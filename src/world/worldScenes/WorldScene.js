@@ -1,0 +1,326 @@
+import { createCamera } from '../components/camera.js';
+import { createScene } from '../components/scene.js';
+import { WorldControls } from '../systems/Controls.js';
+import { updateSingleLightCamera } from '../components/shadowMaker.js';
+import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRightGuiConfig } from '../components/utils/guiConfigHelper.js';
+import { Resizer } from '../systems/Resizer.js';
+import { Loop } from '../systems/Loop.js';
+import { Gui } from '../systems/Gui.js';
+
+const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
+const INITIAL_RIGHT_PANEL = 'Lights Control';
+const RESOLUTION_RATIO = {'0.5x': 0.5, '0.8x': 0.8, '1x': 1, '2x': 2};
+
+class WorldScene {
+    setup = {};
+    name = 'default scene';
+    camera = null;
+    scene = null;
+    renderer = null;
+    loop = null;
+    #resizer = null;
+    controls = null;
+    container = null;
+    staticRendering = true;
+    lights = {};
+    gui = null;
+    guiRightLightsSpecs = {};
+    guiLeftSpecs = {};
+    guiLights = {};
+    guiObjects = {};
+    eventDispatcher;
+    shadowLightObjects = [];
+    physics = null;
+    players = [];
+    walls = [];
+    floors = [];
+    obstacles = [];
+    loadSequence = 0;
+    player;
+    showRoleSelector = false;
+
+    constructor(container, renderer, specs, eventDispatcher) {
+        this.setup = specs;
+        this.name = specs.name;
+        this.renderer = renderer;
+        this.camera = createCamera(specs.camera);
+        this.scene = createScene(specs.scene.backgroundColor);
+        this.loop = new Loop(this.camera, this.scene, this.renderer);
+        this.container = container;
+        this.eventDispatcher = eventDispatcher;
+
+        this.controls = new WorldControls(this.camera, this.renderer.domElement);
+
+        this.controls.defControl.listenToKeyEvents(window);
+
+        this.#resizer = new Resizer(container, this.camera, this.renderer);
+        this.#resizer.onResize = 
+        () => {
+            this.render();
+        };
+
+        this.controls.defControl.addEventListener('change', () => {
+            // important!!! no need to render after scene start to update automatically
+            // increase the performance fps
+            if (this.staticRendering) this.render();    
+        });
+
+        if (specs.enableGui) {
+            this.gui = new Gui();
+            this.controls.initPanels(this.gui);
+            this.guiLeftSpecs = makeGuiPanel();
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Select World',
+                parent: 'selectWorld',
+                name: 'scene',
+                value: { scene: specs.name },
+                params: specs.scenes,
+                type: 'scene-dropdown',
+                changeFn: specs.changeCallback
+            }));
+        }
+    }
+
+    initContainer() {
+        this.container.append(this.renderer.domElement);
+        this.controls.defControl.enabled = true;
+        if (this.gui) {
+            this.initGUIControl();
+        }
+    }
+
+    initGUIControl() {
+        this.gui.init({ 
+            attachedTo: this, 
+            left: this.guiLeftSpecs, 
+            right_lights: this.guiRightLightsSpecs,
+            initialRightPanel: INITIAL_RIGHT_PANEL
+        });
+    }
+
+    render() {
+        this.renderer.render(this.scene, this.camera);
+    }
+
+    start() {
+        this.staticRendering = false;
+        this.controls.initPreCoordinates();
+        this.controls.defControl.enableDamping = true;
+        this.controls.defControl.dampingFactor = 0.1; // default 0.05
+        this.loop.start(this.gui.stats);
+    }
+
+    stop() {
+        this.staticRendering = true;
+        this.controls.defControl.enableDamping = false;
+        this.loop.stop();
+    }
+
+    update() {
+        this.scene.children.forEach((object) => {
+            object.rotation.y += 0.0025;
+        })
+        this.render();
+        window.requestAnimationFrame(this.update.bind(this));
+    }
+
+    moveCamera() {
+        const moveDist = 5;
+        if (this.staticRendering) {
+            this.controls.moveCameraStatic(moveDist);
+        } else {
+            this.controls.moveCamera(moveDist);
+        }
+    }
+
+    resetCamera() {
+        this.controls.resetCamera();
+    }
+
+    focusNext() {}
+
+    focusNextProcess(setup) {
+        const { allTargets, allCameraPos, allPlayerPos } = setup;
+
+        this.loadSequence = ++this.loadSequence % allTargets.length;
+
+        if (this.player) {
+            this.player.setPosition(allPlayerPos[this.loadSequence]);
+            this.player.updateBoundingBoxHelper();
+        }
+
+        if (this.staticRendering) {
+            this.controls.defControl.target.copy(allTargets[this.loadSequence]);
+            this.camera.position.copy(allCameraPos[this.loadSequence]);
+            this.controls.defControl.update();
+        } else {
+            const tar = this.controls.defControl.target;
+            const pos = this.camera.position;
+            if (this.loadSequence === 0) { // move to first position
+                allTargets[allTargets.length - 1] = { x: tar.x, y: tar.y, z: tar.z };
+                allCameraPos[allCameraPos.length - 1] = { x: pos.x, y: pos.y, z: pos.z };
+                this.controls.focusNext(
+                    allTargets[allTargets.length - 1], allTargets[0],
+                    allCameraPos[allCameraPos.length - 1], allCameraPos[0]
+                );
+            } else { // move to next position
+                allTargets[this.loadSequence - 1] = { x: tar.x, y: tar.y, z: tar.z };
+                allCameraPos[this.loadSequence - 1] = { x: pos.x, y: pos.y, z: pos.z };
+                this.controls.focusNext(
+                    allTargets[this.loadSequence - 1], allTargets[this.loadSequence],
+                    allCameraPos[this.loadSequence - 1], allCameraPos[this.loadSequence]
+                );
+            }
+        }
+        
+        this.controls.defControl.update();
+    }
+
+    reset() {
+        this.stop();
+        this.renderer.shadowMap.enabled = false;
+        this.controls.resetCamera();
+        this.controls.defControl.enabled = false;
+        if (this.gui) {
+            this.gui.hide();
+            this.gui.reset();
+        }
+    }
+
+    dispose() {
+        // this.#renderer.dispose();
+        // this.#renderer.forceContextLoss();
+    }
+
+    subscribeEvents(obj, moveType) {
+        this.eventDispatcher.actions.forEach(action => {
+            const callback = obj[action];
+            if (callback) {
+                const subscriber = {
+                    subscriber: obj,
+                    scene: this.name,
+                    callback: callback
+                }
+                this.eventDispatcher.subscribe(moveType, action, subscriber);
+            }
+        });
+    }
+
+    unsubscribeEvents(obj, moveType) {
+        this.eventDispatcher.actions.forEach(action => {
+            const callback = obj[action];
+            if (callback) {
+                const subscriber = {
+                    subscriber: obj,
+                    scene: this.name,
+                    callback: callback
+                }
+                this.eventDispatcher.unsubscribe(moveType, action, subscriber);
+            }
+        });
+    }
+
+    setupGuiConfig() {
+        const rightGuiConfig = makeSceneRightGuiConfig(this.guiLights);
+
+        Object.assign(rightGuiConfig.parents, this.lights);
+        this.guiRightLightsSpecs = rightGuiConfig;
+        
+        this.setupLeftFunctionPanle();
+        this.guiLeftSpecs.details.push(makeFunctionGuiConfig('Actions', 'actions'));
+        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+            folder: 'Change Resolution',
+            parent: 'changeResolution',
+            name: 'ratio',
+            value: { ratio: 1 },
+            params: RESOLUTION_RATIO,
+            type: 'dropdown',
+            changeFn: this.changeResolution.bind(this)
+        }));
+        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+            folder: 'Select Control',
+            parent: 'selectControl',
+            name: 'control',
+            value: { control: INITIAL_RIGHT_PANEL },
+            params: CONTROL_TITLES,
+            type: 'control-dropdown',
+            changeFn: this.gui.selectControl.bind(this.gui)
+        }));
+        if (this.showRoleSelector) {
+            const roles = [];
+            this.players.forEach(p => roles.push(p.name));
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Select Role',
+                parent: 'selectRole',
+                name: 'role',
+                value: { role: this.player.name },
+                params: roles,
+                type: 'role-dropdown',
+                changeFn: this.changeCharacter.bind(this)
+            }));
+        }
+        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+            folder: 'Player Box Helper',
+            parent: 'playerBoxHelper',
+            name: 'boundingBox',
+            value: { boundingBox: 'hide' },
+            params: ['show', 'hide'],
+            type: 'dropdown',
+            changeFn: this.showPlayerBoundingBox.bind(this)
+        }));
+        
+        // bind callback to light helper and shadow cam helper
+        this.bindLightShadowHelperGuiCallback();
+    }
+
+    setupObjectsGuiConfig() {}
+    
+    changeResolution (ratio) {
+        this.#resizer.changeResolution(ratio);
+    }
+
+    changeCharacter(name, showBoxHelper) {
+        // player should have boundingBox and boundingBoxHelper.
+        const find = this.players.find(p => p.name === name);
+        const oldPlayerBoxHelper = this.player ? this.scene.getObjectByName(this.player.boundingBoxHelper.name) : null;
+        if (find) {
+            if (this.player) {
+                // remove old player.
+                this.physics.removeActivePlayers(this.player.name);
+                this.scene.remove(this.player.group);
+                this.unsubscribeEvents(this.player, this.setup.moveType);
+                if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
+            }
+            this.player = find;
+            this.physics.addActivePlayers(name);
+            this.scene.add(this.player.group);
+            this.subscribeEvents(this.player, this.setup.moveType);
+            if (showBoxHelper) {
+                this.scene.add(this.player.boundingBoxHelper);
+            }
+        }
+    }
+
+    showPlayerBoundingBox(show) {
+        if (!this.player || !this.player.boundingBoxHelper) return;
+        const find = this.scene.getObjectByName(this.player.boundingBoxHelper.name);
+        if (show === 'show') {
+            if (!find) this.scene.add(this.player.boundingBoxHelper);
+        } else {
+            if (find) this.scene.remove(this.player.boundingBoxHelper);
+        }
+    }
+
+    bindLightShadowHelperGuiCallback() {
+        // bind callback to light helper and shadow cam helper
+        this.shadowLightObjects.forEach(lightObj => {
+            const { specs } = this.guiRightLightsSpecs.details.find(d => d.parent === lightObj.name);
+            const changeObjs = specs.filter(s => s.hasOwnProperty('changeFn') && (s.type === 'light-num' || s.type === 'color' || s.type === 'groundColor' || s.type === 'angle'));
+            changeObjs.forEach(o => {
+                o['changeFn'] = updateSingleLightCamera.bind(this, lightObj, true);
+            })
+        });
+    }
+}
+
+export { WorldScene };
