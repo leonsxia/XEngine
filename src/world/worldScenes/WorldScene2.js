@@ -122,6 +122,7 @@ class WorldScene2 extends WorldScene {
             return;
         }
         const train = new Train('red train');
+        train.setPosition([0, 1.25, 0]);
         this.subscribeEvents(train, worldSceneSpecs.moveType);
         train.castShadow(true);
         train.receiveShadow(true);

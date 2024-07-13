@@ -259,15 +259,44 @@ class WorldScene {
                 changeFn: this.changeCharacter.bind(this)
             }));
         }
-        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-            folder: 'Player Box Helper',
-            parent: 'playerBoxHelper',
-            name: 'boundingBox',
-            value: { boundingBox: 'hide' },
-            params: ['show', 'hide'],
-            type: 'dropdown',
-            changeFn: this.showPlayerBoundingBox.bind(this)
-        }));
+        if (this.players.length > 0) {
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Player BB Helper',
+                parent: 'playerBBHelper',
+                name: 'BBHelper',
+                value: { BBHelper: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showPlayerBBHelper.bind(this)
+            }));
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Player BB',
+                parent: 'playerBB',
+                name: 'BB',
+                value: { BB: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showPlayerBB.bind(this)
+            }));
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Player BBW',
+                parent: 'playerBBW',
+                name: 'BBW',
+                value: { BBW: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showPlayerBBW.bind(this)
+            }));
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Player BF',
+                parent: 'playerBF',
+                name: 'BF',
+                value: { BF: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showPlayerBF.bind(this)
+            }));
+        }
         
         // bind callback to light helper and shadow cam helper
         this.bindLightShadowHelperGuiCallback();
@@ -279,13 +308,17 @@ class WorldScene {
         this.#resizer.changeResolution(ratio);
     }
 
-    changeCharacter(name, showBoxHelper) {
+    changeCharacter(name) {
         // player should have boundingBox and boundingBoxHelper.
         const find = this.players.find(p => p.name === name);
         const oldPlayerBoxHelper = this.player ? this.scene.getObjectByName(this.player.boundingBoxHelper.name) : null;
         if (find) {
             if (this.player) {
                 // remove old player.
+                this.showPlayerBBHelper(false)
+                    .showPlayerBB(false)
+                    .showPlayerBBW(false)
+                    .showPlayerBF(false);
                 this.physics.removeActivePlayers(this.player.name);
                 this.scene.remove(this.player.group);
                 this.unsubscribeEvents(this.player, this.setup.moveType);
@@ -295,13 +328,10 @@ class WorldScene {
             this.physics.addActivePlayers(name);
             this.scene.add(this.player.group);
             this.subscribeEvents(this.player, this.setup.moveType);
-            if (showBoxHelper) {
-                this.scene.add(this.player.boundingBoxHelper);
-            }
         }
     }
 
-    showPlayerBoundingBox(show) {
+    showPlayerBBHelper(show) {
         if (!this.player || !this.player.boundingBoxHelper) return;
         const find = this.scene.getObjectByName(this.player.boundingBoxHelper.name);
         if (show === 'show') {
@@ -309,6 +339,28 @@ class WorldScene {
         } else {
             if (find) this.scene.remove(this.player.boundingBoxHelper);
         }
+        return this;
+    }
+
+    showPlayerBB(show) {
+        if (!this.player || !this.player.boundingBoxMesh) return;
+        if (show === 'show') this.player.showBB(true);
+        else this.player.showBB(false);
+        return this;
+    }
+
+    showPlayerBBW(show) {
+        if (!this.player || !this.player.boundingBoxWireMesh) return;
+        if (show === 'show') this.player.showBBW(true);
+        else this.player.showBBW(false);
+        return this;
+    }
+
+    showPlayerBF(show) {
+        if (!this.player) return;
+        if (show === 'show') this.player.showBF(show);
+        else this.player.showBF(false);
+        return this;
     }
 
     bindLightShadowHelperGuiCallback() {

@@ -53,7 +53,7 @@ class World {
         if (this.#currentScene) this.#currentScene.reset(); // reset camera, gui, controls, stop animation
         this.#container.innerHTML = '';
         if (this.#infosDomElements) {
-            this.#infosDomElements.header.textContent = `DiscoverThreeJs - World ${name}`;
+            this.#infosDomElements.header.textContent = `XEngine - World ${name}`;
             this.#infosDomElements.msg.textContent = 'loading assets...';
         }
 

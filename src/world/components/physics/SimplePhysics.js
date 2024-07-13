@@ -1,4 +1,4 @@
-import { Object3D } from 'three';
+import * as Color from '../basic/colorBase.js';
 
 const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
 const FACE_DEF = ['frontFace', 'backFace', 'leftFace', 'rightFace'];
@@ -106,10 +106,15 @@ class SimplePhysics {
                     console.log('ray intersect');
                     const leftCorIntersectFace = leftBorderIntersects.length > 0 ? leftBorderIntersects[0].object.name : null;
                     const rightCorIntersectFace = rightBorderIntersects.length > 0 ? rightBorderIntersects[0].object.name : null;
-                    if (leftCorIntersectFace === FACE_DEF[2] || rightCorIntersectFace === FACE_DEF[2]) 
+                    if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) 
+                        player.frontFaceIntersects = true;
+                    else if (leftCorIntersectFace === FACE_DEF[1] || rightCorIntersectFace === FACE_DEF[1]) 
+                        player.backFaceIntersects = true;
+                    else if (leftCorIntersectFace === FACE_DEF[2] || rightCorIntersectFace === FACE_DEF[2]) 
                         player.leftFaceIntersects = true;
                     else if (leftCorIntersectFace === FACE_DEF[3] || rightCorIntersectFace === FACE_DEF[3])
                         player.rightFaceIntersects = true;
+
                     intersect = true;
                     return { wallMesh, intersect, borderReach: true, cornors, leftCorIntersectFace, rightCorIntersectFace };
                 }
@@ -128,20 +133,25 @@ class SimplePhysics {
             return;
         }
         this.activePlayers.forEach(player => {
-            player.setBoundingBoxHelperColor(0x00ff00);
+            player.setBoundingBoxHelperColor(Color.BBW).resetBFColor(Color.BF);
             player.resetItersectStatus();
             const collisionedWalls = [];
             this.walls.forEach(wall => {
                 const checkResult = this.checkIntersection(player, wall, delta);
                 if (checkResult.intersect) {
                 // if (player.boundingBox.intersectsBox(wall.boundingBox)) {
-                    player.setBoundingBoxHelperColor(0xff0000);
+                    player.setBoundingBoxHelperColor(Color.intersect);
                     wall.checkResult = checkResult;
                     collisionedWalls.push(wall);
                 } else {
                     wall.checkResult = { intersect: false, borderReach: false }
                 }
             });
+
+            if (player.frontFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[0])
+            else if (player.backFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[1])
+            else if (player.leftFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[2])
+            else if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
 
             if (collisionedWalls.length === 0) {
                 player.tick(delta);
@@ -151,12 +161,20 @@ class SimplePhysics {
                 })
             }
 
+            const collisionFloors = [];
             this.floors.forEach(floor => {
                 if (player.boundingBox.intersectsBox(floor.boundingBox)) {
                     // to do
                     // player.tickWithFloor(delta, floor);
+                    collisionFloors.push(floor);
                 }
             });
+
+            if (collisionFloors.length === 0) {
+                player.tickFall(delta);
+            } else {
+                player.onGround(collisionFloors[0]);
+            }
         });
     }
 }

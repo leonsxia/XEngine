@@ -1,10 +1,10 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Sphere, BoxCube, Plane } from '../components/Models.js';
+import { Train, Tofu, Sphere, BoxCube, Plane, CollisionPlane } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
-import { SimplePhysics } from '../components/SimplePhysics.js';
+import { SimplePhysics } from '../components/physics/SimplePhysics.js';
+import { createCollisionPlane } from '../components/physics/collisionHelper.js';
 import { WorldScene } from './WorldScene.js';
-import { ArrowHelper } from 'three';
 
 const sceneName = 'Simple Physics';
 const worldSceneSpecs = {
@@ -173,7 +173,7 @@ class WorldScene4 extends WorldScene {
             color: 0xCC8866,
             name: 'ground'
         };
-        const ground = new Plane(groudSpecs);
+        const ground = new CollisionPlane(groudSpecs);
         ground.setRotation([-.5 * Math.PI, 0, 0]);
         ground.updateBoundingBoxHelper();
         ground.receiveShadow(true);
@@ -229,27 +229,30 @@ class WorldScene4 extends WorldScene {
 
         const train = new Train('red train 2');
         // this.subscribeEvents(train, worldSceneSpecs.moveType);
-        train.castShadow(true);
-        train.receiveShadow(true);
-        train.setPosition([0, 0, 0]);
-        train.setScale([.5, .5, .5]);
-        train.updateBoundingBoxHelper();
+        train.castShadow(true)
+            .receiveShadow(true)
+            .setPosition([0, 3, 0])
+            .setScale([.5, .5, .5])
+            .updateBoundingBoxHelper();
 
         const tofu = new Tofu('tofu1');
         // this.subscribeEvents(tofu, worldSceneSpecs.moveType);
-        tofu.castShadow(true);
-        tofu.receiveShadow(true);
-        tofu.setPosition([0, 0, 3]);
-        tofu.setRotation([0, Math.PI, 0]);
-        tofu.setScale([.2, .3, .2]);
-        tofu.updateBoundingBoxHelper();
+        tofu.castShadow(true)
+            .receiveShadow(true)
+            .setPosition([0, 5, 3])
+            .setRotation([0, Math.PI, 0])
+            .setScale([.2, .3, .2])
+            .updateBoundingBoxHelper();
 
         await Promise.all([
             earth.init(earthSpecs),
             box.init(boxSpecs)
         ]);
 
-        const walls = this.createWalls().concat(this.createWalls2()).concat(this.createInsideWalls2());
+        const walls = this.createWalls()
+            .concat(this.createWalls2())
+            .concat(this.createInsideWalls())
+            .concat(this.createInsideWalls2());
         this.players.push(tofu);
         this.players.push(train);
         this.walls = walls;
@@ -263,9 +266,7 @@ class WorldScene4 extends WorldScene {
         this.changeCharacter('red train 2', false);
 
         walls.forEach(w => {
-            this.scene.add(w.mesh, w.line);
-            this.scene.add(new ArrowHelper(w.leftRay.ray.direction, w.leftRay.ray.origin, w.height, 0x00ff00) );
-            this.scene.add(new ArrowHelper(w.rightRay.ray.direction, w.rightRay.ray.origin, w.height, 0xff0000) );
+            this.scene.add(w.mesh, w.line, w.leftArrow, w.rightArrow);
         });
 
         this.showRoleSelector = true;
@@ -294,183 +295,64 @@ class WorldScene4 extends WorldScene {
 
     createWalls() {
         // wall
-        const wallSpecs = {
+        const specs = {
             width: 10,
-            height: 5,
-            color: 0xcccccc,
-            name: 'wall'
+            height: 2.5
         };
-        const wall = new Plane(wallSpecs);
-        wall.receiveShadow(true);
-        // wall.setDoubleSide();
-        // wall.setDoubleShadowSide();
-        wall.castShadow(true);
-        wall.setPosition([20, 0, 0]);
-        wall.setRotationY(- Math.PI / 6);
-        wall.updateBoundingBoxHelper();
+        const posY = specs.height / 2 - .1;
 
-        const wall2Specs = {
-            width: 10,
-            height: 5,
-            color: 0xcccccc,
-            name: 'wall2'
-        };
-        const wall2 = new Plane(wall2Specs);
-        wall2.receiveShadow(true);
-        // wall2.setDoubleSide();
-        // wall2.setDoubleShadowSide();
-        wall2.castShadow(true);
-        wall2.setPosition([13.2, 0, 1.8]);
-        wall2.setRotationY(Math.PI / 3);
-        wall2.updateBoundingBoxHelper();
+        const wall = createCollisionPlane(specs, 'wall', [20, posY, 0], - Math.PI / 6, true, true);
 
-        const wall3Specs = {
-            width: 10,
-            height: 5,
-            color: 0xcccccc,
-            name: 'wall3'
-        };
-        const wall3 = new Plane(wall3Specs);
-        wall3.receiveShadow(true);
-        // wall3.setDoubleSide();
-        // wall3.setDoubleShadowSide();
-        wall3.castShadow(true);
-        wall3.setPosition([15, 0, 8.6]);
-        wall3.setRotationY(5 * Math.PI / 6);
-        wall3.updateBoundingBoxHelper();
+        const wall2 = createCollisionPlane(specs, 'wall2', [13.2, posY, 1.8], Math.PI / 3, true, true);
 
-        const wall4Specs = {
-            width: 10,
-            height: 5,
-            color: 0xcccccc,
-            name: 'wall4'
-        };
-        const wall4 = new Plane(wall4Specs);
-        wall4.receiveShadow(true);
-        // wall4.setDoubleSide();
-        // wall4.setDoubleShadowSide();
-        wall4.castShadow(true);
-        wall4.setPosition([21.8, 0, 6.8]);
-        wall4.setRotationY(- 2 * Math.PI / 3);
-        wall4.updateBoundingBoxHelper();
+        const wall3 = createCollisionPlane(specs, 'wall3', [15, posY, 8.6], 5 * Math.PI / 6, true, true);
+
+        const wall4 = createCollisionPlane(specs, 'wall4', [21.8, posY, 6.8], - 2 * Math.PI / 3, true, true);
 
         return [wall, wall2, wall3, wall4];
     }
 
     createWalls2() {
-        const wallSpecs = {
+        const specs = {
             width: 10,
-            height: 2.5,
-            color: 0xcccccc,
+            height: 2.5
         };
-        const posY = wallSpecs.height / 2 - .1;
-        // wall
-        const wall = new Plane(wallSpecs);
-        wall.name = 'wall5';
-        wall.receiveShadow(true);
-        wall.castShadow(true);
-        wall.setPosition([0, posY, - 14]);
-        wall.setRotationY(0);
-        wall.updateBoundingBoxHelper();
+        const posY = specs.height / 2 - .1;
 
-        const wall2 = new Plane(wallSpecs);
-        wall2.name = 'wall6'
-        wall2.receiveShadow(true);
-        wall2.castShadow(true);
-        wall2.setPosition([- 5, posY, - 9]);
-        wall2.setRotationY(Math.PI / 2);
-        wall2.updateBoundingBoxHelper();
+        const wall = createCollisionPlane(specs, 'wall5', [0, posY, - 14], 0, true, true);
 
-        const wall3 = new Plane(wallSpecs);
-        wall3.name = 'wall7'
-        wall3.receiveShadow(true);
-        wall3.castShadow(true);
-        wall3.setPosition([0, posY, - 4]);
-        wall3.setRotationY(Math.PI);
-        wall3.updateBoundingBoxHelper();
+        const wall2 = createCollisionPlane(specs, 'wall6', [- 5, posY, - 9], Math.PI / 2, true, true);
 
-        const wall4 = new Plane(wallSpecs);
-        wall4.name = 'wall8'
-        wall4.receiveShadow(true);
-        wall4.castShadow(true);
-        wall4.setPosition([5, posY, - 9]);
-        wall4.setRotationY(- Math.PI / 2);
-        wall4.updateBoundingBoxHelper();
+        const wall3 = createCollisionPlane(specs, 'wall7', [0, posY, - 4], Math.PI, true, true);
+
+        const wall4 = createCollisionPlane(specs, 'wall8', [5, posY, - 9], - Math.PI / 2, true, true);
 
         return [wall, wall2, wall3, wall4];
     }
 
     createInsideWalls() {
-        const wallSpecs = {
+        const specs = {
             width: 1,
-            height: 2.5,
-            color: 0xcccccc
+            height: 2.5
         }
         const offset = Math.sqrt(.5);
-        const posY = wallSpecs.height / 2 - .1;
-        const wall = new Plane(wallSpecs);
-        wall.name = 'wall9';
-        wall.receiveShadow(true);
-        wall.castShadow(true);
-        wall.setPosition([0, posY, -5]);
-        wall.setRotationY(0);
-        wall.updateBoundingBoxHelper();
+        const posY = specs.height / 2 - .1;
+        
+        const wall = createCollisionPlane(specs, 'wall9', [0, posY, -5], 0, true, true);
 
-        const wall2 = new Plane(wallSpecs);
-        wall2.name = 'wall10';
-        wall2.receiveShadow(true);
-        wall2.castShadow(true);
-        wall2.setPosition([- .5 - offset / 2, posY, - 5 - offset / 2]);
-        wall2.setRotationY(- Math.PI / 4);
-        wall2.updateBoundingBoxHelper();
+        const wall2 = createCollisionPlane(specs, 'wall10', [- .5 - offset / 2, posY, - 5 - offset / 2], - Math.PI / 4, true, true);
 
-        const wall3 = new Plane(wallSpecs);
-        wall3.name = 'wall11';
-        wall3.receiveShadow(true);
-        wall3.castShadow(true);
-        wall3.setPosition([- .5 - offset, posY, - 5.5 - offset]);
-        wall3.setRotationY(- Math.PI / 2);
-        wall3.updateBoundingBoxHelper();
+        const wall3 = createCollisionPlane(specs, 'wall11', [- .5 - offset, posY, - 5.5 - offset], - Math.PI / 2, true, true);
 
-        const wall4 = new Plane(wallSpecs);
-        wall4.name = 'wall12';
-        wall4.receiveShadow(true);
-        wall4.castShadow(true);
-        wall4.setPosition([- .5 - offset / 2, posY, - 6 - 3 * offset / 2]);
-        wall4.setRotationY(- 3 * Math.PI / 4);
-        wall4.updateBoundingBoxHelper();
+        const wall4 = createCollisionPlane(specs, 'wall12', [- .5 - offset / 2, posY, - 6 - 3 * offset / 2], - 3 * Math.PI / 4, true, true);
 
-        const wall5 = new Plane(wallSpecs);
-        wall5.name = 'wall13'
-        wall5.receiveShadow(true);;
-        wall5.castShadow(true);
-        wall5.setPosition([0, posY, - 6 - 2 * offset]);
-        wall5.setRotationY(Math.PI);
-        wall5.updateBoundingBoxHelper();
+        const wall5 = createCollisionPlane(specs, 'wall13', [0, posY, - 6 - 2 * offset], Math.PI, true, true);
 
-        const wall6 = new Plane(wallSpecs);
-        wall6.name = 'wall14'
-        wall6.receiveShadow(true);;
-        wall6.castShadow(true);
-        wall6.setPosition([.5 + offset / 2, posY, - 6 - 3 * offset / 2]);
-        wall6.setRotationY(3 * Math.PI / 4);
-        wall6.updateBoundingBoxHelper();
+        const wall6 = createCollisionPlane(specs, 'wall14', [.5 + offset / 2, posY, - 6 - 3 * offset / 2], 3 * Math.PI / 4, true, true);
 
-        const wall7 = new Plane(wallSpecs);
-        wall7.name = 'wall15';
-        wall7.receiveShadow(true);
-        wall7.castShadow(true);
-        wall7.setPosition([.5 + offset, posY, - 5.5 - offset]);
-        wall7.setRotationY(Math.PI / 2);
-        wall7.updateBoundingBoxHelper();
+        const wall7 = createCollisionPlane(specs, 'wall15', [.5 + offset, posY, - 5.5 - offset], Math.PI / 2, true, true);
 
-        const wall8 = new Plane(wallSpecs);
-        wall8.name = 'wall16'
-        wall8.receiveShadow(true);;
-        wall8.castShadow(true);
-        wall8.setPosition([.5 + offset / 2, posY, - 5 - offset / 2]);
-        wall8.setRotationY(Math.PI / 4);
-        wall8.updateBoundingBoxHelper();
+        const wall8 = createCollisionPlane(specs, 'wall16', [.5 + offset / 2, posY, - 5 - offset / 2], Math.PI / 4, true, true);
 
         return [
             wall, wall2, wall3, wall4, 
@@ -479,66 +361,28 @@ class WorldScene4 extends WorldScene {
     }
 
     createInsideWalls2() {
-        const wallSpecs = {
+        const specs = {
             width: 1,
-            height: 2.5,
-            color: 0xcccccc
+            height: 2.5
         }
 
-        const wallLSpecs = {
+        const specsL = {
             width: 2,
-            height: 2.5,
-            color: 0xcccccc
+            height: 2.5
         }
-        const posY = wallSpecs.height / 2 - .1;
+        const posY = specs.height / 2 - .1;
 
-        const wall = new Plane(wallLSpecs);
-        wall.name = 'wall17';
-        wall.receiveShadow(true);
-        wall.castShadow(true);
-        wall.setPosition([- 3, posY, - 5]);
-        wall.setRotationY(- Math.PI / 2);
-        wall.updateBoundingBoxHelper();
+        const wall = createCollisionPlane(specsL, 'wall17', [- 3, posY, - 5], - Math.PI / 2, true, true);
 
-        const wall2 = new Plane(wallSpecs);
-        wall2.name = 'wall18';
-        wall2.receiveShadow(true);
-        wall2.castShadow(true);
-        wall2.setPosition([- 2.5, posY, - 6]);
-        wall2.setRotationY(Math.PI);
-        wall2.updateBoundingBoxHelper();
+        const wall2 = createCollisionPlane(specs, 'wall18', [- 2.5, posY, - 6], Math.PI, true, true);
 
-        const wall3 = new Plane(wallLSpecs);
-        wall3.name = 'wall19';
-        wall3.receiveShadow(true);
-        wall3.castShadow(true);
-        wall3.setPosition([- 2, posY, - 5]);
-        wall3.setRotationY(Math.PI / 2);
-        wall3.updateBoundingBoxHelper();
+        const wall3 = createCollisionPlane(specsL, 'wall19', [- 2, posY, - 5], Math.PI / 2, true, true);
 
-        const wall4 = new Plane(wallLSpecs);
-        wall4.name = 'wall20';
-        wall4.receiveShadow(true);
-        wall4.castShadow(true);
-        wall4.setPosition([2, posY, - 5]);
-        wall4.setRotationY(- Math.PI / 2);
-        wall4.updateBoundingBoxHelper();
+        const wall4 = createCollisionPlane(specsL, 'wall20', [2, posY, - 5], - Math.PI / 2, true, true);
 
-        const wall5 = new Plane(wallSpecs);
-        wall5.name = 'wall21';
-        wall5.receiveShadow(true);
-        wall5.castShadow(true);
-        wall5.setPosition([2.5, posY, - 6]);
-        wall5.setRotationY(Math.PI);
-        wall5.updateBoundingBoxHelper();
+        const wall5 = createCollisionPlane(specs, 'wall21', [2.5, posY, - 6], Math.PI, true, true);
 
-        const wall6 = new Plane(wallLSpecs);
-        wall6.name = 'wall22';
-        wall6.receiveShadow(true);
-        wall6.castShadow(true);
-        wall6.setPosition([3, posY, - 5]);
-        wall6.setRotationY(Math.PI / 2);
-        wall6.updateBoundingBoxHelper();
+        const wall6 = createCollisionPlane(specsL, 'wall22', [3, posY, - 5], Math.PI / 2, true, true);
 
         return [wall, wall2, wall3, wall4, wall5, wall6];
     }
@@ -555,9 +399,9 @@ class WorldScene4 extends WorldScene {
             { x: 20, y: 10, z: 20 }
         ];
         const allPlayerPos = [
-            [0, 0, 0],
-            [0, 0, - 9],
-            [18, 0, 4],
+            [0, 3, 0],
+            [0, 3, - 9],
+            [18, 3, 4],
         ]
 
         const setup = { allTargets, allCameraPos, allPlayerPos };

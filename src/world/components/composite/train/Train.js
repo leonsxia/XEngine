@@ -14,7 +14,8 @@ class Train extends Moveable2D {
     #rotateR = 3;
     boundingBox;
     boundingBoxHelper;
-    vel;
+    #g = 9.8;
+    #fallingTime = 0;
 
     constructor(name) {
         super();
@@ -24,9 +25,10 @@ class Train extends Moveable2D {
 
         const {
             cabin, chimney, nose, smallWheelFront, smallWheelCenter, smallWheelRear, bigWheel,
-            boundingBox, boundingBoxWire,
-            frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
-            width, depth, height, Rl, Rs
+            bbObjects: {
+                boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace
+            },
+            specs: { width, depth, height, Rl, Rs }
         } = this.meshes;
         this.group.add(
             cabin, nose, chimney, smallWheelRear, smallWheelCenter, smallWheelFront, bigWheel,
@@ -50,6 +52,15 @@ class Train extends Moveable2D {
 
     get boundingBoxMesh() {
         return this.group.getObjectByName('boundingBox');
+    }
+
+    get boundingFaceMesh() {
+        return [
+            this.group.getObjectByName('frontFace'),
+            this.group.getObjectByName('backFace'),
+            this.group.getObjectByName('leftFace'),
+            this.group.getObjectByName('rightFace')
+        ]
     }
 
     get position() {
@@ -104,28 +115,58 @@ class Train extends Moveable2D {
         return this.isAccelerating ? 0.02 : 0.005;
     }
 
+    showBB(show) {
+        this.boundingBoxMesh.visible = show;
+    }
+
+    showBBW(show) {
+        this.boundingBoxWireMesh.visible = show;
+        return this;
+    }
+
+    showBF(show) {
+        this.boundingFaceMesh.forEach(bf => { if (bf) bf.visible = show });
+        return this;
+    }
+
     updateBoundingBoxHelper() {
         const { matrixWorld, geometry: { boundingBox } } = this.boundingBoxMesh;
         this.group.updateMatrixWorld();
         this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
         // this.boundingBoxHelper.updateMatrixWorld();
+        return this;
     }
 
     setBoundingBoxHelperColor(color) {
         this.boundingBoxHelper.material.color.setHex(color);
         this.boundingBoxWireMesh.material.color.setHex(color);
+        return this;
+    }
+
+    setBFColor(color, face) {
+        const find = this.boundingFaceMesh.find(bf => bf.name === face);
+        if (find) find.material.color.setHex(color);
+        return this;
+    }
+
+    resetBFColor(color) {
+        this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(color));
+        return this;
     }
 
     setPosition(pos) {
         this.group.position.set(...pos);
+        return this;
     }
 
     setRotation(rot) {
         this.group.rotation.set(...rot);
+        return this;
     }
 
     setScale(scale) {
         this.group.scale.set(...scale);
+        return this;
     }
 
     setTickParams(delta) {
@@ -147,6 +188,18 @@ class Train extends Moveable2D {
         this.tankmoveTick(params);
         this.tickWheels(delta, params);
         this.updateBoundingBoxHelper();
+    }
+
+    tickFall(delta) {
+        const now = this.#fallingTime + delta;
+        const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
+        this.group.position.y -= deltaY;
+        this.#fallingTime = now;
+    }
+
+    onGround(floor) {
+        this.group.position.y = floor.mesh.position.y + this.height / 2;
+        this.#fallingTime = 0;
     }
 
     tickWithWall(delta, wall) {
@@ -178,6 +231,7 @@ class Train extends Moveable2D {
                 child.castShadow = cast;
             }
         });
+        return this;
     }
 
     receiveShadow(receive) {
@@ -186,6 +240,7 @@ class Train extends Moveable2D {
                 child.receiveShadow = receive;
             }
         });
+        return this;
     }
 }
 

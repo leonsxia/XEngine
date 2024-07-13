@@ -33,30 +33,46 @@ class BasicObject {
     }
 
     async initBasic(specs) {
-        const [map] = await Promise.all([new TextureLoader().loadAsync(specs.map)]);
-        this.#map = map;
-        this.#map.colorSpace = SRGBColorSpace;
-        this.mesh.material = this.material = new MeshStandardMaterial({ map: this.#map });
+        const { map } = specs;
+        const [texture] = await Promise.all([
+            map ? new TextureLoader().loadAsync(map) : new Promise(resolve => resolve(null))
+        ]);
+        if (texture) {
+            this.#map = texture;
+            this.#map.colorSpace = SRGBColorSpace;
+            this.mesh.material = this.material = new MeshStandardMaterial({ map: this.#map });
+        }
     }
 
     setPosition(pos) {
         this.mesh.position.set(...pos);
+        return this;
     }
 
     setRotation(rot) {
         this.mesh.rotation.set(...rot);
+        return this;
     }
 
     setScale(scale) {
         this.mesh.scale.set(...scale);
+        return this;
+    }
+
+    setName(name) {
+        this.mesh.name = name;;
+        this.name = name;
+        return this;
     }
 
     castShadow(cast) {
         this.mesh.castShadow = cast;
+        return this;
     }
 
     receiveShadow(receive) {
         this.mesh.receiveShadow = receive;
+        return this;
     }
 }
 

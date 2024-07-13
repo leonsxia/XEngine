@@ -1,5 +1,5 @@
 import { Object3D, Vector3 } from 'three';
-import { COR_DEF, FACE_DEF } from '../SimplePhysics';
+import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
 
 class Moveable2D {
     #movingLeft = false;
@@ -14,6 +14,8 @@ class Moveable2D {
         this.rightCorIntersects = false;
         this.backLeftCorIntersects = false;
         this.backRightCorIntersects = false;
+        this.frontFaceIntersects = false;
+        this.backFaceIntersects = false;
         this.leftFaceIntersects = false;
         this.rightFaceIntersects = false;
     }
@@ -23,6 +25,8 @@ class Moveable2D {
         this.rightCorIntersects = false;
         this.backLeftCorIntersects = false;
         this.backRightCorIntersects = false;
+        this.frontFaceIntersects = false;
+        this.backFaceIntersects = false;
         this.leftFaceIntersects = false;
         this.rightFaceIntersects = false;
     }

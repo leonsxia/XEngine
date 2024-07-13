@@ -160,8 +160,17 @@ class Gui {
                         break;
                     case 'role-dropdown':
                         find.changeFn(val, false);
-                        this.#guis[0].folders.find(f => f._title === 'Player Box Helper')
-                            .controllers.find(c => c._name === 'boundingBox')
+                        this.#guis[0].folders.find(f => f._title === 'Player BB Helper')
+                            .controllers.find(c => c._name === 'BBHelper')
+                            .setValue('hide');
+                        this.#guis[0].folders.find(f => f._title === 'Player BB')
+                            .controllers.find(c => c._name === 'BB')
+                            .setValue('hide');
+                        this.#guis[0].folders.find(f => f._title === 'Player BBW')
+                            .controllers.find(c => c._name === 'BBW')
+                            .setValue('hide');
+                        this.#guis[0].folders.find(f => f._title === 'Player BF')
+                            .controllers.find(c => c._name === 'BF')
                             .setValue('hide');
                         break;
                     case 'light-num':

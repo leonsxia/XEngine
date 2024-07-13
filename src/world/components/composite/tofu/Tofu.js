@@ -12,7 +12,8 @@ class Tofu extends Moveable2D {
     #rotateR = 2;
     boundingBox;
     boundingBoxHelper;
-    vel;
+    #g = 9.8;
+    #fallingTime = 0;
 
     constructor(name) {
         super();
@@ -21,9 +22,11 @@ class Tofu extends Moveable2D {
         this.meshes = createMeshes();
         const { 
             body, slotLeft, slotRight, 
-            boundingBox, boundingBoxWire, 
-            frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
-            width, depth, height } = this.meshes;
+            bbObjects: {
+                boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace
+            },
+            specs: { width, depth, height }
+        } = this.meshes;
         this.group.add(
             body, slotLeft, slotRight, 
             boundingBox, boundingBoxWire, 
@@ -43,6 +46,15 @@ class Tofu extends Moveable2D {
 
     get boundingBoxMesh() {
         return this.group.getObjectByName('boundingBox');
+    }
+
+    get boundingFaceMesh() {
+        return [
+            this.group.getObjectByName('frontFace'),
+            this.group.getObjectByName('backFace'),
+            this.group.getObjectByName('leftFace'),
+            this.group.getObjectByName('rightFace')
+        ]
     }
 
     get position() {
@@ -86,7 +98,7 @@ class Tofu extends Moveable2D {
     }
 
     get velocity() {
-        return this.isAccelerating ? 10 : 3;
+        return this.isAccelerating ? 10 : 4.5;
     }
 
     get recoverCoefficient() {
@@ -97,28 +109,58 @@ class Tofu extends Moveable2D {
         return this.isAccelerating ? 0.01 : 0.005;
     }
 
+    showBB(show) {
+        this.boundingBoxMesh.visible = show;
+    }
+
+    showBBW(show) {
+        this.boundingBoxWireMesh.visible = show;
+        return this;
+    }
+
+    showBF(show) {
+        this.boundingFaceMesh.forEach(bf => { if (bf) bf.visible = show });
+        return this;
+    }
+
     updateBoundingBoxHelper() {
         const { matrixWorld, geometry: { boundingBox } } = this.boundingBoxMesh;
         this.group.updateMatrixWorld();
         this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
         // this.boundingBoxHelper.updateMatrixWorld();
+        return this;
+    }
+
+    setBFColor(color, face) {
+        const find = this.boundingFaceMesh.find(bf => bf.name === face);
+        if (find) find.material.color.setHex(color);
+        return this;
+    }
+
+    resetBFColor(color) {
+        this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(color));
+        return this;
     }
 
     setBoundingBoxHelperColor(color) {
         this.boundingBoxHelper.material.color.setHex(color);
         this.boundingBoxWireMesh.material.color.setHex(color);
+        return this;
     }
 
     setPosition(pos) {
         this.group.position.set(...pos);
+        return this;
     }
 
     setRotation(rot) {
         this.group.rotation.set(...rot);
+        return this;
     }
 
     setScale(scale) {
         this.group.scale.set(...scale);
+        return this;
     }
 
     castShadow(cast) {
@@ -127,6 +169,7 @@ class Tofu extends Moveable2D {
                 child.castShadow = cast;
             }
         });
+        return this;
     }
 
     receiveShadow(receive) {
@@ -135,6 +178,7 @@ class Tofu extends Moveable2D {
                 child.receiveShadow = receive;
             }
         });
+        return this;
     }
 
     setTickParams(delta) {
@@ -152,6 +196,18 @@ class Tofu extends Moveable2D {
         const params = this.setTickParams(delta);
         this.tankmoveTick(params);
         this.updateBoundingBoxHelper();
+    }
+
+    tickFall(delta) {
+        const now = this.#fallingTime + delta;
+        const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
+        this.group.position.y -= deltaY;
+        this.#fallingTime = now;
+    }
+
+    onGround(floor) {
+        this.group.position.y = floor.mesh.position.y + this.height / 2;
+        this.#fallingTime = 0;
     }
 
     tickWithWall(delta, wall) {
