@@ -1,26 +1,34 @@
-import { Mesh, MeshPhongMaterial, DoubleSide } from 'three';
+import { Mesh, MeshPhongMaterial, DoubleSide, TextureLoader, SRGBColorSpace, RepeatWrapping } from 'three';
 import { BasicObject } from './BasicObject';
 
 class Plane extends BasicObject {
+    #mapSrc;
+    #mapRatio;
     #map = null;
 
     constructor(specs) {
         super('plane', specs);
-        const { name, color } = specs;
+        const { name, color, map, mapRatio } = specs;
+        this.#mapSrc = map;
+        this.#mapRatio = mapRatio;
         if (color)
             this.material = new MeshPhongMaterial({ color: color });
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = name;
     }
 
-    async init (specs) {
-        const { map } = specs;
+    async init () {
         const [texture] = await Promise.all([
-            map ? new TextureLoader().loadAsync(map) : new Promise(resolve => resolve(null))
+            this.#mapSrc ? new TextureLoader().loadAsync(this.#mapSrc) : new Promise(resolve => resolve(null))
         ]);
         if (texture) {
             this.#map = texture;
             this.#map.colorSpace = SRGBColorSpace;
+            if (this.#mapRatio) {
+                const xRepeat =  this.width * this.#mapRatio / this.height;
+                this.#map.wrapS = RepeatWrapping;
+                this.#map.repeat.set(xRepeat, 1);
+            }
             this.mesh.material = this.material = new MeshPhongMaterial({ map: this.#map });
         }
     }

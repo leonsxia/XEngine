@@ -33,27 +33,27 @@ class Moveable2D {
 
     movingLeft(val) {
         this.#movingLeft = val;
-        console.log(`[moveable2D]:movingLeft ${this.#movingLeft}`);
+        // console.log(`[moveable2D]:movingLeft ${this.#movingLeft}`);
     }
 
     movingRight(val) {
         this.#movingRight = val;
-        console.log(`[moveable2D]:movingRight ${this.#movingRight}`);
+        // console.log(`[moveable2D]:movingRight ${this.#movingRight}`);
     }
 
     movingForward(val) {
         this.#movingForward = val;
-        console.log(`[moveable2D]:movingForward ${this.#movingForward}`);
+        // console.log(`[moveable2D]:movingForward ${this.#movingForward}`);
     }
 
     movingBackward(val) {
         this.#movingBackward = val;
-        console.log(`[moveable2D]:movingBackward ${this.#movingBackward}`);
+        // console.log(`[moveable2D]:movingBackward ${this.#movingBackward}`);
     }
 
     accelerate(val) {
         this.#accelerate = val;
-        console.log(`[moveable2D]:accelerate ${this.#accelerate}`);
+        // console.log(`[moveable2D]:accelerate ${this.#accelerate}`);
     }
 
     get dummyObject() {

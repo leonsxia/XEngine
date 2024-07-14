@@ -1,3 +1,4 @@
+import { Vector3 } from 'three';
 import * as Color from '../basic/colorBase.js';
 
 const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
@@ -38,8 +39,14 @@ class SimplePhysics {
         // set dummy object related to zero position.
         const dummyObject = player.dummyObject;
         const wallMesh = plane.mesh.clone();
+        
+        wallMesh.position.copy(plane.mesh.localToWorld(new Vector3(0, 0, 0)));
         wallMesh.position.y = 0;
+        wallMesh.rotation.x = 0;
+        wallMesh.rotation.y = plane.mesh.rotationY;
+        wallMesh.rotation.z = 0;
         wallMesh.rotationY = plane.mesh.rotationY;
+
         dummyObject.position.copy(wallMesh.worldToLocal(player.position.clone()));
         dummyObject.rotation.y = player.rotation.y - plane.mesh.rotationY;
         dummyObject.scale.copy(player.scale);
@@ -62,7 +69,7 @@ class SimplePhysics {
             && Math.abs(dummyObject.position.z) - halfPlayerDepth <= 0
         ) {
             const halfEdgeLength = plane.width / 2;
-            const padding = player.velocity * delta + 0.1;
+            const padding = player.velocity * delta;// + 0.1;
             if (
                 (Math.abs(dummyObject.position.z - halfPlayerDepth) <=  padding) && 
                 (
@@ -103,7 +110,7 @@ class SimplePhysics {
                     rightBorderIntersects.length > 0 ||
                     leftBorderIntersects.length > 0
                 ) {
-                    console.log('ray intersect');
+                    // console.log('ray intersect');
                     const leftCorIntersectFace = leftBorderIntersects.length > 0 ? leftBorderIntersects[0].object.name : null;
                     const rightCorIntersectFace = rightBorderIntersects.length > 0 ? rightBorderIntersects[0].object.name : null;
                     if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) 

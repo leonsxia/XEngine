@@ -35,8 +35,9 @@ class WorldScene {
     walls = [];
     floors = [];
     obstacles = [];
-    loadSequence = 0;
+    rooms = [];
     player;
+    loadSequence = 0;
     showRoleSelector = false;
 
     constructor(container, renderer, specs, eventDispatcher) {
@@ -156,19 +157,17 @@ class WorldScene {
         } else {
             const tar = this.controls.defControl.target;
             const pos = this.camera.position;
+            const preTar = { x: tar.x, y: tar.y, z: tar.z };
+            const preCam = { x: pos.x, y: pos.y, z: pos.z };
             if (this.loadSequence === 0) { // move to first position
-                allTargets[allTargets.length - 1] = { x: tar.x, y: tar.y, z: tar.z };
-                allCameraPos[allCameraPos.length - 1] = { x: pos.x, y: pos.y, z: pos.z };
                 this.controls.focusNext(
-                    allTargets[allTargets.length - 1], allTargets[0],
-                    allCameraPos[allCameraPos.length - 1], allCameraPos[0]
+                    preTar, allTargets[0],
+                    preCam, allCameraPos[0]
                 );
             } else { // move to next position
-                allTargets[this.loadSequence - 1] = { x: tar.x, y: tar.y, z: tar.z };
-                allCameraPos[this.loadSequence - 1] = { x: pos.x, y: pos.y, z: pos.z };
                 this.controls.focusNext(
-                    allTargets[this.loadSequence - 1], allTargets[this.loadSequence],
-                    allCameraPos[this.loadSequence - 1], allCameraPos[this.loadSequence]
+                    preTar, allTargets[this.loadSequence],
+                    preCam, allCameraPos[this.loadSequence]
                 );
             }
         }
@@ -181,6 +180,8 @@ class WorldScene {
         this.renderer.shadowMap.enabled = false;
         this.controls.resetCamera();
         this.controls.defControl.enabled = false;
+        this.loadSequence = -1;
+        this.focusNext();
         if (this.gui) {
             this.gui.hide();
             this.gui.reset();

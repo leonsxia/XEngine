@@ -2,14 +2,15 @@ import { BoxGeometry, EdgesGeometry, Mesh, LineSegments } from "three";
 import { basicMateraials } from "../basic/basicMaterial";
 import { CollisionPlane } from "./CollisionPlane";
 
-function createCollisionPlane(specs, name, position, rotationY, receiveShadow, castShadow, showArrow = false) {
+function createCollisionPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false, needUpdateMatrixWorld = true) {
     const cPlane = new CollisionPlane(specs);
     cPlane.setName(name)
         .receiveShadow(receiveShadow)
         .castShadow(castShadow)
         .setPosition(position)
         .setRotationY(rotationY)
-        .updateBoundingBoxHelper();
+        .createRay()
+        .updateBoundingBoxHelper(needUpdateMatrixWorld);
     cPlane.leftArrow.visible = showArrow ? true : false;
     cPlane.rightArrow.visible = showArrow ? true : false;
     return cPlane;
@@ -30,7 +31,7 @@ function createBoundingBoxFaces(specs) {
     boundingBoxWire.name = 'boundingBoxWire';
     boundingBoxWire.position.set(0, 0, 0);
     boundingBoxWire.visible = showBBW ? true : false;
-    boundingBoxWire.geometry.computeBoundingBox();
+    // boundingBoxWire.geometry.computeBoundingBox();
 
     const boundingBox = new Mesh(collisionGeometries.boundingBox, basicMateraials.boundingBox);
     boundingBox.name = 'boundingBox';

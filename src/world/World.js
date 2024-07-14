@@ -89,15 +89,15 @@ class World {
                     if (!this.#keyADown) {
                         this.#keyADown = true;
                         if (!this.#keyDDown) {
-                            console.log('<');
+                            // console.log('<');
                             this.#movingLeft = true;
                             eventDispatcher.publish(messageType, moveActions[0], this.current, this.#movingLeft);
                         } else {
-                            console.log('stop >'); // stop on local x
+                            // console.log('stop >'); // stop on local x
                             this.#movingRight = false;
                             eventDispatcher.publish(messageType, moveActions[1], this.current, this.#movingRight);
                         }
-                        this.logMovement();
+                        // this.logMovement();
                     }
                     break;
                 case 'd':
@@ -106,15 +106,15 @@ class World {
                     if (!this.#keyDDown) {
                         this.#keyDDown = true;
                         if (!this.#keyADown) {
-                            console.log('>');
+                            // console.log('>');
                             this.#movingRight = true;
                             eventDispatcher.publish(messageType, moveActions[1], this.current, this.#movingRight);
                         } else {
-                            console.log('stop <'); // stop on local x
+                            // console.log('stop <'); // stop on local x
                             this.#movingLeft = false;
                             eventDispatcher.publish(messageType, moveActions[0], this.current, this.#movingLeft);
                         }
-                        this.logMovement();
+                        // this.logMovement();
                     }
                     break;
                 case 'w':
@@ -123,15 +123,15 @@ class World {
                     if (!this.#keyWDown) {
                         this.#keyWDown = true;
                         if (!this.#keySDown) {
-                            console.log('^');
+                            // console.log('^');
                             this.#movingForward = true;
                             eventDispatcher.publish(messageType, moveActions[2], this.current, this.#movingForward);
                         } else {
-                            console.log('stop v');
+                            // console.log('stop v');
                             this.#movingBackward = false;
                             eventDispatcher.publish(messageType, moveActions[3], this.current, this.#movingBackward);
                         }
-                        this.logMovement();
+                        // this.logMovement();
                     }
                     break;
                 case 's':
@@ -140,22 +140,22 @@ class World {
                     if (!this.#keySDown) {
                         this.#keySDown = true;
                         if (!this.#keyWDown) {
-                            console.log('v');
+                            // console.log('v');
                             this.#movingBackward = true;
                             eventDispatcher.publish(messageType, moveActions[3], this.current, this.#movingBackward);
                         } else {
-                            console.log('stop ^');
+                            // console.log('stop ^');
                             this.#movingForward = false;
                             eventDispatcher.publish(messageType, moveActions[2], this.current, this.#movingForward);
                         }
-                        this.logMovement();
+                        // this.logMovement();
                     }
                     break;
                 case 'Shift':
                     if (!this.#keyShiftDown) {
                         this.#keyShiftDown = true;
                         this.#accelerate = true;
-                        console.log('faster!');
+                        // console.log('faster!');
                         eventDispatcher.publish(messageType, moveActions[4], this.current, this.#accelerate);
                     }
                     break;
@@ -170,66 +170,66 @@ class World {
                 case 'A':
                 case 'ArrowLeft':
                     if (this.#keyDDown) {
-                        console.log('>');
+                        // console.log('>');
                         this.#movingRight = true;
                         eventDispatcher.publish(messageType, moveActions[1], this.current, this.#movingRight);
                     } else {
-                        console.log('stop <'); // stop on local x
+                        // console.log('stop <'); // stop on local x
                         this.#movingLeft = false;
                         eventDispatcher.publish(messageType, moveActions[0], this.current, this.#movingLeft);
                     }
                     this.#keyADown = false;
-                    this.logMovement();
+                    // this.logMovement();
                     break;
                 case 'd':
                 case 'D':
                 case 'ArrowRight':
                     if (this.#keyADown) {
-                        console.log('<');
+                        // console.log('<');
                         this.#movingLeft = true;
                         eventDispatcher.publish(messageType, moveActions[0], this.current, this.#movingLeft);
                     } else {
-                        console.log('stop >'); // stop on local x
+                        // console.log('stop >'); // stop on local x
                         this.#movingRight = false;
                         eventDispatcher.publish(messageType, moveActions[1], this.current, this.#movingRight);
                     }
                     this.#keyDDown = false;
-                    this.logMovement();
+                    // this.logMovement();
                     break;
                 case 'w':
                 case 'W':
                 case 'ArrowUp':
                     if (this.#keySDown) {
-                        console.log('v');
+                        // console.log('v');
                         this.#movingBackward = true;
                         eventDispatcher.publish(messageType, moveActions[3], this.current, this.#movingBackward);
                     } else {
-                        console.log('stop ^'); // stop on local z
+                        // console.log('stop ^'); // stop on local z
                         this.#movingForward = false;
                         eventDispatcher.publish(messageType, moveActions[2], this.current, this.#movingForward);
                     }
                     this.#keyWDown = false;
-                    this.logMovement();
+                    // this.logMovement();
                     break;
                 case 's':
                 case 'S':
                 case 'ArrowDown':
                     if (this.#keyWDown) {
-                        console.log('^');
+                        // console.log('^');
                         this.#movingForward = true;
                         eventDispatcher.publish(messageType, moveActions[2], this.current, this.#movingForward);
                     } else {
-                        console.log('stop v'); // stop on local z
+                        // console.log('stop v'); // stop on local z
                         this.#movingBackward = false;
                         eventDispatcher.publish(messageType, moveActions[3], this.current, this.#movingBackward);
                     }
                     this.#keySDown = false;
-                    this.logMovement();
+                    // this.logMovement();
                     break;
                 case 'Shift':
                     this.#keyShiftDown = false;
                     this.#accelerate = false;
-                    console.log('slow down');
+                    // console.log('slow down');
                     eventDispatcher.publish(messageType, moveActions[4], this.current, this.#accelerate);
                     break;
                 case ' ':

@@ -27,16 +27,18 @@ class CollisionPlane extends Plane {
         return this;
     }
 
-    updateBoundingBoxHelper() {
-        this.mesh.updateMatrixWorld();
+    updateBoundingBoxHelper(needUpdateMatrixWorld = true) {
+        if (needUpdateMatrixWorld) {
+            this.mesh.updateMatrixWorld();
+        }
         this.boundingBox.copy(this.geometry.boundingBox).applyMatrix4(this.mesh.matrixWorld);
         this.line.applyMatrix4(this.mesh.matrixWorld);
         // this.boundingBoxHelper.updateMatrixWorld();
-        this.updateRay();
+        if (this.leftRay && this.rightRay) this.updateRay();
         return this;
     }
 
-    updateRay() {
+    createRay() {
         const width = this.#w;
         const height = this.#h;
 
@@ -52,6 +54,26 @@ class CollisionPlane extends Plane {
         this.rightRay = new Raycaster(rightfrom, dir, 0, height);
         this.rightRay.layers.set(1);
         this.rightArrow = new ArrowHelper(this.rightRay.ray.direction, this.rightRay.ray.origin, this.height, 0xff0000);
+
+        return this;
+    }
+
+    updateRay() {
+        const width = this.#w;
+        const height = this.#h;
+
+        const dir = new Vector3(0, 1, 0);
+        const leftfrom = new Vector3(width / 2, - height / 2, 0);
+        leftfrom.applyMatrix4(this.mesh.matrixWorld);
+        this.leftRay.set(leftfrom, dir);
+        this.leftArrow.position.copy(leftfrom);
+         
+        const rightfrom = new Vector3(- width / 2, - height / 2, 0);
+        rightfrom.applyMatrix4(this.mesh.matrixWorld);
+        this.rightRay.set(rightfrom, dir);
+        this.rightArrow.position.copy(rightfrom);
+
+        return this;
     }
 }
 

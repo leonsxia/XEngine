@@ -1,6 +1,6 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Sphere, BoxCube, Plane, CollisionPlane } from '../components/Models.js';
+import { Train, Tofu, Sphere, BoxCube, Plane, CollisionPlane, Room, SquarePillar } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { createCollisionPlane } from '../components/physics/collisionHelper.js';
@@ -113,6 +113,22 @@ const gridSpecs = {
     size: 100,
     divisions: 100
 }
+// target, camera setup
+const allTargets = [
+    { x: 0, y: 0, z: 5 },
+    { x: 0, y: 0, z: - 9},
+    { x: 18, y: 0, z: 4 },
+];
+const allCameraPos = [
+    { x: 10, y: 10, z: 20 },
+    { x: 10, y: 13, z: - 1},
+    { x: 20, y: 10, z: 20 }
+];
+const allPlayerPos = [
+    [0, 3, 5],
+    [0, 3, - 9],
+    [18, 3, 4],
+]
 
 class WorldScene4 extends WorldScene {
     #loaded = false;
@@ -244,30 +260,42 @@ class WorldScene4 extends WorldScene {
             .setScale([.2, .3, .2])
             .updateBoundingBoxHelper();
 
-        await Promise.all([
+        const [tmp1, tmp2, room1, room2, room3] = await Promise.all([
             earth.init(earthSpecs),
-            box.init(boxSpecs)
+            box.init(boxSpecs),
+            this.createWalls(),
+            this.createWalls2(),
+            this.createRoom1()
         ]);
 
-        const walls = this.createWalls()
-            .concat(this.createWalls2())
+        this.rooms.push(room3.walls);
+        this.rooms.push(room2.concat(this.createInsideWalls()).concat(this.createInsideWalls2()));
+        this.rooms.push(room1);
+        
+        const walls = room1
+            .concat(room2)
             .concat(this.createInsideWalls())
             .concat(this.createInsideWalls2());
         this.players.push(tofu);
         this.players.push(train);
-        this.walls = walls;
+        // this.walls = walls.concat(room3.walls);
         this.floors.push(ground);
         this.physics = new SimplePhysics(this.players, this.floors, this.walls, this.obstacles);
 
         this.loop.updatables.push(earth, box, this.physics);
-        this.scene.add(ground.mesh, ground.boundingBoxHelper, ceiling.mesh
-        );
+        this.scene.add(ground.mesh, ground.boundingBoxHelper, ceiling.mesh);
 
-        this.changeCharacter('red train 2', false);
+        // initialize player and room
+        this.changeCharacter('tofu1');
+        this.loadSequence = -1;
+        this.focusNext();
 
         walls.forEach(w => {
             this.scene.add(w.mesh, w.line, w.leftArrow, w.rightArrow);
         });
+
+        this.scene.add(room3.group);
+        room3.walls.forEach(w => this.scene.add(w.line, w.leftArrow, w.rightArrow));
 
         this.showRoleSelector = true;
         // Gui setup
@@ -293,11 +321,95 @@ class WorldScene4 extends WorldScene {
         });
     }
 
-    createWalls() {
+    async createRoom1() {
+        const specs = {
+            width: 10,
+            height: 3.5,
+            depth: 15,
+            frontMap: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg',
+            backMap: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg',
+            leftMap: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg',
+            rightMap: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg',
+            name: 'room1'
+        }
+
+        const spSepcs1 = {
+            width: 1,
+            height: 3.5,
+            depth: 1,
+            frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            backMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            leftMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            rightMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5,
+            name: 'square_pillar1',
+            showArrow: false
+        }
+
+        const inWallSpecs1 = {
+            width: 5,
+            height: 3.5,
+            map: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5
+        }
+
+        const inWallSpecs2 = {
+            width: 3,
+            height: 3.5,
+            map: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5
+        }
+
+        const inWallSpecs3 = {
+            width: 0.5,
+            height: 3.5,
+            map: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5
+        }
+
+        const inWallSpecs4 = {
+            width: 2.5,
+            height: 3.5,
+            map: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5
+        }
+
+        const inWallSpecs5 = {
+            width: 4.5,
+            height: 3.5,
+            map: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5
+        }
+
+        const posY = specs.height / 2 - .1;
+        const insideWall1 = createCollisionPlane(inWallSpecs1, 'inside_wall_1', [0, 0, 5], - Math.PI / 2, true, true, false, false);
+        const insideWall2 = createCollisionPlane(inWallSpecs2, 'inside_wall_2', [1.5, 0, 2.5], Math.PI, true, true, false, false);
+        const insideWall3 = createCollisionPlane(inWallSpecs3, 'inside_wall_3', [3, 0, 2.75], Math.PI / 2, true, true, false, false);
+        const insideWall4 = createCollisionPlane(inWallSpecs4, 'inside_wall_4', [1.75, 0, 3], 0, true, true, false, false);
+        const insideWall5 = createCollisionPlane(inWallSpecs5, 'inside_wall_5', [.5, 0, 5.25], Math.PI / 2, true, true, false, false);
+
+        const spillar1 = new SquarePillar(spSepcs1);
+        const room = new Room(specs);
+        spillar1
+            .setPosition([0, 0, -2])
+            .setRotationY(5 * Math.PI / 6)
+        room.addWalls([insideWall1, insideWall2, insideWall3, insideWall4, insideWall5]);
+        room.addGroup(spillar1);
+
+        await room.init();
+        room.setPosition([0, posY, 10])
+            .setRotationY(- Math.PI / 6)
+            .updateWallsBBandRay();
+
+        return room;
+    }
+
+    async createWalls() {
         // wall
         const specs = {
             width: 10,
-            height: 2.5
+            height: 3.5,
+            map: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg'
         };
         const posY = specs.height / 2 - .1;
 
@@ -309,13 +421,20 @@ class WorldScene4 extends WorldScene {
 
         const wall4 = createCollisionPlane(specs, 'wall4', [21.8, posY, 6.8], - 2 * Math.PI / 3, true, true);
 
+        await Promise.all([
+            wall.init(), 
+            wall2.init(), 
+            wall3.init(), 
+            wall4.init()
+        ]);
         return [wall, wall2, wall3, wall4];
     }
 
-    createWalls2() {
+    async createWalls2() {
         const specs = {
             width: 10,
-            height: 2.5
+            height: 3.5,
+            map: 'assets/textures/walls/Texturelabs_Concrete_128S.jpg'
         };
         const posY = specs.height / 2 - .1;
 
@@ -327,6 +446,12 @@ class WorldScene4 extends WorldScene {
 
         const wall4 = createCollisionPlane(specs, 'wall8', [5, posY, - 9], - Math.PI / 2, true, true);
 
+        await Promise.all([
+            wall.init(), 
+            wall2.init(), 
+            wall3.init(), 
+            wall4.init()
+        ]);
         return [wall, wall2, wall3, wall4];
     }
 
@@ -388,25 +513,10 @@ class WorldScene4 extends WorldScene {
     }
 
     focusNext() {
-        const allTargets = [
-            { x: 0, y: 0, z: 0 },
-            { x: 0, y: 0, z: - 9},
-            { x: 18, y: 0, z: 4 },
-        ];
-        const allCameraPos = [
-            { x: 10, y: 10, z: 10 },
-            { x: 10, y: 13, z: - 1},
-            { x: 20, y: 10, z: 20 }
-        ];
-        const allPlayerPos = [
-            [0, 3, 0],
-            [0, 3, - 9],
-            [18, 3, 4],
-        ]
-
         const setup = { allTargets, allCameraPos, allPlayerPos };
 
         this.focusNextProcess(setup);
+        this.physics.walls = this.rooms[this.loadSequence];
     }
 }
 

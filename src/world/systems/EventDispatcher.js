@@ -63,7 +63,7 @@ class EventDispatcher {
                     {
                         args.push(arguments[i]);
                     }
-                    console.log(`subscriber: '${subscriber.subscriber.name}' scene: ${subscriber.scene}`);
+                    // console.log(`subscriber: '${subscriber.subscriber.name}' scene: ${subscriber.scene}`);
                     subscriber.callback.apply(subscriber.subscriber, args);
                 });
             }
