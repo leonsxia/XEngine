@@ -1,5 +1,6 @@
 import { Group, MeshPhongMaterial, TextureLoader, SRGBColorSpace, RepeatWrapping } from 'three';
 import { createCollisionPlane } from '../../physics/collisionHelper';
+import { green } from '../../basic/colorBase';
 
 class SquarePillar {
     name = '';
@@ -9,7 +10,7 @@ class SquarePillar {
     rightFace;
     walls = [];
     showArrow = false;
-    spces;
+    specs;
 
     constructor(specs) {
         this.specs = specs;
@@ -26,7 +27,7 @@ class SquarePillar {
         this.leftFace = createCollisionPlane(vSpecs, `${name}_left`, [- width / 2, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);
         this.rightFace = createCollisionPlane(vSpecs, `${name}_right`, [width / 2, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
         
-        this.frontFace.line.material.color.setHex(0x00ff00);
+        this.frontFace.line.material.color.setHex(green);
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
 
@@ -44,7 +45,7 @@ class SquarePillar {
             frontMap ? new TextureLoader().loadAsync(frontMap) : new Promise(resolve => resolve(null)),
             backMap ? new TextureLoader().loadAsync(backMap) : new Promise(resolve => resolve(null)),
             leftMap ? new TextureLoader().loadAsync(leftMap) : new Promise(resolve => resolve(null)),
-            rightMap ? new TextureLoader().loadAsync(rightMap) : new Promise(resolve => resolve(null)),
+            rightMap ? new TextureLoader().loadAsync(rightMap) : new Promise(resolve => resolve(null))
         ]);
 
         if (frontT) {
@@ -75,7 +76,7 @@ class SquarePillar {
     setTextureWrapS(mapRatio, texture, h) {
         if (mapRatio) {
             const { width, height, depth } = this.specs;
-            const xRepeat =  h ? width * mapRatio / height : depth * mapRatio / height;
+            const xRepeat =  h ? width / (mapRatio * height) : depth / (mapRatio * height);
             texture.wrapS = RepeatWrapping;
             texture.repeat.set(xRepeat, 1);
         }

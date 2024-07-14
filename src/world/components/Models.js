@@ -12,3 +12,5 @@ export { Tofu } from './composite/tofu/Tofu.js';
 export { CollisionPlane } from './physics/CollisionPlane.js';
 export { Room } from './composite/room/Room.js';
 export { SquarePillar } from './composite/inwall/SquarePillar.js';
+export { LWall } from './composite/inwall/LWall.js';
+export { CylinderPillar } from './composite/inwall/CylinderPillar.js';

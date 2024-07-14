@@ -1,16 +1,22 @@
-import { Mesh, MeshPhongMaterial, DoubleSide, TextureLoader, SRGBColorSpace, RepeatWrapping } from 'three';
+import { Mesh, MeshPhongMaterial, DoubleSide, TextureLoader, SRGBColorSpace, RepeatWrapping, MirroredRepeatWrapping } from 'three';
 import { BasicObject } from './BasicObject';
 
 class Plane extends BasicObject {
     #mapSrc;
     #mapRatio;
+    #repeatU;
+    #repeatV;
+    #rotationT;
     #map = null;
 
     constructor(specs) {
         super('plane', specs);
-        const { name, color, map, mapRatio } = specs;
+        const { name, color, map, mapRatio, repeatU, repeatV, rotationT } = specs;
         this.#mapSrc = map;
         this.#mapRatio = mapRatio;
+        this.#repeatU = repeatU;
+        this.#repeatV = repeatV;
+        this.#rotationT = rotationT;
         if (color)
             this.material = new MeshPhongMaterial({ color: color });
         this.mesh = new Mesh(this.geometry, this.material);
@@ -24,11 +30,20 @@ class Plane extends BasicObject {
         if (texture) {
             this.#map = texture;
             this.#map.colorSpace = SRGBColorSpace;
-            if (this.#mapRatio) {
-                const xRepeat =  this.width * this.#mapRatio / this.height;
+            if (this.#rotationT) {
+                this.#map.center.set(.5, .5);
+                this.#map.rotation = this.#rotationT;
+            }
+            if (this.#repeatU && this.#repeatV) {
+                this.#map.wrapS = MirroredRepeatWrapping;   // horizontal
+                this.#map.wrapT = MirroredRepeatWrapping;   // vertical
+                this.#map.repeat.set(this.#repeatU, this.#repeatV);
+            } else if (this.#mapRatio) {
+                const xRepeat =  this.width / (this.#mapRatio * this.height);
                 this.#map.wrapS = RepeatWrapping;
                 this.#map.repeat.set(xRepeat, 1);
-            }
+            } 
+            
             this.mesh.material = this.material = new MeshPhongMaterial({ map: this.#map });
         }
     }

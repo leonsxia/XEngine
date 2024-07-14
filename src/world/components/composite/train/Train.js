@@ -198,7 +198,8 @@ class Train extends Moveable2D {
     }
 
     onGround(floor) {
-        this.group.position.y = floor.mesh.position.y + this.height / 2;
+        const floorY = floor.mesh.localToWorld(new Vector3(0, 0, 0)).y;
+        this.group.position.y = floorY + this.height / 2;
         this.#fallingTime = 0;
     }
 
