@@ -2,7 +2,7 @@ import { Group, Box3, Box3Helper, Vector3 } from 'three';
 import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 
-const ENLARGE = 2;
+const ENLARGE = 2.5;
 
 class Tofu extends Moveable2D {
     name = '';
@@ -11,7 +11,7 @@ class Tofu extends Moveable2D {
     #w;
     #d;
     #h;
-    #rotateR = .8;
+    #rotateR = 1.2;
     boundingBox;
     boundingBoxHelper;
     #g = 9.8;
