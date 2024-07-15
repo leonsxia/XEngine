@@ -19,6 +19,7 @@ class CollisionPlane extends Plane {
         
         this.edges = new EdgesGeometry( this.geometry );
         this.line = new LineSegments( this.edges, new LineBasicMaterial( { color: white } ) );
+        this.mesh.add(this.line);
     }
 
     setRotationY(y) {
@@ -33,7 +34,6 @@ class CollisionPlane extends Plane {
             this.mesh.updateMatrixWorld();
         }
         this.boundingBox.copy(this.geometry.boundingBox).applyMatrix4(this.mesh.matrixWorld);
-        this.line.applyMatrix4(this.mesh.matrixWorld);
         if (this.leftRay && this.rightRay) this.updateRay();
         return this;
     }
@@ -62,7 +62,7 @@ class CollisionPlane extends Plane {
 
         const dir = new Vector3(0, 1, 0);
         const quaternion = new Quaternion();
-        dir.applyQuaternion(this.mesh.getWorldQuaternion(quaternion));
+        dir.applyQuaternion(this.mesh.getWorldQuaternion(quaternion));  // this will update mesh matrix world.
         const leftfrom = new Vector3(width / 2, - height / 2, 0);
         leftfrom.applyMatrix4(this.mesh.matrixWorld);
         this.leftRay.set(leftfrom, dir);

@@ -2,6 +2,8 @@ import { GUI } from 'lil-gui';
 import Stats from 'stats.js';
 
 const CONTROL_TITLES = ['Menu', 'Lights Control', 'Objects Control'];
+const PLAYER_CONTROL = 'Player Control';
+
 class Gui {
     #guis = [];
     #stats = null;
@@ -154,22 +156,22 @@ class Gui {
                         find.changeFn(val);
                         break;
                     case 'control-dropdown':
-                        if (this.#sceneChanged) return;
+                        // if (this.#sceneChanged) return;
                     case 'dropdown':
                         find.changeFn(val);
                         break;
                     case 'role-dropdown':
                         find.changeFn(val, false);
-                        this.#guis[0].folders.find(f => f._title === 'Player BB Helper')
+                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
                             .controllers.find(c => c._name === 'BBHelper')
                             .setValue('hide');
-                        this.#guis[0].folders.find(f => f._title === 'Player BB')
+                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
                             .controllers.find(c => c._name === 'BB')
                             .setValue('hide');
-                        this.#guis[0].folders.find(f => f._title === 'Player BBW')
+                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
                             .controllers.find(c => c._name === 'BBW')
                             .setValue('hide');
-                        this.#guis[0].folders.find(f => f._title === 'Player BF')
+                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
                             .controllers.find(c => c._name === 'BF')
                             .setValue('hide');
                         break;

@@ -10,6 +10,7 @@ class Room {
     rightWall;
     walls = [];
     floors = [];
+    obstacles = [];
     insideWalls = [];
     insideGroups = [];
     showArrow = false;
@@ -25,7 +26,7 @@ class Room {
         this.showArrow = showArrow;
         this.group = new Group();
 
-        this.frontWall = createCollisionPlane(hSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, this.showArrow, false);
+        this.frontWall = createCollisionPlane(hSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, this.showArrow, true);
         this.backWall = createCollisionPlane(hSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, this.showArrow, false);
         this.leftWall = createCollisionPlane(vSpecs, `${name}_left`, [- width / 2, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
         this.rightWall = createCollisionPlane(vSpecs, `${name}_right`, [width / 2, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);

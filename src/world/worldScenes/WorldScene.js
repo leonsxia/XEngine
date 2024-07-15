@@ -2,7 +2,7 @@ import { createCamera } from '../components/camera.js';
 import { createScene } from '../components/scene.js';
 import { WorldControls } from '../systems/Controls.js';
 import { updateSingleLightCamera } from '../components/shadowMaker.js';
-import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRightGuiConfig } from '../components/utils/guiConfigHelper.js';
+import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRightGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig } from '../components/utils/guiConfigHelper.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { Gui } from '../systems/Gui.js';
@@ -32,10 +32,8 @@ class WorldScene {
     shadowLightObjects = [];
     physics = null;
     players = [];
-    walls = [];
-    floors = [];
-    obstacles = [];
     rooms = [];
+    cPlanes = [];
     player;
     loadSequence = 0;
     showRoleSelector = false;
@@ -183,8 +181,8 @@ class WorldScene {
         this.loadSequence = -1;
         this.focusNext();
         if (this.gui) {
-            this.gui.hide();
             this.gui.reset();
+            this.gui.hide();
         }
     }
 
@@ -260,43 +258,64 @@ class WorldScene {
                 changeFn: this.changeCharacter.bind(this)
             }));
         }
+
         if (this.players.length > 0) {
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Player BB Helper',
-                parent: 'playerBBHelper',
+            const folder = makeFolderGuiConfig({folder: 'Player Control', parent: 'playerControl'});
+            folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BBHelper',
                 value: { BBHelper: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: this.showPlayerBBHelper.bind(this)
             }));
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Player BB',
-                parent: 'playerBB',
+            folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BB',
                 value: { BB: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: this.showPlayerBB.bind(this)
             }));
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Player BBW',
-                parent: 'playerBBW',
+            folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BBW',
                 value: { BBW: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: this.showPlayerBBW.bind(this)
             }));
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Player BF',
-                parent: 'playerBF',
+            folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BF',
                 value: { BF: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: this.showPlayerBF.bind(this)
             }));
+            this.guiLeftSpecs.details.push(folder);
+        }
+
+        if (this.cPlanes.length > 0) {
+            const folder = makeFolderGuiConfig({folder: 'cPlanes Control', parent: 'cPlanesControl'});
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'lines',
+                value: { lines: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showCPlaneLines.bind(this)
+            }));
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'arrows',
+                value: { arrows: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showCPlaneArrows.bind(this)
+            }));
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'BBHelper',
+                value: { BBHelper: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showCPlaneBBHelper.bind(this)
+            }));
+            this.guiLeftSpecs.details.push(folder);
         }
         
         // bind callback to light helper and shadow cam helper
@@ -363,6 +382,28 @@ class WorldScene {
         if (show === 'show') this.player.showBF(show);
         else this.player.showBF(false);
         return this;
+    }
+
+    showCPlaneLines(show) {
+        const s = show === 'show' ? true : false;
+        this.cPlanes.forEach(cp => {
+            cp.line.visible = s;
+        });
+    }
+
+    showCPlaneArrows(show) {
+        const s = show === 'show' ? true : false;
+        this.cPlanes.forEach(cp => {
+            if (cp.leftArrow) cp.leftArrow.visible = s;
+            if (cp.rightArrow) cp.rightArrow.visible = s;
+        });
+    }
+
+    showCPlaneBBHelper(show) {
+        const s = show === 'show' ? true : false;
+        this.cPlanes.forEach(cp => {
+            cp.boundingBoxHelper.visible = s;
+        });
     }
 
     bindLightShadowHelperGuiCallback() {

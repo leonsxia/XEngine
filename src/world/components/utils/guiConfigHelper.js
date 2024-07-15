@@ -43,6 +43,22 @@ function makeDropdownGuiConfig(specs) {
     }
 }
 
+function makeFolderGuiConfig(specs) {
+    const { folder, parent } = specs;
+    return { folder, parent, specs: [] }
+}
+
+function makeFolderSpecGuiConfig(specs) {
+    const { name, value, params, type, changeFn } = specs;
+    return {
+        name,
+        value,
+        params,
+        type,
+        changeFn
+    };
+}
+
 function addDirectionalLight(light, specs) {
     // main directional light
     specs.push({
@@ -655,7 +671,9 @@ function attachObjectsToRightGuiConfig(objectSpecsArr) {
 export { 
     makeGuiPanel, 
     makeFunctionGuiConfig, 
-    makeDropdownGuiConfig, 
+    makeDropdownGuiConfig,
+    makeFolderGuiConfig,
+    makeFolderSpecGuiConfig,
     makeSceneRightGuiConfig,
     attachObjectsToRightGuiConfig
  };

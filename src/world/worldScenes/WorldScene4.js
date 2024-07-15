@@ -193,6 +193,7 @@ class WorldScene4 extends WorldScene {
         ground.setRotation([-.5 * Math.PI, 0, 0]);
         ground.updateBoundingBoxHelper();
         ground.receiveShadow(true);
+        this.cPlanes.push(ground);
 
         // ceiling
         const ceilingSpecs = {
@@ -273,7 +274,7 @@ class WorldScene4 extends WorldScene {
         
         this.players.push(tofu);
         this.players.push(train);
-        this.physics = new SimplePhysics(this.players, this.floors, this.walls, this.obstacles);
+        this.physics = new SimplePhysics(this.players, [], [], []);
 
         this.loop.updatables.push(box, this.physics);
         this.scene.add(ground.mesh, ground.boundingBoxHelper, ceiling.mesh);
@@ -284,14 +285,14 @@ class WorldScene4 extends WorldScene {
         this.focusNext();
 
         this.scene.add(room1.group);
-        room1.walls.forEach(w => this.scene.add(w.line, w.leftArrow, w.rightArrow));
-        room1.floors.forEach(f => this.scene.add(f.line, f.boundingBoxHelper, f.leftArrow, f.rightArrow));
+        room1.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
+        room1.floors.forEach(f => this.scene.add(f.boundingBoxHelper, f.leftArrow, f.rightArrow));
         this.scene.add(room2.group);
-        room2.walls.forEach(w => this.scene.add(w.line, w.leftArrow, w.rightArrow));
-        room2.floors.forEach(f => this.scene.add(f.line, f.boundingBoxHelper, f.leftArrow, f.rightArrow));
+        room2.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
+        room2.floors.forEach(f => this.scene.add(f.boundingBoxHelper, f.leftArrow, f.rightArrow));
         this.scene.add(room3.group);
-        room3.walls.forEach(w => this.scene.add(w.line, w.leftArrow, w.rightArrow));
-        room3.floors.forEach(f => this.scene.add(f.line, f.boundingBoxHelper, f.leftArrow, f.rightArrow));
+        room3.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
+        room3.floors.forEach(f => this.scene.add(f.boundingBoxHelper, f.leftArrow, f.rightArrow));
 
         this.showRoleSelector = true;
         // Gui setup
@@ -299,6 +300,10 @@ class WorldScene4 extends WorldScene {
             this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr };
             this.setupGuiConfig();
         }
+
+        this.showCPlaneLines(false);
+        this.showCPlaneArrows(false);
+        this.showCPlaneBBHelper(false);
 
         this.initContainer();
         this.#loaded = true;
@@ -393,6 +398,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(- Math.PI / 6)
             .updateCPlaneBBandRay();
 
+        this.cPlanes = this.cPlanes.concat(room.walls, room.floors);
         return room;
     }
 
@@ -482,6 +488,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(5 * Math.PI / 6)
             .updateCPlaneBBandRay();
 
+        this.cPlanes = this.cPlanes.concat(room.walls, room.floors);
         return room;
     }
 
@@ -527,6 +534,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(- Math.PI / 6)
             .updateCPlaneBBandRay();
 
+        this.cPlanes = this.cPlanes.concat(room.walls, room.floors);
         return room;
     }
 
