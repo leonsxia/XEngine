@@ -256,7 +256,7 @@ class WorldScene4 extends WorldScene {
             .receiveShadow(true)
             .setPosition([0, 5, 3])
             // .setRotation([0, Math.PI, 0])
-            .setScale([.2, .3, .2])
+            // .setScale([.2, .3, .2])
             .updateBoundingBoxHelper();
 
         const [tmp1, room1, room2, room3] = await Promise.all([

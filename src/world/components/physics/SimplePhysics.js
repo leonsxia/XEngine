@@ -69,7 +69,7 @@ class SimplePhysics {
             && Math.abs(dummyObject.position.z) - halfPlayerDepth <= 0
         ) {
             const halfEdgeLength = plane.width / 2;
-            const padding = player.velocity * delta;// + 0.1;
+            const padding = player.velocity * delta + 0.1;
             if (
                 (Math.abs(dummyObject.position.z - halfPlayerDepth) <=  padding) && 
                 (
@@ -136,9 +136,9 @@ class SimplePhysics {
     }
 
     tick(delta) {
-        if (delta > 0.0333) { // lost frame when fps lower than 30fps
-            return;
-        }
+        // if (delta > 0.0333) { // lost frame when fps lower than 30fps
+        //     return;
+        // }
         this.activePlayers.forEach(player => {
             player.setBoundingBoxHelperColor(Color.BBW).resetBFColor(Color.BF);
             player.resetItersectStatus();

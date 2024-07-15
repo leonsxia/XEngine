@@ -47,6 +47,7 @@ function createMeshes() {
     const bbSpecs = {
         width, depth, height, 
         bbfThickness: .35,  // calculated by Train faster speed = 10 m/s, 30fps needs at least 1/30 * 10 = 0.333 m to cover.
+        gap: .2,
         showBB: false, showBBW: false, showBF: false
     }
     const bbObjects = createBoundingBoxFaces(bbSpecs);

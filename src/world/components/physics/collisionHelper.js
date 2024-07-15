@@ -17,15 +17,15 @@ function createCollisionPlane(specs, name, position, rotationY, receiveShadow = 
 }
 
 function createCollisionGeometries(specs) {
-    const { width, height, depth, bbfThickness } = specs;
+    const { width, height, depth, bbfThickness, gap } = specs;
     const boundingBox = new BoxGeometry(width, height, depth);
     const boundingBoxEdges = new EdgesGeometry(boundingBox);
-    const boundingFace = new BoxGeometry(width - .2, height, bbfThickness);
+    const boundingFace = new BoxGeometry(width - gap, height, bbfThickness);
     return { boundingBox, boundingBoxEdges, boundingFace };
 }
 
 function createBoundingBoxFaces(specs) {
-    const { width, depth, bbfThickness, showBB, showBBW, showBF } = specs;
+    const { width, depth, bbfThickness, showBB, showBBW, showBF, gap } = specs;
     const collisionGeometries = createCollisionGeometries(specs);
     const boundingBoxWire = new LineSegments(collisionGeometries.boundingBoxEdges, basicMateraials.boundingBoxWire);
     boundingBoxWire.name = 'boundingBoxWire';
@@ -56,7 +56,7 @@ function createBoundingBoxFaces(specs) {
     const leftBoundingFace = new Mesh(collisionGeometries.boundingFace, basicMateraials.boundingFace.clone());
     leftBoundingFace.name = 'leftFace';
     leftBoundingFace.position.set(BBFWidthOffset, 0, 0);
-    leftBoundingFace.scale.x = (depth - .2) / (width - .2);
+    leftBoundingFace.scale.x = (depth - gap) / (width - gap);
     leftBoundingFace.rotation.y += Math.PI / 2;
     leftBoundingFace.visible = showBF ? true : false;
     leftBoundingFace.layers.enable(1);
@@ -64,7 +64,7 @@ function createBoundingBoxFaces(specs) {
     const rightBoundingFace = new Mesh(collisionGeometries.boundingFace, basicMateraials.boundingFace.clone());
     rightBoundingFace.name = 'rightFace';
     rightBoundingFace.position.set(- BBFWidthOffset, 0, 0);
-    rightBoundingFace.scale.x = (depth - .2) / (width - .2);
+    rightBoundingFace.scale.x = (depth - gap) / (width - gap);
     rightBoundingFace.rotation.y += Math.PI / 2;
     rightBoundingFace.visible = showBF ? true : false;
     rightBoundingFace.layers.enable(1);

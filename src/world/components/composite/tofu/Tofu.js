@@ -2,6 +2,8 @@ import { Group, Box3, Box3Helper, Vector3 } from 'three';
 import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 
+const ENLARGE = 2;
+
 class Tofu extends Moveable2D {
     name = '';
     group;
@@ -9,11 +11,12 @@ class Tofu extends Moveable2D {
     #w;
     #d;
     #h;
-    #rotateR = 2;
+    #rotateR = .8;
     boundingBox;
     boundingBoxHelper;
     #g = 9.8;
     #fallingTime = 0;
+    #vel = 1.34;
 
     constructor(name) {
         super();
@@ -98,15 +101,15 @@ class Tofu extends Moveable2D {
     }
 
     get velocity() {
-        return this.isAccelerating ? 10 : 4.5;
+        return this.isAccelerating ? this.#vel * ENLARGE : this.#vel;
     }
 
     get recoverCoefficient() {
-        return this.isAccelerating ? 0.04 : 0.02;
+        return this.isAccelerating ? 0.008 : 0.004;
     }
     
     get backwardCoefficient() {
-        return this.isAccelerating ? 0.01 : 0.005;
+        return this.isAccelerating ? 0.002 : 0.001;
     }
 
     showBB(show) {
@@ -182,7 +185,7 @@ class Tofu extends Moveable2D {
     }
 
     setTickParams(delta) {
-        const R = this.isAccelerating ? this.#rotateR * 2 : this.#rotateR;
+        const R = this.isAccelerating ? this.#rotateR * ENLARGE : this.#rotateR;
         const rotateVel = this.velocity / R;
         const dist = this.velocity * delta;
         const params = {
