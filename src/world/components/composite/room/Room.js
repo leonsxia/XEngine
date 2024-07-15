@@ -17,11 +17,12 @@ class Room {
 
     constructor(specs) {
         this.specs = specs;
-        const { name, width, depth, height } = specs;
+        const { name, width, depth, height, showArrow } = specs;
         const hSpecs = { width, height };
         const vSpecs = { width: depth, height };
 
         this.name = name;
+        this.showArrow = showArrow;
         this.group = new Group();
 
         this.frontWall = createCollisionPlane(hSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, this.showArrow, false);
@@ -143,7 +144,7 @@ class Room {
         return this;
     }
 
-    updateWallsBBandRay() {
+    updateCPlaneBBandRay() {
         this.group.updateMatrixWorld();
         this.walls.forEach(w => w.updateBoundingBoxHelper(false));
         this.floors.forEach(f => f.updateBoundingBoxHelper(false));

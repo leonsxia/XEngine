@@ -195,12 +195,14 @@ class Train extends Moveable2D {
         const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
         this.group.position.y -= deltaY;
         this.#fallingTime = now;
+        this.updateBoundingBoxHelper();
     }
 
     onGround(floor) {
         const floorY = floor.mesh.localToWorld(new Vector3(0, 0, 0)).y;
         this.group.position.y = floorY + this.height / 2;
         this.#fallingTime = 0;
+        this.updateBoundingBoxHelper();
     }
 
     tickWithWall(delta, wall) {
