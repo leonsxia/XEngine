@@ -246,7 +246,7 @@ class WorldScene4 extends WorldScene {
         // this.subscribeEvents(train, worldSceneSpecs.moveType);
         train.castShadow(true)
             .receiveShadow(true)
-            .setPosition([0, 3, 0])
+            // .setPosition([0, 3, 0])
             .setScale([.5, .5, .5])
             .updateBoundingBoxHelper();
 
@@ -254,7 +254,7 @@ class WorldScene4 extends WorldScene {
         // this.subscribeEvents(tofu, worldSceneSpecs.moveType);
         tofu.castShadow(true)
             .receiveShadow(true)
-            .setPosition([0, 5, 3])
+            // .setPosition([0, 5, 3])
             // .setRotation([0, Math.PI, 0])
             // .setScale([.2, .3, .2])
             .updateBoundingBoxHelper();

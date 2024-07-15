@@ -326,6 +326,7 @@ class WorldScene {
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
             }
             this.player = find;
+            this.focusNext(--this.loadSequence);
             this.physics.addActivePlayers(name);
             this.scene.add(this.player.group);
             this.subscribeEvents(this.player, this.setup.moveType);
