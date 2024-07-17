@@ -1,6 +1,8 @@
-import { BoxGeometry, EdgesGeometry, Mesh, LineSegments } from "three";
-import { basicMateraials } from "../basic/basicMaterial";
-import { CollisionPlane } from "./CollisionPlane";
+import { BoxGeometry, EdgesGeometry, Mesh, LineSegments, Vector3 } from 'three';
+import { OBB } from 'three/examples/jsm/Addons.js';
+import { basicMateraials } from '../basic/basicMaterial';
+import { CollisionPlane } from './CollisionPlane';
+import { OBBPlane } from './OBBPlane';
 
 function createCollisionPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false, needUpdateMatrixWorld = true) {
     const cPlane = new CollisionPlane(specs);
@@ -16,11 +18,46 @@ function createCollisionPlane(specs, name, position, rotationY, receiveShadow = 
     return cPlane;
 }
 
+function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow = false, castShadow = false, createRay= false, showArrow = false, needUpdateMatrixWorld = true) {
+    const cPlane = new CollisionPlane(specs);
+    cPlane.setName(name)
+        .receiveShadow(receiveShadow)
+        .castShadow(castShadow)
+        .setPosition(position)
+        .setRotation(rotation)
+    if (createRay) cPlane.createRay();
+        
+    cPlane.updateBoundingBoxHelper(needUpdateMatrixWorld);
+    
+    if (createRay) {
+        cPlane.leftArrow.visible = showArrow ? true : false;
+        cPlane.rightArrow.visible = showArrow ? true : false;
+    }
+    return cPlane;
+}
+
+function createOBBPlane(specs, name, position, rotation, receiveShadow = false, castShadow = false, needUpdateMatrixWorld = true) {
+    const obbPlane = new OBBPlane(specs);
+    obbPlane.setName(name)
+        .receiveShadow(receiveShadow)
+        .castShadow(castShadow)
+        .setPosition(position)
+        .setRotation(rotation)
+        .updateOBB(needUpdateMatrixWorld);
+
+    return obbPlane;
+}
+
 function createCollisionGeometries(specs) {
     const { width, height, depth, bbfThickness, gap } = specs;
     const boundingBox = new BoxGeometry(width, height, depth);
     const boundingBoxEdges = new EdgesGeometry(boundingBox);
     const boundingFace = new BoxGeometry(width - gap, height, bbfThickness);
+
+    // setup OBB on geometry level
+    boundingBox.userData.obb = new OBB();
+    boundingBox.userData.obb.halfSize.copy( new Vector3(width, height, depth) ).multiplyScalar( 0.5 );
+
     return { boundingBox, boundingBoxEdges, boundingFace };
 }
 
@@ -38,6 +75,9 @@ function createBoundingBoxFaces(specs) {
     boundingBox.position.set(0, 0, 0);
     boundingBox.visible = showBB ? true : false;
     boundingBox.geometry.computeBoundingBox();
+
+    // bounding volume on object level (this will reflect the current world transform)
+    boundingBox.userData.obb = new OBB();
 
     const BBFDepthOffset = depth / 2 - bbfThickness / 2;
     const BBFWidthOffset = width / 2 - bbfThickness / 2;
@@ -72,4 +112,9 @@ function createBoundingBoxFaces(specs) {
     return { boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace };
 }
 
-export { createCollisionPlane, createBoundingBoxFaces };
+export { 
+    createCollisionPlane, 
+    createBoundingBoxFaces, 
+    createCollisionPlaneFree,
+    createOBBPlane
+};

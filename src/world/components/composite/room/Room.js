@@ -10,6 +10,10 @@ class Room {
     rightWall;
     walls = [];
     floors = [];
+    tops = [];
+    bottoms = [];
+    topOBBs = [];
+    bottomOBBs = [];
     obstacles = [];
     insideWalls = [];
     insideGroups = [];
@@ -26,7 +30,7 @@ class Room {
         this.showArrow = showArrow;
         this.group = new Group();
 
-        this.frontWall = createCollisionPlane(hSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, this.showArrow, true);
+        this.frontWall = createCollisionPlane(hSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, this.showArrow, false);
         this.backWall = createCollisionPlane(hSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, this.showArrow, false);
         this.leftWall = createCollisionPlane(vSpecs, `${name}_left`, [- width / 2, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
         this.rightWall = createCollisionPlane(vSpecs, `${name}_right`, [width / 2, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);
@@ -122,6 +126,10 @@ class Room {
             this.group.add(g.group);
             this.insideGroups.push(g);
             this.walls = this.walls.concat(g.walls);
+            if (g.tops) this.tops = this.tops.concat(g.tops);
+            if (g.bottoms) this.bottoms = this.bottoms.concat(g.bottoms);
+            if (g.topOBBs) this.topOBBs = this.topOBBs.concat(g.topOBBs);
+            if (g.bottomOBBs) this.bottomOBBs = this.bottomOBBs.concat(g.bottomOBBs);
         });
     }
 
@@ -148,7 +156,11 @@ class Room {
     updateCPlaneBBandRay() {
         this.group.updateMatrixWorld();
         this.walls.forEach(w => w.updateBoundingBoxHelper(false));
-        this.floors.forEach(f => f.updateBoundingBoxHelper(false));
+        this.floors.forEach(f => f.updateOBB(false));
+        this.tops.forEach(t => t.updateBoundingBoxHelper(false));
+        this.bottoms.forEach(b => b.updateBoundingBoxHelper(false));
+        this.topOBBs.forEach(t => t.updateOBB(false));
+        this.bottomOBBs.forEach(b => b.updateOBB(false));
     }
 }
 

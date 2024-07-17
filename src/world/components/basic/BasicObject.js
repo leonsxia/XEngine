@@ -1,4 +1,4 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, MeshStandardMaterial, TextureLoader, SRGBColorSpace } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, MeshStandardMaterial, TextureLoader, SRGBColorSpace, Vector3 } from 'three';
 import { basicMateraials } from './basicMaterial';
 
 class BasicObject {
@@ -44,7 +44,13 @@ class BasicObject {
         }
     }
 
-    setPosition(pos) {
+    get worldPosition() {
+        const target = new Vector3();
+        this.mesh.getWorldPosition(target);
+        return target;
+    }
+
+     setPosition(pos) {
         this.mesh.position.set(...pos);
         return this;
     }

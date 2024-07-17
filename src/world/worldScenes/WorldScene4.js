@@ -1,6 +1,6 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Sphere, BoxCube, Plane, CollisionPlane, Room, SquarePillar, LWall, CylinderPillar } from '../components/Models.js';
+import { Train, Tofu, Sphere, BoxCube, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { createCollisionPlane } from '../components/physics/collisionHelper.js';
@@ -189,10 +189,10 @@ class WorldScene4 extends WorldScene {
             color: 0xCC8866,
             name: 'ground'
         };
-        const ground = new CollisionPlane(groudSpecs);
-        ground.setRotation([-.5 * Math.PI, 0, 0]);
-        ground.updateBoundingBoxHelper();
-        ground.receiveShadow(true);
+        const ground = new OBBPlane(groudSpecs);
+        ground.setRotation([-.5 * Math.PI, 0, 0])
+            .updateOBB()
+            .receiveShadow(true)
         this.cPlanes.push(ground);
 
         // ceiling
@@ -277,22 +277,19 @@ class WorldScene4 extends WorldScene {
         this.physics = new SimplePhysics(this.players, [], [], []);
 
         this.loop.updatables.push(box, this.physics);
-        this.scene.add(ground.mesh, ground.boundingBoxHelper, ceiling.mesh);
+        this.scene.add(ground.mesh, ground.line, ceiling.mesh);
 
         // initialize player and rooms
         this.changeCharacter('tofu1');
-        this.loadSequence = -1;
-        this.focusNext();
+        // this.loadSequence = -1;
+        // this.focusNext();
 
         this.scene.add(room1.group);
         room1.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
-        room1.floors.forEach(f => this.scene.add(f.boundingBoxHelper, f.leftArrow, f.rightArrow));
         this.scene.add(room2.group);
         room2.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
-        room2.floors.forEach(f => this.scene.add(f.boundingBoxHelper, f.leftArrow, f.rightArrow));
         this.scene.add(room3.group);
         room3.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
-        room3.floors.forEach(f => this.scene.add(f.boundingBoxHelper, f.leftArrow, f.rightArrow));
 
         this.showRoleSelector = true;
         // Gui setup
@@ -327,6 +324,7 @@ class WorldScene4 extends WorldScene {
             width: 10,
             height: 4.6,
             depth: 15,
+            roomHeight: 4.6,
             frontMap: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg',
             backMap: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg',
             leftMap: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg',
@@ -336,14 +334,18 @@ class WorldScene4 extends WorldScene {
             showArrow: true
         };
 
-        const spSepcs1 = {
-            width: 1,
-            height: 4.6,
-            depth: 1,
+        const spSpecs1 = {
+            width: 3,
+            height: 0.6,
+            depth: 3,
+            roomHeight: 4.6,
+            enableOBBs: true,
             frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             backMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             leftMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             rightMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'square_pillar1',
             showArrow: true
@@ -354,12 +356,15 @@ class WorldScene4 extends WorldScene {
             height: 4.6,
             depth: 5,
             thickness: .5,
+            roomHeight: 4.6,
             outTMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             outSMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             inTMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             inSMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             sideTMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             sideSMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'LWall1',
             showArrow: true
@@ -375,14 +380,13 @@ class WorldScene4 extends WorldScene {
 
         const posY = specs.height / 2;
 
-        const floor = new CollisionPlane(floorSpecs);
+        const floor = new OBBPlane(floorSpecs);
         floor.setRotation([- .5 * Math.PI, 0, 0])
             .setPosition([0,  - posY + .1, 0])
-            .createRay()
             .receiveShadow(true);
 
-        const spillar1 = new SquarePillar(spSepcs1);
-        spillar1.setPosition([0, 0, -5])
+        const spillar1 = new SquarePillar(spSpecs1);
+        spillar1.setPosition([- 2, - posY + spSpecs1.height * .5, - 5])
             .setRotationY(5 * Math.PI / 6);
 
         const lwall1 = new LWall(lwSpecs1);
@@ -398,7 +402,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(- Math.PI / 6)
             .updateCPlaneBBandRay();
 
-        this.cPlanes = this.cPlanes.concat(room.walls, room.floors);
+        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
         return room;
     }
 
@@ -407,6 +411,7 @@ class WorldScene4 extends WorldScene {
             width: 10,
             height: 4.6,
             depth: 20,
+            roomHeight: 4.6,
             frontMap: 'assets/textures/walls/Texturelabs_Concrete_128S.jpg',
             backMap: 'assets/textures/walls/Texturelabs_Concrete_128S.jpg',
             leftMap: 'assets/textures/walls/Texturelabs_Concrete_128S.jpg',
@@ -420,10 +425,14 @@ class WorldScene4 extends WorldScene {
             width: 1,
             height: 4.6,
             depth: 2,
+            roomHeight: 4.6,
+            enableOBBs: false,
             frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             backMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             leftMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             rightMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'square_pillar3',
             showArrow: true
@@ -433,10 +442,14 @@ class WorldScene4 extends WorldScene {
             width: 1,
             height: 4.6,
             depth: 2,
+            roomHeight: 4.6,
+            enableOBBs: false,
             frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             backMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             leftMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             rightMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'square_pillar4',
             showArrow: true
@@ -445,9 +458,30 @@ class WorldScene4 extends WorldScene {
         const cpSepcs1 = {
             width: 1,
             height: 4.6,
+            roomHeight: 4.6,
             map: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'cylinder_pillar1',
+            showArrow: true
+        };
+
+        const lwSpecs2 = {
+            width: 3,
+            height: .6,
+            depth: 5,
+            thickness: 1,
+            roomHeight: 4.6,
+            enableOBBs: true,
+            outTMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            outSMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            inTMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            inSMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            sideTMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            sideSMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5,
+            name: 'LWall1',
             showArrow: true
         };
 
@@ -465,10 +499,9 @@ class WorldScene4 extends WorldScene {
 
         const posY = specs.height / 2;
 
-        const floor = new CollisionPlane(floorSpecs);
+        const floor = new OBBPlane(floorSpecs);
         floor.setRotation([- .5 * Math.PI, 0, 0])
             .setPosition([0,  - posY + .1, 0])
-            .createRay()
             .receiveShadow(true);
 
         const spillar3 = new SquarePillar(spSepcs3);
@@ -478,8 +511,11 @@ class WorldScene4 extends WorldScene {
         spillar4.setPosition([2.5, 0, 9]);
         cpillar1.setPosition([0, 0, 0])
 
+        const lwall1 = new LWall(lwSpecs2);
+        lwall1.setPosition([- 1.5, - posY + lwSpecs2.height * .5, - 5]);
+
         const room = new Room(specs);
-        room.addGroups([spillar3, spillar4, cpillar1]);
+        room.addGroups([spillar3, spillar4, cpillar1, lwall1]);
         room.addFloors([floor]);
 
         await room.init();
@@ -488,7 +524,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(5 * Math.PI / 6)
             .updateCPlaneBBandRay();
 
-        this.cPlanes = this.cPlanes.concat(room.walls, room.floors);
+        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
         return room;
     }
 
@@ -497,6 +533,7 @@ class WorldScene4 extends WorldScene {
             width: 10,
             height: 4.6,
             depth: 20,
+            roomHeight: 4.6,
             frontMap: 'assets/textures/walls/Texturelabs_Wood_186S.jpg',
             backMap: 'assets/textures/walls/Texturelabs_Wood_186S.jpg',
             leftMap: 'assets/textures/walls/Texturelabs_Wood_186S.jpg',
@@ -519,10 +556,9 @@ class WorldScene4 extends WorldScene {
 
         const posY = specs.height / 2;
 
-        const floor = new CollisionPlane(floorSpecs);
+        const floor = new OBBPlane(floorSpecs);
         floor.setRotation([- .5 * Math.PI, 0, 0])
             .setPosition([0,  - posY + .1, 0])
-            .createRay()
             .receiveShadow(true);
 
         const room = new Room(specs);
@@ -534,7 +570,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(- Math.PI / 6)
             .updateCPlaneBBandRay();
 
-        this.cPlanes = this.cPlanes.concat(room.walls, room.floors);
+        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
         return room;
     }
 
@@ -544,6 +580,7 @@ class WorldScene4 extends WorldScene {
         this.focusNextProcess(setup);
         this.physics.walls = this.rooms[this.loadSequence].walls;
         this.physics.floors = this.rooms[this.loadSequence].floors;
+        this.physics.obstacleTops = this.rooms[this.loadSequence].topOBBs;
     }
 }
 

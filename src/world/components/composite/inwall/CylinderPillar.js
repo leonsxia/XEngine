@@ -53,16 +53,20 @@ class CylinderPillar {
             texture.colorSpace = SRGBColorSpace;
             const material = new MeshPhongMaterial({ map: texture });
             this.walls.forEach(w => w.mesh.material = material);
-            this.setTextureWrapS(mapRatio, texture);
+            this.setTextureWrap(mapRatio, texture);
         }
     }
 
-    setTextureWrapS(mapRatio, texture) {
+    setTextureWrap(mapRatio, texture) {
         if (mapRatio) {
-            const { width, height } = this.specs;
-            const xRepeat =  width / (mapRatio * height);
+            const { width, height, roomHeight } = this.specs;
+            const xRepeat = width / (mapRatio * roomHeight);
+            const yRepeat = height / roomHeight;
+
             texture.wrapS = RepeatWrapping;
-            texture.repeat.set(xRepeat, 1);
+            texture.wrapT = RepeatWrapping;
+
+            texture.repeat.set(xRepeat, yRepeat);
         }
     }
 

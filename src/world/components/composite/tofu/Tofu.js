@@ -3,6 +3,7 @@ import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 
 const ENLARGE = 2.5;
+const ENABLE_QUICK_TURN = true;
 
 class Tofu extends Moveable2D {
     name = '';
@@ -11,7 +12,7 @@ class Tofu extends Moveable2D {
     #w;
     #d;
     #h;
-    #rotateR = 1.2;
+    #rotateR = .9;
     boundingBox;
     boundingBoxHelper;
     #g = 9.8;
@@ -41,6 +42,8 @@ class Tofu extends Moveable2D {
         this.boundingBox = new Box3();
         this.boundingBoxHelper = new Box3Helper(this.boundingBox, 0x00ff00);
         this.boundingBoxHelper.name = `${name}-box-helper`;
+
+        this.paddingCoefficient = .04 * ENLARGE;
     }
 
     get boundingBoxWireMesh() {
@@ -58,6 +61,10 @@ class Tofu extends Moveable2D {
             this.group.getObjectByName('leftFace'),
             this.group.getObjectByName('rightFace')
         ]
+    }
+
+    get obb() {
+        return this.boundingBoxMesh.userData.obb;
     }
 
     get position() {
@@ -84,6 +91,12 @@ class Tofu extends Moveable2D {
         return this.#d * this.group.scale.z;
     }
 
+    get bottomY() {
+        const target = new Vector3();
+        this.boundingBoxMesh.getWorldPosition(target);
+        return target.y - this.height * .5;
+    }
+
     get leftCorVec3() {
         return new Vector3(this.#w / 2, 0, this.#d / 2);
     }
@@ -101,7 +114,11 @@ class Tofu extends Moveable2D {
     }
 
     get velocity() {
-        return this.isAccelerating ? this.#vel * ENLARGE : this.#vel;
+        return this.isAccelerating && !this.isBackward ? this.#vel * ENLARGE : this.#vel;
+    }
+
+    get turnBackVel() {
+        return 2.5 * Math.PI;
     }
 
     get recoverCoefficient() {
@@ -110,6 +127,10 @@ class Tofu extends Moveable2D {
     
     get backwardCoefficient() {
         return this.isAccelerating ? 0.002 : 0.001;
+    }
+
+    get enableQuickTurn() {
+        return ENABLE_QUICK_TURN;
     }
 
     showBB(show) {
@@ -127,10 +148,15 @@ class Tofu extends Moveable2D {
     }
 
     updateBoundingBoxHelper() {
-        const { matrixWorld, geometry: { boundingBox } } = this.boundingBoxMesh;
+        const { matrixWorld, geometry: { boundingBox, userData } } = this.boundingBoxMesh;
         this.group.updateMatrixWorld();
         this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
         // this.boundingBoxHelper.updateMatrixWorld();
+
+        // update OBB
+        this.boundingBoxMesh.userData.obb.copy( userData.obb );
+        this.boundingBoxMesh.userData.obb.applyMatrix4( matrixWorld );
+
         return this;
     }
 

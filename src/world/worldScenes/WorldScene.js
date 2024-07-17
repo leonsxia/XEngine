@@ -50,7 +50,7 @@ class WorldScene {
 
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 
-        this.controls.defControl.listenToKeyEvents(window);
+        // this.controls.defControl.listenToKeyEvents(window);
 
         this.#resizer = new Resizer(container, this.camera, this.renderer);
         this.#resizer.onResize = 
@@ -402,7 +402,7 @@ class WorldScene {
     showCPlaneBBHelper(show) {
         const s = show === 'show' ? true : false;
         this.cPlanes.forEach(cp => {
-            cp.boundingBoxHelper.visible = s;
+            if (cp.boundingBoxHelper) cp.boundingBoxHelper.visible = s;
         });
     }
 
