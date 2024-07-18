@@ -1,5 +1,6 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, MeshStandardMaterial, TextureLoader, SRGBColorSpace, Vector3 } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, MeshStandardMaterial, MeshPhongMaterial, TextureLoader, SRGBColorSpace, Vector3, RepeatWrapping, MirroredRepeatWrapping } from 'three';
 import { basicMateraials } from './basicMaterial';
+import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
 
 class BasicObject {
     #map = null;
@@ -9,7 +10,7 @@ class BasicObject {
     name = '';
 
     constructor(type, specs) {
-        const { name } = specs;
+        const { name, color } = specs;
         if (name) this.name = name;
         switch (type) {
             case 'plane':
@@ -25,11 +26,22 @@ class BasicObject {
                 }
                 break;
             case 'sphere':
-                const { size: { radius, widthSegments, heightSegments } } = specs;
-                this.geometry = new SphereGeometry(radius, widthSegments, heightSegments);
-                break;
+                {
+                    const { size: { radius, widthSegments, heightSegments } } = specs;
+                    this.geometry = new SphereGeometry(radius, widthSegments, heightSegments);
+                    break;
+                }
+            case 'circle':
+                {
+                    const { radius, segments } = specs;
+                    this.geometry = new CircleGeometry(radius, segments);
+                    break;
+                }
         }
-        this.material = basicMateraials.basic;;
+        if (color) 
+            this.material = new MeshPhongMaterial({ color: color });
+        else
+            this.material = basicMateraials.basic;;
     }
 
     async initBasic(specs) {
@@ -50,7 +62,22 @@ class BasicObject {
         return target;
     }
 
-     setPosition(pos) {
+    getRepeatMode(mode) {
+        let repeat;
+
+        switch(mode) {
+            case REPEAT:
+                repeat = RepeatWrapping;
+                break;
+            case MIRRORED_REPEAT:
+                repeat = MirroredRepeatWrapping;
+                break;
+        }
+
+        return repeat;
+    }
+
+    setPosition(pos) {
         this.mesh.position.set(...pos);
         return this;
     }

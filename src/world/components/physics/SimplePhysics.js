@@ -35,6 +35,26 @@ class SimplePhysics {
         })
     }
 
+    checkOutOfWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
+        let result = false;
+        const padding = .1;
+
+        const leftBorderX = - wall.width * .5 + padding;
+        const rightBorderX = wall.width * .5 - padding;
+        const topBorderY = wall.height * .5 - padding;
+        const bottomBorderY = - wall.height * .5 + padding;
+
+        if (player.position.x < leftBorderX - halfPlayerWidth ||
+            player.position.x > rightBorderX + halfPlayerWidth ||
+            player.position.y > topBorderY + halfPlayerHeight ||
+            player.position.y < bottomBorderY - halfPlayerHeight
+        ) {
+            result = true;
+        }
+
+        return result;
+    }
+
     checkIntersection(player, plane, delta) {
         let intersect = false;
         let intersectCor = null;
@@ -66,8 +86,14 @@ class SimplePhysics {
 
         const cornors = { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 };
 
-        const halfPlayerDepth = Math.max(Math.abs(leftCorVec3.z - rightBackCorVec3.z), Math.abs(rightCorVec3.z - leftBackCorVec3.z)) / 2;
-        // const halfPlayerWidth = Math.max(Math.abs(leftCorVec3.x - rightBackCorVec3.x), Math.abs(rightCorVec3.x - leftBackCorVec3.x)) / 2;
+        const halfPlayerDepth = Math.max(Math.abs(leftCorVec3.z - rightBackCorVec3.z), Math.abs(rightCorVec3.z - leftBackCorVec3.z)) * .5;
+        const halfPlayerWidth = Math.max(Math.abs(leftCorVec3.x - rightBackCorVec3.x), Math.abs(rightCorVec3.x - leftBackCorVec3.x)) * .5;
+        const halfPlayerHeight = player.height * .5;
+
+        if (this.checkOutOfWallRangeLocal(dummyObject, plane, halfPlayerWidth, halfPlayerHeight)) {
+            return { intersect, borderReach: false };
+        }
+
         if ((leftCorVec3.z <=0 || rightCorVec3.z <= 0 || leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) 
             && Math.abs(dummyObject.position.z) - halfPlayerDepth <= 0
         ) {

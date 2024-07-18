@@ -170,9 +170,13 @@ class WorldScene3 extends WorldScene {
         const allTargets = birdsGroup.positions.concat([{x: 0, y: 0, z: 0}]);
         const allCameraPos = birdsGroup.getBirdsCamsPositions(5);
         allCameraPos.push({x: 20, y: 15, z: 20}); // the last view camera position
+        const pos = {
+            allTargets,
+            allCameraPos
+        }
 
-        const setup = { allTargets, allCameraPos };
-        this.focusNextProcess(setup);
+        Object.assign(worldSceneSpecs, pos);
+        this.focusNextProcess();
     }
 }
 

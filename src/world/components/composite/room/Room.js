@@ -1,6 +1,7 @@
-import { Group, MeshPhongMaterial, TextureLoader, SRGBColorSpace, RepeatWrapping } from 'three';
+import { Group } from 'three';
 import { createCollisionPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
+import { REPEAT } from '../../utils/constants';
 
 class Room {
     name = '';
@@ -23,18 +24,23 @@ class Room {
     constructor(specs) {
         this.specs = specs;
         const { name, width, depth, height, showArrow } = specs;
-        const hSpecs = { width, height };
-        const vSpecs = { width: depth, height };
+        const { frontMap, backMap, leftMap, rightMap } = this.specs;
+
+        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap });
+        const backSpecs = this.makePlaneConfig({ width, height, map: backMap });
+
+        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap });
+        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap });
 
         this.name = name;
         this.showArrow = showArrow;
         this.group = new Group();
 
-        this.frontWall = createCollisionPlane(hSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, this.showArrow, false);
-        this.backWall = createCollisionPlane(hSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, this.showArrow, false);
-        this.leftWall = createCollisionPlane(vSpecs, `${name}_left`, [- width / 2, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
-        this.rightWall = createCollisionPlane(vSpecs, `${name}_right`, [width / 2, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);
+        this.backWall = createCollisionPlane(backSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, this.showArrow, false);
+        this.leftWall = createCollisionPlane(leftSpecs, `${name}_left`, [- width / 2, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
+        this.rightWall = createCollisionPlane(rightSpecs, `${name}_right`, [width / 2, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);
         
+        this.frontWall = createCollisionPlane(frontSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, this.showArrow, false);
         this.frontWall.line.material.color.setHex(green);
 
         this.walls = [this.frontWall, this.backWall, this.leftWall, this.rightWall];
@@ -51,41 +57,17 @@ class Room {
         const insideWallsInit = this.initInsideWalls();
         const floorsInit = this.initFloors();
         const insideGroupsInit = this.initInsideGroups();
-        const { frontMap, backMap, leftMap, rightMap, mapRatio } = this.specs;
-        const [frontT, backT, leftT, rightT] = await Promise.all([
-            frontMap ? new TextureLoader().loadAsync(frontMap) : new Promise(resolve => resolve(null)),
-            backMap ? new TextureLoader().loadAsync(backMap) : new Promise(resolve => resolve(null)),
-            leftMap ? new TextureLoader().loadAsync(leftMap) : new Promise(resolve => resolve(null)),
-            rightMap ? new TextureLoader().loadAsync(rightMap) : new Promise(resolve => resolve(null))
+        
+        await Promise.all([
+            this.frontWall.init(),
+            this.backWall.init(),
+            this.leftWall.init(),
+            this.rightWall.init()
         ]
             .concat(insideWallsInit)
             .concat(floorsInit)
             .concat(insideGroupsInit)
-    );
-
-        if (frontT) {
-            frontT.colorSpace = SRGBColorSpace;
-            this.frontWall.mesh.material = new MeshPhongMaterial({ map: frontT });
-            this.setTextureWrapS(mapRatio, frontT, true);
-        }
-
-        if (backT) {
-            backT.colorSpace = SRGBColorSpace;
-            this.backWall.mesh.material = new MeshPhongMaterial({ map: backT });
-            this.setTextureWrapS(mapRatio, backT, true);
-        }
-
-        if (leftT) {
-            leftT.colorSpace = SRGBColorSpace;
-            this.leftWall.mesh.material = new MeshPhongMaterial({ map: leftT });
-            this.setTextureWrapS(mapRatio, leftT, false);
-        }
-
-        if (rightT) {
-            rightT.colorSpace = SRGBColorSpace;
-            this.rightWall.mesh.material = new MeshPhongMaterial({ map: rightT });
-            this.setTextureWrapS(mapRatio, rightT, false);
-        }
+        );
     }
 
     initInsideWalls() {
@@ -133,13 +115,19 @@ class Room {
         });
     }
 
-    setTextureWrapS(mapRatio, texture, h) {
+    makePlaneConfig(specs) {
+        const { width, height } = specs;
+        const { roomHeight = 1, mapRatio } = this.specs;
+
         if (mapRatio) {
-            const { width, height, depth } = this.specs;
-            const xRepeat =  h ? width / (mapRatio * height) : depth / (mapRatio * height);
-            texture.wrapS = RepeatWrapping;
-            texture.repeat.set(xRepeat, 1);
+            specs.repeatU = width / (mapRatio * roomHeight);
+            specs.repeatV = height / roomHeight;
         }
+
+        specs.repeatModeU = REPEAT;
+        specs.repeatModeV = REPEAT;
+
+        return specs;
     }
 
     setPosition(pos) {

@@ -138,8 +138,8 @@ class WorldScene {
 
     focusNext() {}
 
-    focusNextProcess(setup) {
-        const { allTargets, allCameraPos, allPlayerPos } = setup;
+    focusNextProcess() {
+        const { allTargets, allCameraPos, allPlayerPos } = this.setup;
 
         this.loadSequence = ++this.loadSequence % allTargets.length;
 
@@ -349,6 +349,13 @@ class WorldScene {
             this.physics.addActivePlayers(name);
             this.scene.add(this.player.group);
             this.subscribeEvents(this.player, this.setup.moveType);
+        }
+    }
+
+    resetCharacterPosition() {
+        if (this.player) {
+            const { allPlayerPos } = this.setup;
+            this.player.setPosition(allPlayerPos[this.loadSequence]);
         }
     }
 

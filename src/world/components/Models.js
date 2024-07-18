@@ -4,12 +4,14 @@ export * as MeshGroup from './basic/meshGroup.js';
 export { BoxCube } from './basic/BoxCube.js';
 export { Sphere } from './basic/Sphere.js';
 export { Plane } from './basic/Plane.js';
+export { Circle } from './basic/Circle.js';
 export { BirdsGroup } from './composite/birds/Birds.js';
 export { Train } from './composite/train/Train.js';
 export { Tofu } from './composite/tofu/Tofu.js';
 
 // physics
 export { CollisionPlane } from './physics/CollisionPlane.js';
+export { CollisionOctagon } from './physics/CollisionOctagon.js';
 export { OBBPlane } from './physics/OBBPlane.js';
 export { Room } from './composite/room/Room.js';
 export { SquarePillar } from './composite/inwall/SquarePillar.js';

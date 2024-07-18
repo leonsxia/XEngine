@@ -1,6 +1,7 @@
-import { Group, MeshPhongMaterial, TextureLoader, SRGBColorSpace, RepeatWrapping } from 'three';
+import { Group } from 'three';
 import { createCollisionPlane, createCollisionPlaneFree, createOBBPlane } from '../../physics/collisionHelper';
 import { yankeesBlue, green } from '../../basic/colorBase';
+import { REPEAT } from '../../utils/constants';
 
 class SquarePillar {
     name = '';
@@ -21,30 +22,37 @@ class SquarePillar {
     constructor(specs) {
         this.specs = specs;
         const { name, width, depth, height, showArrow, enableOBBs } = specs;
-        const hSpecs = { width, height };
-        const vSpecs = { width: depth, height };
-        const tbSpecs = { width, height: depth, color: yankeesBlue };
+        const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
+
+        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap })
+        const backSpecs = this.makePlaneConfig({ width, height, map: backMap });
+
+        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap });
+        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap });
+
+        const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap});
+        const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap });
 
         this.name = name;
         this.showArrow = showArrow;
         this.group = new Group();
 
-        this.backFace = createCollisionPlane(hSpecs, `${name}_back`, [0, 0, - depth / 2], Math.PI, true, true, this.showArrow, false);
-        this.leftFace = createCollisionPlane(vSpecs, `${name}_left`, [- width / 2, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);
-        this.rightFace = createCollisionPlane(vSpecs, `${name}_right`, [width / 2, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
+        this.backFace = createCollisionPlane(backSpecs, `${name}_back`, [0, 0, - depth / 2], Math.PI, true, true, this.showArrow, false);
+        this.leftFace = createCollisionPlane(leftSpecs, `${name}_left`, [- width / 2, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);
+        this.rightFace = createCollisionPlane(rightSpecs, `${name}_right`, [width / 2, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
         if (!enableOBBs) {
-            this.topFace = createCollisionPlaneFree(tbSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, this.showArrow, false);
-            this.bottomFace = createCollisionPlaneFree(tbSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, this.showArrow, false);
+            this.topFace = createCollisionPlaneFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, this.showArrow, false);
+            this.bottomFace = createCollisionPlaneFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, this.showArrow, false);
             this.tops = [this.topFace];
             this.bottoms = [this.bottomFace];
         } else {
-            this.topFace = createOBBPlane(tbSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false);
-            this.bottomFace = createOBBPlane(tbSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false);
+            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false);
+            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false);
             this.topOBBs = [this.topFace];
             this.bottomOBBs = [this.bottomFace];
         }
         // create last for changing line color
-        this.frontFace = createCollisionPlane(hSpecs, `${name}_front`, [0, 0, depth / 2], 0, true, true, this.showArrow, false);
+        this.frontFace = createCollisionPlane(frontSpecs, `${name}_front`, [0, 0, depth / 2], 0, true, true, this.showArrow, false);
         this.frontFace.line.material.color.setHex(green);
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
@@ -60,67 +68,30 @@ class SquarePillar {
     }
 
     async init() {
-        const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap, mapRatio } = this.specs;
-        const [frontT, backT, leftT, rightT, topT, bottomT] = await Promise.all([
-            frontMap ? new TextureLoader().loadAsync(frontMap) : new Promise(resolve => resolve(null)),
-            backMap ? new TextureLoader().loadAsync(backMap) : new Promise(resolve => resolve(null)),
-            leftMap ? new TextureLoader().loadAsync(leftMap) : new Promise(resolve => resolve(null)),
-            rightMap ? new TextureLoader().loadAsync(rightMap) : new Promise(resolve => resolve(null)),
-            topMap ? new TextureLoader().loadAsync(topMap) : new Promise(resolve => resolve(null)),
-            bottomMap ? new TextureLoader().loadAsync(bottomMap) : new Promise(resolve => resolve(null))
+        await Promise.all([
+            this.frontFace.init(),
+            this.backFace.init(),
+            this.leftFace.init(),
+            this.rightFace.init(),
+            this.topFace.init(),
+            this.bottomFace.init()
         ]);
-
-        if (frontT) {
-            frontT.colorSpace = SRGBColorSpace;
-            this.frontFace.mesh.material = new MeshPhongMaterial({ map: frontT });
-            this.setTextureWrap(mapRatio, frontT, true);
-        }
-
-        if (backT) {
-            backT.colorSpace = SRGBColorSpace;
-            this.backFace.mesh.material = new MeshPhongMaterial({ map: backT });
-            this.setTextureWrap(mapRatio, backT, true);
-        }
-
-        if (leftT) {
-            leftT.colorSpace = SRGBColorSpace;
-            this.leftFace.mesh.material = new MeshPhongMaterial({ map: leftT });
-            this.setTextureWrap(mapRatio, leftT, false);
-        }
-
-        if (rightT) {
-            rightT.colorSpace = SRGBColorSpace;
-            this.rightFace.mesh.material = new MeshPhongMaterial({ map: rightT });
-            this.setTextureWrap(mapRatio, rightT, false);
-        }
-
-        if (topT) {
-            topT.colorSpace = SRGBColorSpace;
-            this.topFace.mesh.material = new MeshPhongMaterial({ map: topT });
-            this.setTextureWrap(mapRatio, topT, true, true);
-        }
-
-        if (bottomT) {
-            bottomT.colorSpace = SRGBColorSpace;
-            this.bottomFace.mesh.material = new MeshPhongMaterial({ map: bottomT });
-            this.setTextureWrap(mapRatio, bottomT, true, true);
-        }
     }
 
-    setTextureWrap(mapRatio, texture, s, tb) {
+    makePlaneConfig(specs) {
+        const { width, height } = specs;
+        const { roomHeight = 1, mapRatio } = this.specs;
+
         if (mapRatio) {
-            const { width, height, depth, roomHeight } = this.specs;
-            const w = s ? width : depth;
-            const h = tb ? s ? depth : width : height;
-            const xRepeat = w / (mapRatio * roomHeight);
-            const yRepeat = h / roomHeight;
-
-            texture.wrapS = RepeatWrapping;
-            texture.wrapT = RepeatWrapping;
-            texture.repeat.set(xRepeat, yRepeat);
+            specs.repeatU = width / (mapRatio * roomHeight);
+            specs.repeatV = height / roomHeight;
         }
-    }
 
+        specs.repeatModeU = REPEAT;
+        specs.repeatModeV = REPEAT;
+
+        return specs;
+    }
 
     setPosition(pos) {
         this.group.position.set(...pos);

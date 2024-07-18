@@ -12,7 +12,7 @@ class OBBPlane extends Plane {
         const { width, height } = specs;
 
         // setup OBB on geometry level
-        this.size = new Vector3( width - .05, height - .05, 0);
+        this.size = new Vector3( width, height, 0);
         this.geometry.userData.obb = new OBB();
         this.geometry.userData.obb.halfSize.copy(this.size).multiplyScalar(.5);
 

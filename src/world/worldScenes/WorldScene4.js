@@ -4,6 +4,7 @@ import { Train, Tofu, Sphere, BoxCube, Plane, OBBPlane, Room, SquarePillar, LWal
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { createCollisionPlane } from '../components/physics/collisionHelper.js';
+import { MIRRORED_REPEAT } from '../components/utils/constants.js';
 import { WorldScene } from './WorldScene.js';
 
 const sceneName = 'Simple Physics';
@@ -17,7 +18,23 @@ const worldSceneSpecs = {
     },
     enableGui: true,
     moveType: 'tankmove',
-    enableShadow: true
+    enableShadow: true,
+    // target, camera setup
+    allTargets: [
+        { x: 0, y: 0, z: 10 },
+        { x: 0, y: 0, z: - 9 },
+        { x: 18, y: 0, z: 4 },
+    ],
+    allCameraPos: [
+        { x: 10, y: 10, z: 25 },
+        { x: 10, y: 13, z: - 1 },
+        { x: 20, y: 10, z: 20 }
+    ],
+    allPlayerPos: [
+        [0, 3, 10],
+        [0, 6, - 13],
+        [18, 3, 4],
+    ]
 };
 // basic lights
 const mainLightCtlSpecs = {
@@ -113,22 +130,6 @@ const gridSpecs = {
     size: 100,
     divisions: 100
 }
-// target, camera setup
-const allTargets = [
-    { x: 0, y: 0, z: 10 },
-    { x: 0, y: 0, z: - 9},
-    { x: 18, y: 0, z: 4 },
-];
-const allCameraPos = [
-    { x: 10, y: 10, z: 25 },
-    { x: 10, y: 13, z: - 1},
-    { x: 20, y: 10, z: 20 }
-];
-const allPlayerPos = [
-    [0, 3, 10],
-    [0, 3, - 9],
-    [18, 3, 4],
-]
 
 class WorldScene4 extends WorldScene {
     #loaded = false;
@@ -137,7 +138,7 @@ class WorldScene4 extends WorldScene {
     #spotLights = {};
 
     constructor(container, renderer, globalConfig, eventDispatcher) {
-        Object.assign(worldSceneSpecs, globalConfig)
+        Object.assign(worldSceneSpecs, globalConfig);
         super(container, renderer, worldSceneSpecs, eventDispatcher);
 
         this.#basicLights = createBasicLights(basicLightSpecsArr);
@@ -288,6 +289,8 @@ class WorldScene4 extends WorldScene {
         room1.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
         this.scene.add(room2.group);
         room2.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
+        room2.tops.forEach(t => this.scene.add(t.boundingBoxHelper));
+        room2.bottoms.forEach(b => this.scene.add(b.boundingBoxHelper));
         this.scene.add(room3.group);
         room3.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
 
@@ -314,7 +317,8 @@ class WorldScene4 extends WorldScene {
                 stop: this.stop.bind(this),
                 moveCamera: this.moveCamera.bind(this),
                 resetCamera: this.resetCamera.bind(this),
-                focusNext: this.focusNext.bind(this)
+                focusNext: this.focusNext.bind(this),
+                resetPlayer: this.resetCharacterPosition.bind(this)
             }
         });
     }
@@ -459,14 +463,17 @@ class WorldScene4 extends WorldScene {
             width: 1,
             height: 4.6,
             roomHeight: 4.6,
+            enableOBBs: true,
             map: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'cylinder_pillar1',
             showArrow: true
         };
 
         const lwSpecs2 = {
-            width: 3,
+            width: 4,
             height: .6,
             depth: 5,
             thickness: 1,
@@ -481,7 +488,7 @@ class WorldScene4 extends WorldScene {
             topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
-            name: 'LWall1',
+            name: 'LWall2',
             showArrow: true
         };
 
@@ -493,6 +500,8 @@ class WorldScene4 extends WorldScene {
             // mapRatio: 1.5,
             repeatU: 1.3,
             repeatV: 1,
+            repeatModeU: MIRRORED_REPEAT,
+            repeatModeV: MIRRORED_REPEAT,
             rotationT: Math.PI / 2,
             showArrow: true
         };
@@ -551,6 +560,8 @@ class WorldScene4 extends WorldScene {
             mapRatio: 1.5,
             repeatU: 1.5,
             repeatV: 2.8,
+            repeatModeU: MIRRORED_REPEAT,
+            repeatModeV: MIRRORED_REPEAT,
             showArrow: true
         };
 
@@ -575,9 +586,7 @@ class WorldScene4 extends WorldScene {
     }
 
     focusNext() {
-        const setup = { allTargets, allCameraPos, allPlayerPos };
-
-        this.focusNextProcess(setup);
+        this.focusNextProcess();
         this.physics.walls = this.rooms[this.loadSequence].walls;
         this.physics.floors = this.rooms[this.loadSequence].floors;
         this.physics.obstacleTops = this.rooms[this.loadSequence].topOBBs;

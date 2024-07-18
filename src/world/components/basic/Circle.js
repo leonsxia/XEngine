@@ -1,8 +1,8 @@
-import { Mesh, MeshPhongMaterial, DoubleSide, TextureLoader, SRGBColorSpace, RepeatWrapping } from 'three';
+import { Mesh, MeshPhongMaterial, TextureLoader, SRGBColorSpace, RepeatWrapping } from 'three';
 import { BasicObject } from './BasicObject';
 import { REPEAT } from '../utils/constants';
 
-class Plane extends BasicObject {
+class Circle extends BasicObject {
     #mapSrc;
     #mapRatio;
     #repeatU;
@@ -13,7 +13,7 @@ class Plane extends BasicObject {
     #map = null;
 
     constructor(specs) {
-        super('plane', specs);
+        super('circle', specs);
         const { name, map, mapRatio, repeatU, repeatV, rotationT, repeatModeU = REPEAT, repeatModeV = REPEAT } = specs;
 
         this.#mapSrc = map;
@@ -28,9 +28,9 @@ class Plane extends BasicObject {
         this.mesh.name = name;
     }
 
-    async init () {
+    async init() {
         const [texture] = await Promise.all([
-            this.#mapSrc ? new TextureLoader().loadAsync(this.#mapSrc) : new Promise(resolve => resolve(null))
+            this.#mapSrc ? new TextureLoader().loadAsync(this.#mapSrc) : Promise.resolve(null)
         ]);
         if (texture) {
             this.#map = texture;
@@ -50,30 +50,18 @@ class Plane extends BasicObject {
                 
                 this.#map.repeat.set(this.#repeatU, this.#repeatV);
             } else if (this.#mapRatio) {
-                const xRepeat =  this.width / (this.#mapRatio * this.height);
+                const xRepeat = this.radius * 2 / (mapRatio * this.radius * 2);
+                const yRepeat = 1;
+
                 this.#map.wrapS = RepeatWrapping;
-                this.#map.repeat.set(xRepeat, 1);
-            } 
-            
-            this.mesh.material = this.material = new MeshPhongMaterial({ map: this.#map });
+                this.#map.wrapT = RepeatWrapping;
+
+                this.#map.repeat.set(xRepeat, yRepeat);
+            }
+
+            this.mesh.material = new MeshPhongMaterial({ map: this.#map });
         }
-    }
-
-    get width() {
-        return this.geometry.parameters.width * this.mesh.scale.x;
-    }
-
-    get height() {
-        return this.geometry.parameters.height * this.mesh.scale.y;
-    }
-
-    setDoubleSide() {
-        this.material.side = DoubleSide;
-    }
-
-    setDoubleShadowSide() {
-        this.material.shadowSide = DoubleSide;
     }
 }
 
-export { Plane };
+export { Circle };

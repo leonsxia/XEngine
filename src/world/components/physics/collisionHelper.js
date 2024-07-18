@@ -2,6 +2,7 @@ import { BoxGeometry, EdgesGeometry, Mesh, LineSegments, Vector3 } from 'three';
 import { OBB } from 'three/examples/jsm/Addons.js';
 import { basicMateraials } from '../basic/basicMaterial';
 import { CollisionPlane } from './CollisionPlane';
+import { CollisionOctagon } from './CollisionOctagon';
 import { OBBPlane } from './OBBPlane';
 
 function createCollisionPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false, needUpdateMatrixWorld = true) {
@@ -24,7 +25,8 @@ function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow
         .receiveShadow(receiveShadow)
         .castShadow(castShadow)
         .setPosition(position)
-        .setRotation(rotation)
+        .setRotation(rotation);
+
     if (createRay) cPlane.createRay();
         
     cPlane.updateBoundingBoxHelper(needUpdateMatrixWorld);
@@ -34,6 +36,18 @@ function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow
         cPlane.rightArrow.visible = showArrow ? true : false;
     }
     return cPlane;
+}
+
+function createCollisionOctagonFree(specs, name, position, rotation, receiveShadow = false, castShadow = false, needUpdateMatrixWorld = true) {
+    const cOctagon = new CollisionOctagon(specs);
+    cOctagon.setName(name)
+        .receiveShadow(receiveShadow)
+        .castShadow(castShadow)
+        .setPosition(position)
+        .setRotation(rotation)
+        .updateBoundingBoxHelper(needUpdateMatrixWorld);
+
+    return cOctagon;
 }
 
 function createOBBPlane(specs, name, position, rotation, receiveShadow = false, castShadow = false, needUpdateMatrixWorld = true) {
@@ -116,5 +130,6 @@ export {
     createCollisionPlane, 
     createBoundingBoxFaces, 
     createCollisionPlaneFree,
+    createCollisionOctagonFree,
     createOBBPlane
 };
