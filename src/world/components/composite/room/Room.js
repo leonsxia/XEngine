@@ -15,6 +15,7 @@ class Room {
     bottoms = [];
     topOBBs = [];
     bottomOBBs = [];
+    boxOBBs = [];
     obstacles = [];
     insideWalls = [];
     insideGroups = [];
@@ -112,6 +113,7 @@ class Room {
             if (g.bottoms) this.bottoms = this.bottoms.concat(g.bottoms);
             if (g.topOBBs) this.topOBBs = this.topOBBs.concat(g.topOBBs);
             if (g.bottomOBBs) this.bottomOBBs = this.bottomOBBs.concat(g.bottomOBBs);
+            if (g.box) this.boxOBBs.push(g.box);
         });
     }
 
@@ -149,6 +151,7 @@ class Room {
         this.bottoms.forEach(b => b.updateBoundingBoxHelper(false));
         this.topOBBs.forEach(t => t.updateOBB(false));
         this.bottomOBBs.forEach(b => b.updateOBB(false));
+        this.boxOBBs.forEach(box => box.updateOBB(false));
     }
 }
 

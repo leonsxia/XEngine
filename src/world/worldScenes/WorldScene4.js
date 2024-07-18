@@ -1,6 +1,6 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Sphere, BoxCube, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar } from '../components/Models.js';
+import { Train, Tofu, Sphere, Box, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { createCollisionPlane } from '../components/physics/collisionHelper.js';
@@ -22,16 +22,16 @@ const worldSceneSpecs = {
     // target, camera setup
     allTargets: [
         { x: 0, y: 0, z: 10 },
-        { x: 0, y: 0, z: - 9 },
+        { x: 0, y: 0, z: - 14 },
         { x: 18, y: 0, z: 4 },
     ],
     allCameraPos: [
         { x: 10, y: 10, z: 25 },
-        { x: 10, y: 13, z: - 1 },
+        { x: 7, y: 17, z: - 5 },
         { x: 20, y: 10, z: 20 }
     ],
     allPlayerPos: [
-        [0, 3, 10],
+        [1, 5, 15],
         [0, 6, - 13],
         [18, 3, 4],
     ]
@@ -193,7 +193,6 @@ class WorldScene4 extends WorldScene {
         const ground = new OBBPlane(groudSpecs);
         ground.setRotation([- .5 * Math.PI, 0, 0])
             .updateOBB()
-            .receiveShadow(true);
         this.cPlanes.push(ground);
 
         // ceiling
@@ -226,24 +225,6 @@ class WorldScene4 extends WorldScene {
         // earth.castShadow(true);
         // earth.receiveShadow(true);
 
-        // box cube
-        const boxSpecs = {
-            map: 'assets/textures/crate.gif',
-            name: 'crate',
-            size: {
-                width: 2,
-                height: 3,
-                depth: 3
-            },
-            basicMaterial: worldSceneSpecs.basicMaterial
-        }
-        const box = new BoxCube(boxSpecs);
-        box.setRotation([0.25, -0.25, 0]);
-        box.setPosition([-10, 10, 0]);
-        box.setScale([3, 3, 3]);
-        box.castShadow(true);
-        box.receiveShadow(true);
-
         const train = new Train('red train 2');
         // this.subscribeEvents(train, worldSceneSpecs.moveType);
         train.castShadow(true)
@@ -261,9 +242,8 @@ class WorldScene4 extends WorldScene {
             // .setScale([.2, .3, .2])
             .updateBoundingBoxHelper();
 
-        const [tmp1, room1, room2, room3] = await Promise.all([
+        const [room1, room2, room3] = await Promise.all([
             // earth.init(earthSpecs),
-            box.init(boxSpecs),
             this.createRoom1(),
             this.createRoom2(),
             this.createRoom3(),
@@ -277,7 +257,7 @@ class WorldScene4 extends WorldScene {
         this.players.push(train);
         this.physics = new SimplePhysics(this.players, [], [], []);
 
-        this.loop.updatables.push(box, this.physics);
+        this.loop.updatables.push(this.physics);
         this.scene.add(ground.mesh, ceiling.mesh);
 
         // initialize player and rooms
@@ -374,6 +354,23 @@ class WorldScene4 extends WorldScene {
             showArrow: true
         };
 
+        const cbSpecs1 = {
+            width: 1.5,
+            height: 1.5,
+            depth: 1.5,
+            baseSize: 1.5,
+            map: 'assets/textures/crate.gif',
+            frontMap: 'assets/textures/crate.gif',
+            backMap: 'assets/textures/crate.gif',
+            leftMap: 'assets/textures/crate.gif',
+            rightMap: 'assets/textures/crate.gif',
+            topMap: 'assets/textures/crate.gif',
+            bottomMap: 'assets/textures/crate.gif',
+            mapRatio: 1,
+            freeTexture: true,
+            name: 'CubeBox1'
+        }
+
         const floorSpecs = {
             width: 10,
             height: 15,
@@ -396,8 +393,12 @@ class WorldScene4 extends WorldScene {
         const lwall1 = new LWall(lwSpecs1);
         lwall1.setPosition([1.5, 0, 5]);
 
+        const cubeBox1 = new BoxCube(cbSpecs1);
+        cubeBox1.setPosition([1, - posY + cbSpecs1.height * .5 + .1, -1])
+            .setRotationY(3 * Math.PI * .25)
+
         const room = new Room(specs);
-        room.addGroups([spillar1, lwall1]);
+        room.addGroups([spillar1, lwall1, cubeBox1]);
         room.addFloors([floor]);
 
         await room.init();
@@ -407,6 +408,8 @@ class WorldScene4 extends WorldScene {
             .updateCPlaneBBandRay();
 
         this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
+        this.cBoxes.push(cubeBox1.box);
+
         return room;
     }
 

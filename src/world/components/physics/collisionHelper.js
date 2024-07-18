@@ -4,6 +4,7 @@ import { basicMateraials } from '../basic/basicMaterial';
 import { CollisionPlane } from './CollisionPlane';
 import { CollisionOctagon } from './CollisionOctagon';
 import { OBBPlane } from './OBBPlane';
+import { OBBBox } from './OBBBox';
 
 function createCollisionPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false, needUpdateMatrixWorld = true) {
     const cPlane = new CollisionPlane(specs);
@@ -60,6 +61,18 @@ function createOBBPlane(specs, name, position, rotation, receiveShadow = false, 
         .updateOBB(needUpdateMatrixWorld);
 
     return obbPlane;
+}
+
+function createOBBBox(specs, name, position, rotation, receiveShadow = false, castShadow = false, needUpdateMatrixWorld = true) {
+    const obbBox = new OBBBox(specs);
+    obbBox.setName(name)
+        .receiveShadow(receiveShadow)
+        .castShadow(castShadow)
+        .setPosition(position)
+        .setRotation(rotation)
+        .updateOBB(needUpdateMatrixWorld);
+
+    return obbBox;
 }
 
 function createCollisionGeometries(specs) {
@@ -131,5 +144,6 @@ export {
     createBoundingBoxFaces, 
     createCollisionPlaneFree,
     createCollisionOctagonFree,
-    createOBBPlane
+    createOBBPlane,
+    createOBBBox
 };

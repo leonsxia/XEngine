@@ -1,7 +1,7 @@
 export * as CubeMaker from './basic/cubeMaker.js';
 export * as SphereMaker from './basic/sphereMaker.js';
 export * as MeshGroup from './basic/meshGroup.js';
-export { BoxCube } from './basic/BoxCube.js';
+export { Box } from './basic/Box.js';
 export { Sphere } from './basic/Sphere.js';
 export { Plane } from './basic/Plane.js';
 export { Circle } from './basic/Circle.js';
@@ -13,7 +13,9 @@ export { Tofu } from './composite/tofu/Tofu.js';
 export { CollisionPlane } from './physics/CollisionPlane.js';
 export { CollisionOctagon } from './physics/CollisionOctagon.js';
 export { OBBPlane } from './physics/OBBPlane.js';
+export { OBBBox } from './physics/OBBBox.js';
 export { Room } from './composite/room/Room.js';
 export { SquarePillar } from './composite/inwall/SquarePillar.js';
 export { LWall } from './composite/inwall/LWall.js';
 export { CylinderPillar } from './composite/inwall/CylinderPillar.js';
+export { BoxCube } from './composite/inwall/BoxCube.js';

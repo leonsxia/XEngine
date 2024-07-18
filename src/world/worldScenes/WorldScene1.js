@@ -1,4 +1,4 @@
-import { CubeMaker, SphereMaker, Sphere, BoxCube, MeshGroup } from '../components/Models.js';
+import { CubeMaker, SphereMaker, Sphere, Box, MeshGroup } from '../components/Models.js';
 import { createBasicLights, createPointLights } from '../components/lights.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { WorldScene } from './WorldScene.js';
@@ -132,8 +132,7 @@ class WorldScene1 extends WorldScene  {
                 width: 2,
                 height: 2,
                 depth: 2
-            },
-            basicMaterial: worldSceneSpecs.basicMaterial
+            }
         }
         const cube = CubeMaker.createCube(cubeSpecs);
         cube.position.set(-5, 0, 0);
@@ -148,9 +147,12 @@ class WorldScene1 extends WorldScene  {
                 depth: 3
             }
         }
-        const box = new BoxCube(boxSpecs);
-        box.setRotation([0.25, -0.25, 0]);
-        box.setPosition([0, 0, 0]);
+        const box = new Box(boxSpecs);
+        box.setRotation([0.25, -0.25, 0])
+            .setPosition([0, 0, 0])
+            .tick = (delta) => {
+                box.mesh.rotation.y += delta * 8.59 * Math.PI / 180;
+            }
 
         // earth
         const earthSpecs = {
@@ -165,8 +167,11 @@ class WorldScene1 extends WorldScene  {
             }
         }
         const earth = new Sphere(earthSpecs);
-        earth.setPosition([5, 0, 0]);
-        earth.setRotation([0.25, 0, 0]);
+        earth.setPosition([5, 0, 0])
+            .setRotation([0.25, 0, 0])
+            .tick = (delta) => {
+                earth.mesh.rotation.y += delta * 8.59 * Math.PI / 180;
+            }
 
         // mesh group
         const meshGroupSpecs = {

@@ -34,6 +34,7 @@ class WorldScene {
     players = [];
     rooms = [];
     cPlanes = [];
+    cBoxes = [];
     player;
     loadSequence = 0;
     showRoleSelector = false;
@@ -395,6 +396,9 @@ class WorldScene {
         const s = show === 'show' ? true : false;
         this.cPlanes.forEach(cp => {
             cp.line.visible = s;
+        });
+        this.cBoxes.forEach(cb => {
+            cb.line.visible = s;
         });
     }
 

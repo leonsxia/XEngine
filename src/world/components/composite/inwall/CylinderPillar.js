@@ -35,31 +35,29 @@ class CylinderPillar {
     bottomOBBs = [];
 
     radius;
-    showArrow = false;
     specs;
 
     constructor(specs) {
         this.specs = specs;
-        const { name, width, height, showArrow, enableOBBs } = specs;
+        const { name, width, height, showArrow = false, enableOBBs = false } = specs;
         const { map, topMap, bottomMap } = this.specs;
         const offset = Math.sqrt(width * width / 2);
 
         this.name = name;
         this.radius = width * .5 / Math.cos(.375 * Math.PI);
-        this.showArrow = showArrow;
         this.group = new Group();
 
         const pSpecs = this.makePlaneConfig({ width, height, map });
         const topSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: topMap });
         const bottomSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: bottomMap }, false);
 
-        this.face2 = createCollisionPlane(pSpecs, `${name}_face2`, [- width / 2 - offset / 2, 0, width / 2 + offset / 2], - Math.PI / 4, true, true, this.showArrow, false);
-        this.face3 = createCollisionPlane(pSpecs, `${name}_face3`, [- width / 2 - offset, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);
-        this.face4 = createCollisionPlane(pSpecs, `${name}_face4`, [- width / 2 - offset / 2, 0, - width / 2 - offset / 2], - 3 * Math.PI / 4, true, true, this.showArrow, false);
-        this.face5 = createCollisionPlane(pSpecs, `${name}_face5`, [0, 0, - width / 2 - offset], Math.PI, true, true, this.showArrow, false);
-        this.face6 = createCollisionPlane(pSpecs, `${name}_face6`, [width / 2 + offset / 2, 0, - width / 2 - offset / 2], 3 * Math.PI / 4, true, true, this.showArrow, false);
-        this.face7 = createCollisionPlane(pSpecs, `${name}_face7`, [width / 2 + offset, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
-        this.face8 = createCollisionPlane(pSpecs, `${name}_face8`, [width / 2 + offset / 2, 0, width / 2 + offset / 2],  Math.PI / 4, true, true, this.showArrow, false);
+        this.face2 = createCollisionPlane(pSpecs, `${name}_face2`, [- width / 2 - offset / 2, 0, width / 2 + offset / 2], - Math.PI / 4, true, true, showArrow, false);
+        this.face3 = createCollisionPlane(pSpecs, `${name}_face3`, [- width / 2 - offset, 0, 0], - Math.PI / 2, true, true, showArrow, false);
+        this.face4 = createCollisionPlane(pSpecs, `${name}_face4`, [- width / 2 - offset / 2, 0, - width / 2 - offset / 2], - 3 * Math.PI / 4, true, true, showArrow, false);
+        this.face5 = createCollisionPlane(pSpecs, `${name}_face5`, [0, 0, - width / 2 - offset], Math.PI, true, true, showArrow, false);
+        this.face6 = createCollisionPlane(pSpecs, `${name}_face6`, [width / 2 + offset / 2, 0, - width / 2 - offset / 2], 3 * Math.PI / 4, true, true, showArrow, false);
+        this.face7 = createCollisionPlane(pSpecs, `${name}_face7`, [width / 2 + offset, 0, 0], Math.PI / 2, true, true, showArrow, false);
+        this.face8 = createCollisionPlane(pSpecs, `${name}_face8`, [width / 2 + offset / 2, 0, width / 2 + offset / 2],  Math.PI / 4, true, true, showArrow, false);
 
         this.top = createCollisionOctagonFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, - Math.PI * .125], true, false, false);
         this.bottom = createCollisionOctagonFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, Math.PI * .125], true, false, false);
@@ -98,7 +96,7 @@ class CylinderPillar {
             )
         }
 
-        this.face1 = createCollisionPlane(pSpecs, `${name}_face1`, [0, 0, width / 2 + offset], 0, true, true, this.showArrow, false);
+        this.face1 = createCollisionPlane(pSpecs, `${name}_face1`, [0, 0, width / 2 + offset], 0, true, true, showArrow, false);
         this.face1.line.material.color.setHex(green);
 
         this.walls = [this.face1, this.face2, this.face3, this.face4, this.face5, this.face6, this.face7, this.face8];
