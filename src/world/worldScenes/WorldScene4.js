@@ -191,9 +191,9 @@ class WorldScene4 extends WorldScene {
             name: 'ground'
         };
         const ground = new OBBPlane(groudSpecs);
-        ground.setRotation([-.5 * Math.PI, 0, 0])
+        ground.setRotation([- .5 * Math.PI, 0, 0])
             .updateOBB()
-            .receiveShadow(true)
+            .receiveShadow(true);
         this.cPlanes.push(ground);
 
         // ceiling
@@ -278,7 +278,7 @@ class WorldScene4 extends WorldScene {
         this.physics = new SimplePhysics(this.players, [], [], []);
 
         this.loop.updatables.push(box, this.physics);
-        this.scene.add(ground.mesh, ground.line, ceiling.mesh);
+        this.scene.add(ground.mesh, ceiling.mesh);
 
         // initialize player and rooms
         this.changeCharacter('tofu1');
