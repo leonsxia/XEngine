@@ -3,25 +3,48 @@ import { OBB } from 'three/examples/jsm/Addons.js';
 import { basicMateraials } from '../basic/basicMaterial';
 import { CollisionPlane } from './CollisionPlane';
 import { CollisionOctagon } from './CollisionOctagon';
+import { CollisionOBBPlane } from './CollisionOBBPlane';
 import { OBBPlane } from './OBBPlane';
 import { OBBBox } from './OBBBox';
+import { violetBlue } from '../basic/colorBase';
 
-function createCollisionPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false, needUpdateMatrixWorld = true) {
+// create plane with line and rays, only support rotationY for collision for now.
+function createCollisionPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false) {
     const cPlane = new CollisionPlane(specs);
     cPlane.setName(name)
         .receiveShadow(receiveShadow)
         .castShadow(castShadow)
         .setPosition(position)
         .setRotationY(rotationY)
-        .createRay()
-        .updateBoundingBoxHelper(needUpdateMatrixWorld);
+        .createRay();
+
     cPlane.leftArrow.visible = showArrow ? true : false;
     cPlane.rightArrow.visible = showArrow ? true : false;
+
     return cPlane;
 }
 
-function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow = false, castShadow = false, createRay= false, showArrow = false, needUpdateMatrixWorld = true) {
+// create plane with line, rays and OBB, only support rotationY for collision for now.
+function createCollisionOBBPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false) {
+    const cObbPlane = new CollisionOBBPlane(specs);
+    cObbPlane.setName(name)
+        .receiveShadow(receiveShadow)
+        .castShadow(castShadow)
+        .setPosition(position)
+        .setRotationY(rotationY)
+        .createRay();
+
+    cObbPlane.leftArrow.visible = showArrow ? true : false;
+    cObbPlane.rightArrow.visible = showArrow ? true : false;
+    
+    return cObbPlane;
+}
+
+
+// create plane with line, optional rays
+function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow = false, castShadow = false, createRay= false, showArrow = false) {
     const cPlane = new CollisionPlane(specs);
+
     cPlane.setName(name)
         .receiveShadow(receiveShadow)
         .castShadow(castShadow)
@@ -29,8 +52,6 @@ function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow
         .setRotation(rotation);
 
     if (createRay) cPlane.createRay();
-        
-    cPlane.updateBoundingBoxHelper(needUpdateMatrixWorld);
     
     if (createRay) {
         cPlane.leftArrow.visible = showArrow ? true : false;
@@ -39,38 +60,40 @@ function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow
     return cPlane;
 }
 
-function createCollisionOctagonFree(specs, name, position, rotation, receiveShadow = false, castShadow = false, needUpdateMatrixWorld = true) {
+// create octagon plane with line
+function createCollisionOctagonFree(specs, name, position, rotation, receiveShadow = false, castShadow = false) {
     const cOctagon = new CollisionOctagon(specs);
+
     cOctagon.setName(name)
         .receiveShadow(receiveShadow)
         .castShadow(castShadow)
         .setPosition(position)
-        .setRotation(rotation)
-        .updateBoundingBoxHelper(needUpdateMatrixWorld);
+        .setRotation(rotation);
 
     return cOctagon;
 }
 
-function createOBBPlane(specs, name, position, rotation, receiveShadow = false, castShadow = false, needUpdateMatrixWorld = true) {
+// create plane with line and OBB
+function createOBBPlane(specs, name, position, rotation, receiveShadow = false, castShadow = false) {
     const obbPlane = new OBBPlane(specs);
+
     obbPlane.setName(name)
         .receiveShadow(receiveShadow)
         .castShadow(castShadow)
         .setPosition(position)
         .setRotation(rotation)
-        .updateOBB(needUpdateMatrixWorld);
 
     return obbPlane;
 }
 
-function createOBBBox(specs, name, position, rotation, receiveShadow = false, castShadow = false, needUpdateMatrixWorld = true) {
+function createOBBBox(specs, name, position, rotation, receiveShadow = false, castShadow = false) {
     const obbBox = new OBBBox(specs);
+
     obbBox.setName(name)
         .receiveShadow(receiveShadow)
         .castShadow(castShadow)
         .setPosition(position)
         .setRotation(rotation)
-        .updateOBB(needUpdateMatrixWorld);
 
     return obbBox;
 }
@@ -91,6 +114,7 @@ function createCollisionGeometries(specs) {
 function createBoundingBoxFaces(specs) {
     const { width, depth, bbfThickness, showBB, showBBW, showBF, gap } = specs;
     const collisionGeometries = createCollisionGeometries(specs);
+
     const boundingBoxWire = new LineSegments(collisionGeometries.boundingBoxEdges, basicMateraials.boundingBoxWire);
     boundingBoxWire.name = 'boundingBoxWire';
     boundingBoxWire.position.set(0, 0, 0);
@@ -139,9 +163,20 @@ function createBoundingBoxFaces(specs) {
     return { boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace };
 }
 
+function createPlayerPushingOBBBox(specs) {
+    const { depth, show } = specs;
+    const pushingBoxSpecs = { size: { width: .2, depth: .1, height: .2 }, color: violetBlue };
+    const pushingOBBBox = createOBBBox(pushingBoxSpecs, 'pushingOBBBox', [0, 0, depth * .5 + pushingBoxSpecs.size.depth * .5], [0, 0, 0], false, false);
+    pushingOBBBox.mesh.visible = show;
+
+    return pushingOBBBox.mesh;
+}
+
 export { 
-    createCollisionPlane, 
-    createBoundingBoxFaces, 
+    createCollisionPlane,
+    createCollisionOBBPlane,
+    createBoundingBoxFaces,
+    createPlayerPushingOBBBox,
     createCollisionPlaneFree,
     createCollisionOctagonFree,
     createOBBPlane,

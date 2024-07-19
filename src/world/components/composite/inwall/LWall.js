@@ -1,5 +1,5 @@
 import { Group } from 'three';
-import { createCollisionPlane, createCollisionPlaneFree, createOBBPlane } from '../../physics/collisionHelper';
+import { createCollisionPlane, createCollisionOBBPlane, createCollisionPlaneFree, createOBBPlane } from '../../physics/collisionHelper';
 import { green, yankeesBlue } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
@@ -21,12 +21,16 @@ class LWall {
     bottoms = [];
     topOBBs = [];
     bottomOBBs = [];
+
+    enableWallOBBs = false;
+    climbable = false;
     specs;
 
     constructor(specs) {
         this.specs = specs;
-        const { name, width, depth, thickness, height, showArrow = false, enableOBBs = false } = specs;
-        const { outTMap, outSMap, inTMap, inSMap, sideTMap, sideSMap, topMap, bottomMap } = this.specs;
+        const { name, width, depth, thickness, height} = specs;
+        const {showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
+        const { outTMap, outSMap, inTMap, inSMap, sideTMap, sideSMap, topMap, bottomMap } = specs;
 
         const outWallTSpecs = this.makePlaneConfig({ width: depth, height, map: outTMap });
         const inWallTSpecs = this.makePlaneConfig({ width: depth - thickness, height, map: inTMap });
@@ -40,32 +44,36 @@ class LWall {
         const bottomSSpecs = this.makePlaneConfig({ width: width - thickness, height: thickness, color: yankeesBlue, map: bottomMap });
 
         this.name = name;
+        this.enableWallOBBs = enableWallOBBs;
+        this.climbable = climbable;
         this.group = new Group();
 
-        this.outWallT = createCollisionPlane(outWallTSpecs, `${name}_outT`, [- width / 2, 0, 0], - Math.PI / 2, true, true, showArrow, false);
-        this.inWallT = createCollisionPlane(inWallTSpecs, `${name}_inT`, [- width / 2 + thickness, 0, thickness / 2], Math.PI / 2, true, true, showArrow, false);
-        this.inWallS = createCollisionPlane(inWallSSpecs, `${name}_inS`, [thickness / 2, 0, - depth / 2 + thickness], 0, true, true, showArrow, false);
-        this.sideWallT = createCollisionPlane(sideWallTSpecs, `${name}_sideT`, [width / 2, 0, - depth / 2 + thickness / 2], Math.PI / 2, true, true, showArrow, false);
-        this.sideWallS = createCollisionPlane(sideWallSSpecs, `${name}_sideS`, [- width / 2 + thickness / 2, 0, depth / 2], 0, true, true, showArrow, false);
+        const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
+
+        this.outWallT = createWallFunction(outWallTSpecs, `${name}_outT`, [- width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
+        this.inWallT = createWallFunction(inWallTSpecs, `${name}_inT`, [- width / 2 + thickness, 0, thickness / 2], Math.PI / 2, true, true, showArrow);
+        this.inWallS = createWallFunction(inWallSSpecs, `${name}_inS`, [thickness / 2, 0, - depth / 2 + thickness], 0, true, true, showArrow);
+        this.sideWallT = createWallFunction(sideWallTSpecs, `${name}_sideT`, [width / 2, 0, - depth / 2 + thickness / 2], Math.PI / 2, true, true, showArrow);
+        this.sideWallS = createWallFunction(sideWallSSpecs, `${name}_sideS`, [- width / 2 + thickness / 2, 0, depth / 2], 0, true, true, showArrow);
 
         if (!enableOBBs) {
-            this.topWallT = createCollisionPlaneFree(topTSpecs, `${name}_topT`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, showArrow, false);
-            this.topWallS = createCollisionPlaneFree(topSSpecs, `${name}_topS`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], true, false, false, showArrow, false);
-            this.bottomWallT = createCollisionPlaneFree(bottomTSpecs, `${name}_bottomT`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, showArrow, false);
-            this.bottomWallS = createCollisionPlaneFree(bottomSSpecs, `${name}_bottomS`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], true, false, false, showArrow, false);
+            this.topWallT = createCollisionPlaneFree(topTSpecs, `${name}_topT`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, showArrow);
+            this.topWallS = createCollisionPlaneFree(topSSpecs, `${name}_topS`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], true, false, false, showArrow);
+            this.bottomWallT = createCollisionPlaneFree(bottomTSpecs, `${name}_bottomT`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, showArrow);
+            this.bottomWallS = createCollisionPlaneFree(bottomSSpecs, `${name}_bottomS`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], true, false, false, showArrow);
             this.tops.push(this.topWallT, this.topWallS);
             this.bottoms.push(this.bottomWallT, this.bottomWallS);
         } else {
-            this.topWallT = createOBBPlane(topTSpecs, `${name}_topT_OBB`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false);
-            this.topWallS = createOBBPlane(topSSpecs, `${name}_topS_OBB`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], true, false, false);
-            this.bottomWallT = createOBBPlane(bottomTSpecs, `${name}_bottomT_OBB`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false);
-            this.bottomWallS = createOBBPlane(bottomSSpecs, `${name}_bottomS_OBB`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], true, false, false);
+            this.topWallT = createOBBPlane(topTSpecs, `${name}_topT_OBB`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], true, false);
+            this.topWallS = createOBBPlane(topSSpecs, `${name}_topS_OBB`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], true, false);
+            this.bottomWallT = createOBBPlane(bottomTSpecs, `${name}_bottomT_OBB`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], true, false);
+            this.bottomWallS = createOBBPlane(bottomSSpecs, `${name}_bottomS_OBB`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], true, false);
             this.topOBBs.push(this.topWallT, this.topWallS);
             this.bottomOBBs.push(this.bottomWallT, this.bottomWallS);
         }
 
         // create last for changing line color
-        this.outWallS = createCollisionPlane(outWallSSpecs, `${name}_outS`, [0, 0, - depth / 2], Math.PI, true, true, showArrow, false);
+        this.outWallS = createWallFunction(outWallSSpecs, `${name}_outS`, [0, 0, - depth / 2], Math.PI, true, true, showArrow);
         this.outWallS.line.material.color.setHex(green);
 
         this.walls = [this.outWallT, this.outWallS, this.inWallT, this.inWallS, this.sideWallT, this.sideWallS];
@@ -101,7 +109,9 @@ class LWall {
 
     makePlaneConfig(specs) {
         const { width, height } = specs;
-        const { roomHeight = 1, mapRatio } = this.specs;
+        const { roomHeight = 1, mapRatio, noRepeat } = this.specs;
+
+        if (noRepeat) return specs;
 
         if (mapRatio) {
             specs.repeatU = width / (mapRatio * roomHeight);

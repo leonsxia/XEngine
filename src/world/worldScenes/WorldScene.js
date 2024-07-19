@@ -309,13 +309,6 @@ class WorldScene {
                 type: 'dropdown',
                 changeFn: this.showCPlaneArrows.bind(this)
             }));
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'BBHelper',
-                value: { BBHelper: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showCPlaneBBHelper.bind(this)
-            }));
             this.guiLeftSpecs.details.push(folder);
         }
         
@@ -407,13 +400,6 @@ class WorldScene {
         this.cPlanes.forEach(cp => {
             if (cp.leftArrow) cp.leftArrow.visible = s;
             if (cp.rightArrow) cp.rightArrow.visible = s;
-        });
-    }
-
-    showCPlaneBBHelper(show) {
-        const s = show === 'show' ? true : false;
-        this.cPlanes.forEach(cp => {
-            if (cp.boundingBoxHelper) cp.boundingBoxHelper.visible = s;
         });
     }
 

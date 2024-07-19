@@ -1,5 +1,5 @@
 import { Group } from 'three';
-import { createCollisionPlane, createCollisionPlaneFree, createOBBPlane } from '../../physics/collisionHelper';
+import { createCollisionPlane, createCollisionOBBPlane, createCollisionPlaneFree, createOBBPlane } from '../../physics/collisionHelper';
 import { yankeesBlue, green } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
@@ -16,11 +16,15 @@ class SquarePillar {
     bottoms = [];
     topOBBs = [];
     bottomOBBs = [];
+
+    enableWallOBBs = false;
+    climbable = false;
     specs;
 
     constructor(specs) {
         this.specs = specs;
-        const { name, width, depth, height, showArrow = false, enableOBBs = false } = specs;
+        const { name, width, depth, height} = specs;
+        const {showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
         const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
 
         const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap })
@@ -33,24 +37,28 @@ class SquarePillar {
         const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap });
 
         this.name = name;
+        this.enableWallOBBs = enableWallOBBs;
+        this.climbable = climbable;
         this.group = new Group();
 
-        this.backFace = createCollisionPlane(backSpecs, `${name}_back`, [0, 0, - depth / 2], Math.PI, true, true, showArrow, false);
-        this.leftFace = createCollisionPlane(leftSpecs, `${name}_left`, [- width / 2, 0, 0], - Math.PI / 2, true, true, showArrow, false);
-        this.rightFace = createCollisionPlane(rightSpecs, `${name}_right`, [width / 2, 0, 0], Math.PI / 2, true, true, showArrow, false);
+        const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
+
+        this.backFace = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], Math.PI, true, true, showArrow);
+        this.leftFace = createWallFunction(leftSpecs, `${name}_left`, [- width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
+        this.rightFace = createWallFunction(rightSpecs, `${name}_right`, [width / 2, 0, 0], Math.PI / 2, true, true, showArrow);
         if (!enableOBBs) {
-            this.topFace = createCollisionPlaneFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, showArrow, false);
-            this.bottomFace = createCollisionPlaneFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, showArrow, false);
+            this.topFace = createCollisionPlaneFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, showArrow);
+            this.bottomFace = createCollisionPlaneFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, showArrow);
             this.tops = [this.topFace];
             this.bottoms = [this.bottomFace];
         } else {
-            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false);
-            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false);
+            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false);
+            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false);
             this.topOBBs = [this.topFace];
             this.bottomOBBs = [this.bottomFace];
         }
         // create last for changing line color
-        this.frontFace = createCollisionPlane(frontSpecs, `${name}_front`, [0, 0, depth / 2], 0, true, true, showArrow, false);
+        this.frontFace = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], 0, true, true, showArrow);
         this.frontFace.line.material.color.setHex(green);
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
@@ -78,7 +86,9 @@ class SquarePillar {
 
     makePlaneConfig(specs) {
         const { width, height } = specs;
-        const { roomHeight = 1, mapRatio } = this.specs;
+        const { roomHeight = 1, mapRatio, noRepeat = false } = this.specs;
+
+        if (noRepeat) return specs;
 
         if (mapRatio) {
             specs.repeatU = width / (mapRatio * roomHeight);

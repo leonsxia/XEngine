@@ -1,21 +1,17 @@
-import { Box3, Box3Helper, EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, Quaternion, ArrowHelper } from "three";
+import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, Quaternion, ArrowHelper } from "three";
 import { Plane } from "../Models";
 import { white } from "../basic/colorBase";
 
 class CollisionPlane extends Plane {
-    boundingBox;
-    boundingBoxHelper;
     #w;
     #h;
+    isOBB = false;
 
     constructor(specs) {
         super(specs);
         const { width, height } = specs;
         this.#w = width;
         this.#h = height;
-        this.geometry.computeBoundingBox();
-        this.boundingBox = new Box3();
-        this.boundingBoxHelper = new Box3Helper(this.boundingBox, white);
         
         this.edges = new EdgesGeometry( this.geometry );
         this.line = new LineSegments( this.edges, new LineBasicMaterial( { color: white } ) );
@@ -25,16 +21,6 @@ class CollisionPlane extends Plane {
     setRotationY(y) {
         this.setRotation([0, y, 0]);
         this.mesh.rotationY = y;
-        return this;
-    }
-
-    updateBoundingBoxHelper(needUpdateMatrixWorld = true) {
-        // when inside a group, no need to update mesh, group will update children instead
-        if (needUpdateMatrixWorld) {
-            this.mesh.updateMatrixWorld();
-        }
-        this.boundingBox.copy(this.geometry.boundingBox).applyMatrix4(this.mesh.matrixWorld);
-        if (this.leftRay && this.rightRay) this.updateRay();
         return this;
     }
 
@@ -57,6 +43,8 @@ class CollisionPlane extends Plane {
     }
 
     updateRay() {   // update ray based on world matrix.
+        if (!this.leftRay || !this.rightRay) return this;
+
         const width = this.#w;
         const height = this.#h;
 

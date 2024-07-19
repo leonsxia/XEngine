@@ -1,28 +1,23 @@
-import { EdgesGeometry, LineSegments, LineBasicMaterial, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import { OBB } from 'three/examples/jsm/Addons.js';
-import { Box } from '../Models';
-import { white } from '../basic/colorBase';
+import { CollisionPlane } from './CollisionPlane';
 
-class OBBBox extends Box {
+class CollisionOBBPlane extends CollisionPlane {
     size;
     isOBB = true;
 
     constructor(specs) {
         super(specs);
 
-        const { size: { width, height, depth } } = specs;
+        const { width, height } = specs;
 
         // setup OBB on geometry level
-        this.size = new Vector3(width, height, depth);
+        this.size = new Vector3( width, height, 0);
         this.geometry.userData.obb = new OBB();
         this.geometry.userData.obb.halfSize.copy(this.size).multiplyScalar(.5);
 
         // bounding volume on object level (this will reflect the current world transform)
         this.mesh.userData.obb = new OBB();
-
-        this.edges = new EdgesGeometry( this.geometry );
-        this.line = new LineSegments( this.edges, new LineBasicMaterial( { color: white } ) );
-        this.mesh.add(this.line);
     }
 
     get obb() {
@@ -44,4 +39,4 @@ class OBBBox extends Box {
     }
 }
 
-export { OBBBox };
+export { CollisionOBBPlane };

@@ -2,7 +2,7 @@ import { Mesh } from 'three';
 
 import { createGeometries } from './geometires';
 import { createMaterials } from './materials';
-import { createBoundingBoxFaces } from '../../physics/collisionHelper';
+import { createBoundingBoxFaces, createPlayerPushingOBBBox } from '../../physics/collisionHelper';
 
 function createMeshes() {
     const geometires = createGeometries();
@@ -35,9 +35,13 @@ function createMeshes() {
     }
     const bbObjects = createBoundingBoxFaces(bbSpecs);
 
+    const pushingObbSpecs = { depth, show: true };
+    const pushingOBBBox = createPlayerPushingOBBBox(pushingObbSpecs);
+
     return { 
         body, slotLeft, slotRight,
         bbObjects,
+        pushingOBBBox,
         specs
     };
 }

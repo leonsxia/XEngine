@@ -207,24 +207,6 @@ class WorldScene4 extends WorldScene {
         ceiling.setPosition([0, 20, 0]);
         ceiling.receiveShadow(true);
 
-        // earth
-        // const earthSpecs = {
-        //     surfaceMap: 'assets/textures/earth_surface_2048.jpg',
-        //     normalMap: 'assets/textures/earth_normal_2048.jpg',
-        //     specularMap: 'assets/textures/earth_specular_2048.jpg',
-        //     name: 'earth',
-        //     size: {
-        //         radius: 2,
-        //         widthSegments: 32,
-        //         heightSegments: 32
-        //     }
-        // }
-        // const earth = new Sphere(earthSpecs);
-        // earth.setPosition([0, 10, 0]);
-        // earth.setRotation([0.25, 0, 0]);
-        // earth.castShadow(true);
-        // earth.receiveShadow(true);
-
         const train = new Train('red train 2');
         // this.subscribeEvents(train, worldSceneSpecs.moveType);
         train.castShadow(true)
@@ -262,15 +244,11 @@ class WorldScene4 extends WorldScene {
 
         // initialize player and rooms
         this.changeCharacter('tofu1');
-        // this.loadSequence = -1;
-        // this.focusNext();
 
         this.scene.add(room1.group);
         room1.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
         this.scene.add(room2.group);
         room2.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
-        room2.tops.forEach(t => this.scene.add(t.boundingBoxHelper));
-        room2.bottoms.forEach(b => this.scene.add(b.boundingBoxHelper));
         this.scene.add(room3.group);
         room3.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
 
@@ -283,7 +261,6 @@ class WorldScene4 extends WorldScene {
 
         this.showCPlaneLines(false);
         this.showCPlaneArrows(false);
-        this.showCPlaneBBHelper(false);
 
         this.initContainer();
         this.#loaded = true;
@@ -315,7 +292,8 @@ class WorldScene4 extends WorldScene {
             rightMap: 'assets/textures/walls/Texturelabs_Concrete_132S.jpg',
             mapRatio: 1.5,
             name: 'room1',
-            showArrow: true
+            showArrow: true,
+            enableWallOBBs: true
         };
 
         const spSpecs1 = {
@@ -332,7 +310,8 @@ class WorldScene4 extends WorldScene {
             bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'square_pillar1',
-            showArrow: true
+            showArrow: true,
+            enableWallOBBs: true
         };
 
         const lwSpecs1 = {
@@ -351,11 +330,12 @@ class WorldScene4 extends WorldScene {
             bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'LWall1',
-            showArrow: true
+            showArrow: true,
+            enableWallOBBs: true
         };
 
         const cbSpecs1 = {
-            width: 1.5,
+            width: 2.5,
             height: 1.5,
             depth: 1.5,
             baseSize: 1.5,
@@ -368,6 +348,9 @@ class WorldScene4 extends WorldScene {
             bottomMap: 'assets/textures/crate.gif',
             mapRatio: 1,
             freeTexture: true,
+            noRepeat: true,
+            enableWallOBBs: true,
+            movable: true,
             name: 'CubeBox1'
         }
 
@@ -405,7 +388,7 @@ class WorldScene4 extends WorldScene {
 
         room.setPosition([0, posY, 15])
             .setRotationY(- Math.PI / 6)
-            .updateCPlaneBBandRay();
+            .updateOBBnRay();
 
         this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
         this.cBoxes.push(cubeBox1.box);
@@ -534,7 +517,7 @@ class WorldScene4 extends WorldScene {
 
         room.setPosition([0, posY, -13])
             .setRotationY(5 * Math.PI / 6)
-            .updateCPlaneBBandRay();
+            .updateOBBnRay();
 
         this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
         return room;
@@ -582,7 +565,7 @@ class WorldScene4 extends WorldScene {
 
         room.setPosition([20, posY, 4.3])
             .setRotationY(- Math.PI / 6)
-            .updateCPlaneBBandRay();
+            .updateOBBnRay();
 
         this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
         return room;
@@ -593,6 +576,7 @@ class WorldScene4 extends WorldScene {
         this.physics.walls = this.rooms[this.loadSequence].walls;
         this.physics.floors = this.rooms[this.loadSequence].floors;
         this.physics.obstacleTops = this.rooms[this.loadSequence].topOBBs;
+        this.physics.obstacles = this.rooms[this.loadSequence].obstacles;
     }
 }
 

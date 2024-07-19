@@ -12,6 +12,7 @@ export { Tofu } from './composite/tofu/Tofu.js';
 // physics
 export { CollisionPlane } from './physics/CollisionPlane.js';
 export { CollisionOctagon } from './physics/CollisionOctagon.js';
+export { CollisionOBBPlane } from './physics/CollisionOBBPlane.js';
 export { OBBPlane } from './physics/OBBPlane.js';
 export { OBBBox } from './physics/OBBBox.js';
 export { Room } from './composite/room/Room.js';

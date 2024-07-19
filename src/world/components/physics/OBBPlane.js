@@ -5,6 +5,7 @@ import { white } from '../basic/colorBase';
 
 class OBBPlane extends Plane {
     size;
+    isOBB = true;
 
     constructor(specs) {
         super(specs);

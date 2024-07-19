@@ -18,6 +18,7 @@ class Tofu extends Moveable2D {
     #g = 9.8;
     #fallingTime = 0;
     #vel = 1.34;
+    isFalling = false;
 
     constructor(name) {
         super();
@@ -29,12 +30,14 @@ class Tofu extends Moveable2D {
             bbObjects: {
                 boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace
             },
+            pushingOBBBox,
             specs: { width, depth, height }
         } = this.meshes;
         this.group.add(
             body, slotLeft, slotRight, 
             boundingBox, boundingBoxWire, 
-            frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace
+            frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
+            pushingOBBBox
         ).name = name;
         this.#w = width;
         this.#d = depth;
@@ -54,6 +57,10 @@ class Tofu extends Moveable2D {
         return this.group.getObjectByName('boundingBox');
     }
 
+    get pushingOBBBoxMesh() {
+        return this.group.getObjectByName('pushingOBBBox');
+    }
+
     get boundingFaceMesh() {
         return [
             this.group.getObjectByName('frontFace'),
@@ -65,6 +72,10 @@ class Tofu extends Moveable2D {
 
     get obb() {
         return this.boundingBoxMesh.userData.obb;
+    }
+
+    get pushingObb() {
+        return this.pushingOBBBoxMesh.userData.obb;
     }
 
     get position() {
@@ -148,14 +159,24 @@ class Tofu extends Moveable2D {
     }
 
     updateBoundingBoxHelper() {
-        const { matrixWorld, geometry: { boundingBox, userData } } = this.boundingBoxMesh;
         this.group.updateMatrixWorld();
-        this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
-        // this.boundingBoxHelper.updateMatrixWorld();
 
-        // update OBB
-        this.boundingBoxMesh.userData.obb.copy( userData.obb );
-        this.boundingBoxMesh.userData.obb.applyMatrix4( matrixWorld );
+        {
+            const { matrixWorld, geometry: { boundingBox, userData } } = this.boundingBoxMesh;
+            this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
+            // this.boundingBoxHelper.updateMatrixWorld();
+
+            // update OBB
+            this.boundingBoxMesh.userData.obb.copy(userData.obb);
+            this.boundingBoxMesh.userData.obb.applyMatrix4(matrixWorld);
+        }
+
+        {
+            // update pushing OBB Box
+            const { matrixWorld, geometry: { userData } } = this.pushingOBBBoxMesh;
+            this.pushingOBBBoxMesh.userData.obb.copy(userData.obb);
+            this.pushingOBBBoxMesh.userData.obb.applyMatrix4( matrixWorld );
+        }
 
         return this;
     }
@@ -228,6 +249,7 @@ class Tofu extends Moveable2D {
     }
 
     tickFall(delta) {
+        this.isFalling = true;
         const now = this.#fallingTime + delta;
         const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
         this.group.position.y -= deltaY;
@@ -236,7 +258,10 @@ class Tofu extends Moveable2D {
     }
 
     onGround(floor) {
-        const floorY = floor.mesh.localToWorld(new Vector3(0, 0, 0)).y;
+        this.isFalling = false;
+        const pos = new Vector3();
+        floor.mesh.getWorldPosition(pos);
+        const floorY = pos.y;
         this.group.position.y = floorY + this.height / 2;
         this.#fallingTime = 0;
         this.updateBoundingBoxHelper();

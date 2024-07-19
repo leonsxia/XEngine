@@ -10,11 +10,12 @@ class Plane extends BasicObject {
     #repeatModeU;
     #repeatModeV;
     #rotationT;
+    #noRepeat;
     #map = null;
 
     constructor(specs) {
         super('plane', specs);
-        const { name, map, mapRatio, repeatU, repeatV, rotationT, repeatModeU = REPEAT, repeatModeV = REPEAT } = specs;
+        const { name, map, mapRatio, repeatU, repeatV, rotationT, repeatModeU = REPEAT, repeatModeV = REPEAT, noRepeat = false } = specs;
 
         this.#mapSrc = map;
         this.#mapRatio = mapRatio;
@@ -23,6 +24,7 @@ class Plane extends BasicObject {
         this.#rotationT = rotationT;
         this.#repeatModeU = repeatModeU;
         this.#repeatModeV = repeatModeV;
+        this.#noRepeat = noRepeat;
 
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = name;
@@ -41,19 +43,21 @@ class Plane extends BasicObject {
                 this.#map.rotation = this.#rotationT;
             }
 
-            if (this.#repeatU && this.#repeatV) {
-                const modeU = this.getRepeatMode(this.#repeatModeU)
-                const modeV = this.getRepeatMode(this.#repeatModeV)
+            if (!this.#noRepeat) {
+                if (this.#repeatU && this.#repeatV) {
+                    const modeU = this.getRepeatMode(this.#repeatModeU)
+                    const modeV = this.getRepeatMode(this.#repeatModeV)
 
-                this.#map.wrapS = modeU;   // horizontal
-                this.#map.wrapT = modeV;   // vertical
-                
-                this.#map.repeat.set(this.#repeatU, this.#repeatV);
-            } else if (this.#mapRatio) {
-                const xRepeat =  this.width / (this.#mapRatio * this.height);
-                this.#map.wrapS = RepeatWrapping;
-                this.#map.repeat.set(xRepeat, 1);
-            } 
+                    this.#map.wrapS = modeU;   // horizontal
+                    this.#map.wrapT = modeV;   // vertical
+
+                    this.#map.repeat.set(this.#repeatU, this.#repeatV);
+                } else if (this.#mapRatio) {
+                    const xRepeat = this.width / (this.#mapRatio * this.height);
+                    this.#map.wrapS = RepeatWrapping;
+                    this.#map.repeat.set(xRepeat, 1);
+                }
+            }
             
             this.mesh.material = this.material = new MeshPhongMaterial({ map: this.#map });
         }

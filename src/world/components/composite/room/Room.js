@@ -1,5 +1,5 @@
 import { Group } from 'three';
-import { createCollisionPlane } from '../../physics/collisionHelper';
+import { createCollisionPlane, createCollisionOBBPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
@@ -15,16 +15,14 @@ class Room {
     bottoms = [];
     topOBBs = [];
     bottomOBBs = [];
-    boxOBBs = [];
     obstacles = [];
     insideWalls = [];
     insideGroups = [];
-    showArrow = false;
     specs;
 
     constructor(specs) {
         this.specs = specs;
-        const { name, width, depth, height, showArrow } = specs;
+        const { name, width, depth, height, showArrow = false, enableWallOBBs = false } = specs;
         const { frontMap, backMap, leftMap, rightMap } = this.specs;
 
         const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap });
@@ -34,14 +32,15 @@ class Room {
         const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap });
 
         this.name = name;
-        this.showArrow = showArrow;
         this.group = new Group();
 
-        this.backWall = createCollisionPlane(backSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, this.showArrow, false);
-        this.leftWall = createCollisionPlane(leftSpecs, `${name}_left`, [- width / 2, 0, 0], Math.PI / 2, true, true, this.showArrow, false);
-        this.rightWall = createCollisionPlane(rightSpecs, `${name}_right`, [width / 2, 0, 0], - Math.PI / 2, true, true, this.showArrow, false);
+        const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
+
+        this.backWall = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, showArrow);
+        this.leftWall = createWallFunction(leftSpecs, `${name}_left`, [- width / 2, 0, 0], Math.PI / 2, true, true, showArrow);
+        this.rightWall = createWallFunction(rightSpecs, `${name}_right`, [width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
         
-        this.frontWall = createCollisionPlane(frontSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, this.showArrow, false);
+        this.frontWall = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, showArrow);
         this.frontWall.line.material.color.setHex(green);
 
         this.walls = [this.frontWall, this.backWall, this.leftWall, this.rightWall];
@@ -113,7 +112,7 @@ class Room {
             if (g.bottoms) this.bottoms = this.bottoms.concat(g.bottoms);
             if (g.topOBBs) this.topOBBs = this.topOBBs.concat(g.topOBBs);
             if (g.bottomOBBs) this.bottomOBBs = this.bottomOBBs.concat(g.bottomOBBs);
-            if (g.box) this.boxOBBs.push(g.box);
+            if (g.isObstacle) this.obstacles.push(g);
         });
     }
 
@@ -143,15 +142,35 @@ class Room {
         return this;
     }
 
-    updateCPlaneBBandRay() {
+    updateOBBnRay() {
+        // this will update all children mesh matrixWorld.
         this.group.updateMatrixWorld();
-        this.walls.forEach(w => w.updateBoundingBoxHelper(false));
+
+        this.walls.forEach(w => {
+            w.updateRay();
+
+            if (w.isOBB) {
+                w.updateOBB(false);
+            }
+        });
+
         this.floors.forEach(f => f.updateOBB(false));
-        this.tops.forEach(t => t.updateBoundingBoxHelper(false));
-        this.bottoms.forEach(b => b.updateBoundingBoxHelper(false));
+
+        this.tops.forEach(t => { 
+            if (t.updateRay) t.updateRay(); 
+        });
+
+        this.bottoms.forEach(b => { 
+            if (b.updateRay) b.updateRay(); 
+        });
+
         this.topOBBs.forEach(t => t.updateOBB(false));
+
         this.bottomOBBs.forEach(b => b.updateOBB(false));
-        this.boxOBBs.forEach(box => box.updateOBB(false));
+
+        this.obstacles.forEach(obs => {
+            obs.updateOBBs(false, false);
+        });
     }
 }
 

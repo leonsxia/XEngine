@@ -1,6 +1,6 @@
 import { Group } from 'three';
-import { createCollisionPlane, createOBBPlane, createOBBBox } from '../../physics/collisionHelper';
-import { yankeesBlue, green, basic } from '../../basic/colorBase';
+import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createOBBBox } from '../../physics/collisionHelper';
+import { yankeesBlue, violetBlue, green, basic } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
 class BoxCube {
@@ -12,14 +12,28 @@ class BoxCube {
     rightFace;
     topFace;
     bottomFace;
+
+    // move triggers
+    frontTrigger;
+    backTrigger;
+    leftTrigger;
+    rightTrigger;
+
     walls = [];
     topOBBs = [];
     bottomOBBs = [];
+    triggers = [];
+
+    isObstacle = true;
+    enableWallOBBs = false;
+    climable = false;
+    movable = false;
     specs;
 
     constructor(specs) {
         this.specs = specs;
-        const { name, width, depth, height, showArrow = false, freeTexture = false } = specs;
+        const { name, width, depth, height } = specs;
+        const { showArrow = false, freeTexture = false, enableWallOBBs = false, climable = false, movable = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
 
         const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map };
@@ -34,23 +48,44 @@ class BoxCube {
         const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap });
 
         this.name = name;
-        this.showArrow = showArrow;
+        this.enableWallOBBs = enableWallOBBs;
+        this.climable = climable;
+        this.movable = movable;
         this.group = new Group();
 
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], !freeTexture ? true : false, !freeTexture ? true : false, false);
 
-        this.backFace = createCollisionPlane(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, true, true, showArrow, false);
-        this.leftFace = createCollisionPlane(leftSpecs, `${name}_left`, [- width * .5, 0, 0], - Math.PI * .5, true, true, showArrow, false);
-        this.rightFace = createCollisionPlane(rightSpecs, `${name}_right`, [width * .5, 0, 0], Math.PI * .5, true, true, showArrow, false);
+        const createPlaneFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
+
+        this.backFace = createPlaneFunction(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, true, true, showArrow);
+        this.leftFace = createPlaneFunction(leftSpecs, `${name}_left`, [- width * .5, 0, 0], - Math.PI * .5, true, true, showArrow);
+        this.rightFace = createPlaneFunction(rightSpecs, `${name}_right`, [width * .5, 0, 0], Math.PI * .5, true, true, showArrow);
         {
-            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, true, false);
-            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, true, false);
+            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, true);
+            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, true);
             this.topOBBs = [this.topFace];
             this.bottomOBBs = [this.bottomFace];
         }
         // create last for changing line color
-        this.frontFace = createCollisionPlane(frontSpecs, `${name}_front`, [0, 0, depth * .5], 0, true, true, showArrow, false);
+        this.frontFace = createPlaneFunction(frontSpecs, `${name}_front`, [0, 0, depth * .5], 0, true, true, showArrow);
         this.frontFace.line.material.color.setHex(green);
+
+        if (movable) {
+            const triggerSpecs = { width: .5, height, color: violetBlue };
+            this.frontTrigger = createOBBPlane(triggerSpecs, `${name}_front_trigger`, [0, 0, depth * .5], [0, 0, 0], false, false );
+            this.backTrigger = createOBBPlane(triggerSpecs, `${name}_back_trigger`, [0, 0, - depth * .5], [0, Math.PI, 0], false, false);
+            this.leftTrigger = createOBBPlane(triggerSpecs, `${name}_left_trigger`, [- width * .5, 0, 0], [0, - Math.PI * .5, 0], false, false);
+            this.rightTrigger = createOBBPlane(triggerSpecs, `${name}_right_trigger`, [width * .5, 0, 0], [0, Math.PI * .5, 0], false, false);
+
+            this.triggers = [this.frontTrigger, this.backTrigger, this.leftTrigger, this.rightTrigger];
+
+            this.group.add(
+                this.frontTrigger.mesh,
+                this.backTrigger.mesh,
+                this.leftTrigger.mesh,
+                this.rightTrigger.mesh
+            );
+        }
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
 
@@ -99,7 +134,9 @@ class BoxCube {
 
     makePlaneConfig(specs) {
         const { width, height } = specs;
-        const { baseSize = height, mapRatio } = this.specs;
+        const { baseSize = height, mapRatio, noRepeat = false } = this.specs;
+
+        if (noRepeat) return specs;
 
         if (mapRatio) {
             specs.repeatU = width / (mapRatio * baseSize);
@@ -121,6 +158,22 @@ class BoxCube {
         this.group.rotation.y = y;
         this.walls.forEach(w => w.mesh.rotationY += y);
         return this;
+    }
+
+    updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true) {
+        if (needUpdateWalls) {
+            this.walls.forEach(w => {
+                w.updateRay();
+
+                if (w.isOBB) {
+                    w.updateOBB(needUpdateMatrixWorld);
+                }
+            });
+        }
+
+        this.topOBBs.concat(this.bottomOBBs, this.triggers).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+
+        this.box.updateOBB(needUpdateMatrixWorld);
     }
 }
 

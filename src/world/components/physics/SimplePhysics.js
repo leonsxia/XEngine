@@ -204,6 +204,12 @@ class SimplePhysics {
                 } else {
                     wall.checkResult = { intersect: false, borderReach: false }
                 }
+
+                if (wall.isOBB) {
+                    // if (player.pushingObb.intersectsOBB(wall.obb)) {
+                    //     console.log(`${wall.name} intersets`);
+                    // }
+                }
             });
 
             if (player.frontFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[0])
@@ -250,6 +256,15 @@ class SimplePhysics {
                     player.onGround(collisionFloors[0]);
                 }
             }
+
+            this.obstacles.forEach(obs => {
+                obs.triggers.forEach(tri => {
+                    if (player.pushingObb.intersectsOBB(tri.obb)) {
+                        console.log(`${tri.name} intersects`);
+                    }
+                });
+                
+            });
         });
     }
 }
