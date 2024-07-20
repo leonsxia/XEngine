@@ -17,6 +17,7 @@ class SquarePillar {
     topOBBs = [];
     bottomOBBs = [];
 
+    isObstacle = false;
     enableWallOBBs = false;
     climbable = false;
     specs;
@@ -24,7 +25,7 @@ class SquarePillar {
     constructor(specs) {
         this.specs = specs;
         const { name, width, depth, height} = specs;
-        const {showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
+        const { isObstacle = false, showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
         const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
 
         const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap })
@@ -37,6 +38,7 @@ class SquarePillar {
         const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap });
 
         this.name = name;
+        this.isObstacle = isObstacle;
         this.enableWallOBBs = enableWallOBBs;
         this.climbable = climbable;
         this.group = new Group();
@@ -110,6 +112,22 @@ class SquarePillar {
         this.group.rotation.y = y;
         this.walls.forEach(w => w.mesh.rotationY += y);
         return this;
+    }
+
+    updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true, needUpdateTopBottom = true) {
+        if (needUpdateWalls) {
+            this.walls.forEach(w => {
+                w.updateRay();
+
+                if (w.isOBB) {
+                    w.updateOBB(needUpdateMatrixWorld);
+                }
+            });
+        }
+
+        if (needUpdateTopBottom) {
+            this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+        }
     }
 }
 

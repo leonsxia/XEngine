@@ -35,7 +35,7 @@ function createMeshes() {
     }
     const bbObjects = createBoundingBoxFaces(bbSpecs);
 
-    const pushingObbSpecs = { depth, show: true };
+    const pushingObbSpecs = { height, depth, show: true };
     const pushingOBBBox = createPlayerPushingOBBBox(pushingObbSpecs);
 
     return { 

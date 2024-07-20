@@ -146,7 +146,7 @@ class WorldScene {
 
         if (this.player) {
             this.player.setPosition(allPlayerPos[this.loadSequence]);
-            this.player.updateBoundingBoxHelper();
+            this.player.updateOBB();
         }
 
         if (this.staticRendering) {

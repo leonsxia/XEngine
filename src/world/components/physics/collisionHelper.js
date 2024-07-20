@@ -164,9 +164,9 @@ function createBoundingBoxFaces(specs) {
 }
 
 function createPlayerPushingOBBBox(specs) {
-    const { depth, show } = specs;
-    const pushingBoxSpecs = { size: { width: .2, depth: .1, height: .2 }, color: violetBlue };
-    const pushingOBBBox = createOBBBox(pushingBoxSpecs, 'pushingOBBBox', [0, 0, depth * .5 + pushingBoxSpecs.size.depth * .5], [0, 0, 0], false, false);
+    const { height, depth, show } = specs;
+    const pushingBoxSpecs = { size: { width: .2, depth: .2, height }, color: violetBlue };
+    const pushingOBBBox = createOBBBox(pushingBoxSpecs, 'pushingOBBBox', [0, 0, depth * .5 + .1 - pushingBoxSpecs.size.depth * .5], [0, 0, 0], false, false);
     pushingOBBBox.mesh.visible = show;
 
     return pushingOBBBox.mesh;

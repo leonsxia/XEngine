@@ -213,7 +213,7 @@ class WorldScene4 extends WorldScene {
             .receiveShadow(true)
             // .setPosition([0, 3, 0])
             .setScale([.5, .5, .5])
-            .updateBoundingBoxHelper();
+            .updateOBB();
 
         const tofu = new Tofu('tofu1');
         // this.subscribeEvents(tofu, worldSceneSpecs.moveType);
@@ -222,7 +222,7 @@ class WorldScene4 extends WorldScene {
             // .setPosition([0, 5, 3])
             // .setRotation([0, Math.PI, 0])
             // .setScale([.2, .3, .2])
-            .updateBoundingBoxHelper();
+            .updateOBB();
 
         const [room1, room2, room3] = await Promise.all([
             // earth.init(earthSpecs),
@@ -311,7 +311,9 @@ class WorldScene4 extends WorldScene {
             mapRatio: 1.5,
             name: 'square_pillar1',
             showArrow: true,
-            enableWallOBBs: true
+            enableWallOBBs: true,
+            isObstacle: true,
+            climbable: true
         };
 
         const lwSpecs1 = {
@@ -335,7 +337,7 @@ class WorldScene4 extends WorldScene {
         };
 
         const cbSpecs1 = {
-            width: 2.5,
+            width: 1.5,
             height: 1.5,
             depth: 1.5,
             baseSize: 1.5,
@@ -349,9 +351,33 @@ class WorldScene4 extends WorldScene {
             mapRatio: 1,
             freeTexture: true,
             noRepeat: true,
+            isObstacle: true,
             enableWallOBBs: true,
             movable: true,
+            climbable: true,
             name: 'CubeBox1'
+        }
+
+        const cbSpecs2 = {
+            width: 1,
+            height: 1,
+            depth: 1,
+            baseSize: 1,
+            map: 'assets/textures/crate.gif',
+            frontMap: 'assets/textures/crate.gif',
+            backMap: 'assets/textures/crate.gif',
+            leftMap: 'assets/textures/crate.gif',
+            rightMap: 'assets/textures/crate.gif',
+            topMap: 'assets/textures/crate.gif',
+            bottomMap: 'assets/textures/crate.gif',
+            mapRatio: 1,
+            freeTexture: true,
+            noRepeat: true,
+            isObstacle: true,
+            enableWallOBBs: true,
+            movable: true,
+            climbable: true,
+            name: 'CubeBox2'
         }
 
         const floorSpecs = {
@@ -377,11 +403,15 @@ class WorldScene4 extends WorldScene {
         lwall1.setPosition([1.5, 0, 5]);
 
         const cubeBox1 = new BoxCube(cbSpecs1);
-        cubeBox1.setPosition([1, - posY + cbSpecs1.height * .5 + .1, -1])
-            .setRotationY(3 * Math.PI * .25)
+        cubeBox1.setPosition([- 2, 2, - 5])
+            .setRotationY(3 * Math.PI * .25);
+
+        const cubeBox2 = new BoxCube(cbSpecs2);
+        cubeBox2.setPosition([- 2, 4, - 5])
+            .setRotationY(Math.PI * .33);
 
         const room = new Room(specs);
-        room.addGroups([spillar1, lwall1, cubeBox1]);
+        room.addGroups([spillar1, lwall1, cubeBox1, cubeBox2]);
         room.addFloors([floor]);
 
         await room.init();
@@ -455,7 +485,10 @@ class WorldScene4 extends WorldScene {
             bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'cylinder_pillar1',
-            showArrow: true
+            showArrow: true,
+            enableWallOBBs: true,
+            isObstacle: true,
+            climbable: true
         };
 
         const lwSpecs2 = {
@@ -475,7 +508,10 @@ class WorldScene4 extends WorldScene {
             bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             name: 'LWall2',
-            showArrow: true
+            showArrow: true,
+            enableWallOBBs: true,
+            isObstacle: true,
+            climbable: true
         };
 
         const floorSpecs = {
@@ -577,6 +613,7 @@ class WorldScene4 extends WorldScene {
         this.physics.floors = this.rooms[this.loadSequence].floors;
         this.physics.obstacleTops = this.rooms[this.loadSequence].topOBBs;
         this.physics.obstacles = this.rooms[this.loadSequence].obstacles;
+        this.physics.sortFloorTops();
     }
 }
 

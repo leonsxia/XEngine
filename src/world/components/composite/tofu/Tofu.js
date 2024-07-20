@@ -4,6 +4,7 @@ import { Moveable2D } from '../../movement/Moveable2D';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
+const ENABLE_CLIMBING = true;
 
 class Tofu extends Moveable2D {
     name = '';
@@ -15,10 +16,9 @@ class Tofu extends Moveable2D {
     #rotateR = .9;
     boundingBox;
     boundingBoxHelper;
-    #g = 9.8;
-    #fallingTime = 0;
     #vel = 1.34;
-    isFalling = false;
+
+    #climbingVel = 1.34;
 
     constructor(name) {
         super();
@@ -132,6 +132,10 @@ class Tofu extends Moveable2D {
         return 2.5 * Math.PI;
     }
 
+    get climbingVel() {
+        return this.#climbingVel;
+    }
+
     get recoverCoefficient() {
         return this.isAccelerating ? 0.008 : 0.004;
     }
@@ -142,6 +146,10 @@ class Tofu extends Moveable2D {
 
     get enableQuickTurn() {
         return ENABLE_QUICK_TURN;
+    }
+
+    get enableClimbing() {
+        return ENABLE_CLIMBING;
     }
 
     showBB(show) {
@@ -158,7 +166,7 @@ class Tofu extends Moveable2D {
         return this;
     }
 
-    updateBoundingBoxHelper() {
+    updateOBB() {
         this.group.updateMatrixWorld();
 
         {
@@ -236,7 +244,8 @@ class Tofu extends Moveable2D {
         const rotateVel = this.velocity / R;
         const dist = this.velocity * delta;
         const params = {
-            group: this.group, R, rotateVel, dist, delta
+            group: this.group, R, rotateVel, dist, delta,
+            player: this
         };
 
         return params;
@@ -245,33 +254,29 @@ class Tofu extends Moveable2D {
     tick(delta) {
         const params = this.setTickParams(delta);
         this.tankmoveTick(params);
-        this.updateBoundingBoxHelper();
+        this.updateOBB();
+    }
+
+    tickClimb(delta, wall) {
+        this.climbWallTick({ delta, wall, player: this });
+        this.updateOBB();
     }
 
     tickFall(delta) {
-        this.isFalling = true;
-        const now = this.#fallingTime + delta;
-        const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
-        this.group.position.y -= deltaY;
-        this.#fallingTime = now;
-        this.updateBoundingBoxHelper();
+        this.fallingTick({ delta, player: this });
+        this.updateOBB();
     }
 
     onGround(floor) {
-        this.isFalling = false;
-        const pos = new Vector3();
-        floor.mesh.getWorldPosition(pos);
-        const floorY = pos.y;
-        this.group.position.y = floorY + this.height / 2;
-        this.#fallingTime = 0;
-        this.updateBoundingBoxHelper();
+        this.onGroundTick({ floor, player: this });
+        this.updateOBB();
     }
 
     tickWithWall(delta, wall) {
         const params = this.setTickParams(delta);
         params.wall = wall;
         this.tankmoveTickWithWall(params);
-        this.updateBoundingBoxHelper();
+        this.updateOBB();
     }
 }
 

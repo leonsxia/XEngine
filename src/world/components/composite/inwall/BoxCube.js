@@ -1,9 +1,10 @@
 import { Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createOBBBox } from '../../physics/collisionHelper';
+import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { yankeesBlue, violetBlue, green, basic } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
-class BoxCube {
+class BoxCube extends ObstacleMoveable  {
     name = '';
     box;
     frontFace;
@@ -13,7 +14,7 @@ class BoxCube {
     topFace;
     bottomFace;
 
-    // move triggers
+    // move triggers, used for player interaction
     frontTrigger;
     backTrigger;
     leftTrigger;
@@ -24,16 +25,25 @@ class BoxCube {
     bottomOBBs = [];
     triggers = [];
 
-    isObstacle = true;
+    // set to false, will not add to room obstacles, so the physics engine will ignore this cubebox.
+    isObstacle = false;
+    // set four vetical face to OBBPlane, so it can iteract with other cubebox or player
     enableWallOBBs = false;
-    climable = false;
+    // set this cubebox is climable by player
+    climbable = false;
+    // set this cubebox can be pushed by player
     movable = false;
+    // falling ground
+    hittingGround;
+
     specs;
 
     constructor(specs) {
+        super();
+
         this.specs = specs;
         const { name, width, depth, height } = specs;
-        const { showArrow = false, freeTexture = false, enableWallOBBs = false, climable = false, movable = false } = specs;
+        const { showArrow = false, isObstacle = false, freeTexture = false, enableWallOBBs = false, climbable = false, movable = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
 
         const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map };
@@ -48,8 +58,9 @@ class BoxCube {
         const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap });
 
         this.name = name;
+        this.isObstacle = isObstacle;
         this.enableWallOBBs = enableWallOBBs;
-        this.climable = climable;
+        this.climbable = climbable;
         this.movable = movable;
         this.group = new Group();
 
@@ -85,10 +96,14 @@ class BoxCube {
                 this.leftTrigger.mesh,
                 this.rightTrigger.mesh
             );
+
+            this.setTriggerVisible(false);
         }
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
 
+        // freeTexture is true to enable 6 different texture maps for each face,
+        // the initial box will be hidden
         if (!freeTexture) {
             this.setFaceVisible(false);
         } else {
@@ -131,6 +146,9 @@ class BoxCube {
         this.bottomFace.mesh.visible = show;
     }
 
+    setTriggerVisible(show) {
+        this.triggers.forEach(tri => tri.mesh.visible = show);
+    }
 
     makePlaneConfig(specs) {
         const { width, height } = specs;
@@ -160,7 +178,7 @@ class BoxCube {
         return this;
     }
 
-    updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true) {
+    updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true, needUpdateTopBottom = true) {
         if (needUpdateWalls) {
             this.walls.forEach(w => {
                 w.updateRay();
@@ -171,9 +189,27 @@ class BoxCube {
             });
         }
 
-        this.topOBBs.concat(this.bottomOBBs, this.triggers).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+        if (needUpdateTopBottom) {
+            this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+        }
+
+        this.triggers.forEach(tri => tri.updateOBB(needUpdateMatrixWorld));
 
         this.box.updateOBB(needUpdateMatrixWorld);
+    }
+
+    tickFall(delta) {
+
+        this.fallingTick({ delta, obstacle: this });
+
+        this.updateOBBs();
+    }
+
+    onGround() {
+
+        this.onGroundTick({ floor: this.hittingGround, obstacle: this });
+        
+        this.updateOBBs();
     }
 }
 

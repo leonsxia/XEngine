@@ -33,6 +33,7 @@ class Room {
 
         this.name = name;
         this.group = new Group();
+        this.group.name = name;
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
@@ -169,7 +170,7 @@ class Room {
         this.bottomOBBs.forEach(b => b.updateOBB(false));
 
         this.obstacles.forEach(obs => {
-            obs.updateOBBs(false, false);
+            obs.updateOBBs(false, false, false);
         });
     }
 }

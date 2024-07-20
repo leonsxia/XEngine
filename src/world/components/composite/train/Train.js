@@ -3,6 +3,7 @@ import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 
 const ENABLE_QUICK_TURN = false;
+const ENABLE_CLIMBING = false;
 
 class Train extends Moveable2D {
     name = '';
@@ -16,8 +17,6 @@ class Train extends Moveable2D {
     #rotateR = 3;
     boundingBox;
     boundingBoxHelper;
-    #g = 9.8;
-    #fallingTime = 0;
 
     constructor(name) {
         super();
@@ -133,6 +132,10 @@ class Train extends Moveable2D {
         return ENABLE_QUICK_TURN;
     }
 
+    get enableClimbing() {
+        return ENABLE_CLIMBING;
+    }
+
     showBB(show) {
         this.boundingBoxMesh.visible = show;
     }
@@ -147,7 +150,7 @@ class Train extends Moveable2D {
         return this;
     }
 
-    updateBoundingBoxHelper() {
+    updateOBB() {
         const { matrixWorld, geometry: { boundingBox, userData } } = this.boundingBoxMesh;
         this.group.updateMatrixWorld();
         this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
@@ -200,7 +203,8 @@ class Train extends Moveable2D {
         const dist = this.velocity * delta;
         const params = {
             group: this.group, R, rotateVel, dist, delta, 
-            smallWheelRotateVel, largeWheelRotateVel
+            smallWheelRotateVel, largeWheelRotateVel,
+            player: this
         };
 
         return params;
@@ -210,22 +214,17 @@ class Train extends Moveable2D {
         const params = this.setTickParams(delta);
         this.tankmoveTick(params);
         this.tickWheels(delta, params);
-        this.updateBoundingBoxHelper();
+        this.updateOBB();
     }
 
     tickFall(delta) {
-        const now = this.#fallingTime + delta;
-        const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
-        this.group.position.y -= deltaY;
-        this.#fallingTime = now;
-        this.updateBoundingBoxHelper();
+        this.fallingTick({ delta, player: this });
+        this.updateOBB();
     }
 
     onGround(floor) {
-        const floorY = floor.mesh.localToWorld(new Vector3(0, 0, 0)).y;
-        this.group.position.y = floorY + this.height / 2;
-        this.#fallingTime = 0;
-        this.updateBoundingBoxHelper();
+        this.onGroundTick({ floor, player: this });
+        this.updateOBB();
     }
 
     tickWithWall(delta, wall) {
@@ -233,7 +232,7 @@ class Train extends Moveable2D {
         params.wall = wall;
         this.tankmoveTickWithWall(params);
         this.tickWheels(delta, params);
-        this.updateBoundingBoxHelper();
+        this.updateOBB();
     }
 
     tickWheels(delta, params) {

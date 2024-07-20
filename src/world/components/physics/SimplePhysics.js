@@ -7,6 +7,7 @@ const STAIR_OFFSET_MAX = .3;
 const STAIR_OFFSET_MIN = .1;
 
 class SimplePhysics {
+
     players = [];
     floors = [];
     walls = [];
@@ -15,27 +16,40 @@ class SimplePhysics {
     activePlayers = [];
 
     constructor(players, floors, walls, obstacles) {
+
         this.players = players;
         this.walls = walls;
         this.floors = floors;
         this.obstacles = obstacles;
+
     }
 
     addActivePlayers(...names) {
+
         names.forEach(name => {
+
             const find = this.players.find(p => p.name === name);
+
             if (find) this.activePlayers.push(find);
+
         });
+
     }
 
     removeActivePlayers(...names) {
+
         names.forEach((name) => {
+
             const idx = this.activePlayers.findIndex(active => active.name === name);
+
             if (idx > -1) this.activePlayers.splice(find, 1);
-        })
+
+        });
+
     }
 
     checkOutOfWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
+
         let result = false;
         const padding = .1;
 
@@ -49,13 +63,17 @@ class SimplePhysics {
             player.position.y > topBorderY + halfPlayerHeight ||
             player.position.y < bottomBorderY - halfPlayerHeight
         ) {
+
             result = true;
+
         }
 
         return result;
+
     }
 
     checkIntersection(player, plane, delta) {
+
         let intersect = false;
         let intersectCor = null;
 
@@ -63,6 +81,7 @@ class SimplePhysics {
         const dummyObject = player.dummyObject;
         const wallMesh = plane.mesh.clone();
         const wallWorldPos = new Vector3();
+        
         plane.mesh.getWorldPosition(wallWorldPos);
         wallMesh.position.copy(wallWorldPos);
         wallMesh.rotation.x = 0;
@@ -91,14 +110,18 @@ class SimplePhysics {
         const halfPlayerHeight = player.height * .5;
 
         if (this.checkOutOfWallRangeLocal(dummyObject, plane, halfPlayerWidth, halfPlayerHeight)) {
+            
             return { intersect, borderReach: false };
+
         }
 
         if ((leftCorVec3.z <=0 || rightCorVec3.z <= 0 || leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) 
             && Math.abs(dummyObject.position.z) - halfPlayerDepth <= 0
         ) {
+            
             const halfEdgeLength = plane.width / 2;
             const padding = player.velocity * delta + player.paddingCoefficient;
+
             if (
                 (Math.abs(dummyObject.position.z - halfPlayerDepth) <=  padding) && 
                 (
@@ -115,46 +138,69 @@ class SimplePhysics {
                 )
             ) {
                 if (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) {
+                    
                     player.leftCorIntersects = true;
                     intersectCor = COR_DEF[0]; // left cornor
+
                 }
                 else if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
+                    
                     player.rightCorIntersects = true;
                     intersectCor = COR_DEF[1]; // right cornor
+
                 }
                 else if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
+                    
                     player.backLeftCorIntersects = true;
                     intersectCor = COR_DEF[2]; // left back cornor
+
                 }
                 else if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
+                    
                     player.backRightCorIntersects = true;
                     intersectCor = COR_DEF[3]; // right back cornor
+
                 }
+
                 intersect = true;
-            } 
-            else if (Math.abs(dummyObject.position.z - halfPlayerDepth) >  player.velocity * delta) {
+
+            } else if (Math.abs(dummyObject.position.z - halfPlayerDepth) >  player.velocity * delta) {
+                
                 const leftBorderIntersects = plane.leftRay.intersectObject(player.group);
                 const rightBorderIntersects = plane.rightRay.intersectObject(player.group);
+                
                 if (
                     rightBorderIntersects.length > 0 ||
                     leftBorderIntersects.length > 0
                 ) {
+                    
                     // console.log('ray intersect');
                     const leftCorIntersectFace = leftBorderIntersects.length > 0 ? leftBorderIntersects[0].object.name : null;
                     const rightCorIntersectFace = rightBorderIntersects.length > 0 ? rightBorderIntersects[0].object.name : null;
+                    
                     if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) 
+                        
                         player.frontFaceIntersects = true;
+
                     else if (leftCorIntersectFace === FACE_DEF[1] || rightCorIntersectFace === FACE_DEF[1]) 
+                        
                         player.backFaceIntersects = true;
+
                     else if (leftCorIntersectFace === FACE_DEF[2] || rightCorIntersectFace === FACE_DEF[2]) 
+                        
                         player.leftFaceIntersects = true;
+
                     else if (leftCorIntersectFace === FACE_DEF[3] || rightCorIntersectFace === FACE_DEF[3])
+                        
                         player.rightFaceIntersects = true;
 
                     intersect = true;
+                    
                     return { wallMesh, intersect, borderReach: true, cornors, leftCorIntersectFace, rightCorIntersectFace };
                 }
+
                 return { intersect, borderReach: false };
+                
             }
         }
 
@@ -162,47 +208,84 @@ class SimplePhysics {
             return { wallMesh, intersect, borderReach: false, intersectCor, cornors };
         else
             return { intersect, borderReach: false }
+
     }
 
     checkStair(player, top) {
+
         let isStair = false;
         const offset = Math.abs(top.worldPosition.y - player.bottomY);
 
         if (player.bottomY < top.worldPosition.y && offset <= STAIR_OFFSET_MAX && offset >= STAIR_OFFSET_MIN) {
+            
             isStair = true;
+
         }
         
         return isStair;
+        
     }
 
     checkBlockByTopS(player, top){
+
         let block = false;
         const offset = Math.abs(top.worldPosition.y - player.bottomY);
 
         if (player.bottomY < top.worldPosition.y && offset > STAIR_OFFSET_MAX) {
+            
             block = true;
+
         }
 
         return block;
+
+    }
+
+    sortFloorTops() {
+
+        this.obstacleTops.sort((a, b) => {
+
+            return b.worldPosition.y - a.worldPosition.y;
+
+        });
+
+        this.floors.sort((a, b) => {
+
+            return b.worldPosition.y - a.worldPosition.y;
+
+        });
+
     }
 
     tick(delta) {
         if (delta > 0.0333) { // lost frame when fps lower than 30fps
+
             return;
+
         }
+
         this.activePlayers.forEach(player => {
+
             player.setBoundingBoxHelperColor(Color.BBW).resetBFColor(Color.BF);
             player.resetItersectStatus();
+
             const collisionedWalls = [];
+
             this.walls.forEach(wall => {
+
                 const checkResult = this.checkIntersection(player, wall, delta);
+
                 if (checkResult.intersect) {
+
                 // if (player.boundingBox.intersectsBox(wall.boundingBox)) {
                     player.setBoundingBoxHelperColor(Color.intersect);
                     wall.checkResult = checkResult;
                     collisionedWalls.push(wall);
+
                 } else {
-                    wall.checkResult = { intersect: false, borderReach: false }
+
+                    wall.checkResult = { intersect: false, borderReach: false };
+
                 }
 
                 if (wall.isOBB) {
@@ -218,53 +301,182 @@ class SimplePhysics {
             else if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
 
             if (collisionedWalls.length === 0) {
+
                 player.tick(delta);
+
             } else {
+
                 collisionedWalls.forEach(wall => {
+
                     player.tickWithWall(delta, wall);
+
                 });
             }
 
+            // for movable obstacles falling down check
+            const movableObs = this.obstacles.filter(obs => obs.movable);
+            const onTopsObs = [];
+
+            // for player falling down check
             const collisionTops = [];
+
             this.obstacleTops.forEach(top => {
+
                 if (collisionTops.length === 0) {
+
                     if (player.obb.intersectsOBB(top.obb) && !this.checkBlockByTopS(player, top)) {
+
                         // to do
                         collisionTops.push(top);
+
                     }
+
                 }
+
+                movableObs.forEach((obs, idx) => {
+
+                    if (top.mesh.parent !== obs.group && obs.box.obb.intersectsOBB(top.obb)) {
+
+                        onTopsObs.push(obs);
+                        movableObs.splice(idx, 1);
+                        obs.hittingGround = top;
+
+                    } else {
+
+                        obs.hittingGround = null;
+
+                    }
+                });
             });
 
             if (collisionTops.length > 0) {
+
                 player.onGround(collisionTops[0]);
+
+            }
+
+            if (onTopsObs.length > 0) {
+
+                onTopsObs.forEach(obs => {
+
+                    obs.onGround();
+
+                });
             }
 
             if (collisionTops.length === 0) {
+
                 const collisionFloors = [];
+
                 this.floors.forEach(floor => {
+
                     if (collisionFloors.length === 0) {
+
                         if (player.obb.intersectsOBB(floor.obb)) {
                             // to do
                             collisionFloors.push(floor);
+
                         }
                     }
                 });
 
                 if (collisionFloors.length === 0) {
+
                     player.tickFall(delta);
+
                 } else {
+
                     player.onGround(collisionFloors[0]);
+
                 }
             }
 
-            this.obstacles.forEach(obs => {
-                obs.triggers.forEach(tri => {
-                    if (player.pushingObb.intersectsOBB(tri.obb)) {
-                        console.log(`${tri.name} intersects`);
+            // check obstacles falling on floors
+            if (movableObs.length > 0) {
+
+                const onGroundObs = [];
+
+                this.floors.forEach(floor => {
+
+                    movableObs.forEach((obs, idx) => {
+
+                        if (obs.box.obb.intersectsOBB(floor.obb)) {
+
+                            onGroundObs.push(obs);
+                            movableObs.splice(idx, 1);
+                            obs.hittingGround = floor;
+
+                        } else {
+
+                            obs.hittingGround = null;
+
+                        }
+                    });
+                });
+
+                if (onGroundObs.length > 0) {
+
+                    onGroundObs.forEach(obs => {
+
+                        obs.onGround();
+
+                    });
+                }
+
+                if (movableObs.length > 0) {
+
+                    movableObs.forEach(obs => {
+
+                        obs.tickFall(delta);
+
+                    })
+                }
+            }
+            
+            // check player push or climb an obstacle
+            if (player.pushingObb) {
+
+                const climbWalls = [];
+
+                this.obstacles.forEach(obs => {
+
+                    if (obs.movable) {
+
+                        obs.triggers.forEach(tri => {
+
+                            if (player.pushingObb.intersectsOBB(tri.obb)) {
+                                // console.log(`${tri.name} is pushed`);
+                            }
+
+                        });
+                    }
+
+                    if (obs.climbable) {
+
+                        obs.walls.forEach(w => {
+
+                            if (w.isOBB) {
+
+                                if (player.pushingObb.intersectsOBB(w.obb)) {
+                                    
+                                    // console.log(`${w.name} is climbed`);
+                                    climbWalls.push(w);
+
+                                }
+                            }
+                        });
                     }
                 });
-                
-            });
+
+                if (climbWalls.length === 1) {
+
+                    const wall = climbWalls[0];
+
+                    // console.log(`${climbWalls[0].name} is climbed`);
+                    player.tickClimb(delta, wall);
+
+                }
+            }
         });
     }
 }

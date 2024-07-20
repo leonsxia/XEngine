@@ -22,6 +22,7 @@ class LWall {
     topOBBs = [];
     bottomOBBs = [];
 
+    isObstacle = false;
     enableWallOBBs = false;
     climbable = false;
     specs;
@@ -29,7 +30,7 @@ class LWall {
     constructor(specs) {
         this.specs = specs;
         const { name, width, depth, thickness, height} = specs;
-        const {showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
+        const { isObstacle = false, showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
         const { outTMap, outSMap, inTMap, inSMap, sideTMap, sideSMap, topMap, bottomMap } = specs;
 
         const outWallTSpecs = this.makePlaneConfig({ width: depth, height, map: outTMap });
@@ -44,6 +45,7 @@ class LWall {
         const bottomSSpecs = this.makePlaneConfig({ width: width - thickness, height: thickness, color: yankeesBlue, map: bottomMap });
 
         this.name = name;
+        this.isObstacle = isObstacle;
         this.enableWallOBBs = enableWallOBBs;
         this.climbable = climbable;
         this.group = new Group();
@@ -133,6 +135,22 @@ class LWall {
         this.group.rotation.y = y;
         this.walls.forEach(w => w.mesh.rotationY += y);
         return this;
+    }
+
+    updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true, needUpdateTopBottom = true) {
+        if (needUpdateWalls) {
+            this.walls.forEach(w => {
+                w.updateRay();
+
+                if (w.isOBB) {
+                    w.updateOBB(needUpdateMatrixWorld);
+                }
+            });
+        }
+
+        if (needUpdateTopBottom) {
+            this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+        }
     }
 }
 

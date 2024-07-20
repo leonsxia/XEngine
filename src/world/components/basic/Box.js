@@ -7,7 +7,7 @@ class Box extends BasicObject {
     constructor(specs) {
         super('box', specs);
 
-        const {name, map} = specs;
+        const { name, map } = specs;
 
         this.#mapSrc = map;
 
@@ -17,6 +17,18 @@ class Box extends BasicObject {
 
     async init () {
         await this.initBasic({ map: this.#mapSrc });
+    }
+
+    get width() {
+        return this.geometry.parameters.width * this.mesh.scale.x;
+    }
+
+    get height() {
+        return this.geometry.parameters.width * this.mesh.scale.y;
+    }
+
+    get depth() {
+        return this.geometry.parameters.depth * this.mesh.scale.z;
     }
 }
 

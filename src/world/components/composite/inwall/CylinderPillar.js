@@ -34,6 +34,7 @@ class CylinderPillar {
     topOBBs = [];
     bottomOBBs = [];
 
+    isObstacle = false;
     enableWallOBBs = false;
     climbable = false;
 
@@ -43,12 +44,13 @@ class CylinderPillar {
     constructor(specs) {
         this.specs = specs;
         const { name, width, height} = specs;
-        const { showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
+        const { isObstacle = false, showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
         const { map, topMap, bottomMap } = specs;
         const offset = Math.sqrt(width * width / 2);
 
         this.name = name;
         this.radius = width * .5 / Math.cos(.375 * Math.PI);
+        this.isObstacle = isObstacle;
         this.enableWallOBBs = enableOBBs;
         this.climbable = climbable;
         this.group = new Group();
@@ -160,7 +162,7 @@ class CylinderPillar {
         const { roomHeight = 1, mapRatio, noRepeat = false } = this.specs;
 
         if (noRepeat) return specs;
-        
+
         if (mapRatio) {
             specs.repeatU = width / (mapRatio * roomHeight);
             specs.repeatV = height / roomHeight;
@@ -181,6 +183,22 @@ class CylinderPillar {
         this.group.rotation.y = y;
         this.walls.forEach(w => w.mesh.rotationY += y);
         return this;
+    }
+
+    updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true, needUpdateTopBottom = true) {
+        if (needUpdateWalls) {
+            this.walls.forEach(w => {
+                w.updateRay();
+
+                if (w.isOBB) {
+                    w.updateOBB(needUpdateMatrixWorld);
+                }
+            });
+        }
+
+        if (needUpdateTopBottom) {
+            this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+        }
     }
 }
 

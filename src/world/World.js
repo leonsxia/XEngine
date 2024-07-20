@@ -10,7 +10,7 @@ const config = {
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics'],  // scene list for scene selector
 };
 const movementTypes = ['tankmove'];
-const moveActions = ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate'];
+const moveActions = ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump'];
 
 class World {
     #renderer;
@@ -23,11 +23,13 @@ class World {
     #keyWDown = false;
     #keySDown = false;
     #keyShiftDown = false;
+    #keySpaceDown = false;
     #movingLeft = false;
     #movingRight = false;
     #movingForward = false;
     #movingBackward = false;
     #accelerate = false;
+    #jump = false;
 
     constructor(container, infos) {
         this.#renderer = createRenderer();
@@ -160,6 +162,11 @@ class World {
                     }
                     break;
                 case ' ':
+                    if (!this.#keySpaceDown) {
+                        this.#keySpaceDown = true;
+                        this.#jump = true;
+                        eventDispatcher.publish(messageType, moveActions[5], this.current, this.#jump);
+                    }
                     break;
             }
         });
@@ -233,6 +240,9 @@ class World {
                     eventDispatcher.publish(messageType, moveActions[4], this.current, this.#accelerate);
                     break;
                 case ' ':
+                    this.#keySpaceDown = false;
+                    this.#jump = false;
+                    eventDispatcher.publish(messageType, moveActions[5], this.current, this.#jump);
                     break;
             }
         });
