@@ -434,7 +434,7 @@ class Moveable2D {
         const dummyObject = this.dummyObject;
 
         dummyObject.position.copy(wallMesh.worldToLocal(group.position.clone()));
-        dummyObject.rotation.y = group.rotation.y - wallMesh.rotationY;
+        dummyObject.rotation.y = group.rotation.y - wallMesh.rotation.y;
         dummyObject.scale.copy(group.scale);
 
         const posY = dummyObject.position.y;
@@ -460,7 +460,7 @@ class Moveable2D {
             dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
 
             group.position.copy(wallMesh.localToWorld(dummyObject.position.clone()));
-            group.rotation.y = dummyObject.rotation.y + wallMesh.rotationY;
+            group.rotation.y = dummyObject.rotation.y + wallMesh.rotation.y;
 
             return;
             
@@ -754,7 +754,7 @@ class Moveable2D {
 
         // transfer dummy to group world position.
         group.position.copy(wallMesh.localToWorld(dummyObject.position.clone()));
-        group.rotation.y = dummyObject.rotation.y + wallMesh.rotationY;
+        group.rotation.y = dummyObject.rotation.y + wallMesh.rotation.y;
     }
 }
 

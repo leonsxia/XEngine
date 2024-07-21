@@ -1,6 +1,7 @@
-import { Vector3 } from 'three';
+import { Object3D, Vector3 } from 'three';
 import * as Color from '../basic/colorBase.js';
 
+const DEBUG = true;
 const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
 const FACE_DEF = ['frontFace', 'backFace', 'leftFace', 'rightFace'];
 const STAIR_OFFSET_MAX = .3;
@@ -79,18 +80,16 @@ class SimplePhysics {
 
         // set dummy object related to zero position.
         const dummyObject = player.dummyObject;
-        const wallMesh = plane.mesh.clone();
+        const wallMesh = new Object3D();
         const wallWorldPos = new Vector3();
         
         plane.mesh.getWorldPosition(wallWorldPos);
+
         wallMesh.position.copy(wallWorldPos);
-        wallMesh.rotation.x = 0;
         wallMesh.rotation.y = plane.mesh.rotationY;
-        wallMesh.rotation.z = 0;
-        wallMesh.rotationY = plane.mesh.rotationY;
 
         dummyObject.position.copy(wallMesh.worldToLocal(player.position.clone()));
-        dummyObject.rotation.y = player.rotation.y - plane.mesh.rotationY;
+        dummyObject.rotation.y = player.rotation.y - wallMesh.rotation.y;
         dummyObject.scale.copy(player.scale);
         
         const leftCorVec3 = player.leftCorVec3;
@@ -295,10 +294,14 @@ class SimplePhysics {
                 }
             });
 
-            if (player.frontFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[0])
-            else if (player.backFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[1])
-            else if (player.leftFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[2])
-            else if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
+            if (DEBUG) {
+
+                if (player.frontFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[0])
+                else if (player.backFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[1])
+                else if (player.leftFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[2])
+                else if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
+
+            }
 
             if (collisionedWalls.length === 0) {
 
