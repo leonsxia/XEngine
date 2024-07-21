@@ -88,13 +88,13 @@ class SquarePillar {
 
     makePlaneConfig(specs) {
         const { width, height } = specs;
-        const { roomHeight = 1, mapRatio, noRepeat = false } = this.specs;
+        const { baseSize = height, mapRatio, noRepeat = false } = this.specs;
 
         if (noRepeat) return specs;
 
         if (mapRatio) {
-            specs.repeatU = width / (mapRatio * roomHeight);
-            specs.repeatV = height / roomHeight;
+            specs.repeatU = width / (mapRatio * baseSize);
+            specs.repeatV = height / baseSize;
         }
 
         specs.repeatModeU = REPEAT;

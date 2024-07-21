@@ -176,12 +176,12 @@ class Room {
 
         const { width, height } = specs;
 
-        const { roomHeight = 1, mapRatio } = this.specs;
+        const { baseSize = height, mapRatio } = this.specs;
 
         if (mapRatio) {
 
-            specs.repeatU = width / (mapRatio * roomHeight);
-            specs.repeatV = height / roomHeight;
+            specs.repeatU = width / (mapRatio * baseSize);
+            specs.repeatV = height / baseSize;
 
         }
 

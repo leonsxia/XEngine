@@ -137,7 +137,7 @@ class CylinderPillar {
     }
 
     makeTBPlaneConfig(specs, top = true) {
-        const { roomHeight = 1, mapRatio, noRepeat = false } = this.specs;
+        const { baseSize = this.radius * 2, mapRatio, noRepeat = false } = this.specs;
 
         if (top)
             specs.rotationT = .125 * Math.PI;
@@ -147,8 +147,8 @@ class CylinderPillar {
         if (noRepeat) return specs;
 
         if (mapRatio) {
-            specs.repeatU = this.radius * 2 / (mapRatio * roomHeight);
-            specs.repeatV = this.radius * 2 / roomHeight;
+            specs.repeatU = this.radius * 2 / (mapRatio * baseSize);
+            specs.repeatV = this.radius * 2 / baseSize;
         }
 
         specs.repeatModeU = REPEAT;
@@ -159,13 +159,13 @@ class CylinderPillar {
 
     makePlaneConfig(specs) {
         const { width, height } = specs;
-        const { roomHeight = 1, mapRatio, noRepeat = false } = this.specs;
+        const { baseSize = height, mapRatio, noRepeat = false } = this.specs;
 
         if (noRepeat) return specs;
 
         if (mapRatio) {
-            specs.repeatU = width / (mapRatio * roomHeight);
-            specs.repeatV = height / roomHeight;
+            specs.repeatU = width / (mapRatio * baseSize);
+            specs.repeatV = height / baseSize;
         }
 
         specs.repeatModeU = REPEAT;
