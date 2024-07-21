@@ -3,6 +3,7 @@ import { createBasicLights, createPointLights } from '../components/lights.js';
 import { BirdsGroup } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { WorldScene } from './WorldScene.js';
+import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../components/utils/constants.js';
 
 const sceneName = 'Birds';
 const worldSceneSpecs = {
@@ -26,7 +27,7 @@ const mainLightCtlSpecs = {
         position: [-10, 10, 10],
         target: [0, 0, 0]
     },
-    type: 'directional',
+    type: DIRECTIONAL_LIGHT,
     debug: true,
     shadow: false,
     shadow_debug: false,
@@ -39,7 +40,7 @@ const ambientLightCtlSpecs = {
         color: [128, 128, 128],
         intensity: 2
     },
-    type: 'ambient',
+    type: AMBIENT_LIGHT,
     debug: true,
     visible: true
 };
@@ -52,7 +53,7 @@ const hemisphereLightCtlSpecs = {
         intensity: 3,
         position: [0, 1, 0] // light emit from top to bottom
     },
-    type: 'hemisphere',
+    type: HEMISPHERE_LIGHT,
     debug: true,
     visible: true
 };
@@ -94,7 +95,7 @@ class WorldScene3 extends WorldScene {
         // shadow light setup, including light helper
         this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
         this.shadowLightObjects = setupShadowLight.call(this,
-            this.scene, ...basicLightSpecsArr, ...pointLightSpecsArr
+            this.scene, null, ...basicLightSpecsArr, ...pointLightSpecsArr
         );
 
         if (worldSceneSpecs.enableGui) {

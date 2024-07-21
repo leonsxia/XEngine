@@ -1,14 +1,17 @@
-import { Group } from 'three';
+import { Object3D, Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
-import { REPEAT } from '../../utils/constants';
+import { REPEAT, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET } from '../../utils/constants';
 
 class Room {
+
     name = '';
+
     frontWall;
     backWall;
     leftWall;
     rightWall;
+
     walls = [];
     floors = [];
     tops = [];
@@ -18,10 +21,17 @@ class Room {
     obstacles = [];
     insideWalls = [];
     insideGroups = [];
+
+    lights = [];
+    directionalLightTarget = new Object3D();
+    spotLightTarget = new Object3D();
+    
     specs;
 
     constructor(specs) {
+
         this.specs = specs;
+
         const { name, width, depth, height, showArrow = false, enableWallOBBs = false } = specs;
         const { frontMap, backMap, leftMap, rightMap } = this.specs;
 
@@ -46,15 +56,25 @@ class Room {
 
         this.walls = [this.frontWall, this.backWall, this.leftWall, this.rightWall];
 
+        this.directionalLightTarget.name = DIRECTIONAL_LIGHT_TARGET;
+        this.spotLightTarget.name = SPOT_LIGHT_TARGET;
+
         this.group.add(
+
             this.frontWall.mesh,
             this.backWall.mesh,
             this.leftWall.mesh,
-            this.rightWall.mesh
+            this.rightWall.mesh,
+
+            this.directionalLightTarget,
+            this.spotLightTarget
+
         );
+
     }
 
     async init() {
+        
         const insideWallsInit = this.initInsideWalls();
         const floorsInit = this.initFloors();
         const insideGroupsInit = this.initInsideGroups();
@@ -69,100 +89,170 @@ class Room {
             .concat(floorsInit)
             .concat(insideGroupsInit)
         );
+
     }
 
     initInsideWalls() {
+
         const promises = [];
+
         this.insideWalls.forEach(w => promises.push(w.init()));
+
         return promises;
+
     }
 
     initFloors() {
+
         const promises = [];
+
         this.floors.forEach(f => promises.push(f.init()));
+
         return promises;
+
     }
 
     initInsideGroups() {
+
         const promises = [];
+
         this.insideGroups.forEach(g => promises.push(g.init()));
+
         return promises;
+
     }
 
     addWalls(walls) {
+
         walls.forEach(w => {
+
             this.group.add(w.mesh);
+
             this.walls.push(w);
+
             this.insideWalls.push(w);
+
         });
+
     }
 
     addFloors(floors) {
+
         floors.forEach(f => {
+
             this.group.add(f.mesh);
+
             this.floors.push(f);
+
         });
+
     }
 
     addGroups(groups) {
+
         groups.forEach(g => {
+
             this.group.add(g.group);
+
             this.insideGroups.push(g);
+
             this.walls = this.walls.concat(g.walls);
+
             if (g.tops) this.tops = this.tops.concat(g.tops);
+
             if (g.bottoms) this.bottoms = this.bottoms.concat(g.bottoms);
+
             if (g.topOBBs) this.topOBBs = this.topOBBs.concat(g.topOBBs);
+
             if (g.bottomOBBs) this.bottomOBBs = this.bottomOBBs.concat(g.bottomOBBs);
+
             if (g.isObstacle) this.obstacles.push(g);
+
         });
+
     }
 
     makePlaneConfig(specs) {
+
         const { width, height } = specs;
+
         const { roomHeight = 1, mapRatio } = this.specs;
 
         if (mapRatio) {
+
             specs.repeatU = width / (mapRatio * roomHeight);
             specs.repeatV = height / roomHeight;
+
         }
 
         specs.repeatModeU = REPEAT;
         specs.repeatModeV = REPEAT;
 
         return specs;
+
     }
 
     setPosition(pos) {
+
         this.group.position.set(...pos);
+
         return this;
+
     }
 
     setRotationY(y) {
+
         this.group.rotation.y = y;
+
         this.walls.forEach(w => w.mesh.rotationY += y);
+
         return this;
+
+    }
+
+    setLightsVisible(lightVisible = true, helperVisible = false) {
+
+        this.lights.forEach(l => {
+
+            l.visible = lightVisible;
+
+            if (l.lightHelper) l.lightHelper.visible = helperVisible;
+
+            if (l.lightShadowCamHelper) l.lightShadowCamHelper.visible = helperVisible;
+            
+        });
+
     }
 
     updateOBBnRay() {
+
         // this will update all children mesh matrixWorld.
         this.group.updateMatrixWorld();
 
         this.walls.forEach(w => {
+
             w.updateRay();
 
             if (w.isOBB) {
+
                 w.updateOBB(false);
+
             }
+
         });
 
         this.floors.forEach(f => f.updateOBB(false));
 
         this.tops.forEach(t => { 
+
             if (t.updateRay) t.updateRay(); 
+
         });
 
         this.bottoms.forEach(b => { 
+
             if (b.updateRay) b.updateRay(); 
+
         });
 
         this.topOBBs.forEach(t => t.updateOBB(false));
@@ -170,8 +260,11 @@ class Room {
         this.bottomOBBs.forEach(b => b.updateOBB(false));
 
         this.obstacles.forEach(obs => {
+
             obs.updateOBBs(false, false, false);
+
         });
+
     }
 }
 

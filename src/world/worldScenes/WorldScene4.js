@@ -1,10 +1,9 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Sphere, Box, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube } from '../components/Models.js';
+import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
-import { createCollisionPlane } from '../components/physics/collisionHelper.js';
-import { MIRRORED_REPEAT } from '../components/utils/constants.js';
+import { MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../components/utils/constants.js';
 import { WorldScene } from './WorldScene.js';
 
 const sceneName = 'Simple Physics';
@@ -36,17 +35,24 @@ const worldSceneSpecs = {
         [18, 3, 4],
     ]
 };
+
+const ROOM1 = 'room1';
+const ROOM2 = 'room2';
+const ROOM3 = 'room3';
+
 // basic lights
-const mainLightCtlSpecs = {
-    name: 'mainLight',
+// room1
+const mainLightCtlSpecs1 = {
+    room: ROOM1,
+    name: 'mainLight1',
     display: 'Directional Light',
     detail: {
         color: [255, 255, 255],
         intensity: 0.7,
-        position: [-10, 20, 8.5],
+        position: [0, 4.3, 0],
         target: [0, 0, 0]
     },
-    type: 'directional',
+    type: DIRECTIONAL_LIGHT,
     debug: true,
     shadow: true,
     shadow_debug: true,
@@ -54,19 +60,21 @@ const mainLightCtlSpecs = {
     shadow_cam_show: false,
     visible: true
 };
-const ambientLightCtlSpecs = {
-    name: 'ambientLight',
+const ambientLightCtlSpecs1 = {
+    room: ROOM1,
+    name: 'ambientLight1',
     display: 'Ambient Light',
     detail: {
         color: [128, 128, 128],
         intensity: 1
     },
-    type: 'ambient',
+    type: AMBIENT_LIGHT,
     debug: true,
     visible: true
 }
-const hemisphereLightCtlSpecs = {
-    name: 'hemisphereLight',
+const hemisphereLightCtlSpecs1 = {
+    room: ROOM1,
+    name: 'hemisphereLight1',
     display: 'Hemisphere Light',
     detail: {
         groundColor: [47, 79, 79],
@@ -74,19 +82,158 @@ const hemisphereLightCtlSpecs = {
         intensity: 0.5,
         position: [0, 1, 0] // light emit from top to bottom
     },
-    type: 'hemisphere',
+    type: HEMISPHERE_LIGHT,
     debug: true,
     helper_show: false,
     visible: true
 };
-const basicLightSpecsArr = [mainLightCtlSpecs, ambientLightCtlSpecs, hemisphereLightCtlSpecs];
+
+// room2
+const mainLightCtlSpecs2 = {
+    room: ROOM2,
+    name: 'mainLight2',
+    display: 'Directional Light',
+    detail: {
+        color: [255, 255, 255],
+        intensity: 0.05,
+        position: [0, 6, 0],
+        target: [0, 0, 0]
+    },
+    type: DIRECTIONAL_LIGHT,
+    debug: true,
+    shadow: true,
+    shadow_debug: true,
+    helper_show: false,
+    shadow_cam_show: false,
+    visible: true
+};
+const ambientLightCtlSpecs2 = {
+    room: ROOM2,
+    name: 'ambientLight2',
+    display: 'Ambient Light',
+    detail: {
+        color: [128, 128, 128],
+        intensity: 1
+    },
+    type: AMBIENT_LIGHT,
+    debug: true,
+    visible: true
+}
+const hemisphereLightCtlSpecs2 = {
+    room: ROOM2,
+    name: 'hemisphereLight2',
+    display: 'Hemisphere Light',
+    detail: {
+        groundColor: [54, 212, 22],
+        skyColor: [40, 157, 215],
+        intensity: 0.3,
+        position: [0, 1, 0] // light emit from top to bottom
+    },
+    type: HEMISPHERE_LIGHT,
+    debug: true,
+    helper_show: false,
+    visible: true
+};
+
+// room3
+const mainLightCtlSpecs3 = {
+    room: ROOM3,
+    name: 'mainLight3',
+    display: 'Directional Light',
+    detail: {
+        color: [255, 255, 255],
+        intensity: 0.7,
+        position: [-10, 20, 8.5],
+        target: [0, 0, 0]
+    },
+    type: DIRECTIONAL_LIGHT,
+    debug: true,
+    shadow: true,
+    shadow_debug: true,
+    helper_show: false,
+    shadow_cam_show: false,
+    visible: true
+};
+const ambientLightCtlSpecs3 = {
+    room: ROOM3,
+    name: 'ambientLight3',
+    display: 'Ambient Light',
+    detail: {
+        color: [128, 128, 128],
+        intensity: 1
+    },
+    type: AMBIENT_LIGHT,
+    debug: true,
+    visible: true
+}
+const hemisphereLightCtlSpecs3 = {
+    room: ROOM3,
+    name: 'hemisphereLight3',
+    display: 'Hemisphere Light',
+    detail: {
+        groundColor: [47, 79, 79],
+        skyColor: [160, 160, 160],
+        intensity: 0.5,
+        position: [0, 4.6, 0] // light emit from top to bottom
+    },
+    type: HEMISPHERE_LIGHT,
+    debug: true,
+    helper_show: false,
+    visible: true
+};
+
+const basicLightSpecsArr = [
+    mainLightCtlSpecs1, ambientLightCtlSpecs1, hemisphereLightCtlSpecs1,
+    mainLightCtlSpecs2, ambientLightCtlSpecs2, hemisphereLightCtlSpecs2,
+    mainLightCtlSpecs3, ambientLightCtlSpecs3, hemisphereLightCtlSpecs3
+];
+
 const pointLightSpecsArr = [
     {
+        room: ROOM1,
         name: 'pointLight1',
-        display: 'Point Light 1',
+        display: 'Point Light',
         detail: {
             color: [255, 199, 44],
-            position: [7.8, 15.78, 0],
+            position: [0, 3.6, 0],
+            intensity: 50,
+            distance: 0,    // infinite far
+            decay: 1    // default 2
+        },
+        debug: true,
+        shadow: true,
+        shadow_debug: true,
+        helper_show: false,
+        shadow_cam_show: false,
+        visible: true
+    },
+
+    {
+        room: ROOM2,
+        name: 'pointLight2',
+        display: 'Point Light',
+        detail: {
+            color: [255, 199, 44],
+            position: [- 8.4, 6.325, - 5.7],
+            intensity: 5,
+            distance: 0,    // infinite far
+            decay: 1    // default 2
+        },
+        debug: true,
+        shadow: true,
+        shadow_debug: true,
+        helper_show: false,
+        shadow_cam_show: false,
+        visible: true
+    },
+
+    {
+        room: ROOM3,
+        name: 'pointLight3',
+        display: 'Point Light',
+        detail: {
+            color: [255, 199, 44],
+            position: [7.8, 7.7, 0],
             intensity: 50,
             distance: 0,    // infinite far
             decay: 1    // default 2
@@ -101,17 +248,62 @@ const pointLightSpecsArr = [
 ];
 const spotLightSpecsArr = [
     {
+        room: ROOM1,
         name: 'spotLight1',
-        display: 'Spot Light 1',
+        display: 'Spot Light',
         detail: {
             color: [255, 235, 0],
-            position: [5, 12, - 21],
-            target: [0.4, - .2, 11.8],
+            position: [- 4.3, 2.25, - 7],
+            target: [0, 0, 0],
             intensity: 26,
             distance: 45,    // 0 infinite far
             decay: 0.33,
             penumbra: 0.35,
             angle: 72 / 360 * Math.PI
+        },
+        debug: true,
+        shadow: true,
+        shadow_debug: true,
+        helper_show: false,
+        shadow_cam_show: false,
+        visible: true
+    },
+
+    {
+        room: ROOM2,
+        name: 'spotLight2',
+        display: 'Spot Light',
+        detail: {
+            color: [250, 250, 250],
+            position: [0, 6, 14.7],
+            target: [0, 1.25, 0],
+            intensity: 26,
+            distance: 45,    // 0 infinite far
+            decay: 0.33,
+            penumbra: 0.35,
+            angle: 23.6 / 360 * Math.PI
+        },
+        debug: true,
+        shadow: true,
+        shadow_debug: true,
+        helper_show: false,
+        shadow_cam_show: false,
+        visible: true
+    },
+
+    {
+        room: ROOM3,
+        name: 'spotLight3',
+        display: 'Spot Light',
+        detail: {
+            color: [255, 162, 0],
+            position: [5, 4.625, - 21],
+            target: [0.4, - .2, 11.8],
+            intensity: 26,
+            distance: 45,    // 0 infinite far
+            decay: 0.33,
+            penumbra: 0.35,
+            angle: 43.2 / 360 * Math.PI
         },
         debug: true,
         shadow: true,
@@ -156,9 +348,9 @@ class WorldScene4 extends WorldScene {
 
         // shadow light setup, including light helper
         this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
-        this.shadowLightObjects = setupShadowLight.call(this,
-            this.scene, ...basicLightSpecsArr, ...pointLightSpecsArr, ...spotLightSpecsArr
-        );
+        // this.shadowLightObjects = setupShadowLight.call(this,
+        //     this.scene, ...basicLightSpecsArr, ...pointLightSpecsArr, ...spotLightSpecsArr
+        // );
         
         return {
             name: this.name,
@@ -242,6 +434,28 @@ class WorldScene4 extends WorldScene {
         this.loop.updatables.push(this.physics);
         this.scene.add(ground.mesh, ceiling.mesh);
 
+        this.rooms.forEach(room => {
+            
+            const basicLightsSpecs = basicLightSpecsArr.filter(basic => basic.room === room.name);
+            const pointLightsSpecs = pointLightSpecsArr.filter(point => point.room === room.name);
+            const spotLightsSpecs = spotLightSpecsArr.filter(spot => spot.room === room.name);
+
+            const roomLightObjects = setupShadowLight.call(this,
+                this.scene, room.group, ...basicLightsSpecs, ...pointLightsSpecs, ...spotLightsSpecs
+            );
+
+            this.shadowLightObjects = this.shadowLightObjects.concat(roomLightObjects);
+
+            const basicLights = basicLightsSpecs.map(l => l.light);
+            const pointLights = pointLightsSpecs.map(l => l.light);
+            const spotLights = spotLightsSpecs.map(l => l.light);
+
+            room.lights = basicLights.concat(pointLights, spotLights);
+
+            room.setLightsVisible(false);
+
+        });
+
         // initialize player and rooms
         this.changeCharacter('tofu1');
 
@@ -253,6 +467,7 @@ class WorldScene4 extends WorldScene {
         room3.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
 
         this.showRoleSelector = true;
+
         // Gui setup
         if (worldSceneSpecs.enableGui) {
             this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr };
@@ -614,6 +829,14 @@ class WorldScene4 extends WorldScene {
         this.physics.obstacleTops = this.rooms[this.loadSequence].topOBBs;
         this.physics.obstacles = this.rooms[this.loadSequence].obstacles;
         this.physics.sortFloorTops();
+
+        this.rooms.forEach((room, idx) => {
+            if (idx === this.loadSequence) {
+                room.setLightsVisible(true);
+            } else {
+                room.setLightsVisible(false);
+            }
+        });
     }
 }
 

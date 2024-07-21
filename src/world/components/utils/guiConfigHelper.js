@@ -1,6 +1,9 @@
+import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from "./constants";
+
 const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
 const DEFALUT_GRID_DEPTH = 50;
+const NUMBER_STEPS = .1;
 
 function combineGuiConfigs(...details) {
     let specs = [];
@@ -62,12 +65,13 @@ function makeFolderSpecGuiConfig(specs) {
 function addDirectionalLight(light, specs) {
     // main directional light
     specs.push({
+        room: light.room,
         folder: light.display,
         parent: light.name,
         specs: [{
             name: 'intensity',
             value: null,
-            params: [0, 20],
+            params: [0, 20, NUMBER_STEPS],
             type: 'number'
         }, {
             name: 'color',
@@ -84,7 +88,7 @@ function addDirectionalLight(light, specs) {
             prop: 'position.x',
             value: null,
             sub: 'position',
-            params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH],
+            params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
             type: 'light-num',
             changeFn: null
         }, {
@@ -92,7 +96,7 @@ function addDirectionalLight(light, specs) {
             prop: 'position.y',
             value: null,
             sub: 'position',
-            params: [0, DEFAULT_GRID_HEIGHT],
+            params: [0, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
             type: 'light-num',
             changeFn: null
         }, {
@@ -100,7 +104,7 @@ function addDirectionalLight(light, specs) {
             prop: 'position.z',
             value: null,
             sub: 'position',
-            params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH],
+            params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
             type: 'light-num',
             changeFn: null
         }, {
@@ -109,7 +113,7 @@ function addDirectionalLight(light, specs) {
             value: null,
             sub: 'target',
             subprop: 'position',
-            params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH],
+            params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
             type: 'light-num',
             changeFn: null
         }, {
@@ -118,7 +122,7 @@ function addDirectionalLight(light, specs) {
             value: null,
             sub: 'target',
             subprop: 'position',
-            params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT],
+            params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
             type: 'light-num',
             changeFn: null
         }, {
@@ -127,7 +131,7 @@ function addDirectionalLight(light, specs) {
             value: null,
             sub: 'target',
             subprop: 'position',
-            params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH],
+            params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
             type: 'light-num',
             changeFn: null
         }, {
@@ -144,7 +148,7 @@ function addDirectionalLight(light, specs) {
                 prop: 'shadow blurSamples',
                 value: null,
                 sub: 'shadow',
-                params: [0, 20, 0.1],
+                params: [0, 20, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -152,7 +156,7 @@ function addDirectionalLight(light, specs) {
                 prop: 'shadow radius',
                 value: null,
                 sub: 'shadow',
-                params: [0, 10, 0.1],
+                params: [0, 10, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -161,7 +165,7 @@ function addDirectionalLight(light, specs) {
                 value: null,
                 sub: 'shadow',
                 subprop: 'camera',
-                params: [1, 100],
+                params: [1, 100, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -170,7 +174,7 @@ function addDirectionalLight(light, specs) {
                 value: null,
                 sub: 'shadow',
                 subprop: 'camera',
-                params: [1, 100],
+                params: [1, 100, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -179,7 +183,7 @@ function addDirectionalLight(light, specs) {
                 value: null,
                 sub: 'shadow',
                 subprop: 'camera',
-                params: [0.1, 10, 0.1],
+                params: [0.1, 10, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -188,7 +192,7 @@ function addDirectionalLight(light, specs) {
                 value: null,
                 sub: 'shadow',
                 subprop: 'camera',
-                params: [10, 100, 0.1],
+                params: [10, 100, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -219,12 +223,13 @@ function addAmbientLight(light, specs) {
     // ambient light
     if (light.visible) {
         specs.push({
+            room: light.room,
             folder: light.display,
             parent: light.name,
             specs: [{
                 name: 'intensity',
                 value: null,
-                params: [0, 20],
+                params: [0, 20, NUMBER_STEPS],
                 type: 'number'
             }, {
                 name: 'color',
@@ -240,12 +245,13 @@ function addHemisphereLight(light, specs) {
     // hemisphere light
     if (light.visible) {
         specs.push({
+            room: light.room,
             folder: light.display,
             parent: light.name,
             specs: [{
                 name: 'intensity',
                 value: null,
-                params: [0, 50],
+                params: [0, 50, NUMBER_STEPS],
                 type: 'number'
             }, {
                 name: 'skyColor',
@@ -269,7 +275,7 @@ function addHemisphereLight(light, specs) {
                 prop: 'position.x',
                 value: null,
                 sub: 'position',
-                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH],
+                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -277,7 +283,7 @@ function addHemisphereLight(light, specs) {
                 prop: 'position.y',
                 value: null,
                 sub: 'position',
-                params: [0, DEFAULT_GRID_HEIGHT],
+                params: [0, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -285,7 +291,7 @@ function addHemisphereLight(light, specs) {
                 prop: 'position.z',
                 value: null,
                 sub: 'position',
-                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH],
+                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -303,13 +309,13 @@ function makeBasicLightGuiConfig(basicLightSpecsArr) {
     const specs = [];
     basicLightSpecsArr.filter(l => l.visible).forEach(basic => {
         switch (basic.light.type) {
-            case 'DirectionalLight':
+            case DIRECTIONAL_LIGHT:
                 addDirectionalLight(basic, specs);
                 break;
-            case 'AmbientLight':
+            case AMBIENT_LIGHT:
                 addAmbientLight(basic, specs);
                 break;
-            case 'HemisphereLight':
+            case HEMISPHERE_LIGHT:
                 addHemisphereLight(basic, specs);
                 break;
         }
@@ -322,12 +328,13 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
     const specs = [];
     pointLightSpecsArr.filter(l => l.visible).forEach(point => {
         specs.push({
+            room: point.room,
             folder: point.display,
             parent: point.name,
             specs: [{
                 name: 'intensity',
                 value: null,
-                params: [0, 100, 0.1],
+                params: [0, 100, NUMBER_STEPS],
                 type: 'number'
             }, {
                 name: 'power',
@@ -359,7 +366,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                 prop: 'position.x',
                 value: null,
                 sub: 'position',
-                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH],
+                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -367,7 +374,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                 prop: 'position.y',
                 value: null,
                 sub: 'position',
-                params: [0, DEFAULT_GRID_HEIGHT],
+                params: [0, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -375,7 +382,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                 prop: 'position.z',
                 value: null,
                 sub: 'position',
-                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH],
+                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -392,7 +399,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     prop: 'shadow blurSamples',
                     value: null,
                     sub: 'shadow',
-                    params: [0, 20, 0.1],
+                    params: [0, 20, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -400,7 +407,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     prop: 'shadow radius',
                     value: null,
                     sub: 'shadow',
-                    params: [0, 10, 0.1],
+                    params: [0, 10, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -409,7 +416,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [1, 100],
+                    params: [1, 100, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -427,7 +434,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [0.1, 10, 0.1],
+                    params: [0.1, 10, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -436,7 +443,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [100, 1000, 0.1],
+                    params: [100, 1000, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -469,12 +476,13 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
     const specs = [];
     spotLightSpecsArr.filter(l => l.visible).forEach(spot => {
         specs.push({
+            room: spot.room,
             folder: spot.display,
             parent: spot.name,
             specs: [{
                 name: 'intensity',
                 value: null,
-                params: [0, 100, 0.1],
+                params: [0, 100, NUMBER_STEPS],
                 type: 'number'
             }, {
                 name: 'power',
@@ -491,7 +499,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 name: 'angleDeg',
                 prop: 'angle',
                 value: null,
-                params: [0, 90],
+                params: [0, 90, NUMBER_STEPS],
                 type: 'angle',
                 changeFn: null
             }, {
@@ -519,7 +527,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 prop: 'position.x',
                 value: null,
                 sub: 'position',
-                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH],
+                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -527,7 +535,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 prop: 'position.y',
                 value: null,
                 sub: 'position',
-                params: [0, DEFAULT_GRID_HEIGHT],
+                params: [0, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -535,7 +543,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 prop: 'position.z',
                 value: null,
                 sub: 'position',
-                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH],
+                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -544,7 +552,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 value: null,
                 sub: 'target',
                 subprop: 'position',
-                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH],
+                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -553,7 +561,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 value: null,
                 sub: 'target',
                 subprop: 'position',
-                params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT],
+                params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -562,7 +570,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 value: null,
                 sub: 'target',
                 subprop: 'position',
-                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH],
+                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -589,7 +597,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     prop: 'shadow blurSamples',
                     value: null,
                     sub: 'shadow',
-                    params: [0, 20, 0.1],
+                    params: [0, 20, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -597,7 +605,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     prop: 'shadow radius',
                     value: null,
                     sub: 'shadow',
-                    params: [0, 10, 0.1],
+                    params: [0, 10, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -606,7 +614,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [0.5, 2, 0.1],
+                    params: [0.5, 2, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -615,7 +623,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [0.1, 10, 0.1],
+                    params: [0.1, 10, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -624,7 +632,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [100, 1000, 0.1],
+                    params: [100, 1000, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {

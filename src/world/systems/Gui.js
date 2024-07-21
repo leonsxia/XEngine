@@ -55,7 +55,7 @@ class Gui {
 
     initRightLights(specs) {
         const eventObjs = [];
-        this.addControl(this.#guis[1], specs, eventObjs);
+        this.addControl(this.#guis[1], specs, eventObjs, true);
         specs.functions = {};
         Object.defineProperty(specs.functions, 'save', {
             value: () => {
@@ -84,10 +84,31 @@ class Gui {
         this.bindChange(this.#guis[1], eventObjs);
     }
 
-    addControl(gui, specs, eventObjs) {
+    addControl(gui, specs, eventObjs, needRoom = false) {
+
+        const rooms = [...new Set(specs.details.map(s => s.room))];
+
+        if (needRoom) {
+
+            rooms.forEach(room => { if (room) gui.addFolder(room); });
+
+        }
+
         specs.details.forEach(detail => {
-            const folder = gui.addFolder(detail.folder);
+
+            let folder;
             const target = detail.parent;
+
+            if (needRoom && detail.room && rooms.length > 0) {
+
+                folder = gui.folders.find(f => f._title === detail.room).addFolder(detail.folder)
+
+            } else {
+
+                folder = gui.addFolder(detail.folder);
+
+            }
+
             detail.specs.forEach(spec => {
                 if (spec.value || spec.changeFn) {
                     Object.defineProperty(spec, 'parent', {
