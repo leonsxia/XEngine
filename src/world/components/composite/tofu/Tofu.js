@@ -46,7 +46,7 @@ class Tofu extends Moveable2D {
         this.boundingBoxHelper = new Box3Helper(this.boundingBox, 0x00ff00);
         this.boundingBoxHelper.name = `${name}-box-helper`;
 
-        this.paddingCoefficient = .04 * ENLARGE;
+        this.paddingCoefficient = .06 * ENLARGE;
     }
 
     get boundingBoxWireMesh() {
@@ -102,6 +102,12 @@ class Tofu extends Moveable2D {
         return this.#d * this.group.scale.z;
     }
 
+    get worldPosition() {
+        const pos = new Vector3();
+        this.boundingBoxMesh.getWorldPosition(pos);
+        return pos;
+    }
+
     get bottomY() {
         const target = new Vector3();
         this.boundingBoxMesh.getWorldPosition(target);
@@ -137,7 +143,7 @@ class Tofu extends Moveable2D {
     }
 
     get recoverCoefficient() {
-        return this.isAccelerating ? 0.008 : 0.004;
+        return this.isAccelerating ? 0.01 : 0.01;
     }
     
     get backwardCoefficient() {

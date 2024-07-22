@@ -240,6 +240,21 @@ class SimplePhysics {
 
     }
 
+    checkWallBelow(player, wall) {
+
+        let isBelow = false;
+        const wallBottom = wall.worldPosition.y - wall.height * .5;
+
+        // if wall is higher than half player height, it will be climbable
+        if (player.bottomY >= wallBottom - player.height * .5) {
+
+            isBelow = true;
+
+        }
+
+        return isBelow;
+    }
+
     sortFloorTops() {
 
         this.obstacleTops.sort((a, b) => {
@@ -460,7 +475,7 @@ class SimplePhysics {
 
                             if (w.isOBB) {
 
-                                if (player.pushingObb.intersectsOBB(w.obb)) {
+                                if (player.pushingObb.intersectsOBB(w.obb) && this.checkWallBelow(player, w)) {
                                     
                                     // console.log(`${w.name} is climbed`);
                                     climbWalls.push(w);

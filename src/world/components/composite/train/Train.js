@@ -94,6 +94,12 @@ class Train extends Moveable2D {
         return this.#d * this.group.scale.z;
     }
 
+    get worldPosition() {
+        const pos = new Vector3();
+        this.boundingBoxMesh.getWorldPosition(pos);
+        return pos;
+    }
+
     get bottomY() {
         const target = new Vector3();
         this.boundingBoxMesh.getWorldPosition(target);
