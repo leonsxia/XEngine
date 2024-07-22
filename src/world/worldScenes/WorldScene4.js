@@ -611,14 +611,14 @@ class WorldScene4 extends WorldScene {
             .receiveShadow(true);
 
         const spillar1 = new SquarePillar(spSpecs1);
-        spillar1.setPosition([- 2, - posY + spSpecs1.height * .5, - 5])
+        spillar1.setPosition([- 1.8, - posY + spSpecs1.height * .5, - 5])
             .setRotationY(5 * Math.PI / 6);
 
         const lwall1 = new LWall(lwSpecs1);
         lwall1.setPosition([1.5, 0, 5]);
 
         const cubeBox1 = new BoxCube(cbSpecs1);
-        cubeBox1.setPosition([- 2, 2, - 5])
+        cubeBox1.setPosition([- 1.5, 2, - 5])
             .setRotationY(3 * Math.PI * .25);
 
         const cubeBox2 = new BoxCube(cbSpecs2);

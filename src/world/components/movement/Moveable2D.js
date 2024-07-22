@@ -1,5 +1,6 @@
 import { Object3D, Vector3 } from 'three';
 import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
+import { intersect } from '../basic/colorBase';
 
 const COOLING_TIME = .7;
 
@@ -20,8 +21,6 @@ class Moveable2D {
     #isQuickTuring = false;
     #turingRad = 0;
     #coolingT = COOLING_TIME;
-    #canForward = false;
-    #canBackward = false;
 
     #isClimbingUp = false;
     #isClimbingForward = false;
@@ -153,8 +152,7 @@ class Moveable2D {
             (intersectCor === COR_DEF[3] && this.leftCorIntersects) ||
             (this.leftCorIntersects && this.rightCorIntersects) || 
             (this.leftCorIntersects && this.backRightCorIntersects) ||
-            (this.rightCorIntersects && this.backLeftCorIntersects) ||
-            (this.frontFaceIntersects && (this.isMovingForwardLeft || this.isMovingForwardRight))
+            (this.rightCorIntersects && this.backLeftCorIntersects) 
         );
     }
 
@@ -166,8 +164,7 @@ class Moveable2D {
             (intersectCor === COR_DEF[0] && this.backRightCorIntersects) ||
             (this.backRightCorIntersects && this.backLeftCorIntersects) ||
             (this.backRightCorIntersects && this.leftCorIntersects) ||
-            (this.backLeftCorIntersects && this.rightCorIntersects) ||
-            (this.backFaceIntersects && (this.isMovingBackwardLeft || this.isMovingBackwardRight))
+            (this.backLeftCorIntersects && this.rightCorIntersects)
         );
     }
 
@@ -218,17 +215,6 @@ class Moveable2D {
 
                 this.#isQuickTuring = true;
 
-                if (this.#canForward) {
-
-                    this.#canForward = false;
-                    this.#canBackward = true;
-
-                } else if (this.#canBackward) {
-
-                    this.#canBackward = false;
-                    this.#canForward = true;
-
-                }
             }
     
             if (this.#isQuickTuring) {
@@ -411,6 +397,7 @@ class Moveable2D {
     }
 
     tankmoveTickWithWall(params) {
+
         const { group, R, rotateVel, dist, delta, wall, player } = params;
         const {
             wallMesh,
@@ -440,6 +427,7 @@ class Moveable2D {
         const posY = dummyObject.position.y;
 
         const recoverCoefficient = player.recoverCoefficient;
+        const quickRecoverCoefficient = player.quickRecoverCoefficient;
         const backwardCoefficient = player.backwardCoefficient;
         let deltaVec3, deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
@@ -466,11 +454,38 @@ class Moveable2D {
             
         }
 
-        if (!this.isForwardBlock(intersectCor) && !this.isBackwardBlock(intersectCor) && 
-            (this.#movingForward || ((!this.enableQuickTurn || !this.#accelerate) && this.#movingBackward))) {
+        // recover position z when static
+        if (
+            (
+                (intersectCor === COR_DEF[0] && leftCorVec3.z < 0) ||
+                (intersectCor === COR_DEF[1] && rightCorVec3.z < 0) ||
+                (intersectCor === COR_DEF[2] && leftBackCorVec3.z < 0) ||
+                (intersectCor === COR_DEF[3] && rightBackCorVec3.z < 0)
+            ) && (
+                !this.isMovingForwardLeft && !this.isMovingForwardRight && 
+                !this.isMovingBackwardLeft && !this.isMovingBackwardRight && 
+                !this.isMovingForward && !this.isMovingBackward
+            )
+        ) {
 
-            this.#canForward = false;
-            this.#canBackward = false;
+            dummyObject.position.z += quickRecoverCoefficient;
+
+        }
+
+        // recover position when reach the wall cornor
+        if (borderReach && !this.isMovingForward && !this.isMovingBackward) {
+
+            if (rightCorIntersectFace) {
+
+                dummyObject.position.x -= recoverCoefficient;
+                dummyObject.position.z += recoverCoefficient;
+            
+            } else {
+
+                dummyObject.position.x += recoverCoefficient;
+                dummyObject.position.z += recoverCoefficient;
+
+            }
 
         }
 
@@ -479,7 +494,7 @@ class Moveable2D {
             const deltaVec3 = new Vector3(0, 0, dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
 
-            if (!this.isForwardBlock(intersectCor) || this.#canForward) {
+            if (!this.isForwardBlock(intersectCor)) {
 
                 if (!borderReach) {
 
@@ -516,18 +531,13 @@ class Moveable2D {
                     dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
 
                 }
-            } else {
-
-                this.#canForward = false;
-                this.#canBackward = true;
-
             }
         } else if (this.isMovingBackward) {
 
             const deltaVec3 = new Vector3(0, 0, - dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
 
-            if (!this.isBackwardBlock(intersectCor) || this.#canBackward) {
+            if (!this.isBackwardBlock(intersectCor)) {
 
                 if (!borderReach) {
 
@@ -564,11 +574,6 @@ class Moveable2D {
                     dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, backwardCoefficient)));
 
                 }
-            } else {
-
-                this.#canBackward = false;
-                this.#canForward = true;
-
             }
         } else if (this.isTurnClockwise) {
 
@@ -584,11 +589,6 @@ class Moveable2D {
                     dummyObject.position.x += recoverCoefficient;
 
                 }
-            } else {
-
-                if (rightCorIntersectFace) dummyObject.position.x -= recoverCoefficient;
-                else dummyObject.position.x += recoverCoefficient;
-
             }
 
             dummyObject.rotation.y -= rotateRad;
@@ -607,11 +607,6 @@ class Moveable2D {
                     dummyObject.position.x -= recoverCoefficient;
 
                 }
-            } else {
-
-                if (leftCorIntersectFace) dummyObject.position.x += recoverCoefficient;
-                else dummyObject.position.x -= recoverCoefficient;
-
             }
 
             dummyObject.rotation.y += rotateRad;
@@ -627,7 +622,6 @@ class Moveable2D {
 
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
 
-                // dummyObject.position.copy(offsetVec3);
                 dummyObject.rotation.y += this.isMovingForwardLeft ? rotateRad : - rotateRad;
 
                 if (!borderReach) {
@@ -679,11 +673,6 @@ class Moveable2D {
                         dummyObject.position.x -= recoverCoefficient;
 
                     }
-                } else {
-
-                    if (leftCorIntersectFace) dummyObject.position.x += recoverCoefficient;
-                    else dummyObject.position.x -= recoverCoefficient;
-
                 }
             } else if (this.isMovingForwardRight || this.isMovingBackwardRight) {
 
@@ -743,11 +732,6 @@ class Moveable2D {
                         dummyObject.position.x -= recoverCoefficient;
 
                     }
-                } else {
-
-                    if (leftCorIntersectFace) dummyObject.position.x += recoverCoefficient;
-                    else dummyObject.position.x -= recoverCoefficient;
-
                 }
             }
         }
@@ -755,6 +739,7 @@ class Moveable2D {
         // transfer dummy to group world position.
         group.position.copy(wallMesh.localToWorld(dummyObject.position.clone()));
         group.rotation.y = dummyObject.rotation.y + wallMesh.rotation.y;
+
     }
 }
 

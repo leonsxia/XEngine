@@ -129,6 +129,10 @@ class Train extends Moveable2D {
     get recoverCoefficient() {
         return this.isAccelerating ? 0.04 : 0.02;
     }
+
+    get quickRecoverCoefficient() {
+        return .03;
+    }
     
     get backwardCoefficient() {
         return this.isAccelerating ? 0.02 : 0.005;

@@ -49,15 +49,15 @@ class SimplePhysics {
 
     }
 
-    checkOutOfWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
+    checkOutOfWallRangeLocal(player, wallMesh, halfPlayerWidth, halfPlayerHeight) {
 
         let result = false;
         const padding = .1;
 
-        const leftBorderX = - wall.width * .5 + padding;
-        const rightBorderX = wall.width * .5 - padding;
-        const topBorderY = wall.height * .5 - padding;
-        const bottomBorderY = - wall.height * .5 + padding;
+        const leftBorderX = - wallMesh.width * .5 + padding;
+        const rightBorderX = wallMesh.width * .5 - padding;
+        const topBorderY = wallMesh.height * .5 - padding;
+        const bottomBorderY = - wallMesh.height * .5 + padding;
 
         if (player.position.x < leftBorderX - halfPlayerWidth ||
             player.position.x > rightBorderX + halfPlayerWidth ||
@@ -87,6 +87,8 @@ class SimplePhysics {
 
         wallMesh.position.copy(wallWorldPos);
         wallMesh.rotation.y = plane.mesh.rotationY;
+        wallMesh.width = plane.width;
+        wallMesh.height = plane.height;
 
         dummyObject.position.copy(wallMesh.worldToLocal(player.position.clone()));
         dummyObject.rotation.y = player.rotation.y - wallMesh.rotation.y;
@@ -108,7 +110,7 @@ class SimplePhysics {
         const halfPlayerWidth = Math.max(Math.abs(leftCorVec3.x - rightBackCorVec3.x), Math.abs(rightCorVec3.x - leftBackCorVec3.x)) * .5;
         const halfPlayerHeight = player.height * .5;
 
-        if (this.checkOutOfWallRangeLocal(dummyObject, plane, halfPlayerWidth, halfPlayerHeight)) {
+        if (this.checkOutOfWallRangeLocal(dummyObject, wallMesh, halfPlayerWidth, halfPlayerHeight)) {
             
             return { intersect, borderReach: false };
 
@@ -136,25 +138,23 @@ class SimplePhysics {
                     )
                 )
             ) {
+
                 if (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) {
                     
                     player.leftCorIntersects = true;
                     intersectCor = COR_DEF[0]; // left cornor
 
-                }
-                else if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
+                } else if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
                     
                     player.rightCorIntersects = true;
                     intersectCor = COR_DEF[1]; // right cornor
 
-                }
-                else if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
+                } else if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
                     
                     player.backLeftCorIntersects = true;
                     intersectCor = COR_DEF[2]; // left back cornor
 
-                }
-                else if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
+                } else if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
                     
                     player.backRightCorIntersects = true;
                     intersectCor = COR_DEF[3]; // right back cornor
@@ -253,6 +253,7 @@ class SimplePhysics {
         }
 
         return isBelow;
+        
     }
 
     sortFloorTops() {
@@ -475,7 +476,7 @@ class SimplePhysics {
 
                             if (w.isOBB) {
 
-                                if (player.pushingObb.intersectsOBB(w.obb) && this.checkWallBelow(player, w)) {
+                                if (player.pushingObb.intersectsOBB(w.obb)) {
                                     
                                     // console.log(`${w.name} is climbed`);
                                     climbWalls.push(w);
@@ -486,7 +487,7 @@ class SimplePhysics {
                     }
                 });
 
-                if (climbWalls.length === 1) {
+                if (climbWalls.length === 1 && this.checkWallBelow(player, climbWalls[0])) {
 
                     const wall = climbWalls[0];
 

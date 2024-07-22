@@ -1,10 +1,10 @@
 import { Mesh } from 'three';
-
 import { createGeometries } from './geometires';
 import { createMaterials } from './materials';
 import { createBoundingBoxFaces, createPlayerPushingOBBBox } from '../../physics/collisionHelper';
 
 function createMeshes() {
+
     const geometires = createGeometries();
     const materials = createMaterials();
 
@@ -28,11 +28,14 @@ function createMeshes() {
     const specs = { width, depth, height };
 
     const bbSpecs = {
+
         width, depth, height, 
-        bbfThickness: .18,  // calculated by Train faster speed = 10 m/s, 30fps needs at least 1/30 * 10 = 0.333 m to cover.
+        bbfThickness: .18,  // calculated by faster speed = 10 m/s, 30fps needs at least 1/30 * 10 = 0.333 m to cover.
         gap: .04,
         showBB: false, showBBW: false, showBF: false
-    }
+
+    };
+
     const bbObjects = createBoundingBoxFaces(bbSpecs);
 
     const pushingObbSpecs = { height, depth, show: true };
@@ -44,6 +47,7 @@ function createMeshes() {
         pushingOBBBox,
         specs
     };
+
 }
 
 export { createMeshes };
