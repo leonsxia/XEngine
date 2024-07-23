@@ -141,27 +141,23 @@ class Moveable2D {
     }
 
     get isQuickTuring() {
-        return this.#movingBackward && this.#accelerate;
+        return this.isMovingBackward && this.#accelerate;
     }
 
-    isForwardBlock(intersectCor) {
+    get isForwardBlock() {
         return (
             (this.leftFaceIntersects && this.rightCorIntersects) ||
             (this.rightFaceIntersects && this.leftCorIntersects) ||
-            (intersectCor === COR_DEF[2] && this.rightCorIntersects) ||
-            (intersectCor === COR_DEF[3] && this.leftCorIntersects) ||
             (this.leftCorIntersects && this.rightCorIntersects) || 
             (this.leftCorIntersects && this.backRightCorIntersects) ||
             (this.rightCorIntersects && this.backLeftCorIntersects) 
         );
     }
 
-    isBackwardBlock(intersectCor) {
+    get isBackwardBlock() {
         return (
             (this.rightFaceIntersects && this.backLeftCorIntersects) ||
             (this.leftFaceIntersects && this.backRightCorIntersects) ||
-            (intersectCor === COR_DEF[1] && this.backLeftCorIntersects) ||
-            (intersectCor === COR_DEF[0] && this.backRightCorIntersects) ||
             (this.backRightCorIntersects && this.backLeftCorIntersects) ||
             (this.backRightCorIntersects && this.leftCorIntersects) ||
             (this.backLeftCorIntersects && this.rightCorIntersects)
@@ -396,6 +392,49 @@ class Moveable2D {
         }
     }
 
+    rotateOffsetCorrection2(dummyObject, clockWise = true, player) {
+
+        const quickRecoverCoefficient = player.quickRecoverCoefficient;
+
+        if (clockWise) {
+
+            if (
+                this.backLeftCorIntersects && this.rightFaceIntersects ||
+                this.rightCorIntersects && this.leftFaceIntersects
+            ) {
+
+                dummyObject.position.x += quickRecoverCoefficient;
+
+            }
+
+        } else {
+
+            if (
+                this.leftCorIntersects && this.rightFaceIntersects ||
+                this.backRightCorIntersects && this.leftFaceIntersects
+            ) {
+
+                dummyObject.position.x -= quickRecoverCoefficient;
+
+            }
+
+        }
+    }
+
+    checkPlayerTowardsWall(player, wall) {
+
+        const wallDir = new Vector3();
+        const playerDir = new Vector3();
+
+        wall.getWorldDirection(wallDir);
+        player.getWorldDirection(playerDir);
+
+        const isTowards = playerDir.dot(wallDir) > 0 ? false : true;
+
+        return isTowards;
+
+    }
+
     tankmoveTickWithWall(params) {
 
         const { group, R, rotateVel, dist, delta, wall, player } = params;
@@ -445,26 +484,18 @@ class Moveable2D {
 
             }
 
-            dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
-
-            group.position.copy(wallMesh.localToWorld(dummyObject.position.clone()));
-            group.rotation.y = dummyObject.rotation.y + wallMesh.rotation.y;
-
             return;
             
         }
 
         // recover position z when static
         if (
+            this.stopped &&
             (
                 (intersectCor === COR_DEF[0] && leftCorVec3.z < 0) ||
                 (intersectCor === COR_DEF[1] && rightCorVec3.z < 0) ||
                 (intersectCor === COR_DEF[2] && leftBackCorVec3.z < 0) ||
                 (intersectCor === COR_DEF[3] && rightBackCorVec3.z < 0)
-            ) && (
-                !this.isMovingForwardLeft && !this.isMovingForwardRight && 
-                !this.isMovingBackwardLeft && !this.isMovingBackwardRight && 
-                !this.isMovingForward && !this.isMovingBackward
             )
         ) {
 
@@ -472,7 +503,7 @@ class Moveable2D {
 
         }
 
-        // recover position when reach the wall cornor
+        // recover position when reach the wall cornor and is rotating
         if (borderReach && !this.isMovingForward && !this.isMovingBackward) {
 
             if (rightCorIntersectFace) {
@@ -494,7 +525,7 @@ class Moveable2D {
             const deltaVec3 = new Vector3(0, 0, dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
 
-            if (!this.isForwardBlock(intersectCor)) {
+            if (!this.isForwardBlock) {
 
                 if (!borderReach) {
 
@@ -537,7 +568,7 @@ class Moveable2D {
             const deltaVec3 = new Vector3(0, 0, - dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
 
-            if (!this.isBackwardBlock(intersectCor)) {
+            if (!this.isBackwardBlock) {
 
                 if (!borderReach) {
 
@@ -581,14 +612,8 @@ class Moveable2D {
 
                 this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
 
-                if (
-                    (this.rightCorIntersects && this.leftFaceIntersects) ||
-                    (this.backLeftCorIntersects && this.rightFaceIntersects)
-                ) {
+                this.rotateOffsetCorrection2(dummyObject, true, player);
 
-                    dummyObject.position.x += recoverCoefficient;
-
-                }
             }
 
             dummyObject.rotation.y -= rotateRad;
@@ -599,14 +624,8 @@ class Moveable2D {
 
                 this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
 
-                if (
-                    (this.backRightCorIntersects && this.leftFaceIntersects) || 
-                    (this.leftCorIntersects && this.rightFaceIntersects)
-                ) {
+                this.rotateOffsetCorrection2(dummyObject, false, player);
 
-                    dummyObject.position.x -= recoverCoefficient;
-
-                }
             }
 
             dummyObject.rotation.y += rotateRad;
@@ -626,18 +645,10 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    if (this.isForwardBlock() || this.isBackwardBlock()) {
+                    if (this.isForwardBlock || this.isBackwardBlock) {
 
-                        if (this.isMovingForwardLeft) {
-
-                            this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
-
-                        }
-                        else if (this.isMovingBackwardLeft) {
-
-                            this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
-
-                        }
+                        this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
+                        
                     } else if (rightCorVec3.z <= 0 && this.isMovingForwardLeft) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightCorVec3.z);
@@ -664,13 +675,13 @@ class Moveable2D {
 
                     }
 
-                    if (this.backLeftCorIntersects && this.rightFaceIntersects && this.isMovingBackwardLeft) {
+                    if (this.isMovingBackwardLeft) {
                         
-                        dummyObject.position.x += recoverCoefficient;
+                        this.rotateOffsetCorrection2(dummyObject, true, player);
 
-                    } else if (this.leftCorIntersects && this.rightFaceIntersects && this.isMovingForwardLeft) {
+                    } else if (this.isMovingForwardLeft) {
                         
-                        dummyObject.position.x -= recoverCoefficient;
+                        this.rotateOffsetCorrection2(dummyObject, false, player);
 
                     }
                 }
@@ -685,18 +696,10 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    if (this.isForwardBlock() || this.isBackwardBlock()) {
+                    if (this.isForwardBlock || this.isBackwardBlock) {
 
-                        if (this.isMovingForwardRight) {
+                        this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
 
-                            this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
-
-                        }
-                        else if (this.isMovingBackwardRight) {
-
-                            this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
-
-                        }
                     } else if (leftCorVec3.z <= 0 && this.isMovingForwardRight) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftCorVec3.z);
@@ -723,13 +726,13 @@ class Moveable2D {
 
                     }
 
-                    if (this.rightCorIntersects && this.leftFaceIntersects && this.isMovingForwardRight) {
+                    if (this.isMovingForwardRight) {
 
-                        dummyObject.position.x += recoverCoefficient;
+                        this.rotateOffsetCorrection2(dummyObject, true, player);
 
-                    } else if (this.backRightCorIntersects && this.leftFaceIntersects && this.isMovingBackwardRight) {
+                    } else if (this.isMovingBackwardRight) {
 
-                        dummyObject.position.x -= recoverCoefficient;
+                        this.rotateOffsetCorrection2(dummyObject, false, player);
 
                     }
                 }
