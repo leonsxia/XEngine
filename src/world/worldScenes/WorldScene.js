@@ -147,7 +147,7 @@ class WorldScene {
         if (this.player) {
             this.player.setPosition(allPlayerPos[this.loadSequence]);
             this.player.updateOBB();
-            if (this.player.downwardRayArrow) {
+            if (this.player.hasRays) {
                 this.player.updateRay();
             }
         }
@@ -263,7 +263,7 @@ class WorldScene {
             }));
         }
 
-        if (this.players.length > 0) {
+        if (this.player) {
             const folder = makeFolderGuiConfig({folder: 'Player Control', parent: 'playerControl'});
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BBHelper',
@@ -293,6 +293,24 @@ class WorldScene {
                 type: 'dropdown',
                 changeFn: this.showPlayerBF.bind(this)
             }));
+            if (this.player.showPushingBox) {
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'PushingBox',
+                    value: { PushingBox: 'hide' },
+                    params: ['show', 'hide'],
+                    type: 'dropdown',
+                    changeFn: this.showPlayerPushingBox.bind(this)
+                }));
+            } 
+            if (this.player.showArrows) {
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'Arrows',
+                    value: { Arrows: 'hide' },
+                    params: ['show', 'hide'],
+                    type: 'dropdown',
+                    changeFn: this.showPlayerArrows.bind(this)
+                }));
+            }
             this.guiLeftSpecs.details.push(folder);
         }
 
@@ -338,7 +356,12 @@ class WorldScene {
                     .showPlayerBF(false);
                 this.physics.removeActivePlayers(this.player.name);
                 this.scene.remove(this.player.group);
-                if (this.player.downwardRayArrow) this.scene.remove(this.player.downwardRayArrow);
+                if (this.player.hasRays) {
+                    this.scene.remove(this.player.leftArrow);
+                    this.scene.remove(this.player.rightArrow);
+                    this.scene.remove(this.player.backLeftArrow);
+                    this.scene.remove(this.player.backRightArrow);
+                }
                 this.unsubscribeEvents(this.player, this.setup.moveType);
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
             }
@@ -347,8 +370,11 @@ class WorldScene {
             this.physics.addActivePlayers(name);
             this.scene.add(this.player.group);
 
-            if (this.player.downwardRayArrow) {
-                this.scene.add(this.player.downwardRayArrow);
+            if (this.player.hasRays) {
+                this.scene.add(this.player.leftArrow);
+                this.scene.add(this.player.rightArrow);
+                this.scene.add(this.player.backLeftArrow);
+                this.scene.add(this.player.backRightArrow);
             }
 
             this.subscribeEvents(this.player, this.setup.moveType);
@@ -389,8 +415,22 @@ class WorldScene {
 
     showPlayerBF(show) {
         if (!this.player) return;
-        if (show === 'show') this.player.showBF(show);
+        if (show === 'show') this.player.showBF(true);
         else this.player.showBF(false);
+        return this;
+    }
+
+    showPlayerPushingBox(show) {
+        if (!this.player || !this.player.showPushingBox) return;
+        if (show === 'show') this.player.showPushingBox(true);
+        else this.player.showPushingBox(false);
+        return this;
+    }
+
+    showPlayerArrows(show) {
+        if (!this.player || !this.player.showArrows) return;
+        if (show === 'show') this.player.showArrows(true);
+        else this.player.showArrows(false);
         return this;
     }
 

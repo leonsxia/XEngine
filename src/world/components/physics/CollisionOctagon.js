@@ -12,6 +12,7 @@ class CollisionOctagon extends Circle {
         this.edges = new EdgesGeometry( this.geometry );
         this.line = new LineSegments( this.edges, new LineBasicMaterial( { color: white } ) );
         this.mesh.add(this.line);
+        this.line.visible = false;
     }
 }
 

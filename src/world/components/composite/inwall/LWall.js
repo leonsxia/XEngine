@@ -49,6 +49,7 @@ class LWall {
         this.enableWallOBBs = enableWallOBBs;
         this.climbable = climbable;
         this.group = new Group();
+        this.group.name = name;
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 

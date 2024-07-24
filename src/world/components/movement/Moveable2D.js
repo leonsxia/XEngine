@@ -150,7 +150,8 @@ class Moveable2D {
             (this.rightFaceIntersects && this.leftCorIntersects) ||
             (this.leftCorIntersects && this.rightCorIntersects) || 
             (this.leftCorIntersects && this.backRightCorIntersects) ||
-            (this.rightCorIntersects && this.backLeftCorIntersects) 
+            (this.rightCorIntersects && this.backLeftCorIntersects) ||
+            (this.frontFaceIntersects && (this.isMovingForwardLeft || this.isMovingForwardRight))
         );
     }
 
@@ -160,7 +161,8 @@ class Moveable2D {
             (this.leftFaceIntersects && this.backRightCorIntersects) ||
             (this.backRightCorIntersects && this.backLeftCorIntersects) ||
             (this.backRightCorIntersects && this.leftCorIntersects) ||
-            (this.backLeftCorIntersects && this.rightCorIntersects)
+            (this.backLeftCorIntersects && this.rightCorIntersects) ||
+            (this.backFaceIntersects && (this.isMovingBackwardLeft || this.isMovingBackwardRight))
         );
     }
 
@@ -199,6 +201,36 @@ class Moveable2D {
 
         this.#isFalling = false;
         this.#fallingTime = 0;
+    }
+
+    onSlopeTick(params) {
+
+        const { slope, player } = params;
+
+        const intersects = [];
+
+        player.rays.forEach(ray => {
+
+            const intersect = ray.intersectObject(slope);
+            if (intersect.length > 0) intersects.push(intersect[0]);
+
+        });
+
+        if (intersects.length > 0) {
+
+            intersects.sort((a, b) => {
+                return b.point.y - a.point.y;
+            });
+
+            const dir = intersects[0].point.clone();
+            dir.y += player.height * .5;
+            player.group.position.y = player.group.parent ? player.group.parent.worldToLocal(dir).y : dir.y;
+
+            this.#isFalling = false;
+            this.#fallingTime = 0;
+
+        }
+
     }
 
     quickTurnTick(params) {

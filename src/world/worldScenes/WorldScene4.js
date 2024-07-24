@@ -1,6 +1,6 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube } from '../components/Models.js';
+import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube, Slope } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../components/utils/constants.js';
@@ -460,11 +460,11 @@ class WorldScene4 extends WorldScene {
         this.changeCharacter('tofu1');
 
         this.scene.add(room1.group);
-        room1.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
+        room1.walls.forEach(w => this.scene.add(...w.arrows));
         this.scene.add(room2.group);
-        room2.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
+        room2.walls.forEach(w => this.scene.add(...w.arrows));
         this.scene.add(room3.group);
-        room3.walls.forEach(w => this.scene.add(w.leftArrow, w.rightArrow));
+        room3.walls.forEach(w => this.scene.add(...w.arrows));
 
         this.showRoleSelector = true;
 
@@ -531,6 +531,26 @@ class WorldScene4 extends WorldScene {
             climbable: true
         };
 
+        const spSpecs2 = {
+            width: 2.5,
+            height: 2,
+            depth: .75,
+            baseSize: 4.6,
+            enableOBBs: true,
+            frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            backMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            leftMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            rightMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5,
+            name: 'square_pillar2',
+            showArrow: true,
+            enableWallOBBs: false,
+            isObstacle: false,
+            climbable: false
+        };
+
         const lwSpecs1 = {
             width: 3,
             height: 4.6,
@@ -595,6 +615,22 @@ class WorldScene4 extends WorldScene {
             name: 'CubeBox2'
         }
 
+        const stairs1Specs = {
+            width: 2,
+            height: 2,
+            depth: 3.5,
+            baseSize: 4.6,
+            frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            backMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            leftMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            rightMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            slopeMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5,
+            enableOBBs: false,
+            name: 'Stairs1'
+        }
+
         const floorSpecs = {
             width: 10,
             height: 15,
@@ -614,6 +650,9 @@ class WorldScene4 extends WorldScene {
         spillar1.setPosition([- 1.8, - posY + spSpecs1.height * .5, - 5])
             .setRotationY(5 * Math.PI / 6);
 
+        const spillar2 = new SquarePillar(spSpecs2);
+        spillar2.setPosition([2.5, - posY + spSpecs2.height * .5 + .1, - 7.125]);
+
         const lwall1 = new LWall(lwSpecs1);
         lwall1.setPosition([1.5, 0, 5]);
 
@@ -622,11 +661,15 @@ class WorldScene4 extends WorldScene {
             .setRotationY(3 * Math.PI * .25);
 
         const cubeBox2 = new BoxCube(cbSpecs2);
-        cubeBox2.setPosition([- 2, 4, - 5])
+        cubeBox2.setPosition([- 1.5, 4, - 5])
             .setRotationY(Math.PI * .33);
 
+        const stairs1 = new Slope(stairs1Specs);
+        stairs1.setPosition([2.5, - posY + stairs1Specs.height * .5 + .1, - 5])
+            // .setRotationY(- Math.PI * .133);
+
         const room = new Room(specs);
-        room.addGroups([spillar1, lwall1, cubeBox1, cubeBox2]);
+        room.addGroups([spillar1, spillar2, lwall1, cubeBox1, cubeBox2, stairs1]);
         room.addFloors([floor]);
 
         await room.init();
@@ -635,7 +678,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(- Math.PI / 6)
             .updateOBBnRay();
 
-        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
+        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces);
         this.cBoxes.push(cubeBox1.box);
 
         return room;
@@ -824,10 +867,13 @@ class WorldScene4 extends WorldScene {
 
     focusNext() {
         this.focusNextProcess();
-        this.physics.walls = this.rooms[this.loadSequence].walls;
-        this.physics.floors = this.rooms[this.loadSequence].floors;
-        this.physics.obstacleTops = this.rooms[this.loadSequence].topOBBs;
-        this.physics.obstacles = this.rooms[this.loadSequence].obstacles;
+        const { walls, floors, topOBBs, obstacles, slopes } = this.rooms[this.loadSequence];
+
+        this.physics.walls = walls;
+        this.physics.floors = floors;
+        this.physics.obstacleTops = topOBBs;
+        this.physics.obstacles = obstacles;
+        this.physics.slopes = slopes;
         this.physics.sortFloorTops();
 
         this.rooms.forEach((room, idx) => {

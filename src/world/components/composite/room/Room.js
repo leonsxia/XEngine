@@ -21,6 +21,8 @@ class Room {
     obstacles = [];
     insideWalls = [];
     insideGroups = [];
+    slopes = [];
+    slopeFaces = [];
 
     lights = [];
     directionalLightTarget = new Object3D();
@@ -168,6 +170,13 @@ class Room {
 
             if (g.isObstacle) this.obstacles.push(g);
 
+            if (g.isSlope) {
+                
+                this.slopes.push(g);
+                this.slopeFaces.push(g.slope);
+            
+            };
+
         });
 
     }
@@ -252,6 +261,12 @@ class Room {
             obs.updateOBBs(false, false, false);
 
         });
+
+        this.slopes.forEach(slope => {
+
+            slope.updateOBBs(false, false, false);
+
+        })
 
     }
 }

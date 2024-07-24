@@ -16,10 +16,12 @@ function createMeshes() {
     const slotLeft = new Mesh(geometires.slot, materials.slot);
     slotLeft.name = 'slotLeft';
     slotLeft.position.set( .3, 0, .3);
+    slotLeft.visible = true;
 
     const slotRight = slotLeft.clone();
     slotRight.name = 'slotRight'
     slotRight.position.set(- .3, 0, .3);
+    slotRight.visible = true;
 
     const width = .9;
     const depth = .9;
@@ -38,7 +40,7 @@ function createMeshes() {
 
     const bbObjects = createBoundingBoxFaces(bbSpecs);
 
-    const pushingObbSpecs = { height, depth, show: true };
+    const pushingObbSpecs = { height, depth, show: false };
     const pushingOBBBox = createPlayerPushingOBBBox(pushingObbSpecs);
 
     return { 

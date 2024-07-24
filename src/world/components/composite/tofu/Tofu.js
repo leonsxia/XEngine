@@ -16,8 +16,16 @@ class Tofu extends Moveable2D {
     boundingBox;
     boundingBoxHelper;
 
-    downwardRay;
-    downwardRayArrow;
+    hasRays = false;
+    leftRay;
+    rightRay;
+    backLeftRay;
+    backRightRay;
+    
+    leftArrow;
+    rightArrow;
+    backLeftArrow;
+    backRightArrow;
 
     #w;
     #d;
@@ -27,8 +35,8 @@ class Tofu extends Moveable2D {
     #turnBackVel = 2.5 * Math.PI;
     #recoverCoefficient = .01;
     #quickRecoverCoefficient = .03;
-
     #climbingVel = 1.34;
+    #rayPadding = .1;
 
     constructor(name) {
 
@@ -67,6 +75,7 @@ class Tofu extends Moveable2D {
         this.boundingBoxHelper.name = `${name}-box-helper`;
 
         this.createRay();
+        this.showArrows(false);
 
         this.paddingCoefficient = .06 * ENLARGE;
 
@@ -166,6 +175,12 @@ class Tofu extends Moveable2D {
 
     }
 
+    get rays() {
+        
+        return [this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay];
+
+    }
+
     get leftCorVec3() {
 
         return new Vector3(this.#w * .5, 0, this.#d * .5);
@@ -260,18 +275,59 @@ class Tofu extends Moveable2D {
 
     }
 
+    showPushingBox(show) {
+
+        this.pushingOBBBoxMesh.visible = show;
+
+        return this;
+
+    }
+
+    showArrows(show) {
+
+        this.leftArrow.visible = show;
+        this.rightArrow.visible = show;
+        this.backLeftArrow.visible = show;
+        this.backRightArrow.visible = show;
+
+    }
+
     createRay() {
 
+        this.hasRays = true;
+ 
         const length = this.height;
         const dir = new Vector3(0, - 1, 0);
-        const fromVec3 = new Vector3(0, 0, 0);
-
+        const posY = this.height * .5;
+        const posX = this.width * .5 - this.#rayPadding;
+        const posZ = this.depth * .5 - this.#rayPadding;
         const headLength = .5;
         const headWidth = .1;
+        let fromVec3;
 
-        this.downwardRay = new Raycaster(fromVec3, dir, 0, length);
+        // left
+        fromVec3 = new Vector3(posX, posY, posZ);
+        this.leftRay = new Raycaster(fromVec3, dir, 0, length);
+        this.leftRay.layers.set(2);
+        this.leftArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
 
-        this.downwardRayArrow = new ArrowHelper(this.downwardRay.ray.direction, this.downwardRay.ray.origin, length, orange, headLength, headWidth);
+        // right
+        fromVec3 = new Vector3(- posX, posY, posZ);
+        this.rightRay = new Raycaster(fromVec3, dir, 0, length);
+        this.rightRay.layers.set(2);
+        this.rightArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+
+        // backLeft
+        fromVec3 = new Vector3(posX, posY, - posZ);
+        this.backLeftRay = new Raycaster(fromVec3, dir, 0, length);
+        this.backLeftRay.layers.set(2);
+        this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+
+        // backRight
+        fromVec3 = new Vector3(- posX, posY, - posZ);
+        this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
+        this.backRightRay.layers.set(2);
+        this.backRightArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
 
         return this;
     }
@@ -284,14 +340,39 @@ class Tofu extends Moveable2D {
 
         }
 
+        const posY = this.height * .5;
+        const posX = this.width * .5 - this.#rayPadding;
+        const posZ = this.depth * .5 - this.#rayPadding;
         const dir = new Vector3(0, - 1, 0);
-        const fromVec3 = new Vector3(0, 0, 0);
+        let fromVec3;
+
+        // left
+        fromVec3 = new Vector3(posX, posY, posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
+        this.leftRay.set(fromVec3, dir);
+        this.leftArrow.position.copy(fromVec3);
+        this.leftArrow.setDirection(dir);
 
-        this.downwardRay.set(fromVec3, dir);
+        // right
+        fromVec3 = new Vector3(- posX, posY, posZ);
+        fromVec3.applyMatrix4(this.group.matrixWorld);
+        this.rightRay.set(fromVec3, dir);
+        this.rightArrow.position.copy(fromVec3);
+        this.rightArrow.setDirection(dir);
 
-        this.downwardRayArrow.position.copy(fromVec3);
-        this.downwardRayArrow.setDirection(dir);
+        // backLeft
+        fromVec3 = new Vector3(posX, posY, - posZ);
+        fromVec3.applyMatrix4(this.group.matrixWorld);
+        this.backLeftRay.set(fromVec3, dir);
+        this.backLeftArrow.position.copy(fromVec3);
+        this.backLeftArrow.setDirection(dir);
+
+        // backRight
+        fromVec3 = new Vector3(- posX, posY, - posZ);
+        fromVec3.applyMatrix4(this.group.matrixWorld);
+        this.backRightRay.set(fromVec3, dir);
+        this.backRightArrow.position.copy(fromVec3);
+        this.backRightArrow.setDirection(dir);
 
     }
 
@@ -458,6 +539,16 @@ class Tofu extends Moveable2D {
     onGround(floor) {
 
         this.onGroundTick({ floor, player: this });
+
+        this.updateOBB();
+
+        this.updateRay(false);
+
+    }
+
+    tickOnSlope(slope) {
+
+        this.onSlopeTick({ slope, player: this });
 
         this.updateOBB();
 

@@ -54,6 +54,7 @@ class CylinderPillar {
         this.enableWallOBBs = enableOBBs;
         this.climbable = climbable;
         this.group = new Group();
+        this.group.name = name;
 
         const pSpecs = this.makePlaneConfig({ width, height, map });
         const topSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: topMap });

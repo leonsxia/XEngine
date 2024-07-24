@@ -4,6 +4,7 @@ import { basicMateraials } from '../basic/basicMaterial';
 import { CollisionPlane } from './CollisionPlane';
 import { CollisionOctagon } from './CollisionOctagon';
 import { CollisionOBBPlane } from './CollisionOBBPlane';
+import { CollisionTrianglePlane } from './CollisionTrianglePlane';
 import { OBBPlane } from './OBBPlane';
 import { OBBBox } from './OBBBox';
 import { violetBlue } from '../basic/colorBase';
@@ -20,10 +21,29 @@ function createCollisionPlane(specs, name, position, rotationY, receiveShadow = 
         .setRotationY(rotationY)
         .createRay();
 
-    cPlane.leftArrow.visible = showArrow ? true : false;
-    cPlane.rightArrow.visible = showArrow ? true : false;
+    cPlane.leftArrow.visible = showArrow;
+    cPlane.rightArrow.visible = showArrow;
 
     return cPlane;
+
+}
+
+// create triangle plane with line and rays, only support rotationY for collision for now.
+function createCollisionTrianglePlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false) {
+
+    const cTriPlane = new CollisionTrianglePlane(specs);
+
+    cTriPlane.setName(name)
+        .receiveShadow(receiveShadow)
+        .castShadow(castShadow)
+        .setPosition(position)
+        .setRotationY(rotationY)
+        .createRay()
+
+    if (cTriPlane.leftArrow) cTriPlane.leftArrow.visible = showArrow;
+    if (cTriPlane.rightArrow) cTriPlane.rightArrow.visible = showArrow;
+
+    return cTriPlane;
 
 }
 
@@ -39,8 +59,8 @@ function createCollisionOBBPlane(specs, name, position, rotationY, receiveShadow
         .setRotationY(rotationY)
         .createRay();
 
-    cObbPlane.leftArrow.visible = showArrow ? true : false;
-    cObbPlane.rightArrow.visible = showArrow ? true : false;
+    cObbPlane.leftArrow.visible = showArrow;
+    cObbPlane.rightArrow.visible = showArrow;
     
     return cObbPlane;
 
@@ -61,8 +81,8 @@ function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow
     if (createRay) cPlane.createRay();
     
     if (createRay) {
-        cPlane.leftArrow.visible = showArrow ? true : false;
-        cPlane.rightArrow.visible = showArrow ? true : false;
+        cPlane.leftArrow.visible = showArrow;
+        cPlane.rightArrow.visible = showArrow;
     }
 
     return cPlane;
@@ -197,12 +217,13 @@ function createPlayerPushingOBBBox(specs) {
     pushingOBBBox.mesh.visible = show;
 
     return pushingOBBBox.mesh;
-    
+
 }
 
 export { 
     createCollisionPlane,
     createCollisionOBBPlane,
+    createCollisionTrianglePlane,
     createBoundingBoxFaces,
     createPlayerPushingOBBBox,
     createCollisionPlaneFree,

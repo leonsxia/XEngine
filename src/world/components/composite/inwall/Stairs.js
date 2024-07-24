@@ -1,13 +1,12 @@
 import { Group } from 'three';
-import { createCollisionPlane, createCollisionOBBPlane, createOBBBox } from '../../physics/collisionHelper';
-import { yankeesBlue, green, basic } from '../../basic/colorBase';
+import { createCollisionPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree } from '../../physics/collisionHelper';
+import { Slope } from './Slope';
+import { yankeesBlue, basic } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
 const DEFAULT_STEP_HEIGHT = .25;
 
-class Stairs {
-
-    name = '';
+class Stairs extends Slope {
 
     #width;
     #height;
@@ -17,25 +16,16 @@ class Stairs {
     #lastStepHeight;
     #steps;
 
-
-    walls = []; // collision plane
-    OBBTops = [];   // OBB plane
-    OBBBottoms = [];    // OBB plane
-    stepFronts = [];    // collision OBB plane
-
-    isStairs = true;
-
-    specs;
-
     constructor(specs) {
 
-        this.specs = specs;
+        super(specs);
 
         const { name, width = 1, depth = 1, height = 1, stepHeight = DEFAULT_STEP_HEIGHT } = specs;
-        const { showArrow = false } = specs;
-        const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
+        const { showArrow = false, enableOBBs = false } = specs;
+        const { frontMap, backMap, leftMap, rightMap, slopeMap, bottomMap } = specs;
 
         this.name = name;
+
         this.#width = width;
         this.#depth = depth;
         this.#height = height;
@@ -44,46 +34,8 @@ class Stairs {
         this.#lastStepHeight = height % stepHeight;
         this.#stepDepth = depth / this.#steps;
 
-        this.group = new Group();
-
     }
 
-
-
-    makePlaneConfig(specs) {
-        
-        const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false } = this.specs;
-
-        if (noRepeat) return specs;
-
-        if (mapRatio) {
-            specs.repeatU = width / (mapRatio * baseSize);
-            specs.repeatV = height / baseSize;
-        }
-
-        specs.repeatModeU = REPEAT;
-        specs.repeatModeV = REPEAT;
-
-        return specs;
-    }
-
-    setPosition(pos) {
-
-        this.group.position.set(...pos);
-
-        return this;
-    }
-
-    setRotationY(y) {
-
-        this.group.rotation.y = y;
-
-        this.walls.forEach(w => w.mesh.rotationY += y);
-
-        this.stepFronts.forEach(sf => sf.mesh.rotationY += y);
-        
-        return this;
-
-    }
 }
+
+export { Stairs };

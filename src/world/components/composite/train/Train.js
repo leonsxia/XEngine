@@ -237,6 +237,10 @@ class Train extends Moveable2D {
         this.updateOBB();
     }
 
+    tickOnSlope(slope) {
+        // to do
+    }
+
     tickWithWall(delta, wall) {
         const params = this.setTickParams(delta);
         params.wall = wall;

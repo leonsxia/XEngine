@@ -1,13 +1,12 @@
 import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, ArrowHelper } from "three";
 import { Plane } from "../Models";
-import { white } from "../basic/colorBase";
+import { white, red, green } from "../basic/colorBase";
 
 const DEFAULT_RAY_LENGTH = 20;
 
 class CollisionPlane extends Plane {
 
     #w;
-    #h;
     #rayLength;
     isOBB = false;
 
@@ -15,15 +14,15 @@ class CollisionPlane extends Plane {
 
         super(specs);
 
-        const { width, height, rayLength = DEFAULT_RAY_LENGTH } = specs;
+        const { width, rayLength = DEFAULT_RAY_LENGTH } = specs;
 
         this.#w = width;
-        this.#h = height;
         this.#rayLength = rayLength;
         
         this.edges = new EdgesGeometry( this.geometry );
         this.line = new LineSegments( this.edges, new LineBasicMaterial( { color: white } ) );
         this.mesh.add(this.line);
+        this.line.visible = false;
 
     }
 
@@ -34,6 +33,16 @@ class CollisionPlane extends Plane {
 
         return this;
 
+    }
+
+    get arrows() {
+
+        const arrows = [];
+        if (this.leftArrow) arrows.push(this.leftArrow);
+        if (this.rightArrow) arrows.push(this.rightArrow);
+
+        return arrows;
+        
     }
 
     createRay() {   // create ray from original no translation.
@@ -51,14 +60,14 @@ class CollisionPlane extends Plane {
 
         this.leftRay = new Raycaster(leftfrom, dir, 0, this.#rayLength);
         this.leftRay.layers.set(1);
-        this.leftArrow = new ArrowHelper(this.leftRay.ray.direction, this.leftRay.ray.origin, this.#rayLength, 0x00ff00, headLength, headWidth);
+        this.leftArrow = new ArrowHelper(this.leftRay.ray.direction, this.leftRay.ray.origin, this.#rayLength, green, headLength, headWidth);
          
         // create right ray and arrow
         const rightfrom = new Vector3(- width * .5, originY, 0);
 
         this.rightRay = new Raycaster(rightfrom, dir, 0, this.#rayLength);
         this.rightRay.layers.set(1);
-        this.rightArrow = new ArrowHelper(this.rightRay.ray.direction, this.rightRay.ray.origin, this.#rayLength, 0xff0000, headLength, headWidth);
+        this.rightArrow = new ArrowHelper(this.rightRay.ray.direction, this.rightRay.ray.origin, this.#rayLength, red, headLength, headWidth);
 
         return this;
 

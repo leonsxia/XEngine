@@ -1,4 +1,5 @@
 import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, MeshStandardMaterial, MeshPhongMaterial, TextureLoader, SRGBColorSpace, Vector3, RepeatWrapping, MirroredRepeatWrapping } from 'three';
+import { createTriangleGeometry } from '../utils/geometryHelper';
 import { basicMateraials } from './basicMaterial';
 import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
 
@@ -29,15 +30,22 @@ class BasicObject {
                 {
                     const { size: { radius, widthSegments, heightSegments } } = specs;
                     this.geometry = new SphereGeometry(radius, widthSegments, heightSegments);
-                    break;
                 }
+                break;
             case 'circle':
                 {
                     const { radius, segments } = specs;
                     this.geometry = new CircleGeometry(radius, segments);
-                    break;
                 }
+                break;
+            case 'triangle':
+                {
+                    const { width, height, leftHanded } = specs;
+                    this.geometry = createTriangleGeometry(width, height, leftHanded);
+                }
+                break;
         }
+
         if (color) 
             this.material = new MeshPhongMaterial({ color: color });
         else

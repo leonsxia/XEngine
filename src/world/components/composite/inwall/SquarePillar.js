@@ -44,6 +44,7 @@ class SquarePillar {
         this.enableWallOBBs = enableWallOBBs;
         this.climbable = climbable;
         this.group = new Group();
+        this.group.name = name;
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
@@ -160,7 +161,7 @@ class SquarePillar {
             this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
 
         }
-        
+
     }
 }
 

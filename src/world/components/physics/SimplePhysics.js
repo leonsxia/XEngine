@@ -14,6 +14,7 @@ class SimplePhysics {
     walls = [];
     obstacles = [];
     obstacleTops = [];
+    slopes = [];
     activePlayers = [];
 
     constructor(players, floors, walls, obstacles) {
@@ -49,20 +50,50 @@ class SimplePhysics {
 
     }
 
-    checkOutOfWallRangeLocal(player, wallMesh, halfPlayerWidth, halfPlayerHeight) {
+    checkOutOfWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
 
         let result = false;
         const padding = .1;
 
-        const leftBorderX = - wallMesh.width * .5 + padding;
-        const rightBorderX = wallMesh.width * .5 - padding;
-        const topBorderY = wallMesh.height * .5 - padding;
-        const bottomBorderY = - wallMesh.height * .5 + padding;
+        const leftBorderX = - wall.width * .5 + padding;
+        const rightBorderX = wall.width * .5 - padding;
+        const topBorderY = wall.height * .5 - padding;
+        const bottomBorderY = - wall.height * .5 + padding;
 
         if (player.position.x < leftBorderX - halfPlayerWidth ||
             player.position.x > rightBorderX + halfPlayerWidth ||
             player.position.y > topBorderY + halfPlayerHeight ||
             player.position.y < bottomBorderY - halfPlayerHeight
+        ) {
+
+            result = true;
+
+        }
+
+        return result;
+
+    }
+
+    checkOutOfTriangleWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
+
+        let result = false;
+        const padding = .1;
+        const { x, y } = player.position;
+        const { width, height, geometry: { parameters: { leftHanded } } } = wall;
+        const tanTheta = height / width;
+        const deltaX = leftHanded ? x + width * .5 : width * .5 - x;
+        const deltaY = deltaX * tanTheta;
+        const offsetY = halfPlayerWidth * tanTheta;
+
+        const leftBorderX = - width * .5 + padding;
+        const rightBorderX = width * .5 - padding;
+        const topBorderY = deltaY <= height * .5 ? - height * .5 + deltaY + offsetY - padding : deltaY - height * .5 + offsetY - padding;
+        const bottomBorderY = - height * .5 + padding;
+
+        if (x < leftBorderX - halfPlayerWidth ||
+            x > rightBorderX + halfPlayerWidth ||
+            y > topBorderY + halfPlayerHeight ||
+            y < bottomBorderY - halfPlayerHeight
         ) {
 
             result = true;
@@ -87,8 +118,6 @@ class SimplePhysics {
 
         wallMesh.position.copy(wallWorldPos);
         wallMesh.rotation.y = plane.mesh.rotationY;
-        wallMesh.width = plane.width;
-        wallMesh.height = plane.height;
 
         dummyObject.position.copy(wallMesh.worldToLocal(player.position.clone()));
         dummyObject.rotation.y = player.rotation.y - wallMesh.rotation.y;
@@ -110,9 +139,15 @@ class SimplePhysics {
         const halfPlayerWidth = Math.max(Math.abs(leftCorVec3.x - rightBackCorVec3.x), Math.abs(rightCorVec3.x - leftBackCorVec3.x)) * .5;
         const halfPlayerHeight = player.height * .5;
 
-        if (this.checkOutOfWallRangeLocal(dummyObject, wallMesh, halfPlayerWidth, halfPlayerHeight)) {
+        if (this.checkOutOfWallRangeLocal(dummyObject, plane, halfPlayerWidth, halfPlayerHeight)) {
             
             return { intersect, borderReach: false };
+
+        }
+
+        if (plane.isTriangle && this.checkOutOfTriangleWallRangeLocal(dummyObject, plane, halfPlayerWidth, halfPlayerHeight)) {
+
+            return { intersect, borderReach: false};
 
         }
 
@@ -165,8 +200,8 @@ class SimplePhysics {
 
             } else if (Math.abs(dummyObject.position.z - halfPlayerDepth) >  player.velocity * delta) {
                 
-                const leftBorderIntersects = plane.leftRay.intersectObject(player.group);
-                const rightBorderIntersects = plane.rightRay.intersectObject(player.group);
+                const leftBorderIntersects = plane.leftRay ? plane.leftRay.intersectObject(player.group) : [];
+                const rightBorderIntersects = plane.rightRay ? plane.rightRay.intersectObject(player.group) : [];
                 
                 if (
                     rightBorderIntersects.length > 0 ||
@@ -253,7 +288,7 @@ class SimplePhysics {
         }
 
         return isBelow;
-        
+
     }
 
     sortFloorTops() {
@@ -366,11 +401,32 @@ class SimplePhysics {
 
                     }
                 });
+
+            });
+
+            // check slope collision
+            const collisionSlopes = [];
+
+            this.slopes.forEach(s => {
+
+                if (collisionSlopes.length === 0) {
+
+                    if (player.obb.intersectsOBB(s.slope.obb)) {
+
+                        collisionSlopes.push(s.slope.mesh);
+
+                    }
+                }
+
             });
 
             if (collisionTops.length > 0) {
 
                 player.onGround(collisionTops[0]);
+
+            } else if (collisionSlopes.length > 0) {
+
+                player.tickOnSlope(collisionSlopes[0]);
 
             }
 
