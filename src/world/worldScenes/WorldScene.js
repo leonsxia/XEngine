@@ -147,6 +147,9 @@ class WorldScene {
         if (this.player) {
             this.player.setPosition(allPlayerPos[this.loadSequence]);
             this.player.updateOBB();
+            if (this.player.downwardRayArrow) {
+                this.player.updateRay();
+            }
         }
 
         if (this.staticRendering) {
@@ -335,6 +338,7 @@ class WorldScene {
                     .showPlayerBF(false);
                 this.physics.removeActivePlayers(this.player.name);
                 this.scene.remove(this.player.group);
+                if (this.player.downwardRayArrow) this.scene.remove(this.player.downwardRayArrow);
                 this.unsubscribeEvents(this.player, this.setup.moveType);
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
             }
@@ -342,6 +346,11 @@ class WorldScene {
             this.focusNext(--this.loadSequence);
             this.physics.addActivePlayers(name);
             this.scene.add(this.player.group);
+
+            if (this.player.downwardRayArrow) {
+                this.scene.add(this.player.downwardRayArrow);
+            }
+
             this.subscribeEvents(this.player, this.setup.moveType);
         }
     }

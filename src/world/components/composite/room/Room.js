@@ -231,7 +231,7 @@ class Room {
 
         this.walls.forEach(w => {
 
-            w.updateRay();
+            w.updateRay(false);
 
             if (w.isOBB) {
 
@@ -242,18 +242,6 @@ class Room {
         });
 
         this.floors.forEach(f => f.updateOBB(false));
-
-        this.tops.forEach(t => { 
-
-            if (t.updateRay) t.updateRay(); 
-
-        });
-
-        this.bottoms.forEach(b => { 
-
-            if (b.updateRay) b.updateRay(); 
-
-        });
 
         this.topOBBs.forEach(t => t.updateOBB(false));
 

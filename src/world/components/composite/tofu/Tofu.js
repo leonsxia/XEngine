@@ -1,6 +1,7 @@
-import { Group, Box3, Box3Helper, Vector3 } from 'three';
+import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three';
 import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
+import { orange } from '../../basic/colorBase';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -14,6 +15,9 @@ class Tofu extends Moveable2D {
 
     boundingBox;
     boundingBoxHelper;
+
+    downwardRay;
+    downwardRayArrow;
 
     #w;
     #d;
@@ -61,6 +65,8 @@ class Tofu extends Moveable2D {
         this.boundingBox = new Box3();
         this.boundingBoxHelper = new Box3Helper(this.boundingBox, 0x00ff00);
         this.boundingBoxHelper.name = `${name}-box-helper`;
+
+        this.createRay();
 
         this.paddingCoefficient = .06 * ENLARGE;
 
@@ -254,9 +260,44 @@ class Tofu extends Moveable2D {
 
     }
 
+    createRay() {
+
+        const length = this.height;
+        const dir = new Vector3(0, - 1, 0);
+        const fromVec3 = new Vector3(0, 0, 0);
+
+        const headLength = .5;
+        const headWidth = .1;
+
+        this.downwardRay = new Raycaster(fromVec3, dir, 0, length);
+
+        this.downwardRayArrow = new ArrowHelper(this.downwardRay.ray.direction, this.downwardRay.ray.origin, length, orange, headLength, headWidth);
+
+        return this;
+    }
+
+    updateRay(needUpdateMatrixWorld) {
+
+        if (needUpdateMatrixWorld) {
+
+            this.group.updateWorldMatrix(true, true);
+
+        }
+
+        const dir = new Vector3(0, - 1, 0);
+        const fromVec3 = new Vector3(0, 0, 0);
+        fromVec3.applyMatrix4(this.group.matrixWorld);
+
+        this.downwardRay.set(fromVec3, dir);
+
+        this.downwardRayArrow.position.copy(fromVec3);
+        this.downwardRayArrow.setDirection(dir);
+
+    }
+
     updateOBB() {
 
-        this.group.updateMatrixWorld();
+        this.group.updateWorldMatrix(true, true);
 
         {
             const { matrixWorld, geometry: { boundingBox, userData } } = this.boundingBoxMesh;
@@ -390,6 +431,8 @@ class Tofu extends Moveable2D {
 
         this.updateOBB();
 
+        this.updateRay(false);
+
     }
 
     tickClimb(delta, wall) {
@@ -397,6 +440,8 @@ class Tofu extends Moveable2D {
         this.climbWallTick({ delta, wall, player: this });
 
         this.updateOBB();
+
+        this.updateRay(false);
 
     }
 
@@ -406,6 +451,8 @@ class Tofu extends Moveable2D {
 
         this.updateOBB();
 
+        this.updateRay(false);
+
     }
 
     onGround(floor) {
@@ -413,6 +460,8 @@ class Tofu extends Moveable2D {
         this.onGroundTick({ floor, player: this });
 
         this.updateOBB();
+
+        this.updateRay(false);
 
     }
 
@@ -425,6 +474,8 @@ class Tofu extends Moveable2D {
         this.tankmoveTickWithWall(params);
 
         this.updateOBB();
+
+        this.updateRay(false);
 
     }
 }

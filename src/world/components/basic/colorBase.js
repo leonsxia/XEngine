@@ -7,6 +7,7 @@ const green = 0x00ff00;
 const red = 0xff0000;
 const blue = 0x0000ff;
 const yellow = 0xffff00;
+const orange = 0xffa500;
 const BB = 0xffffff;
 const BF = 0xffff33;
 const BBW = 0x00ff00;
@@ -22,6 +23,7 @@ export {
     red,
     blue,
     yellow,
+    orange,
     BB,
     BF,
     BBW,

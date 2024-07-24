@@ -162,7 +162,7 @@ class Train extends Moveable2D {
 
     updateOBB() {
         const { matrixWorld, geometry: { boundingBox, userData } } = this.boundingBoxMesh;
-        this.group.updateMatrixWorld();
+        this.group.updateWorldMatrix(true, true);
         this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
         // this.boundingBoxHelper.updateMatrixWorld();
 

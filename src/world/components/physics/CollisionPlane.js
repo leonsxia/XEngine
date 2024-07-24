@@ -64,9 +64,15 @@ class CollisionPlane extends Plane {
 
     }
 
-    updateRay() {   // update ray based on world matrix.
+    updateRay(needUpdateMatrixWorld = true) {   // update ray based on world matrix.
 
         if (!this.leftRay || !this.rightRay) return this;
+
+        if (needUpdateMatrixWorld) {
+
+            this.mesh.updateWorldMatrix(true, true);
+
+        }
 
         const width = this.#w;
         const originY = - this.#rayLength * .5;

@@ -32,7 +32,7 @@ class OBBPlane extends Plane {
     // update OBB
     updateOBB(needUpdateMatrixWorld = true) {
         if (needUpdateMatrixWorld) {
-            this.mesh.updateMatrixWorld();
+            this.mesh.updateWorldMatrix(true, true);
         }
 
         const { matrixWorld, geometry: { userData } } = this.mesh;
