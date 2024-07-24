@@ -291,7 +291,7 @@ function updateLightAndShadowCamHelper(lightObj) {
     const { light, lightHelper, lightShadowCamHelper, debug, shadow, shadow_debug } = lightObj;
 
     // update the light target's matrixWorld because it's needed by the helper
-    if (!light.target.parent) {
+    if (!light.target.parent && !debug) {
 
         // update when debug is false, and manually change the light target
         light.target.updateMatrixWorld(); 
@@ -360,9 +360,7 @@ function updateLightCamera(lights) {
         updateSingleLightCamera.call(this, lightObj);
 
     });
-
-    this.render();  // need render twice to update the shadow camera helper.
-
+    
 }
 
 export { setupShadowLight, updateSingleLightCamera };
