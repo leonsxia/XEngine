@@ -62,7 +62,7 @@ class Tofu extends Moveable2D {
         this.boundingBoxHelper = new Box3Helper(this.boundingBox, 0x00ff00);
         this.boundingBoxHelper.name = `${name}-box-helper`;
 
-        this.paddingCoefficient = .04 * ENLARGE;
+        this.paddingCoefficient = .06 * ENLARGE;
 
     }
 
@@ -425,7 +425,7 @@ class Tofu extends Moveable2D {
         this.tankmoveTickWithWall(params);
 
         this.updateOBB();
-        
+
     }
 }
 
