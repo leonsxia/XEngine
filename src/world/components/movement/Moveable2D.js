@@ -144,6 +144,10 @@ class Moveable2D {
         return this.isMovingBackward && this.#accelerate;
     }
 
+    get isInAir() {
+        return this.#isFalling;
+    }
+
     get isForwardBlock() {
         return (
             (this.leftFaceIntersects && this.rightCorIntersects) ||
@@ -230,6 +234,8 @@ class Moveable2D {
             this.#fallingTime = 0;
 
         }
+
+        return this.#isFalling;
 
     }
 

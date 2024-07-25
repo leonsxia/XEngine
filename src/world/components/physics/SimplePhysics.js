@@ -316,6 +316,8 @@ class SimplePhysics {
 
         this.activePlayers.forEach(player => {
 
+            // console.log(`is in air: ${player.isInAir}`);
+
             player.setBoundingBoxHelperColor(Color.BBW).resetBFColor(Color.BF);
             player.resetItersectStatus();
 
@@ -410,7 +412,7 @@ class SimplePhysics {
             this.slopes.forEach(s => {
 
                 // check if player is on slope, and slow it down
-                if (player.obb.intersectsOBB(s.slope.obb)) {
+                if (player.isInAir && player.obb.intersectsOBB(s.slope.obb)) {
 
                     player.setSlopeCoefficient(s);
 
@@ -436,13 +438,15 @@ class SimplePhysics {
 
             });
 
+            let isFalling = true;
+
             if (collisionTops.length > 0) {
 
                 player.onGround(collisionTops[0]);
 
             } else if (collisionSlopes.length > 0) {
 
-                player.tickOnSlope(collisionSlopes[0]);
+                isFalling = player.tickOnSlope(collisionSlopes[0]);
 
             }
 
@@ -455,7 +459,7 @@ class SimplePhysics {
                 });
             }
 
-            if (collisionTops.length === 0) {
+            if (collisionTops.length === 0 && isFalling) {
 
                 const collisionFloors = [];
 

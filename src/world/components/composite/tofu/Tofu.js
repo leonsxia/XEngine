@@ -589,11 +589,13 @@ class Tofu extends Moveable2D {
 
     tickOnSlope(slope) {
 
-        this.onSlopeTick({ slope, player: this });
+        const isFalling = this.onSlopeTick({ slope, player: this });
 
         this.updateOBB();
 
         this.updateRay(false);
+
+        return isFalling;
 
     }
 

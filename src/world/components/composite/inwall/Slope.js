@@ -60,8 +60,8 @@ class Slope {
 
         this.slope.mesh.layers.enable(2);
         this.box.mesh.visible = false;
-        this.bottomBoxBuffer.mesh.visible = true;
-        this.topBoxBuffer.mesh.visible = true;
+        this.bottomBoxBuffer.mesh.visible = false;
+        this.topBoxBuffer.mesh.visible = false;
 
         if (!enableOBBs) {
 
