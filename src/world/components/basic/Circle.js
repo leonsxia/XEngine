@@ -3,64 +3,81 @@ import { BasicObject } from './BasicObject';
 import { REPEAT } from '../utils/constants';
 
 class Circle extends BasicObject {
-    #mapSrc;
-    #mapRatio;
-    #repeatU;
-    #repeatV;
-    #repeatModeU;
-    #repeatModeV;
-    #rotationT;
-    #map = null;
 
     constructor(specs) {
-        super('circle', specs);
-        const { name, map, mapRatio, repeatU, repeatV, rotationT, repeatModeU = REPEAT, repeatModeV = REPEAT } = specs;
 
-        this.#mapSrc = map;
-        this.#mapRatio = mapRatio;
-        this.#repeatU = repeatU;
-        this.#repeatV = repeatV;
-        this.#rotationT = rotationT;
-        this.#repeatModeU = repeatModeU;
-        this.#repeatModeV = repeatModeV;
+        super('circle', specs);
 
         this.mesh = new Mesh(this.geometry, this.material);
-        this.mesh.name = name;
+        this.mesh.name = specs.name;
+
     }
 
     async init() {
-        const [texture] = await Promise.all([
-            this.#mapSrc ? new TextureLoader().loadAsync(this.#mapSrc) : Promise.resolve(null)
+
+        const { map, normalMap } = this.specs;
+
+        const [texture, normal] = await Promise.all([
+            map ? new TextureLoader().loadAsync(map) : Promise.resolve(null),
+            normalMap ? new TextureLoader().loadAsync(normalMap) : Promise.resolve(null)
         ]);
+
         if (texture) {
-            this.#map = texture;
-            this.#map.colorSpace = SRGBColorSpace;
 
-            if (this.#rotationT) {
-                this.#map.center.set(.5, .5);
-                this.#map.rotation = this.#rotationT;
-            }
+            this.setTextureCircle(texture);
+            
+        }
 
-            if (this.#repeatU && this.#repeatV) {
-                const modeU = this.getRepeatMode(this.#repeatModeU)
-                const modeV = this.getRepeatMode(this.#repeatModeV)
+        if (normal) {
 
-                this.#map.wrapS = modeU;   // horizontal
-                this.#map.wrapT = modeV;   // vertical
-                
-                this.#map.repeat.set(this.#repeatU, this.#repeatV);
-            } else if (this.#mapRatio) {
-                const xRepeat = this.radius * 2 / (mapRatio * this.radius * 2);
+            this.setTextureCircle(normal);
+
+        }
+
+        this.mesh.material = new MeshPhongMaterial({ map: texture, normalMap: normal });
+
+    }
+
+    setTextureCircle(texture) {
+
+        const { rotationT, noRepeat = false, repeatU, repeatV, repeatModeU = REPEAT, repeatModeV = REPEAT, mapRatio } = this.specs;
+
+        texture.colorSpace = SRGBColorSpace;
+
+        if (rotationT) {
+
+            texture.center.set(.5, .5);
+            texture.rotation = rotationT;
+
+        }
+
+        if (!noRepeat) {
+
+            if (repeatU && repeatV) {
+
+                const modeU = this.getRepeatMode(repeatModeU)
+                const modeV = this.getRepeatMode(repeatModeV)
+
+                texture.wrapS = modeU;   // horizontal
+                texture.wrapT = modeV;   // vertical
+
+                texture.repeat.set(repeatU, repeatV);
+
+            } else if (mapRatio) {
+
+                const { radius } = this.specs;
+
+                const xRepeat = radius * 2 / (mapRatio * radius * 2);
                 const yRepeat = 1;
 
-                this.#map.wrapS = RepeatWrapping;
-                this.#map.wrapT = RepeatWrapping;
+                texture.wrapS = RepeatWrapping;
+                texture.wrapT = RepeatWrapping;
 
-                this.#map.repeat.set(xRepeat, yRepeat);
+                texture.repeat.set(xRepeat, yRepeat);
+
             }
-
-            this.mesh.material = new MeshPhongMaterial({ map: this.#map });
         }
+
     }
 }
 

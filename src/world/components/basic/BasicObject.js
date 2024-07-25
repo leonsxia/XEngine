@@ -4,15 +4,19 @@ import { basicMateraials } from './basicMaterial';
 import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
 
 class BasicObject {
-    #map = null;
     geometry = null;
     material = null;
     mesh = null;
     name = '';
+    specs;
 
     constructor(type, specs) {
         const { name, color } = specs;
+
         if (name) this.name = name;
+
+        this.specs = specs;
+
         switch (type) {
             case 'plane':
                 {
@@ -49,25 +53,37 @@ class BasicObject {
         if (color) 
             this.material = new MeshPhongMaterial({ color: color });
         else
-            this.material = basicMateraials.basic;;
+            this.material = basicMateraials.basic;
+
     }
 
-    async initBasic(specs) {
-        const { map } = specs;
-        const [texture] = await Promise.all([
-            map ? new TextureLoader().loadAsync(map) : new Promise(resolve => resolve(null))
+    async initBasic() {
+
+        const { map, normalMap } = this.specs;
+
+        const [texture, normal] = await Promise.all([
+            map ? new TextureLoader().loadAsync(map) : Promise.resolve(null),
+            normalMap ? new TextureLoader().loadAsync(normalMap) : Promise.resolve(null)
         ]);
+
         if (texture) {
-            this.#map = texture;
-            this.#map.colorSpace = SRGBColorSpace;
-            this.mesh.material = this.material = new MeshStandardMaterial({ map: this.#map });
+            
+            texture.colorSpace = SRGBColorSpace;
+
         }
+
+        this.mesh.material = this.material = new MeshStandardMaterial({ map: texture, normalMap: normal });
+
     }
 
     get worldPosition() {
+
         const target = new Vector3();
+
         this.mesh.getWorldPosition(target);
+
         return target;
+
     }
 
     getRepeatMode(mode) {
@@ -75,45 +91,107 @@ class BasicObject {
 
         switch(mode) {
             case REPEAT:
+
                 repeat = RepeatWrapping;
+
                 break;
+
             case MIRRORED_REPEAT:
+
                 repeat = MirroredRepeatWrapping;
+
                 break;
         }
 
         return repeat;
     }
 
+    setTexture(texture) {
+
+        const { rotationT, noRepeat = false, repeatU, repeatV, repeatModeU = REPEAT, repeatModeV = REPEAT, mapRatio } = this.specs;
+
+        texture.colorSpace = SRGBColorSpace;
+
+        if (rotationT) {
+
+            texture.center.set(.5, .5);
+            texture.rotation = rotationT;
+
+        }
+
+        if (!noRepeat) {
+
+            if (repeatU && repeatV) {
+
+                const modeU = this.getRepeatMode(repeatModeU)
+                const modeV = this.getRepeatMode(repeatModeV)
+
+                texture.wrapS = modeU;   // horizontal
+                texture.wrapT = modeV;   // vertical
+
+                texture.repeat.set(repeatU, repeatV);
+
+            } else if (mapRatio) {
+
+                const { width, height } = this.specs;
+
+                const xRepeat = width / (mapRatio * height);
+
+                texture.wrapS = RepeatWrapping;
+                texture.repeat.set(xRepeat, 1);
+
+            }
+        }
+
+    }
+
     setPosition(pos) {
+
         this.mesh.position.set(...pos);
+
         return this;
+
     }
 
     setRotation(rot) {
+
         this.mesh.rotation.set(...rot);
+
         return this;
+
     }
 
     setScale(scale) {
+
         this.mesh.scale.set(...scale);
+
         return this;
+
     }
 
     setName(name) {
+
         this.mesh.name = name;;
         this.name = name;
+
         return this;
+
     }
 
     castShadow(cast) {
+
         this.mesh.castShadow = cast;
+
         return this;
+
     }
 
     receiveShadow(receive) {
+
         this.mesh.receiveShadow = receive;
+
         return this;
+
     }
 }
 

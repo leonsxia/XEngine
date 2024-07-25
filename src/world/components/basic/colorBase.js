@@ -12,6 +12,7 @@ const BB = 0xffffff;
 const BF = 0xffff33;
 const BBW = 0x00ff00;
 const intersect = 0xff0000;
+const specular = 0x111111;
 
 export {
     basic,
@@ -27,5 +28,6 @@ export {
     BB,
     BF,
     BBW,
-    intersect
+    intersect,
+    specular
 }
