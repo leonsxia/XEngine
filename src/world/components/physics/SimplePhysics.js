@@ -409,6 +409,22 @@ class SimplePhysics {
 
             this.slopes.forEach(s => {
 
+                // check if player is on slope, and slow it down
+                if (player.obb.intersectsOBB(s.slope.obb)) {
+
+                    player.setSlopeCoefficient(s);
+
+                } else if (player.obb.intersectsOBB(s.box.obb) && 
+                    (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
+
+                    player.setSlopeCoefficient(s);
+
+                } else if (!player.obb.intersectsOBB(s.box.obb)) {
+
+                    player.setSlopeCoefficient();
+
+                }
+
                 if (collisionSlopes.length === 0) {
 
                     if (player.obb.intersectsOBB(s.slope.obb)) {

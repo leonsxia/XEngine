@@ -6,6 +6,8 @@ import { orange } from '../../basic/colorBase';
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
 const ENABLE_CLIMBING = true;
+const SLOWDOWN_COEFFICIENT = .78;
+const SLOPE_COEFFICIENT = .6;
 
 class Tofu extends Moveable2D {
 
@@ -37,6 +39,8 @@ class Tofu extends Moveable2D {
     #quickRecoverCoefficient = .03;
     #climbingVel = 1.34;
     #rayPadding = .1;
+    #slopeCoefficient = 1;
+    #slowDownCoefficient = 1;
 
     constructor(name) {
 
@@ -77,7 +81,7 @@ class Tofu extends Moveable2D {
         this.createRay();
         this.showArrows(false);
 
-        this.paddingCoefficient = .06 * ENLARGE;
+        this.paddingCoefficient = .05 * ENLARGE;
 
     }
 
@@ -207,7 +211,9 @@ class Tofu extends Moveable2D {
 
     get velocity() {
 
-        return this.isAccelerating && !this.isBackward ? this.#vel * ENLARGE : this.#vel;
+        return this.isAccelerating && !this.isBackward ? 
+            this.#vel * ENLARGE * this.#slopeCoefficient * this.#slowDownCoefficient : 
+            this.#vel * this.#slopeCoefficient;
 
     }
 
@@ -253,6 +259,18 @@ class Tofu extends Moveable2D {
 
     }
 
+    get slopeCoefficient() {
+
+        return this.#slopeCoefficient;
+
+    }
+
+    set slopeCoefficient(val) {
+
+        this.#slopeCoefficient = val;
+
+    }
+ 
     showBB(show) {
 
         this.boundingBoxMesh.visible = show;
@@ -453,6 +471,27 @@ class Tofu extends Moveable2D {
 
     }
 
+    setSlopeCoefficient(slope) {
+
+        if (!slope) {
+
+            this.slopeCoefficient = 1;
+
+        }
+
+        else {
+
+            const { depth, height } = slope;
+            const cosTheta = depth / Math.sqrt(depth * depth + height * height);
+
+            this.slopeCoefficient = cosTheta * SLOPE_COEFFICIENT;
+
+        }
+
+        return this;
+
+    }
+
     castShadow(cast) {
 
         this.group.children.forEach(child => {
@@ -508,6 +547,8 @@ class Tofu extends Moveable2D {
 
         const params = this.setTickParams(delta);
 
+        this.#slowDownCoefficient = 1;
+
         this.tankmoveTick(params);
 
         this.updateOBB();
@@ -561,6 +602,8 @@ class Tofu extends Moveable2D {
         const params = this.setTickParams(delta);
 
         params.wall = wall;
+
+        this.#slowDownCoefficient = SLOWDOWN_COEFFICIENT;
 
         this.tankmoveTickWithWall(params);
 

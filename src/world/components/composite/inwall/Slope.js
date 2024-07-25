@@ -1,5 +1,5 @@
 import { Group } from 'three';
-import { createCollisionPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree } from '../../physics/collisionHelper';
+import { createCollisionPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree, createOBBBox } from '../../physics/collisionHelper';
 import { yankeesBlue, basic } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
@@ -9,6 +9,9 @@ class Slope {
     isSlope = true;
     isStairs = true;
 
+    box;
+    bottomBoxBuffer;
+    topBoxBuffer;
     slope;
     leftFace;
     rightFace;
@@ -29,6 +32,9 @@ class Slope {
         const { showArrow = false, enableOBBs = false } = specs;
         const { backMap, leftMap, rightMap, slopeMap, bottomMap } = specs;
 
+        const boxSpecs = {size: { width, depth, height }, color: basic}
+        const bufferSpecs = { size: { width, depth: .2, height: .1 }, color: yankeesBlue };
+
         const slopeSpecs = this.makePlaneConfig({ width, height: Math.sqrt(depth * depth + height * height), color: yankeesBlue, map: slopeMap });
         const leftSpecs = this.makePlaneConfig({ width: depth, height, leftHanded: true, color: basic, map: leftMap });
         const rightSpecs = this.makePlaneConfig({ width: depth, height, leftHanded: false, color: basic, map: rightMap });
@@ -36,9 +42,16 @@ class Slope {
         const bottomSpecs = this.makePlaneConfig({ width, height: depth, color: yankeesBlue, map: bottomMap });
 
         this.name = name;
-
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        
         this.group = new Group();
         this.group.name = name;
+
+        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], false, false);
+        this.bottomBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_bottom_buffer`, [0, - height * .5 + bufferSpecs.size.height * .5, depth * .5 + bufferSpecs.size.depth * .5], [0, 0, 0], false, false);
+        this.topBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_top_buffer`, [0, height * .5 + bufferSpecs.size.height * .5, - depth * .5 - bufferSpecs.size.depth * .5], [0, 0, 0], false, false);
 
         this.slope = createOBBPlane(slopeSpecs, `${name}_slope`, [0, 0, 0], [- Math.atan(depth / height), 0, 0], true, true);
         this.leftFace = createCollisionTrianglePlane(leftSpecs, `${name}_left`, [width * .5, 0, 0], Math.PI * .5, true, true, showArrow);
@@ -46,6 +59,9 @@ class Slope {
         this.backFace = createCollisionPlane(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, true, true, showArrow);
 
         this.slope.mesh.layers.enable(2);
+        this.box.mesh.visible = false;
+        this.bottomBoxBuffer.mesh.visible = true;
+        this.topBoxBuffer.mesh.visible = true;
 
         if (!enableOBBs) {
 
@@ -64,6 +80,9 @@ class Slope {
         this.walls = [this.leftFace, this.rightFace, this.backFace];
 
         this.group.add(
+            this.box.mesh,
+            this.bottomBoxBuffer.mesh,
+            this.topBoxBuffer.mesh,
             this.slope.mesh,
             this.leftFace.mesh,
             this.rightFace.mesh,
@@ -143,6 +162,10 @@ class Slope {
         }
 
         this.slope.updateOBB(needUpdateMatrixWorld);
+
+        this.box.updateOBB(needUpdateMatrixWorld);
+        this.bottomBoxBuffer.updateOBB(needUpdateMatrixWorld);
+        this.topBoxBuffer.updateOBB(needUpdateMatrixWorld);
     }
 }
 
