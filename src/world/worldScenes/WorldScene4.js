@@ -1,6 +1,6 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube, Slope } from '../components/Models.js';
+import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube, Slope, Stairs } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../components/utils/constants.js';
@@ -533,8 +533,8 @@ class WorldScene4 extends WorldScene {
 
         const spSpecs2 = {
             width: 2.5,
-            height: 2,
-            depth: .75,
+            height: 2.3,
+            depth: 2.75,
             baseSize: 4.6,
             enableOBBs: true,
             frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
@@ -615,9 +615,9 @@ class WorldScene4 extends WorldScene {
             name: 'CubeBox2'
         }
 
-        const stairs1Specs = {
+        const slope1Specs = {
             width: 2,
-            height: 2,
+            height: 2.3,
             depth: 3.5,
             baseSize: 4.6,
             frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
@@ -625,6 +625,21 @@ class WorldScene4 extends WorldScene {
             leftMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             rightMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             slopeMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            mapRatio: 1.5,
+            enableOBBs: false,
+            name: 'Slope1'
+        }
+
+        const stairs1Specs = {
+            width: 2,
+            height: 2.5,
+            depth: 3.5,
+            baseSize: 4.6,
+            frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            topMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            sideMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
+            backMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             bottomMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',
             mapRatio: 1.5,
             enableOBBs: false,
@@ -651,7 +666,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(5 * Math.PI / 6);
 
         const spillar2 = new SquarePillar(spSpecs2);
-        spillar2.setPosition([2.5, - posY + spSpecs2.height * .5 + .1, - 7.125]);
+        spillar2.setPosition([2.5, - posY + spSpecs2.height * .5 + .1, - 6.125]);
 
         const lwall1 = new LWall(lwSpecs1);
         lwall1.setPosition([1.5, 0, 5]);
@@ -664,12 +679,16 @@ class WorldScene4 extends WorldScene {
         cubeBox2.setPosition([- 1.5, 4, - 5])
             .setRotationY(Math.PI * .33);
 
-        const stairs1 = new Slope(stairs1Specs);
-        stairs1.setPosition([2.5, - posY + stairs1Specs.height * .5 + .1, - 5])
+        const slope1 = new Slope(slope1Specs);
+        slope1.setPosition([2.5, - posY + slope1Specs.height * .5 + .1, - 3]);
             // .setRotationY(- Math.PI * .133);
 
+        const stairs1 = new Stairs(stairs1Specs);
+        stairs1.setPosition([- 2, - posY + stairs1Specs.height * .5 + .1, - .5])
+            .setRotationY(Math.PI * .5);
+
         const room = new Room(specs);
-        room.addGroups([spillar1, spillar2, lwall1, cubeBox1, cubeBox2, stairs1]);
+        room.addGroups([spillar1, spillar2, lwall1, cubeBox1, cubeBox2, slope1, stairs1]);
         room.addFloors([floor]);
 
         await room.init();

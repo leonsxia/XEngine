@@ -66,6 +66,7 @@ class Plane extends BasicObject {
 
         const emptyObj = new this.constructor({ name: name ?? `${this.name}_clone`, empty: true });
         
+        emptyObj.specs = this.specs;
         emptyObj.geometry = this.geometry;
         emptyObj.material = this.material;
         emptyObj.mesh = this.mesh.clone();
@@ -73,6 +74,7 @@ class Plane extends BasicObject {
         return emptyObj;
 
     }
+
 }
 
 export { Plane };

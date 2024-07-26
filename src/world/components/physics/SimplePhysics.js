@@ -53,7 +53,7 @@ class SimplePhysics {
     checkOutOfWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
 
         let result = false;
-        const padding = .1;
+        const padding = STAIR_OFFSET_MAX;
 
         const leftBorderX = - wall.width * .5 + padding;
         const rightBorderX = wall.width * .5 - padding;
@@ -77,7 +77,7 @@ class SimplePhysics {
     checkOutOfTriangleWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
 
         let result = false;
-        const padding = .1;
+        const padding = STAIR_OFFSET_MAX;
         const { x, y } = player.position;
         const { width, height, geometry: { parameters: { leftHanded } } } = wall;
         const tanTheta = height / width;
@@ -305,6 +305,14 @@ class SimplePhysics {
 
         });
 
+        this.slopes.sort((a, b) => {
+
+            const tar = new Vector3();
+
+            return b.group.getWorldPosition(tar).y - a.group.getWorldPosition(tar).y;
+
+        });
+
     }
 
     tick(delta) {
@@ -411,43 +419,49 @@ class SimplePhysics {
 
             this.slopes.forEach(s => {
 
-                // check if player is on slope, and slow it down
-                const playerIntersectSlopeBox = player.obb.intersectsOBB(s.box.obb);
-
-                if (!playerIntersectSlopeBox) {
-
-                    player.setSlopeCoefficient?.();
-
-                } else if (player.isInAir && player.obb.intersectsOBB(s.slope.obb)) {
-
-                    player.setSlopeCoefficient?.(s);
-
-                } else if (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb)) {
-
-                    player.setSlopeCoefficient?.(s);
-
-                }
-
                 if (collisionSlopes.length === 0) {
 
-                    if (player.obb.intersectsOBB(s.slope.obb)) {
+                    // check if player is on slope, and slow it down
+                    const playerIntersectSlopeBox = player.obb.intersectsOBB(s.box.obb);
+                    const playerIntersectSlope = player.obb.intersectsOBB(s.slope.obb);
 
+                    if (!playerIntersectSlopeBox && player.intersectSlope === s) {
+
+                        player.setSlopeCoefficient?.();
+                        player.intersectSlope = null;
+
+                    } else if (player.isInAir && playerIntersectSlope) {
+
+                        player.setSlopeCoefficient?.(s);
+
+                    } else if (playerIntersectSlope && (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
+
+                        player.setSlopeCoefficient?.(s);
+
+                    }
+
+                    if (playerIntersectSlope) {
+
+                        player.intersectSlope = s;
                         collisionSlopes.push(s.slope.mesh);
 
                     }
+
                 }
 
             });
 
-            let isFalling = true;
-
-            if (collisionTops.length > 0) {
+            if (collisionTops.length > 0 && collisionSlopes.length === 0) {
 
                 player.onGround(collisionTops[0]);
 
             } else if (collisionSlopes.length > 0) {
 
-                isFalling = player.tickOnSlope(collisionSlopes[0]) ?? isFalling;
+                player.tickOnSlope(collisionSlopes[0]);
+
+            } else {
+
+                player.isInAir = true;
 
             }
 
@@ -460,7 +474,7 @@ class SimplePhysics {
                 });
             }
 
-            if (collisionTops.length === 0 && isFalling) {
+            if (collisionTops.length === 0 && player.isInAir) {
 
                 const collisionFloors = [];
 

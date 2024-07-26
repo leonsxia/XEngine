@@ -22,3 +22,4 @@ export { LWall } from './composite/inwall/LWall.js';
 export { CylinderPillar } from './composite/inwall/CylinderPillar.js';
 export { BoxCube } from './composite/inwall/BoxCube.js';
 export { Slope } from './composite/inwall/Slope.js';
+export { Stairs } from './composite/inwall/Stairs.js';

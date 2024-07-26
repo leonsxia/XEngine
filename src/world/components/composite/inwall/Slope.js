@@ -7,7 +7,6 @@ class Slope {
 
     name = '';
     isSlope = true;
-    isStairs = true;
 
     box;
     bottomBoxBuffer;

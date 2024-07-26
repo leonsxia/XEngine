@@ -38,7 +38,7 @@ class Tofu extends Moveable2D {
     #recoverCoefficient = .01;
     #quickRecoverCoefficient = .03;
     #climbingVel = 1.34;
-    #rayPadding = .1;
+    #rayPadding = .2;
     #slopeCoefficient = 1;
     #slowDownCoefficient = 1;
 
@@ -589,13 +589,11 @@ class Tofu extends Moveable2D {
 
     tickOnSlope(slope) {
 
-        const isFalling = this.onSlopeTick({ slope, player: this });
+        this.onSlopeTick({ slope, player: this });
 
         this.updateOBB();
 
         this.updateRay(false);
-
-        return isFalling;
 
     }
 

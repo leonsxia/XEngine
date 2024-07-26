@@ -16,7 +16,7 @@ class Moveable2D {
 
     #g = 9.8;
     #fallingTime = 0;
-    #isFalling = false;
+    #isFalling = true;
 
     #isQuickTuring = false;
     #turingRad = 0;
@@ -182,6 +182,12 @@ class Moveable2D {
         );
     }
 
+    set isInAir(val) {
+
+        this.#isFalling = val;
+
+    }
+
     fallingTick(params) {
         const { delta, player } = params;
 
@@ -233,9 +239,11 @@ class Moveable2D {
             this.#isFalling = false;
             this.#fallingTime = 0;
 
-        }
+        } else {
 
-        return this.#isFalling;
+            this.#isFalling = true;
+
+        }
 
     }
 
