@@ -205,8 +205,6 @@ class Train extends Moveable2D {
         return this;
     }
 
-    setSlopeCoefficient() {}
-
     setTickParams(delta) {
         const R = this.isAccelerating ? this.#rotateR * 2.5 : this.#rotateR;
         const rotateVel = this.velocity / R;

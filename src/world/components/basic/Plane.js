@@ -7,6 +7,8 @@ class Plane extends BasicObject {
 
         super('plane', specs);
 
+        if (specs.empty) return this;
+
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = specs.name;
 
@@ -57,6 +59,18 @@ class Plane extends BasicObject {
     setDoubleShadowSide() {
 
         this.material.shadowSide = DoubleSide;
+
+    }
+
+    clone(name) {
+
+        const emptyObj = new this.constructor({ name: name ?? `${this.name}_clone`, empty: true });
+        
+        emptyObj.geometry = this.geometry;
+        emptyObj.material = this.material;
+        emptyObj.mesh = this.mesh.clone();
+
+        return emptyObj;
 
     }
 }

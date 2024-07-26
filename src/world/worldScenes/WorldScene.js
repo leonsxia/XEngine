@@ -401,36 +401,36 @@ class WorldScene {
 
     showPlayerBB(show) {
         if (!this.player || !this.player.boundingBoxMesh) return;
-        if (show === 'show') this.player.showBB(true);
-        else this.player.showBB(false);
+        const s = show === 'show' ? true : false;
+        this.player.showBB(s);
         return this;
     }
 
     showPlayerBBW(show) {
         if (!this.player || !this.player.boundingBoxWireMesh) return;
-        if (show === 'show') this.player.showBBW(true);
-        else this.player.showBBW(false);
+        const s = show === 'show' ? true : false;
+        this.player.showBBW(s);
         return this;
     }
 
     showPlayerBF(show) {
         if (!this.player) return;
-        if (show === 'show') this.player.showBF(true);
-        else this.player.showBF(false);
+        const s = show === 'show' ? true : false;
+        this.player.showBF(s);
         return this;
     }
 
     showPlayerPushingBox(show) {
         if (!this.player || !this.player.showPushingBox) return;
-        if (show === 'show') this.player.showPushingBox(true);
-        else this.player.showPushingBox(false);
+        const s = show === 'show' ? true : false;
+        this.player.showPushingBox(s);
         return this;
     }
 
     showPlayerArrows(show) {
         if (!this.player || !this.player.showArrows) return;
-        if (show === 'show') this.player.showArrows(true);
-        else this.player.showArrows(false);
+        const s = show === 'show' ? true : false;
+        this.player.showArrows(s);
         return this;
     }
 

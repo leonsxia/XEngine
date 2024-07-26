@@ -67,7 +67,7 @@ class BoxCube extends ObstacleMoveable  {
         this.group = new Group();
         this.group.name = name;
 
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], !freeTexture ? true : false, !freeTexture ? true : false);
+        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], !freeTexture, !freeTexture);
 
         const createPlaneFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 

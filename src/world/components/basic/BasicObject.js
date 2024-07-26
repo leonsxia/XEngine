@@ -11,11 +11,13 @@ class BasicObject {
     specs;
 
     constructor(type, specs) {
-        const { name, color } = specs;
+        const { name, color, empty } = specs;
 
         if (name) this.name = name;
 
         this.specs = specs;
+
+        if (empty) return this;
 
         switch (type) {
             case 'plane':

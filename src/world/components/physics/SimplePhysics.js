@@ -412,18 +412,19 @@ class SimplePhysics {
             this.slopes.forEach(s => {
 
                 // check if player is on slope, and slow it down
-                if (player.isInAir && player.obb.intersectsOBB(s.slope.obb)) {
+                const playerIntersectSlopeBox = player.obb.intersectsOBB(s.box.obb);
 
-                    player.setSlopeCoefficient(s);
+                if (!playerIntersectSlopeBox) {
 
-                } else if (player.obb.intersectsOBB(s.box.obb) && 
-                    (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
+                    player.setSlopeCoefficient?.();
 
-                    player.setSlopeCoefficient(s);
+                } else if (player.isInAir && player.obb.intersectsOBB(s.slope.obb)) {
 
-                } else if (!player.obb.intersectsOBB(s.box.obb)) {
+                    player.setSlopeCoefficient?.(s);
 
-                    player.setSlopeCoefficient();
+                } else if (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb)) {
+
+                    player.setSlopeCoefficient?.(s);
 
                 }
 
@@ -446,7 +447,7 @@ class SimplePhysics {
 
             } else if (collisionSlopes.length > 0) {
 
-                isFalling = player.tickOnSlope(collisionSlopes[0]);
+                isFalling = player.tickOnSlope(collisionSlopes[0]) ?? isFalling;
 
             }
 
