@@ -34,7 +34,8 @@ class Circle extends BasicObject {
 
         }
 
-        this.mesh.material = new MeshPhongMaterial({ map: texture, normalMap: normal });
+        if (texture || normal) 
+            this.mesh.material = new MeshPhongMaterial({ map: texture, normalMap: normal });
 
     }
 

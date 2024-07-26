@@ -633,7 +633,7 @@ class WorldScene4 extends WorldScene {
 
         const stairs1Specs = {
             width: 2,
-            height: 2.5,
+            height: 2.6,
             depth: 3.5,
             baseSize: 4.6,
             frontMap: 'assets/textures/walls/Texturelabs_Brick_159S.jpg',

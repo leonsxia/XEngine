@@ -53,12 +53,13 @@ class SimplePhysics {
     checkOutOfWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
 
         let result = false;
-        const padding = STAIR_OFFSET_MAX;
+        const paddingX = .1
+        const paddingY = STAIR_OFFSET_MAX;
 
-        const leftBorderX = - wall.width * .5 + padding;
-        const rightBorderX = wall.width * .5 - padding;
-        const topBorderY = wall.height * .5 - padding;
-        const bottomBorderY = - wall.height * .5 + padding;
+        const leftBorderX = - wall.width * .5 + paddingX;
+        const rightBorderX = wall.width * .5 - paddingX;
+        const topBorderY = wall.height * .5 - paddingY;
+        const bottomBorderY = - wall.height * .5 + paddingY;
 
         if (player.position.x < leftBorderX - halfPlayerWidth ||
             player.position.x > rightBorderX + halfPlayerWidth ||
@@ -77,7 +78,8 @@ class SimplePhysics {
     checkOutOfTriangleWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
 
         let result = false;
-        const padding = STAIR_OFFSET_MAX;
+        const paddingX = .1;
+        const paddingY = STAIR_OFFSET_MAX;
         const { x, y } = player.position;
         const { width, height, geometry: { parameters: { leftHanded } } } = wall;
         const tanTheta = height / width;
@@ -85,10 +87,10 @@ class SimplePhysics {
         const deltaY = deltaX * tanTheta;
         const offsetY = halfPlayerWidth * tanTheta;
 
-        const leftBorderX = - width * .5 + padding;
-        const rightBorderX = width * .5 - padding;
-        const topBorderY = deltaY <= height * .5 ? - height * .5 + deltaY + offsetY - padding : deltaY - height * .5 + offsetY - padding;
-        const bottomBorderY = - height * .5 + padding;
+        const leftBorderX = - width * .5 + paddingX ;
+        const rightBorderX = width * .5 - paddingX;
+        const topBorderY = deltaY <= height * .5 ? - height * .5 + deltaY + offsetY - paddingY : deltaY - height * .5 + offsetY - paddingY;
+        const bottomBorderY = - height * .5 + paddingY;
 
         if (x < leftBorderX - halfPlayerWidth ||
             x > rightBorderX + halfPlayerWidth ||

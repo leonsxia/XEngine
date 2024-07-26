@@ -1,17 +1,15 @@
-import { Mesh, MeshPhongMaterial, DoubleSide, TextureLoader } from 'three';
+import { Mesh, MeshPhongMaterial, TextureLoader } from 'three';
 import { BasicObject } from './BasicObject';
 
-class Plane extends BasicObject {
+class StairsSidePlane extends BasicObject {
 
     constructor(specs) {
 
-        super('plane', specs);
-
-        if (specs.empty) return this;
+        super('stairsSide', specs);
 
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = specs.name;
-
+        
     }
 
     async init () {
@@ -24,9 +22,9 @@ class Plane extends BasicObject {
         ]);
 
         if (texture) {
-            
+
             this.setTexture(texture);
-        
+            
         }
 
         if (normal) {
@@ -37,6 +35,7 @@ class Plane extends BasicObject {
 
         if (texture || normal) 
             this.mesh.material = this.material = new MeshPhongMaterial({ map: texture, normalMap: normal });
+
     }
 
     get width() {
@@ -50,32 +49,6 @@ class Plane extends BasicObject {
         return this.geometry.parameters.height * this.mesh.scale.y;
 
     }
-
-    setDoubleSide() {
-
-        this.material.side = DoubleSide;
-
-    }
-
-    setDoubleShadowSide() {
-
-        this.material.shadowSide = DoubleSide;
-
-    }
-
-    clone(name) {
-
-        const emptyObj = new this.constructor({ name: name ?? `${this.name}_clone`, empty: true });
-        
-        emptyObj.specs = this.specs;
-        emptyObj.geometry = this.geometry;
-        emptyObj.material = this.material;
-        emptyObj.mesh = this.mesh.clone();
-
-        return emptyObj;
-
-    }
-
 }
 
-export { Plane };
+export { StairsSidePlane };

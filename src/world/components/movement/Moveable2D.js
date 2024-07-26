@@ -239,10 +239,6 @@ class Moveable2D {
             this.#isFalling = false;
             this.#fallingTime = 0;
 
-        } else {
-
-            this.#isFalling = true;
-
         }
 
     }

@@ -33,7 +33,8 @@ class TrianglePlane extends BasicObject {
 
         }
 
-        this.mesh.material = this.material = new MeshPhongMaterial({ map: texture, normalMap: normal });
+        if (texture || normal) 
+            this.mesh.material = this.material = new MeshPhongMaterial({ map: texture, normalMap: normal });
     }
 
     get width() {

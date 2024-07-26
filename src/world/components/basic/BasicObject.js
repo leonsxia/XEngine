@@ -1,5 +1,5 @@
 import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, MeshStandardMaterial, MeshPhongMaterial, TextureLoader, SRGBColorSpace, Vector3, RepeatWrapping, MirroredRepeatWrapping } from 'three';
-import { createTriangleGeometry } from '../utils/geometryHelper';
+import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { basicMateraials } from './basicMaterial';
 import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
 
@@ -50,6 +50,21 @@ class BasicObject {
                     this.geometry = createTriangleGeometry(width, height, leftHanded);
                 }
                 break;
+            case 'stairsSide':
+                {
+                    this.geometry = createStairsSideGeometry(specs);
+                }
+                break;
+            case 'stairsFront':
+                {
+                    this.geometry = createStairsFrontGeometry(specs);
+                }
+                break;
+            case 'stairsTop':
+                {
+                    this.geometry = createStairsTopGeometry(specs);
+                }
+                break;
         }
 
         if (color) 
@@ -74,7 +89,8 @@ class BasicObject {
 
         }
 
-        this.mesh.material = this.material = new MeshStandardMaterial({ map: texture, normalMap: normal });
+        if (texture || normal) 
+            this.mesh.material = this.material = new MeshStandardMaterial({ map: texture, normalMap: normal });
 
     }
 
