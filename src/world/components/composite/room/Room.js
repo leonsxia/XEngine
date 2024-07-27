@@ -23,6 +23,9 @@ class Room {
     insideGroups = [];
     slopes = [];
     slopeFaces = [];
+    stairsSides = [];
+    stairsStepFronts = [];
+    stairsStepTops = [];
 
     lights = [];
     directionalLightTarget = new Object3D();
@@ -54,7 +57,7 @@ class Room {
         this.rightWall = createWallFunction(rightSpecs, `${name}_right`, [width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
         
         this.frontWall = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, showArrow);
-        this.frontWall.line.material.color.setHex(green);
+        this.frontWall.line?.material.color.setHex(green);
 
         this.walls = [this.frontWall, this.backWall, this.leftWall, this.rightWall];
 
@@ -177,6 +180,14 @@ class Room {
             
             };
 
+            if (g.isStairs) {
+
+                this.stairsSides = this.stairsSides.concat(g.stepSides);
+                this.stairsStepFronts.push(g.stepFront);
+                this.stairsStepTops.push(g.stepTop);
+
+            }
+
         });
 
     }
@@ -185,7 +196,9 @@ class Room {
 
         const { width, height } = specs;
 
-        const { baseSize = height, mapRatio } = this.specs;
+        const { baseSize = height, mapRatio, lines } = this.specs;
+
+        specs.lines = lines;
 
         if (mapRatio) {
 

@@ -44,11 +44,11 @@ class BoxCube extends ObstacleMoveable  {
         super();
 
         this.specs = specs;
-        const { name, width, depth, height } = specs;
+        const { name, width, depth, height, lines = true } = specs;
         const { showArrow = false, isObstacle = false, freeTexture = false, enableWallOBBs = false, climbable = false, movable = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
 
-        const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map };
+        const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map, lines };
 
         const frontSpecs = this.makePlaneConfig({ width, height, color: basic, map: frontMap })
         const backSpecs = this.makePlaneConfig({ width, height, color: basic, map: backMap });
@@ -84,7 +84,7 @@ class BoxCube extends ObstacleMoveable  {
 
         // create last for changing line color
         this.frontFace = createPlaneFunction(frontSpecs, `${name}_front`, [0, 0, depth * .5], 0, true, true, showArrow);
-        this.frontFace.line.material.color.setHex(green);
+        this.frontFace.line?.material.color.setHex(green);
 
         if (movable) {
 
@@ -179,7 +179,9 @@ class BoxCube extends ObstacleMoveable  {
     makePlaneConfig(specs) {
         
         const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false } = this.specs;
+        const { baseSize = height, mapRatio, noRepeat = false, lines = true } = this.specs;
+
+        specs.lines = lines;
 
         if (noRepeat) return specs;
 

@@ -77,7 +77,7 @@ class LWall {
 
         // create last for changing line color
         this.outWallS = createWallFunction(outWallSSpecs, `${name}_outS`, [0, 0, - depth / 2], Math.PI, true, true, showArrow);
-        this.outWallS.line.material.color.setHex(green);
+        this.outWallS.line?.material.color.setHex(green);
 
         this.walls = [this.outWallT, this.outWallS, this.inWallT, this.inWallS, this.sideWallT, this.sideWallS];
 
@@ -112,8 +112,10 @@ class LWall {
 
     makePlaneConfig(specs) {
         const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat } = this.specs;
+        const { baseSize = height, mapRatio, noRepeat, lines = true } = this.specs;
 
+        specs.lines = lines;
+        
         if (noRepeat) return specs;
 
         if (mapRatio) {

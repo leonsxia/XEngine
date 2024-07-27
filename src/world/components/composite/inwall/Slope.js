@@ -106,7 +106,9 @@ class Slope {
     makePlaneConfig(specs) {
         
         const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false } = this.specs;
+        const { baseSize = height, mapRatio, noRepeat = false, lines = true } = this.specs;
+
+        specs.lines = lines;
 
         if (noRepeat) return specs;
 

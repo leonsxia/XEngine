@@ -317,6 +317,13 @@ class WorldScene {
         if (this.cPlanes.length > 0) {
             const folder = makeFolderGuiConfig({folder: 'cPlanes Control', parent: 'cPlanesControl'});
             folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Wire',
+                value: { Wire: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showCPlanes.bind(this)
+            }));
+            folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'lines',
                 value: { lines: 'hide' },
                 params: ['show', 'hide'],
@@ -434,13 +441,25 @@ class WorldScene {
         return this;
     }
 
+    showCPlanes(show) {
+
+        const s = show === 'show' ? true : false;
+        this.cPlanes.forEach(cp => {
+            cp.setWireframe(s);
+        });
+        this.cBoxes.forEach(cb => {
+            cb.setWireframe(s);
+        });
+
+    }
+
     showCPlaneLines(show) {
         const s = show === 'show' ? true : false;
         this.cPlanes.forEach(cp => {
-            cp.line.visible = s;
+            if (cp.line) cp.line.visible = s;
         });
         this.cBoxes.forEach(cb => {
-            cb.line.visible = s;
+            if (cb.line) cb.line.visible = s;
         });
     }
 

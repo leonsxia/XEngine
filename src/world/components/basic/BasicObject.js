@@ -196,6 +196,21 @@ class BasicObject {
 
     }
 
+    setTransparent(transparent, opacity) {
+
+        this.material.transparent = transparent;
+        this.material.opacity = opacity;
+
+        return this;
+
+    }
+
+    setWireframe(show) {
+
+        this.material.wireframe = show;
+
+    }
+
     castShadow(cast) {
 
         this.mesh.castShadow = cast;

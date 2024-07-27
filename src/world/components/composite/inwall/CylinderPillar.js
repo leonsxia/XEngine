@@ -108,7 +108,7 @@ class CylinderPillar {
         }
 
         this.face1 = createWallFunction(pSpecs, `${name}_face1`, [0, 0, width / 2 + offset], 0, true, true, showArrow);
-        this.face1.line.material.color.setHex(green);
+        this.face1.line?.material.color.setHex(green);
 
         this.walls = [this.face1, this.face2, this.face3, this.face4, this.face5, this.face6, this.face7, this.face8];
 
@@ -138,7 +138,9 @@ class CylinderPillar {
     }
 
     makeTBPlaneConfig(specs, top = true) {
-        const { baseSize = this.radius * 2, mapRatio, noRepeat = false } = this.specs;
+        const { baseSize = this.radius * 2, mapRatio, noRepeat = false, lines = true } = this.specs;
+
+        specs.lines = lines;
 
         if (top)
             specs.rotationT = .125 * Math.PI;
@@ -160,7 +162,9 @@ class CylinderPillar {
 
     makePlaneConfig(specs) {
         const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false } = this.specs;
+        const { baseSize = height, mapRatio, noRepeat = false, lines = true } = this.specs;
+
+        specs.lines = lines;
 
         if (noRepeat) return specs;
 

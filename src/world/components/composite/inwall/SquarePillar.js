@@ -72,7 +72,7 @@ class SquarePillar {
 
         // create last for changing line color
         this.frontFace = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], 0, true, true, showArrow);
-        this.frontFace.line.material.color.setHex(green);
+        this.frontFace.line?.material.color.setHex(green);
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
         
@@ -103,8 +103,10 @@ class SquarePillar {
     makePlaneConfig(specs) {
 
         const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false } = this.specs;
+        const { baseSize = height, mapRatio, noRepeat = false, lines = true } = this.specs;
 
+        specs.lines = lines;
+        
         if (noRepeat) return specs;
 
         if (mapRatio) {

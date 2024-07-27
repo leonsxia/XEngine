@@ -14,15 +14,19 @@ class CollisionPlane extends Plane {
 
         super(specs);
 
-        const { width, rayLength = DEFAULT_RAY_LENGTH } = specs;
+        const { width, rayLength = DEFAULT_RAY_LENGTH, lines = false } = specs;
 
         this.#w = width;
         this.#rayLength = rayLength;
         
-        this.edges = new EdgesGeometry( this.geometry );
-        this.line = new LineSegments( this.edges, new LineBasicMaterial( { color: white } ) );
-        this.mesh.add(this.line);
-        this.line.visible = false;
+        if (lines) {
+
+            this.edges = new EdgesGeometry(this.geometry);
+            this.line = new LineSegments(this.edges, new LineBasicMaterial({ color: white }));
+            this.mesh.add(this.line);
+            this.line.visible = false;
+            
+        }
 
     }
 

@@ -15,15 +15,19 @@ class CollisionTrianglePlane extends TrianglePlane {
 
         super(specs);
 
-        const { width, rayLength = DEFAULT_RAY_LENGTH } = specs;
+        const { width, rayLength = DEFAULT_RAY_LENGTH, lines = false } = specs;
 
         this.#w = width;
         this.#rayLength = rayLength;
         
-        this.edges = new EdgesGeometry( this.geometry );
-        this.line = new LineSegments( this.edges, new LineBasicMaterial( { color: white } ) );
-        this.mesh.add(this.line);
-        this.line.visible = false;
+        if (lines) {
+
+            this.edges = new EdgesGeometry(this.geometry);
+            this.line = new LineSegments(this.edges, new LineBasicMaterial({ color: white }));
+            this.mesh.add(this.line);
+            this.line.visible = false;
+
+        }
 
     }
 
@@ -59,7 +63,7 @@ class CollisionTrianglePlane extends TrianglePlane {
 
         if (!leftHanded) {
             // create left ray and arrow
-            const leftfrom = new Vector3(width * .5, originY, 0);
+            const leftfrom = new Vector3(- width * .5, originY, 0);
 
             this.leftRay = new Raycaster(leftfrom, dir, 0, this.#rayLength);
             this.leftRay.layers.set(1);
@@ -68,7 +72,7 @@ class CollisionTrianglePlane extends TrianglePlane {
          
         if (leftHanded) {
             // create right ray and arrow
-            const rightfrom = new Vector3(- width * .5, originY, 0);
+            const rightfrom = new Vector3(width * .5, originY, 0);
 
             this.rightRay = new Raycaster(rightfrom, dir, 0, this.#rayLength);
             this.rightRay.layers.set(1);
@@ -81,7 +85,7 @@ class CollisionTrianglePlane extends TrianglePlane {
 
     updateRay(needUpdateMatrixWorld = true) {   // update ray based on world matrix.
 
-        if (!this.leftRay || !this.rightRay) return this;
+        if (!this.leftRay && !this.rightRay) return this;
 
         if (needUpdateMatrixWorld) {
 
@@ -97,7 +101,7 @@ class CollisionTrianglePlane extends TrianglePlane {
 
         if (!leftHanded) {
             // udpate left ray and arrow
-            const leftfrom = new Vector3(width * .5, originY, 0);
+            const leftfrom = new Vector3(- width * .5, originY, 0);
             leftfrom.applyMatrix4(this.mesh.matrixWorld);
 
             this.leftRay.set(leftfrom, dir);
@@ -108,7 +112,7 @@ class CollisionTrianglePlane extends TrianglePlane {
          
         if (leftHanded) {
             // udpate right ray and arrow
-            const rightfrom = new Vector3(- width * .5, originY, 0);
+            const rightfrom = new Vector3(width * .5, originY, 0);
             rightfrom.applyMatrix4(this.mesh.matrixWorld);
 
             this.rightRay.set(rightfrom, dir);

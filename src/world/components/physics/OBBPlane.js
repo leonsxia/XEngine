@@ -10,7 +10,7 @@ class OBBPlane extends Plane {
     constructor(specs) {
         super(specs);
 
-        const { width, height } = specs;
+        const { width, height, lines = false } = specs;
 
         // setup OBB on geometry level
         this.size = new Vector3( width, height, 0);
@@ -20,18 +20,25 @@ class OBBPlane extends Plane {
         // bounding volume on object level (this will reflect the current world transform)
         this.mesh.userData.obb = new OBB();
 
-        this.edges = new EdgesGeometry( this.geometry );
-        this.line = new LineSegments( this.edges, new LineBasicMaterial( { color: white } ) );
-        this.mesh.add(this.line);
-        this.line.visible = false;
+        if (lines) {
+
+            this.edges = new EdgesGeometry(this.geometry);
+            this.line = new LineSegments(this.edges, new LineBasicMaterial({ color: white }));
+            this.mesh.add(this.line);
+            this.line.visible = false;
+
+        }
     }
 
     get obb() {
+
         return this.mesh.userData.obb;
+
     }
 
     // update OBB
     updateOBB(needUpdateMatrixWorld = true) {
+
         if (needUpdateMatrixWorld) {
             this.mesh.updateWorldMatrix(true, true);
         }
@@ -42,6 +49,7 @@ class OBBPlane extends Plane {
         this.mesh.userData.obb.applyMatrix4( matrixWorld );
 
         return this;
+        
     }
 }
 

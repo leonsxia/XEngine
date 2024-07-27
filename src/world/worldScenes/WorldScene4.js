@@ -194,9 +194,9 @@ const pointLightSpecsArr = [
         name: 'pointLight1',
         display: 'Point Light',
         detail: {
-            color: [255, 199, 44],
+            color: [251, 230, 172],
             position: [0, 3.6, 0],
-            intensity: 50,
+            intensity: 25,
             distance: 0,    // infinite far
             decay: 1    // default 2
         },
@@ -697,7 +697,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(- Math.PI / 6)
             .updateOBBnRay();
 
-        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces);
+        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
         this.cBoxes.push(cubeBox1.box);
 
         return room;
