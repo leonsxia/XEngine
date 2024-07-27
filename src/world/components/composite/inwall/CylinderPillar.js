@@ -45,7 +45,7 @@ class CylinderPillar {
         this.specs = specs;
         const { name, width, height} = specs;
         const { isObstacle = false, showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
-        const { map, topMap, bottomMap } = specs;
+        const { map, topMap, bottomMap, normalMap, topNormal, bottomNormal } = specs;
         const offset = Math.sqrt(width * width / 2);
 
         this.name = name;
@@ -56,9 +56,9 @@ class CylinderPillar {
         this.group = new Group();
         this.group.name = name;
 
-        const pSpecs = this.makePlaneConfig({ width, height, map });
-        const topSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: topMap });
-        const bottomSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: bottomMap }, false);
+        const pSpecs = this.makePlaneConfig({ width, height, map, normalMap });
+        const topSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: topMap, normalMap: topNormal });
+        const bottomSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal }, false);
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 

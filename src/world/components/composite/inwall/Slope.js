@@ -30,15 +30,16 @@ class Slope {
         const { name, width = 1, depth = 1, height = 1 } = specs;
         const { showArrow = false, enableOBBs = false } = specs;
         const { backMap, leftMap, rightMap, slopeMap, bottomMap } = specs;
+        const { backNormal, leftNormal, rightNormal, slopeNormal, bottomNormal } = specs;
 
-        const boxSpecs = {size: { width, depth, height }, color: basic}
+        const boxSpecs = { size: { width, depth, height } };
         const bufferSpecs = { size: { width, depth: .2, height: .1 }, color: yankeesBlue };
 
-        const slopeSpecs = this.makePlaneConfig({ width, height: Math.sqrt(depth * depth + height * height), color: yankeesBlue, map: slopeMap });
-        const leftSpecs = this.makePlaneConfig({ width: depth, height, leftHanded: true, color: basic, map: leftMap });
-        const rightSpecs = this.makePlaneConfig({ width: depth, height, leftHanded: false, color: basic, map: rightMap });
-        const backSpecs = this.makePlaneConfig({ width, height, color: basic, map: backMap });
-        const bottomSpecs = this.makePlaneConfig({ width, height: depth, color: yankeesBlue, map: bottomMap });
+        const slopeSpecs = this.makePlaneConfig({ width, height: Math.sqrt(depth * depth + height * height), color: yankeesBlue, map: slopeMap, normalMap: slopeNormal });
+        const leftSpecs = this.makePlaneConfig({ width: depth, height, leftHanded: true, color: basic, map: leftMap, normalMap: leftNormal });
+        const rightSpecs = this.makePlaneConfig({ width: depth, height, leftHanded: false, color: basic, map: rightMap, normalMap: rightNormal });
+        const backSpecs = this.makePlaneConfig({ width, height, color: basic, map: backMap, normalMap: backNormal });
+        const bottomSpecs = this.makePlaneConfig({ width, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
         this.name = name;
         this.width = width;
@@ -167,6 +168,7 @@ class Slope {
         this.box.updateOBB(needUpdateMatrixWorld);
         this.bottomBoxBuffer.updateOBB(needUpdateMatrixWorld);
         this.topBoxBuffer.updateOBB(needUpdateMatrixWorld);
+        
     }
 }
 

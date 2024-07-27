@@ -4,7 +4,9 @@ import { green, yankeesBlue } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
 class LWall {
+
     name = '';
+
     // S: horizontal, T: vertical
     outWallT;
     outWallS;
@@ -28,21 +30,24 @@ class LWall {
     specs;
 
     constructor(specs) {
+
         this.specs = specs;
+
         const { name, width, depth, thickness, height} = specs;
         const { isObstacle = false, showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
         const { outTMap, outSMap, inTMap, inSMap, sideTMap, sideSMap, topMap, bottomMap } = specs;
+        const { outTNormal, outSNormal, inTNormal, inSNormal, sideTNormal, sideSNormal, topNormal, bottomNormal } = specs;
 
-        const outWallTSpecs = this.makePlaneConfig({ width: depth, height, map: outTMap });
-        const inWallTSpecs = this.makePlaneConfig({ width: depth - thickness, height, map: inTMap });
-        const outWallSSpecs = this.makePlaneConfig({ width, height, map: outSMap });
-        const inWallSSpecs = this.makePlaneConfig({ width: width - thickness, height, map: inSMap });
-        const sideWallTSpecs = this.makePlaneConfig({ width: thickness, height, map: sideTMap });
-        const sideWallSSpecs = this.makePlaneConfig({ width: thickness, height, map: sideSMap });
-        const topTSpecs = this.makePlaneConfig({ width: thickness, height: depth, color: yankeesBlue, map: topMap });
-        const topSSpecs = this.makePlaneConfig({ width: width - thickness, height: thickness, color: yankeesBlue, map: topMap });
-        const bottomTSpecs = this.makePlaneConfig({ width: thickness, height: depth, color: yankeesBlue, map: bottomMap });
-        const bottomSSpecs = this.makePlaneConfig({ width: width - thickness, height: thickness, color: yankeesBlue, map: bottomMap });
+        const outWallTSpecs = this.makePlaneConfig({ width: depth, height, map: outTMap, normalMap: outTNormal });
+        const inWallTSpecs = this.makePlaneConfig({ width: depth - thickness, height, map: inTMap, normalMap: inTNormal });
+        const outWallSSpecs = this.makePlaneConfig({ width, height, map: outSMap, normalMap: outSNormal });
+        const inWallSSpecs = this.makePlaneConfig({ width: width - thickness, height, map: inSMap, normalMap: inSNormal });
+        const sideWallTSpecs = this.makePlaneConfig({ width: thickness, height, map: sideTMap, normalMap: sideTNormal });
+        const sideWallSSpecs = this.makePlaneConfig({ width: thickness, height, map: sideSMap, normalMap: sideSNormal });
+        const topTSpecs = this.makePlaneConfig({ width: thickness, height: depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
+        const topSSpecs = this.makePlaneConfig({ width: width - thickness, height: thickness, color: yankeesBlue, map: topMap, normalMap: topNormal });
+        const bottomTSpecs = this.makePlaneConfig({ width: thickness, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
+        const bottomSSpecs = this.makePlaneConfig({ width: width - thickness, height: thickness, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
         this.name = name;
         this.isObstacle = isObstacle;
@@ -96,6 +101,7 @@ class LWall {
     }
 
     async init() {
+
         await Promise.all([
             this.outWallT.init(),
             this.outWallS.init(),
@@ -108,9 +114,11 @@ class LWall {
             this.bottomWallT.init(),
             this.bottomWallS.init()
         ]);
+
     }
 
     makePlaneConfig(specs) {
+
         const { width, height } = specs;
         const { baseSize = height, mapRatio, noRepeat, lines = true } = this.specs;
 
@@ -127,34 +135,51 @@ class LWall {
         specs.repeatModeV = REPEAT;
 
         return specs;
+        
     }
 
     setPosition(pos) {
+
         this.group.position.set(...pos);
+        
         return this;
+
     }
 
     setRotationY(y) {
+
         this.group.rotation.y = y;
         this.walls.forEach(w => w.mesh.rotationY += y);
+
         return this;
+
     }
 
     updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true, needUpdateTopBottom = true) {
+
         if (needUpdateWalls) {
+
             this.walls.forEach(w => {
+
                 w.updateRay();
 
                 if (w.isOBB) {
+
                     w.updateOBB(needUpdateMatrixWorld);
+
                 }
+
             });
         }
 
         if (needUpdateTopBottom) {
+
             this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+
         }
+
     }
+    
 }
 
 export { LWall };

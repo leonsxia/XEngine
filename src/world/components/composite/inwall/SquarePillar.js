@@ -29,15 +29,16 @@ class SquarePillar {
         const { name, width, depth, height} = specs;
         const { isObstacle = false, showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
         const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
+        const { frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
 
-        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap })
-        const backSpecs = this.makePlaneConfig({ width, height, map: backMap });
+        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap, normalMap: frontNormal })
+        const backSpecs = this.makePlaneConfig({ width, height, map: backMap, normalMap: backNormal });
 
-        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap });
-        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap });
+        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap, normalMap: leftNormal });
+        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap, normalMap: rightNormal });
 
-        const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap});
-        const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap });
+        const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
+        const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
         this.name = name;
         this.isObstacle = isObstacle;

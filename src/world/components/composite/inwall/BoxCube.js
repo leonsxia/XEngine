@@ -47,17 +47,18 @@ class BoxCube extends ObstacleMoveable  {
         const { name, width, depth, height, lines = true } = specs;
         const { showArrow = false, isObstacle = false, freeTexture = false, enableWallOBBs = false, climbable = false, movable = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
+        const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
 
-        const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map, lines };
+        const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map, normalMap, lines };
 
-        const frontSpecs = this.makePlaneConfig({ width, height, color: basic, map: frontMap })
-        const backSpecs = this.makePlaneConfig({ width, height, color: basic, map: backMap });
+        const frontSpecs = this.makePlaneConfig({ width, height, color: basic, map: frontMap, normalMap: frontNormal })
+        const backSpecs = this.makePlaneConfig({ width, height, color: basic, map: backMap, normalMap: backNormal });
 
-        const leftSpecs = this.makePlaneConfig({ width: depth, height, color: basic, map: leftMap });
-        const rightSpecs = this.makePlaneConfig({ width: depth, height, color: basic, map: rightMap });
+        const leftSpecs = this.makePlaneConfig({ width: depth, height, color: basic, map: leftMap, normalMap: leftNormal });
+        const rightSpecs = this.makePlaneConfig({ width: depth, height, color: basic, map: rightMap, normalMap: rightNormal });
 
-        const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap});
-        const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap });
+        const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
+        const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
         this.name = name;
         this.isObstacle = isObstacle;

@@ -39,12 +39,13 @@ class Room {
 
         const { name, width, depth, height, showArrow = false, enableWallOBBs = false } = specs;
         const { frontMap, backMap, leftMap, rightMap } = this.specs;
+        const { frontNormal, backNormal, leftNormal, rightNormal } = this.specs;
 
-        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap });
-        const backSpecs = this.makePlaneConfig({ width, height, map: backMap });
+        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap, normalMap: frontNormal });
+        const backSpecs = this.makePlaneConfig({ width, height, map: backMap, normalMap: backNormal });
 
-        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap });
-        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap });
+        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap, normalMap: leftNormal });
+        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap, normalMap: rightNormal });
 
         this.name = name;
         this.group = new Group();
