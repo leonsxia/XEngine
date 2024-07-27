@@ -1,11 +1,12 @@
 import { Mesh, MeshPhongMaterial, DoubleSide, TextureLoader } from 'three';
 import { BasicObject } from './BasicObject';
+import { PLANE } from '../utils/constants';
 
 class Plane extends BasicObject {
 
     constructor(specs) {
 
-        super('plane', specs);
+        super(PLANE, specs);
 
         if (specs.empty) return this;
 

@@ -1,12 +1,13 @@
 import { Mesh, MeshPhongMaterial, TextureLoader, SRGBColorSpace } from 'three';
 import { BasicObject } from './BasicObject';
 import { specular } from './colorBase';
+import { SPHERE } from '../utils/constants';
 
 class Sphere extends BasicObject {
 
     constructor(specs) {
 
-        super('sphere', specs);
+        super(SPHERE, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = specs.name;

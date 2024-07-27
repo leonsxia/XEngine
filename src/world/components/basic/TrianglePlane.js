@@ -1,11 +1,12 @@
 import { Mesh, MeshPhongMaterial, TextureLoader } from 'three';
 import { BasicObject } from './BasicObject';
+import { TRIANGLE } from '../utils/constants';
 
 class TrianglePlane extends BasicObject {
 
     constructor(specs) {
 
-        super('triangle', specs);
+        super(TRIANGLE, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = specs.name;

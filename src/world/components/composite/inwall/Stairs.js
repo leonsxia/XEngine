@@ -1,6 +1,7 @@
 import { StairsSidePlane, StairsStepPlane } from '../../Models';
 import { Slope } from './Slope';
 import { yankeesBlue, basic } from '../../basic/colorBase';
+import { STAIRS_FRONT, STAIRS_TOP } from '../../utils/constants';
 
 const DEFAULT_STEP_HEIGHT = .25;
 
@@ -79,8 +80,8 @@ class Stairs extends Slope {
     createStepFaces() {
 
         const { name, width = 1, depth = 1, height = 1, frontMap, topMap, frontNormal, topNormal } = this.specs;
-        const frontSpecs = this.makePlaneConfig({ name: `${name}_front`, width, height, depth, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: frontMap, normalMap: frontNormal, type: 'stairsFront', color: basic });
-        const topSpecs = this.makePlaneConfig({ name: `${name}_top`, width, height: depth, depth: height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: topMap, normalMap: topNormal, type: 'stairsTop', color: yankeesBlue });
+        const frontSpecs = this.makePlaneConfig({ name: `${name}_front`, width, height, depth, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: frontMap, normalMap: frontNormal, type: STAIRS_FRONT, color: basic });
+        const topSpecs = this.makePlaneConfig({ name: `${name}_top`, width, height: depth, depth: height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: topMap, normalMap: topNormal, type: STAIRS_TOP, color: yankeesBlue });
         
         const front = new StairsStepPlane(frontSpecs);
         const top = new StairsStepPlane(topSpecs);

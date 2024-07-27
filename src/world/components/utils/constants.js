@@ -12,6 +12,16 @@ const SPOT_LIGHT = 'SpotLight';
 const DIRECTIONAL_LIGHT_TARGET = 'DirectionalLightTarget';
 const SPOT_LIGHT_TARGET = 'SpotLightTarget';
 
+// objects
+const PLANE = 'plane';
+const BOX = 'box';
+const SPHERE = 'sphere';
+const CIRCLE = 'circle';
+const TRIANGLE = 'triangle';
+const STAIRS_SIDE = 'stairsSide';
+const STAIRS_FRONT = 'stairsFront';
+const STAIRS_TOP = 'stairsTop';
+
 export { 
     REPEAT, 
     MIRRORED_REPEAT,
@@ -21,5 +31,13 @@ export {
     POINT_LIGHT,
     SPOT_LIGHT,
     DIRECTIONAL_LIGHT_TARGET,
-    SPOT_LIGHT_TARGET
+    SPOT_LIGHT_TARGET,
+    PLANE,
+    BOX,
+    SPHERE,
+    CIRCLE,
+    TRIANGLE,
+    STAIRS_SIDE,
+    STAIRS_FRONT,
+    STAIRS_TOP
 };

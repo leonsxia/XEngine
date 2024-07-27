@@ -1,11 +1,12 @@
 import { Mesh } from 'three'
 import { BasicObject } from './BasicObject';
+import { BOX } from '../utils/constants';
 
 class Box extends BasicObject {
 
     constructor(specs) {
 
-        super('box', specs);
+        super(BOX, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = specs.name;

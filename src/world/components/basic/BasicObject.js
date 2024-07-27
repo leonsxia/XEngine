@@ -2,6 +2,7 @@ import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, MeshStandar
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { basicMateraials } from './basicMaterial';
 import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
+import { PLANE, BOX, SPHERE, CIRCLE, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP } from '../utils/constants';
 
 class BasicObject {
     geometry = null;
@@ -20,47 +21,47 @@ class BasicObject {
         if (empty) return this;
 
         switch (type) {
-            case 'plane':
+            case PLANE:
                 {
                     const { width, height } = specs;
                     this.geometry = new PlaneGeometry(width, height);
                 }
                 break;
-            case 'box':
+            case BOX:
                 {
                     const { size: { width, height, depth } } = specs;
                     this.geometry = new BoxGeometry(width, height, depth);
                 }
                 break;
-            case 'sphere':
+            case SPHERE:
                 {
                     const { size: { radius, widthSegments, heightSegments } } = specs;
                     this.geometry = new SphereGeometry(radius, widthSegments, heightSegments);
                 }
                 break;
-            case 'circle':
+            case CIRCLE:
                 {
                     const { radius, segments } = specs;
                     this.geometry = new CircleGeometry(radius, segments);
                 }
                 break;
-            case 'triangle':
+            case TRIANGLE:
                 {
                     const { width, height, leftHanded } = specs;
                     this.geometry = createTriangleGeometry(width, height, leftHanded);
                 }
                 break;
-            case 'stairsSide':
+            case STAIRS_SIDE:
                 {
                     this.geometry = createStairsSideGeometry(specs);
                 }
                 break;
-            case 'stairsFront':
+            case STAIRS_FRONT:
                 {
                     this.geometry = createStairsFrontGeometry(specs);
                 }
                 break;
-            case 'stairsTop':
+            case STAIRS_TOP:
                 {
                     this.geometry = createStairsTopGeometry(specs);
                 }

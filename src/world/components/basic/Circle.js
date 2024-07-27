@@ -1,12 +1,13 @@
 import { Mesh, MeshPhongMaterial, TextureLoader, SRGBColorSpace, RepeatWrapping } from 'three';
 import { BasicObject } from './BasicObject';
 import { REPEAT } from '../utils/constants';
+import { CIRCLE } from '../utils/constants';
 
 class Circle extends BasicObject {
 
     constructor(specs) {
 
-        super('circle', specs);
+        super(CIRCLE, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = specs.name;
