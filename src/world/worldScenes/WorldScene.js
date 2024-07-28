@@ -122,7 +122,7 @@ class WorldScene {
 
     render() {
 
-        console.log(++renderTimes);
+        // console.log(++renderTimes);
         this.renderer.render(this.scene, this.camera);
 
     }
