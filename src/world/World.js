@@ -63,7 +63,7 @@ class World {
 
         this.#currentScene?.reset(); // reset camera, gui, controls, stop animation
         
-        if (this.#container) this.#container.innerHTML = '';
+        this.#container.innerHTML = '';
 
         if (this.#infosDomElements) {
 
@@ -82,9 +82,20 @@ class World {
 
         if (this.#infosDomElements) this.#infosDomElements.msg.textContent = 'assets all loaded. => renderding scene...';
 
-        loadScene.render();
+        const start = Date.now();
 
-        if (this.#infosDomElements) this.#infosDomElements.msg.textContent = 'render complete!'
+        setTimeout(() => {
+
+            loadScene.render();
+
+            this.#container.append(this.#renderer.domElement);
+
+            const end = Date.now();
+            console.log(`render in ${(end - start) * .001} s`);
+
+            if (this.#infosDomElements) this.#infosDomElements.msg.textContent = 'render complete!';
+
+        }, 0);
 
     }
 

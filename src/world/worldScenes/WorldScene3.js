@@ -71,7 +71,6 @@ const gridSpecs = {
 }
 
 class WorldScene3 extends WorldScene {
-    #loadSequence = 0;
     #objects = [];
     #loaded = false;
     #basicLights = {};
@@ -88,12 +87,11 @@ class WorldScene3 extends WorldScene {
 
         // this.camera.add(this.#pointLights['cameraSpotLight']);
         
-        this.loop.updatables = [this.controls.defControl];
         this.scene.add(  //this.camera, 
             createAxesHelper(axesSpecs), createGridHelper(gridSpecs));
 
         // shadow light setup, including light helper
-        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
+        // this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
         this.shadowLightObjects = setupShadowLight.call(this,
             this.scene, null, ...basicLightSpecsArr, ...pointLightSpecsArr
         );
@@ -118,6 +116,9 @@ class WorldScene3 extends WorldScene {
     }
 
     async init() {
+
+        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
+
         if (this.#loaded) {
             this.initContainer();
             return
@@ -144,12 +145,21 @@ class WorldScene3 extends WorldScene {
         await birdsGroup.loadBirds();
         // move the target to the center of the front bird
         this.controls.defControl.target.copy(birdsGroup.getBirds(0).position);
+
+        this.forceStaticRender = false;
         this.controls.defControl.update();
+        this.forceStaticRender = true;
+
         this.controls.defControl.saveState();
+
         this.loop.updatables.push(birdsGroup);
+
         this.scene.add(birdsGroup);
+
         this.initContainer();
+
         this.#loaded = true;
+
     }
 
     setupLeftFunctionPanle() {
@@ -158,14 +168,14 @@ class WorldScene3 extends WorldScene {
             'actions': {
                 start: this.start.bind(this),
                 stop: this.stop.bind(this),
-                moveCamera: this.moveCamera.bind(this),
-                resetCamera: this.resetCamera.bind(this),
-                focusNext: this.focusNext.bind(this)
+                moveCamera: this.moveCamera.bind(this, false),
+                resetCamera: this.resetCamera.bind(this, false),
+                focusNext: this.focusNext.bind(this, false)
             }
         });
     }
 
-    focusNext() {
+    focusNext(forceStaticRender = true) {
         // console.log(this.#loadSequence);
         const birdsGroup = this.#objects.find((obj) => obj.name === 'birdsGroup');
         const allTargets = birdsGroup.positions.concat([{x: 0, y: 0, z: 0}]);
@@ -177,7 +187,7 @@ class WorldScene3 extends WorldScene {
         }
 
         Object.assign(worldSceneSpecs, pos);
-        this.focusNextProcess();
+        this.focusNextProcess(forceStaticRender);
     }
 }
 

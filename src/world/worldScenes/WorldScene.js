@@ -41,6 +41,7 @@ class WorldScene {
     loadSequence = 0;
     showRoleSelector = false;
     textures;
+    forceStaticRender = true;   // swith which controls whether it will render after control change.
 
     constructor(container, renderer, specs, eventDispatcher) {
 
@@ -55,6 +56,7 @@ class WorldScene {
 
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 
+        this.loop.updatables = [this.controls.defControl];
         // this.controls.defControl.listenToKeyEvents(window);
 
         this.#resizer = new Resizer(container, this.camera, this.renderer);
@@ -70,7 +72,7 @@ class WorldScene {
 
             // important!!! no need to render after scene start to update automatically
             // increase the performance fps
-            if (this.staticRendering) this.render();    
+            if (this.staticRendering && this.forceStaticRender) this.render();    
 
         });
 
@@ -98,7 +100,6 @@ class WorldScene {
 
     initContainer() {
 
-        this.container.append(this.renderer.domElement);
         this.controls.defControl.enabled = true;
 
         if (this.gui) {
@@ -159,13 +160,15 @@ class WorldScene {
 
     }
 
-    moveCamera() {
+    moveCamera(forceStaticRender = true) {
 
         const moveDist = 5;
 
         if (this.staticRendering) {
 
+            if (!forceStaticRender) this.forceStaticRender = false;
             this.controls.moveCameraStatic(moveDist);
+            if (!forceStaticRender) this.forceStaticRender = true;
 
         } else {
 
@@ -175,15 +178,43 @@ class WorldScene {
 
     }
 
-    resetCamera() {
+    resetCamera(forceStaticRender = true) {
 
+        if (!forceStaticRender) this.forceStaticRender = false;
         this.controls.resetCamera();
+        if (!forceStaticRender) this.forceStaticRender = true;
 
     }
 
-    focusNext() {}
+    reset() {
 
-    focusNextProcess() {
+        renderTimes = 0;
+        this.stop();
+
+        this.renderer.shadowMap.enabled = false;
+
+        // no need to render at this time.
+        this.resetCamera(false);
+
+        this.controls.defControl.enabled = false;
+
+        this.loadSequence = -1;
+
+        // no need to render at this time too.
+        this.focusNext(false);
+
+        if (this.gui) {
+
+            this.gui.reset();
+            this.gui.hide();
+
+        }
+    }
+
+    focusNext( /* forceStaticRender = true */ ) {}
+
+    focusNextProcess(forceStaticRender = true) {
+
         const { allTargets, allCameraPos, allPlayerPos } = this.setup;
 
         this.loadSequence = ++this.loadSequence % allTargets.length;
@@ -205,7 +236,10 @@ class WorldScene {
 
             this.controls.defControl.target.copy(allTargets[this.loadSequence]);
             this.camera.position.copy(allCameraPos[this.loadSequence]);
+
+            if (!forceStaticRender) this.forceStaticRender = false;
             this.controls.defControl.update();
+            if (!forceStaticRender) this.forceStaticRender = true;
 
         } else {
 
@@ -231,28 +265,6 @@ class WorldScene {
             }
         }
 
-    }
-
-    reset() {
-
-        renderTimes = 0;
-        this.stop();
-
-        this.renderer.shadowMap.enabled = false;
-
-        this.controls.resetCamera();
-        this.controls.defControl.enabled = false;
-
-        this.loadSequence = -1;
-
-        this.focusNext();
-
-        if (this.gui) {
-
-            this.gui.reset();
-            this.gui.hide();
-
-        }
     }
 
     dispose() {
@@ -454,7 +466,7 @@ class WorldScene {
 
     }
 
-    changeCharacter(name) {
+    changeCharacter(name, forceStaticRender = true) {
 
         // player should have boundingBox and boundingBoxHelper.
         const find = this.players.find(p => p.name === name);
@@ -491,7 +503,8 @@ class WorldScene {
 
             this.player = find;
 
-            this.focusNext(--this.loadSequence);
+            --this.loadSequence;
+            this.focusNext(forceStaticRender);
 
             this.physics.addActivePlayers(name);
 

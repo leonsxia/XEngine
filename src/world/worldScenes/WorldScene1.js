@@ -77,11 +77,10 @@ class WorldScene1 extends WorldScene  {
 
         // this.camera.add(this.#pointLights['cameraSpotLight']);
         
-        this.loop.updatables = [this.controls.defControl];
         // this.scene.add(this.camera);
 
         // shadow light setup, including light helper
-        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
+        // this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
         this.shadowLightObjects = setupShadowLight.call(this,
             this.scene, null, ...basicLightSpecsArr, ...pointLightSpecsArr
         );
@@ -107,6 +106,9 @@ class WorldScene1 extends WorldScene  {
     }
 
     async init() {
+
+        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
+
         if (this.#loaded) {
             this.initContainer();
             return;
@@ -198,9 +200,9 @@ class WorldScene1 extends WorldScene  {
             'actions': {
                 start: this.start.bind(this),
                 stop: this.stop.bind(this),
-                moveCamera: this.moveCamera.bind(this),
-                resetCamera: this.resetCamera.bind(this),
-                focusNext: this.focusNext.bind(this)
+                moveCamera: this.moveCamera.bind(this, false),
+                resetCamera: this.resetCamera.bind(this, false),
+                focusNext: this.focusNext.bind(this, false)
             }
         });
     }

@@ -380,12 +380,11 @@ class WorldScene4 extends WorldScene {
 
         // this.camera.add(this.#pointLights['cameraSpotLight']);
 
-        this.loop.updatables = [this.controls.defControl];
         this.scene.add( //this.camera, 
             createAxesHelper(axesSpecs), createGridHelper(gridSpecs));
 
         // shadow light setup, including light helper
-        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
+        // this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
         // this.shadowLightObjects = setupShadowLight.call(this,
         //     this.scene, ...basicLightSpecsArr, ...pointLightSpecsArr, ...spotLightSpecsArr
         // );
@@ -497,7 +496,9 @@ class WorldScene4 extends WorldScene {
         });
 
         // initialize player and rooms
-        this.changeCharacter('tofu1');
+
+        // no need to render at this time, so the change event of control won't do the rendering.
+        this.changeCharacter('tofu1', false);
 
         this.scene.add(room1.group);
         room1.walls.forEach(w => this.scene.add(...w.arrows));
@@ -527,9 +528,9 @@ class WorldScene4 extends WorldScene {
             'actions': {
                 start: this.start.bind(this),
                 stop: this.stop.bind(this),
-                moveCamera: this.moveCamera.bind(this),
-                resetCamera: this.resetCamera.bind(this),
-                focusNext: this.focusNext.bind(this),
+                moveCamera: this.moveCamera.bind(this, false),
+                resetCamera: this.resetCamera.bind(this, false),
+                focusNext: this.focusNext.bind(this, false),
                 resetPlayer: this.resetCharacterPosition.bind(this)
             }
         });
@@ -1013,8 +1014,9 @@ class WorldScene4 extends WorldScene {
         return room;
     }
 
-    focusNext() {
-        this.focusNextProcess();
+    focusNext(forceStaticRender = true) {
+        
+        this.focusNextProcess(forceStaticRender);
         const { walls, floors, topOBBs, obstacles, slopes } = this.rooms[this.loadSequence];
 
         this.physics.walls = walls;
