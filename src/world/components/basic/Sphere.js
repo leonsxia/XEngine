@@ -18,18 +18,44 @@ class Sphere extends BasicObject {
 
         const { surfaceMap, normalMap, specularMap } = this.specs;
 
-        const [surfaceT, normalT, specularT] = await Promise.all([
-            surfaceMap ? new TextureLoader().loadAsync(surfaceMap) : Promise.resolve(null),
-            normalMap ? new TextureLoader().loadAsync(normalMap) : Promise.resolve(null),
-            specularMap ? new TextureLoader().loadAsync(specularMap) : Promise.resolve(null)
-        ]);
+        if (surfaceMap?.isTexture || normalMap?.isTexture || specularMap?.isTexture) {
+
+            const _map = specularMap?.clone();
+            const _normalMap = normalMap?.clone();
+            const _specularMap = specularMap?.clone();
+
+            if (surfaceMap) _map.colorSpace = SRGBColorSpace;
+
+            this.resetTextureColor();
+            this.material.map = _map;
+            this.material.normalMap = _normalMap;
+            this.material.specularMap = _specularMap;
+
+            return;
+
+        }
+
+        if (surfaceMap || normalMap || specularMap) {
+
+            const loader = new TextureLoader();
+
+            const [surfaceT, normalT, specularT] = await Promise.all([
+                surfaceMap ? loader.loadAsync(surfaceMap) : Promise.resolve(null),
+                normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null),
+                specularMap ? loader.loadAsync(specularMap) : Promise.resolve(null)
+            ]);
 
 
-        if (surfaceT) surfaceT.colorSpace = SRGBColorSpace;
+            if (surfaceT) {
+                
+                this.resetTextureColor();
+                surfaceT.colorSpace = SRGBColorSpace;
+                this.material.map = surfaceT;
+            
+            }
 
-        if (surfaceT || normalT || specularT) {
-
-            this.mesh.material = this.material = new MeshPhongMaterial({ map: surfaceT, normalMap: normalT, specularMap: specularT, specular: specular });
+            if (normalT) this.material.normalMap = normalT;
+            if (specularT) this.material.specularMap = specularT;
 
         }
         

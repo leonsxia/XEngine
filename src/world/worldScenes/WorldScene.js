@@ -38,6 +38,7 @@ class WorldScene {
     player;
     loadSequence = 0;
     showRoleSelector = false;
+    textures;
 
     constructor(container, renderer, specs, eventDispatcher) {
         this.setup = specs;

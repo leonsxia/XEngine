@@ -17,26 +17,56 @@ class Circle extends BasicObject {
     async init() {
 
         const { map, normalMap } = this.specs;
+        
+        if (map?.isTexture || normalMap?.isTexture) {
 
-        const [texture, normal] = await Promise.all([
-            map ? new TextureLoader().loadAsync(map) : Promise.resolve(null),
-            normalMap ? new TextureLoader().loadAsync(normalMap) : Promise.resolve(null)
-        ]);
+            const _map = map?.clone();
+            const _normalMap = normalMap?.clone();
 
-        if (texture) {
+            this.resetTextureColor();
 
-            this.setTextureCircle(texture);
+            if (map) {
+                
+                this.setTexture(_map);
+                this.material.map = _map;
+
+            }
+
+            if (normalMap) {
+                
+                this.setTexture(_normalMap);
+                this.material.normalMap = _normalMap;
             
-        }
+            }
 
-        if (normal) {
-
-            this.setTextureCircle(normal);
+            return;
 
         }
 
-        if (texture || normal) 
-            this.mesh.material = this.material = new MeshPhongMaterial({ map: texture, normalMap: normal });
+        if (map || normalMap) {
+            const loader = new TextureLoader();
+
+            const [texture, normal] = await Promise.all([
+                map ? loader.loadAsync(map) : Promise.resolve(null),
+                normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null)
+            ]);
+
+            this.resetTextureColor();
+            
+            if (texture) {
+
+                this.setTextureCircle(texture);
+                this.material.map = texture;
+
+            }
+
+            if (normal) {
+
+                this.setTextureCircle(normal);
+                this.material.normalMap = normal;
+
+            }
+        }
 
     }
 

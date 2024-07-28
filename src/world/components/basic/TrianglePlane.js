@@ -17,25 +17,56 @@ class TrianglePlane extends BasicObject {
 
         const { map, normalMap } = this.specs;
 
-        const [texture, normal] = await Promise.all([
-            map ? new TextureLoader().loadAsync(map) : Promise.resolve(null),
-            normalMap ? new TextureLoader().loadAsync(normalMap) : Promise.resolve(null)
-        ]);
+        if (map?.isTexture || normalMap?.isTexture) {
 
-        if (texture) {
+            const _map = map?.clone();
+            const _normalMap = normalMap?.clone();
 
-            this.setTexture(texture);
+            this.resetTextureColor();
+
+            if (map) {
+                
+                this.setTexture(_map);
+                this.material.map = _map;
             
+            }
+
+            if (normalMap) {
+                
+                this.setTexture(_normalMap);
+                this.material._normalMap = _normalMap;
+            
+            }
+
+            return;
+
         }
 
-        if (normal) {
+        if (map || normalMap) {
+            const loader = new TextureLoader();
 
-            this.setTexture(normal);
+            const [texture, normal] = await Promise.all([
+                map ? loader.loadAsync(map) : Promise.resolve(null),
+                normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null)
+            ]);
 
+            this.resetTextureColor();
+            
+            if (texture) {
+
+                this.setTexture(texture);
+                this.material.map = texture;
+
+            }
+
+            if (normal) {
+
+                this.setTexture(normal);
+                this.material.normalMap = normal;
+
+            }
         }
 
-        if (texture || normal) 
-            this.mesh.material = this.material = new MeshPhongMaterial({ map: texture, normalMap: normal });
     }
 
     get width() {

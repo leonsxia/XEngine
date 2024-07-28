@@ -1,6 +1,7 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, MeshStandardMaterial, MeshPhongMaterial, TextureLoader, SRGBColorSpace, Vector3, RepeatWrapping, MirroredRepeatWrapping } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, MeshPhongMaterial, TextureLoader, SRGBColorSpace, Vector3, RepeatWrapping, MirroredRepeatWrapping, Color } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { basicMateraials } from './basicMaterial';
+import { white } from './colorBase';
 import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
 import { PLANE, BOX, SPHERE, CIRCLE, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP } from '../utils/constants';
 
@@ -71,7 +72,7 @@ class BasicObject {
         if (color) 
             this.material = new MeshPhongMaterial({ color: color });
         else
-            this.material = basicMateraials.basic;
+            this.material = basicMateraials.basic.clone();
 
     }
 
@@ -79,19 +80,42 @@ class BasicObject {
 
         const { map, normalMap } = this.specs;
 
-        const [texture, normal] = await Promise.all([
-            map ? new TextureLoader().loadAsync(map) : Promise.resolve(null),
-            normalMap ? new TextureLoader().loadAsync(normalMap) : Promise.resolve(null)
-        ]);
+        if (map?.isTexture || normalMap?.isTexture) {
 
-        if (texture) {
-            
-            texture.colorSpace = SRGBColorSpace;
+            const _map = map?.clone();
+            const _normalMap = normalMap?.clone();
+
+            this.resetTextureColor();
+            this.material.map = _map;
+            this.material.normalMap = _normalMap;
+
+            return;
 
         }
 
-        if (texture || normal) 
-            this.mesh.material = this.material = new MeshStandardMaterial({ map: texture, normalMap: normal });
+        if (map || normalMap) {
+
+            const loader = new TextureLoader();
+
+            const [texture, normal] = await Promise.all([
+                map ? loader.loadAsync(map) : Promise.resolve(null),
+                normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null)
+            ]);
+
+            if (texture) {
+
+                texture.colorSpace = SRGBColorSpace;
+                this.material.map = texture;
+
+            }
+
+            if (normal) {
+
+                this.material.normalMap = normal;
+
+            }
+
+        }
 
     }
 
@@ -161,6 +185,12 @@ class BasicObject {
 
             }
         }
+
+    }
+
+    resetTextureColor() {
+
+        this.material.color = new Color(white);
 
     }
 

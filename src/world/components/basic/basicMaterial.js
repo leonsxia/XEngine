@@ -1,8 +1,8 @@
-import { MeshStandardMaterial, LineBasicMaterial } from 'three';
+import { MeshStandardMaterial, LineBasicMaterial, MeshPhongMaterial } from 'three';
 import * as Color from './colorBase.js';
 
 function createBasicMaterials() {
-    const basic = new MeshStandardMaterial({ color: Color.basic });
+    const basic = new MeshPhongMaterial({ color: Color.basic });
 
     const boundingBox = new MeshStandardMaterial({ color: Color.BB });
 
