@@ -19,6 +19,7 @@ h1 {
 
     /* make sure that the heading is drawn on top */
     z-index: 1;
+    color: #ccc;
 }
 
 #scene-container {
@@ -36,7 +37,6 @@ h1 {
 
 #leftPanel {
     position: absolute;
-    left: 5px;
     top: 45px;
     z-index: 1;
 }
@@ -50,4 +50,12 @@ h1 {
 #leftPanel li {
     text-align: left;
     margin: 5px 0 0 0;  
+}
+
+#msg {
+    height: 19px;
+    width: auto;
+    padding: 0 10px 0 10px;
+    color: #fff;
+    background-color: #111;
 }
