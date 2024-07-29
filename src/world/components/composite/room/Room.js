@@ -197,7 +197,7 @@ class Room {
 
         const { width, height } = specs;
 
-        const { baseSize = height, mapRatio, lines } = this.specs;
+        const { baseSize = height, mapRatio, lines = true } = this.specs;
 
         specs.lines = lines;
 

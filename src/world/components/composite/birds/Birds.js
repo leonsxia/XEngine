@@ -1,5 +1,5 @@
 import { Vector3, Group } from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { setupModel } from './setModel';
 
 class Bird {

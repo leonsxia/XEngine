@@ -290,10 +290,10 @@ const spotLightSpecsArr = [
         name: 'spotLight1',
         display: 'Spot Light',
         detail: {
-            color: [255, 235, 0],
+            color: [242, 176, 33],
             position: [- 4.3, 4.6, - 7],
             target: [0, 0, 0],
-            intensity: 26,
+            intensity: 46,
             distance: 45,    // 0 infinite far
             decay: 0.33,
             penumbra: 0.35,
