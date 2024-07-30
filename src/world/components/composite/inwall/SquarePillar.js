@@ -1,33 +1,22 @@
-import { Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane, createCollisionPlaneFree, createOBBPlane } from '../../physics/collisionHelper';
+import { InWallObjectBase } from './InWallObjectBase';
 import { yankeesBlue, green } from '../../basic/colorBase';
-import { REPEAT } from '../../utils/constants';
 
-class SquarePillar {
-    name = '';
+class SquarePillar extends InWallObjectBase {
+    
     frontFace;
     backFace;
     leftFace;
     rightFace;
     topFace;
     bottomFace;
-    walls = [];
-    tops = [];
-    bottoms = [];
-    topOBBs = [];
-    bottomOBBs = [];
-
-    isObstacle = false;
-    enableWallOBBs = false;
-    climbable = false;
-    specs;
 
     constructor(specs) {
 
-        this.specs = specs;
+        super(specs);
 
         const { name, width, depth, height} = specs;
-        const { isObstacle = false, showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
+        const { showArrow = false } = specs;
         const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
 
@@ -40,20 +29,13 @@ class SquarePillar {
         const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
         const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
-        this.name = name;
-        this.isObstacle = isObstacle;
-        this.enableWallOBBs = enableWallOBBs;
-        this.climbable = climbable;
-        this.group = new Group();
-        this.group.name = name;
-
-        const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
+        const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
         this.backFace = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], Math.PI, true, true, showArrow);
         this.rightFace = createWallFunction(leftSpecs, `${name}_right`, [- width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
         this.leftFace = createWallFunction(rightSpecs, `${name}_left`, [width / 2, 0, 0], Math.PI / 2, true, true, showArrow);
 
-        if (!enableOBBs) {
+        if (!this.enableOBBs) {
 
             this.topFace = createCollisionPlaneFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, showArrow);
             this.bottomFace = createCollisionPlaneFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, showArrow);
@@ -101,71 +83,6 @@ class SquarePillar {
 
     }
 
-    makePlaneConfig(specs) {
-
-        const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false, lines = true } = this.specs;
-
-        specs.lines = lines;
-        
-        if (noRepeat) return specs;
-
-        if (mapRatio) {
-
-            specs.repeatU = width / (mapRatio * baseSize);
-            specs.repeatV = height / baseSize;
-
-        }
-
-        specs.repeatModeU = REPEAT;
-        specs.repeatModeV = REPEAT;
-
-        return specs;
-
-    }
-
-    setPosition(pos) {
-
-        this.group.position.set(...pos);
-
-        return this;
-
-    }
-
-    setRotationY(y) {
-
-        this.group.rotation.y = y;
-
-        this.walls.forEach(w => w.mesh.rotationY += y);
-
-        return this;
-
-    }
-
-    updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true, needUpdateTopBottom = true) {
-
-        if (needUpdateWalls) {
-
-            this.walls.forEach(w => {
-
-                w.updateRay();
-
-                if (w.isOBB) {
-
-                    w.updateOBB(needUpdateMatrixWorld);
-
-                }
-
-            });
-        }
-
-        if (needUpdateTopBottom) {
-
-            this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
-
-        }
-
-    }
 }
 
 export { SquarePillar };

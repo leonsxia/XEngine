@@ -93,6 +93,7 @@ class WorldScene1 extends WorldScene  {
         return {
             name: this.name,
             renderer: this.renderer,
+            scene: this.scene,
             init: this.init.bind(this), 
             render: this.render.bind(this),
             start: this.start.bind(this),

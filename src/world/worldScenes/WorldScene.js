@@ -41,6 +41,7 @@ class WorldScene {
     loadSequence = 0;
     showRoleSelector = false;
     textures;
+    gltfs;
     forceStaticRender = true;   // swith which controls whether it will render after control change.
 
     constructor(container, renderer, specs, eventDispatcher) {

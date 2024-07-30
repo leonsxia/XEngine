@@ -93,6 +93,10 @@ class World {
             const end = Date.now();
             console.log(`render in ${(end - start) * .001} s`);
 
+            const { objects, vertices, triangles } = this.countObjects(loadScene.scene);
+
+            console.log(`objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
+
             if (this.#infosDomElements) this.#infosDomElements.msg.textContent = 'render complete!';
 
         }, 0);
@@ -104,6 +108,40 @@ class World {
         return this.#currentScene.name;
 
     }
+
+    countObjects(scene) {
+
+        let objects = 0, vertices = 0, triangles = 0;
+
+        scene.children.forEach(object => {
+
+            object.traverseVisible( function ( object ) {
+                objects ++;
+    
+                if ( object.isMesh ) {
+    
+                    const geometry = object.geometry;
+    
+                    vertices += geometry.attributes.position.count;
+    
+                    if ( geometry.index !== null ) {
+    
+                        triangles += geometry.index.count / 3;
+    
+                    } else {
+    
+                        triangles += geometry.attributes.position.count / 3;
+    
+                    }
+    
+                }
+    
+            } );
+
+        });
+        
+        return { objects, vertices, triangles };
+    } 
 
     bindAllMoves() {
 

@@ -1,4 +1,4 @@
-import { Mesh, MeshPhongMaterial, TextureLoader } from 'three';
+import { Mesh, TextureLoader } from 'three';
 import { BasicObject } from './BasicObject';
 import { TRIANGLE } from '../utils/constants';
 

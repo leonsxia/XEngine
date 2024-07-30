@@ -1,6 +1,7 @@
-import { Mesh, MeshPhongMaterial, DoubleSide, TextureLoader } from 'three';
+import { Mesh, DoubleSide, TextureLoader } from 'three';
 import { BasicObject } from './BasicObject';
 import { PLANE } from '../utils/constants';
+import { clone } from '../utils/objectHelper';
 
 class Plane extends BasicObject {
 
@@ -97,12 +98,29 @@ class Plane extends BasicObject {
 
     clone(name) {
 
-        const emptyObj = new this.constructor({ name: name ?? `${this.name}_clone`, empty: true });
+        const emptyObjName = name ?? `${this.name}_clone`;
+        const emptyObj = new this.constructor({ name: emptyObjName, empty: true });
         
-        emptyObj.specs = this.specs;
+        const emptySpecs = {};
+        const ignore = ['name'];
+        if (typeof this.specs.map !== 'string') {
+            ignore.push('map');
+            emptySpecs.map = this.specs.map;
+        }
+
+        if (typeof this.specs.normalMap !== 'string') {
+            ignore.push('normalMap');
+            emptySpecs.normalMap = this.specs.normalMap;
+        }
+
+        emptyObj.name = emptySpecs.name = emptyObjName;
+
+        emptyObj.specs = clone(emptySpecs, this.specs, ignore);
+
         emptyObj.geometry = this.geometry;
         emptyObj.material = this.material;
         emptyObj.mesh = this.mesh.clone();
+        emptyObj.mesh.name = emptyObjName;
 
         return emptyObj;
 

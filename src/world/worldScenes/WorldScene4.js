@@ -1,9 +1,10 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube, Slope, Stairs } from '../components/Models.js';
+import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube, Slope, Stairs, WoodenPicnicTable, WoodenSmallTable } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { loadTextures } from '../components/utils/textureHelper.js';
+import { loadGLTFModels } from '../components/utils/gltfHelper.js';
 import { MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../components/utils/constants.js';
 import { WorldScene } from './WorldScene.js';
 
@@ -76,6 +77,17 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.WOOD_186, map: 'assets/textures/walls/Texturelabs_Wood_186M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Wood_186L.jpg'
 }, {
     name: TEXTURE_NAMES.WOOD_227, map: 'assets/textures/walls/Texturelabs_Wood_227M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Wood_227L.jpg'
+}];
+
+const GLTF_NAMES = {
+    WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
+    WOODEN_TABLE: 'WOODEN_TABLE'
+}
+
+const GLTFS = [{
+    name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
+}, {
+    name: GLTF_NAMES.WOODEN_TABLE, src: 'wooden_table_1k/wooden_table_02_1k.gltf'
 }];
 
 // basic lights
@@ -270,10 +282,10 @@ const pointLightSpecsArr = [
         name: 'pointLight3',
         display: 'Point Light',
         detail: {
-            color: [255, 199, 44],
-            position: [7.8, 7.7, 0],
-            intensity: 50,
-            distance: 0,    // infinite far
+            color: [253, 182, 58],
+            position: [- .2, 5.3, 0],
+            intensity: 90,
+            distance: 16.77,    // 0 infinite far
             decay: 1    // default 2
         },
         debug: true,
@@ -348,7 +360,7 @@ const spotLightSpecsArr = [
         shadow_debug: true,
         helper_show: false,
         shadow_cam_show: false,
-        visible: true
+        visible: false
     }
 ];
 // axes, grid helper
@@ -380,6 +392,9 @@ class WorldScene4 extends WorldScene {
 
         // this.camera.add(this.#pointLights['cameraSpotLight']);
 
+        const gridY = createGridHelper(gridSpecs);
+        gridY.rotation.x = Math.PI * .5;
+
         this.scene.add( //this.camera, 
             createAxesHelper(axesSpecs), createGridHelper(gridSpecs));
 
@@ -392,6 +407,7 @@ class WorldScene4 extends WorldScene {
         return {
             name: this.name,
             renderer: this.renderer,
+            scene: this.scene,
             init: this.init.bind(this), 
             render: this.render.bind(this),
             start: this.start.bind(this),
@@ -453,13 +469,19 @@ class WorldScene4 extends WorldScene {
             // .setScale([.2, .3, .2])
             .updateOBB();
 
-        this.textures = await loadTextures(TEXTURES);
+        const [textures, gltfs] = await Promise.all([
+            loadTextures(TEXTURES),
+            loadGLTFModels(GLTFS)
+        ]);
+
+        this.textures = textures;
+        this.gltfs = gltfs;
 
         const [room1, room2, room3] = await Promise.all([
             // earth.init(earthSpecs),
             this.createRoom1(),
             this.createRoom2(),
-            this.createRoom3(),
+            this.createRoom3()
         ]);
 
         this.rooms.push(room1);
@@ -485,9 +507,9 @@ class WorldScene4 extends WorldScene {
 
             this.shadowLightObjects = this.shadowLightObjects.concat(roomLightObjects);
 
-            const basicLights = basicLightsSpecs.map(l => l.light);
-            const pointLights = pointLightsSpecs.map(l => l.light);
-            const spotLights = spotLightsSpecs.map(l => l.light);
+            const basicLights = basicLightsSpecs.filter(l => l.visible).map(l => l.light);
+            const pointLights = pointLightsSpecs.filter(l => l.visible).map(l => l.light);
+            const spotLights = spotLightsSpecs.filter(l => l.visible).map(l => l.light);
 
             room.lights = basicLights.concat(pointLights, spotLights);
 
@@ -961,6 +983,7 @@ class WorldScene4 extends WorldScene {
 
     async createRoom3() {
         const T_MAPS = this.textures;
+        const GLTF_MAPS = this.gltfs;
 
         const specs = {
             width: 10,
@@ -994,6 +1017,41 @@ class WorldScene4 extends WorldScene {
             showArrow: true
         };
 
+        const woodenPicnicTableSpecs = {
+            src: GLTF_MAPS[GLTF_NAMES.WOODEN_PICNIC_TABLE],
+            name: 'wooden_picnic_table_1',
+            offsetY: - .371,
+            scale: [1, 1, 1],
+            // castShadow: true,
+            // receiveShadow: true,
+            isObstacle: true,
+            enableWallOBBs: true,
+            movable: true,
+            climbable: true
+        }
+
+        const woodenTableSpecs = {
+            src: GLTF_MAPS[GLTF_NAMES.WOODEN_TABLE],
+            name: 'wooden_table_1',
+            offsetY: - .4,
+            scale: [1.5, 1, 3],
+            isObstacle: true,
+            enableWallOBBs: true,
+            movable: true,
+            climbable: true
+        }
+
+        const woodenTableSpecs2 = {
+            src: GLTF_MAPS[GLTF_NAMES.WOODEN_TABLE],
+            name: 'wooden_table_2',
+            offsetY: - .4,
+            scale: [1, 1, 1],
+            isObstacle: true,
+            enableWallOBBs: true,
+            movable: true,
+            climbable: true
+        }
+
         const posY = specs.height / 2;
 
         const floor = new OBBPlane(floorSpecs);
@@ -1001,8 +1059,19 @@ class WorldScene4 extends WorldScene {
             .setPosition([0,  - posY + .1, 0])
             .receiveShadow(true);
 
+        const woodenPicnicTable = new WoodenPicnicTable(woodenPicnicTableSpecs);
+        woodenPicnicTable.setPosition([0, 3, 0]);
+
+        const smallTable = new WoodenSmallTable(woodenTableSpecs);
+        smallTable.setPosition([0, 3, 4])
+            .setRotationY(5 * Math.PI / 6);
+
+        const smallTable2 = new WoodenSmallTable(woodenTableSpecs2);
+        smallTable2.setPosition([3, 5, 5]);
+
         const room = new Room(specs);
         room.addFloors([floor]);
+        room.addGroups([woodenPicnicTable, smallTable, smallTable2]);
 
         await room.init();
 

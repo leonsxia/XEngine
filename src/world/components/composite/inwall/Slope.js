@@ -1,34 +1,27 @@
-import { Group } from 'three';
 import { createCollisionPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree, createOBBBox } from '../../physics/collisionHelper';
+import { InWallObjectBase } from './InWallObjectBase';
 import { yankeesBlue, basic } from '../../basic/colorBase';
-import { REPEAT } from '../../utils/constants';
 
-class Slope {
+class Slope extends InWallObjectBase {
 
-    name = '';
     isSlope = true;
 
     box;
     bottomBoxBuffer;
     topBoxBuffer;
+
     slope;
     leftFace;
     rightFace;
     backFace;
     bottomFace;
 
-    walls = []; // collision plane
-    bottoms = []; // non OBB plane
-    bottomOBBs = [];    // OBB plane
-
-    specs;
-
     constructor(specs) {
 
-        this.specs = specs;
+        super(specs);
 
         const { name, width = 1, depth = 1, height = 1 } = specs;
-        const { showArrow = false, enableOBBs = false } = specs;
+        const { showArrow = false } = specs;
         const { backMap, leftMap, rightMap, slopeMap, bottomMap } = specs;
         const { backNormal, leftNormal, rightNormal, slopeNormal, bottomNormal } = specs;
 
@@ -41,13 +34,9 @@ class Slope {
         const backSpecs = this.makePlaneConfig({ width, height, color: basic, map: backMap, normalMap: backNormal });
         const bottomSpecs = this.makePlaneConfig({ width, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
-        this.name = name;
         this.width = width;
         this.height = height;
         this.depth = depth;
-        
-        this.group = new Group();
-        this.group.name = name;
 
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], false, false);
         this.bottomBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_bottom_buffer`, [0, - height * .5 + bufferSpecs.size.height * .5, depth * .5 + bufferSpecs.size.depth * .5], [0, 0, 0], false, false);
@@ -63,7 +52,7 @@ class Slope {
         this.bottomBoxBuffer.mesh.visible = false;
         this.topBoxBuffer.mesh.visible = false;
 
-        if (!enableOBBs) {
+        if (!this.enableOBBs) {
 
             this.bottomFace = createCollisionPlaneFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, showArrow);
 
@@ -101,43 +90,6 @@ class Slope {
             this.backFace.init(),
             this.bottomFace.init()
         ]);
-
-    }
-
-    makePlaneConfig(specs) {
-        
-        const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false, lines = true } = this.specs;
-
-        specs.lines = lines;
-
-        if (noRepeat) return specs;
-
-        if (mapRatio) {
-            specs.repeatU = width / (mapRatio * baseSize);
-            specs.repeatV = height / baseSize;
-        }
-
-        specs.repeatModeU = REPEAT;
-        specs.repeatModeV = REPEAT;
-
-        return specs;
-    }
-
-    setPosition(pos) {
-
-        this.group.position.set(...pos);
-
-        return this;
-    }
-
-    setRotationY(y) {
-
-        this.group.rotation.y = y;
-
-        this.walls.forEach(w => w.mesh.rotationY += y);
-        
-        return this;
 
     }
 

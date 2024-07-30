@@ -416,7 +416,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [1, 100, NUMBER_STEPS],
+                    params: [1, 150, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {

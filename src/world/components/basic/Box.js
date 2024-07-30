@@ -27,7 +27,7 @@ class Box extends BasicObject {
 
     get height() {
 
-        return this.geometry.parameters.width * this.mesh.scale.y;
+        return this.geometry.parameters.height * this.mesh.scale.y;
 
     }
 

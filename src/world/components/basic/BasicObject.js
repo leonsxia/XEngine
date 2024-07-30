@@ -6,6 +6,7 @@ import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
 import { PLANE, BOX, SPHERE, CIRCLE, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP } from '../utils/constants';
 
 class BasicObject {
+    
     geometry = null;
     material = null;
     mesh = null;
@@ -239,6 +240,8 @@ class BasicObject {
     setWireframe(show) {
 
         this.material.wireframe = show;
+
+        return this;
 
     }
 

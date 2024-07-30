@@ -157,13 +157,13 @@ function createBoundingBoxFaces(specs) {
 
     const collisionGeometries = createCollisionGeometries(specs);
 
-    const boundingBoxWire = new LineSegments(collisionGeometries.boundingBoxEdges, basicMateraials.boundingBoxWire);
+    const boundingBoxWire = new LineSegments(collisionGeometries.boundingBoxEdges, basicMateraials.boundingBoxWire.clone());
     boundingBoxWire.name = 'boundingBoxWire';
     boundingBoxWire.position.set(0, 0, 0);
     boundingBoxWire.visible = showBBW;
     // boundingBoxWire.geometry.computeBoundingBox();
 
-    const boundingBox = new Mesh(collisionGeometries.boundingBox, basicMateraials.boundingBox);
+    const boundingBox = new Mesh(collisionGeometries.boundingBox, basicMateraials.boundingBox.clone());
     boundingBox.name = 'boundingBox';
     boundingBox.position.set(0, 0, 0);
     boundingBox.visible = showBB;
@@ -174,19 +174,20 @@ function createBoundingBoxFaces(specs) {
 
     const BBFDepthOffset = depth / 2 - bbfThickness / 2;
     const BBFWidthOffset = width / 2 - bbfThickness / 2;
-    const frontBoundingFace = new Mesh(collisionGeometries.boundingFace, basicMateraials.boundingFace);
+    const boundingFaceMaterial = basicMateraials.boundingFace.clone();
+    const frontBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
     frontBoundingFace.name = 'frontFace';
     frontBoundingFace.position.set(0, 0, BBFDepthOffset);
     frontBoundingFace.visible = showBF;
     frontBoundingFace.layers.enable(1);
 
-    const backBoundingFace = new Mesh(collisionGeometries.boundingFace, basicMateraials.boundingFace.clone());
+    const backBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
     backBoundingFace.name = 'backFace';
     backBoundingFace.position.set(0, 0, - BBFDepthOffset);
     backBoundingFace.visible = showBF;
     backBoundingFace.layers.enable(1);
 
-    const leftBoundingFace = new Mesh(collisionGeometries.boundingFace, basicMateraials.boundingFace.clone());
+    const leftBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
     leftBoundingFace.name = 'leftFace';
     leftBoundingFace.position.set(BBFWidthOffset, 0, 0);
     leftBoundingFace.scale.x = (depth - gap) / (width - gap);
@@ -194,7 +195,7 @@ function createBoundingBoxFaces(specs) {
     leftBoundingFace.visible = showBF;
     leftBoundingFace.layers.enable(1);
      
-    const rightBoundingFace = new Mesh(collisionGeometries.boundingFace, basicMateraials.boundingFace.clone());
+    const rightBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
     rightBoundingFace.name = 'rightFace';
     rightBoundingFace.position.set(- BBFWidthOffset, 0, 0);
     rightBoundingFace.scale.x = (depth - gap) / (width - gap);

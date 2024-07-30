@@ -162,7 +162,7 @@ class Room {
 
             this.insideGroups.push(g);
 
-            this.walls = this.walls.concat(g.walls);
+            if (g.walls) this.walls = this.walls.concat(g.walls);
 
             if (g.tops) this.tops = this.tops.concat(g.tops);
 

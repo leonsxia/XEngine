@@ -1,10 +1,10 @@
-import { Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane, createCollisionOctagonFree, createOBBPlane } from '../../physics/collisionHelper';
+import { InWallObjectBase } from './InWallObjectBase';
 import { green, yankeesBlue } from '../../basic/colorBase';
 import { REPEAT } from '../../utils/constants';
 
-class CylinderPillar {
-    name = '';
+class CylinderPillar extends InWallObjectBase {
+
     // named faces clockwise
     face1; // bottom
     face2;
@@ -28,39 +28,24 @@ class CylinderPillar {
     bottomLF2RB;
     bottomRF2LB;
 
-    walls = [];
-    tops = [];
-    bottoms = [];
-    topOBBs = [];
-    bottomOBBs = [];
-
-    isObstacle = false;
-    enableWallOBBs = false;
-    climbable = false;
-
     radius;
-    specs;
 
     constructor(specs) {
-        this.specs = specs;
+
+        super(specs);
+        
         const { name, width, height} = specs;
-        const { isObstacle = false, showArrow = false, enableOBBs = false, enableWallOBBs = false, climbable = false } = specs;
+        const { showArrow = false } = specs;
         const { map, topMap, bottomMap, normalMap, topNormal, bottomNormal } = specs;
         const offset = Math.sqrt(width * width / 2);
 
-        this.name = name;
         this.radius = width * .5 / Math.cos(.375 * Math.PI);
-        this.isObstacle = isObstacle;
-        this.enableWallOBBs = enableOBBs;
-        this.climbable = climbable;
-        this.group = new Group();
-        this.group.name = name;
 
         const pSpecs = this.makePlaneConfig({ width, height, map, normalMap });
         const topSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: topMap, normalMap: topNormal });
         const bottomSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal }, false);
 
-        const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
+        const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
         this.face2 = createWallFunction(pSpecs, `${name}_face2`, [- width / 2 - offset / 2, 0, width / 2 + offset / 2], - Math.PI / 4, true, true, showArrow);
         this.face3 = createWallFunction(pSpecs, `${name}_face3`, [- width / 2 - offset, 0, 0], - Math.PI / 2, true, true, showArrow, false);
@@ -75,7 +60,8 @@ class CylinderPillar {
         this.tops = [this.top];
         this.bottoms = [this.bottom];
 
-        if (enableOBBs) {
+        if (this.enableOBBs) {
+
             const halfWidth = this.radius * Math.sin(.375 * Math.PI);
             const tbOBBSpecs = { width: halfWidth * 2, height: width, color: yankeesBlue };
 
@@ -113,10 +99,12 @@ class CylinderPillar {
         this.walls = [this.face1, this.face2, this.face3, this.face4, this.face5, this.face6, this.face7, this.face8];
 
         this.walls.forEach(w => this.group.add(w.mesh));
+
         this.group.add(
             this.top.mesh,
             this.bottom.mesh
         );
+
     }
 
     async init() {
@@ -160,51 +148,6 @@ class CylinderPillar {
         return specs;
     }
 
-    makePlaneConfig(specs) {
-        const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false, lines = true } = this.specs;
-
-        specs.lines = lines;
-
-        if (noRepeat) return specs;
-
-        if (mapRatio) {
-            specs.repeatU = width / (mapRatio * baseSize);
-            specs.repeatV = height / baseSize;
-        }
-
-        specs.repeatModeU = REPEAT;
-        specs.repeatModeV = REPEAT;
-
-        return specs;
-    }
-
-    setPosition(pos) {
-        this.group.position.set(...pos);
-        return this;
-    }
-
-    setRotationY(y) {
-        this.group.rotation.y = y;
-        this.walls.forEach(w => w.mesh.rotationY += y);
-        return this;
-    }
-
-    updateOBBs(needUpdateMatrixWorld = true, needUpdateWalls = true, needUpdateTopBottom = true) {
-        if (needUpdateWalls) {
-            this.walls.forEach(w => {
-                w.updateRay();
-
-                if (w.isOBB) {
-                    w.updateOBB(needUpdateMatrixWorld);
-                }
-            });
-        }
-
-        if (needUpdateTopBottom) {
-            this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
-        }
-    }
 }
 
 export { CylinderPillar };

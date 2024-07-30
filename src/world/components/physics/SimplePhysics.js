@@ -54,12 +54,13 @@ class SimplePhysics {
 
         let result = false;
         const paddingX = .1
-        const paddingY = STAIR_OFFSET_MAX;
+        const paddingTopY = STAIR_OFFSET_MAX;
+        const paddingBottomY = .1;
 
         const leftBorderX = - wall.width * .5 + paddingX;
         const rightBorderX = wall.width * .5 - paddingX;
-        const topBorderY = wall.height * .5 - paddingY;
-        const bottomBorderY = - wall.height * .5 + paddingY;
+        const topBorderY = wall.height * .5 - paddingTopY;
+        const bottomBorderY = - wall.height * .5 + paddingBottomY;
 
         if (player.position.x < leftBorderX - halfPlayerWidth ||
             player.position.x > rightBorderX + halfPlayerWidth ||
@@ -79,7 +80,8 @@ class SimplePhysics {
 
         let result = false;
         const paddingX = .1;
-        const paddingY = STAIR_OFFSET_MAX;
+        const paddingTopY = STAIR_OFFSET_MAX;
+        const paddingBottomY = .1;
         const { x, y } = player.position;
         const { width, height, geometry: { parameters: { leftHanded } } } = wall;
         const tanTheta = height / width;
@@ -89,8 +91,8 @@ class SimplePhysics {
 
         const leftBorderX = - width * .5 + paddingX ;
         const rightBorderX = width * .5 - paddingX;
-        const topBorderY = deltaY <= height * .5 ? - height * .5 + deltaY + offsetY - paddingY : deltaY - height * .5 + offsetY - paddingY;
-        const bottomBorderY = - height * .5 + paddingY;
+        const topBorderY = deltaY <= height * .5 ? - height * .5 + deltaY + offsetY - paddingTopY : deltaY - height * .5 + offsetY - paddingTopY;
+        const bottomBorderY = - height * .5 + paddingBottomY;
 
         if (x < leftBorderX - halfPlayerWidth ||
             x > rightBorderX + halfPlayerWidth ||
@@ -168,10 +170,10 @@ class SimplePhysics {
                         ((leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) && (rightBackCorVec3.x < - halfEdgeLength) && (leftBackCorVec3.x > halfEdgeLength))
                     ) ||
                     (
-                        (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) ||
-                        (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) ||
-                        (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) ||
-                        (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength)
+                        (!player.leftCorIntersects && leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) ||
+                        (!player.rightCorIntersects && rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) ||
+                        (!player.backLeftCorIntersects && leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) ||
+                        (!player.backRightCorIntersects && rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength)
                     )
                 )
             ) {
@@ -386,6 +388,8 @@ class SimplePhysics {
             // for player falling down check
             const collisionTops = [];
 
+            movableObs.forEach(obs => obs.hittingGround = null); // reset hitting ground
+
             this.obstacleTops.forEach(top => {
 
                 if (collisionTops.length === 0) {
@@ -399,22 +403,27 @@ class SimplePhysics {
 
                 }
 
-                movableObs.forEach((obs, idx) => {
+                movableObs.forEach(obs => {
+                    
+                    if (!obs.hittingGround) {
 
-                    if (top.mesh.parent !== obs.group && obs.box.obb.intersectsOBB(top.obb)) {
+                        if (top.mesh.parent !== obs.group && obs.box.obb.intersectsOBB(top.obb)) {
 
-                        onTopsObs.push(obs);
-                        movableObs.splice(idx, 1);
-                        obs.hittingGround = top;
+                            onTopsObs.push(obs);
+                            obs.hittingGround = top;
 
-                    } else {
+                        } else {
 
-                        obs.hittingGround = null;
+                            obs.hittingGround = null;
+
+                        }
 
                     }
                 });
 
             });
+
+            const fallingObs = movableObs.filter(obs => !onTopsObs.find(f => f === obs));
 
             // check slope collision
             const collisionSlopes = [];
@@ -504,23 +513,26 @@ class SimplePhysics {
             }
 
             // check obstacles falling on floors
-            if (movableObs.length > 0) {
+            if (fallingObs.length > 0) {
 
                 const onGroundObs = [];
 
                 this.floors.forEach(floor => {
+                    
+                    fallingObs.forEach(obs => {
 
-                    movableObs.forEach((obs, idx) => {
+                        if (!obs.hittingGround) {
 
-                        if (obs.box.obb.intersectsOBB(floor.obb)) {
+                            if (obs.box.obb.intersectsOBB(floor.obb)) {
 
-                            onGroundObs.push(obs);
-                            movableObs.splice(idx, 1);
-                            obs.hittingGround = floor;
+                                onGroundObs.push(obs);
+                                obs.hittingGround = floor;
 
-                        } else {
+                            } else {
 
-                            obs.hittingGround = null;
+                                obs.hittingGround = null;
+
+                            }
 
                         }
                     });
@@ -535,9 +547,11 @@ class SimplePhysics {
                     });
                 }
 
-                if (movableObs.length > 0) {
+                const stillFallingObs = fallingObs.filter(obs => !onGroundObs.find(f => f === obs));
 
-                    movableObs.forEach(obs => {
+                if (stillFallingObs.length > 0) {
+
+                    stillFallingObs.forEach(obs => {
 
                         obs.tickFall(delta);
 
@@ -554,7 +568,7 @@ class SimplePhysics {
 
                     if (obs.movable) {
 
-                        obs.triggers.forEach(tri => {
+                        obs.triggers?.forEach(tri => {
 
                             if (player.pushingObb.intersectsOBB(tri.obb)) {
                                 // console.log(`${tri.name} is pushed`);

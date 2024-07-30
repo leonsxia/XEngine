@@ -12,6 +12,9 @@ export { BirdsGroup } from './composite/birds/Birds.js';
 export { Train } from './composite/train/Train.js';
 export { Tofu } from './composite/tofu/Tofu.js';
 
+// GLTF
+export { GLTFModel } from './basic/GLTFModel.js';
+
 // physics
 export { CollisionPlane } from './physics/CollisionPlane.js';
 export { CollisionOctagon } from './physics/CollisionOctagon.js';
@@ -25,3 +28,5 @@ export { CylinderPillar } from './composite/inwall/CylinderPillar.js';
 export { BoxCube } from './composite/inwall/BoxCube.js';
 export { Slope } from './composite/inwall/Slope.js';
 export { Stairs } from './composite/inwall/Stairs.js';
+export { WoodenPicnicTable } from './composite/inwall/WoodenPicnicTable.js';
+export { WoodenSmallTable } from './composite/inwall/WoodenSmallTable.js';

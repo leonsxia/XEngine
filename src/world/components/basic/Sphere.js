@@ -1,4 +1,4 @@
-import { Mesh, MeshPhongMaterial, TextureLoader, SRGBColorSpace } from 'three';
+import { Mesh, TextureLoader, SRGBColorSpace } from 'three';
 import { BasicObject } from './BasicObject';
 import { specular } from './colorBase';
 import { SPHERE } from '../utils/constants';
