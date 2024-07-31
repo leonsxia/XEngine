@@ -436,7 +436,7 @@ class SimplePhysics {
                     const playerIntersectSlopeBox = player.obb.intersectsOBB(s.box.obb);
                     const playerIntersectSlope = player.obb.intersectsOBB(s.slope.obb);
 
-                    if (!playerIntersectSlopeBox && player.intersectSlope === s) {
+                    if (!playerIntersectSlopeBox && (player.intersectSlope === s || !player.intersectSlope)) {
 
                         player.setSlopeCoefficient?.();
                         player.intersectSlope = null;
@@ -461,6 +461,14 @@ class SimplePhysics {
                 }
 
             });
+
+            // when player is on a slope, change the room must clear the slope state.
+            if (this.slopes.length === 0) {
+
+                player.setSlopeCoefficient?.();
+                player.intersectSlope = null;
+
+            }
 
             if (collisionTops.length > 0 && collisionSlopes.length === 0) {
 
