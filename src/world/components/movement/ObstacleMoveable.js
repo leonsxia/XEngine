@@ -1,5 +1,3 @@
-import { Vector3 } from 'three';
-
 class ObstacleMoveable {
     #fallingTime = 0;
     #isFalling = false;

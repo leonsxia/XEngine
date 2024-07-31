@@ -1,5 +1,6 @@
 import { Object3D, Vector3 } from 'three';
 import * as Color from '../basic/colorBase.js';
+import { groupHasChild } from '../utils/objectHelper.js';
 
 const DEBUG = true;
 const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
@@ -170,10 +171,10 @@ class SimplePhysics {
                         ((leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) && (rightBackCorVec3.x < - halfEdgeLength) && (leftBackCorVec3.x > halfEdgeLength))
                     ) ||
                     (
-                        (!player.leftCorIntersects && leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) ||
-                        (!player.rightCorIntersects && rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) ||
-                        (!player.backLeftCorIntersects && leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) ||
-                        (!player.backRightCorIntersects && rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength)
+                        (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) ||
+                        (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) ||
+                        (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) ||
+                        (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength)
                     )
                 )
             ) {
@@ -279,19 +280,20 @@ class SimplePhysics {
 
     }
 
-    checkWallBelow(player, wall) {
+    checkWallClimbable(player, wall) {
 
-        let isBelow = false;
+        let climbable = false;
         const wallBottom = wall.worldPosition.y - wall.height * .5;
+        const wallTop = wall.worldPosition.y + wall.height * .5;
 
-        // if wall is higher than half player height, it will be climbable
-        if (player.bottomY >= wallBottom - player.height * .5) {
+        // if wall is lower than half player height, and not below player, it will be climbable
+        if (player.bottomY >= wallBottom - player.height * .5 && player.bottomY < wallTop) {
 
-            isBelow = true;
+            climbable = true;
 
         }
 
-        return isBelow;
+        return climbable;
 
     }
 
@@ -382,13 +384,17 @@ class SimplePhysics {
             }
 
             // for movable obstacles falling down check
-            const movableObs = this.obstacles.filter(obs => obs.movable);
+            const movableObs = this.obstacles.filter(obs => {
+
+                if (obs.movable) obs.hittingGround = null;  // reset hitting ground
+                return obs.movable;
+
+            });
+            
             const onTopsObs = [];
 
             // for player falling down check
             const collisionTops = [];
-
-            movableObs.forEach(obs => obs.hittingGround = null); // reset hitting ground
 
             this.obstacleTops.forEach(top => {
 
@@ -407,14 +413,10 @@ class SimplePhysics {
                     
                     if (!obs.hittingGround) {
 
-                        if (top.mesh.parent !== obs.group && obs.box.obb.intersectsOBB(top.obb)) {
+                        if ((!groupHasChild(obs.group, top.mesh)) && obs.box.obb.intersectsOBB(top.obb)) {
 
                             onTopsObs.push(obs);
                             obs.hittingGround = top;
-
-                        } else {
-
-                            obs.hittingGround = null;
 
                         }
 
@@ -591,7 +593,7 @@ class SimplePhysics {
 
                             if (w.isOBB) {
 
-                                if (player.pushingObb.intersectsOBB(w.obb)) {
+                                if (player.pushingObb.intersectsOBB(w.obb) && this.checkWallClimbable(player, w)) {
                                     
                                     // console.log(`${w.name} is climbed`);
                                     climbWalls.push(w);
@@ -602,7 +604,7 @@ class SimplePhysics {
                     }
                 });
 
-                if (climbWalls.length === 1 && this.checkWallBelow(player, climbWalls[0])) {
+                if (climbWalls.length === 1) {
 
                     const wall = climbWalls[0];
 

@@ -19,6 +19,8 @@ class ObstacleBase extends ObstacleMoveable {
     bottomOBBs = [];
     triggers = [];
 
+    cObjects = [];
+
     // set to false, will not add to room obstacles, so the physics engine will ignore this cubebox.
     isObstacle = false;
     // set four vetical face to OBBPlane, so it can iteract with other cubebox or player
@@ -53,6 +55,55 @@ class ObstacleBase extends ObstacleMoveable {
         this.height = height;
         this.depth = depth;
         
+    }
+
+    getWalls() {
+
+        let walls = [];
+
+        this.cObjects.forEach(obj => walls = walls.concat(obj.walls));
+
+        return walls;
+
+    }
+
+    getTopOBBs() {
+
+        let tops = [];
+
+        this.cObjects.forEach(obj => tops = tops.concat(obj.topOBBs));
+
+        return tops;
+
+    }
+
+    getBottomOBBs() {
+
+        let bottoms = [];
+
+        this.cObjects.forEach(obj => bottoms = bottoms.concat(obj.bottomOBBs));
+
+        return bottoms;
+    }
+
+    addCObjects() {
+
+        this.cObjects.forEach(obj => {
+
+            this.group.add(obj.group);
+
+        });
+
+        return this;
+
+    }
+
+    setCObjectsVisible(show) {
+
+        this.cObjects.forEach(obj => obj.setVisible(show));
+
+        return this;
+
     }
 
     setTriggers() {

@@ -30,3 +30,6 @@ export { Slope } from './composite/inwall/Slope.js';
 export { Stairs } from './composite/inwall/Stairs.js';
 export { WoodenPicnicTable } from './composite/inwall/WoodenPicnicTable.js';
 export { WoodenSmallTable } from './composite/inwall/WoodenSmallTable.js';
+
+// collision objects
+export { CollisionBox } from './physics/CollisionObjects/CollisionBox.js';

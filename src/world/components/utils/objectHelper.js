@@ -20,4 +20,33 @@ function clone(target, source, ignore = []) {
 
 }
 
-export { clone };
+function groupHasChild(group, child) {
+
+    let has = false;
+
+    if (group.children.length > 0) {
+
+        for (let i = 0; i < group.children.length; i++) {
+
+            const c = group.children[i];
+
+            if (c.isGroup) {
+
+                has = groupHasChild(c, child);
+
+            } else if (c === child) {
+
+                has = true;
+
+            }
+
+            if (has) return has;
+
+        }
+    }
+
+    return has;
+
+}
+
+export { clone, groupHasChild };
