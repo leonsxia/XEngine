@@ -1,4 +1,4 @@
-import { Mesh, TextureLoader, SRGBColorSpace } from 'three';
+import { Mesh, SRGBColorSpace } from 'three';
 import { BasicObject } from './BasicObject';
 import { specular } from './colorBase';
 import { SPHERE } from '../utils/constants';
@@ -37,7 +37,7 @@ class Sphere extends BasicObject {
 
         if (surfaceMap || normalMap || specularMap) {
 
-            const loader = new TextureLoader();
+            const loader = this.loader;
 
             const [surfaceT, normalT, specularT] = await Promise.all([
                 surfaceMap ? loader.loadAsync(surfaceMap) : Promise.resolve(null),
@@ -58,6 +58,8 @@ class Sphere extends BasicObject {
             if (specularT) this.material.specularMap = specularT;
 
         }
+
+        this.material.specular.setHex(specular);
         
     }
 }

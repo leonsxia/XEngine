@@ -17,6 +17,7 @@ const PLANE = 'plane';
 const BOX = 'box';
 const SPHERE = 'sphere';
 const CIRCLE = 'circle';
+const CYLINDER = 'cylinder';
 const TRIANGLE = 'triangle';
 const STAIRS_SIDE = 'stairsSide';
 const STAIRS_FRONT = 'stairsFront';
@@ -36,6 +37,7 @@ export {
     BOX,
     SPHERE,
     CIRCLE,
+    CYLINDER,
     TRIANGLE,
     STAIRS_SIDE,
     STAIRS_FRONT,

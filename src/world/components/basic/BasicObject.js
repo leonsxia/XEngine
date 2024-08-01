@@ -1,9 +1,10 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, MeshPhongMaterial, TextureLoader, SRGBColorSpace, Vector3, RepeatWrapping, MirroredRepeatWrapping, Color } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, RepeatWrapping, MirroredRepeatWrapping } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
+import { worldTextureLoader } from '../utils/textureHelper';
 import { basicMateraials } from './basicMaterial';
 import { white } from './colorBase';
 import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
-import { PLANE, BOX, SPHERE, CIRCLE, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP } from '../utils/constants';
+import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP } from '../utils/constants';
 
 class BasicObject {
     
@@ -11,6 +12,8 @@ class BasicObject {
     material = null;
     mesh = null;
     name = '';
+    loader = worldTextureLoader;
+    type;
     specs;
 
     constructor(type, specs) {
@@ -19,6 +22,7 @@ class BasicObject {
         if (name) this.name = name;
 
         this.specs = specs;
+        this.type = type;
 
         if (empty) return this;
 
@@ -45,6 +49,12 @@ class BasicObject {
                 {
                     const { radius, segments } = specs;
                     this.geometry = new CircleGeometry(radius, segments);
+                }
+                break;
+            case CYLINDER:
+                {
+                    const { radius, height, segments } = specs;
+                    this.geometry = new CylinderGeometry(radius, radius, height, segments);
                 }
                 break;
             case TRIANGLE:
@@ -87,8 +97,20 @@ class BasicObject {
             const _normalMap = normalMap?.clone();
 
             this.resetTextureColor();
-            this.material.map = _map;
-            this.material.normalMap = _normalMap;
+
+            if (map) {
+
+                this.setTexture(_map);
+                this.material.map = _map;
+
+            }
+
+            if (normalMap) {
+
+                this.setTexture(_normalMap);
+                this.material.normalMap = _normalMap;
+
+            }
 
             return;
 
@@ -96,22 +118,25 @@ class BasicObject {
 
         if (map || normalMap) {
 
-            const loader = new TextureLoader();
+            const loader = this.loader;
 
             const [texture, normal] = await Promise.all([
                 map ? loader.loadAsync(map) : Promise.resolve(null),
                 normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null)
             ]);
 
+            this.resetTextureColor();
+
             if (texture) {
 
-                texture.colorSpace = SRGBColorSpace;
+                this.setTexture(texture);
                 this.material.map = texture;
 
             }
 
             if (normal) {
 
+                this.setTexture(normal);
                 this.material.normalMap = normal;
 
             }
@@ -152,7 +177,12 @@ class BasicObject {
 
     setTexture(texture) {
 
-        const { rotationT, noRepeat = false, repeatU, repeatV, repeatModeU = REPEAT, repeatModeV = REPEAT, mapRatio } = this.specs;
+        const { 
+            rotationT, 
+            noRepeat = false, repeatU, repeatV, repeatModeU = REPEAT, repeatModeV = REPEAT, 
+            offsetX = 0, offsetY = 0,
+            mapRatio 
+        } = this.specs;
 
         texture.colorSpace = SRGBColorSpace;
 
@@ -160,6 +190,12 @@ class BasicObject {
 
             texture.center.set(.5, .5);
             texture.rotation = rotationT;
+
+        }
+
+        if (offsetX > 0 || offsetY > 0) {
+
+            texture.offset.set(offsetX, offsetY);
 
         }
 
@@ -177,12 +213,42 @@ class BasicObject {
 
             } else if (mapRatio) {
 
-                const { width, height } = this.specs;
+                let w, h, basic;
 
-                const xRepeat = width / (mapRatio * height);
+                switch(this.type) {
+                    case PLANE:
+                    case BOX:
+                    case TRIANGLE:
+                    case STAIRS_SIDE:
+                    case STAIRS_FRONT:
+                    case STAIRS_TOP:
+
+                        {
+                            let { width, height, baseSize = height } = this.specs;
+                            w = width;
+                            h = height;
+                            basic = baseSize;
+                        }
+
+                        break;
+                        
+                    case CIRCLE:
+
+                        {
+                            let { radius, baseSize = radius * 2 } = this.specs;
+                            w = h = radius * 2;
+                            basic = baseSize;
+                        }
+
+                        break;
+                }
+
+                const xRepeat = w / (mapRatio * basic);
+                const yRepeat = h / basic;
 
                 texture.wrapS = RepeatWrapping;
-                texture.repeat.set(xRepeat, 1);
+                texture.wrapT = RepeatWrapping;
+                texture.repeat.set(xRepeat, yRepeat);
 
             }
         }
@@ -191,7 +257,7 @@ class BasicObject {
 
     resetTextureColor() {
 
-        this.material.color = new Color(white);
+        this.material.color.setHex(white);
 
     }
 

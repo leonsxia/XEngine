@@ -1,11 +1,10 @@
 import { createCollisionPlane, createCollisionOBBPlane, createCollisionOctagonFree, createOBBPlane } from '../../physics/collisionHelper';
 import { InWallObjectBase } from './InWallObjectBase';
 import { green, yankeesBlue } from '../../basic/colorBase';
-import { REPEAT } from '../../utils/constants';
 
 class CylinderPillar extends InWallObjectBase {
 
-    // named faces clockwise
+    // named faces counterclockwise
     face1; // bottom
     face2;
     face3; // left
@@ -41,19 +40,26 @@ class CylinderPillar extends InWallObjectBase {
 
         this.radius = width * .5 / Math.cos(.375 * Math.PI);
 
-        const pSpecs = this.makePlaneConfig({ width, height, map, normalMap });
+        const pSpecs1 = this.makePlaneConfig({ width, height, map, normalMap }, 0);
+        const pSpecs2 = this.makePlaneConfig({ width, height, map, normalMap }, 1);
+        const pSpecs3 = this.makePlaneConfig({ width, height, map, normalMap }, 2);
+        const pSpecs4 = this.makePlaneConfig({ width, height, map, normalMap }, 3);
+        const pSpecs5 = this.makePlaneConfig({ width, height, map, normalMap }, 4);
+        const pSpecs6 = this.makePlaneConfig({ width, height, map, normalMap }, 5);
+        const pSpecs7 = this.makePlaneConfig({ width, height, map, normalMap }, 6);
+        const pSpecs8 = this.makePlaneConfig({ width, height, map, normalMap }, 7);
         const topSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: topMap, normalMap: topNormal });
         const bottomSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal }, false);
 
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
-        this.face2 = createWallFunction(pSpecs, `${name}_face2`, [- width / 2 - offset / 2, 0, width / 2 + offset / 2], - Math.PI / 4, true, true, showArrow);
-        this.face3 = createWallFunction(pSpecs, `${name}_face3`, [- width / 2 - offset, 0, 0], - Math.PI / 2, true, true, showArrow, false);
-        this.face4 = createWallFunction(pSpecs, `${name}_face4`, [- width / 2 - offset / 2, 0, - width / 2 - offset / 2], - 3 * Math.PI / 4, true, true, showArrow);
-        this.face5 = createWallFunction(pSpecs, `${name}_face5`, [0, 0, - width / 2 - offset], Math.PI, true, true, showArrow, false);
-        this.face6 = createWallFunction(pSpecs, `${name}_face6`, [width / 2 + offset / 2, 0, - width / 2 - offset / 2], 3 * Math.PI / 4, true, true, showArrow);
-        this.face7 = createWallFunction(pSpecs, `${name}_face7`, [width / 2 + offset, 0, 0], Math.PI / 2, true, true, showArrow, false);
-        this.face8 = createWallFunction(pSpecs, `${name}_face8`, [width / 2 + offset / 2, 0, width / 2 + offset / 2],  Math.PI / 4, true, true, showArrow);
+        this.face8 = createWallFunction(pSpecs8, `${name}_face2`, [- width / 2 - offset / 2, 0, width / 2 + offset / 2], - Math.PI / 4, true, true, showArrow);
+        this.face7 = createWallFunction(pSpecs7, `${name}_face3`, [- width / 2 - offset, 0, 0], - Math.PI / 2, true, true, showArrow, false);
+        this.face6 = createWallFunction(pSpecs6, `${name}_face4`, [- width / 2 - offset / 2, 0, - width / 2 - offset / 2], - 3 * Math.PI / 4, true, true, showArrow);
+        this.face5 = createWallFunction(pSpecs5, `${name}_face5`, [0, 0, - width / 2 - offset], Math.PI, true, true, showArrow, false);
+        this.face4 = createWallFunction(pSpecs4, `${name}_face6`, [width / 2 + offset / 2, 0, - width / 2 - offset / 2], 3 * Math.PI / 4, true, true, showArrow);
+        this.face3 = createWallFunction(pSpecs3, `${name}_face7`, [width / 2 + offset, 0, 0], Math.PI / 2, true, true, showArrow, false);
+        this.face2 = createWallFunction(pSpecs2, `${name}_face8`, [width / 2 + offset / 2, 0, width / 2 + offset / 2],  Math.PI / 4, true, true, showArrow);
 
         this.top = createCollisionOctagonFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, - Math.PI * .125], true, false);
         this.bottom = createCollisionOctagonFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, Math.PI * .125], true, false);
@@ -93,7 +99,7 @@ class CylinderPillar extends InWallObjectBase {
             )
         }
 
-        this.face1 = createWallFunction(pSpecs, `${name}_face1`, [0, 0, width / 2 + offset], 0, true, true, showArrow);
+        this.face1 = createWallFunction(pSpecs1, `${name}_face1`, [0, 0, width / 2 + offset], 0, true, true, showArrow);
         this.face1.line?.material.color.setHex(green);
 
         this.walls = [this.face1, this.face2, this.face3, this.face4, this.face5, this.face6, this.face7, this.face8];
@@ -108,44 +114,66 @@ class CylinderPillar extends InWallObjectBase {
     }
 
     async init() {
+
         await Promise.all([
             this.top.init(),
             this.bottom.init()
         ].concat(this.initSideWalls()));
+
     }
 
     initSideWalls() {
+
         const promises = [];
+
         this.walls.forEach(w => promises.push(w.init()));
+
         return promises;
+
     }
 
     setOBBPlaneVisible(visible) {
+
         this.topOBBs.forEach(t => t.mesh.visible = visible);
         this.bottomOBBs.forEach(b => b.mesh.visible = visible);
+
+    }
+
+    makePlaneConfig(specs, idx) {
+
+        const { height } = specs;
+        const { baseSize = height, mapRatio, lines = true } = this.specs;
+        const { separatedFace = false } = this.specs;
+
+        if (!separatedFace) {
+
+            specs.offsetX = idx / 8;
+
+        }
+
+        specs.lines = lines;
+        specs.mapRatio = mapRatio;
+        specs.baseSize = baseSize
+
+        return specs;
+
     }
 
     makeTBPlaneConfig(specs, top = true) {
-        const { baseSize = this.radius * 2, mapRatio, noRepeat = false, lines = true } = this.specs;
+        
+        const { baseSize = this.radius * 2, mapRatio, lines = true } = this.specs;
 
         specs.lines = lines;
+        specs.mapRatio = mapRatio;
+        specs.baseSize = baseSize;
 
         if (top)
             specs.rotationT = .125 * Math.PI;
         else
             specs.rotationT = - .125 * Math.PI;
 
-        if (noRepeat) return specs;
-
-        if (mapRatio) {
-            specs.repeatU = this.radius * 2 / (mapRatio * baseSize);
-            specs.repeatV = this.radius * 2 / baseSize;
-        }
-
-        specs.repeatModeU = REPEAT;
-        specs.repeatModeV = REPEAT;
-
         return specs;
+
     }
 
 }

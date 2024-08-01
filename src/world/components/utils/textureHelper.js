@@ -1,9 +1,19 @@
 import { TextureLoader, SRGBColorSpace} from 'three';
 
+function getTextureLoader() {
+
+    const loader = new TextureLoader();
+
+    return loader;
+
+}
+
+const worldTextureLoader = getTextureLoader();
+
 async function loadSingleTexture(specs) {
 
     const { map, normalMap } = specs;
-    const loader = new TextureLoader();
+    const loader = worldTextureLoader;
 
     const [texture, normal] = await Promise.all([
         map ? loader.loadAsync(map) : Promise.resolve(null),
@@ -17,7 +27,7 @@ async function loadSingleTexture(specs) {
 async function loadTextures(mapsArr) {
 
     const loadPromises = [];
-    const loader = new TextureLoader();
+    const loader = worldTextureLoader;
     const loaded = {};
     mapsArr.forEach(m => {
 
@@ -58,4 +68,4 @@ async function loadTextures(mapsArr) {
 
 }
 
-export { loadSingleTexture, loadTextures };
+export { worldTextureLoader, loadSingleTexture, loadTextures };

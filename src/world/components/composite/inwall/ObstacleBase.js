@@ -170,22 +170,12 @@ class ObstacleBase extends ObstacleMoveable {
 
     makePlaneConfig(specs) {
         
-        const { width, height } = specs;
-        const { baseSize = height, mapRatio, noRepeat = false, lines = true } = this.specs;
+        const { height } = specs;
+        const { baseSize = height, mapRatio, lines = true } = this.specs;
 
         specs.lines = lines;
-
-        if (noRepeat) return specs;
-
-        if (mapRatio) {
-
-            specs.repeatU = width / (mapRatio * baseSize);
-            specs.repeatV = height / baseSize;
-
-        }
-
-        specs.repeatModeU = undefined;
-        specs.repeatModeV = REPEAT;
+        specs.mapRatio = mapRatio;
+        specs.baseSize = baseSize;
 
         return specs;
 
