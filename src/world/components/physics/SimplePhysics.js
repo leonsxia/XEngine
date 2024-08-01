@@ -166,16 +166,10 @@ class SimplePhysics {
             if (
                 (Math.abs(dummyObject.position.z - halfPlayerDepth) <=  padding) && 
                 (
-                    (
-                        ((leftCorVec3.z <= 0 || rightCorVec3.z <= 0) && (leftCorVec3.x < - halfEdgeLength) && (rightCorVec3.x > halfEdgeLength)) ||
-                        ((leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) && (rightBackCorVec3.x < - halfEdgeLength) && (leftBackCorVec3.x > halfEdgeLength))
-                    ) ||
-                    (
-                        (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) ||
-                        (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) ||
-                        (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) ||
-                        (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength)
-                    )
+                    (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) ||
+                    (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) ||
+                    (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) ||
+                    (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength)
                 )
             ) {
 

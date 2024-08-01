@@ -72,7 +72,7 @@ class CollisionBox {
             this.right.mesh,
             this.top.mesh,
             this.bottom.mesh
-        )
+        );
 
     }
 
@@ -99,7 +99,7 @@ class CollisionBox {
         this.group.rotation.set(0, rotY, 0);
 
         return this;
-        
+
     }
 
 }

@@ -241,6 +241,24 @@ class BasicObject {
                         }
 
                         break;
+
+                    case CYLINDER:
+
+                        if (!texture.isCap) { 
+
+                            let { radius, height, baseSize = height} = this.specs;
+                            w = 2 * Math.PI * radius;
+                            h = height;
+                            basic = baseSize;
+
+                        } else {
+
+                            let { radius, baseSize = radius * 2 } = this.specs;
+                            w = h = radius * 2;
+                            basic = baseSize;
+                        }
+
+                        break;
                 }
 
                 const xRepeat = w / (mapRatio * basic);

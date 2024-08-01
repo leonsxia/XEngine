@@ -1,6 +1,6 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube, Slope, Stairs, WoodenPicnicTable, WoodenSmallTable } from '../components/Models.js';
+import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, BoxCube, Slope, Stairs, WoodenPicnicTable, WoodenSmallTable, CollisionCylinder, CollisionHexCylinder } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { loadTextures } from '../components/utils/textureHelper.js';
@@ -477,11 +477,30 @@ class WorldScene4 extends WorldScene {
         this.textures = textures;
         this.gltfs = gltfs;
 
+        const cylinderSpecs1 = {
+            radius: .5,
+            height: 4.6,
+            segments: 16,
+            baseSize: 4.6,
+            map: this.textures[TEXTURE_NAMES.BRICK_159],
+            normalMap: this.textures[TEXTURE_NAMES.BRICK_159_NORMAL],
+            topMap: this.textures[TEXTURE_NAMES.BRICK_159],
+            topNormal: this.textures[TEXTURE_NAMES.BRICK_159_NORMAL],
+            bottomMap: this.textures[TEXTURE_NAMES.BRICK_159],
+            bottomNormal: this.textures[TEXTURE_NAMES.BRICK_159_NORMAL],
+            name: 'cylinder1',
+            mapRatio: 1.5,
+            rotationC: Math.PI * .5,
+            lines: true
+        }
+        const cylinder1 = new CollisionCylinder(cylinderSpecs1);
+
         const [room1, room2, room3] = await Promise.all([
             // earth.init(earthSpecs),
             this.createRoom1(),
             this.createRoom2(),
-            this.createRoom3()
+            this.createRoom3(),
+            cylinder1.init(),
         ]);
 
         this.rooms.push(room1);
@@ -493,7 +512,7 @@ class WorldScene4 extends WorldScene {
         this.physics = new SimplePhysics(this.players, [], [], []);
 
         this.loop.updatables.push(this.physics);
-        this.scene.add(ground.mesh, ceiling.mesh);
+        this.scene.add(ground.mesh, ceiling.mesh, cylinder1.mesh);
 
         this.rooms.forEach(room => {
             
@@ -904,6 +923,15 @@ class WorldScene4 extends WorldScene {
             climbable: true
         };
 
+        const cHexCylinderSpecs = {
+            radius: .5,
+            height: 4.6,
+            enableWallOBBs: true,
+            showArrow: false,
+            lines: true,
+            name: 'cHexCylinder1'
+        }
+
         const lwSpecs2 = {
             width: 4,
             height: .6,
@@ -960,15 +988,17 @@ class WorldScene4 extends WorldScene {
         const spillar3 = new SquarePillar(spSepcs3);
         const spillar4 = new SquarePillar(spSepcs4);
         const cpillar1 = new CylinderPillar(cpSepcs1);
+        const cHexCylinder1 = new CollisionHexCylinder(cHexCylinderSpecs);
         spillar3.setPosition([- 2.5, 0, 9]);
         spillar4.setPosition([2.5, 0, 9]);
-        cpillar1.setPosition([0, 0, 0])
+        cpillar1.setPosition([0, 0, 0]);
+        cHexCylinder1.setPosition([0, 0, 0]);
 
         const lwall1 = new LWall(lwSpecs2);
         lwall1.setPosition([- 1.5, - posY + lwSpecs2.height * .5, - 5]);
 
         const room = new Room(specs);
-        room.addGroups([spillar3, spillar4, cpillar1, lwall1]);
+        room.addGroups([spillar3, spillar4, lwall1, cHexCylinder1]);
         room.addFloors([floor]);
 
         await room.init();

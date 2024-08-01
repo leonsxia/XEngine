@@ -66,7 +66,7 @@ class WoodenPicnicTable extends ObstacleBase {
         // collision box
         const cBoxTop = new CollisionBox(cBoxTopSpecs);
         const cBoxSideLeft = new CollisionBox(cBoxLeftSideSpecs);
-        const cBoxSideRight = new CollisionBox(cBoxLeftSideSpecs);
+        const cBoxSideRight = new CollisionBox(cBoxRightSideSpecs);
         const sideX = (this.topWidth + sideWidth) * .5;
         const topY = (this.height - topHeight) * .5; 
         const bottomY = (this.bottomHeight - this.height) * .5;
