@@ -390,7 +390,7 @@ class SimplePhysics {
                 return obs.movable;
 
             });
-            
+
             const onTopsObs = [];
 
             // for player falling down check
@@ -576,7 +576,7 @@ class SimplePhysics {
 
                 this.obstacles.forEach(obs => {
 
-                    if (obs.movable) {
+                    if (obs.movable && (obs.pushable || obs.draggable)) {
 
                         obs.triggers?.forEach(tri => {
 

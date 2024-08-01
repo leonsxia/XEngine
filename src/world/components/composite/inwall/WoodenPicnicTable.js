@@ -51,8 +51,9 @@ class WoodenPicnicTable extends ObstacleBase {
 
         const topHeight = this.height - this.bottomHeight;
         const sideWidth = (this.width - this.topWidth) * .5
-        const cBoxTopSpecs = { name, width: this.topWidth, depth: this.depth, height: topHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
-        const cBoxSideSpecs = { name, width: sideWidth, depth: this.depth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxTopSpecs = { name: `${name}_top`, width: this.topWidth, depth: this.depth, height: topHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxLeftSideSpecs = { name: `${name}_left_side`, width: sideWidth, depth: this.depth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxRightSideSpecs = { name: `${name}_right_side`, width: sideWidth, depth: this.depth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
@@ -64,8 +65,8 @@ class WoodenPicnicTable extends ObstacleBase {
 
         // collision box
         const cBoxTop = new CollisionBox(cBoxTopSpecs);
-        const cBoxSideLeft = new CollisionBox(cBoxSideSpecs);
-        const cBoxSideRight = new CollisionBox(cBoxSideSpecs);
+        const cBoxSideLeft = new CollisionBox(cBoxLeftSideSpecs);
+        const cBoxSideRight = new CollisionBox(cBoxLeftSideSpecs);
         const sideX = (this.topWidth + sideWidth) * .5;
         const topY = (this.height - topHeight) * .5; 
         const bottomY = (this.bottomHeight - this.height) * .5;

@@ -1022,8 +1022,6 @@ class WorldScene4 extends WorldScene {
             name: 'wooden_picnic_table_1',
             offsetY: - .371,
             scale: [1, 1, 1],
-            // castShadow: true,
-            // receiveShadow: true,
             isObstacle: true,
             enableWallOBBs: true,
             movable: true,

@@ -108,9 +108,9 @@ class ObstacleBase extends ObstacleMoveable {
 
     setTriggers() {
 
-        const { name, movable } = this.specs;
+        const { name, movable = false, pushable = false, draggable = false } = this.specs;
 
-        if (movable) {
+        if (movable && (pushable || draggable)) {
 
             const triggerSpecs = { width: .5, height: this.height, color: violetBlue };
 
