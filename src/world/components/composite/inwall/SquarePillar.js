@@ -58,6 +58,8 @@ class SquarePillar extends InWallObjectBase {
         this.frontFace = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], 0, receiveShadow, castShadow, showArrow);
         this.frontFace.line?.material.color.setHex(green);
 
+        this.setInvisibleFaces();
+
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
         
         this.group.add(
@@ -81,6 +83,37 @@ class SquarePillar extends InWallObjectBase {
             this.topFace.init(),
             this.bottomFace.init()
         ]);
+
+    }
+
+    setInvisibleFaces() {
+
+        const { invisibles = [] } = this.specs;
+
+        invisibles.forEach(i => {
+
+            switch(i) {
+                case 0:
+                    this.frontFace.mesh.visible = false;
+                    break;
+                case 1:
+                    this.backFace.mesh.visible = false;
+                    break;
+                case 2:
+                    this.leftFace.mesh.visible = false;
+                    break;
+                case 3:
+                    this.rightFace.mesh.visible = false;
+                    break;
+                case 4:
+                    this.topFace.mesh.visible = false;
+                    break;
+                case 5:
+                    this.bottomFace.mesh.visible = false;
+                    break;
+            }
+
+        });
 
     }
 

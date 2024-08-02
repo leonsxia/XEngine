@@ -20,7 +20,7 @@ class WoodenPicnicTable extends ObstacleBase {
         super(specs);
 
         const { name, scale = [1, 1, 1], lines = true } = specs;
-        const { offsetY } = specs;  // offsetY used to set gltf model to zero position.
+        const { offsetY = - .371 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
@@ -46,7 +46,7 @@ class WoodenPicnicTable extends ObstacleBase {
         this.gltf.setScale(scale);
 
         // obb box
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], true, true);
+        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.box.mesh.visible = false;
 
         // collision box

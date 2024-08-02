@@ -1,6 +1,9 @@
 import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
-import { Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs, WoodenPicnicTable, WoodenSmallTable } from '../components/Models.js';
+import { 
+    Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs, 
+    WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable 
+} from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { loadTextures } from '../components/utils/textureHelper.js';
@@ -34,7 +37,7 @@ const worldSceneSpecs = {
     allPlayerPos: [
         [1, 5, 15],
         [0, 6, - 13],
-        [28, 3, 4],
+        [25, 3, 4],
     ]
 };
 
@@ -81,13 +84,16 @@ const TEXTURES = [{
 
 const GLTF_NAMES = {
     WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
-    WOODEN_TABLE: 'WOODEN_TABLE'
+    WOODEN_TABLE: 'WOODEN_TABLE',
+    ROUND_WOODEN_TABLE: 'ROUND_WOODEN_TABLE'
 }
 
 const GLTFS = [{
     name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
 }, {
     name: GLTF_NAMES.WOODEN_TABLE, src: 'inRoom/tables/wooden_table_1k/wooden_table_02_1k.gltf'
+}, {
+    name: GLTF_NAMES.ROUND_WOODEN_TABLE, src: 'inRoom/tables/round_wooden_table_01_1k/round_wooden_table_01_1k.gltf'
 }];
 
 // basic lights
@@ -1042,7 +1048,6 @@ class WorldScene4 extends WorldScene {
         const woodenPicnicTableSpecs = {
             src: GLTF_MAPS[GLTF_NAMES.WOODEN_PICNIC_TABLE],
             name: 'wooden_picnic_table_1',
-            offsetY: - .371,
             scale: [1, 1, 1],
             isObstacle: true,
             enableWallOBBs: true,
@@ -1053,7 +1058,6 @@ class WorldScene4 extends WorldScene {
         const woodenTableSpecs = {
             src: GLTF_MAPS[GLTF_NAMES.WOODEN_TABLE],
             name: 'wooden_table_1',
-            offsetY: - .4,
             scale: [1.5, 1, 3],
             isObstacle: true,
             enableWallOBBs: true,
@@ -1064,8 +1068,17 @@ class WorldScene4 extends WorldScene {
         const woodenTableSpecs2 = {
             src: GLTF_MAPS[GLTF_NAMES.WOODEN_TABLE],
             name: 'wooden_table_2',
-            offsetY: - .4,
             scale: [1, 1, 1],
+            isObstacle: true,
+            enableWallOBBs: true,
+            movable: true,
+            climbable: true
+        }
+
+        const roundWoodenTableSpecs1 = {
+            src: GLTF_MAPS[GLTF_NAMES.ROUND_WOODEN_TABLE],
+            name: 'round_woodent_table_1',
+            scale: [1.5, 1],
             isObstacle: true,
             enableWallOBBs: true,
             movable: true,
@@ -1087,11 +1100,15 @@ class WorldScene4 extends WorldScene {
             .setRotationY(5 * Math.PI / 6);
 
         const smallTable2 = new WoodenSmallTable(woodenTableSpecs2);
-        smallTable2.setPosition([3, 5, 5]);
+        smallTable2.setPosition([3, 4, 5]);
+
+        const roundWoodenTable1 = new RoundWoodenTable(roundWoodenTableSpecs1);
+        roundWoodenTable1.setPosition([3, 3, - 3])
+            .setRotationY(3 * Math.PI * .25);
 
         const room = new Room(specs);
         room.addFloors([floor]);
-        room.addGroups([woodenPicnicTable, smallTable, smallTable2]);
+        room.addGroups([woodenPicnicTable, smallTable, smallTable2, roundWoodenTable1]);
 
         await room.init();
 

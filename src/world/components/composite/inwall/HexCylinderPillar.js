@@ -12,13 +12,13 @@ class HexCylinderPillar extends ObstacleBase {
 
         super(specs);
 
-        const { name, scale = [1, 1], lines = true, showArrow = false } = specs;
+        const { name, lines = true, showArrow = false } = specs;
         const { radius, height, segments = 16, baseSize, mapRatio, rotationC = Math.PI * .5 } = specs;
         const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
 
-        this.radius = radius * scale[0];
-        this.height = height * scale[1];
+        this.radius = radius;
+        this.height = height;
 
         const boxSpecs = { size: { width: this.radius * 2, depth: this.radius * 2, height: this.height }, lines };
         const cylinderSpecs = { 
@@ -34,7 +34,7 @@ class HexCylinderPillar extends ObstacleBase {
             .castShadow(castShadow);
         
         // obb box
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], true, true);
+        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.box.mesh.visible = false;
 
         // collision cylinder
