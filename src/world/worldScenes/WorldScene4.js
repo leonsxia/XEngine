@@ -9,7 +9,7 @@ import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { loadTextures } from '../components/utils/textureHelper.js';
 import { loadGLTFModels } from '../components/utils/gltfHelper.js';
 import { 
-    MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT,
+    REPEAT, MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT,
     TEXTURE_NAMES, TEXTURES, GLTF_NAMES, GLTFS
  } from '../components/utils/constants.js';
 import { WorldScene } from './WorldScene.js';
@@ -481,11 +481,11 @@ class WorldScene4 extends WorldScene {
         this.changeCharacter('tofu1', false);
 
         this.scene.add(room1.group);
-        room1.walls.forEach(w => this.scene.add(...w.arrows));
+        room1.walls.concat(room1.insideWalls).forEach(w => this.scene.add(...w.arrows));
         this.scene.add(room2.group);
-        room2.walls.forEach(w => this.scene.add(...w.arrows));
+        room2.walls.concat(room2.insideWalls).forEach(w => this.scene.add(...w.arrows));
         this.scene.add(room3.group);
-        room3.walls.forEach(w => this.scene.add(...w.arrows));
+        room3.walls.concat(room3.insideWalls).forEach(w => this.scene.add(...w.arrows));
 
         this.showRoleSelector = true;
 
@@ -770,7 +770,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(- Math.PI / 6)
             .updateOBBnRay();
 
-        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
+        this.cPlanes = this.cPlanes.concat(room.walls, room.insideWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
         this.cBoxes.push(cubeBox1.box, cubeBox2.box);
 
         return room;
@@ -957,7 +957,7 @@ class WorldScene4 extends WorldScene {
             .setRotationY(5 * Math.PI / 6)
             .updateOBBnRay();
 
-        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
+        this.cPlanes = this.cPlanes.concat(room.walls, room.insideWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
         return room;
     }
 
@@ -967,18 +967,22 @@ class WorldScene4 extends WorldScene {
 
         const specs = {
             width: 20,
-            height: 4.6,
+            height: 9.2,
             depth: 20,
             baseSize: 4.6,
-            frontMap: T_MAPS[TEXTURE_NAMES.WOOD_186],
-            frontNormal: T_MAPS[TEXTURE_NAMES.WOOD_186_NORMAL],
-            backMap: T_MAPS[TEXTURE_NAMES.WOOD_186],
-            backNormal: T_MAPS[TEXTURE_NAMES.WOOD_186_NORMAL],
+            frontMap: T_MAPS[TEXTURE_NAMES.WOOD_156],
+            frontNormal: T_MAPS[TEXTURE_NAMES.WOOD_156_NORMAL],
+            backMap: T_MAPS[TEXTURE_NAMES.WOOD_156],
+            backNormal: T_MAPS[TEXTURE_NAMES.WOOD_156_NORMAL],
             leftMap: T_MAPS[TEXTURE_NAMES.WOOD_186],
             leftNormal: T_MAPS[TEXTURE_NAMES.WOOD_186_NORMAL],
-            rightMap: T_MAPS[TEXTURE_NAMES.WOOD_186],
-            rightNormal: T_MAPS[TEXTURE_NAMES.WOOD_186_NORMAL],
-            mapRatio: 1.5,
+            rightMap: T_MAPS[TEXTURE_NAMES.METAL_272],
+            rightNormal: T_MAPS[TEXTURE_NAMES.METAL_272_NORMAL],
+            repeatU: 2.3,
+            repeatV: 1.5,
+            repeatModeU: REPEAT,
+            repeatModeV: MIRRORED_REPEAT,
+            // mapRatio: 1.5,
             name: 'room3',
             showArrow: true
         };
@@ -1095,16 +1099,16 @@ class WorldScene4 extends WorldScene {
             .setRotationY(- Math.PI / 6)
             .updateOBBnRay();
 
-        this.cPlanes = this.cPlanes.concat(room.walls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
+        this.cPlanes = this.cPlanes.concat(room.walls, room.insideWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs);
         return room;
     }
 
     focusNext(forceStaticRender = true) {
         
         this.focusNextProcess(forceStaticRender);
-        const { walls, floors, topOBBs, obstacles, slopes } = this.rooms[this.loadSequence];
+        const { walls, insideWalls, floors, topOBBs, obstacles, slopes } = this.rooms[this.loadSequence];
 
-        this.physics.walls = walls;
+        this.physics.walls = walls.concat(insideWalls);
         this.physics.floors = floors;
         this.physics.obstacleTops = topOBBs;
         this.physics.obstacles = obstacles;

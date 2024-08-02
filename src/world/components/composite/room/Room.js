@@ -53,24 +53,44 @@ class Room {
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
-        this.backWall = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, showArrow);
-        this.leftWall = createWallFunction(leftSpecs, `${name}_left`, [- width / 2, 0, 0], Math.PI / 2, true, true, showArrow);
-        this.rightWall = createWallFunction(rightSpecs, `${name}_right`, [width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
         
-        this.frontWall = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, showArrow);
-        this.frontWall.line?.material.color.setHex(green);
+        if (!this.ignoreWall('back')) {
 
-        this.walls = [this.frontWall, this.backWall, this.leftWall, this.rightWall];
+            this.backWall = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, showArrow);
+            this.walls.push(this.backWall);
+            this.group.add(this.backWall.mesh);
+
+        }
+
+        if (!this.ignoreWall('left')) {
+
+            this.leftWall = createWallFunction(leftSpecs, `${name}_left`, [width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
+            this.walls.push(this.leftWall);
+            this.group.add(this.leftWall.mesh);
+
+        }
+
+        if (!this.ignoreWall('right')) {
+
+            this.rightWall = createWallFunction(rightSpecs, `${name}_right`, [- width / 2, 0, 0], Math.PI / 2, true, true, showArrow);
+            this.walls.push(this.rightWall);
+            this.group.add(this.rightWall.mesh);
+
+        }
+        
+        if (!this.ignoreWall('front')) {
+
+            this.frontWall = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, showArrow);
+            this.frontWall.line?.material.color.setHex(green);
+            this.walls.push(this.frontWall);
+            this.group.add(this.frontWall.mesh);
+
+        }
 
         this.directionalLightTarget.name = DIRECTIONAL_LIGHT_TARGET;
         this.spotLightTarget.name = SPOT_LIGHT_TARGET;
 
         this.group.add(
-
-            this.frontWall.mesh,
-            this.backWall.mesh,
-            this.leftWall.mesh,
-            this.rightWall.mesh,
 
             this.directionalLightTarget,
             this.spotLightTarget
@@ -85,17 +105,23 @@ class Room {
         const floorsInit = this.initFloors();
         const insideGroupsInit = this.initInsideGroups();
         
-        await Promise.all([
-            this.frontWall.init(),
-            this.backWall.init(),
-            this.leftWall.init(),
-            this.rightWall.init()
-        ]
+        await Promise.all(
+            this.initWalls()
             .concat(insideWallsInit)
             .concat(floorsInit)
             .concat(insideGroupsInit)
         );
 
+    }
+
+    initWalls() {
+
+        const promises = [];
+
+        this.walls.forEach(w => promises.push(w.init()));
+
+        return promises;
+        
     }
 
     initInsideWalls() {
@@ -136,10 +162,20 @@ class Room {
 
             this.walls.push(w);
 
+        });
+
+    }
+
+    addInsideWalls(walls) {
+
+        walls.forEach(w => {
+
+            this.group.add(w.mesh);
+
             this.insideWalls.push(w);
 
         });
-
+        
     }
 
     addFloors(floors) {
@@ -162,7 +198,7 @@ class Room {
 
             this.insideGroups.push(g);
 
-            if (g.walls) this.walls = this.walls.concat(g.walls);
+            if (g.walls) this.insideWalls = this.insideWalls.concat(g.walls);
 
             if (g.tops) this.tops = this.tops.concat(g.tops);
 
@@ -193,23 +229,59 @@ class Room {
 
     }
 
+    ignoreWall(wall) {
+
+        const { ignoreWalls = [] } = this.specs;
+
+        let ignore = false;
+
+        switch (wall) {
+
+            case 'front':
+                ignore = ignoreWalls.findIndex(i => i === 0) > - 1;
+                break;
+
+            case 'back':
+                ignore = ignoreWalls.findIndex(i => i === 1) > - 1;
+                break;
+
+            case 'left':
+                ignore = ignoreWalls.findIndex(i => i === 2) > - 1;
+                break;
+            
+            case 'right':
+                ignore = ignoreWalls.findIndex(i => i === 3) > - 1;
+                break;
+
+        }
+
+        return ignore;
+
+    }
+
     makePlaneConfig(specs) {
 
         const { width, height } = specs;
 
         const { baseSize = height, mapRatio, lines = true } = this.specs;
+        const { repeatU, repeatV, repeatModeU = REPEAT, repeatModeV = REPEAT } = this.specs;
 
         specs.lines = lines;
 
-        if (mapRatio) {
+        if (repeatU && repeatV) {
+
+            specs.repeatU = repeatU;
+            specs.repeatV = repeatV;
+
+        } else if (mapRatio) {
 
             specs.repeatU = width / (mapRatio * baseSize);
             specs.repeatV = height / baseSize;
 
         }
 
-        specs.repeatModeU = REPEAT;
-        specs.repeatModeV = REPEAT;
+        specs.repeatModeU = repeatModeU;
+        specs.repeatModeV = repeatModeV;
 
         return specs;
 
@@ -227,7 +299,7 @@ class Room {
 
         this.group.rotation.y = y;
 
-        this.walls.forEach(w => w.mesh.rotationY += y);
+        this.walls.concat(this.insideWalls).forEach(w => w.mesh.rotationY += y);
 
         return this;
 
@@ -252,7 +324,7 @@ class Room {
         // this will update all children mesh matrixWorld.
         this.group.updateMatrixWorld();
 
-        this.walls.forEach(w => {
+        this.walls.concat(this.insideWalls).forEach(w => {
 
             w.updateRay(false);
 
