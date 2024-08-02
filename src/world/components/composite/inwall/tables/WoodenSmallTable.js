@@ -1,8 +1,8 @@
-import { createOBBBox } from '../../physics/collisionHelper';
-import { ObstacleBase } from './ObstacleBase';
-import { GLTFModel, CollisionBox } from '../../Models';
+import { createOBBBox } from '../../../physics/collisionHelper';
+import { ObstacleBase } from '../ObstacleBase';
+import { GLTFModel, CollisionBox } from '../../../Models';
 
-const GLTF_SRC = 'wooden_table_1k/wooden_table_02_1k.gltf';
+const GLTF_SRC = 'inRoom/tables/wooden_table_1k/wooden_table_02_1k.gltf';
 
 class WoodenSmallTable extends ObstacleBase {
 

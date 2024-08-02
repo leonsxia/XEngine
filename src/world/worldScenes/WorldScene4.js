@@ -24,17 +24,17 @@ const worldSceneSpecs = {
     allTargets: [
         { x: 0, y: 0, z: 10 },
         { x: 0, y: 0, z: - 14 },
-        { x: 18, y: 0, z: 4 },
+        { x: 28, y: 0, z: 4 },
     ],
     allCameraPos: [
         { x: 10, y: 10, z: 25 },
         { x: 7, y: 17, z: - 5 },
-        { x: 20, y: 10, z: 20 }
+        { x: 30, y: 10, z: 20 }
     ],
     allPlayerPos: [
         [1, 5, 15],
         [0, 6, - 13],
-        [18, 3, 4],
+        [28, 3, 4],
     ]
 };
 
@@ -85,9 +85,9 @@ const GLTF_NAMES = {
 }
 
 const GLTFS = [{
-    name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
+    name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
 }, {
-    name: GLTF_NAMES.WOODEN_TABLE, src: 'wooden_table_1k/wooden_table_02_1k.gltf'
+    name: GLTF_NAMES.WOODEN_TABLE, src: 'inRoom/tables/wooden_table_1k/wooden_table_02_1k.gltf'
 }];
 
 // basic lights
@@ -984,7 +984,7 @@ class WorldScene4 extends WorldScene {
         spillar3.setPosition([- 2.5, 0, 9]);
         spillar4.setPosition([2.5, 0, 9]);
         cpillar1.setPosition([0, 0, 0]);
-        hexCylinder1.setPosition([2.5, .5, - 5]);
+        hexCylinder1.setPosition([2.5, .5, - 3.5]);
 
         const lwall1 = new LWall(lwSpecs2);
         lwall1.setPosition([- 1.5, - posY + lwSpecs2.height * .5, - 5]);
@@ -1008,7 +1008,7 @@ class WorldScene4 extends WorldScene {
         const GLTF_MAPS = this.gltfs;
 
         const specs = {
-            width: 10,
+            width: 20,
             height: 4.6,
             depth: 20,
             baseSize: 4.6,
@@ -1026,7 +1026,7 @@ class WorldScene4 extends WorldScene {
         };
 
         const floorSpecs = {
-            width: 10,
+            width: 20,
             height: 20,
             map: T_MAPS[TEXTURE_NAMES.WOOD_227],
             normalMap: T_MAPS[TEXTURE_NAMES.WOOD_227_NORMAL],
@@ -1095,7 +1095,7 @@ class WorldScene4 extends WorldScene {
 
         await room.init();
 
-        room.setPosition([20, posY, 4.3])
+        room.setPosition([30, posY, 4.3])
             .setRotationY(- Math.PI / 6)
             .updateOBBnRay();
 
