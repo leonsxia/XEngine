@@ -56,6 +56,7 @@ class Stairs extends Slope {
     createSideFaces() {
 
         const { name, width = 1, depth = 1, height = 1, sideMap, sideNormal } = this.specs;
+        const { receiveShadow = true, castShadow = true } = this.specs;
         const leftSideSpecs = this.makePlaneConfig({ name: `${name}_left_side`, width: depth, height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: sideMap, normalMap: sideNormal, leftHanded: true, color: basic });
         const rightSideSpecs = this.makePlaneConfig({ name: `${name}_right_side`, width: depth, height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: sideMap, normalMap: sideNormal, leftHanded: false, color: basic });
 
@@ -63,13 +64,13 @@ class Stairs extends Slope {
         const rightSide = new StairsSidePlane(rightSideSpecs);
         leftSide.setPosition([width * .5, 0, 0])
             .setRotation([0, Math.PI * .5, 0])
-            .receiveShadow(true)
-            .castShadow(true);
+            .receiveShadow(receiveShadow)
+            .castShadow(castShadow);
 
         rightSide.setPosition([- width * .5, 0, 0])
             .setRotation([0, - Math.PI * .5, 0])
-            .receiveShadow(true)
-            .castShadow(true);
+            .receiveShadow(receiveShadow)
+            .castShadow(castShadow);
 
         this.stepSides.push(leftSide, rightSide);
 
@@ -80,18 +81,19 @@ class Stairs extends Slope {
     createStepFaces() {
 
         const { name, width = 1, depth = 1, height = 1, frontMap, topMap, frontNormal, topNormal } = this.specs;
+        const { receiveShadow = true, castShadow = true } = this.specs;
         const frontSpecs = this.makePlaneConfig({ name: `${name}_front`, width, height, depth, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: frontMap, normalMap: frontNormal, type: STAIRS_FRONT, color: basic });
         const topSpecs = this.makePlaneConfig({ name: `${name}_top`, width, height: depth, depth: height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: topMap, normalMap: topNormal, type: STAIRS_TOP, color: yankeesBlue });
         
         const front = new StairsStepPlane(frontSpecs);
         const top = new StairsStepPlane(topSpecs);
 
-        front.receiveShadow(true)
-            .castShadow(true);
+        front.receiveShadow(receiveShadow)
+            .castShadow(castShadow);
 
         top.setRotation([- Math.PI * .5, 0, 0])
-            .receiveShadow(true)
-            .castShadow(true);
+            .receiveShadow(receiveShadow)
+            .castShadow(castShadow);
         
         this.stepFront = front;
         this.stepTop = top;

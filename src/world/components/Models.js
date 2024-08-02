@@ -23,10 +23,13 @@ export { CollisionCylinder } from './physics/CollisionCylinder.js';
 export { CollisionOBBPlane } from './physics/CollisionOBBPlane.js';
 export { OBBPlane } from './physics/OBBPlane.js';
 export { OBBBox } from './physics/OBBBox.js';
+
+// room/inwall
 export { Room } from './composite/room/Room.js';
 export { SquarePillar } from './composite/inwall/SquarePillar.js';
 export { LWall } from './composite/inwall/LWall.js';
 export { CylinderPillar } from './composite/inwall/CylinderPillar.js';
+export { HexCylinderPillar } from './composite/inwall/HexCylinderPillar.js';
 export { BoxCube } from './composite/inwall/BoxCube.js';
 export { Slope } from './composite/inwall/Slope.js';
 export { Stairs } from './composite/inwall/Stairs.js';

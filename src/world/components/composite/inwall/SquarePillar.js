@@ -19,6 +19,7 @@ class SquarePillar extends InWallObjectBase {
         const { showArrow = false } = specs;
         const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
+        const { receiveShadow = true, castShadow = true } = specs;
 
         const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap, normalMap: frontNormal })
         const backSpecs = this.makePlaneConfig({ width, height, map: backMap, normalMap: backNormal });
@@ -31,22 +32,22 @@ class SquarePillar extends InWallObjectBase {
 
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
-        this.backFace = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], Math.PI, true, true, showArrow);
-        this.rightFace = createWallFunction(leftSpecs, `${name}_right`, [- width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
-        this.leftFace = createWallFunction(rightSpecs, `${name}_left`, [width / 2, 0, 0], Math.PI / 2, true, true, showArrow);
+        this.backFace = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], Math.PI, receiveShadow, castShadow, showArrow);
+        this.rightFace = createWallFunction(leftSpecs, `${name}_right`, [- width / 2, 0, 0], - Math.PI / 2, receiveShadow, castShadow, showArrow);
+        this.leftFace = createWallFunction(rightSpecs, `${name}_left`, [width / 2, 0, 0], Math.PI / 2, receiveShadow, castShadow, showArrow);
 
         if (!this.enableOBBs) {
 
-            this.topFace = createCollisionPlaneFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, showArrow);
-            this.bottomFace = createCollisionPlaneFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, showArrow);
+            this.topFace = createCollisionPlaneFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
+            this.bottomFace = createCollisionPlaneFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
 
             this.tops = [this.topFace];
             this.bottoms = [this.bottomFace];
 
         } else {
 
-            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, false);
-            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, false);
+            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, false);
+            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, false);
 
             this.topOBBs = [this.topFace];
             this.bottomOBBs = [this.bottomFace];
@@ -54,7 +55,7 @@ class SquarePillar extends InWallObjectBase {
         }
 
         // create last for changing line color
-        this.frontFace = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], 0, true, true, showArrow);
+        this.frontFace = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], 0, receiveShadow, castShadow, showArrow);
         this.frontFace.line?.material.color.setHex(green);
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];

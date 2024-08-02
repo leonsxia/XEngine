@@ -11,12 +11,6 @@ class WoodenSmallTable extends ObstacleBase {
     depth = .706739;
 
     gltf;
-    frontFace;
-    backFace;
-    leftFace;
-    rightFace;
-    topFace;
-    bottomFace;
 
     constructor(specs) {
 

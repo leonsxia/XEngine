@@ -24,6 +24,7 @@ class LWall extends InWallObjectBase {
         const { showArrow = false } = specs;
         const { outTMap, outSMap, inTMap, inSMap, sideTMap, sideSMap, topMap, bottomMap } = specs;
         const { outTNormal, outSNormal, inTNormal, inSNormal, sideTNormal, sideSNormal, topNormal, bottomNormal } = specs;
+        const { receiveShadow = true, castShadow = true } = specs;
 
         const outWallTSpecs = this.makePlaneConfig({ width: depth, height, map: outTMap, normalMap: outTNormal });
         const inWallTSpecs = this.makePlaneConfig({ width: depth - thickness, height, map: inTMap, normalMap: inTNormal });
@@ -38,28 +39,28 @@ class LWall extends InWallObjectBase {
 
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
-        this.outWallT = createWallFunction(outWallTSpecs, `${name}_outT`, [- width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
-        this.inWallT = createWallFunction(inWallTSpecs, `${name}_inT`, [- width / 2 + thickness, 0, thickness / 2], Math.PI / 2, true, true, showArrow);
-        this.inWallS = createWallFunction(inWallSSpecs, `${name}_inS`, [thickness / 2, 0, - depth / 2 + thickness], 0, true, true, showArrow);
-        this.sideWallT = createWallFunction(sideWallTSpecs, `${name}_sideT`, [width / 2, 0, - depth / 2 + thickness / 2], Math.PI / 2, true, true, showArrow);
-        this.sideWallS = createWallFunction(sideWallSSpecs, `${name}_sideS`, [- width / 2 + thickness / 2, 0, depth / 2], 0, true, true, showArrow);
+        this.outWallT = createWallFunction(outWallTSpecs, `${name}_outT`, [- width / 2, 0, 0], - Math.PI / 2, receiveShadow, castShadow, showArrow);
+        this.inWallT = createWallFunction(inWallTSpecs, `${name}_inT`, [- width / 2 + thickness, 0, thickness / 2], Math.PI / 2, receiveShadow, castShadow, showArrow);
+        this.inWallS = createWallFunction(inWallSSpecs, `${name}_inS`, [thickness / 2, 0, - depth / 2 + thickness], 0, receiveShadow, castShadow, showArrow);
+        this.sideWallT = createWallFunction(sideWallTSpecs, `${name}_sideT`, [width / 2, 0, - depth / 2 + thickness / 2], Math.PI / 2, receiveShadow, castShadow, showArrow);
+        this.sideWallS = createWallFunction(sideWallSSpecs, `${name}_sideS`, [- width / 2 + thickness / 2, 0, depth / 2], 0, receiveShadow, castShadow, showArrow);
 
         if (!this.enableOBBs) {
 
-            this.topWallT = createCollisionPlaneFree(topTSpecs, `${name}_topT`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], true, false, false, showArrow);
-            this.topWallS = createCollisionPlaneFree(topSSpecs, `${name}_topS`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], true, false, false, showArrow);
-            this.bottomWallT = createCollisionPlaneFree(bottomTSpecs, `${name}_bottomT`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], true, false, false, showArrow);
-            this.bottomWallS = createCollisionPlaneFree(bottomSSpecs, `${name}_bottomS`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], true, false, false, showArrow);
+            this.topWallT = createCollisionPlaneFree(topTSpecs, `${name}_topT`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
+            this.topWallS = createCollisionPlaneFree(topSSpecs, `${name}_topS`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
+            this.bottomWallT = createCollisionPlaneFree(bottomTSpecs, `${name}_bottomT`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
+            this.bottomWallS = createCollisionPlaneFree(bottomSSpecs, `${name}_bottomS`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
 
             this.tops.push(this.topWallT, this.topWallS);
             this.bottoms.push(this.bottomWallT, this.bottomWallS);
 
         } else {
 
-            this.topWallT = createOBBPlane(topTSpecs, `${name}_topT_OBB`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], true, false);
-            this.topWallS = createOBBPlane(topSSpecs, `${name}_topS_OBB`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], true, false);
-            this.bottomWallT = createOBBPlane(bottomTSpecs, `${name}_bottomT_OBB`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], true, false);
-            this.bottomWallS = createOBBPlane(bottomSSpecs, `${name}_bottomS_OBB`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], true, false);
+            this.topWallT = createOBBPlane(topTSpecs, `${name}_topT_OBB`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, false);
+            this.topWallS = createOBBPlane(topSSpecs, `${name}_topS_OBB`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], receiveShadow, false);
+            this.bottomWallT = createOBBPlane(bottomTSpecs, `${name}_bottomT_OBB`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, false);
+            this.bottomWallS = createOBBPlane(bottomSSpecs, `${name}_bottomS_OBB`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], receiveShadow, false);
 
             this.topOBBs.push(this.topWallT, this.topWallS);
             this.bottomOBBs.push(this.bottomWallT, this.bottomWallS);
@@ -67,7 +68,7 @@ class LWall extends InWallObjectBase {
         }
 
         // create last for changing line color
-        this.outWallS = createWallFunction(outWallSSpecs, `${name}_outS`, [0, 0, - depth / 2], Math.PI, true, true, showArrow);
+        this.outWallS = createWallFunction(outWallSSpecs, `${name}_outS`, [0, 0, - depth / 2], Math.PI, receiveShadow, castShadow, showArrow);
         this.outWallS.line?.material.color.setHex(green);
 
         this.walls = [this.outWallT, this.outWallS, this.inWallT, this.inWallS, this.sideWallT, this.sideWallS];

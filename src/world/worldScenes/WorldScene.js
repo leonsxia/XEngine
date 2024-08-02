@@ -431,7 +431,7 @@ class WorldScene {
                 value: { Wire: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
-                changeFn: this.showCPlanes.bind(this)
+                changeFn: this.showWireframe.bind(this)
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -617,7 +617,7 @@ class WorldScene {
 
     }
 
-    showCPlanes(show) {
+    showWireframe(show) {
 
         const s = show === 'show' ? true : false;
 

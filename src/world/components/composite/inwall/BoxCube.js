@@ -20,6 +20,7 @@ class BoxCube extends ObstacleBase  {
         const { showArrow = false, freeTexture = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
+        const { receiveShadow = true, castShadow = true } = specs;
 
         const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map, normalMap, lines };
 
@@ -32,23 +33,23 @@ class BoxCube extends ObstacleBase  {
         const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
         const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], !freeTexture, !freeTexture);
+        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
 
         const createPlaneFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
-        this.backFace = createPlaneFunction(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, true, true, showArrow);
-        this.rightFace = createPlaneFunction(leftSpecs, `${name}_right`, [- width * .5, 0, 0], - Math.PI * .5, true, true, showArrow);
-        this.leftFace = createPlaneFunction(rightSpecs, `${name}_left`, [width * .5, 0, 0], Math.PI * .5, true, true, showArrow);
+        this.backFace = createPlaneFunction(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, receiveShadow, castShadow, showArrow);
+        this.rightFace = createPlaneFunction(leftSpecs, `${name}_right`, [- width * .5, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
+        this.leftFace = createPlaneFunction(rightSpecs, `${name}_left`, [width * .5, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
 
         {
-            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], true, true);
-            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], true, true);
+            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);
+            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, castShadow);
             this.topOBBs = [this.topFace];
             this.bottomOBBs = [this.bottomFace];
         }
 
         // create last for changing line color
-        this.frontFace = createPlaneFunction(frontSpecs, `${name}_front`, [0, 0, depth * .5], 0, true, true, showArrow);
+        this.frontFace = createPlaneFunction(frontSpecs, `${name}_front`, [0, 0, depth * .5], 0, receiveShadow, castShadow, showArrow);
         this.frontFace.line?.material.color.setHex(green);
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];

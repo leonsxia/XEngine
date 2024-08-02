@@ -82,10 +82,6 @@ class CollisionHexCylinder {
         
     }
 
-    async init() {
-        return;
-    }
-
     makeBoxConfig(name, specs) {
 
         const { width, height, depth, enableWallOBBs, showArrow, lines } = specs;

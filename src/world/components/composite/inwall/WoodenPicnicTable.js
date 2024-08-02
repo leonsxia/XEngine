@@ -14,20 +14,6 @@ class WoodenPicnicTable extends ObstacleBase {
     topWidth = 1.246;
 
     gltf;
-    bottomFrontFace;
-    bottomBackFace;
-    bottomLeftFace;
-    bottomRightFace;
-    bottomTopLeftFace;
-    bottomTopRightFace;
-
-    topFrontFace;
-    topBackFace;
-    topLeftFace;
-    topRightFace;
-    topUpFace;
-
-    bottomFace;
 
     constructor(specs) {
 

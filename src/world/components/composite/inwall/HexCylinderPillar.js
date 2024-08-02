@@ -1,0 +1,66 @@
+import { createOBBBox } from '../../physics/collisionHelper';
+import { ObstacleBase } from './ObstacleBase';
+import { CollisionHexCylinder, CollisionCylinder } from '../../Models';
+
+class HexCylinderPillar extends ObstacleBase {
+
+    radius;
+    height;
+    cylinder;
+
+    constructor(specs) {
+
+        super(specs);
+
+        const { name, scale = [1, 1], lines = true, showArrow = false } = specs;
+        const { radius, height, segments = 16, baseSize, mapRatio, rotationC = Math.PI * .5 } = specs;
+        const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal } = specs;
+        const { receiveShadow = true, castShadow = true } = specs;
+
+        this.radius = radius * scale[0];
+        this.height = height * scale[1];
+
+        const boxSpecs = { size: { width: this.radius * 2, depth: this.radius * 2, height: this.height }, lines };
+        const cylinderSpecs = { 
+            name: `${name}_cylinder`, radius: this.radius, height: this.height, segments, baseSize, 
+            map, normalMap, topMap, topNormal, bottomMap, bottomNormal,
+            mapRatio, rotationC, lines
+        };
+        const chCylinderSpecs = { name, radius: this.radius, height: this.height, enableWallOBBs:this.enableWallOBBs, showArrow, lines };
+
+        // cylinder
+        this.cylinder = new CollisionCylinder(cylinderSpecs);
+        this.cylinder.receiveShadow(receiveShadow)
+            .castShadow(castShadow);
+        
+        // obb box
+        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], true, true);
+        this.box.mesh.visible = false;
+
+        // collision cylinder
+        const chCylinder = new CollisionHexCylinder(chCylinderSpecs);
+        chCylinder.setRotationY(Math.PI / 16);
+
+        this.cObjects = [chCylinder];
+        this.walls = this.getWalls();
+        this.topOBBs = this.getTopOBBs();
+        this.bottomOBBs = this.getBottomOBBs();
+        this.addCObjects();
+        this.setCObjectsVisible(false);
+
+        this.group.add(
+            this.cylinder.mesh,
+            this.box.mesh
+        );
+
+    }
+
+    async init() {
+
+        await this.cylinder.init();
+
+    }
+
+}
+
+export { HexCylinderPillar };

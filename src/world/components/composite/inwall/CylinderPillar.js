@@ -36,6 +36,7 @@ class CylinderPillar extends InWallObjectBase {
         const { name, width, height} = specs;
         const { showArrow = false } = specs;
         const { map, topMap, bottomMap, normalMap, topNormal, bottomNormal } = specs;
+        const { receiveShadow = true, castShadow = true } = specs;
         const offset = Math.sqrt(width * width / 2);
 
         this.radius = width * .5 / Math.cos(.375 * Math.PI);
@@ -53,16 +54,16 @@ class CylinderPillar extends InWallObjectBase {
 
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
-        this.face8 = createWallFunction(pSpecs8, `${name}_face2`, [- width / 2 - offset / 2, 0, width / 2 + offset / 2], - Math.PI / 4, true, true, showArrow);
-        this.face7 = createWallFunction(pSpecs7, `${name}_face3`, [- width / 2 - offset, 0, 0], - Math.PI / 2, true, true, showArrow, false);
-        this.face6 = createWallFunction(pSpecs6, `${name}_face4`, [- width / 2 - offset / 2, 0, - width / 2 - offset / 2], - 3 * Math.PI / 4, true, true, showArrow);
-        this.face5 = createWallFunction(pSpecs5, `${name}_face5`, [0, 0, - width / 2 - offset], Math.PI, true, true, showArrow, false);
-        this.face4 = createWallFunction(pSpecs4, `${name}_face6`, [width / 2 + offset / 2, 0, - width / 2 - offset / 2], 3 * Math.PI / 4, true, true, showArrow);
-        this.face3 = createWallFunction(pSpecs3, `${name}_face7`, [width / 2 + offset, 0, 0], Math.PI / 2, true, true, showArrow, false);
-        this.face2 = createWallFunction(pSpecs2, `${name}_face8`, [width / 2 + offset / 2, 0, width / 2 + offset / 2],  Math.PI / 4, true, true, showArrow);
+        this.face8 = createWallFunction(pSpecs8, `${name}_face2`, [- width / 2 - offset / 2, 0, width / 2 + offset / 2], - Math.PI / 4, receiveShadow, castShadow, showArrow);
+        this.face7 = createWallFunction(pSpecs7, `${name}_face3`, [- width / 2 - offset, 0, 0], - Math.PI / 2, receiveShadow, castShadow, showArrow);
+        this.face6 = createWallFunction(pSpecs6, `${name}_face4`, [- width / 2 - offset / 2, 0, - width / 2 - offset / 2], - 3 * Math.PI / 4, receiveShadow, castShadow, showArrow);
+        this.face5 = createWallFunction(pSpecs5, `${name}_face5`, [0, 0, - width / 2 - offset], Math.PI, receiveShadow, castShadow, showArrow);
+        this.face4 = createWallFunction(pSpecs4, `${name}_face6`, [width / 2 + offset / 2, 0, - width / 2 - offset / 2], 3 * Math.PI / 4, receiveShadow, castShadow, showArrow);
+        this.face3 = createWallFunction(pSpecs3, `${name}_face7`, [width / 2 + offset, 0, 0], Math.PI / 2, receiveShadow, castShadow, showArrow);
+        this.face2 = createWallFunction(pSpecs2, `${name}_face8`, [width / 2 + offset / 2, 0, width / 2 + offset / 2],  Math.PI / 4, receiveShadow, castShadow, showArrow);
 
-        this.top = createCollisionOctagonFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, - Math.PI * .125], true, false);
-        this.bottom = createCollisionOctagonFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, Math.PI * .125], true, false);
+        this.top = createCollisionOctagonFree(topSpecs, `${name}_top`, [0, height * .5, 0], [- Math.PI * .5, 0, - Math.PI * .125], receiveShadow, false);
+        this.bottom = createCollisionOctagonFree(bottomSpecs, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, Math.PI * .125], receiveShadow, false);
         this.tops = [this.top];
         this.bottoms = [this.bottom];
 
@@ -99,7 +100,7 @@ class CylinderPillar extends InWallObjectBase {
             )
         }
 
-        this.face1 = createWallFunction(pSpecs1, `${name}_face1`, [0, 0, width / 2 + offset], 0, true, true, showArrow);
+        this.face1 = createWallFunction(pSpecs1, `${name}_face1`, [0, 0, width / 2 + offset], 0, receiveShadow, castShadow, showArrow);
         this.face1.line?.material.color.setHex(green);
 
         this.walls = [this.face1, this.face2, this.face3, this.face4, this.face5, this.face6, this.face7, this.face8];
