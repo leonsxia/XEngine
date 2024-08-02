@@ -66,7 +66,8 @@ const GLTF_NAMES = {
     WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
     WOODEN_TABLE: 'WOODEN_TABLE',
     ROUND_WOODEN_TABLE: 'ROUND_WOODEN_TABLE',
-    PAINTED_WOODEN_TABLE: 'PAINTED_WOODEN_TABLE'
+    PAINTED_WOODEN_TABLE: 'PAINTED_WOODEN_TABLE',
+    PAINTED_WOODEN_NIGHTSTAND: 'PAINTED_WOODEN_NIGHTSTAND'
 }
 
 const GLTFS = [{
@@ -77,6 +78,8 @@ const GLTFS = [{
     name: GLTF_NAMES.ROUND_WOODEN_TABLE, src: 'inRoom/tables/round_wooden_table_01_1k/round_wooden_table_01_1k.gltf'
 }, {
     name: GLTF_NAMES.PAINTED_WOODEN_TABLE, src: 'inRoom/tables/painted_wooden_table_1k/painted_wooden_table_1k.gltf'
+}, {
+    nmae: GLTF_NAMES.PAINTED_WOODEN_NIGHTSTAND, src: 'inRoom/tables/painted_wooden_nightstand_1k/painted_wooden_nightstand_1k.gltf'
 }];
 
 export { 

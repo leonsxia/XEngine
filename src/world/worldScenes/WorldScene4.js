@@ -2,7 +2,7 @@ import { createAxesHelper, createGridHelper } from '../components/utils/helpers.
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
 import { 
     Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs, 
-    WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable
+    WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand
 } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
@@ -1047,6 +1047,16 @@ class WorldScene4 extends WorldScene {
             climbable: true
         }
 
+        const paintedWoodenNightstandSpecs1 = {
+            src: GLTF_MAPS[GLTF_NAMES.PAINTED_WOODEN_NIGHTSTAND],
+            name: 'painted_woodent_nightstand_1',
+            scale: [1.5, 1.5, 1.5],
+            isObstacle: true,
+            enableWallOBBs: true,
+            movable: true,
+            climbable: true
+        }
+
         const posY = specs.height / 2;
 
         const floor = new OBBPlane(floorSpecs);
@@ -1071,9 +1081,13 @@ class WorldScene4 extends WorldScene {
         const paintedWoodenTable1 = new PaintedWoodenTable(paintedWoodenTableSpecs1);
         paintedWoodenTable1.setPosition([- 3, 3, - 3.5]);
 
+        const paintedWoodenNightstand = new PaintedWoodenNightstand(paintedWoodenNightstandSpecs1);
+        paintedWoodenNightstand.setPosition([0, 3, - 5])
+            .setRotationY(Math.PI * .25);
+
         const room = new Room(specs);
         room.addFloors([floor]);
-        room.addGroups([woodenPicnicTable, smallTable, smallTable2, roundWoodenTable1, paintedWoodenTable1]);
+        room.addGroups([woodenPicnicTable, smallTable, smallTable2, roundWoodenTable1, paintedWoodenTable1, paintedWoodenNightstand]);
 
         await room.init();
 

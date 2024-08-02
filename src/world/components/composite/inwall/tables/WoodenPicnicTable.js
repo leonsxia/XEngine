@@ -2,7 +2,6 @@ import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionBox } from '../../../Models';
 
-
 const GLTF_SRC = 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf';
 
 class WoodenPicnicTable extends ObstacleBase {
