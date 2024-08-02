@@ -2,7 +2,6 @@ import { Group } from 'three';
 import { createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue } from '../../basic/colorBase';
-import { REPEAT } from '../../utils/constants';
 
 class ObstacleBase extends ObstacleMoveable {
 

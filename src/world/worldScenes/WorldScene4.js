@@ -2,13 +2,16 @@ import { createAxesHelper, createGridHelper } from '../components/utils/helpers.
 import { createBasicLights, createPointLights, createSpotLights } from '../components/lights.js';
 import { 
     Train, Tofu, Plane, OBBPlane, Room, SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs, 
-    WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable 
+    WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable
 } from '../components/Models.js';
 import { setupShadowLight } from '../components/shadowMaker.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { loadTextures } from '../components/utils/textureHelper.js';
 import { loadGLTFModels } from '../components/utils/gltfHelper.js';
-import { MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../components/utils/constants.js';
+import { 
+    MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT,
+    TEXTURE_NAMES, TEXTURES, GLTF_NAMES, GLTFS
+ } from '../components/utils/constants.js';
 import { WorldScene } from './WorldScene.js';
 
 const sceneName = 'Simple Physics';
@@ -44,57 +47,6 @@ const worldSceneSpecs = {
 const ROOM1 = 'room1';
 const ROOM2 = 'room2';
 const ROOM3 = 'room3';
-
-const TEXTURE_NAMES = {
-    CRATE: 'CRATE',
-    CRATE_NORMAL: 'CRATE_NORMAL',
-    CONCRETE_128: 'CONCRETE_128',
-    CONCRETE_128_NORMAL: 'CONCRETE_128_NORMAL',
-    CONCRETE_132: 'CONCRETE_132',
-    CONCRETE_132_NORMAL: 'CONCRETE_132_NORMAL',
-    BRICK_159: 'BRICK_159',
-    BRICK_159_NORMAL: 'BRICK_159_NORMAL',
-    FABRIC_190: 'FABRIC_190',
-    FABRIC_190_NORMAL: 'FABRIC_190_NORMAL',
-    STONE_165: 'STONE_165',
-    STONE_165_NORMAL: 'STONE_165_NORMAL',
-    WOOD_186: 'WOOD_186',
-    WOOD_186_NORMAL: 'WOOD_186_NORMAL',
-    WOOD_227: 'WOOD_227',
-    WOOD_227_NORMAL: 'WOOD_227_NORMAL'
-}
-
-const TEXTURES = [{
-    name: TEXTURE_NAMES.CRATE, map: 'assets/textures/crate.png', normalMap: 'assets/textures/normals/crate.jpg'
-}, {
-    name: TEXTURE_NAMES.CONCRETE_128, map: 'assets/textures/walls/Texturelabs_Concrete_128M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_128L.jpg'
-}, {
-    name: TEXTURE_NAMES.CONCRETE_132, map: 'assets/textures/walls/Texturelabs_Concrete_132M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_132L.jpg'
-}, {
-    name: TEXTURE_NAMES.BRICK_159, map: 'assets/textures/walls/Texturelabs_Brick_159M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Brick_159L.jpg'
-}, {
-    name: TEXTURE_NAMES.FABRIC_190, map: 'assets/textures/walls/Texturelabs_Fabric_190M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Fabric_190L.jpg'
-}, {
-    name: TEXTURE_NAMES.STONE_165, map: 'assets/textures/walls/Texturelabs_Stone_165M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Stone_165L.jpg'
-}, {
-    name: TEXTURE_NAMES.WOOD_186, map: 'assets/textures/walls/Texturelabs_Wood_186M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Wood_186L.jpg'
-}, {
-    name: TEXTURE_NAMES.WOOD_227, map: 'assets/textures/walls/Texturelabs_Wood_227M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Wood_227L.jpg'
-}];
-
-const GLTF_NAMES = {
-    WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
-    WOODEN_TABLE: 'WOODEN_TABLE',
-    ROUND_WOODEN_TABLE: 'ROUND_WOODEN_TABLE'
-}
-
-const GLTFS = [{
-    name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
-}, {
-    name: GLTF_NAMES.WOODEN_TABLE, src: 'inRoom/tables/wooden_table_1k/wooden_table_02_1k.gltf'
-}, {
-    name: GLTF_NAMES.ROUND_WOODEN_TABLE, src: 'inRoom/tables/round_wooden_table_01_1k/round_wooden_table_01_1k.gltf'
-}];
 
 // basic lights
 // room1
@@ -1085,6 +1037,16 @@ class WorldScene4 extends WorldScene {
             climbable: true
         }
 
+        const paintedWoodenTableSpecs1 = {
+            src: GLTF_MAPS[GLTF_NAMES.PAINTED_WOODEN_TABLE],
+            name: 'painted_woodent_table_1',
+            scale: [1, 1, 1],
+            isObstacle: true,
+            enableWallOBBs: true,
+            movable: true,
+            climbable: true
+        }
+
         const posY = specs.height / 2;
 
         const floor = new OBBPlane(floorSpecs);
@@ -1106,9 +1068,12 @@ class WorldScene4 extends WorldScene {
         roundWoodenTable1.setPosition([3, 3, - 3])
             .setRotationY(3 * Math.PI * .25);
 
+        const paintedWoodenTable1 = new PaintedWoodenTable(paintedWoodenTableSpecs1);
+        paintedWoodenTable1.setPosition([- 3, 3, - 3.5]);
+
         const room = new Room(specs);
         room.addFloors([floor]);
-        room.addGroups([woodenPicnicTable, smallTable, smallTable2, roundWoodenTable1]);
+        room.addGroups([woodenPicnicTable, smallTable, smallTable2, roundWoodenTable1, paintedWoodenTable1]);
 
         await room.init();
 

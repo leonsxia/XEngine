@@ -36,6 +36,7 @@ export { Stairs } from './composite/inwall/Stairs.js';
 export { WoodenPicnicTable } from './composite/inwall/tables/WoodenPicnicTable.js';
 export { WoodenSmallTable } from './composite/inwall/tables/WoodenSmallTable.js';
 export { RoundWoodenTable } from './composite/inwall/tables/RoundWoodenTable.js';
+export { PaintedWoodenTable } from './composite/inwall/tables/PaintedWoodenTable.js';
 
 // collision objects
 export { CollisionBox } from './physics/CollisionObjects/CollisionBox.js';
