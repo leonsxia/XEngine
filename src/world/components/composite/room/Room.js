@@ -1,7 +1,7 @@
 import { Object3D, Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
-import { REPEAT, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET } from '../../utils/constants';
+import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER } from '../../utils/constants';
 
 class Room {
 
@@ -49,6 +49,7 @@ class Room {
 
         this.name = name;
         this.group = new Group();
+        this.group.isRoom = true;
         this.group.name = name;
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
@@ -57,6 +58,7 @@ class Room {
         if (!this.ignoreWall('back')) {
 
             this.backWall = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, showArrow);
+            this.backWall.manuallyAdded = true;
             this.walls.push(this.backWall);
             this.group.add(this.backWall.mesh);
 
@@ -65,6 +67,7 @@ class Room {
         if (!this.ignoreWall('left')) {
 
             this.leftWall = createWallFunction(leftSpecs, `${name}_left`, [width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
+            this.leftWall.manuallyAdded = true;
             this.walls.push(this.leftWall);
             this.group.add(this.leftWall.mesh);
 
@@ -73,6 +76,7 @@ class Room {
         if (!this.ignoreWall('right')) {
 
             this.rightWall = createWallFunction(rightSpecs, `${name}_right`, [- width / 2, 0, 0], Math.PI / 2, true, true, showArrow);
+            this.rightWall.manuallyAdded = true;
             this.walls.push(this.rightWall);
             this.group.add(this.rightWall.mesh);
 
@@ -81,6 +85,7 @@ class Room {
         if (!this.ignoreWall('front')) {
 
             this.frontWall = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, showArrow);
+            this.frontWall.manuallyAdded = true;
             this.frontWall.line?.material.color.setHex(green);
             this.walls.push(this.frontWall);
             this.group.add(this.frontWall.mesh);
@@ -111,6 +116,8 @@ class Room {
             .concat(floorsInit)
             .concat(insideGroupsInit)
         );
+
+        this.setPickLayers();
 
     }
 
@@ -162,6 +169,8 @@ class Room {
 
             this.walls.push(w);
 
+            w.manuallyAdded = true;
+
         });
 
     }
@@ -174,6 +183,8 @@ class Room {
 
             this.insideWalls.push(w);
 
+            w.manuallyAdded = true;
+
         });
         
     }
@@ -185,6 +196,8 @@ class Room {
             this.group.add(f.mesh);
 
             this.floors.push(f);
+
+            f.manuallyAdded = true;
 
         });
 
@@ -264,7 +277,7 @@ class Room {
         const { width, height } = specs;
 
         const { baseSize = height, mapRatio, lines = true } = this.specs;
-        const { repeatU, repeatV, repeatModeU = REPEAT, repeatModeV = REPEAT } = this.specs;
+        const { repeatU, repeatV, repeatModeU = REPEAT_WRAPPING, repeatModeV = REPEAT_WRAPPING } = this.specs;
 
         specs.lines = lines;
 
@@ -284,6 +297,16 @@ class Room {
         specs.repeatModeV = repeatModeV;
 
         return specs;
+
+    }
+
+    setPickLayers() {
+
+        this.walls.filter(w => w.manuallyAdded).forEach(w => {w.mesh.layers.enable(CAMERA_RAY_LAYER)});
+
+        this.insideWalls.filter(w => w.manuallyAdded).forEach(w => w.mesh.layers.enable(CAMERA_RAY_LAYER));
+
+        this.floors.filter(f => f.manuallyAdded).forEach(f => f.mesh.layers.enable(CAMERA_RAY_LAYER));
 
     }
 

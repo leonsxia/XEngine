@@ -1,6 +1,7 @@
 import { createCollisionPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree, createOBBBox } from '../../physics/collisionHelper';
 import { InWallObjectBase } from './InWallObjectBase';
 import { yankeesBlue, basic } from '../../basic/colorBase';
+import { PLAYER_RAY_LAYER } from '../../utils/constants';
 
 class Slope extends InWallObjectBase {
 
@@ -48,7 +49,7 @@ class Slope extends InWallObjectBase {
         this.rightFace = createCollisionTrianglePlane(rightSpecs, `${name}_right`, [- width * .5, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
         this.backFace = createCollisionPlane(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, receiveShadow, castShadow, showArrow);
 
-        this.slope.mesh.layers.enable(2);
+        this.slope.mesh.layers.enable(PLAYER_RAY_LAYER);
         this.box.mesh.visible = false;
         this.bottomBoxBuffer.mesh.visible = false;
         this.topBoxBuffer.mesh.visible = false;
@@ -79,6 +80,8 @@ class Slope extends InWallObjectBase {
             this.backFace.mesh,
             this.bottomFace.mesh
         );
+
+        this.setPickLayers();
 
     }
 

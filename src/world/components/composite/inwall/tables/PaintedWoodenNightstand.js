@@ -63,6 +63,8 @@ class PaintedWoodenNightstand extends ObstacleBase {
 
         await this.gltf.init();
 
+        this.setPickLayers();
+
     }
 
 }

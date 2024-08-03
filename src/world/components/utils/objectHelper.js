@@ -49,4 +49,32 @@ function groupHasChild(group, child) {
 
 }
 
-export { clone, groupHasChild };
+function getVisibleMeshes(object, meshes = []) {
+
+    if (object.isGroup && object.visible) {
+
+        object.children.forEach(child => {
+
+            if (child.isGroup && child.visible) {
+
+                getVisibleMeshes(child, meshes);
+
+            } else if (child.isMesh && child.visible) {
+
+                meshes.push(child);
+
+            }
+
+        });
+
+    } else if (object.isMesh && object.visible) {
+
+        meshes.push(object);
+
+    }
+
+    return meshes;
+
+}
+
+export { clone, groupHasChild, getVisibleMeshes };

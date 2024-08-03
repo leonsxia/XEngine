@@ -1,6 +1,7 @@
 import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, ArrowHelper } from "three";
 import { TrianglePlane } from "../Models";
 import { white, red, green } from "../basic/colorBase";
+import { CORNOR_RAY_LAYER } from "../utils/constants";
 
 const DEFAULT_RAY_LENGTH = 20;
 
@@ -66,7 +67,7 @@ class CollisionTrianglePlane extends TrianglePlane {
             const leftfrom = new Vector3(- width * .5, originY, 0);
 
             this.leftRay = new Raycaster(leftfrom, dir, 0, this.#rayLength);
-            this.leftRay.layers.set(1);
+            this.leftRay.layers.set(CORNOR_RAY_LAYER);
             this.leftArrow = new ArrowHelper(this.leftRay.ray.direction, this.leftRay.ray.origin, this.#rayLength, green, headLength, headWidth);
         }
          
@@ -75,7 +76,7 @@ class CollisionTrianglePlane extends TrianglePlane {
             const rightfrom = new Vector3(width * .5, originY, 0);
 
             this.rightRay = new Raycaster(rightfrom, dir, 0, this.#rayLength);
-            this.rightRay.layers.set(1);
+            this.rightRay.layers.set(CORNOR_RAY_LAYER);
             this.rightArrow = new ArrowHelper(this.rightRay.ray.direction, this.rightRay.ray.origin, this.#rayLength, red, headLength, headWidth);
         }
 

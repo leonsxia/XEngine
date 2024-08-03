@@ -67,7 +67,7 @@ class WorldScene1 extends WorldScene  {
 
     // 1. Create an instance of the World app   
     constructor(container, renderer, globalConfig, eventDispatcher) {
-        Object.assign(worldSceneSpecs, globalConfig)
+        Object.assign(worldSceneSpecs, globalConfig);
         super(container, renderer, worldSceneSpecs, eventDispatcher);
 
         this.#basicLights = createBasicLights(basicLightSpecsArr);

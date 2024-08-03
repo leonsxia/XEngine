@@ -4,6 +4,7 @@ import { WorldScene3 } from "./worldScenes/WorldScene3";
 import { WorldScene4 } from "./worldScenes/WorldScene4";
 
 import { createRenderer } from "./systems/renderer";
+import { Picker } from "./systems/Picker";
 import { EventDispatcher } from "./systems/EventDispatcher";
 
 const config = { 
@@ -41,6 +42,9 @@ class World {
         this.#movementEventDispatcher = new EventDispatcher(movementTypes, moveActions);
 
         config.changeCallback = this.changeScene.bind(this);
+
+        const worldPicker = new Picker(container);
+        config.worldPicker = worldPicker;
 
         this.worldScenes = [];
         this.worldScenes.push(new WorldScene1(container, this.#renderer, config, this.#movementEventDispatcher));

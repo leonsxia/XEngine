@@ -85,6 +85,8 @@ class LWall extends InWallObjectBase {
             this.bottomWallT.mesh,
             this.bottomWallS.mesh
         );
+
+        this.setPickLayers();
     }
 
     async init() {

@@ -78,6 +78,8 @@ class BoxCube extends ObstacleBase  {
             this.bottomFace.mesh
         );
 
+        this.setPickLayers();
+
     }
 
     async init() {

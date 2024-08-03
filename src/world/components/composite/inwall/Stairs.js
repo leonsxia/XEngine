@@ -36,6 +36,8 @@ class Stairs extends Slope {
         this.createSideFaces();
         this.createStepFaces();
 
+        this.setPickLayers();
+
     }
 
     async init() {

@@ -8,6 +8,7 @@ import { CollisionTrianglePlane } from './CollisionTrianglePlane';
 import { OBBPlane } from './OBBPlane';
 import { OBBBox } from './OBBBox';
 import { violetBlue } from '../basic/colorBase';
+import { CORNOR_RAY_LAYER } from '../utils/constants';
 
 // create plane with line and rays, only support rotationY for collision for now.
 function createCollisionPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false) {
@@ -179,13 +180,13 @@ function createBoundingBoxFaces(specs) {
     frontBoundingFace.name = 'frontFace';
     frontBoundingFace.position.set(0, 0, BBFDepthOffset);
     frontBoundingFace.visible = showBF;
-    frontBoundingFace.layers.enable(1);
+    frontBoundingFace.layers.enable(CORNOR_RAY_LAYER);
 
     const backBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
     backBoundingFace.name = 'backFace';
     backBoundingFace.position.set(0, 0, - BBFDepthOffset);
     backBoundingFace.visible = showBF;
-    backBoundingFace.layers.enable(1);
+    backBoundingFace.layers.enable(CORNOR_RAY_LAYER);
 
     const leftBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
     leftBoundingFace.name = 'leftFace';
@@ -193,7 +194,7 @@ function createBoundingBoxFaces(specs) {
     leftBoundingFace.scale.x = (depth - gap) / (width - gap);
     leftBoundingFace.rotation.y += Math.PI / 2;
     leftBoundingFace.visible = showBF;
-    leftBoundingFace.layers.enable(1);
+    leftBoundingFace.layers.enable(CORNOR_RAY_LAYER);
      
     const rightBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
     rightBoundingFace.name = 'rightFace';
@@ -201,7 +202,7 @@ function createBoundingBoxFaces(specs) {
     rightBoundingFace.scale.x = (depth - gap) / (width - gap);
     rightBoundingFace.rotation.y += Math.PI / 2;
     rightBoundingFace.visible = showBF;
-    rightBoundingFace.layers.enable(1);
+    rightBoundingFace.layers.enable(CORNOR_RAY_LAYER);
 
     return { boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace };
 

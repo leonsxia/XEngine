@@ -63,6 +63,8 @@ class PaintedWoodenTable extends ObstacleBase {
 
         await this.gltf.init();
 
+        this.setPickLayers();
+
     }
 
 }

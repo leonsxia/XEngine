@@ -71,6 +71,8 @@ class SquarePillar extends InWallObjectBase {
             this.bottomFace.mesh
         );
 
+        this.setPickLayers();
+
     }
 
     async init() {

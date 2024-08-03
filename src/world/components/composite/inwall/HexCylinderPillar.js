@@ -53,6 +53,8 @@ class HexCylinderPillar extends ObstacleBase {
             this.box.mesh
         );
 
+        this.setPickLayers();
+
     }
 
     async init() {

@@ -112,6 +112,8 @@ class CylinderPillar extends InWallObjectBase {
             this.bottom.mesh
         );
 
+        this.setPickLayers();
+
     }
 
     async init() {

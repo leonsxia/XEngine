@@ -62,6 +62,8 @@ class RoundWoodenTable extends ObstacleBase {
 
         await this.gltf.init();
 
+        this.setPickLayers();
+
     }
 
 }

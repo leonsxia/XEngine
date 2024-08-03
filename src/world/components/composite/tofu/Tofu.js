@@ -2,6 +2,7 @@ import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three'
 import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange } from '../../basic/colorBase';
+import { CAMERA_RAY_LAYER, PLAYER_RAY_LAYER } from '../../utils/constants';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -60,6 +61,10 @@ class Tofu extends Moveable2D {
             specs: { width, depth, height }
 
         } = this.meshes;
+
+        body.layers.enable(CAMERA_RAY_LAYER);
+        slotLeft.layers.enable(CAMERA_RAY_LAYER);
+        slotRight.layers.enable(CAMERA_RAY_LAYER);
 
         this.group.add(
 
@@ -326,25 +331,25 @@ class Tofu extends Moveable2D {
         // left
         fromVec3 = new Vector3(posX, posY, posZ);
         this.leftRay = new Raycaster(fromVec3, dir, 0, length);
-        this.leftRay.layers.set(2);
+        this.leftRay.layers.set(PLAYER_RAY_LAYER);
         this.leftArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
         this.rightRay = new Raycaster(fromVec3, dir, 0, length);
-        this.rightRay.layers.set(2);
+        this.rightRay.layers.set(PLAYER_RAY_LAYER);
         this.rightArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
         this.backLeftRay = new Raycaster(fromVec3, dir, 0, length);
-        this.backLeftRay.layers.set(2);
+        this.backLeftRay.layers.set(PLAYER_RAY_LAYER);
         this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
         this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
-        this.backRightRay.layers.set(2);
+        this.backRightRay.layers.set(PLAYER_RAY_LAYER);
         this.backRightArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
 
         return this;

@@ -20,10 +20,11 @@ function makeGuiPanel() {
     };
 }
 
-function makeFunctionGuiConfig(folder, parent) {
+function makeFunctionGuiConfig(folder, parent, close = false) {
     return {
         folder,
         parent,
+        close,
         specs: [{
             value: null,
             type: 'function'
@@ -32,10 +33,11 @@ function makeFunctionGuiConfig(folder, parent) {
 }
 
 function makeDropdownGuiConfig(specs) {
-    const { folder, parent, name, value, params, type, changeFn } = specs;
+    const { folder, parent, name, value, params, type, changeFn, close = false } = specs;
     return {
         folder,
         parent,
+        close,
         specs: [{
             name,
             value,
@@ -47,8 +49,8 @@ function makeDropdownGuiConfig(specs) {
 }
 
 function makeFolderGuiConfig(specs) {
-    const { folder, parent } = specs;
-    return { folder, parent, specs: [] }
+    const { folder, parent, close = false } = specs;
+    return { folder, parent, close, specs: [] }
 }
 
 function makeFolderSpecGuiConfig(specs) {

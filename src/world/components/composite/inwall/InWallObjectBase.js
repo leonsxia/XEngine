@@ -1,5 +1,6 @@
 import { Group } from 'three';
-import { REPEAT } from '../../utils/constants';
+import { CAMERA_RAY_LAYER } from '../../utils/constants';
+import { getVisibleMeshes } from '../../utils/objectHelper';
 
 class InWallObjectBase {
 
@@ -45,6 +46,14 @@ class InWallObjectBase {
 
         return specs;
 
+    }
+
+    setPickLayers() {
+
+        const meshes = getVisibleMeshes(this.group);
+
+        meshes.forEach(m => m.layers.enable(CAMERA_RAY_LAYER));
+        
     }
 
     setPosition(pos) {

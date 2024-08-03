@@ -2,6 +2,8 @@ import { Group } from 'three';
 import { createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue } from '../../basic/colorBase';
+import { CAMERA_RAY_LAYER } from '../../utils/constants';
+import { getVisibleMeshes } from '../../utils/objectHelper';
 
 class ObstacleBase extends ObstacleMoveable {
 
@@ -95,6 +97,14 @@ class ObstacleBase extends ObstacleMoveable {
 
         return this;
 
+    }
+
+    setPickLayers() {
+
+        const meshes = getVisibleMeshes(this.group);
+
+        meshes.forEach(m => m.layers.enable(CAMERA_RAY_LAYER));
+        
     }
 
     setCObjectsVisible(show) {

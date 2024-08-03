@@ -1,9 +1,9 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, RepeatWrapping, MirroredRepeatWrapping } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3 } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
 import { basicMateraials } from './basicMaterial';
 import { white } from './colorBase';
-import { REPEAT, MIRRORED_REPEAT } from '../utils/constants';
+import { REPEAT_WRAPPING } from '../utils/constants';
 import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP } from '../utils/constants';
 
 class BasicObject {
@@ -155,31 +155,11 @@ class BasicObject {
 
     }
 
-    getRepeatMode(mode) {
-        let repeat;
-
-        switch(mode) {
-            case REPEAT:
-
-                repeat = RepeatWrapping;
-
-                break;
-
-            case MIRRORED_REPEAT:
-
-                repeat = MirroredRepeatWrapping;
-
-                break;
-        }
-
-        return repeat;
-    }
-
     setTexture(texture) {
 
         const { 
             rotationT, 
-            noRepeat = false, repeatU, repeatV, repeatModeU = REPEAT, repeatModeV = REPEAT, 
+            noRepeat = false, repeatU, repeatV, repeatModeU = REPEAT_WRAPPING, repeatModeV = REPEAT_WRAPPING, 
             offsetX = 0, offsetY = 0,
             mapRatio 
         } = this.specs;
@@ -203,11 +183,8 @@ class BasicObject {
 
             if (repeatU && repeatV) {
 
-                const modeU = this.getRepeatMode(repeatModeU)
-                const modeV = this.getRepeatMode(repeatModeV)
-
-                texture.wrapS = modeU;   // horizontal
-                texture.wrapT = modeV;   // vertical
+                texture.wrapS = repeatModeU;   // horizontal
+                texture.wrapT = repeatModeV;   // vertical
 
                 texture.repeat.set(repeatU, repeatV);
 
@@ -264,8 +241,8 @@ class BasicObject {
                 const xRepeat = w / (mapRatio * basic);
                 const yRepeat = h / basic;
 
-                texture.wrapS = RepeatWrapping;
-                texture.wrapT = RepeatWrapping;
+                texture.wrapS = REPEAT_WRAPPING;
+                texture.wrapT = REPEAT_WRAPPING;
                 texture.repeat.set(xRepeat, yRepeat);
 
             }

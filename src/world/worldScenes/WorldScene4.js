@@ -9,8 +9,8 @@ import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { loadTextures } from '../components/utils/textureHelper.js';
 import { loadGLTFModels } from '../components/utils/gltfHelper.js';
 import { 
-    REPEAT, MIRRORED_REPEAT, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT,
-    TEXTURE_NAMES, TEXTURES, GLTF_NAMES, GLTFS
+    REPEAT_WRAPPING, MIRRORED_REPEAT_WRAPPING, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT,
+    TEXTURE_NAMES, TEXTURES, GLTF_NAMES, GLTFS, OUTLINE, SSAO, FXAA
  } from '../components/utils/constants.js';
 import { WorldScene } from './WorldScene.js';
 
@@ -379,7 +379,10 @@ class WorldScene4 extends WorldScene {
     }
 
     async init() {
+
         this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
+        this.picker.setup(this);
+
         if (this.#loaded) {
             this.initContainer();
             // this.updateMainLightCamera();
@@ -429,7 +432,8 @@ class WorldScene4 extends WorldScene {
 
         const [textures, gltfs] = await Promise.all([
             loadTextures(TEXTURES),
-            loadGLTFModels(GLTFS)
+            loadGLTFModels(GLTFS),
+            this.initBasic()
         ]);
 
         this.textures = textures;
@@ -488,6 +492,10 @@ class WorldScene4 extends WorldScene {
         room3.walls.concat(room3.insideWalls).forEach(w => this.scene.add(...w.arrows));
 
         this.showRoleSelector = true;
+
+        // post processor
+        this.enablePostProcessing(true);
+        this.setEffect(OUTLINE, { enabled: true, texture: this.triTexture });
 
         // Gui setup
         if (worldSceneSpecs.enableGui) {
@@ -922,8 +930,8 @@ class WorldScene4 extends WorldScene {
             // mapRatio: 1.5,
             repeatU: 1.3,
             repeatV: 1,
-            repeatModeU: MIRRORED_REPEAT,
-            repeatModeV: MIRRORED_REPEAT,
+            repeatModeU: MIRRORED_REPEAT_WRAPPING,
+            repeatModeV: MIRRORED_REPEAT_WRAPPING,
             rotationT: Math.PI / 2,
             showArrow: true
         };
@@ -980,8 +988,8 @@ class WorldScene4 extends WorldScene {
             rightNormal: T_MAPS[TEXTURE_NAMES.METAL_272_NORMAL],
             repeatU: 2.3,
             repeatV: 1.5,
-            repeatModeU: REPEAT,
-            repeatModeV: MIRRORED_REPEAT,
+            repeatModeU: REPEAT_WRAPPING,
+            repeatModeV: MIRRORED_REPEAT_WRAPPING,
             // mapRatio: 1.5,
             name: 'room3',
             showArrow: true
@@ -996,8 +1004,8 @@ class WorldScene4 extends WorldScene {
             mapRatio: 1.5,
             repeatU: 1.5,
             repeatV: 2.8,
-            repeatModeU: MIRRORED_REPEAT,
-            repeatModeV: MIRRORED_REPEAT,
+            repeatModeU: MIRRORED_REPEAT_WRAPPING,
+            repeatModeV: MIRRORED_REPEAT_WRAPPING,
             showArrow: true
         };
 

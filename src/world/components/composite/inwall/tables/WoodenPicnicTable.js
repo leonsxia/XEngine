@@ -80,6 +80,8 @@ class WoodenPicnicTable extends ObstacleBase {
 
         await this.gltf.init();
 
+        this.setPickLayers();
+
     }
 
 }

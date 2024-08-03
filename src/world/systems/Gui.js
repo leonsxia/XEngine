@@ -199,6 +199,12 @@ class Gui {
                 }
 
             });
+
+            if (detail.close) {
+
+                folder.close();
+
+            }
         });
     }
 

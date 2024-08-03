@@ -1,6 +1,9 @@
+import { RepeatWrapping, MirroredRepeatWrapping } from 'three';
+
 // Texture
-const REPEAT = 'repeat';
-const MIRRORED_REPEAT = 'mirroredRepeat';
+const REPEAT_WRAPPING = RepeatWrapping;
+const MIRRORED_REPEAT_WRAPPING = MirroredRepeatWrapping;
+const TRI_PATTERN = 'assets/textures/tri_pattern.jpg';
 
 // Light
 const DIRECTIONAL_LIGHT = 'DirectionalLight';
@@ -22,6 +25,16 @@ const TRIANGLE = 'triangle';
 const STAIRS_SIDE = 'stairsSide';
 const STAIRS_FRONT = 'stairsFront';
 const STAIRS_TOP = 'stairsTop';
+
+// post-processing
+const OUTLINE = 'outline';
+const SSAO = 'ssao';
+const FXAA = 'fxaa';
+
+// raycaster layers
+const CORNOR_RAY_LAYER = 1;
+const PLAYER_RAY_LAYER = 2;
+const CAMERA_RAY_LAYER = 3;
 
 // textures
 const TEXTURE_NAMES = {
@@ -95,8 +108,10 @@ const GLTFS = [{
 }];
 
 export { 
-    REPEAT, 
-    MIRRORED_REPEAT,
+    REPEAT_WRAPPING,
+    MIRRORED_REPEAT_WRAPPING,
+    TRI_PATTERN,
+
     DIRECTIONAL_LIGHT,
     AMBIENT_LIGHT,
     HEMISPHERE_LIGHT,
@@ -104,6 +119,7 @@ export {
     SPOT_LIGHT,
     DIRECTIONAL_LIGHT_TARGET,
     SPOT_LIGHT_TARGET,
+
     PLANE,
     BOX,
     SPHERE,
@@ -113,6 +129,14 @@ export {
     STAIRS_SIDE,
     STAIRS_FRONT,
     STAIRS_TOP,
+
+    OUTLINE,
+    SSAO,
+    FXAA,
+
+    CORNOR_RAY_LAYER,
+    PLAYER_RAY_LAYER,
+    CAMERA_RAY_LAYER,
 
     TEXTURE_NAMES,
     TEXTURES,

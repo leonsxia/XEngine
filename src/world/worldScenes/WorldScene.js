@@ -6,6 +6,9 @@ import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRi
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { Gui } from '../systems/Gui.js';
+import { PostProcessor } from '../systems/PostProcesser.js';
+import { loadSingleTexture } from '../components/utils/textureHelper.js';
+import { TRI_PATTERN, REPEAT_WRAPPING } from '../components/utils/constants.js';
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Lights Control';
@@ -16,6 +19,7 @@ class WorldScene {
     
     setup = {};
     name = 'default scene';
+
     camera = null;
     scene = null;
     renderer = null;
@@ -24,14 +28,19 @@ class WorldScene {
     controls = null;
     container = null;
     staticRendering = true;
+    forceStaticRender = true;   // switch whether controls will render after control change.
+
     lights = {};
+    shadowLightObjects = [];
+
     gui = null;
     guiRightLightsSpecs = {};
     guiLeftSpecs = {};
     guiLights = {};
     guiObjects = {};
+
     eventDispatcher;
-    shadowLightObjects = [];
+    
     physics = null;
     players = [];
     rooms = [];
@@ -40,31 +49,43 @@ class WorldScene {
     player;
     loadSequence = 0;
     showRoleSelector = false;
+
     textures;
     gltfs;
-    forceStaticRender = true;   // swith which controls whether it will render after control change.
+    
+    postProcessor;
+    triTexture;
+    postProcessingEnabled = false;
+
+    picker;
+    enablePick = false;
 
     constructor(container, renderer, specs, eventDispatcher) {
 
         this.setup = specs;
         this.name = specs.name;
+
+        this.container = container;
         this.renderer = renderer;
         this.camera = createCamera(specs.camera);
         this.scene = createScene(specs.scene.backgroundColor);
-        this.loop = new Loop(this.camera, this.scene, this.renderer);
-        this.container = container;
+        this.postProcessor = new PostProcessor(renderer, this.scene, this.camera, container);
+        this.loop = new Loop(this.camera, this.scene, this.renderer, this.postProcessor);
         this.eventDispatcher = eventDispatcher;
+
+        this.picker = specs.worldPicker;
 
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 
         this.loop.updatables = [this.controls.defControl];
         // this.controls.defControl.listenToKeyEvents(window);
 
-        this.#resizer = new Resizer(container, this.camera, this.renderer);
+        this.#resizer = new Resizer(container, this.camera, this.renderer, this.postProcessor);
 
         this.#resizer.onResize = 
         () => {
 
+            this.postProcessor.reset();
             this.render();
 
         };
@@ -73,7 +94,7 @@ class WorldScene {
 
             // important!!! no need to render after scene start to update automatically
             // increase the performance fps
-            if (this.staticRendering && this.forceStaticRender) this.render();    
+            if (this.staticRendering && this.forceStaticRender) this.render();
 
         });
 
@@ -96,6 +117,16 @@ class WorldScene {
             }));
 
         }
+
+    }
+
+    async initBasic() {
+
+        const { texture } = await loadSingleTexture({ map: TRI_PATTERN });
+
+        texture.wrapS = REPEAT_WRAPPING;
+        texture.wrapT = REPEAT_WRAPPING;
+        this.triTexture = texture;
 
     }
 
@@ -125,7 +156,15 @@ class WorldScene {
     render() {
 
         // console.log(++renderTimes);
-        this.renderer.render(this.scene, this.camera);
+        if (this.postProcessingEnabled) {
+
+            this.postProcessor.composer.render();
+
+        } else {
+
+            this.renderer.render(this.scene, this.camera);
+        
+        }
 
     }
 
@@ -147,18 +186,17 @@ class WorldScene {
 
     }
 
-    update() {
+    enablePostProcessing(enable) {
 
-        this.scene.children.forEach((object) => {
+        this.postProcessingEnabled = enable;
+        this.loop.enablePostProcessing(enable);
 
-            object.rotation.y += 0.0025;
+    }
 
-        });
+    setEffect(type, specs) {
 
-        this.render();
-
-        window.requestAnimationFrame(this.update.bind(this));
-
+        this.postProcessor.setEffectPass(type, specs);
+        
     }
 
     moveCamera(forceStaticRender = true) {
@@ -203,6 +241,10 @@ class WorldScene {
 
         // no need to render at this time too.
         this.focusNext(false);
+
+        // clear picker object
+        this.picker.reset();
+        this.postProcessor.clearOutlineObjects();
 
         if (this.gui) {
 
@@ -331,7 +373,8 @@ class WorldScene {
             value: { ratio: 1 },
             params: RESOLUTION_RATIO,
             type: 'dropdown',
-            changeFn: this.changeResolution.bind(this)
+            changeFn: this.changeResolution.bind(this),
+            close: true
         }));
 
         this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
@@ -341,7 +384,8 @@ class WorldScene {
             value: { control: INITIAL_RIGHT_PANEL },
             params: CONTROL_TITLES,
             type: 'control-dropdown',
-            changeFn: this.gui.selectControl.bind(this.gui)
+            changeFn: this.gui.selectControl.bind(this.gui),
+            close: true
         }));
 
         if (this.showRoleSelector) {
@@ -354,13 +398,28 @@ class WorldScene {
                 value: { role: this.player.name },
                 params: roles,
                 type: 'role-dropdown',
-                changeFn: this.changeCharacter.bind(this)
+                changeFn: this.changeCharacter.bind(this),
+                close: true
             }));
+        }
+
+        if (!this.picker.isUnavailable) {
+
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Enable Picker',
+                parent: 'enablePicker',
+                name: 'picker',
+                value: { picker: 'disable' },
+                params: ['enable', 'disable'],
+                type: 'dropdown',
+                changeFn: this.enablePicking.bind(this)
+            }));
+
         }
 
         if (this.player) {
 
-            const folder = makeFolderGuiConfig({folder: 'Player Control', parent: 'playerControl'});
+            const folder = makeFolderGuiConfig({folder: 'Player Control', parent: 'playerControl', close: true});
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BBHelper',
@@ -424,7 +483,7 @@ class WorldScene {
 
         if (this.cPlanes.length > 0) {
 
-            const folder = makeFolderGuiConfig({folder: 'cPlanes Control', parent: 'cPlanesControl'});
+            const folder = makeFolderGuiConfig({folder: 'cPlanes Control', parent: 'cPlanesControl', close: true});
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'Wire',
@@ -663,6 +722,16 @@ class WorldScene {
             if (cp.rightArrow) cp.rightArrow.visible = s;
 
         });
+
+    }
+
+    enablePicking(enable) {
+
+        const e = enable === 'enable' ? true : false;
+
+        this.enablePick = e;
+
+        this.postProcessor.clearOutlineObjects();
 
     }
 
