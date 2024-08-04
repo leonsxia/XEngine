@@ -6,9 +6,8 @@ import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRi
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { Gui } from '../systems/Gui.js';
-import { PostProcessor } from '../systems/PostProcesser.js';
-import { loadSingleTexture } from '../components/utils/textureHelper.js';
-import { TRI_PATTERN, REPEAT_WRAPPING } from '../components/utils/constants.js';
+import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
+import { FXAA, OUTLINE, SSAO } from '../components/utils/constants.js';
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Lights Control';
@@ -117,16 +116,6 @@ class WorldScene {
             }));
 
         }
-
-    }
-
-    async initBasic() {
-
-        const { texture } = await loadSingleTexture({ map: TRI_PATTERN });
-
-        texture.wrapS = REPEAT_WRAPPING;
-        texture.wrapT = REPEAT_WRAPPING;
-        this.triTexture = texture;
 
     }
 
@@ -403,17 +392,55 @@ class WorldScene {
             }));
         }
 
-        if (!this.picker.isUnavailable) {
+        if (this.postProcessor) {
 
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Enable Picker',
-                parent: 'enablePicker',
-                name: 'picker',
-                value: { picker: 'disable' },
+            const folder = makeFolderGuiConfig({folder: 'Post Processing', parent: 'postProcessing', close: true});
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'PostEffect',
+                value: { PostEffect: 'disable' },
                 params: ['enable', 'disable'],
                 type: 'dropdown',
-                changeFn: this.enablePicking.bind(this)
+                changeFn: this.enablePostEffect.bind(this)
             }));
+
+            if (!this.picker.isUnavailable) {
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'Picker',
+                    value: { Picker: 'disable' },
+                    params: ['enable', 'disable'],
+                    type: 'dropdown',
+                    changeFn: this.enablePicking.bind(this)
+                }));
+
+            }
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'FXAA',
+                value: { FXAA: 'disable' },
+                params: ['enable', 'disable'],
+                type: 'dropdown',
+                changeFn: this.enableFXAA.bind(this)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'SSAO',
+                value: { SSAO: 'disable' },
+                params: ['enable', 'disable'],
+                type: 'dropdown',
+                changeFn: this.enableSSAO.bind(this)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'SSAOOutput',
+                value: { SSAOOutput: 'Default' },
+                params: ['Default', 'SSAO Only', 'SSAO+Blur Only', 'Depth', 'Normal'],
+                type: 'dropdown',
+                changeFn: this.changeSSAOOutput.bind(this)
+            }));
+
+            this.guiLeftSpecs.details.push(folder);
 
         }
 
@@ -725,13 +752,70 @@ class WorldScene {
 
     }
 
+    enablePostEffect(enable) {
+
+        const e = enable === 'enable' ? true : false;
+
+        this.enablePostProcessing(e);
+
+    }
+
     enablePicking(enable) {
 
         const e = enable === 'enable' ? true : false;
 
-        this.enablePick = e;
+        this.enablePick = e;    // for picker click event
 
+        this.setEffect(OUTLINE, { enabled: e });
         this.postProcessor.clearOutlineObjects();
+
+    }
+
+    enableFXAA(enable) {
+
+        const e = enable === 'enable' ? true : false;
+
+        this.setEffect(FXAA, { enabled: e });
+
+    }
+
+    enableSSAO(enable) {
+
+        const e = enable === 'enable' ? true : false;
+
+        this.setEffect(SSAO, { enabled: e });
+
+    }
+
+    changeSSAOOutput(name) {
+
+        let output;
+
+        switch (name) {
+
+            case 'SSAO Only':
+                output = SSAO_OUTPUT.SSAOOnly;
+                break;
+
+            case 'SSAO+Blur Only':
+                output = SSAO_OUTPUT.SSAOBlur;
+                break;
+
+            case 'Depth':
+                output = SSAO_OUTPUT.Depth;
+                break;
+
+            case 'Normal':
+                output = SSAO_OUTPUT.Normal;
+                break;
+
+            default:
+                output = SSAO_OUTPUT.Default;
+                break;
+
+        }
+
+        this.setEffect(SSAO, { output });
 
     }
 

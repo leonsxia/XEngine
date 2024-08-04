@@ -1,4 +1,5 @@
 import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3 } from 'three';
+import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
 import { basicMateraials } from './basicMaterial';
@@ -107,7 +108,7 @@ class BasicObject {
 
             if (normalMap) {
 
-                this.setTexture(_normalMap);
+                this.setTexture(_normalMap, true);
                 this.material.normalMap = _normalMap;
 
             }
@@ -136,7 +137,7 @@ class BasicObject {
 
             if (normal) {
 
-                this.setTexture(normal);
+                this.setTexture(normal, true);
                 this.material.normalMap = normal;
 
             }
@@ -155,7 +156,7 @@ class BasicObject {
 
     }
 
-    setTexture(texture) {
+    setTexture(texture, isNormal = false) {
 
         const { 
             rotationT, 
@@ -177,6 +178,15 @@ class BasicObject {
 
             texture.offset.set(offsetX, offsetY);
 
+        }
+
+        if (!isNormal) {
+
+            texture.minFilter = LinearMipMapLinearFilter;
+
+        } else {
+
+            texture.minFilter = NearestMipMapLinearFilter;
         }
 
         if (!noRepeat) {

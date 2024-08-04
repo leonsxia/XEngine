@@ -6,17 +6,34 @@ import { OutlinePass } from 'three/examples/jsm/Addons.js';
 import { OutputPass } from 'three/examples/jsm/Addons.js';
 import { SSAOPass } from 'three/examples/jsm/Addons.js';
 import { FXAAShader } from 'three/examples/jsm/Addons.js';
-import { OUTLINE, SSAO, FXAA } from '../components/utils/constants';
+import { OUTLINE, SSAO, FXAA, TRI_PATTERN, REPEAT_WRAPPING } from '../components/utils/constants';
 import { white } from '../components/basic/colorBase';
+import { loadSingleTexture } from '../components/utils/textureHelper';
 
 const DEFAULT_OUTLINE = {
     edgeStrength: 3.0,
     edgeGlow: 0.0,
     edgeThickness: 1.0,
     pulsePeriod: 0,
-    rotate: false,
-    usePatternTexture: false
+    usePatternTexture: false,
+    enabled: false
 };
+
+const DEFAULT_SSAO = {
+    kernelRadius: 8,
+    minDistance: .005,
+    maxDistance: .1,
+    output: SSAOPass.OUTPUT.Default,
+    enabled: false
+}
+
+const SSAO_OUTPUT = {
+    Default: SSAOPass.OUTPUT.Default,
+    SSAOOnly: SSAOPass.OUTPUT.SSAO,
+    SSAOBlur: SSAOPass.OUTPUT.Blur,
+    Depth: SSAOPass.OUTPUT.Depth,
+    Normal: SSAOPass.OUTPUT.Normal
+}
 
 class PostProcessor {
 
@@ -33,6 +50,10 @@ class PostProcessor {
     outlinePass;
     ssaoPass;
     effectFXAA;
+
+    // config
+    #outlineConfig = {};
+    #ssaoConfig = {};
 
     effects = [];
 
@@ -59,6 +80,9 @@ class PostProcessor {
         this.composer.addPass(this.ssaoPass)
         this.composer.addPass(this.outputPass);
         this.composer.addPass(this.effectFXAA);
+
+        Object.assign(this.#outlineConfig, DEFAULT_OUTLINE);
+        Object.assign(this.#ssaoConfig, DEFAULT_SSAO);
         
     }
 
@@ -71,6 +95,18 @@ class PostProcessor {
     get clientHeight() {
 
         return this.#container.clientHeight;
+
+    }
+
+    async init() {
+
+        const { texture } = await loadSingleTexture({ map: TRI_PATTERN });
+
+        texture.wrapS = REPEAT_WRAPPING;
+        texture.wrapT = REPEAT_WRAPPING;
+        this.triTexture = texture;
+
+        this.outlinePass.patternTexture = texture;
 
     }
 
@@ -121,25 +157,27 @@ class PostProcessor {
             case OUTLINE:
                 {
                     const { 
-                        enabled, texture,
-                        edgeStrength = DEFAULT_OUTLINE.edgeStrength, 
-                        edgeGlow = DEFAULT_OUTLINE.edgeGlow, 
-                        edgeThickness = DEFAULT_OUTLINE.edgeThickness, 
-                        pulsePeriod = DEFAULT_OUTLINE.pulsePeriod, 
-                        usePatternTexture = DEFAULT_OUTLINE.usePatternTexture 
+                        enabled = this.#outlineConfig.enabled,
+                        edgeStrength = this.#outlineConfig.edgeStrength, 
+                        edgeGlow = this.#outlineConfig.edgeGlow, 
+                        edgeThickness = this.#outlineConfig.edgeThickness, 
+                        pulsePeriod = this.#outlineConfig.pulsePeriod, 
+                        usePatternTexture = this.#outlineConfig.usePatternTexture 
                     } = specs;
 
-                    if (enabled) {
+                    this.#outlineConfig.enabled = enabled;
+                    this.#outlineConfig.edgeStrength = edgeStrength;
+                    this.#outlineConfig.edgeGlow = edgeGlow;
+                    this.#outlineConfig.edgeThickness = edgeThickness;
+                    this.#outlineConfig.pulsePeriod = pulsePeriod;
+                    this.#outlineConfig.usePatternTexture = usePatternTexture;
 
-                        this.outlinePass.patternTexture = texture;
-                        this.outlinePass.edgeStrength = edgeStrength;
-                        this.outlinePass.edgeGlow = edgeGlow;
-                        this.outlinePass.edgeThickness = edgeThickness;
-                        this.outlinePass.pulsePeriod = pulsePeriod;
-                        this.outlinePass.hiddenEdgeColor.setHex(white);
-                        this.outlinePass.usePatternTexture = usePatternTexture;
-
-                    } 
+                    this.outlinePass.edgeStrength = edgeStrength;
+                    this.outlinePass.edgeGlow = edgeGlow;
+                    this.outlinePass.edgeThickness = edgeThickness;
+                    this.outlinePass.pulsePeriod = pulsePeriod;
+                    this.outlinePass.hiddenEdgeColor.setHex(white);
+                    this.outlinePass.usePatternTexture = usePatternTexture;
                     this.outlinePass.enabled = enabled;
                 }
                 break;
@@ -147,21 +185,24 @@ class PostProcessor {
             case SSAO:
                 {
                     const { 
-                        enabled,
-                        kernelRadius = 8,
-                        minDistance = .005,
-                        maxDistance = .1
+                        enabled = this.#ssaoConfig.enabled,
+                        kernelRadius = this.#ssaoConfig.kernelRadius,
+                        minDistance = this.#ssaoConfig.minDistance,
+                        maxDistance = this.#ssaoConfig.maxDistance,
+                        output = this.#ssaoConfig.output
                     } = specs;
 
-                    if (enabled) {
+                    this.#ssaoConfig.enabled = enabled;
+                    this.#ssaoConfig.kernelRadius = kernelRadius;
+                    this.#ssaoConfig.minDistance = minDistance;
+                    this.#ssaoConfig.maxDistance = maxDistance;
+                    this.#ssaoConfig.output = output;
 
-                        this.resetSSAO();
-                        this.ssaoPass.kernelRadius = kernelRadius;
-                        this.ssaoPass.minDistance = minDistance;
-                        this.ssaoPass.maxDistance = maxDistance;
-                        // this.ssaoPass.output = SSAOPass.OUTPUT.Blur;
-
-                    }
+                    this.resetSSAO();
+                    this.ssaoPass.kernelRadius = kernelRadius;
+                    this.ssaoPass.minDistance = minDistance;
+                    this.ssaoPass.maxDistance = maxDistance;
+                    this.ssaoPass.output = output;
 
                     this.ssaoPass.enabled = enabled;
 
@@ -172,11 +213,7 @@ class PostProcessor {
                 {
                     const { enabled } = specs;
 
-                    if (enabled) {
-
-                        this.resetFXAA();
-
-                    } 
+                    this.resetFXAA();
 
                     this.effectFXAA.enabled = enabled;
 
@@ -187,4 +224,4 @@ class PostProcessor {
 
 }
 
-export { PostProcessor };
+export { PostProcessor, SSAO_OUTPUT };

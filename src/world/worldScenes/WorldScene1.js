@@ -85,11 +85,6 @@ class WorldScene1 extends WorldScene  {
             this.scene, null, ...basicLightSpecsArr, ...pointLightSpecsArr
         );
 
-        // Gui setup
-        if (worldSceneSpecs.enableGui) {
-            this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr};
-            this.setupGuiConfig();
-        }
         return {
             name: this.name,
             renderer: this.renderer,
@@ -191,6 +186,13 @@ class WorldScene1 extends WorldScene  {
         ]);
         this.loop.updatables.push(sphere, cube, box, earth, meshGroup);
         this.scene.add(sphere, cube, box.mesh, earth.mesh, meshGroup);
+
+        // Gui setup
+        if (worldSceneSpecs.enableGui) {
+            this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr};
+            this.setupGuiConfig();
+        }
+        
         this.initContainer();
         this.#loaded = true;
     }

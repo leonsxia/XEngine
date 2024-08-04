@@ -10,7 +10,7 @@ import { loadTextures } from '../components/utils/textureHelper.js';
 import { loadGLTFModels } from '../components/utils/gltfHelper.js';
 import { 
     REPEAT_WRAPPING, MIRRORED_REPEAT_WRAPPING, DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT,
-    TEXTURE_NAMES, TEXTURES, GLTF_NAMES, GLTFS, OUTLINE, SSAO, FXAA
+    TEXTURE_NAMES, TEXTURES, GLTF_NAMES, GLTFS
  } from '../components/utils/constants.js';
 import { WorldScene } from './WorldScene.js';
 
@@ -433,7 +433,7 @@ class WorldScene4 extends WorldScene {
         const [textures, gltfs] = await Promise.all([
             loadTextures(TEXTURES),
             loadGLTFModels(GLTFS),
-            this.initBasic()
+            this.postProcessor.init()
         ]);
 
         this.textures = textures;
@@ -494,8 +494,7 @@ class WorldScene4 extends WorldScene {
         this.showRoleSelector = true;
 
         // post processor
-        this.enablePostProcessing(true);
-        this.setEffect(OUTLINE, { enabled: true, texture: this.triTexture });
+        this.enablePostProcessing(false);
 
         // Gui setup
         if (worldSceneSpecs.enableGui) {

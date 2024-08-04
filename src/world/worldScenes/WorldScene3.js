@@ -96,10 +96,6 @@ class WorldScene3 extends WorldScene {
             this.scene, null, ...basicLightSpecsArr, ...pointLightSpecsArr
         );
 
-        if (worldSceneSpecs.enableGui) {
-            this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr };
-            this.setupGuiConfig();
-        }
         return {
             name: this.name,
             renderer: this.renderer,
@@ -156,6 +152,11 @@ class WorldScene3 extends WorldScene {
         this.loop.updatables.push(birdsGroup);
 
         this.scene.add(birdsGroup);
+
+        if (worldSceneSpecs.enableGui) {
+            this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr };
+            this.setupGuiConfig();
+        }
 
         this.initContainer();
 

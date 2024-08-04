@@ -96,10 +96,6 @@ class WorldScene2 extends WorldScene {
             this.scene, null, ...basicLightSpecsArr, ...pointLightSpecsArr
         );
 
-        if (worldSceneSpecs.enableGui) {
-            this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr };
-            this.setupGuiConfig();
-        }
         return {
             name: this.name,
             renderer: this.renderer,
@@ -131,6 +127,12 @@ class WorldScene2 extends WorldScene {
         train.receiveShadow(true);
         this.loop.updatables.push(train);
         this.scene.add(train.group);
+
+        if (worldSceneSpecs.enableGui) {
+            this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr };
+            this.setupGuiConfig();
+        }
+        
         this.initContainer();
         this.#loaded = true;
     }

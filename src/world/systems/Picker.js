@@ -53,7 +53,7 @@ class Picker {
 
     get isUnavailable() {
 
-        return! !this.#camera && !this.#scene && !this.#postProcessor && !this.#worldScene;
+        return !this.#camera && !this.#scene && !this.#postProcessor && !this.#worldScene;
 
     }
 

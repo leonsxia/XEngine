@@ -74,7 +74,7 @@ class Cylinder extends BasicObject {
             if (normalMap) {
 
                 _normal.isCap = true;
-                this.setTexture(_normal);
+                this.setTexture(_normal, true);
                 this.setCapRotation(_normal);
 
                 material.normalMap = _normal;
@@ -109,7 +109,7 @@ class Cylinder extends BasicObject {
             if (normal) {
 
                 normal.isCap = true;
-                this.setTexture(normal);
+                this.setTexture(normal, true);
                 this.setCapRotation(normal);
                 
                 material.normalMap = normal;
