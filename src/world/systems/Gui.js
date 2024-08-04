@@ -113,6 +113,16 @@ class Gui {
 
     }
 
+    addObjects(specs) {
+
+        const eventObjs = [];
+
+        this.addControl(this.#guis[2], specs, eventObjs);
+
+        this.bindChange(this.#guis[2], eventObjs);
+
+    }
+
     addControl(gui, specs, eventObjs, needRoom = false) {
 
         const rooms = [...new Set(specs.details.map(s => s.room))];
@@ -143,7 +153,7 @@ class Gui {
                 if (spec.value || spec.changeFn) {
 
                     Object.defineProperty(spec, 'parent', {
-                        value: target,
+                        value: target ?? spec.prop,
                         writable: false
                     });
 
@@ -171,7 +181,7 @@ class Gui {
                     case 'light-num':
                     case 'angle':
 
-                        folder.add(parent, property, ...spec.params).name(displayName).identifier = target;
+                        folder.add(parent, property, ...spec.params).name(displayName).identifier = target ?? displayName;
 
                         break;
 
@@ -288,6 +298,12 @@ class Gui {
 
                         break;
 
+                    case 'number':
+
+                        if (find.changeFn) find.changeFn(val);
+                        
+                        break;
+
                     case 'light-num':
                     case 'angle':
 
@@ -368,6 +384,12 @@ class Gui {
         this.showAt(title);
 
         this.#currentRightPanel = title;
+
+    }
+
+    removeObjects() {
+
+        this.#guis[2].children.forEach(c => c.destroy());
 
     }
 

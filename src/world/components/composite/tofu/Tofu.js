@@ -49,6 +49,7 @@ class Tofu extends Moveable2D {
 
         this.name = name;
         this.group = new Group();
+        this.group.isPlayer = true;
         this.meshes = createMeshes();
 
         const { 

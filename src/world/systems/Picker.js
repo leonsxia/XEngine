@@ -1,5 +1,6 @@
 import { Raycaster, Vector2 } from 'three';
 import { CAMERA_RAY_LAYER } from '../components/utils/constants';
+import { getInwallParent } from '../components/utils/objectHelper';
 
 class Picker {
 
@@ -65,7 +66,8 @@ class Picker {
 
     clickEvent(event) {
 
-        if (!this.#scene || !this.#worldScene.enablePick) return;
+        if (!this.#scene || !this.#worldScene.postProcessingEnabled || !this.#worldScene.enablePick) 
+            return;
 
         this.#mouse.x = (event.clientX / this.clientWidth) * 2 - 1;
         this.#mouse.y = - (event.clientY / this.clientHeight) * 2 + 1;
@@ -81,12 +83,22 @@ class Picker {
         const intersects = this.#raycaster.intersectObjects(this.#scene.children);
 
         this.#postProcessor.clearOutlineObjects();
+        this.#worldScene.pickedObject = null;
+        this.#worldScene.clearObjectsPanel();
 
         if (intersects.length > 0) {
 
             const intersectObj = intersects[0].object;
-            const selectedObject = intersectObj.parent.isRoom ? intersectObj : intersectObj.parent;
+            const selectedObject = intersectObj.parent.isRoom ? intersectObj : 
+                intersectObj.parent.isPlayer ? intersectObj.parent : getInwallParent(intersectObj);
+
+            selectedObject.isPicked = true;
+
             this.#postProcessor.addOutlineObjects([selectedObject]);
+
+            this.#worldScene.pickedObject = selectedObject;
+
+            this.#worldScene.setupObjectsGuiConfig([this.#worldScene.pickedObject]);
 
         }
 

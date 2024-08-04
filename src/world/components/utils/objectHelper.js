@@ -77,4 +77,24 @@ function getVisibleMeshes(object, meshes = []) {
 
 }
 
-export { clone, groupHasChild, getVisibleMeshes };
+function getInwallParent(object) {
+
+    let target = null;
+    
+    if (object.parent.isMesh || object.parent.isGroup) {
+
+        if (object.parent.isInwallObject) {
+
+            target = object.parent;
+
+        } else {
+
+            target = getInwallParent(object.parent, target);
+
+        }
+    }
+
+    return target;
+}
+
+export { clone, groupHasChild, getVisibleMeshes, getInwallParent };

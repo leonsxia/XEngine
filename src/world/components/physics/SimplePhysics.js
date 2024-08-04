@@ -322,11 +322,104 @@ class SimplePhysics {
 
         }
 
-        this.activePlayers.forEach(player => {
+        // obstacle collision check
+        {
+            // for movable obstacles falling down check
+            const movableObs = this.obstacles.filter(obs => {
+
+                if (obs.movable) obs.hittingGround = null;  // reset hitting ground
+                return obs.movable && !obs.group.isPicked;
+
+            });
+
+            const onTopsObs = [];
+
+            this.obstacleTops.forEach(top => {
+                movableObs.forEach(obs => {
+                    
+                    if (!obs.hittingGround) {
+
+                        if ((!groupHasChild(obs.group, top.mesh)) && obs.box.obb.intersectsOBB(top.obb)) {
+
+                            onTopsObs.push(obs);
+                            obs.hittingGround = top;
+
+                        }
+
+                    }
+                });
+
+            });
+
+            if (onTopsObs.length > 0) {
+
+                onTopsObs.forEach(obs => {
+
+                    obs.onGround();
+
+                });
+            }
+
+            const fallingObs = movableObs.filter(obs => !onTopsObs.find(f => f === obs));
+
+            // check obstacles falling on floors
+            if (fallingObs.length > 0) {
+
+                const onGroundObs = [];
+
+                this.floors.forEach(floor => {
+                    
+                    fallingObs.forEach(obs => {
+
+                        if (!obs.hittingGround) {
+
+                            if (obs.box.obb.intersectsOBB(floor.obb)) {
+
+                                onGroundObs.push(obs);
+                                obs.hittingGround = floor;
+
+                            } else {
+
+                                obs.hittingGround = null;
+
+                            }
+
+                        }
+                    });
+                });
+
+                if (onGroundObs.length > 0) {
+
+                    onGroundObs.forEach(obs => {
+
+                        obs.onGround();
+
+                    });
+                }
+
+                const stillFallingObs = fallingObs.filter(obs => !onGroundObs.find(f => f === obs));
+
+                if (stillFallingObs.length > 0) {
+
+                    stillFallingObs.forEach(obs => {
+
+                        obs.tickFall(delta);
+
+                    })
+                }
+            }
+        }
+
+        this.activePlayers.filter(p => !p.group.isPicked).forEach(player => {
 
             // console.log(`is in air: ${player.isInAir}`);
 
-            player.setBoundingBoxHelperColor(Color.BBW).resetBFColor(Color.BF);
+            if (DEBUG) {
+
+                player.setBoundingBoxHelperColor(Color.BBW).resetBFColor(Color.BF);
+
+            }
+
             player.resetItersectStatus();
 
             const collisionedWalls = [];
@@ -337,8 +430,12 @@ class SimplePhysics {
 
                 if (checkResult.intersect) {
 
-                // if (player.boundingBox.intersectsBox(wall.boundingBox)) {
-                    player.setBoundingBoxHelperColor(Color.intersect);
+                    if (DEBUG) {
+
+                        player.setBoundingBoxHelperColor(Color.intersect);
+
+                    }
+
                     wall.checkResult = checkResult;
                     collisionedWalls.push(wall);
 
@@ -377,16 +474,6 @@ class SimplePhysics {
                 });
             }
 
-            // for movable obstacles falling down check
-            const movableObs = this.obstacles.filter(obs => {
-
-                if (obs.movable) obs.hittingGround = null;  // reset hitting ground
-                return obs.movable;
-
-            });
-
-            const onTopsObs = [];
-
             // for player falling down check
             const collisionTops = [];
 
@@ -403,23 +490,7 @@ class SimplePhysics {
 
                 }
 
-                movableObs.forEach(obs => {
-                    
-                    if (!obs.hittingGround) {
-
-                        if ((!groupHasChild(obs.group, top.mesh)) && obs.box.obb.intersectsOBB(top.obb)) {
-
-                            onTopsObs.push(obs);
-                            obs.hittingGround = top;
-
-                        }
-
-                    }
-                });
-
             });
-
-            const fallingObs = movableObs.filter(obs => !onTopsObs.find(f => f === obs));
 
             // check slope collision
             const collisionSlopes = [];
@@ -480,15 +551,6 @@ class SimplePhysics {
 
             }
 
-            if (onTopsObs.length > 0) {
-
-                onTopsObs.forEach(obs => {
-
-                    obs.onGround();
-
-                });
-            }
-
             if (collisionTops.length === 0 && player.isInAir) {
 
                 const collisionFloors = [];
@@ -513,53 +575,6 @@ class SimplePhysics {
 
                     player.onGround(collisionFloors[0]);
 
-                }
-            }
-
-            // check obstacles falling on floors
-            if (fallingObs.length > 0) {
-
-                const onGroundObs = [];
-
-                this.floors.forEach(floor => {
-                    
-                    fallingObs.forEach(obs => {
-
-                        if (!obs.hittingGround) {
-
-                            if (obs.box.obb.intersectsOBB(floor.obb)) {
-
-                                onGroundObs.push(obs);
-                                obs.hittingGround = floor;
-
-                            } else {
-
-                                obs.hittingGround = null;
-
-                            }
-
-                        }
-                    });
-                });
-
-                if (onGroundObs.length > 0) {
-
-                    onGroundObs.forEach(obs => {
-
-                        obs.onGround();
-
-                    });
-                }
-
-                const stillFallingObs = fallingObs.filter(obs => !onGroundObs.find(f => f === obs));
-
-                if (stillFallingObs.length > 0) {
-
-                    stillFallingObs.forEach(obs => {
-
-                        obs.tickFall(delta);
-
-                    })
                 }
             }
             

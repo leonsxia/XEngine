@@ -56,7 +56,7 @@ const mainLightCtlSpecs1 = {
     display: 'Directional Light',
     detail: {
         color: [255, 255, 255],
-        intensity: 0.7,
+        intensity: 0,
         position: [0, 4.3, 0],
         target: [0, 0, 0]
     },
@@ -74,7 +74,7 @@ const ambientLightCtlSpecs1 = {
     display: 'Ambient Light',
     detail: {
         color: [128, 128, 128],
-        intensity: 1
+        intensity: .5
     },
     type: AMBIENT_LIGHT,
     debug: true,
@@ -87,7 +87,7 @@ const hemisphereLightCtlSpecs1 = {
     detail: {
         groundColor: [47, 79, 79],
         skyColor: [160, 160, 160],
-        intensity: 0.5,
+        intensity: 0.1,
         position: [0, 1, 0] // light emit from top to bottom
     },
     type: HEMISPHERE_LIGHT,

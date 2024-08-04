@@ -54,9 +54,10 @@ function makeFolderGuiConfig(specs) {
 }
 
 function makeFolderSpecGuiConfig(specs) {
-    const { name, value, params, type, changeFn } = specs;
+    const { name, prop = null, value, params, type, changeFn } = specs;
     return {
         name,
+        prop,
         value,
         params,
         type,
@@ -673,8 +674,68 @@ function makeSceneRightGuiConfig(lightSpecs) {
     return panel;
 }
 
-function attachObjectsToRightGuiConfig(objectSpecsArr) {
-    // todo
+function makeObjectsGuiConfig(objects) {
+
+    const objectPanel = makeGuiPanel();
+    
+    objects.forEach(object => {
+
+        const folder = makeFolderGuiConfig({ folder: object.name, parent: null, close: false });
+
+        folder.specs.push(makeFolderSpecGuiConfig({
+            name: 'x',
+            prop: 'position.x',
+            value: object.position,
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+            type: 'number',
+            changeFn: () => {
+                object.father.updateOBBs.call(object.father);
+            }
+        }));
+
+        folder.specs.push(makeFolderSpecGuiConfig({
+            name: 'y',
+            prop: 'position.y',
+            value: object.position,
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+            type: 'number',
+            changeFn: () => {
+                object.father.updateOBBs.call(object.father);
+            }
+        }));
+
+        folder.specs.push(makeFolderSpecGuiConfig({
+            name: 'z',
+            prop: 'position.z',
+            value: object.position,
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+            type: 'number',
+            changeFn: () => {
+                object.father.updateOBBs.call(object.father);
+            }
+        }));
+
+        if (!object.isPlayer && object.father) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'y',
+                prop: 'rotation.y',
+                value: object.rotation,
+                params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+                type: 'number',
+                changeFn: (val) => {
+                    object.father.setRotationY.call(object.father, val);
+                    object.father.updateOBBs.call(object.father);
+                }
+            }));
+
+        }
+
+        objectPanel.details.push(folder);
+
+    });
+
+    return objectPanel;
 }
 
 
@@ -685,5 +746,5 @@ export {
     makeFolderGuiConfig,
     makeFolderSpecGuiConfig,
     makeSceneRightGuiConfig,
-    attachObjectsToRightGuiConfig
+    makeObjectsGuiConfig
  };

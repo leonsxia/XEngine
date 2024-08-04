@@ -33,6 +33,10 @@ class InWallObjectBase {
         this.climbable = climbable;
         this.group = new Group();
         this.group.name = name;
+        this.group.isInwallObject = true;
+        this.group.rotationY = 0;
+        this.group.father = this;
+
     }
 
     makePlaneConfig(specs) {
@@ -66,9 +70,12 @@ class InWallObjectBase {
 
     setRotationY(y) {
 
-        this.group.rotation.y = y;
+        const preGroupRotY = this.group.rotationY;
 
-        this.walls.forEach(w => w.mesh.rotationY += y);
+        this.group.rotation.y = y;
+        this.group.rotationY = y;
+
+        this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y);
 
         return this;
 

@@ -2,7 +2,7 @@ import { createCamera } from '../components/camera.js';
 import { createScene } from '../components/scene.js';
 import { WorldControls } from '../systems/Controls.js';
 import { updateSingleLightCamera } from '../components/shadowMaker.js';
-import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRightGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig } from '../components/utils/guiConfigHelper.js';
+import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRightGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeObjectsGuiConfig } from '../components/utils/guiConfigHelper.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { Gui } from '../systems/Gui.js';
@@ -58,6 +58,7 @@ class WorldScene {
 
     picker;
     enablePick = false;
+    pickedObject = null;
 
     constructor(container, renderer, specs, eventDispatcher) {
 
@@ -232,6 +233,7 @@ class WorldScene {
         this.focusNext(false);
 
         // clear picker object
+        this.pickedObject = null;
         this.picker.reset();
         this.postProcessor.clearOutlineObjects();
 
@@ -545,7 +547,19 @@ class WorldScene {
 
     }
 
-    setupObjectsGuiConfig() {}
+    setupObjectsGuiConfig(objects) {
+
+        const objectsConfig = makeObjectsGuiConfig(objects);
+
+        this.gui.addObjects(objectsConfig);
+
+    }
+
+    clearObjectsPanel() {
+
+        this.gui.removeObjects();
+
+    }
     
     changeResolution (ratio) {
 
@@ -758,6 +772,13 @@ class WorldScene {
 
         this.enablePostProcessing(e);
 
+        if (!e) {
+
+            this.postProcessor.clearOutlineObjects();
+            this.clearObjectsPanel();
+        
+        }
+
     }
 
     enablePicking(enable) {
@@ -767,7 +788,13 @@ class WorldScene {
         this.enablePick = e;    // for picker click event
 
         this.setEffect(OUTLINE, { enabled: e });
-        this.postProcessor.clearOutlineObjects();
+
+        if (!e) {
+            
+            this.postProcessor.clearOutlineObjects();
+            this.clearObjectsPanel();
+
+        }
 
     }
 

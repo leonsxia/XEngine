@@ -143,7 +143,12 @@ class PostProcessor {
 
     clearOutlineObjects() {
 
-        this.outlinePass.selectedObjects = [];
+        if (this.outlinePass.selectedObjects.length > 0) {
+
+            delete this.outlinePass.selectedObjects[0].isPicked;
+            this.outlinePass.selectedObjects = [];
+
+        }
 
     }
 
