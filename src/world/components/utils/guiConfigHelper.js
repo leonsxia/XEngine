@@ -4,6 +4,7 @@ const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
 const DEFALUT_GRID_DEPTH = 50;
 const NUMBER_STEPS = .1;
+const PICKED_NUMBER_STEPS = .001;
 
 function combineGuiConfigs(...details) {
     let specs = [];
@@ -682,37 +683,45 @@ function makeObjectsGuiConfig(objects) {
 
         const folder = makeFolderGuiConfig({ folder: object.name, parent: null, close: false });
 
+        const posChangeFn = () => {
+                
+            if (object.isPlayer) {
+    
+                object.father.updateRay.call(object.father);
+                object.father.updateOBB.call(object.father);
+    
+            } else {
+                
+                object.father.updateOBBs.call(object.father);
+    
+            }
+        }
+
         folder.specs.push(makeFolderSpecGuiConfig({
             name: 'x',
             prop: 'position.x',
             value: object.position,
-            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, PICKED_NUMBER_STEPS],
             type: 'number',
-            changeFn: () => {
-                object.father.updateOBBs.call(object.father);
-            }
+            changeFn: posChangeFn
         }));
 
         folder.specs.push(makeFolderSpecGuiConfig({
             name: 'y',
             prop: 'position.y',
             value: object.position,
-            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, PICKED_NUMBER_STEPS],
             type: 'number',
-            changeFn: () => {
-                object.father.updateOBBs.call(object.father);
-            }
+            changeFn: posChangeFn
         }));
 
         folder.specs.push(makeFolderSpecGuiConfig({
             name: 'z',
             prop: 'position.z',
             value: object.position,
-            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, PICKED_NUMBER_STEPS],
             type: 'number',
-            changeFn: () => {
-                object.father.updateOBBs.call(object.father);
-            }
+            changeFn: posChangeFn
         }));
 
         if (!object.isPlayer && object.father) {
@@ -721,11 +730,13 @@ function makeObjectsGuiConfig(objects) {
                 name: 'y',
                 prop: 'rotation.y',
                 value: object.rotation,
-                params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+                params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, PICKED_NUMBER_STEPS],
                 type: 'number',
                 changeFn: (val) => {
+
                     object.father.setRotationY.call(object.father, val);
                     object.father.updateOBBs.call(object.father);
+
                 }
             }));
 

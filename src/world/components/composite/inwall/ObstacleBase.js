@@ -241,6 +241,12 @@ class ObstacleBase extends ObstacleMoveable {
         
     }
 
+    onSlope() {
+
+        this.onSlopeTick();
+        
+    }
+
 }
 
 export { ObstacleBase };

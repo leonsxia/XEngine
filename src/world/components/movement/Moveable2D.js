@@ -188,6 +188,13 @@ class Moveable2D {
 
     }
 
+    resetFallingState() {
+
+        this.#isFalling = false;
+        this.#fallingTime = 0;
+
+    }
+
     fallingTick(params) {
         const { delta, player } = params;
 
@@ -209,8 +216,8 @@ class Moveable2D {
         dir.y += player.height * .5;
         player.group.position.y = player.group.parent ? player.group.parent.worldToLocal(dir).y : dir.y;
 
-        this.#isFalling = false;
-        this.#fallingTime = 0;
+        this.resetFallingState();
+
     }
 
     onSlopeTick(params) {
@@ -236,8 +243,7 @@ class Moveable2D {
             dir.y += player.height * .5;
             player.group.position.y = player.group.parent ? player.group.parent.worldToLocal(dir).y : dir.y;
 
-            this.#isFalling = false;
-            this.#fallingTime = 0;
+            this.resetFallingState();
 
         }
 

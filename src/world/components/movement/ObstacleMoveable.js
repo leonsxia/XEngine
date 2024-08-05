@@ -5,6 +5,13 @@ class ObstacleMoveable {
 
     constructor() {}
 
+    resetFallingState() {
+
+        this.#isFalling = false;
+        this.#fallingTime = 0;
+
+    }
+
     fallingTick(params) {
 
         const { delta, obstacle } = params;
@@ -26,8 +33,13 @@ class ObstacleMoveable {
         dir.y += obstacle.box.height * .5;
         obstacle.group.position.y = obstacle.group.parent ? obstacle.group.parent.worldToLocal(dir).y : dir.y;
 
-        this.#isFalling = false;
-        this.#fallingTime = 0;
+        this.resetFallingState()
+        
+    }
+
+    onSlopeTick() {
+
+        this.resetFallingState();
         
     }
 }

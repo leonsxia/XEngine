@@ -93,6 +93,7 @@ class Picker {
                 intersectObj.parent.isPlayer ? intersectObj.parent : getInwallParent(intersectObj);
 
             selectedObject.isPicked = true;
+            selectedObject.father?.resetFallingState?.();
 
             this.#postProcessor.addOutlineObjects([selectedObject]);
 

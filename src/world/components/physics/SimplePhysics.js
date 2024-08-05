@@ -333,8 +333,10 @@ class SimplePhysics {
             });
 
             const onTopsObs = [];
+            const onSlopesObs = [];
 
             this.obstacleTops.forEach(top => {
+
                 movableObs.forEach(obs => {
                     
                     if (!obs.hittingGround) {
@@ -351,6 +353,22 @@ class SimplePhysics {
 
             });
 
+            this.slopes.forEach(s => {
+
+                movableObs.forEach(obs => {
+
+                    if (!obs.hittingGround) {
+
+                        if (obs.box.obb.intersectsOBB(s.slope.obb)) {
+
+                            onSlopesObs.push(obs);
+                            obs.hittingGround = s.slope;
+
+                        }
+                    }
+                })
+            })
+
             if (onTopsObs.length > 0) {
 
                 onTopsObs.forEach(obs => {
@@ -360,7 +378,16 @@ class SimplePhysics {
                 });
             }
 
-            const fallingObs = movableObs.filter(obs => !onTopsObs.find(f => f === obs));
+            if (onSlopesObs.length > 0) {
+
+                onSlopesObs.forEach(obs => {
+
+                    obs.onSlope();
+
+                });
+            }
+
+            const fallingObs = movableObs.filter(obs => !onTopsObs.find(t => t === obs) && !onSlopesObs.find(s => s === obs));
 
             // check obstacles falling on floors
             if (fallingObs.length > 0) {

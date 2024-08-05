@@ -50,6 +50,7 @@ class Tofu extends Moveable2D {
         this.name = name;
         this.group = new Group();
         this.group.isPlayer = true;
+        this.group.father = this;
         this.meshes = createMeshes();
 
         const { 
@@ -356,7 +357,7 @@ class Tofu extends Moveable2D {
         return this;
     }
 
-    updateRay(needUpdateMatrixWorld) {
+    updateRay(needUpdateMatrixWorld = true) {
 
         if (needUpdateMatrixWorld) {
 
@@ -397,6 +398,8 @@ class Tofu extends Moveable2D {
         this.backRightRay.set(fromVec3, dir);
         this.backRightArrow.position.copy(fromVec3);
         this.backRightArrow.setDirection(dir);
+
+        return this;
 
     }
 

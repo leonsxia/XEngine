@@ -428,7 +428,8 @@ class WorldScene4 extends WorldScene {
             // .setPosition([0, 5, 3])
             // .setRotation([0, Math.PI, 0])
             // .setScale([.2, .3, .2])
-            .updateOBB();
+            .updateOBB()
+            .updateRay();
 
         const [textures, gltfs] = await Promise.all([
             loadTextures(TEXTURES),
