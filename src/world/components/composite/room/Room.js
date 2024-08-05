@@ -51,6 +51,7 @@ class Room {
         this.group = new Group();
         this.group.isRoom = true;
         this.group.name = name;
+        this.rotationY = 0;
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
@@ -175,6 +176,8 @@ class Room {
 
             w.isWall = true;
 
+            w.mesh.rotationY += this.rotationY;     // update wall mesh world rotation y
+
         });
 
     }
@@ -190,6 +193,8 @@ class Room {
             w.mesh.layers.enable(CAMERA_RAY_LAYER);
 
             w.isInsideWall = true;
+
+            w.mesh.rotationY += this.rotationY;     // update wall mesh world rotation y
 
         });
         
@@ -318,9 +323,16 @@ class Room {
 
     setRotationY(y) {
 
-        this.group.rotation.y = y;
+        const preRotY = this.rotationY;
 
-        this.walls.concat(this.insideWalls).forEach(w => w.mesh.rotationY += y);
+        this.group.rotation.y = y;
+        this.rotationY = y;
+
+        this.walls.concat(this.insideWalls).forEach(w => {
+            
+            w.mesh.rotationY = w.mesh.rotationY - preRotY + y;
+        
+        });
 
         return this;
 

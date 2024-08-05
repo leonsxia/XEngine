@@ -29,9 +29,9 @@ class CollisionPlane extends Plane {
             
         }
 
-        this.mesh.rotationY = 0;
         this.mesh.father = this;
-        this.rotationY = 0;
+        this.mesh.rotationY = 0;    // world location y
+        this.rotationY = 0;     // local rotation y
 
     }
 

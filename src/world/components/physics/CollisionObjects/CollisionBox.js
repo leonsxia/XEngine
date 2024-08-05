@@ -43,10 +43,11 @@ class CollisionBox {
         this.depth = depth;
         this.group.name = this.name;
 
+        this.rotationY = 0;     // local rotation y
+
         // collision faces
         const createPlaneFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
         
-
         this.back = createPlaneFunction(frontBackSpecs, `${this.name}_back`, [0, 0, - this.depth * .5], Math.PI, true, true, showArrow);
         this.left = createPlaneFunction(leftRightSpecs, `${this.name}_left`, [this.width * .5, 0, 0], Math.PI * .5, true, true, showArrow);
         this.right = createPlaneFunction(leftRightSpecs, `${this.name}_right`, [- this.width * .5, 0, 0], - Math.PI * .5, true, true, showArrow);
@@ -94,9 +95,12 @@ class CollisionBox {
 
     setRotationY(rotY) {
 
-        this.walls.forEach(w => w.mesh.rotationY += rotY);
+        const preRotY = this.rotationY;
+
+        this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preRotY + rotY);
 
         this.group.rotation.set(0, rotY, 0);
+        this.rotationY = rotY;
 
         return this;
 

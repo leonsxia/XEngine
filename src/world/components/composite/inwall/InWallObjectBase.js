@@ -34,8 +34,9 @@ class InWallObjectBase {
         this.group = new Group();
         this.group.name = name;
         this.group.isInwallObject = true;
-        this.group.rotationY = 0;
         this.group.father = this;
+
+        this.rotationY = 0;     // local rotation y
 
     }
 
@@ -70,10 +71,10 @@ class InWallObjectBase {
 
     setRotationY(y) {
 
-        const preGroupRotY = this.group.rotationY;
+        const preGroupRotY = this.rotationY;
 
         this.group.rotation.y = y;
-        this.group.rotationY = y;
+        this.rotationY = y;
 
         this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y);
 

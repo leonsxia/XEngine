@@ -43,6 +43,8 @@ class CollisionHexCylinder {
         this.height = height;
         this.group.name = this.name;
 
+        this.rotationY = 0;     // local rotation y
+
         const cbox1 = new CollisionBox(boxSpecs1);
         const cbox2 = new CollisionBox(boxSpecs2);
         const cbox3 = new CollisionBox(boxSpecs3);
@@ -109,9 +111,12 @@ class CollisionHexCylinder {
 
     setRotationY(rotY) {
 
-        this.walls.forEach(w => w.mesh.rotationY += rotY);
+        const preRotY = this.rotationY;
+
+        this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preRotY + rotY);
 
         this.group.rotation.set(0, rotY, 0);
+        this.rotationY = rotY;
 
         return this;
 

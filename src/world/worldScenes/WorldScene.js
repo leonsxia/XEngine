@@ -10,7 +10,7 @@ import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
 import { FXAA, OUTLINE, SSAO } from '../components/utils/constants.js';
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
-const INITIAL_RIGHT_PANEL = 'Lights Control';
+const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
 const RESOLUTION_RATIO = {'0.5x': 0.5, '0.8x': 0.8, '1x': 1, '2x': 2};
 let renderTimes = 0;
 

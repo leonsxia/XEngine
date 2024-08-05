@@ -30,12 +30,20 @@ class CollisionTrianglePlane extends TrianglePlane {
 
         }
 
+        this.mesh.rotationY = 0;    // world rotation y
+        this.rotationY = 0;     // local rotation y
+        this.mesh.father = this;
+
     }
 
     setRotationY(y) {
 
+        const preRotY = this.rotationY;
+
         this.setRotation([0, y, 0]);
-        this.mesh.rotationY = y;
+        this.rotationY = y;
+
+        this.mesh.rotationY = this.mesh.rotationY - preRotY + y;
 
         return this;
 
