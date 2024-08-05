@@ -58,37 +58,41 @@ class Room {
         if (!this.ignoreWall('back')) {
 
             this.backWall = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], 0, true, true, showArrow);
-            this.backWall.manuallyAdded = true;
+            this.backWall.isWall = true;
             this.walls.push(this.backWall);
             this.group.add(this.backWall.mesh);
+            this.backWall.mesh.layers.enable(CAMERA_RAY_LAYER);
 
         }
 
         if (!this.ignoreWall('left')) {
 
             this.leftWall = createWallFunction(leftSpecs, `${name}_left`, [width / 2, 0, 0], - Math.PI / 2, true, true, showArrow);
-            this.leftWall.manuallyAdded = true;
+            this.leftWall.isWall = true;
             this.walls.push(this.leftWall);
             this.group.add(this.leftWall.mesh);
+            this.leftWall.mesh.layers.enable(CAMERA_RAY_LAYER);
 
         }
 
         if (!this.ignoreWall('right')) {
 
             this.rightWall = createWallFunction(rightSpecs, `${name}_right`, [- width / 2, 0, 0], Math.PI / 2, true, true, showArrow);
-            this.rightWall.manuallyAdded = true;
+            this.rightWall.isWall = true;
             this.walls.push(this.rightWall);
             this.group.add(this.rightWall.mesh);
+            this.rightWall.mesh.layers.enable(CAMERA_RAY_LAYER);
 
         }
         
         if (!this.ignoreWall('front')) {
 
             this.frontWall = createWallFunction(frontSpecs, `${name}_front`, [0, 0, depth / 2], Math.PI, true, true, showArrow);
-            this.frontWall.manuallyAdded = true;
+            this.frontWall.isWall = true;
             this.frontWall.line?.material.color.setHex(green);
             this.walls.push(this.frontWall);
             this.group.add(this.frontWall.mesh);
+            this.frontWall.mesh.layers.enable(CAMERA_RAY_LAYER);
 
         }
 
@@ -116,8 +120,6 @@ class Room {
             .concat(floorsInit)
             .concat(insideGroupsInit)
         );
-
-        this.setPickLayers();
 
     }
 
@@ -169,7 +171,9 @@ class Room {
 
             this.walls.push(w);
 
-            w.manuallyAdded = true;
+            w.mesh.layers.enable(CAMERA_RAY_LAYER);
+
+            w.isWall = true;
 
         });
 
@@ -183,7 +187,9 @@ class Room {
 
             this.insideWalls.push(w);
 
-            w.manuallyAdded = true;
+            w.mesh.layers.enable(CAMERA_RAY_LAYER);
+
+            w.isInsideWall = true;
 
         });
         
@@ -197,7 +203,9 @@ class Room {
 
             this.floors.push(f);
 
-            f.manuallyAdded = true;
+            f.mesh.layers.enable(CAMERA_RAY_LAYER);
+
+            f.isFloor = true;
 
         });
 
@@ -297,16 +305,6 @@ class Room {
         specs.repeatModeV = repeatModeV;
 
         return specs;
-
-    }
-
-    setPickLayers() {
-
-        this.walls.filter(w => w.manuallyAdded).forEach(w => {w.mesh.layers.enable(CAMERA_RAY_LAYER)});
-
-        this.insideWalls.filter(w => w.manuallyAdded).forEach(w => w.mesh.layers.enable(CAMERA_RAY_LAYER));
-
-        this.floors.filter(f => f.manuallyAdded).forEach(f => f.mesh.layers.enable(CAMERA_RAY_LAYER));
 
     }
 

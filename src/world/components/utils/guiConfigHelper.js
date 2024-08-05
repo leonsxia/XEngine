@@ -692,10 +692,15 @@ function makeObjectsGuiConfig(objects) {
                 object.father.updateRay.call(object.father);
                 object.father.updateOBB.call(object.father);
     
-            } else {
+            } else if (object.isGroup) {
                 
                 object.father.updateOBBs.call(object.father);
     
+            } else if (object.isMesh) {
+
+                object.father.updateRay?.call(object.father);
+                object.father.updateOBB?.call(object.father);
+
             }
         }
 
@@ -726,22 +731,48 @@ function makeObjectsGuiConfig(objects) {
             changeFn: posChangeFn
         }));
 
-        if (!object.isPlayer && object.father) {
+        if (!object.isPlayer && !object.father.isFloor) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'y',
                 prop: 'rotation.y',
                 value: object.rotation,
-                params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, PICKED_NUMBER_STEPS],
+                params: [- 2 * Math.PI, 2 * Math.PI, PICKED_NUMBER_STEPS],
                 type: 'number',
                 changeFn: (val) => {
 
-                    object.father.setRotationY.call(object.father, val);
-                    object.father.updateOBBs.call(object.father);
+                    if (object.isGroup) {
+
+                        object.father.setRotationY.call(object.father, val);
+                        object.father.updateOBBs.call(object.father);
+
+                    } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall)) {
+
+                        object.father.setRotationY.call(object.father, val);
+                        object.father.updateRay.call(object.father);
+                        object.father.updateOBB?.call(object.father);
+
+                    }
 
                 }
             }));
 
+        }
+
+        if (object.father.isFloor) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'z',
+                prop: 'rotation.z',
+                value: object.rotation,
+                params: [- 2 * Math.PI, 2 * Math.PI, PICKED_NUMBER_STEPS],
+                type: 'number',
+                changeFn: () => {
+
+                        object.father.updateOBB.call(object.father);
+
+                }
+            }));
         }
 
         objectPanel.details.push(folder);

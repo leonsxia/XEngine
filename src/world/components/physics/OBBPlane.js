@@ -28,6 +28,9 @@ class OBBPlane extends Plane {
             this.line.visible = false;
 
         }
+
+        this.mesh.father = this;
+
     }
 
     get obb() {
