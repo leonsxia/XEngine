@@ -153,7 +153,7 @@ class Gui {
                 if (spec.value || spec.changeFn) {
 
                     Object.defineProperty(spec, 'parent', {
-                        value: target ?? spec.prop,
+                        value: target ?? spec.prop, // if target not exists, will use prop for identifier/parent check in object panel.
                         writable: false
                     });
 
@@ -178,10 +178,15 @@ class Gui {
                         break;
 
                     case 'number':
+
+                        folder.add(parent, property, ...spec.params).name(displayName).identifier = target ?? displayName;
+
+                        break;
+
                     case 'light-num':
                     case 'angle':
 
-                        folder.add(parent, property, ...spec.params).name(displayName).identifier = target ?? displayName;
+                        folder.add(parent, property, ...spec.params).name(displayName).identifier = target;
 
                         break;
 
@@ -301,7 +306,7 @@ class Gui {
                     case 'number':
 
                         if (find.changeFn) find.changeFn(val);
-                        
+
                         break;
 
                     case 'light-num':

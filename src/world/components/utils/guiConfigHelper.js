@@ -681,6 +681,8 @@ function makeObjectsGuiConfig(objects) {
     
     objects.forEach(object => {
 
+
+        // set parent to null, so gui will use prop to set identifier
         const folder = makeFolderGuiConfig({ folder: object.name, parent: null, close: false });
 
         const posChangeFn = () => {
