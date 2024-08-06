@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { Group, MathUtils } from 'three';
 import { CAMERA_RAY_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 
@@ -79,6 +79,18 @@ class InWallObjectBase {
         this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y);
 
         return this;
+
+    }
+
+    get rotationYDegree() {
+
+        return MathUtils.radToDeg(this.rotationY);
+
+    }
+
+    set rotationYDegree(value) {
+
+        this.setRotationY(MathUtils.degToRad(value));
 
     }
 

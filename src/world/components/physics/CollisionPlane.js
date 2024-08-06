@@ -1,4 +1,4 @@
-import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, ArrowHelper } from "three";
+import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, ArrowHelper, MathUtils } from "three";
 import { Plane } from "../Models";
 import { white, red, green } from "../basic/colorBase";
 import { CORNOR_RAY_LAYER } from "../utils/constants";
@@ -29,7 +29,6 @@ class CollisionPlane extends Plane {
             
         }
 
-        this.mesh.father = this;
         this.mesh.rotationY = 0;    // world location y
         this.rotationY = 0;     // local rotation y
 
@@ -45,6 +44,18 @@ class CollisionPlane extends Plane {
         this.mesh.rotationY = this.mesh.rotationY - preRotY + y;
 
         return this;
+
+    }
+
+    get rotationYDegree() {
+
+        return MathUtils.radToDeg(this.rotationY);
+
+    }
+
+    set rotationYDegree(value) {
+
+        this.setRotationY(MathUtils.degToRad(value));
 
     }
 

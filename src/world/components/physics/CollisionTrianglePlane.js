@@ -1,7 +1,7 @@
-import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, ArrowHelper } from "three";
-import { TrianglePlane } from "../Models";
-import { white, red, green } from "../basic/colorBase";
-import { CORNOR_RAY_LAYER } from "../utils/constants";
+import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, ArrowHelper, MathUtils } from 'three';
+import { TrianglePlane } from '../Models';
+import { white, red, green } from '../basic/colorBase';
+import { CORNOR_RAY_LAYER } from '../utils/constants';
 
 const DEFAULT_RAY_LENGTH = 20;
 
@@ -32,7 +32,6 @@ class CollisionTrianglePlane extends TrianglePlane {
 
         this.mesh.rotationY = 0;    // world rotation y
         this.rotationY = 0;     // local rotation y
-        this.mesh.father = this;
 
     }
 
@@ -46,6 +45,18 @@ class CollisionTrianglePlane extends TrianglePlane {
         this.mesh.rotationY = this.mesh.rotationY - preRotY + y;
 
         return this;
+
+    }
+
+    get rotationYDegree() {
+
+        return MathUtils.radToDeg(this.rotationY);
+
+    }
+
+    set rotationYDegree(value) {
+
+        this.setRotationY(MathUtils.degToRad(value));
 
     }
 

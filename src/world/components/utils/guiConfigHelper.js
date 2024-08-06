@@ -1,10 +1,11 @@
-import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from "./constants";
+import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './constants';
 
 const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
 const DEFALUT_GRID_DEPTH = 50;
 const NUMBER_STEPS = .1;
-const PICKED_NUMBER_STEPS = .001;
+const PICKED_NUMBER_STEPS = .01;
+const PICKED_ANGLE_STEPS = .01;
 
 function combineGuiConfigs(...details) {
     let specs = [];
@@ -734,21 +735,19 @@ function makeObjectsGuiConfig(objects) {
         if (!object.isPlayer && !object.father.isFloor) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'y',
+                name: 'rotationYDegree',
                 prop: 'rotation.y',
-                value: object.rotation,
-                params: [- 2 * Math.PI, 2 * Math.PI, PICKED_NUMBER_STEPS],
-                type: 'number',
+                value: object.father,
+                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                type: 'object-angle',
                 changeFn: (val) => {
 
                     if (object.isGroup) {
 
-                        object.father.setRotationY.call(object.father, val);
                         object.father.updateOBBs.call(object.father);
 
                     } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall)) {
 
-                        object.father.setRotationY.call(object.father, val);
                         object.father.updateRay.call(object.father);
                         object.father.updateOBB?.call(object.father);
 
@@ -762,17 +761,18 @@ function makeObjectsGuiConfig(objects) {
         if (object.father.isFloor) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'z',
+                name: 'rotationZDegree',
                 prop: 'rotation.z',
-                value: object.rotation,
-                params: [- 2 * Math.PI, 2 * Math.PI, PICKED_NUMBER_STEPS],
-                type: 'number',
+                value: object.father,
+                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                type: 'object-angle',
                 changeFn: () => {
 
                         object.father.updateOBB.call(object.father);
 
                 }
             }));
+            
         }
 
         objectPanel.details.push(folder);

@@ -1,4 +1,4 @@
-import { EdgesGeometry, LineSegments, LineBasicMaterial, Vector3 } from 'three';
+import { EdgesGeometry, LineSegments, LineBasicMaterial, Vector3, MathUtils } from 'three';
 import { OBB } from 'three/examples/jsm/Addons.js';
 import { Plane } from '../Models';
 import { white } from '../basic/colorBase';
@@ -29,13 +29,23 @@ class OBBPlane extends Plane {
 
         }
 
-        this.mesh.father = this;
-
     }
 
     get obb() {
 
         return this.mesh.userData.obb;
+
+    }
+
+    get rotationZDegree() {
+
+        return MathUtils.radToDeg(this.mesh.rotation.z);
+
+    }
+
+    set rotationZDegree(value) {
+
+        this.mesh.rotation.z = MathUtils.degToRad(value);
 
     }
 

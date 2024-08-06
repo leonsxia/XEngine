@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { Group, MathUtils } from 'three';
 import { createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue } from '../../basic/colorBase';
@@ -22,13 +22,13 @@ class ObstacleBase extends ObstacleMoveable {
 
     cObjects = [];
 
-    // set to false, will not add to room obstacles, so the physics engine will ignore this cubebox.
+    // set to false, will not add to room obstacles, so the physics engine will ignore this object.
     isObstacle = false;
-    // set four vetical face to OBBPlane, so it can iteract with other cubebox or player
+    // set four vetical face to OBBPlane, so it can iteract with other object or player
     enableWallOBBs = false;
-    // set this cubebox is climable by player
+    // set this obstacle is climable by player
     climbable = false;
-    // set this cubebox can be pushed by player
+    // set this obstacle can be pushed by player
     movable = false;
     // falling ground
     hittingGround;
@@ -165,6 +165,18 @@ class ObstacleBase extends ObstacleMoveable {
         this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y);
 
         return this;
+
+    }
+
+    get rotationYDegree() {
+
+        return MathUtils.radToDeg(this.rotationY);
+
+    }
+
+    set rotationYDegree(value) {
+
+        this.setRotationY(MathUtils.degToRad(value));
 
     }
 

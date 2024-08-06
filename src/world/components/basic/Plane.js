@@ -14,6 +14,8 @@ class Plane extends BasicObject {
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.name = specs.name;
 
+        this.mesh.father = this;
+
     }
 
     async init () {

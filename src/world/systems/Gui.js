@@ -178,6 +178,7 @@ class Gui {
                         break;
 
                     case 'number':
+                    case 'object-angle':
 
                         folder.add(parent, property, ...spec.params).name(displayName).identifier = target ?? displayName;
 
@@ -304,6 +305,7 @@ class Gui {
                         break;
 
                     case 'number':
+                    case 'object-angle':
 
                         if (find.changeFn) find.changeFn(val);
 
