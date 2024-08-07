@@ -224,7 +224,16 @@ class Room {
 
             this.insideGroups.push(g);
 
-            if (g.walls) this.insideWalls = this.insideWalls.concat(g.walls);
+            if (g.walls) {
+                
+                g.walls.forEach(w => {
+
+                    w.mesh.rotationY += this.rotationY;
+                    this.insideWalls.push(w);
+                    
+                });
+            
+            }
 
             if (g.tops) this.tops = this.tops.concat(g.tops);
 
