@@ -30,6 +30,8 @@ class Tofu extends Moveable2D {
     backLeftArrow;
     backRightArrow;
 
+    intersectSlope;
+
     #w;
     #d;
     #h;
@@ -499,6 +501,12 @@ class Tofu extends Moveable2D {
 
         return this;
 
+    }
+
+    setSlopeIntersection(s) {
+
+        this.setSlopeCoefficient(s);
+        this.intersectSlope = s;
     }
 
     castShadow(cast) {

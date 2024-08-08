@@ -532,22 +532,20 @@ class SimplePhysics {
 
                     if (!playerIntersectSlopeBox && (player.intersectSlope === s || !player.intersectSlope)) {
 
-                        player.setSlopeCoefficient?.();
-                        player.intersectSlope = null;
+                        player.setSlopeIntersection?.();
 
                     } else if (player.isInAir && playerIntersectSlope) {
 
-                        player.setSlopeCoefficient?.(s);
+                        player.setSlopeIntersection?.(s);
 
                     } else if (playerIntersectSlope && (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
 
-                        player.setSlopeCoefficient?.(s);
+                        player.setSlopeIntersection?.(s);
 
                     }
 
                     if (playerIntersectSlope) {
 
-                        player.intersectSlope = s;
                         collisionSlopes.push(s.slope.mesh);
 
                     }
@@ -555,14 +553,6 @@ class SimplePhysics {
                 }
 
             });
-
-            // when player is on a slope, change the room must clear the slope state.
-            if (this.slopes.length === 0) {
-
-                player.setSlopeCoefficient?.();
-                player.intersectSlope = null;
-
-            }
 
             if (collisionTops.length > 0 && collisionSlopes.length === 0) {
 

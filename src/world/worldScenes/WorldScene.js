@@ -264,6 +264,9 @@ class WorldScene {
                 this.player.updateRay();
 
             }
+
+            this.player.setSlopeIntersection?.();
+            
         }
 
         if (this.staticRendering) {
