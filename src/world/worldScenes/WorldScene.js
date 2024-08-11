@@ -7,7 +7,7 @@ import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { Gui } from '../systems/Gui.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
-import { FXAA, OUTLINE, SSAO } from '../components/utils/constants.js';
+import { FXAA, OUTLINE, SSAO, SSAA } from '../components/utils/constants.js';
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
@@ -23,7 +23,7 @@ class WorldScene {
     scene = null;
     renderer = null;
     loop = null;
-    #resizer = null;
+    resizer = null;
     controls = null;
     container = null;
     staticRendering = true;
@@ -80,13 +80,12 @@ class WorldScene {
         this.loop.updatables = [this.controls.defControl];
         // this.controls.defControl.listenToKeyEvents(window);
 
-        this.#resizer = new Resizer(container, this.camera, this.renderer, this.postProcessor);
+        this.resizer = new Resizer(container, this.camera, this.renderer, this.postProcessor);
 
-        this.#resizer.onResize = 
+        this.resizer.onResize = 
         () => {
 
-            this.postProcessor.reset();
-            this.render();
+            if (this.staticRendering && this.forceStaticRender) this.render();
 
         };
 
@@ -430,6 +429,22 @@ class WorldScene {
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'SSAA',
+                value: { SSAA: 'disable' },
+                params: ['enable', 'disable'],
+                type: 'dropdown',
+                changeFn: this.enableSSAA.bind(this)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'SSAASampleLevel',
+                value: { SSAASampleLevel: 'Level 2: 4 Samples' },
+                params: ['Level 0: 1 Sample', 'Level 2: 4 Samples', 'Level 3: 8 Samples', 'Level 4: 16 Samples', 'Level 5: 32 Samples'],
+                type: 'dropdown',
+                changeFn: this.changeSSAASampleLevel.bind(this)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'SSAO',
                 value: { SSAO: 'disable' },
                 params: ['enable', 'disable'],
@@ -566,7 +581,7 @@ class WorldScene {
     
     changeResolution (ratio) {
 
-        this.#resizer.changeResolution(ratio);
+        this.resizer.changeResolution(ratio);
 
     }
 
@@ -806,6 +821,45 @@ class WorldScene {
         const e = enable === 'enable' ? true : false;
 
         this.setEffect(FXAA, { enabled: e });
+
+    }
+
+    enableSSAA(enable) {
+
+        const e = enable === 'enable' ? true : false;
+
+        this.setEffect(SSAA, { enabled: e });
+
+    }
+
+    changeSSAASampleLevel(name) {
+
+        let sampleLevel;
+
+        switch (name) {
+
+            case 'Level 0: 1 Sample':
+                sampleLevel = 0;
+                break;
+            case 'Level 1: 2 Samples':
+                sampleLevel = 1;
+                break;
+            case 'Level 2: 4 Samples':
+                sampleLevel = 2;
+                break;
+            case 'Level 3: 8 Samples':
+                sampleLevel = 3;
+                break;
+            case 'Level 4: 16 Samples':
+                sampleLevel = 4;
+                break;
+            case 'Level 5: 32 Samples':
+                sampleLevel = 5;
+                break;
+
+        }
+
+        this.setEffect(SSAA, { sampleLevel });
 
     }
 

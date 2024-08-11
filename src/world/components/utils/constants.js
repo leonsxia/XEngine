@@ -30,6 +30,7 @@ const STAIRS_TOP = 'stairsTop';
 const OUTLINE = 'outline';
 const SSAO = 'ssao';
 const FXAA = 'fxaa';
+const SSAA = 'ssaa'
 
 // raycaster layers
 const CORNOR_RAY_LAYER = 1;
@@ -133,6 +134,7 @@ export {
     OUTLINE,
     SSAO,
     FXAA,
+    SSAA,
 
     CORNOR_RAY_LAYER,
     PLAYER_RAY_LAYER,

@@ -16,13 +16,6 @@ class Resizer {
         // set initial size on load
         this.setSize();
 
-        window.addEventListener('resize', () => {
-
-            this.setSize();
-
-            this.onResize();
-
-        });
     }
 
     onResize() {}
@@ -50,6 +43,7 @@ class Resizer {
 
         // Set the pixel ratio (for mobile devices)
         this.#renderer.setPixelRatio(this.#ratio);
+        this.#postProcessor.composer.setPixelRatio(this.#ratio);
 
         // Update the size of the renderer and the canvas
         this.#renderer.setSize(width, height);
@@ -60,6 +54,7 @@ class Resizer {
         // renderer.setViewport(0, 0, container.clientWidth / 2, container.clientHeight / 2);
 
         this.#postProcessor.composer.setSize(width, height);
+        this.#postProcessor.reset();
 
     };
 

@@ -6,7 +6,8 @@ import { OutlinePass } from 'three/examples/jsm/Addons.js';
 import { OutputPass } from 'three/examples/jsm/Addons.js';
 import { SSAOPass } from 'three/examples/jsm/Addons.js';
 import { FXAAShader } from 'three/examples/jsm/Addons.js';
-import { OUTLINE, SSAO, FXAA, TRI_PATTERN, REPEAT_WRAPPING } from '../components/utils/constants';
+import { SSAARenderPass } from 'three/examples/jsm/Addons.js';
+import { OUTLINE, SSAO, FXAA, SSAA, TRI_PATTERN, REPEAT_WRAPPING } from '../components/utils/constants';
 import { white } from '../components/basic/colorBase';
 import { loadSingleTexture } from '../components/utils/textureHelper';
 
@@ -35,6 +36,12 @@ const SSAO_OUTPUT = {
     Normal: SSAOPass.OUTPUT.Normal
 }
 
+const DEFAULT_SSAA = {
+    unbiased: true,
+    sampleLevel: 2,
+    enabled: false
+}
+
 class PostProcessor {
 
     #renderer;
@@ -50,10 +57,12 @@ class PostProcessor {
     outlinePass;
     ssaoPass;
     effectFXAA;
+    ssaaPass;
 
     // config
     #outlineConfig = {};
     #ssaoConfig = {};
+    #ssaaConfig = {};
 
     effects = [];
 
@@ -71,18 +80,21 @@ class PostProcessor {
         this.outlinePass = new OutlinePass( new Vector2( container.clientWidth, container.clientHeight ), scene, camera );
         this.ssaoPass = new SSAOPass(scene, camera, container.clientWidth, container.clientHeight);
         this.effectFXAA = new ShaderPass( FXAAShader );
+        this.ssaaPass = new SSAARenderPass(scene, camera);
 
-        this.effects = [this.outlinePass, this.ssaoPass, this.effectFXAA];
+        this.effects = [this.ssaaPass, this.outlinePass, this.ssaoPass, this.effectFXAA];
         this.disableAllEffects();
 
         this.composer.addPass(this.renderPass);
+        this.composer.addPass(this.ssaaPass);
         this.composer.addPass(this.outlinePass);
-        this.composer.addPass(this.ssaoPass)
+        this.composer.addPass(this.ssaoPass);
         this.composer.addPass(this.outputPass);
         this.composer.addPass(this.effectFXAA);
 
         Object.assign(this.#outlineConfig, DEFAULT_OUTLINE);
         Object.assign(this.#ssaoConfig, DEFAULT_SSAO);
+        Object.assign(this.#ssaaConfig, DEFAULT_SSAA);
         
     }
 
@@ -95,6 +107,18 @@ class PostProcessor {
     get clientHeight() {
 
         return this.#container.clientHeight;
+
+    }
+
+    get renderTargetWidth() {
+
+        return this.clientWidth * this.composer._pixelRatio;
+
+    }
+
+    get renderTargetHeight() {
+
+        return this.clientHeight * this.composer._pixelRatio;
 
     }
 
@@ -120,18 +144,25 @@ class PostProcessor {
 
         this.resetSSAO();
         this.resetFXAA();
+        this.resetSSAA();
+
+    }
+
+    resetSSAA() {
+
+        this.ssaaPass.setSize(this.renderTargetWidth, this.renderTargetHeight);
 
     }
 
     resetFXAA() {
 
-        this.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / this.clientWidth, 1 / this.clientHeight );
+        this.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / this.renderTargetWidth, 1 / this.renderTargetHeight );
 
     }
 
     resetSSAO() {
 
-        this.ssaoPass.setSize(this.clientWidth, this.clientHeight);
+        this.ssaoPass.setSize(this.renderTargetWidth, this.renderTargetHeight);
 
     }
 
@@ -158,6 +189,31 @@ class PostProcessor {
         // const outputIdx = this.composer.passes.findIndex(pass => pass instanceof OutputPass);
         
         switch(type) {
+
+            case SSAA:
+                {
+                    const {
+                        enabled = this.#ssaaConfig.enabled,
+                        sampleLevel = this.#ssaaConfig.sampleLevel,
+                        unbiased = this.#ssaaConfig.unbiased
+                    } = specs;
+
+                    this.#ssaaConfig.enabled = enabled;
+                    this.#ssaaConfig.sampleLevel = sampleLevel;
+                    this.#ssaaConfig.unbiased = unbiased;
+
+                    this.resetSSAA();
+                    this.ssaaPass.enabled = enabled;
+                    this.ssaaPass.sampleLevel = sampleLevel;
+                    this.ssaaPass.unbiased = unbiased;
+
+                    if (enabled)
+                        this.renderPass.enabled = false;
+                    else 
+                        this.renderPass.enabled = true;
+
+                }
+                break;
             
             case OUTLINE:
                 {

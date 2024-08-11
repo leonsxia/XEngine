@@ -100,6 +100,7 @@ class WorldScene2 extends WorldScene {
             name: this.name,
             renderer: this.renderer,
             scene: this.scene,
+            resizer: this.resizer,
             init: this.init.bind(this), 
             render: this.render.bind(this),
             start: this.start.bind(this),

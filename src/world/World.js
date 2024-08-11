@@ -59,6 +59,7 @@ class World {
 
         await this.changeScene(name);
 
+        this.bindResizer();
         this.bindAllMoves();
 
     }
@@ -146,6 +147,20 @@ class World {
         
         return { objects, vertices, triangles };
     } 
+
+    bindResizer() {
+
+        window.addEventListener('resize', () => {
+
+            const resizer = this.#currentScene.resizer;
+
+            resizer.setSize();
+
+            resizer.onResize();
+
+        });
+
+    }
 
     bindAllMoves() {
 
