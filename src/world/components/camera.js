@@ -2,7 +2,7 @@ import { PerspectiveCamera } from 'three'
 
 function createCamera(spc) {
     const camera = new PerspectiveCamera(
-        35, // fov = Field of View
+        50, // fov = Field of View
         1,  // aspect ratio
         0.1,    // near clipping plane
         500     // far clipping plane
