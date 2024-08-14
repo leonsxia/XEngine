@@ -1,4 +1,4 @@
-import { createCamera } from '../components/camera.js';
+import { ThirdPersonCamera } from '../components/cameras/ThirdPersonCamera.js';
 import { createScene } from '../components/scene.js';
 import { WorldControls } from '../systems/Controls.js';
 import { updateSingleLightCamera } from '../components/shadowMaker.js';
@@ -19,6 +19,7 @@ class WorldScene {
     setup = {};
     name = 'default scene';
 
+    cameraObj = null;
     camera = null;
     scene = null;
     renderer = null;
@@ -67,7 +68,9 @@ class WorldScene {
 
         this.container = container;
         this.renderer = renderer;
-        this.camera = createCamera(specs.camera);
+        this.cameraObj = new ThirdPersonCamera(specs.camera);
+        this.camera = this.cameraObj.camera;
+        
         this.scene = createScene(specs.scene.backgroundColor);
         this.postProcessor = new PostProcessor(renderer, this.scene, this.camera, container);
         this.loop = new Loop(this.camera, this.scene, this.renderer, this.postProcessor);
@@ -198,7 +201,7 @@ class WorldScene {
             this.controls.moveCameraStatic(moveDist);
             if (!forceStaticRender) this.forceStaticRender = true;
 
-        } else {
+        } else if (this.loop.updatables.find(f => f === this.controls.defControl)) {
 
             this.controls.moveCamera(moveDist);
 
@@ -277,7 +280,7 @@ class WorldScene {
             this.controls.defControl.update();
             if (!forceStaticRender) this.forceStaticRender = true;
 
-        } else {
+        } else if (this.loop.updatables.find(f => f === this.controls.defControl)) {
 
             const tar = this.controls.defControl.target;
             const pos = this.camera.position;
@@ -466,6 +469,17 @@ class WorldScene {
 
         if (this.player) {
 
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Third Person Camera',
+                parent: 'thirdPersonCamera',
+                name: 'TPC',
+                value: { TPC: 'disable' },
+                params: ['enable', 'disable'],
+                type: 'dropdown',
+                changeFn: this.enableTPC.bind(this),
+                close: true
+            }));
+
             const folder = makeFolderGuiConfig({folder: 'Player Control', parent: 'playerControl', close: true});
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -628,6 +642,8 @@ class WorldScene {
             this.physics.addActivePlayers(name);
 
             this.scene.add(this.player.group);
+
+            this.cameraObj.player = find;
 
             if (this.player.hasRays) {
 
@@ -900,6 +916,31 @@ class WorldScene {
         }
 
         this.setEffect(SSAO, { output });
+
+    }
+
+    enableTPC(enable) {
+
+        const e = enable === 'enable' ? true : false;
+        const { updatables } = this.loop;
+
+        if (e) {
+
+            const idx = updatables.findIndex(f => f === this.controls.defControl);
+            updatables.splice(idx, 1);
+            updatables.push(this.cameraObj);
+            this.scene.add(this.cameraObj.rayArrow);
+
+            this.cameraObj.setPositionFromPlayer();
+
+        } else {
+
+            const idx = updatables.findIndex(f => f === this.cameraObj);
+            updatables.splice(idx, 1);
+            updatables.push(this.controls.defControl);
+            this.scene.remove(this.cameraObj.rayArrow);
+
+        }
 
     }
 

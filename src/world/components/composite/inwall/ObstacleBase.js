@@ -2,7 +2,7 @@ import { Group, MathUtils } from 'three';
 import { createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 
 class ObstacleBase extends ObstacleMoveable {
@@ -107,7 +107,12 @@ class ObstacleBase extends ObstacleMoveable {
 
         const meshes = getVisibleMeshes(this.group);
 
-        meshes.forEach(m => m.layers.enable(CAMERA_RAY_LAYER));
+        meshes.forEach(m => {
+
+            m.layers.enable(CAMERA_RAY_LAYER);
+            m.layers.enable(PLAYER_CAMERA_RAY_LAYER);
+
+        });
 
     }
 
@@ -204,6 +209,7 @@ class ObstacleBase extends ObstacleMoveable {
         specs.lines = lines;
         specs.mapRatio = mapRatio;
         specs.baseSize = baseSize;
+        specs.transparent = true;
 
         return specs;
 

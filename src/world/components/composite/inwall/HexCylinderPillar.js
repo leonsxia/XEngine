@@ -24,7 +24,7 @@ class HexCylinderPillar extends ObstacleBase {
         const cylinderSpecs = { 
             name: `${name}_cylinder`, radius: this.radius, height: this.height, segments, baseSize, 
             map, normalMap, topMap, topNormal, bottomMap, bottomNormal,
-            mapRatio, rotationC, lines
+            mapRatio, rotationC, lines, transparent: true
         };
         const chCylinderSpecs = { name, radius: this.radius, height: this.height, enableWallOBBs:this.enableWallOBBs, showArrow, lines };
 

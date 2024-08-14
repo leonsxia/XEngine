@@ -156,7 +156,8 @@ class CylinderPillar extends InWallObjectBase {
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;
-        specs.baseSize = baseSize
+        specs.baseSize = baseSize;
+        specs.transparent = true;
 
         return specs;
 
@@ -169,6 +170,7 @@ class CylinderPillar extends InWallObjectBase {
         specs.lines = lines;
         specs.mapRatio = mapRatio;
         specs.baseSize = baseSize;
+        specs.transparent = true;
 
         if (top)
             specs.rotationT = .125 * Math.PI;

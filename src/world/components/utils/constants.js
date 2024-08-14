@@ -36,6 +36,7 @@ const SSAA = 'ssaa'
 const CORNOR_RAY_LAYER = 1;
 const PLAYER_RAY_LAYER = 2;
 const CAMERA_RAY_LAYER = 3;
+const PLAYER_CAMERA_RAY_LAYER = 4;
 
 // textures
 const TEXTURE_NAMES = {
@@ -139,6 +140,7 @@ export {
     CORNOR_RAY_LAYER,
     PLAYER_RAY_LAYER,
     CAMERA_RAY_LAYER,
+    PLAYER_CAMERA_RAY_LAYER,
 
     TEXTURE_NAMES,
     TEXTURES,

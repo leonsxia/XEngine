@@ -27,6 +27,9 @@ class Cylinder extends BasicObject {
 
         }
 
+        this.topMaterial.transparent = true;
+        this.bottomMaterial.transparent = true;
+
         this.mesh = new Mesh(this.geometry, [this.material, this.topMaterial, this.bottomMaterial]);
         this.mesh.name = specs.name;
 

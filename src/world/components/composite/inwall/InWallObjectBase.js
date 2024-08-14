@@ -1,5 +1,5 @@
 import { Group, MathUtils } from 'three';
-import { CAMERA_RAY_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 
 class InWallObjectBase {
@@ -47,7 +47,8 @@ class InWallObjectBase {
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;
-        specs.baseSize = baseSize
+        specs.baseSize = baseSize;
+        specs.transparent = true;
 
         return specs;
 
@@ -57,7 +58,12 @@ class InWallObjectBase {
 
         const meshes = getVisibleMeshes(this.group);
 
-        meshes.forEach(m => m.layers.enable(CAMERA_RAY_LAYER));
+        meshes.forEach(m => {
+            
+            m.layers.enable(CAMERA_RAY_LAYER);
+            m.layers.enable(PLAYER_CAMERA_RAY_LAYER);
+        
+        });
         
     }
 

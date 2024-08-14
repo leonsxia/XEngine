@@ -22,7 +22,7 @@ class BoxCube extends ObstacleBase  {
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
 
-        const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map, normalMap, lines };
+        const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map, normalMap, lines, transparent: true };
 
         const frontSpecs = this.makePlaneConfig({ width, height, color: basic, map: frontMap, normalMap: frontNormal })
         const backSpecs = this.makePlaneConfig({ width, height, color: basic, map: backMap, normalMap: backNormal });

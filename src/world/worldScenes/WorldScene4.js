@@ -454,7 +454,7 @@ class WorldScene4 extends WorldScene {
         
         this.players.push(tofu);
         this.players.push(train);
-        this.physics = new SimplePhysics(this.players, [], [], []);
+        this.physics = new SimplePhysics(this.players);
 
         this.loop.updatables.push(this.physics);
         this.scene.add(ground.mesh, ceiling.mesh);
@@ -485,6 +485,7 @@ class WorldScene4 extends WorldScene {
 
         // no need to render at this time, so the change event of control won't do the rendering.
         this.changeCharacter('tofu1', false);
+        this.cameraObj.setup({ player: this.player, control: this.controls.defControl, scene: this.scene });
 
         this.scene.add(room1.group);
         room1.walls.concat(room1.insideWalls).forEach(w => this.scene.add(...w.arrows));

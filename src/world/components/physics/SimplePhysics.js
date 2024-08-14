@@ -18,7 +18,7 @@ class SimplePhysics {
     slopes = [];
     activePlayers = [];
 
-    constructor(players, floors, walls, obstacles) {
+    constructor(players, floors = [], walls = [], obstacles = []) {
 
         this.players = players;
         this.walls = walls;

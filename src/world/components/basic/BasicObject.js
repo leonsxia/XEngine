@@ -81,10 +81,14 @@ class BasicObject {
                 break;
         }
 
+        const { transparent = false } = specs;
+
         if (color) 
             this.material = new MeshPhongMaterial({ color: color });
         else
             this.material = basicMateraials.basic.clone();
+
+        this.material.transparent = transparent;
 
     }
 
