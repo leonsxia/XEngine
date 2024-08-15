@@ -929,7 +929,7 @@ class WorldScene {
             const idx = updatables.findIndex(f => f === this.controls.defControl);
             updatables.splice(idx, 1);
             updatables.push(this.cameraObj);
-            this.scene.add(this.cameraObj.rayArrow);
+            this.scene.add(...this.cameraObj.rayArrows);
 
             this.cameraObj.setPositionFromPlayer();
 
@@ -938,7 +938,7 @@ class WorldScene {
             const idx = updatables.findIndex(f => f === this.cameraObj);
             updatables.splice(idx, 1);
             updatables.push(this.controls.defControl);
-            this.scene.remove(this.cameraObj.rayArrow);
+            this.scene.remove(...this.cameraObj.rayArrows);
 
         }
 

@@ -153,7 +153,9 @@ class Tofu extends Moveable2D {
     }
 
     get width() {
+
         return this.#w * this.group.scale.x;
+        
     }
 
     get height() {

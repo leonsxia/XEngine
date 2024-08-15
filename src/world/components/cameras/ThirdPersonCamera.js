@@ -1,7 +1,9 @@
 import { Vector3, Raycaster, ArrowHelper, Object3D } from 'three';
 import { Camera } from './Camera';
-import { yellow } from '../basic/colorBase';
+import { green, red, yellow } from '../basic/colorBase';
 import { PLAYER_CAMERA_RAY_LAYER } from '../utils/constants';
+
+const PADDING = .1;
 
 class ThirdPersonCamera extends Camera {
 
@@ -12,8 +14,27 @@ class ThirdPersonCamera extends Camera {
     #camPosLocal = new Vector3(0, 3, - 5);
     #camTarLocal = new Vector3(0, 0, 3);
 
-    #raycaster;
-    rayArrow;
+    rayArrowTop;
+    rayArrowBottom;
+
+    #rayTopFrontLeft;
+    #rayTopFrontRight;
+    #rayTopBackLeft;
+    #rayTopBackRight;
+    #rayCenter;
+    #rayBottomBackLeft;
+    #rayBottomBackRight;
+
+    #rayArrowTopFrontLeft;
+    #rayArrowTopFrontRight;
+    #rayArrowTopBackLeft;
+    #rayArrowTopBackRight;
+    #rayArrowCenter;
+    #rayArrowBottomBackLeft;
+    #rayArrowBottomBackRight;
+
+    rays = [];
+    rayArrows = [];
 
     #invisibleOpacity = .15;
     #intersectObjects = [];
@@ -22,26 +43,41 @@ class ThirdPersonCamera extends Camera {
 
         super(specs);
 
-        const headLength = 1;
-        const headWidth = .2;
+    }
 
-        const dir = this.#camTarLocal.clone().sub(this.#camPosLocal).normalize();
+    get playerTopFrontLeft() {
 
-        this.#raycaster = new Raycaster(this.#camPosLocal.clone(), dir, 0, this.rayLength);
-        this.#raycaster.layers.set(PLAYER_CAMERA_RAY_LAYER);
-
-        this.rayArrow = new ArrowHelper(dir, this.#camPosLocal, this.rayLength, yellow, headLength, headWidth);
-        this.rayArrow.visible = false;
+        return new Vector3(this.#player.width * .5 - PADDING, this.#player.height * .5, this.#player.depth * .5 - PADDING);
 
     }
 
-    get rayLength() {
+    get playerTopFrontRight() {
 
-        const totalDistZ = this.#camTarLocal.z - this.#camPosLocal.z;
-        const totalDist = Math.sqrt(totalDistZ * totalDistZ + this.#camPosLocal.y * this.#camPosLocal.y);
-        const rayLength = Math.abs(this.#camPosLocal.z) * totalDist / totalDistZ;
+        return new Vector3(- this.#player.width * .5 + PADDING, this.#player.height * .5, this.#player.depth * .5 - PADDING);
 
-        return rayLength;
+    }
+
+    get playerTopBackLeft() {
+
+        return new Vector3(this.#player.width * .5 - PADDING, this.#player.height * .5, - this.#player.depth * .5 + PADDING);
+
+    }
+
+    get playerTopBackRight() {
+
+        return new Vector3(- this.#player.width * .5 + PADDING, this.#player.height * .5, - this.#player.depth * .5 + PADDING);
+
+    }
+
+    get playerBottomBackLeft() {
+
+        return new Vector3(this.#player.width * .5 - PADDING, 0, - this.#player.depth * .5 + PADDING);
+
+    }
+
+    get playerBottomBackRight() {
+
+        return new Vector3(- this.#player.width * .5 + PADDING, 0, - this.#player.depth * .5 + PADDING);
 
     }
 
@@ -59,6 +95,85 @@ class ThirdPersonCamera extends Camera {
         this.#control = control;
         this.#scene = scene;
 
+        this.setupRays();
+
+    }
+
+    setupRays() {
+
+        const headLength = 1;
+        const headWidth = .2;
+
+        const dirTopFrontLeft = this.playerTopFrontLeft.sub(this.#camPosLocal);
+        const dirTopFrontRight = this.playerTopFrontRight.sub(this.#camPosLocal);
+        const dirTopBackLeft = this.playerTopBackLeft.sub(this.#camPosLocal);
+        const dirTopBackRight = this.playerTopBackRight.sub(this.#camPosLocal);
+        const dirCenter = new Vector3().sub(this.#camPosLocal);
+        const dirBottomBackLeft = this.playerBottomBackLeft.sub(this.#camPosLocal);
+        const dirBottomBackRight = this.playerBottomBackRight.sub(this.#camPosLocal);
+
+        this.#rayTopFrontLeft = new Raycaster(this.#camPosLocal.clone(), dirTopFrontLeft.clone().normalize(), 0, dirTopFrontLeft.length());
+        this.#rayTopFrontRight = new Raycaster(this.#camPosLocal.clone(), dirTopFrontRight.clone().normalize(), 0, dirTopFrontRight.length());
+        this.#rayTopBackLeft = new Raycaster(this.#camPosLocal.clone(), dirTopBackLeft.clone().normalize(), 0, dirTopBackLeft.length());
+        this.#rayTopBackRight = new Raycaster(this.#camPosLocal.clone(), dirTopBackRight.clone().normalize(), 0, dirTopBackRight.length());
+        this.#rayCenter = new Raycaster(this.#camPosLocal.clone(), dirCenter.clone().normalize(), 0, dirCenter.length());
+        this.#rayBottomBackLeft = new Raycaster(this.#camPosLocal.clone(), dirBottomBackLeft.clone().normalize(), 0, dirBottomBackLeft.length());
+        this.#rayBottomBackRight = new Raycaster(this.#camPosLocal.clone(), dirBottomBackRight.clone().normalize(), 0, dirBottomBackRight.length());
+
+        this.#rayArrowTopFrontLeft = new ArrowHelper(dirTopFrontLeft.clone().normalize(), this.#camPosLocal, dirTopFrontLeft.length(), green, headLength, headWidth);
+        this.#rayArrowTopFrontRight = new ArrowHelper(dirTopFrontRight.clone().normalize(), this.#camPosLocal, dirTopFrontRight.length(), red, headLength, headWidth);
+        this.#rayArrowTopBackLeft = new ArrowHelper(dirTopBackLeft.clone().normalize(), this.#camPosLocal, dirTopBackLeft.length(), green, headLength, headWidth);
+        this.#rayArrowTopBackRight = new ArrowHelper(dirTopBackRight.clone().normalize(), this.#camPosLocal, dirTopBackRight.length(), red, headLength, headWidth);
+        this.#rayArrowCenter = new ArrowHelper(dirCenter.clone().normalize(), this.#camPosLocal, dirCenter.length(), yellow, headLength, headWidth);
+        this.#rayArrowBottomBackLeft = new ArrowHelper(dirBottomBackLeft.clone().normalize(), this.#camPosLocal, dirBottomBackLeft.length(), green, headLength, headWidth);
+        this.#rayArrowBottomBackRight = new ArrowHelper(dirBottomBackRight.clone().normalize(), this.#camPosLocal, dirBottomBackRight.length(), red, headLength, headWidth);
+
+        this.rays = [
+            this.#rayTopFrontLeft, this.#rayTopFrontRight, this.#rayTopBackLeft, this.#rayTopBackRight,
+            this.#rayCenter,
+            this.#rayBottomBackLeft, this.#rayBottomBackRight
+        ];
+
+        this.rays.forEach(r => r.layers.set(PLAYER_CAMERA_RAY_LAYER));
+
+        this.rayArrows = [
+            this.#rayArrowTopFrontLeft, this.#rayArrowTopFrontRight, this.#rayArrowTopBackLeft, this.#rayArrowTopBackRight,
+            this.#rayArrowCenter,
+            this.#rayArrowBottomBackLeft, this.#rayArrowBottomBackRight
+        ];
+
+        this.rayArrows.forEach(a => a.visible = false);
+
+    }
+
+    updateRays(dummyObject, camPosWorld) {
+
+        const dirTopFrontLeft = dummyObject.localToWorld(this.playerTopFrontLeft).sub(camPosWorld).normalize();
+        const dirTopFrontRight = dummyObject.localToWorld(this.playerTopFrontRight).sub(camPosWorld).normalize();
+        const dirTopBackLeft = dummyObject.localToWorld(this.playerTopBackLeft).sub(camPosWorld).normalize();
+        const dirTopBackRight = dummyObject.localToWorld(this.playerTopBackRight).sub(camPosWorld).normalize();
+        const dirCenter = dummyObject.localToWorld(new Vector3()).sub(camPosWorld).normalize();
+        const dirBottomBackLeft = dummyObject.localToWorld(this.playerBottomBackLeft).sub(camPosWorld).normalize();
+        const dirBottomBackRight = dummyObject.localToWorld(this.playerBottomBackRight).sub(camPosWorld).normalize();
+
+        this.#rayTopFrontLeft.set(camPosWorld, dirTopFrontLeft);
+        this.#rayTopFrontRight.set(camPosWorld, dirTopFrontRight);
+        this.#rayTopBackLeft.set(camPosWorld, dirTopBackLeft);
+        this.#rayTopBackRight.set(camPosWorld, dirTopBackRight);
+        this.#rayCenter.set(camPosWorld, dirCenter);
+        this.#rayBottomBackLeft.set(camPosWorld, dirBottomBackLeft);
+        this.#rayBottomBackRight.set(camPosWorld, dirBottomBackRight);
+
+        this.rayArrows.forEach(a => a.position.copy(camPosWorld));
+
+        this.#rayArrowTopFrontLeft.setDirection(dirTopFrontLeft);
+        this.#rayArrowTopFrontRight.setDirection(dirTopFrontRight);
+        this.#rayArrowTopBackLeft.setDirection(dirTopBackLeft);
+        this.#rayArrowTopBackRight.setDirection(dirTopBackRight);
+        this.#rayArrowCenter.setDirection(dirCenter);
+        this.#rayArrowBottomBackLeft.setDirection(dirBottomBackLeft);
+        this.#rayArrowBottomBackRight.setDirection(dirBottomBackRight);
+
     }
 
     setPositionFromPlayer() {
@@ -70,23 +185,24 @@ class ThirdPersonCamera extends Camera {
 
         const camPosWorld = dummyObject.localToWorld(this.#camPosLocal.clone());
         const camTarWorld = dummyObject.localToWorld(this.#camTarLocal.clone());
-        const dir = camTarWorld.clone().sub(camPosWorld).normalize();
 
         this.camera.position.copy(camPosWorld);
         this.camera.lookAt(camTarWorld);
         this.target = camTarWorld;
 
-        this.#raycaster.set(camPosWorld, dir);
-        
-        this.rayArrow.position.copy(camPosWorld);
-        this.rayArrow.setDirection(dir);
-        this.rayArrow.setLength(this.rayLength);
+        this.updateRays(dummyObject, camPosWorld);
 
     }
 
     checkRayIntersection() {
 
-        const intersects = this.#raycaster.intersectObjects(this.#scene.children);
+        let intersects = [];
+
+        this.rays.forEach(ray => {
+
+            intersects = intersects.concat(ray.intersectObjects(this.#scene.children));
+
+        });
 
         this.resetInterectObjects();
 
