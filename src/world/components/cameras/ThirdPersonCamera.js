@@ -4,6 +4,8 @@ import { green, red, yellow } from '../basic/colorBase';
 import { PLAYER_CAMERA_RAY_LAYER } from '../utils/constants';
 
 const PADDING = .1;
+const HEADLENGTH = .5;
+const HEADWIDTH = .1;
 
 class ThirdPersonCamera extends Camera {
 
@@ -81,6 +83,9 @@ class ThirdPersonCamera extends Camera {
 
     }
 
+    /**
+     * @param {any} p
+     */
     set player(p) {
 
         this.#player = p;
@@ -99,10 +104,42 @@ class ThirdPersonCamera extends Camera {
 
     }
 
-    setupRays() {
+    changePlayer(player) {
 
-        const headLength = 1;
-        const headWidth = .2;
+        this.#player = player;
+
+        const dirTopFrontLeftLength = this.playerTopFrontLeft.sub(this.#camPosLocal).length();
+        const dirTopFrontRightLength = this.playerTopFrontRight.sub(this.#camPosLocal).length();
+        const dirTopBackLeftLength = this.playerTopBackLeft.sub(this.#camPosLocal).length();
+        const dirTopBackRightLength = this.playerTopBackRight.sub(this.#camPosLocal).length();
+        const dirBottomBackLeftLength = this.playerBottomBackLeft.sub(this.#camPosLocal).length();
+        const dirBottomBackRightLength = this.playerBottomBackRight.sub(this.#camPosLocal).length();
+
+        this.#rayTopFrontLeft.far = dirTopFrontLeftLength;
+        this.#rayTopFrontRight.far = dirTopFrontRightLength;
+        this.#rayTopBackLeft.far = dirTopBackLeftLength;
+        this.#rayTopBackRight.far = dirTopBackRightLength;
+        this.#rayBottomBackLeft.far = dirBottomBackLeftLength;
+        this.#rayBottomBackRight.far = dirBottomBackRightLength;
+
+        this.#rayArrowTopFrontLeft.setLength(dirTopFrontLeftLength, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowTopFrontRight.setLength(dirTopFrontRightLength, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowTopBackLeft.setLength(dirTopBackLeftLength, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowTopBackRight.setLength(dirTopBackRightLength, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowBottomBackLeft.setLength(dirBottomBackLeftLength, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowBottomBackRight.setLength(dirBottomBackRightLength, HEADLENGTH, HEADWIDTH);
+
+        const dummyObject = new Object3D();
+        dummyObject.position.copy(this.#player.group.position);
+        dummyObject.rotation.copy(this.#player.group.rotation);
+
+        const camPosWorld = dummyObject.localToWorld(this.#camPosLocal.clone());
+
+        this.updateRays(dummyObject, camPosWorld);
+        
+    }
+
+    setupRays() {
 
         const dirTopFrontLeft = this.playerTopFrontLeft.sub(this.#camPosLocal);
         const dirTopFrontRight = this.playerTopFrontRight.sub(this.#camPosLocal);
@@ -120,13 +157,13 @@ class ThirdPersonCamera extends Camera {
         this.#rayBottomBackLeft = new Raycaster(this.#camPosLocal.clone(), dirBottomBackLeft.clone().normalize(), 0, dirBottomBackLeft.length());
         this.#rayBottomBackRight = new Raycaster(this.#camPosLocal.clone(), dirBottomBackRight.clone().normalize(), 0, dirBottomBackRight.length());
 
-        this.#rayArrowTopFrontLeft = new ArrowHelper(dirTopFrontLeft.clone().normalize(), this.#camPosLocal, dirTopFrontLeft.length(), green, headLength, headWidth);
-        this.#rayArrowTopFrontRight = new ArrowHelper(dirTopFrontRight.clone().normalize(), this.#camPosLocal, dirTopFrontRight.length(), red, headLength, headWidth);
-        this.#rayArrowTopBackLeft = new ArrowHelper(dirTopBackLeft.clone().normalize(), this.#camPosLocal, dirTopBackLeft.length(), green, headLength, headWidth);
-        this.#rayArrowTopBackRight = new ArrowHelper(dirTopBackRight.clone().normalize(), this.#camPosLocal, dirTopBackRight.length(), red, headLength, headWidth);
-        this.#rayArrowCenter = new ArrowHelper(dirCenter.clone().normalize(), this.#camPosLocal, dirCenter.length(), yellow, headLength, headWidth);
-        this.#rayArrowBottomBackLeft = new ArrowHelper(dirBottomBackLeft.clone().normalize(), this.#camPosLocal, dirBottomBackLeft.length(), green, headLength, headWidth);
-        this.#rayArrowBottomBackRight = new ArrowHelper(dirBottomBackRight.clone().normalize(), this.#camPosLocal, dirBottomBackRight.length(), red, headLength, headWidth);
+        this.#rayArrowTopFrontLeft = new ArrowHelper(dirTopFrontLeft.clone().normalize(), this.#camPosLocal, dirTopFrontLeft.length(), green, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowTopFrontRight = new ArrowHelper(dirTopFrontRight.clone().normalize(), this.#camPosLocal, dirTopFrontRight.length(), red, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowTopBackLeft = new ArrowHelper(dirTopBackLeft.clone().normalize(), this.#camPosLocal, dirTopBackLeft.length(), green, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowTopBackRight = new ArrowHelper(dirTopBackRight.clone().normalize(), this.#camPosLocal, dirTopBackRight.length(), red, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowCenter = new ArrowHelper(dirCenter.clone().normalize(), this.#camPosLocal, dirCenter.length(), yellow, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowBottomBackLeft = new ArrowHelper(dirBottomBackLeft.clone().normalize(), this.#camPosLocal, dirBottomBackLeft.length(), green, HEADLENGTH, HEADWIDTH);
+        this.#rayArrowBottomBackRight = new ArrowHelper(dirBottomBackRight.clone().normalize(), this.#camPosLocal, dirBottomBackRight.length(), red, HEADLENGTH, HEADWIDTH);
 
         this.rays = [
             this.#rayTopFrontLeft, this.#rayTopFrontRight, this.#rayTopBackLeft, this.#rayTopBackRight,

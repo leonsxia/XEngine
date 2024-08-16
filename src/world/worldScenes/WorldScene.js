@@ -601,6 +601,8 @@ class WorldScene {
 
     changeCharacter(name, forceStaticRender = true) {
 
+        let firstLoad = true;
+
         // player should have boundingBox and boundingBoxHelper.
         const find = this.players.find(p => p.name === name);
         const oldPlayerBoxHelper = this.player ? this.scene.getObjectByName(this.player.boundingBoxHelper.name) : null;
@@ -608,6 +610,8 @@ class WorldScene {
         if (find) {
 
             if (this.player) {
+
+                firstLoad = false;
 
                 // remove old player.
                 this.showPlayerBBHelper(false)
@@ -643,7 +647,15 @@ class WorldScene {
 
             this.scene.add(this.player.group);
 
-            this.cameraObj.player = find;
+            if (firstLoad) {
+                
+                this.cameraObj.player = this.player;
+
+            } else {
+
+                this.cameraObj.changePlayer(this.player);
+                
+            }
 
             if (this.player.hasRays) {
 
