@@ -1,0 +1,287 @@
+{
+    "scene": "Simple Physics",
+    "players": [
+        {
+            "name": "tofu1",
+            "type": "Tofu",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [0, 0, 0]
+        },
+        {
+            "name": "red train 2",
+            "type": "Train",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [0.5, 0.5, 0.5],
+            "position": [0, 0, 0]
+        }
+    ],
+    "lights": [
+        {
+            "room": "room1",
+            "basicLightSpecs": [
+                {
+                    "name": "mainLight1",
+                    "display": "Directional Light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "intensity": 0,
+                        "position": [0, 4.3, 0],
+                        "target": [0, 0, 0]
+                    },
+                    "type": "DirectionalLight",
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                },
+                {
+                    "name": "ambientLight1",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [128, 128, 128],
+                        "intensity": 0.5
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true
+                },
+                {
+                    "name": "hemisphereLight1",
+                    "display": "Hemisphere Light",
+                    "detail": {
+                        "groundColor": [47, 79, 79],
+                        "skyColor": [160, 160, 160],
+                        "intensity": 0.1,
+                        "position": [0, 1, 0]
+                    },
+                    "type": "HemisphereLight",
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "pointLight1",
+                    "display": "Point Light",
+                    "detail": {
+                        "color": [251, 230, 172],
+                        "position": [0, 4, -4.3],
+                        "intensity": 25,
+                        "distance": 0,
+                        "decay": 1
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                }
+            ],
+            "spotLightSpecs": [
+                {
+                    "name": "spotLight1",
+                    "display": "Spot Light",
+                    "detail": {
+                        "color": [242, 176, 33],
+                        "position": [-4.3, 4.6, -7],
+                        "target": [0, 0, 0],
+                        "intensity": 46,
+                        "distance": 45,
+                        "decay": 0.33,
+                        "penumbra": 0.35,
+                        "angle": 0.7156
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                }
+            ]
+        },
+        {
+            "room": "room2",
+            "basicLightSpecs": [
+                {
+                    "name": "mainLight2",
+                    "display": "Directional Light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "intensity": 0.05,
+                        "position": [0, 6, 0],
+                        "target": [0, 0, 0]
+                    },
+                    "type": "DirectionalLight",
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                },
+                {
+                    "name": "ambientLight2",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [128, 128, 128],
+                        "intensity": 1
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true
+                },
+                {
+                    "name": "hemisphereLight2",
+                    "display": "Hemisphere Light",
+                    "detail": {
+                        "groundColor": [54, 212, 22],
+                        "skyColor": [40, 157, 215],
+                        "intensity": 0.3,
+                        "position": [0, 1, 0]
+                    },
+                    "type": "HemisphereLight",
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "pointLight2",
+                    "display": "Point Light",
+                    "detail": {
+                        "color": [255, 199, 44],
+                        "position": [-8.4, 6.325, -5.7],
+                        "intensity": 20,
+                        "distance": 0,
+                        "decay": 1
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                }
+            ],
+            "spotLightSpecs": [
+                {
+                    "name": "spotLight2",
+                    "display": "Spot Light",
+                    "detail": {
+                        "color": [250, 250, 250],
+                        "position": [0, 6, 14.7],
+                        "target": [0, 1.25, 0],
+                        "intensity": 26,
+                        "distance": 45,
+                        "decay": 0.33,
+                        "penumbra": 0.35,
+                        "angle": 0.2059
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                }
+            ]
+        },
+        {
+            "room": "room3",
+            "basicLightSpecs": [
+                {
+                    "name": "mainLight3",
+                    "display": "Directional Light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "intensity": 0.7,
+                        "position": [-10, 20, 8.5],
+                        "target": [0, 0, 0]
+                    },
+                    "type": "DirectionalLight",
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                },
+                {
+                    "name": "ambientLight3",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [128, 128, 128],
+                        "intensity": 1
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true
+                },
+                {
+                    "name": "hemisphereLight3",
+                    "display": "Hemisphere Light",
+                    "detail": {
+                        "groundColor": [47, 79, 79],
+                        "skyColor": [160, 160, 160],
+                        "intensity": 0.5,
+                        "position": [0, 4.6, 0]
+                    },
+                    "type": "HemisphereLight",
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "pointLight3",
+                    "display": "Point Light",
+                    "detail": {
+                        "color": [253, 182, 58],
+                        "position": [-0.2, 5.3, 0],
+                        "intensity": 90,
+                        "distance": 16.77,
+                        "decay": 1
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                }
+            ],
+            "spotLightSpecs": [
+                {
+                    "name": "spotLight3",
+                    "display": "Spot Light",
+                    "detail": {
+                        "color": [244, 207, 144],
+                        "position": [5, 4.625, -21],
+                        "target": [0.4, -0.2, 11.8],
+                        "intensity": 26,
+                        "distance": 45,
+                        "decay": 0.33,
+                        "penumbra": 0.35,
+                        "angle": 0.377
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": false
+                }
+            ]
+        }
+    ]
+}
