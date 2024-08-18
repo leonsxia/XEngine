@@ -17,49 +17,81 @@ class Sphere extends BasicObject {
     async init() {
 
         const { surfaceMap, normalMap, specularMap } = this.specs;
+        let mapLoaded = false;
+        let normalLoaded = false;
+        let specularLoaded = false;
 
-        if (surfaceMap?.isTexture || normalMap?.isTexture || specularMap?.isTexture) {
+        if (surfaceMap?.isTexture) {
 
-            const _map = specularMap?.clone();
-            const _normalMap = normalMap?.clone();
-            const _specularMap = specularMap?.clone();
-
-            if (surfaceMap) _map.colorSpace = SRGBColorSpace;
+            const _map = surfaceMap.clone();
 
             this.resetTextureColor();
+            _map.colorSpace = SRGBColorSpace;
             this.material.map = _map;
-            this.material.normalMap = _normalMap;
-            this.material.specularMap = _specularMap;
 
-            return;
+            mapLoaded = true;
 
         }
 
-        if (surfaceMap || normalMap || specularMap) {
+        if (normalMap?.isTexture) {
 
-            const loader = this.loader;
+            const _normalMap = normalMap.clone();
 
-            const [surfaceT, normalT, specularT] = await Promise.all([
-                surfaceMap ? loader.loadAsync(surfaceMap) : Promise.resolve(null),
-                normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null),
-                specularMap ? loader.loadAsync(specularMap) : Promise.resolve(null)
-            ]);
+            this.resetTextureColor();
+            this.material.normalMap = _normalMap;
 
+            normalLoaded = true;
 
-            if (surfaceT) {
-                
-                this.resetTextureColor();
-                surfaceT.colorSpace = SRGBColorSpace;
-                this.material.map = surfaceT;
-            
-            }
+        }
 
-            if (normalT) this.material.normalMap = normalT;
-            if (specularT) this.material.specularMap = specularT;
+        if (specularMap?.isTexture) {
+
+            const _specularMap = specularMap.clone();
+
+            this.resetTextureColor();
+            this.material.specularMap = _specularMap;
+
+            specularLoaded = true;
 
         }
 
         this.material.specular.setHex(specular);
+
+        if (mapLoaded && normalLoaded && specularLoaded) {
+
+            return;
+
+        }
+        
+        const loadPromises = [];
+
+        loadPromises.push(surfaceMap && !surfaceMap.isTexture ? this.loader.loadAsync(surfaceMap) : Promise.resolve(null));
+        loadPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
+        loadPromises.push(specularMap && !specularMap.isTexture ? this.loader.loadAsync(specularMap) : Promise.resolve(null));
+
+        const [surfaceT, normalT, specularT] = await Promise.all(loadPromises);
+
+        if (surfaceT) {
+
+            this.resetTextureColor();
+            surfaceT.colorSpace = SRGBColorSpace;
+            this.material.map = surfaceT;
+
+        }
+
+        if (normalT) {
+
+            this.resetTextureColor();
+            this.material.normalMap = normalT;
+
+        }
+
+        if (specularT) {
+
+            this.resetTextureColor();
+            this.material.specularMap = specularT;
+
+        }
         
     }
 }

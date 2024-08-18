@@ -57,68 +57,74 @@ class Cylinder extends BasicObject {
         else
             material = this.bottomMaterial;
 
-        if (map?.isTexture || normalMap?.isTexture) {
-            
-            const _map = map?.clone();
-            const _normal = normalMap?.clone();
+        let mapLoaded = false;
+        let normalLoaded = false;
+
+        if (map?.isTexture) {
+
+            const _map = map.clone();
 
             material.color.setHex(white);
-            
-            if (map) {
+            _map.isCap = true;
+            this.setTexture(_map);
+            this.setCapRotation(_map);
 
-                _map.isCap = true;
-                this.setTexture(_map);
-                this.setCapRotation(_map);
+            material.map = _map;
 
-                material.map = _map;
+            mapLoaded = true;
 
-            }
+        }
 
-            if (normalMap) {
+        if (normalMap?.isTexture) {
 
-                _normal.isCap = true;
-                this.setTexture(_normal, true);
-                this.setCapRotation(_normal);
+            const _normal = normalMap.clone();
 
-                material.normalMap = _normal;
+            material.color.setHex(white);
+            _normal.isCap = true;
+            this.setTexture(_normal, true);
+            this.setCapRotation(_normal);
 
-            }
+            material.normalMap = _normal;
+
+            normalLoaded = true;
+
+        }
+
+        if (mapLoaded && normalLoaded) {
 
             return;
-            
+
         }
-        
-        if (map || normalMap) {
 
-            const loader = this.loader;
+        const loadPromises = [];
 
-            const [texture, normal] = await Promise.all([
-                map ? loader.loadAsync(map) : Promise.resolve(null),
-                normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null)
-            ]);
+        loadPromises.push(map && !map.isTexture ? this.loader.loadAsync(map) : Promise.resolve(null));
+        loadPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
+
+        const [texture, normal] = await Promise.all(loadPromises);
+
+        if (texture) {
 
             material.color.setHex(white);
+            texture.isCap = true;
+            this.setTexture(texture);
+            this.setCapRotation(texture);
 
-            if (texture) {
+            material.map = texture;
 
-                texture.isCap = true;
-                this.setTexture(texture);
-                this.setCapRotation(texture);
-
-                material.map = texture;
-
-            }
-
-            if (normal) {
-
-                normal.isCap = true;
-                this.setTexture(normal, true);
-                this.setCapRotation(normal);
-                
-                material.normalMap = normal;
-
-            }
         }
+
+        if (normal) {
+
+            material.color.setHex(white);
+            normal.isCap = true;
+            this.setTexture(normal, true);
+            this.setCapRotation(normal);
+
+            material.normalMap = normal;
+
+        }
+
     }
 
     setCapRotation(texture) {

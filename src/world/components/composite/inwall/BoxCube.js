@@ -38,8 +38,8 @@ class BoxCube extends ObstacleBase  {
         const createPlaneFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
         this.backFace = createPlaneFunction(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, receiveShadow, castShadow, showArrow);
-        this.rightFace = createPlaneFunction(leftSpecs, `${name}_right`, [- width * .5, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
-        this.leftFace = createPlaneFunction(rightSpecs, `${name}_left`, [width * .5, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
+        this.rightFace = createPlaneFunction(rightSpecs, `${name}_right`, [- width * .5, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
+        this.leftFace = createPlaneFunction(leftSpecs, `${name}_left`, [width * .5, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
 
         {
             this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);

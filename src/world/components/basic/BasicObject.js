@@ -18,6 +18,7 @@ class BasicObject {
     specs;
 
     constructor(type, specs) {
+
         const { name, color, empty } = specs;
 
         if (name) this.name = name;
@@ -95,56 +96,59 @@ class BasicObject {
     async initBasic() {
 
         const { map, normalMap } = this.specs;
+        let mapLoaded = false;
+        let normalLoaded = false;
 
-        if (map?.isTexture || normalMap?.isTexture) {
+        if (map?.isTexture) {
 
-            const _map = map?.clone();
-            const _normalMap = normalMap?.clone();
+            const _map = map.clone();
 
             this.resetTextureColor();
+            this.setTexture(_map);
+            this.material.map = _map;
 
-            if (map) {
+            mapLoaded = true;
 
-                this.setTexture(_map);
-                this.material.map = _map;
+        }
 
-            }
+        if (normalMap?.isTexture) {
 
-            if (normalMap) {
+            const _normalMap = normalMap.clone();
 
-                this.setTexture(_normalMap, true);
-                this.material.normalMap = _normalMap;
+            this.resetTextureColor();
+            this.setTexture(_normalMap, true);
+            this.material.normalMap = _normalMap;
 
-            }
+            normalLoaded = true;
+
+        }
+
+        if (mapLoaded && normalLoaded) {
 
             return;
 
         }
+        
+        const loadPromises = [];
 
-        if (map || normalMap) {
+        loadPromises.push(map && !map.isTexture ? this.loader.loadAsync(map) : Promise.resolve(null));
+        loadPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
 
-            const loader = this.loader;
+        const [texture, normal] = await Promise.all(loadPromises);
 
-            const [texture, normal] = await Promise.all([
-                map ? loader.loadAsync(map) : Promise.resolve(null),
-                normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null)
-            ]);
+        if (texture) {
 
             this.resetTextureColor();
+            this.setTexture(texture);
+            this.material.map = texture;
 
-            if (texture) {
+        }
 
-                this.setTexture(texture);
-                this.material.map = texture;
+        if (normal) {
 
-            }
-
-            if (normal) {
-
-                this.setTexture(normal, true);
-                this.material.normalMap = normal;
-
-            }
+            this.resetTextureColor();
+            this.setTexture(normal, true);
+            this.material.normalMap = normal;
 
         }
 

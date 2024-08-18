@@ -33,8 +33,8 @@ class SquarePillar extends InWallObjectBase {
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
         this.backFace = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth / 2], Math.PI, receiveShadow, castShadow, showArrow);
-        this.rightFace = createWallFunction(leftSpecs, `${name}_right`, [- width / 2, 0, 0], - Math.PI / 2, receiveShadow, castShadow, showArrow);
-        this.leftFace = createWallFunction(rightSpecs, `${name}_left`, [width / 2, 0, 0], Math.PI / 2, receiveShadow, castShadow, showArrow);
+        this.rightFace = createWallFunction(rightSpecs, `${name}_right`, [- width / 2, 0, 0], - Math.PI / 2, receiveShadow, castShadow, showArrow);
+        this.leftFace = createWallFunction(leftSpecs, `${name}_left`, [width / 2, 0, 0], Math.PI / 2, receiveShadow, castShadow, showArrow);
 
         if (!this.enableOBBs) {
 
