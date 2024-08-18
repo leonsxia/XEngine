@@ -1,11 +1,11 @@
 import { RepeatWrapping, MirroredRepeatWrapping } from 'three';
 
-// Texture
+// texture
 const REPEAT_WRAPPING = RepeatWrapping;
 const MIRRORED_REPEAT_WRAPPING = MirroredRepeatWrapping;
 const TRI_PATTERN = 'assets/textures/tri_pattern.jpg';
 
-// Light
+// light
 const DIRECTIONAL_LIGHT = 'DirectionalLight';
 const AMBIENT_LIGHT = 'AmbientLight';
 const HEMISPHERE_LIGHT = 'HemisphereLight';
@@ -15,16 +15,42 @@ const SPOT_LIGHT = 'SpotLight';
 const DIRECTIONAL_LIGHT_TARGET = 'DirectionalLightTarget';
 const SPOT_LIGHT_TARGET = 'SpotLightTarget';
 
+// scene objects
+const AXES = 'Axes';
+const GRID = 'Grid';
+
+// players
+const TOFU = 'Tofu';
+const TRAIN = 'Train';
+
 // objects
-const PLANE = 'plane';
-const BOX = 'box';
-const SPHERE = 'sphere';
-const CIRCLE = 'circle';
-const CYLINDER = 'cylinder';
-const TRIANGLE = 'triangle';
-const STAIRS_SIDE = 'stairsSide';
-const STAIRS_FRONT = 'stairsFront';
-const STAIRS_TOP = 'stairsTop';
+const PLANE = 'Plane';
+const OBBPLANE = 'OBBPlane';
+const COLLISIONPLANE = 'CollisionPlane';
+const COLLISIONOBBPLANE = 'CollisionOBBPlane';
+const BOX = 'Box';
+const SPHERE = 'Sphere';
+const CIRCLE = 'Circle';
+const CYLINDER = 'Cylinder';
+const TRIANGLE = 'Triangle';
+const STAIRS_SIDE = 'StairsSide';
+const STAIRS_FRONT = 'StairsFront';
+const STAIRS_TOP = 'StairsTop';
+
+// composite objects
+const ROOM = 'Room';
+const SQUARE_PILLAR = 'SquarePillar';
+const LWALL = 'LWall';
+const CYLINDER_PILLAR = 'CylinderPillar';
+const HEX_CYLINDER_PILLAR = 'HexCylinderPillar';
+const BOX_CUBE = 'BoxCube';
+const SLOPE = 'Slope';
+const STAIRS = 'Stairs';
+const WOODEN_PICNIC_TABLE = 'WoodenPicnicTable';
+const WOODEN_SMALL_TABLE = 'WoodenSmallTable';
+const ROUND_WOODEN_TABLE = 'RoundWoodenTable';
+const PAINTED_WOODEN_TABLE = 'PaintedWoodenTable';
+const PAINTED_WOODEN_NIGHTSTAND = 'PaintedWoodenNightstand';
 
 // post-processing
 const OUTLINE = 'outline';
@@ -122,7 +148,16 @@ export {
     DIRECTIONAL_LIGHT_TARGET,
     SPOT_LIGHT_TARGET,
 
+    AXES,
+    GRID,
+
+    TOFU,
+    TRAIN,
+
     PLANE,
+    OBBPLANE,
+    COLLISIONPLANE,
+    COLLISIONOBBPLANE,
     BOX,
     SPHERE,
     CIRCLE,
@@ -131,6 +166,20 @@ export {
     STAIRS_SIDE,
     STAIRS_FRONT,
     STAIRS_TOP,
+
+    ROOM,
+    SQUARE_PILLAR,
+    LWALL,
+    CYLINDER_PILLAR,
+    HEX_CYLINDER_PILLAR,
+    BOX_CUBE,
+    SLOPE,
+    STAIRS,
+    WOODEN_PICNIC_TABLE,
+    WOODEN_SMALL_TABLE,
+    ROUND_WOODEN_TABLE,
+    PAINTED_WOODEN_TABLE,
+    PAINTED_WOODEN_NIGHTSTAND,
 
     OUTLINE,
     SSAO,

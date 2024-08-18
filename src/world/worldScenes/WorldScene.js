@@ -50,8 +50,6 @@ class WorldScene {
     loadSequence = 0;
     showRoleSelector = false;
 
-    textures;
-    gltfs;
     
     postProcessor;
     triTexture;

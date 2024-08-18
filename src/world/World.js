@@ -7,6 +7,11 @@ import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
 import { EventDispatcher } from "./systems/EventDispatcher";
 
+import { loadTextures } from "./components/utils/textureHelper";
+import { loadGLTFModels } from "./components/utils/gltfHelper";
+import { loadAssets } from "./worldScenes/sceneBuilder";
+import { TEXTURES, GLTFS } from "./components/utils/constants";
+
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics'],  // scene list for scene selector
 };
@@ -33,6 +38,9 @@ class World {
     #accelerate = false;
     #jump = false;
 
+    #textures;
+    #gltfs;
+
     constructor(container, infos) {
 
         this.#renderer = createRenderer();
@@ -56,6 +64,21 @@ class World {
     }
 
     async initScene(name) {
+
+        const start = Date.now();
+            
+        const [textures, gltfs] = await Promise.all([
+            loadTextures(TEXTURES),
+            loadGLTFModels(GLTFS)
+        ]);
+
+        const end = Date.now();
+        console.log(`loading assests in ${(end - start) * .001} s`);
+
+        this.#textures = textures;
+        this.#gltfs = gltfs;
+
+        loadAssets(this.#textures, this.#gltfs);
 
         await this.changeScene(name);
 
