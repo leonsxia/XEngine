@@ -173,21 +173,21 @@ class Gui {
                 switch(spec.type) {
                     case 'boolean':
 
-                        folder.add(parent, property).name(displayName).identifier = target;
+                        folder.add(parent, property).listen().name(displayName).identifier = target;
 
                         break;
 
                     case 'number':
                     case 'object-angle':
 
-                        folder.add(parent, property, ...spec.params).name(displayName).identifier = target ?? displayName;
+                        folder.add(parent, property, ...spec.params).listen().name(displayName).identifier = target ?? displayName;
 
                         break;
 
                     case 'light-num':
                     case 'angle':
 
-                        folder.add(parent, property, ...spec.params).name(displayName).identifier = target;
+                        folder.add(parent, property, ...spec.params).listen().name(displayName).identifier = target;
 
                         break;
 
@@ -196,14 +196,14 @@ class Gui {
                     case 'control-dropdown':
                     case 'role-dropdown':
 
-                        folder.add(parent, property, spec.params).name(displayName).identifier = target;
+                        folder.add(parent, property, spec.params).listen().name(displayName).identifier = target;
 
                         break;
 
                     case 'color':
                     case 'groundColor':
 
-                        folder.addColor(parent, property, ...spec.params).name(displayName).identifier = target;
+                        folder.addColor(parent, property, ...spec.params).listen().name(displayName).identifier = target;
 
                         break;
 

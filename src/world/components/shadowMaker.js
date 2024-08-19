@@ -16,9 +16,9 @@ function setupShadowLight(scene, room, ...lights) {
 
     lights.filter(l => l.visible).forEach(l => {
 
-        const { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show } = l;
+        const { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show, room = 'scene' } = l;
 
-        let lightObj = { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show };
+        let lightObj = { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show, room };
 
         const addShadowCamHelper = () => {
 
@@ -79,7 +79,7 @@ function setupShadowLight(scene, room, ...lights) {
 
             default: // ambient
 
-                lightObj = { light, name, debug, shadow };
+                lightObj = { light, name, debug, shadow, room };
                 
                 break;
 

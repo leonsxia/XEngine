@@ -7,7 +7,7 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1, 1, 1],
-            "position": [0, 0, 0]
+            "position": [1, 5, 15]
         },
         {
             "name": "red train 2",
@@ -15,7 +15,7 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [0.5, 0.5, 0.5],
-            "position": [0, 0, 0]
+            "position": [1, 5, 15]
         }
     ],
     "lights": [

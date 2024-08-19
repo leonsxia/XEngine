@@ -6,18 +6,22 @@ import {
 } from '../../components/Models.js';
 import { setupShadowLight } from "../../components/shadowMaker.js";
 import {
+    DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
     AXES, GRID, TRAIN, TOFU,
     PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
     ROOM, SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
     WOODEN_PICNIC_TABLE, WOODEN_SMALL_TABLE, ROUND_WOODEN_TABLE, PAINTED_WOODEN_TABLE, PAINTED_WOODEN_NIGHTSTAND,
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
+import { updateSingleLightCamera } from "../../components/shadowMaker.js";
 
 class SceneBuilder {
 
     textures;
     gltfs;
     worldScene;
+    setup;
+    setupCopy;
 
     constructor() {}
 
@@ -40,8 +44,10 @@ class SceneBuilder {
             const response = await fetch(request);
             const setup = await response.json();
     
-            worldScene.sceneObjects = setup;
-            worldScene.sceneObjectsCopy = setup;
+            this.setup = setup;
+            this.setupCopy = JSON.parse(JSON.stringify(setup));
+            worldScene.sceneObjects = JSON.parse(JSON.stringify(setup));
+            worldScene.sceneObjectsCopy = JSON.parse(JSON.stringify(setup));
     
             const { players, lights, objects } = setup;
             const sceneSpecs = objects.find(o => o.room === 'scene');
@@ -74,8 +80,8 @@ class SceneBuilder {
     
                 const roomLights = lights.find(l => l.room === room.name);
                 const basicLightsSpecsArr = roomLights['basicLightSpecs'].map(l => { l.room = room.name; return l; });
-                const pointLightsSpecsArr = roomLights['pointLightSpecs'].map(l => { l.room = room.name; return l; });;
-                const spotLightsSpecsArr = roomLights['spotLightSpecs'].map(l => { l.room = room.name; return l; });;
+                const pointLightsSpecsArr = roomLights['pointLightSpecs'].map(l => { l.room = room.name; return l; });
+                const spotLightsSpecsArr = roomLights['spotLightSpecs'].map(l => { l.room = room.name; return l; });
     
                 const _basicLights = createBasicLights(basicLightsSpecsArr);
                 const _pointLights = createPointLights(pointLightsSpecsArr);
@@ -227,6 +233,140 @@ class SceneBuilder {
     
         return rooms;
     
+    }
+
+    resetScene() {
+
+        const { players, lights, objects } = this.setup;
+        const sceneSpecs = objects.find(o => o.room === 'scene');
+        const roomSpecs = objects.filter(o => o.type === ROOM);
+
+        players.forEach(p => {
+
+            this.updatePlayer(p);
+
+        });
+
+        lights.forEach(room => {
+
+            const basicLightsSpecsArr = room['basicLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
+            const pointLightsSpecsArr = room['pointLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
+            const spotLightsSpecsArr = room['spotLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
+
+            basicLightsSpecsArr.forEach(l => {
+
+                const origin = this.setupCopy.lights.find(f => f.room === room.room)['basicLightSpecs'].find(f => f.name === l.name);
+                this.updateLight(l, origin);
+
+            });
+
+            pointLightsSpecsArr.forEach(l => {
+
+                const origin = this.setupCopy.lights.find(f => f.room === room.room)['pointLightSpecs'].find(f => f.name === l.name);
+                this.updateLight(l, origin);
+
+            });
+
+            spotLightsSpecsArr.forEach(l => {
+
+                const origin = this.setupCopy.lights.find(f => f.room === room.room)['spotLightSpecs'].find(f => f.name === l.name);
+                this.updateLight(l, origin);
+                
+            });
+        });
+
+    }
+
+    updatePlayer(specs) {
+
+        const { type, name, position } = specs;
+        const find = this.worldScene.players.find(p => p.name === name);
+
+        find.setPosition(position);
+
+    }
+
+    updateLight(specs, origin) {
+
+        const { type, name, room } = specs;
+        const find = this.worldScene.shadowLightObjects.find(l => l.room === room && l.name === name);
+        const light = find.light;
+
+        switch (light.type) {
+
+            case DIRECTIONAL_LIGHT:
+                {
+                    const { intensity = 1, position = [0, 0, 0], target = [0, 0, 0] } = specs.detail;
+                    const { color = [255, 255, 255] } = origin.detail;
+
+                    specs.detail.color = new Array(...color);
+                    light.color.setStyle(this.colorStr(...color));
+                    light.intensity = intensity;
+                    light.position.set(...position);
+                    light.target.position.set(...target);
+                }
+
+                break;
+            case AMBIENT_LIGHT:
+                {
+                    const { intensity = 1 } = specs.detail;
+                    const { color = [255, 255, 255] } = origin.detail;
+
+                    specs.detail.color = new Array(...color);
+                    light.color.setStyle(this.colorStr(...color));
+                    light.intensity = intensity;
+                }
+
+                break;
+            case HEMISPHERE_LIGHT:
+                {
+                    const { intensity = 1, position = [0, 0, 0] } = specs.detail;
+                    const { skyColor = [255, 255, 255], groundColor = [255, 255, 255] } = origin.detail;
+
+                    specs.detail.skyColor = new Array(...skyColor);
+                    specs.detail.groundColor = new Array(...groundColor);
+                    light.color.setStyle(this.colorStr(...skyColor));
+                    light.groundColor.setStyle(this.colorStr(...groundColor));
+                    light.intensity = intensity;
+                    light.position.set(...position);
+                }
+
+                break;
+            case POINT_LIGHT:
+                {
+                    const { intensity = 1, distance = 0, decay = 2, position = [0, 0, 0] } = specs.detail;
+                    const { color = [255, 255, 255] } = origin.detail;
+
+                    specs.detail.color = new Array(...color);
+                    light.color.setStyle(this.colorStr(...color));
+                    light.intensity = intensity;
+                    light.distance = distance;
+                    light.decay = decay;
+                    light.position.set(...position);
+                }
+
+                break;
+            case SPOT_LIGHT:
+                {
+                    const { intensity = 1, distance = 0, angle = Math.PI / 3, penumbra = 0, decay = 2, position = [0, 0, 0], target = [0, 0, 0] } = specs.detail;
+                    const { color = [255, 255, 255] } = origin.detail;
+                    
+                    specs.detail.color = new Array(...color);
+                    light.color.setStyle(this.colorStr(...color));
+                    light.intensity = intensity;
+                    light.distance = distance;
+                    light.angle = angle;
+                    light.penumbra = penumbra;
+                    light.decay = decay;
+                    light.position.set(...position);
+                    light.target.position.set(...target);
+                }
+
+                break;
+        }
+
+        updateSingleLightCamera.call(this.worldScene, find, false);
+
     }
     
     buildObject(specs) {
@@ -597,6 +737,12 @@ class SceneBuilder {
             }
         }
     
+    }
+
+    colorStr(r, g, b) {
+
+        return `rgb(${r},${g},${b})`;
+
     }
 
 }

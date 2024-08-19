@@ -685,6 +685,12 @@ class WorldScene {
 
     }
 
+    resetScene() {
+
+        this.sceneBuilder.resetScene();
+        
+    }
+
     showPlayerBBHelper(show) {
 
         if (!this.player || !this.player.boundingBoxHelper) return;
