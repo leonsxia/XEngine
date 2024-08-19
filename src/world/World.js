@@ -9,7 +9,7 @@ import { EventDispatcher } from "./systems/EventDispatcher";
 
 import { loadTextures } from "./components/utils/textureHelper";
 import { loadGLTFModels } from "./components/utils/gltfHelper";
-import { loadAssets } from "./worldScenes/sceneBuilder";
+import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS } from "./components/utils/constants";
 
 const config = { 
@@ -41,6 +41,8 @@ class World {
     #textures;
     #gltfs;
 
+    #sceneBuilder;
+
     constructor(container, infos) {
 
         this.#renderer = createRenderer();
@@ -53,6 +55,8 @@ class World {
 
         const worldPicker = new Picker(container);
         config.worldPicker = worldPicker;
+        this.#sceneBuilder = new SceneBuilder();
+        config.sceneBuilder = this.#sceneBuilder;
 
         this.worldScenes = [];
         this.worldScenes.push(new WorldScene1(container, this.#renderer, config, this.#movementEventDispatcher));
@@ -78,7 +82,7 @@ class World {
         this.#textures = textures;
         this.#gltfs = gltfs;
 
-        loadAssets(this.#textures, this.#gltfs);
+        this.#sceneBuilder.loadAssets(this.#textures, this.#gltfs);
 
         await this.changeScene(name);
 

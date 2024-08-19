@@ -49,7 +49,6 @@ class WorldScene {
     player;
     loadSequence = 0;
     showRoleSelector = false;
-
     
     postProcessor;
     triTexture;
@@ -58,6 +57,10 @@ class WorldScene {
     picker;
     enablePick = false;
     pickedObject = null;
+
+    sceneBuilder;
+    sceneObjects;
+    sceneObjectsCopy;
 
     constructor(container, renderer, specs, eventDispatcher) {
 
@@ -75,6 +78,7 @@ class WorldScene {
         this.eventDispatcher = eventDispatcher;
 
         this.picker = specs.worldPicker;
+        this.sceneBuilder = specs.sceneBuilder;
 
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 

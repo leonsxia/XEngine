@@ -105,6 +105,7 @@ class WorldScene1 extends WorldScene  {
     async init() {
 
         this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
+        this.sceneBuilder.worldScene = this;
 
         if (this.#loaded) {
             this.initContainer();

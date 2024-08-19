@@ -1,6 +1,5 @@
 import { WorldScene } from './WorldScene.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
-import { buildScene } from './sceneBuilder.js';
 import { independence } from '../components/basic/colorBase.js';
 
 const sceneName = 'Simple Physics';
@@ -62,6 +61,7 @@ class WorldScene4 extends WorldScene {
 
         this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
         this.picker.setup(this);
+        this.sceneBuilder.worldScene = this;
 
         if (this.#loaded) {
             this.initContainer();
@@ -69,7 +69,7 @@ class WorldScene4 extends WorldScene {
         }
 
         await this.postProcessor.init();
-        await buildScene({ src: 'assets/sceneObjects/worldScene4.json', worldScene: this });
+        await this.sceneBuilder.buildScene({ src: 'assets/sceneObjects/worldScene4.json' });
 
         this.physics = new SimplePhysics(this.players);
 
