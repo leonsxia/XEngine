@@ -108,7 +108,9 @@ class WorldScene4 extends WorldScene {
                 resetCamera: this.resetCamera.bind(this, false),
                 focusNext: this.focusNext.bind(this, false),
                 resetPlayer: this.resetCharacterPosition.bind(this),
-                resetScene: this.resetScene.bind(this)
+                resetScene: this.resetScene.bind(this),
+                saveScene: this.saveScene.bind(this),
+                loadScene: this.loadScene.bind(this)
             }
         });
     }

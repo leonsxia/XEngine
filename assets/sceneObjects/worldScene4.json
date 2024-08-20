@@ -541,7 +541,7 @@
             ],
             "ceilings": [],
             "walls": [],
-            "insideWalls" : []
+            "insideWalls": []
         },
         {
             "room": "room2",
@@ -696,7 +696,7 @@
             ],
             "ceilings": [],
             "walls": [],
-            "insideWalls" : []
+            "insideWalls": []
         },
         {
             "room": "room3",
@@ -812,7 +812,7 @@
             ],
             "ceilings": [],
             "walls": [],
-            "insideWalls" : []
+            "insideWalls": []
         }
     ]
 }

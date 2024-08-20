@@ -22,6 +22,8 @@ class SceneBuilder {
     worldScene;
     setup;
     setupCopy;
+    savedSetup;
+    jsonFileName;
 
     constructor() {}
 
@@ -44,10 +46,10 @@ class SceneBuilder {
             const response = await fetch(request);
             const setup = await response.json();
     
+            this.jsonFileName = src.slice(src.lastIndexOf('/') + 1);
             this.setup = setup;
             this.setupCopy = JSON.parse(JSON.stringify(setup));
-            worldScene.sceneObjects = JSON.parse(JSON.stringify(setup));
-            worldScene.sceneObjectsCopy = JSON.parse(JSON.stringify(setup));
+            this.savedSetup = JSON.parse(JSON.stringify(setup));
     
             const { players, lights, objects } = setup;
             const sceneSpecs = objects.find(o => o.room === 'scene');
@@ -114,7 +116,6 @@ class SceneBuilder {
                 worldScene.cPlanes = worldScene.cPlanes.concat(room.walls, room.insideWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
     
                 worldScene.scene.add(room.group);
-                room.walls.concat(room.insideWalls).forEach(w => worldScene.scene.add(...w.arrows));
     
             });
     
@@ -245,16 +246,69 @@ class SceneBuilder {
     
     }
 
+    saveScene() {
+
+        this.updateScene(this.savedSetup, null, false, true);
+        const savedJson = JSON.stringify(this.savedSetup);
+        const savedBlob = new Blob([savedJson], {type: 'application/json'});
+
+        const tempLink = document.createElement('a');
+
+        tempLink.setAttribute('href', URL.createObjectURL(savedBlob));
+        tempLink.setAttribute('download', `${this.jsonFileName}`);
+
+        tempLink.click();
+
+        URL.revokeObjectURL(tempLink.href);
+
+    }
+
+    loadScene() {
+
+        const tempInput = document.createElement('input');
+
+        tempInput.type = 'file';
+        tempInput.setAttribute('accept', 'application/json');
+
+        tempInput.click();
+
+        tempInput.addEventListener('change', event => {
+
+            const file = event.target.files[0];
+
+            file.text().then(text => {
+
+                const loadJson = JSON.parse(text);
+                
+                this.updateScene(this.setup, loadJson, false, false);
+
+                if (this.worldScene.staticRendering) 
+                    this.worldScene.render();
+
+            });
+
+        });
+    }
+
     resetScene() {
 
-        const { players, lights, objects } = this.setup;
+        this.updateScene(this.setup, this.setupCopy, true);
+
+    }
+
+    updateScene(_setup, _targetSetup, needResetPlayers = false, updateSetupOnly = false) {
+
+        const { players, lights, objects } = _setup;
         const sceneSpecs = objects.find(o => o.room === 'scene');
         const roomSpecs = objects.filter(o => o.type === ROOM);
 
         players.forEach(p => {
 
-            this.updatePlayer(p);
-            this.worldScene.resetCharacterPosition();
+            const _targetPlayerSetup = updateSetupOnly ? null : _targetSetup.players.find (f => f.type === p.type && f.name === p.name);
+
+            this.updatePlayer(p, _targetPlayerSetup, updateSetupOnly);
+
+            if (needResetPlayers) this.worldScene.resetCharacterPosition();
 
         });
 
@@ -266,22 +320,22 @@ class SceneBuilder {
 
             basicLightsSpecsArr.forEach(l => {
 
-                const origin = this.setupCopy.lights.find(f => f.room === room.room)['basicLightSpecs'].find(f => f.name === l.name);
-                this.updateLight(l, origin);
+                const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['basicLightSpecs'].find(f => f.type === l.type && f.name === l.name);
+                this.updateLight(l, _targetLightSetup, updateSetupOnly);
 
             });
 
             pointLightsSpecsArr.forEach(l => {
 
-                const origin = this.setupCopy.lights.find(f => f.room === room.room)['pointLightSpecs'].find(f => f.name === l.name);
-                this.updateLight(l, origin);
+                const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['pointLightSpecs'].find(f => f.type === l.type && f.name === l.name);
+                this.updateLight(l, _targetLightSetup, updateSetupOnly);
 
             });
 
             spotLightsSpecsArr.forEach(l => {
 
-                const origin = this.setupCopy.lights.find(f => f.room === room.room)['spotLightSpecs'].find(f => f.name === l.name);
-                this.updateLight(l, origin);
+                const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['spotLightSpecs'].find(f => f => f.type === l.type && f.name === l.name);
+                this.updateLight(l, _targetLightSetup, updateSetupOnly);
                 
             });
         });
@@ -290,7 +344,8 @@ class SceneBuilder {
 
             if (o.type !== AXES && o.type !== GRID) {
 
-                this.updateObject(o);
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === 'scene').children.find(f => f.type === o.type && f.name === o.name);
+                this.updateObject(o, _target, updateSetupOnly);
 
             }
         });
@@ -298,113 +353,243 @@ class SceneBuilder {
         roomSpecs.forEach(room => {
 
             this.worldScene.rooms.find(r => r.name === room.room).resetDefaultWalls();
+
+            room.groups.forEach(group => {
+                
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).groups.find(f => f.type === group.type && f.name === group.name);
+                this.updateObject(group, _target, updateSetupOnly);
             
-            room.groups.forEach(g => this.updateObject(g));
-            room.floors.forEach(f => this.updateObject(f));
-            room.ceilings.forEach(c => this.updateObject(c));
-            room.walls.forEach(w => this.updateObject(w));
-            room.insideWalls.forEach(iw => this.updateObject(iw));
+            });
+            room.floors.forEach(floor => {
+                
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).floors.find(f => f.type === floor.type && f.name === floor.name);
+                this.updateObject(floor, _target, updateSetupOnly);
+
+            });
+
+            room.ceilings.forEach(ceiling => {
+                
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).ceilings.find(f => f.type === ceiling.type && f.name === ceiling.name);
+                this.updateObject(ceiling, _target, updateSetupOnly);
+            
+            });
+
+            room.walls.forEach(wall => {
+                
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).walls.find(f => f.type === wall.type && f.name === wall.name);
+                this.updateObject(wall, _target, updateSetupOnly);
+            
+            });
+
+
+            room.insideWalls.forEach(inwall => {
+                
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).insideWalls.find(f => f.type === inwall.type && f.name === inwall.name);
+                this.updateObject(inwall, _target, updateSetupOnly);
+            
+            });
 
         });
 
     }
 
-    updatePlayer(specs) {
+    updatePlayer(_origin, _target, updateSetupOnly = false) {
 
-        const { type, name, position } = specs;
-        const find = this.worldScene.players.find(p => p.name === name);
+        const { name } = _origin;
+        const findPlayer = this.worldScene.players.find(p => p.name === name);
 
-        find.setPosition(position);
+        if (updateSetupOnly) {
+
+            _origin.position = new Array(...this.positionArr(findPlayer.position));
+
+        } else {
+
+            const { position } = _target;
+
+            findPlayer.setPosition(position);
+            _origin.position = new Array(...position);
+
+        }
 
     }
 
-    updateLight(specs, targetSetup) {
+    updateLight(_origin, _target, updateSetupOnly = false) {
 
-        const { name, room } = specs;
-        const find = this.worldScene.shadowLightObjects.find(l => l.room === room && l.name === name);
-        const light = find.light;
+        const { name, room } = _origin;
+        const findLight = this.worldScene.shadowLightObjects.find(l => l.room === room && l.name === name);
+        const light = findLight.light;
 
         switch (light.type) {
 
             case DIRECTIONAL_LIGHT:
                 {
-                    const { intensity = 1, position = [0, 0, 0], target = [0, 0, 0] } = specs.detail;
-                    const { color = [255, 255, 255] } = targetSetup.detail;
 
-                    specs.detail.color = new Array(...color);
-                    light.color.setStyle(this.colorStr(...color));
-                    light.intensity = intensity;
-                    light.position.set(...position);
-                    light.target.position.set(...target);
+                    if (updateSetupOnly) {
+
+                        _origin.detail.color = new Array(...this.colorArr(light.color));
+                        _origin.detail.intensity = light.intensity;
+                        _origin.detail.position = new Array(...this.positionArr(light.position));
+                        _origin.detail.target = new Array(...this.positionArr(light.target.position));
+
+                    } else {
+
+                        const { intensity = 1, position = [0, 0, 0], target = [0, 0, 0] } = _target.detail;
+                        const { color = [255, 255, 255] } = _target.detail;
+
+                        _origin.detail.color = new Array(...color);
+                        _origin.detail.intensity = intensity;
+                        _origin.detail.position = new Array(...position);
+                        _origin.detail.target = new Array(...target);
+
+                        light.color.setStyle(this.colorStr(...color));
+                        light.intensity = intensity;
+                        light.position.set(...position);
+                        light.target.position.set(...target);
+
+                    }
                 }
 
                 break;
             case AMBIENT_LIGHT:
                 {
-                    const { intensity = 1 } = specs.detail;
-                    const { color = [255, 255, 255] } = targetSetup.detail;
 
-                    specs.detail.color = new Array(...color);
-                    light.color.setStyle(this.colorStr(...color));
-                    light.intensity = intensity;
+                    if (updateSetupOnly) {
+
+                        _origin.detail.color = new Array(...this.colorArr(light.color));
+                        _origin.detail.intensity = light.intensity;
+
+                    } else {
+
+                        const { intensity = 1 } = _target.detail;
+                        const { color = [255, 255, 255] } = _target.detail;
+
+                        _origin.detail.color = new Array(...color);
+                        _origin.detail.intensity = intensity;
+
+                        light.color.setStyle(this.colorStr(...color));
+                        light.intensity = intensity;
+
+                    }
+
                 }
 
                 break;
             case HEMISPHERE_LIGHT:
                 {
-                    const { intensity = 1, position = [0, 0, 0] } = specs.detail;
-                    const { skyColor = [255, 255, 255], groundColor = [255, 255, 255] } = targetSetup.detail;
 
-                    specs.detail.skyColor = new Array(...skyColor);
-                    specs.detail.groundColor = new Array(...groundColor);
-                    light.color.setStyle(this.colorStr(...skyColor));
-                    light.groundColor.setStyle(this.colorStr(...groundColor));
-                    light.intensity = intensity;
-                    light.position.set(...position);
+                    if (updateSetupOnly) {
+
+                        _origin.detail.skyColor = new Array(...this.colorArr(light.color));
+                        _origin.detail.groundColor = new Array(...this.colorArr(light.groundColor));
+                        _origin.detail.intensity = light.intensity;
+                        _origin.detail.position = new Array(...this.positionArr(light.position));
+
+                    } else {
+
+                        const { intensity = 1, position = [0, 0, 0] } = _target.detail;
+                        const { skyColor = [255, 255, 255], groundColor = [255, 255, 255] } = _target.detail;
+
+                        _origin.detail.skyColor = new Array(...skyColor);
+                        _origin.detail.groundColor = new Array(...groundColor);
+                        _origin.detail.intensity = intensity;
+                        _origin.detail.position = new Array(...position);
+
+                        light.color.setStyle(this.colorStr(...skyColor));
+                        light.groundColor.setStyle(this.colorStr(...groundColor));
+                        light.intensity = intensity;
+                        light.position.set(...position);
+
+                    }
                 }
 
                 break;
             case POINT_LIGHT:
                 {
-                    const { intensity = 1, distance = 0, decay = 2, position = [0, 0, 0] } = specs.detail;
-                    const { color = [255, 255, 255] } = targetSetup.detail;
 
-                    specs.detail.color = new Array(...color);
-                    light.color.setStyle(this.colorStr(...color));
-                    light.intensity = intensity;
-                    light.distance = distance;
-                    light.decay = decay;
-                    light.position.set(...position);
+                    if (updateSetupOnly) {
+
+                        _origin.detail.color = new Array(...this.colorArr(light.color));
+                        _origin.detail.intensity = light.intensity;
+                        _origin.detail.distance = light.distance;
+                        _origin.detail.decay = light.decay;
+                        _origin.detail.position = new Array(...this.positionArr(light.position));
+
+                    } else {
+
+                        const { intensity = 1, distance = 0, decay = 2, position = [0, 0, 0] } = _target.detail;
+                        const { color = [255, 255, 255] } = _target.detail;
+
+                        _origin.detail.color = new Array(...color);
+                        _origin.detail.intensity = intensity;
+                        _origin.detail.distance = distance;
+                        _origin.detail.decay = decay;
+                        _origin.detail.position = new Array(...position);
+
+                        light.color.setStyle(this.colorStr(...color));
+                        light.intensity = intensity;
+                        light.distance = distance;
+                        light.decay = decay;
+                        light.position.set(...position);
+
+                    }
                 }
 
                 break;
             case SPOT_LIGHT:
                 {
-                    const { intensity = 1, distance = 0, angle = Math.PI / 3, penumbra = 0, decay = 2, position = [0, 0, 0], target = [0, 0, 0] } = specs.detail;
-                    const { color = [255, 255, 255] } = targetSetup.detail;
-                    
-                    specs.detail.color = new Array(...color);
-                    light.color.setStyle(this.colorStr(...color));
-                    light.intensity = intensity;
-                    light.distance = distance;
-                    light.angle = angle;
-                    light.penumbra = penumbra;
-                    light.decay = decay;
-                    light.position.set(...position);
-                    light.target.position.set(...target);
+
+                    if (updateSetupOnly) {
+
+                        _origin.detail.color = new Array(...this.colorArr(light.color));
+                        _origin.detail.intensity = light.intensity;
+                        _origin.detail.distance = light.distance;
+                        _origin.detail.angle = light.angle;
+                        _origin.detail.penumbra = light.penumbra;
+                        _origin.detail.decay = light.decay;
+                        _origin.detail.position = new Array(...this.positionArr(light.position));
+                        _origin.detail.target = new Array(...this.positionArr(light.target.position));
+
+                    } else {
+
+                        const { intensity = 1, distance = 0, angle = Math.PI / 3, penumbra = 0, decay = 2, position = [0, 0, 0], target = [0, 0, 0] } = _target.detail;
+                        const { color = [255, 255, 255] } = _target.detail;
+
+                        _origin.detail.color = new Array(...color);
+                        _origin.detail.intensity = intensity;
+                        _origin.detail.distance = distance;
+                        _origin.detail.angle = angle;
+                        _origin.detail.penumbra = penumbra;
+                        _origin.detail.decay = decay;
+                        _origin.detail.position = new Array(...position);
+                        _origin.detail.target = new Array(...target);
+
+                        light.color.setStyle(this.colorStr(...color));
+                        light.intensity = intensity;
+                        light.distance = distance;
+                        light.angle = angle;
+                        light.penumbra = penumbra;
+                        light.decay = decay;
+                        light.position.set(...position);
+                        light.target.position.set(...target);
+
+                    }
                 }
 
                 break;
         }
 
-        updateSingleLightCamera.call(this.worldScene, find, false);
+        if (!updateSetupOnly) {
+
+            updateSingleLightCamera.call(this.worldScene, findLight, false);
+
+        }
 
     }
 
-    updateObject(specs) {
+    updateObject(_origin, _target, updateSetupOnly = false) {
 
-        const { name } = specs;
-        const objects = this.worldScene.scene.children.filter(o => o.isGroup || o.isMesh)
+        const { name } = _origin;
+        const objects = this.worldScene.scene.children.filter(o => o.isGroup || o.isMesh);
         let find = objects.find(f => f.name === name);
 
         if (!find) {
@@ -429,33 +614,68 @@ class SceneBuilder {
 
         if (find) {
 
-            const { position = [0, 0, 0] } = specs;
+            if (updateSetupOnly) {
 
-            find.position.set(...position);
+                _origin.position = new Array(...this.positionArr(find.position));
+
+            } else {
+
+                const { position = [0, 0, 0] } = _target;
+
+                find.position.set(...position);
+
+            }
 
             if (!find.father.isFloor && !find.father.isCeiling) {
 
                 if (find.isGroup) {
 
-                    const { rotationY = 0 } = specs;
+                    if (updateSetupOnly) {
 
-                    find.father.setRotationY(rotationY);
-                    find.father.updateOBBs();
-
-                } else if (find.isMesh) {
-
-                    const { rotation = [0, 0, 0], rotationY = 0 } = specs;
-
-                    if (find.father.isCollision) {
-
-                        find.father.setRotationY(rotationY);
-                        find.father.updateRay();
-                        find.father.updateOBB?.();
+                        _origin.rotationY = find.father.rotationY;
 
                     } else {
 
-                        find.father.setRotation(rotation);
-                        find.father.updateOBB?.();
+                        const { rotationY = 0 } = _target;
+
+                        find.father.setRotationY(rotationY);
+                        find.father.updateOBBs();
+
+                    }
+
+                } else if (find.isMesh) {
+
+                    if (find.father.isCollision) {
+
+                        if (updateSetupOnly) {
+
+                            _origin.rotationY = find.father.rotationY;
+
+                        } else {
+
+                            const { rotationY = 0 } = _target;
+
+                            find.father.setRotationY(rotationY);
+                            find.father.updateRay();
+                            find.father.updateOBB?.();
+                        
+                        }
+
+                    } else {
+
+                        if (updateSetupOnly) {
+
+                            _origin.rotation = new Array(...this.rotationArr(find.rotation));
+
+                        } else {
+
+                            const { rotation = [0, 0, 0] } = _target;
+
+                            find.father.setRotation(rotation);
+                            find.father.updateOBB?.();
+
+                        }
+                        
                     }
                 }
                 
@@ -463,10 +683,18 @@ class SceneBuilder {
 
             if (find.father.isFloor || find.father.isCeiling) {
 
-                const { rotation = [0, 0, 0] } = specs;
+                if (updateSetupOnly) {
 
-                find.father.setRotation(rotation);
-                find.father.updateOBB();
+                    _origin.rotation = new Array(...this.rotationArr(find.rotation));
+
+                } else {
+
+                    const { rotation = [0, 0, 0] } = _target;
+
+                    find.father.setRotation(rotation);
+                    find.father.updateOBB();
+
+                }
 
             }
         }
@@ -554,14 +782,14 @@ class SceneBuilder {
                 break;
             case COLLISIONPLANE:
                 {
-                    const { position = [0, 0, 0], rotation = [0, 0, 0], receiveShadow = false, castShadow = false, updateRay = true } = specs;
+                    const { position = [0, 0, 0], rotationY = 0, receiveShadow = false, castShadow = false, updateRay = true } = specs;
                     const { map, normalMap } = specs;
     
                     const maps = [{ map }, { normalMap }];
                     this.setupObjectTextures(maps, specs);
     
                     object = new CollisionPlane(specs);
-                    object.setRotation(rotation)
+                    object.setRotationY(rotationY)
                         .setPosition(position)
                         .receiveShadow(receiveShadow)
                         .castShadow(castShadow)
@@ -573,14 +801,14 @@ class SceneBuilder {
                 break;
             case COLLISIONOBBPLANE:
                 {
-                    const { position = [0, 0, 0], rotation = [0, 0, 0], receiveShadow = false, castShadow = false, updateOBB = true, updateRay = true } = specs;
+                    const { position = [0, 0, 0], rotationY = 0, receiveShadow = false, castShadow = false, updateOBB = true, updateRay = true } = specs;
                     const { map, normalMap } = specs;
     
                     const maps = [{ map }, { normalMap }];
                     this.setupObjectTextures(maps, specs);
     
                     object = new CollisionOBBPlane(specs);
-                    object.setRotation(rotation)
+                    object.setRotationY(rotationY)
                         .setPosition(position)
                         .receiveShadow(receiveShadow)
                         .castShadow(castShadow)
@@ -847,6 +1075,25 @@ class SceneBuilder {
     colorStr(r, g, b) {
 
         return `rgb(${r},${g},${b})`;
+
+    }
+
+    colorArr(objColor) {
+
+        const color = objColor.clone().convertLinearToSRGB();
+        return [Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255)];
+
+    }
+
+    positionArr(objPosition) {
+
+        return [objPosition.x, objPosition.y, objPosition.z];
+
+    }
+
+    rotationArr(objRotation) {
+
+        return [objRotation.x, objRotation.y, objRotation.z];
 
     }
 

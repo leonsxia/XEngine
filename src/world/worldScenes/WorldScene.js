@@ -59,8 +59,6 @@ class WorldScene {
     pickedObject = null;
 
     sceneBuilder;
-    sceneObjects;
-    sceneObjectsCopy;
 
     constructor(container, renderer, specs, eventDispatcher) {
 
@@ -688,7 +686,19 @@ class WorldScene {
     resetScene() {
 
         this.sceneBuilder.resetScene();
-        
+
+    }
+
+    saveScene() {
+
+        this.sceneBuilder.saveScene();
+
+    }
+
+    loadScene() {
+
+        this.sceneBuilder.loadScene();
+
     }
 
     showPlayerBBHelper(show) {
@@ -813,8 +823,20 @@ class WorldScene {
 
         this.cPlanes.forEach(cp => {
 
-            if (cp.leftArrow) cp.leftArrow.visible = s;
-            if (cp.rightArrow) cp.rightArrow.visible = s;
+            if (cp.leftArrow) {
+
+                cp.leftArrow.visible = s;
+                if (s) this.scene.add(cp.leftArrow);
+                else this.scene.remove(cp.leftArrow);
+            
+            }
+            if (cp.rightArrow) {
+                
+                cp.rightArrow.visible = s;
+                if (s) this.scene.add(cp.rightArrow);
+                else this.scene.remove(cp.rightArrow);
+            
+            }
 
         });
 
