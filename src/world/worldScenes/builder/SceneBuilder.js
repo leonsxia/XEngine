@@ -182,6 +182,7 @@ class SceneBuilder {
     
             const groups = [];
             const floors = [];
+            const ceilings = [];
             const walls = [];
             const insideWalls = [];
     
@@ -202,6 +203,15 @@ class SceneBuilder {
     
             });
             room.addFloors(floors);
+
+            roomSpec.ceilings.forEach(spec => {
+
+                spec.updateOBB = false;
+                const ceiling = this.buildObject(spec);
+                ceilings.push(ceiling);
+
+            });
+            room.addCeilings(ceilings);
     
             roomSpec.walls.forEach(spec => {
     
@@ -244,6 +254,7 @@ class SceneBuilder {
         players.forEach(p => {
 
             this.updatePlayer(p);
+            this.worldScene.resetCharacterPosition();
 
         });
 
@@ -275,6 +286,27 @@ class SceneBuilder {
             });
         });
 
+        sceneSpecs.children.forEach(o => {
+
+            if (o.type !== AXES && o.type !== GRID) {
+
+                this.updateObject(o);
+
+            }
+        });
+
+        roomSpecs.forEach(room => {
+
+            this.worldScene.rooms.find(r => r.name === room.room).resetDefaultWalls();
+            
+            room.groups.forEach(g => this.updateObject(g));
+            room.floors.forEach(f => this.updateObject(f));
+            room.ceilings.forEach(c => this.updateObject(c));
+            room.walls.forEach(w => this.updateObject(w));
+            room.insideWalls.forEach(iw => this.updateObject(iw));
+
+        });
+
     }
 
     updatePlayer(specs) {
@@ -286,9 +318,9 @@ class SceneBuilder {
 
     }
 
-    updateLight(specs, origin) {
+    updateLight(specs, targetSetup) {
 
-        const { type, name, room } = specs;
+        const { name, room } = specs;
         const find = this.worldScene.shadowLightObjects.find(l => l.room === room && l.name === name);
         const light = find.light;
 
@@ -297,7 +329,7 @@ class SceneBuilder {
             case DIRECTIONAL_LIGHT:
                 {
                     const { intensity = 1, position = [0, 0, 0], target = [0, 0, 0] } = specs.detail;
-                    const { color = [255, 255, 255] } = origin.detail;
+                    const { color = [255, 255, 255] } = targetSetup.detail;
 
                     specs.detail.color = new Array(...color);
                     light.color.setStyle(this.colorStr(...color));
@@ -310,7 +342,7 @@ class SceneBuilder {
             case AMBIENT_LIGHT:
                 {
                     const { intensity = 1 } = specs.detail;
-                    const { color = [255, 255, 255] } = origin.detail;
+                    const { color = [255, 255, 255] } = targetSetup.detail;
 
                     specs.detail.color = new Array(...color);
                     light.color.setStyle(this.colorStr(...color));
@@ -321,7 +353,7 @@ class SceneBuilder {
             case HEMISPHERE_LIGHT:
                 {
                     const { intensity = 1, position = [0, 0, 0] } = specs.detail;
-                    const { skyColor = [255, 255, 255], groundColor = [255, 255, 255] } = origin.detail;
+                    const { skyColor = [255, 255, 255], groundColor = [255, 255, 255] } = targetSetup.detail;
 
                     specs.detail.skyColor = new Array(...skyColor);
                     specs.detail.groundColor = new Array(...groundColor);
@@ -335,7 +367,7 @@ class SceneBuilder {
             case POINT_LIGHT:
                 {
                     const { intensity = 1, distance = 0, decay = 2, position = [0, 0, 0] } = specs.detail;
-                    const { color = [255, 255, 255] } = origin.detail;
+                    const { color = [255, 255, 255] } = targetSetup.detail;
 
                     specs.detail.color = new Array(...color);
                     light.color.setStyle(this.colorStr(...color));
@@ -349,7 +381,7 @@ class SceneBuilder {
             case SPOT_LIGHT:
                 {
                     const { intensity = 1, distance = 0, angle = Math.PI / 3, penumbra = 0, decay = 2, position = [0, 0, 0], target = [0, 0, 0] } = specs.detail;
-                    const { color = [255, 255, 255] } = origin.detail;
+                    const { color = [255, 255, 255] } = targetSetup.detail;
                     
                     specs.detail.color = new Array(...color);
                     light.color.setStyle(this.colorStr(...color));
@@ -367,6 +399,77 @@ class SceneBuilder {
 
         updateSingleLightCamera.call(this.worldScene, find, false);
 
+    }
+
+    updateObject(specs) {
+
+        const { name } = specs;
+        const objects = this.worldScene.scene.children.filter(o => o.isGroup || o.isMesh)
+        let find = objects.find(f => f.name === name);
+
+        if (!find) {
+
+            const rooms = objects.filter(o => o.isRoom);
+
+            if (rooms?.length) {
+
+                for (let i = 0; i < rooms.length; i++) {
+
+                    const roomFind = rooms[i].children.filter(o => o.isGroup || o.isMesh).find(f => f.name === name);
+
+                    if (roomFind) {
+
+                        find = roomFind;
+                        break;
+
+                    }
+                }
+            }
+        }
+
+        if (find) {
+
+            const { position = [0, 0, 0] } = specs;
+
+            find.position.set(...position);
+
+            if (!find.father.isFloor && !find.father.isCeiling) {
+
+                if (find.isGroup) {
+
+                    const { rotationY = 0 } = specs;
+
+                    find.father.setRotationY(rotationY);
+                    find.father.updateOBBs();
+
+                } else if (find.isMesh) {
+
+                    const { rotation = [0, 0, 0], rotationY = 0 } = specs;
+
+                    if (find.father.isCollision) {
+
+                        find.father.setRotationY(rotationY);
+                        find.father.updateRay();
+                        find.father.updateOBB?.();
+
+                    } else {
+
+                        find.father.setRotation(rotation);
+                        find.father.updateOBB?.();
+                    }
+                }
+                
+            }
+
+            if (find.father.isFloor || find.father.isCeiling) {
+
+                const { rotation = [0, 0, 0] } = specs;
+
+                find.father.setRotation(rotation);
+                find.father.updateOBB();
+
+            }
+        }
     }
     
     buildObject(specs) {
@@ -461,7 +564,8 @@ class SceneBuilder {
                     object.setRotation(rotation)
                         .setPosition(position)
                         .receiveShadow(receiveShadow)
-                        .castShadow(castShadow);
+                        .castShadow(castShadow)
+                        .createRay();
     
                     if (updateRay) object.updateRay();
                 }
@@ -479,7 +583,8 @@ class SceneBuilder {
                     object.setRotation(rotation)
                         .setPosition(position)
                         .receiveShadow(receiveShadow)
-                        .castShadow(castShadow);
+                        .castShadow(castShadow)
+                        .createRay();
     
                     if (updateOBB) object.updateOBB();
                     if (updateRay) object.updateRay();

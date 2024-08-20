@@ -14,6 +14,7 @@ class Room {
 
     walls = [];
     floors = [];
+    ceilings = [];
     tops = [];
     bottoms = [];
     topOBBs = [];
@@ -113,13 +114,12 @@ class Room {
         
         const insideWallsInit = this.initInsideWalls();
         const floorsInit = this.initFloors();
+        const ceilingsInit = this.initCeilings();
         const insideGroupsInit = this.initInsideGroups();
         
         await Promise.all(
             this.initWalls()
-            .concat(insideWallsInit)
-            .concat(floorsInit)
-            .concat(insideGroupsInit)
+            .concat(insideWallsInit, floorsInit, ceilingsInit, insideGroupsInit)
         );
 
     }
@@ -149,6 +149,16 @@ class Room {
         const promises = [];
 
         this.floors.forEach(f => promises.push(f.init()));
+
+        return promises;
+
+    }
+
+    initCeilings() {
+
+        const promises = [];
+
+        this.ceilings.forEach(c => promises.push(c.init()));
 
         return promises;
 
@@ -214,6 +224,21 @@ class Room {
 
         });
 
+    }
+
+    addCeilings(ceilings) {
+
+        ceilings.forEach(c => {
+
+            this.group.add(c.mesh);
+
+            this.ceilings.push(c);
+
+            c.mesh.layers.enable(CAMERA_RAY_LAYER);
+
+            c.isCeiling = true;
+
+        });
     }
 
     addGroups(groups) {
@@ -359,6 +384,47 @@ class Room {
             
         });
 
+    }
+
+    resetDefaultWalls() {
+
+        const { width, depth } = this.specs;
+
+        if (!this.ignoreWall('front')) {
+
+            this.frontWall.setPosition([0, 0, depth * .5])
+                .setRotationY(Math.PI)
+                .updateRay()
+                .updateOBB?.();
+
+        }
+
+        if (!this.ignoreWall('back')) {
+
+            this.backWall.setPosition([0, 0, - depth * .5])
+                .setRotationY(0)
+                .updateRay()
+                .updateOBB?.();
+
+        }
+
+        if (!this.ignoreWall('left')) {
+
+            this.leftWall.setPosition([width * .5, 0, 0])
+                .setRotationY(- Math.PI * .5)
+                .updateRay()
+                .updateOBB?.();
+
+        }
+
+        if (!this.ignoreWall('right')) {
+
+            this.rightWall.setPosition([- width * .5, 0, 0])
+                .setRotationY(Math.PI * .5)
+                .updateRay()
+                .updateOBB?.();
+
+        }
     }
 
     updateOBBnRay() {

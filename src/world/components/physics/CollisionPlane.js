@@ -10,6 +10,7 @@ class CollisionPlane extends Plane {
     #w;
     #rayLength;
     isOBB = false;
+    isCollision = true;
 
     constructor(specs) {
 

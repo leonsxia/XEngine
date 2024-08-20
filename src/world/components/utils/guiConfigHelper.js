@@ -690,17 +690,17 @@ function makeObjectsGuiConfig(objects) {
                 
             if (object.isPlayer) {
     
-                object.father.updateRay.call(object.father);
-                object.father.updateOBB.call(object.father);
+                object.father.updateRay();
+                object.father.updateOBB();
     
             } else if (object.isGroup) {
                 
-                object.father.updateOBBs.call(object.father);
+                object.father.updateOBBs();
     
             } else if (object.isMesh) {
 
-                object.father.updateRay?.call(object.father);
-                object.father.updateOBB?.call(object.father);
+                object.father.updateRay?.();
+                object.father.updateOBB?.();
 
             }
         }
@@ -732,7 +732,7 @@ function makeObjectsGuiConfig(objects) {
             changeFn: posChangeFn
         }));
 
-        if (!object.isPlayer && !object.father.isFloor) {
+        if (!object.isPlayer && !object.father.isFloor && !object.father.isCeiling) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationYDegree',
@@ -744,12 +744,12 @@ function makeObjectsGuiConfig(objects) {
 
                     if (object.isGroup) {
 
-                        object.father.updateOBBs.call(object.father);
+                        object.father.updateOBBs();
 
                     } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall)) {
 
-                        object.father.updateRay.call(object.father);
-                        object.father.updateOBB?.call(object.father);
+                        object.father.updateRay();
+                        object.father.updateOBB?.();
 
                     }
 
@@ -758,7 +758,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (object.father.isFloor) {
+        if (object.father.isFloor || object.father.isCeiling) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationZDegree',
@@ -768,7 +768,7 @@ function makeObjectsGuiConfig(objects) {
                 type: 'object-angle',
                 changeFn: () => {
 
-                        object.father.updateOBB.call(object.father);
+                        object.father.updateOBB();
 
                 }
             }));
