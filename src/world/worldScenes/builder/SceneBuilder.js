@@ -2,7 +2,8 @@ import { createAxesHelper, createGridHelper } from "../../components/utils/helpe
 import { createBasicLights, createPointLights, createSpotLights } from "../../components/lights.js";
 import {
     Train, Tofu, Plane, OBBPlane, CollisionPlane, CollisionOBBPlane, Room, SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs,
-    WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand
+    WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand,
+    PaintedWoodenBlueChair
 } from '../../components/Models.js';
 import { setupShadowLight } from "../../components/shadowMaker.js";
 import {
@@ -11,6 +12,7 @@ import {
     PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
     ROOM, SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
     WOODEN_PICNIC_TABLE, WOODEN_SMALL_TABLE, ROUND_WOODEN_TABLE, PAINTED_WOODEN_TABLE, PAINTED_WOODEN_NIGHTSTAND,
+    PAINTED_WOODEN_BLUE_CHAIR,
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
 import { updateSingleLightCamera } from "../../components/shadowMaker.js";
@@ -1035,6 +1037,21 @@ class SceneBuilder {
                     if (updateOBBs) object.updateOBBs();
                 }
     
+                break;
+            case PAINTED_WOODEN_BLUE_CHAIR:
+                {
+                    const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+                    const { src } = specs;
+    
+                    this.setupObjectGLTF({ src }, specs);
+    
+                    object = new PaintedWoodenBlueChair(specs);
+                    object.setPosition(position)
+                        .setRotationY(rotationY)
+    
+                    if (updateOBBs) object.updateOBBs();
+                }
+
                 break;
         }
     
