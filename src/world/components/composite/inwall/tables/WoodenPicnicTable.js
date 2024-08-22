@@ -35,7 +35,7 @@ class WoodenPicnicTable extends ObstacleBase {
         const boxSpecs = { size: { width: this.width, depth: this.depth, height: this.height }, lines };
 
         const topHeight = this.height - this.bottomHeight;
-        const sideWidth = (this.width - this.topWidth) * .5
+        const sideWidth = (this.width - this.topWidth) * .5;
         const cBoxTopSpecs = { name: `${name}_top`, width: this.topWidth, depth: this.depth, height: topHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
         const cBoxLeftSideSpecs = { name: `${name}_left_side`, width: sideWidth, depth: this.depth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
         const cBoxRightSideSpecs = { name: `${name}_right_side`, width: sideWidth, depth: this.depth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };

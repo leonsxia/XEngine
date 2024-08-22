@@ -783,13 +783,13 @@
                     "type": "PaintedWoodenNightstand",
                     "src": "PAINTED_WOODEN_NIGHTSTAND",
                     "name": "painted_wooden_nightstand_1",
-                    "scale": [1.5, 1.5, 1.5],
+                    "scale": [1.3, 1.2, 1.3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [0, 3, -5],
-                    "rotationY": 0.7854
+                    "position": [4.8, -4.05, -6.98],
+                    "rotationY": -0.6632
                 },
                 {
                     "type": "PaintedWoodenBlueChair",
@@ -826,6 +826,18 @@
                     "climbable": true,
                     "position": [-3.72, 3, 7.31],
                     "rotationY": -1.9024
+                },
+                {
+                    "type": "Sofa03",
+                    "src": "SOFA_03",
+                    "name": "sofa03_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "position": [6, 3, -5.32],
+                    "rotationY": -0.96
                 }
             ],
             "floors": [

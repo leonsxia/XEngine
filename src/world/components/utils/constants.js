@@ -54,6 +54,7 @@ const PAINTED_WOODEN_NIGHTSTAND = 'PaintedWoodenNightstand';
 const PAINTED_WOODEN_BLUE_CHAIR = 'PaintedWoodenBlueChair';
 const PAINTED_WOODEN_WHITE_CHAIR = 'PaintedWoodenWhiteChair';
 const PAINTED_WOODEN_STOOL = 'PaintedWoodenStool';
+const SOFA_03 = 'Sofa03';
 
 // post-processing
 const OUTLINE = 'outline';
@@ -128,7 +129,8 @@ const GLTF_NAMES = {
     // seats
     PAINTED_WOODEN_BLUE_CHAIR: 'PAINTED_WOODEN_BLUE_CHAIR',
     PAINTED_WOODEN_WHITE_CHAIR: 'PAINTED_WOODEN_WHITE_CHAIR',
-    PAINTED_WOODEN_STOOL: 'PAINTED_WOODEN_STOOL'
+    PAINTED_WOODEN_STOOL: 'PAINTED_WOODEN_STOOL',
+    SOFA_03: 'SOFA_03'
 }
 
 const GLTFS = [{
@@ -147,6 +149,8 @@ const GLTFS = [{
     name: GLTF_NAMES.PAINTED_WOODEN_WHITE_CHAIR, src: 'inRoom/seats/painted_wooden_chair_01_1k/painted_wooden_chair_01_1k.gltf'
 }, {
     name: GLTF_NAMES.PAINTED_WOODEN_STOOL, src: 'inRoom/seats/painted_wooden_stool_1k/painted_wooden_stool_1k.gltf'
+}, {
+    name: GLTF_NAMES.SOFA_03, src: 'inRoom/seats/sofa_03_1k/sofa_03_1k.gltf'
 }];
 
 export { 
@@ -197,6 +201,7 @@ export {
     PAINTED_WOODEN_BLUE_CHAIR,
     PAINTED_WOODEN_WHITE_CHAIR,
     PAINTED_WOODEN_STOOL,
+    SOFA_03,
 
     OUTLINE,
     SSAO,
