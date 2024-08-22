@@ -38,9 +38,10 @@ class Sofa03 extends ObstacleBase {
 
         const boxSpecs = { size: { width: this.width, depth: this.depth, height: this.height }, lines };
 
+        const bottomDepth = this.depth - this.backDepth;
         const sideWidth = (this.width - this.bottomWidth) * .5;
         const backHeight = this.height - this.bottomHeight;
-        const cBoxBottomSpecs = { name: `${name}_bottom`, width: this.bottomWidth, depth: this.depth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxBottomSpecs = { name: `${name}_bottom`, width: this.bottomWidth, depth: bottomDepth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
         const cBoxLeftSideSpecs = { name: `${name}_left_side`, width: sideWidth, depth: this.depth, height: this.sideHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
         const cBoxRightSideSpecs = { name: `${name}_right_side`, width: sideWidth, depth: this.depth, height: this.sideHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
         const cBoxBackSpecs = { name: `${name}_back`, width: this.bottomWidth, depth: this.backDepth, height: backHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
@@ -61,9 +62,10 @@ class Sofa03 extends ObstacleBase {
         const sideX = (this.bottomWidth + sideWidth) * .5;
         const sideY = (this.sideHeight - this.height) * .5;
         const bottomY = (this.bottomHeight - this.height) * .5;
+        const bottomZ = (this.depth - bottomDepth) * .5;
         const backY = (this.height - backHeight) * .5;
         const backZ = (this.backDepth - this.depth) * .5;
-        cBoxBottom.setPosition([0, bottomY, 0]);
+        cBoxBottom.setPosition([0, bottomY, bottomZ]);
         cBoxSideLeft.setPosition([sideX, sideY, 0]);
         cBoxSideRight.setPosition([- sideX, sideY, 0]);
         cBoxBack.setPosition([0, backY, backZ]);
