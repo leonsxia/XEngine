@@ -52,6 +52,7 @@ const ROUND_WOODEN_TABLE = 'RoundWoodenTable';
 const PAINTED_WOODEN_TABLE = 'PaintedWoodenTable';
 const PAINTED_WOODEN_NIGHTSTAND = 'PaintedWoodenNightstand';
 const PAINTED_WOODEN_BLUE_CHAIR = 'PaintedWoodenBlueChair';
+const PAINTED_WOODEN_WHITE_CHAIR = 'PaintedWoodenWhiteChair';
 
 // post-processing
 const OUTLINE = 'outline';
@@ -124,7 +125,8 @@ const GLTF_NAMES = {
     PAINTED_WOODEN_TABLE: 'PAINTED_WOODEN_TABLE',
     PAINTED_WOODEN_NIGHTSTAND: 'PAINTED_WOODEN_NIGHTSTAND',
     // seats
-    PAINTED_WOODEN_BLUE_CHAIR: 'PAINTED_WOODEN_BLUE_CHAIR'
+    PAINTED_WOODEN_BLUE_CHAIR: 'PAINTED_WOODEN_BLUE_CHAIR',
+    PAINTED_WOODEN_WHITE_CHAIR: 'PAINTED_WOODEN_WHITE_CHAIR'
 }
 
 const GLTFS = [{
@@ -139,6 +141,8 @@ const GLTFS = [{
     nmae: GLTF_NAMES.PAINTED_WOODEN_NIGHTSTAND, src: 'inRoom/tables/painted_wooden_nightstand_1k/painted_wooden_nightstand_1k.gltf'
 }, {
     name: GLTF_NAMES.PAINTED_WOODEN_BLUE_CHAIR, src: 'inRoom/seats/painted_wooden_chair_02_1k/painted_wooden_chair_02_1k.gltf'
+}, {
+    name: GLTF_NAMES.PAINTED_WOODEN_WHITE_CHAIR, src: 'inRoom/seats/painted_wooden_chair_01_1k/painted_wooden_chair_01_1k.gltf'
 }];
 
 export { 
@@ -187,6 +191,7 @@ export {
     PAINTED_WOODEN_TABLE,
     PAINTED_WOODEN_NIGHTSTAND,
     PAINTED_WOODEN_BLUE_CHAIR,
+    PAINTED_WOODEN_WHITE_CHAIR,
 
     OUTLINE,
     SSAO,

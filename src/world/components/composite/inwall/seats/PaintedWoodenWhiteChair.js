@@ -2,18 +2,18 @@ import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionBox } from '../../../Models';
 
-const GLTF_SRC = 'inRoom/seats/painted_wooden_chair_02_1k/painted_wooden_chair_02_1k.gltf';
+const GLTF_SRC = 'inRoom/seats/painted_wooden_chair_01_1k/painted_wooden_chair_01_1k.gltf';
 
-class PaintedWoodenBlueChair extends ObstacleBase {
+class PaintedWoodenWhiteChair extends ObstacleBase {
 
-    width = .637;
-    height = 1.275;
-    depth = .666;
-    bottomWidth = .572;
-    bottomHeight = .589;
-    bottomDepth = .585;
-    backHeight = .691;
-    backDepth = .154;
+    width = .433;
+    height = .964;
+    depth = .506;
+    bottomHeight = .458;
+    bottomDepth = .476;
+    backWidth = .377;
+    backHeight = .518;
+    backDepth = .125;
 
     gltf;
 
@@ -22,16 +22,16 @@ class PaintedWoodenBlueChair extends ObstacleBase {
         super(specs);
 
         const { name, scale = [1, 1, 1], lines = true } = specs;
-        const { offsetY = - .6375 } = specs;  // offsetY used to set gltf model to zero position.
+        const { offsetY = - .482 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this.width *= scale[0];
         this.height *= scale[1];
         this.depth *= scale[2];
-        this.bottomWidth *= scale[0];
         this.bottomHeight *= scale[1];
         this.bottomDepth *= scale[2];
+        this.backWidth *= scale[0];
         this.backHeight *= scale[1];
         this.backDepth *= scale[2];
 
@@ -40,8 +40,8 @@ class PaintedWoodenBlueChair extends ObstacleBase {
 
         const boxSpecs = { size: { width: this.width, depth: this.depth, height: this.height }, lines };
 
-        const cBoxBottomSpecs = { name: `${name}_bottom`, width: this.bottomWidth, depth: this.bottomDepth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
-        const cBoxBackSpecs = { name: `${name}_back`, width: this.width, depth: this.backDepth, height: this.backHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxBottomSpecs = { name: `${name}_bottom`, width: this.width, depth: this.bottomDepth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxBackSpecs = { name: `${name}_back`, width: this.backWidth, depth: this.backDepth, height: this.backHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
@@ -54,13 +54,11 @@ class PaintedWoodenBlueChair extends ObstacleBase {
         // collision box
         const cBoxBottom = new CollisionBox(cBoxBottomSpecs);
         const cBoxBack = new CollisionBox(cBoxBackSpecs);
-        const bottomX = - .015 * scale[0];
         const bottomY = (this.bottomHeight - this.height) * .5;
-        const backX = - .02 * scale[0];
         const backY = (this.backHeight - this.height) * .5 + this.bottomHeight;
-        const backZ = - .28 * scale[2];
-        cBoxBottom.setPosition([bottomX, bottomY, 0]);
-        cBoxBack.setPosition([backX, backY, backZ]);
+        const backZ = - .24 * scale[2];
+        cBoxBottom.setPosition([0, bottomY, 0]);
+        cBoxBack.setPosition([0, backY, backZ]);
 
         this.cObjects = [cBoxBottom, cBoxBack];
         this.walls = this.getWalls();
@@ -86,4 +84,4 @@ class PaintedWoodenBlueChair extends ObstacleBase {
 
 }
 
-export { PaintedWoodenBlueChair };
+export { PaintedWoodenWhiteChair };
