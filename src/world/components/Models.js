@@ -40,6 +40,7 @@ export { PaintedWoodenTable } from './composite/inwall/tables/PaintedWoodenTable
 export { PaintedWoodenNightstand } from './composite/inwall/tables/PaintedWoodenNightstand.js';
 export { PaintedWoodenBlueChair } from './composite/inwall/seats/PaintedWoodenBlueChair.js';
 export { PaintedWoodenWhiteChair } from './composite/inwall/seats/PaintedWoodenWhiteChair.js';
+export { PaintedWoodenStool } from './composite/inwall/seats/PaintedWoodenStool.js';
 
 // collision objects
 export { CollisionBox } from './physics/CollisionObjects/CollisionBox.js';
