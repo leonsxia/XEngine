@@ -45,6 +45,7 @@ export { Sofa03 } from './composite/inwall/seats/Sofa03.js';
 export { PaintedWoodenBlueCabinet } from './composite/inwall/shelves/PaintedWoodenBlueCabinet.js';
 export { Shelf01 } from './composite/inwall/shelves/Shelf01.js';
 export { PaintedWoodenWhiteCabinet } from './composite/inwall/shelves/PaintedWoodenWhiteCabinet.js';
+export { Television01 } from './composite/inwall/electronics/Television01.js';
 
 // collision objects
 export { CollisionBox } from './physics/CollisionObjects/CollisionBox.js';

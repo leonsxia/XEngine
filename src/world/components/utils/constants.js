@@ -58,6 +58,7 @@ const SOFA_03 = 'Sofa03';
 const PAINTED_WOODEN_BLUE_CABINET = 'PaintedWoodenBlueCabinet';
 const SHELF_01 = 'Shelf01';
 const PAINTED_WOODEN_WHITE_CABINET = 'PaintedWoodenWhiteCabinet';
+const TELEVISION_01 = 'Television01';
 
 // post-processing
 const OUTLINE = 'outline';
@@ -137,7 +138,9 @@ const GLTF_NAMES = {
     // shelves
     PAINTED_WOODEN_BLUE_CABINET: 'PAINTED_WOODEN_BLUE_CABINET',
     SHELF_01: 'SHELF_01',
-    PAINTED_WOODEN_WHITE_CABINET: 'PAINTED_WOODEN_WHITE_CABINET'
+    PAINTED_WOODEN_WHITE_CABINET: 'PAINTED_WOODEN_WHITE_CABINET',
+    // Electronics
+    TELEVISION_01: 'TELEVISION_01'
 }
 
 const GLTFS = [{
@@ -164,6 +167,8 @@ const GLTFS = [{
     name: GLTF_NAMES.SHELF_01, src: 'inRoom/shelves/Shelf_01_1k/Shelf_01_1k.gltf'
 }, {
     name: GLTF_NAMES.PAINTED_WOODEN_WHITE_CABINET, src: 'inRoom/shelves/painted_wooden_cabinet_1k/painted_wooden_cabinet_1k.gltf'
+}, {
+    name: GLTF_NAMES.TELEVISION_01, src: 'inRoom/electronics/Television_01_1k/Television_01_1k.gltf'
 }];
 
 export { 
@@ -218,6 +223,7 @@ export {
     PAINTED_WOODEN_BLUE_CABINET,
     SHELF_01,
     PAINTED_WOODEN_WHITE_CABINET,
+    TELEVISION_01,
 
     OUTLINE,
     SSAO,

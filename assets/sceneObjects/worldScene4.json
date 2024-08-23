@@ -874,6 +874,18 @@
                     "climbable": true,
                     "position": [7.62, 3, -1.6],
                     "rotationY": -1.5947
+                },
+                {
+                    "type": "Television01",
+                    "src": "TELEVISION_01",
+                    "name": "television_01_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "position": [3, 4, -3],
+                    "rotationY": 2.2689
                 }
             ],
             "floors": [
