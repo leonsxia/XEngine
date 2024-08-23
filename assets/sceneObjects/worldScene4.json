@@ -862,6 +862,18 @@
                     "climbable": true,
                     "position": [7.39, 3, -3.32],
                     "rotationY": -1.2858
+                },
+                {
+                    "type": "PaintedWoodenWhiteCabinet",
+                    "src": "PAINTED_WOODEN_WHITE_CABINET",
+                    "name": "painted_wooden_white_cabinet_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "position": [7.62, 3, -1.6],
+                    "rotationY": -1.5947
                 }
             ],
             "floors": [

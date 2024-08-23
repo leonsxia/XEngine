@@ -4,7 +4,7 @@ import {
     Train, Tofu, Plane, OBBPlane, CollisionPlane, CollisionOBBPlane, Room, SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs,
     WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand,
     PaintedWoodenBlueChair, PaintedWoodenWhiteChair, PaintedWoodenStool, Sofa03,
-    PaintedWoodenBlueCabinet, Shelf01
+    PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet
 } from '../../components/Models.js';
 import { setupShadowLight } from "../../components/shadowMaker.js";
 import {
@@ -14,7 +14,7 @@ import {
     ROOM, SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
     WOODEN_PICNIC_TABLE, WOODEN_SMALL_TABLE, ROUND_WOODEN_TABLE, PAINTED_WOODEN_TABLE, PAINTED_WOODEN_NIGHTSTAND,
     PAINTED_WOODEN_BLUE_CHAIR, PAINTED_WOODEN_WHITE_CHAIR, PAINTED_WOODEN_STOOL, SOFA_03,
-    PAINTED_WOODEN_BLUE_CABINET, SHELF_01,
+    PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
 import { updateSingleLightCamera } from "../../components/shadowMaker.js";
@@ -1123,6 +1123,21 @@ class SceneBuilder {
                     this.setupObjectGLTF({ src }, specs);
     
                     object = new Shelf01(specs);
+                    object.setPosition(position)
+                        .setRotationY(rotationY)
+    
+                    if (updateOBBs) object.updateOBBs();
+                }
+
+                break;
+            case PAINTED_WOODEN_WHITE_CABINET:
+                {
+                    const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+                    const { src } = specs;
+    
+                    this.setupObjectGLTF({ src }, specs);
+    
+                    object = new PaintedWoodenWhiteCabinet(specs);
                     object.setPosition(position)
                         .setRotationY(rotationY)
     
