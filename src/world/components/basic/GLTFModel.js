@@ -25,7 +25,7 @@ class GLTFModel {
 
     async init() {
 
-        const { src, receiveShadow = false, castShadow = false, offsetY = 0 } = this.specs;
+        const { src, receiveShadow = false, castShadow = false, offsetY = 0, offsetZ = 0 } = this.specs;
 
         let model;
 
@@ -56,6 +56,7 @@ class GLTFModel {
             }
 
             modelGroup.position.y = offsetY;
+            modelGroup.position.z = offsetZ;
 
             this.group.add(modelGroup);
 

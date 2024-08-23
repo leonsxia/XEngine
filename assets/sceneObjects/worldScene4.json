@@ -850,6 +850,18 @@
                     "climbable": true,
                     "position": [3.29, 3, -7.41],
                     "rotationY": -0.05
+                },
+                {
+                    "type": "Shelf01",
+                    "src": "SHELF_01",
+                    "name": "shelf_01_1",
+                    "scale": [1.1, 1.1, 2],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "position": [7.39, 3, -3.32],
+                    "rotationY": -1.2858
                 }
             ],
             "floors": [
