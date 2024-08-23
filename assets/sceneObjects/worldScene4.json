@@ -788,7 +788,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [4.8, -4.05, -6.98],
+                    "position": [4.8, 3, -6.98],
                     "rotationY": -0.6632
                 },
                 {
@@ -838,6 +838,18 @@
                     "climbable": true,
                     "position": [6, 3, -5.32],
                     "rotationY": -0.96
+                },
+                {
+                    "type": "PaintedWoodenBlueCabinet",
+                    "src": "PAINTED_WOODEN_BLUE_CABINET",
+                    "name": "painted_wooden_blue_cabinet_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "position": [3.29, 3, -7.41],
+                    "rotationY": -0.05
                 }
             ],
             "floors": [

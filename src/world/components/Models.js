@@ -42,6 +42,7 @@ export { PaintedWoodenBlueChair } from './composite/inwall/seats/PaintedWoodenBl
 export { PaintedWoodenWhiteChair } from './composite/inwall/seats/PaintedWoodenWhiteChair.js';
 export { PaintedWoodenStool } from './composite/inwall/seats/PaintedWoodenStool.js';
 export { Sofa03 } from './composite/inwall/seats/Sofa03.js';
+export { PaintedWoodenBlueCabinet } from './composite/inwall/shelves/PaintedWoodenBlueCabinet.js';
 
 // collision objects
 export { CollisionBox } from './physics/CollisionObjects/CollisionBox.js';
