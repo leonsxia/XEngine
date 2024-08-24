@@ -26,10 +26,6 @@ class SceneBuilder {
     textures;
     gltfs;
     worldScene;
-    setup;
-    setupCopy;
-    savedSetup;
-    jsonFileName;
 
     constructor() {}
 
@@ -52,10 +48,10 @@ class SceneBuilder {
             const response = await fetch(request);
             const setup = await response.json();
     
-            this.jsonFileName = src.slice(src.lastIndexOf('/') + 1);
-            this.setup = setup;
-            this.setupCopy = JSON.parse(JSON.stringify(setup));
-            this.savedSetup = JSON.parse(JSON.stringify(setup));
+            worldScene.jsonFileName = src.slice(src.lastIndexOf('/') + 1);
+            worldScene.sceneSetup = setup;
+            worldScene.sceneSetupCopy = JSON.parse(JSON.stringify(setup));
+            worldScene.sceneSavedSetup = JSON.parse(JSON.stringify(setup));
     
             const { players, lights, objects } = setup;
             const sceneSpecs = objects.find(o => o.room === 'scene');
@@ -254,14 +250,14 @@ class SceneBuilder {
 
     saveScene() {
 
-        this.updateScene(this.savedSetup, null, false, true);
-        const savedJson = JSON.stringify(this.savedSetup);
+        this.updateScene(this.worldScene.sceneSavedSetup, null, false, true);
+        const savedJson = JSON.stringify(this.worldScene.sceneSavedSetup);
         const savedBlob = new Blob([savedJson], {type: 'application/json'});
 
         const tempLink = document.createElement('a');
 
         tempLink.setAttribute('href', URL.createObjectURL(savedBlob));
-        tempLink.setAttribute('download', `${this.jsonFileName}`);
+        tempLink.setAttribute('download', `${this.worldScene.jsonFileName}`);
 
         tempLink.click();
 
@@ -286,7 +282,7 @@ class SceneBuilder {
 
                 const loadJson = JSON.parse(text);
                 
-                this.updateScene(this.setup, loadJson, false, false);
+                this.updateScene(this.worldScene.sceneSetup, loadJson, false, false);
 
                 if (this.worldScene.staticRendering) 
                     this.worldScene.render();
@@ -298,7 +294,7 @@ class SceneBuilder {
 
     resetScene() {
 
-        this.updateScene(this.setup, this.setupCopy, true);
+        this.updateScene(this.worldScene.sceneSetup, this.worldScene.sceneSetupCopy, true);
 
     }
 

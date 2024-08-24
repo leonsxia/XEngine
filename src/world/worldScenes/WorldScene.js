@@ -59,6 +59,10 @@ class WorldScene {
     pickedObject = null;
 
     sceneBuilder;
+    sceneSetup;
+    sceneSetupCopy;
+    sceneSavedSetup;
+    jsonFileName;
 
     constructor(container, renderer, specs, eventDispatcher) {
 
