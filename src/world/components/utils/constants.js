@@ -175,6 +175,17 @@ const GLTFS = [{
     name: GLTF_NAMES.TELEVISION_01, src: 'inRoom/electronics/Television_01_1k/Television_01_1k.gltf'
 }];
 
+const SHADER_NAMES = {
+    BLOOM_VERTEX: 'BLOOM_VERTEX',
+    BLOOM_FRAGMENT: 'BLOOM_FRAGMENT'
+};
+
+const SHADERS = [{
+    name: SHADER_NAMES.BLOOM_VERTEX, src: 'assets/shaders/bloom_vertexshader.shader'
+}, {
+    name: SHADER_NAMES.BLOOM_FRAGMENT, src: 'assets/shaders/bloom_fragmentshader.shader'
+}];
+
 export { 
     REPEAT_WRAPPING,
     MIRRORED_REPEAT_WRAPPING,
@@ -245,5 +256,7 @@ export {
     TEXTURE_NAMES,
     TEXTURES,
     GLTF_NAMES,
-    GLTFS
+    GLTFS,
+    SHADER_NAMES,
+    SHADERS
 };

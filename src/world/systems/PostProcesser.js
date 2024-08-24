@@ -8,10 +8,11 @@ import { SSAOPass } from 'three/examples/jsm/Addons.js';
 import { FXAAShader } from 'three/examples/jsm/Addons.js';
 import { SSAARenderPass } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
-import { OUTLINE, SSAO, FXAA, SSAA, BLOOM, TRI_PATTERN, REPEAT_WRAPPING, BLOOM_SCENE_LAYER } from '../components/utils/constants';
+import { OUTLINE, SSAO, FXAA, SSAA, BLOOM, TRI_PATTERN, REPEAT_WRAPPING, BLOOM_SCENE_LAYER, SHADER_NAMES } from '../components/utils/constants';
 import { black, white } from '../components/basic/colorBase';
 import { loadSingleTexture } from '../components/utils/textureHelper';
 import { basicMateraials } from '../components/basic/basicMaterial';
+import { shaders } from '../components/utils/shaderHelper';
 
 const DEFAULT_OUTLINE = {
     edgeStrength: 3.0,
@@ -101,25 +102,6 @@ class PostProcessor {
 
         this.composer = new EffectComposer(renderer);
 
-        this.renderPass = new RenderPass(scene, camera);
-        this.outputPass = new OutputPass();
-        this.outlinePass = new OutlinePass( new Vector2( container.clientWidth, container.clientHeight ), scene, camera );
-        this.ssaoPass = new SSAOPass(scene, camera, container.clientWidth, container.clientHeight);
-        this.effectFXAA = new ShaderPass( FXAAShader );
-        this.ssaaPass = new SSAARenderPass(scene, camera);
-        this.initBloomPass();
-
-        this.effects = [this.ssaaPass, this.outlinePass, this.ssaoPass, this.effectFXAA, this.bloomMixedPass];
-        this.disableAllEffects();
-
-        this.composer.addPass(this.renderPass);
-        this.composer.addPass(this.ssaaPass);
-        this.composer.addPass(this.outlinePass);
-        this.composer.addPass(this.ssaoPass);
-        this.composer.addPass(this.bloomMixedPass);
-        this.composer.addPass(this.outputPass);
-        this.composer.addPass(this.effectFXAA);
-
         Object.assign(this.#outlineConfig, DEFAULT_OUTLINE);
         Object.assign(this.#ssaoConfig, DEFAULT_SSAO);
         Object.assign(this.#ssaaConfig, DEFAULT_SSAA);
@@ -151,12 +133,35 @@ class PostProcessor {
 
     }
 
+    initPass() {
+
+        this.renderPass = new RenderPass(this.#scene, this.#camera);
+        this.outputPass = new OutputPass();
+        this.outlinePass = new OutlinePass(new Vector2(this.renderTargetWidth, this.renderTargetHeight), this.#scene, this.#camera);
+        this.ssaoPass = new SSAOPass(this.#scene, this.#camera, this.renderTargetWidth, this.renderTargetHeight);
+        this.effectFXAA = new ShaderPass( FXAAShader );
+        this.ssaaPass = new SSAARenderPass(this.#scene, this.#camera);
+        this.initBloomPass();
+
+        this.effects = [this.ssaaPass, this.outlinePass, this.ssaoPass, this.effectFXAA, this.bloomMixedPass];
+        this.disableAllEffects();
+
+        this.composer.addPass(this.renderPass);
+        this.composer.addPass(this.ssaaPass);
+        this.composer.addPass(this.outlinePass);
+        this.composer.addPass(this.ssaoPass);
+        this.composer.addPass(this.bloomMixedPass);
+        this.composer.addPass(this.outputPass);
+        this.composer.addPass(this.effectFXAA);
+
+    }
+
     initBloomPass() {
 
-        this.#vertexShaderBloom = document.getElementById('bloom_vertexshader').textContent;
-        this.#fragmentShaderBloom = document.getElementById('bloom_fragmentshader').textContent;
+        this.#vertexShaderBloom = shaders[SHADER_NAMES.BLOOM_VERTEX];
+        this.#fragmentShaderBloom = shaders[SHADER_NAMES.BLOOM_FRAGMENT];
 
-        const bloomPass = new UnrealBloomPass(new Vector2( this.#container.clientWidth, this.#container.clientHeight ), 1.5, 0.4, 0.85 );
+        const bloomPass = new UnrealBloomPass(new Vector2(this.renderTargetWidth, this.renderTargetHeight), 1.5, 0.4, 0.85 );
         bloomPass.threshold = DEFAULT_BLOOM.threshold;
         bloomPass.strength = DEFAULT_BLOOM.strength;
         bloomPass.radius = DEFAULT_BLOOM.radius;
@@ -186,6 +191,8 @@ class PostProcessor {
     }
 
     async init() {
+
+        this.initPass();
 
         const { texture } = await loadSingleTexture({ map: TRI_PATTERN });
 
@@ -264,31 +271,31 @@ class PostProcessor {
 
     resetOutline() {
 
-        this.outlinePass.setSize(this.renderTargetWidth, this.renderTargetHeight);
+        this.outlinePass?.setSize(this.renderTargetWidth, this.renderTargetHeight);
 
     }
 
     resetSSAA() {
 
-        this.ssaaPass.setSize(this.renderTargetWidth, this.renderTargetHeight);
+        this.ssaaPass?.setSize(this.renderTargetWidth, this.renderTargetHeight);
 
     }
 
     resetFXAA() {
 
-        this.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / this.renderTargetWidth, 1 / this.renderTargetHeight );
+        this.effectFXAA?.uniforms[ 'resolution' ].value.set( 1 / this.renderTargetWidth, 1 / this.renderTargetHeight );
 
     }
 
     resetSSAO() {
 
-        this.ssaoPass.setSize(this.renderTargetWidth, this.renderTargetHeight);
+        this.ssaoPass?.setSize(this.renderTargetWidth, this.renderTargetHeight);
 
     }
 
     resetBloom() {
 
-        this.bloomPass.setSize(this.renderTargetWidth, this.renderTargetHeight);
+        this.bloomPass?.setSize(this.renderTargetWidth, this.renderTargetHeight);
 
     }
 
@@ -300,7 +307,7 @@ class PostProcessor {
 
     clearOutlineObjects() {
 
-        if (this.outlinePass.selectedObjects.length > 0) {
+        if (this.outlinePass?.selectedObjects.length > 0) {
 
             delete this.outlinePass.selectedObjects[0].isPicked;
             this.outlinePass.selectedObjects = [];

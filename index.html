@@ -14,34 +14,6 @@
 </head>
 
 <body>
-    <script type="x-shader/x-vertex" id="bloom_vertexshader">
-
-        varying vec2 vUv;
-
-        void main() {
-
-            vUv = uv;
-
-            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-
-        }
-
-    </script>
-
-    <script type="x-shader/x-fragment" id="bloom_fragmentshader">
-
-        uniform sampler2D baseTexture;
-        uniform sampler2D bloomTexture;
-
-        varying vec2 vUv;
-
-        void main() {
-
-            gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
-
-        }
-
-    </script>
     <h1 id="sceneTitle">XEngine - World Scene</h1>
     <div id="scene-container"></div>
     <div id="leftPanel">

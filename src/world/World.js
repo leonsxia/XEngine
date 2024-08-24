@@ -9,8 +9,9 @@ import { EventDispatcher } from "./systems/EventDispatcher";
 
 import { loadTextures } from "./components/utils/textureHelper";
 import { loadGLTFModels } from "./components/utils/gltfHelper";
+import { loadShaders } from "./components/utils/shaderHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
-import { TEXTURES, GLTFS } from "./components/utils/constants";
+import { TEXTURES, GLTFS, SHADERS } from "./components/utils/constants";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics'],  // scene list for scene selector
@@ -71,9 +72,10 @@ class World {
 
         const start = Date.now();
             
-        const [textures, gltfs] = await Promise.all([
+        const [textures, gltfs, shaders] = await Promise.all([
             loadTextures(TEXTURES),
-            loadGLTFModels(GLTFS)
+            loadGLTFModels(GLTFS),
+            loadShaders(SHADERS)
         ]);
 
         const end = Date.now();
