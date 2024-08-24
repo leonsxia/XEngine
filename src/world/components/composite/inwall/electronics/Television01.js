@@ -1,6 +1,7 @@
 import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
-import { GLTFModel, CollisionBox } from '../../../Models';
+import { GLTFModel, CollisionBox, Box } from '../../../Models';
+import { deepSkyBlue } from '../../../basic/colorBase';
 
 const GLTF_SRC = 'inRoom/electronics/Television_01_1k/Television_01_1k.gltf';
 
@@ -32,6 +33,11 @@ class Television01 extends ObstacleBase {
 
         const cBoxSpecs = { name: `${name}_cbox`, width: this.width, depth: this.depth, height: this.height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
+        const screenWidth = .36 * scale[0];
+        const screenHeight = .28 * scale[1];
+        const screenDepth = .02 * scale[2];
+        const bloomScreenSpecs = { name: `${name}_screen`, size: { width: screenWidth, height: screenHeight, depth: screenDepth }, color: deepSkyBlue, useBasicMaterial: true, transparent: true };
+
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
         this.gltf.setScale(scale);
@@ -51,6 +57,18 @@ class Television01 extends ObstacleBase {
         this.bottomOBBs = this.getBottomOBBs();
         this.addCObjects();
         this.setCObjectsVisible(false);
+
+        // bloom object
+        const bloomScreen = new Box(bloomScreenSpecs);
+        const screenX = -.068 * scale[0];
+        const screenY = .03 * scale[1];
+        const screenZ = .215 * scale[2];
+        bloomScreen.setPosition([screenX, screenY, screenZ]);
+        this.bloomObjects = [bloomScreen];
+        this.setBloomObjectsTransparent();
+        this.setBloomObjectsLayers();
+        this.setBloomObjectsVisible(false);
+        this.addBloomObjects();
 
         this.group.add(
             this.gltf.group,

@@ -1,4 +1,4 @@
-import { Vector2 } from 'three';
+import { Layers, ShaderMaterial, Vector2 } from 'three';
 import { EffectComposer } from 'three/examples/jsm/Addons.js';
 import { RenderPass } from 'three/examples/jsm/Addons.js';
 import { ShaderPass } from 'three/examples/jsm/Addons.js';
@@ -7,9 +7,11 @@ import { OutputPass } from 'three/examples/jsm/Addons.js';
 import { SSAOPass } from 'three/examples/jsm/Addons.js';
 import { FXAAShader } from 'three/examples/jsm/Addons.js';
 import { SSAARenderPass } from 'three/examples/jsm/Addons.js';
-import { OUTLINE, SSAO, FXAA, SSAA, TRI_PATTERN, REPEAT_WRAPPING } from '../components/utils/constants';
-import { white } from '../components/basic/colorBase';
+import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
+import { OUTLINE, SSAO, FXAA, SSAA, BLOOM, TRI_PATTERN, REPEAT_WRAPPING, BLOOM_SCENE_LAYER } from '../components/utils/constants';
+import { black, white } from '../components/basic/colorBase';
 import { loadSingleTexture } from '../components/utils/textureHelper';
+import { basicMateraials } from '../components/basic/basicMaterial';
 
 const DEFAULT_OUTLINE = {
     edgeStrength: 3.0,
@@ -42,6 +44,16 @@ const DEFAULT_SSAA = {
     enabled: false
 }
 
+const DEFAULT_BLOOM = {
+    strength: 2.76,  // 1
+    radius: .74,  // .5
+    threshold: 0,
+    enabled: false
+}
+
+const bloomLayer = new Layers();
+bloomLayer.set(BLOOM_SCENE_LAYER);
+
 class PostProcessor {
 
     #renderer;
@@ -50,6 +62,7 @@ class PostProcessor {
     #container;
 
     composer;
+    bloomComposer;
 
     // passes
     renderPass;
@@ -58,11 +71,23 @@ class PostProcessor {
     ssaoPass;
     effectFXAA;
     ssaaPass;
+    // bloom
+    bloomPass;
+    bloomMixedPass;
+    bloomMaterials = {};
+    darkMaterial = basicMateraials.dark;
 
     // config
     #outlineConfig = {};
     #ssaoConfig = {};
     #ssaaConfig = {};
+    #bloomConfig = {};
+
+    // shaders
+    #vertexShaderBloom;
+    #fragmentShaderBloom;
+
+    #sceneBackground;
 
     effects = [];
 
@@ -72,6 +97,7 @@ class PostProcessor {
         this.#scene = scene;
         this.#camera = camera;
         this.#container = container;
+        this.#sceneBackground = scene.background;
 
         this.composer = new EffectComposer(renderer);
 
@@ -81,20 +107,23 @@ class PostProcessor {
         this.ssaoPass = new SSAOPass(scene, camera, container.clientWidth, container.clientHeight);
         this.effectFXAA = new ShaderPass( FXAAShader );
         this.ssaaPass = new SSAARenderPass(scene, camera);
+        this.initBloomPass();
 
-        this.effects = [this.ssaaPass, this.outlinePass, this.ssaoPass, this.effectFXAA];
+        this.effects = [this.ssaaPass, this.outlinePass, this.ssaoPass, this.effectFXAA, this.bloomMixedPass];
         this.disableAllEffects();
 
         this.composer.addPass(this.renderPass);
         this.composer.addPass(this.ssaaPass);
         this.composer.addPass(this.outlinePass);
         this.composer.addPass(this.ssaoPass);
+        this.composer.addPass(this.bloomMixedPass);
         this.composer.addPass(this.outputPass);
         this.composer.addPass(this.effectFXAA);
 
         Object.assign(this.#outlineConfig, DEFAULT_OUTLINE);
         Object.assign(this.#ssaoConfig, DEFAULT_SSAO);
         Object.assign(this.#ssaaConfig, DEFAULT_SSAA);
+        Object.assign(this.#bloomConfig, DEFAULT_BLOOM);
         
     }
 
@@ -122,6 +151,40 @@ class PostProcessor {
 
     }
 
+    initBloomPass() {
+
+        this.#vertexShaderBloom = document.getElementById('bloom_vertexshader').textContent;
+        this.#fragmentShaderBloom = document.getElementById('bloom_fragmentshader').textContent;
+
+        const bloomPass = new UnrealBloomPass(new Vector2( this.#container.clientWidth, this.#container.clientHeight ), 1.5, 0.4, 0.85 );
+        bloomPass.threshold = DEFAULT_BLOOM.threshold;
+        bloomPass.strength = DEFAULT_BLOOM.strength;
+        bloomPass.radius = DEFAULT_BLOOM.radius;
+        this.bloomPass = bloomPass;
+
+        const bloomComposer = new EffectComposer(this.#renderer);
+        bloomComposer.renderToScreen = false;
+        bloomComposer.addPass(this.renderPass);
+        bloomComposer.addPass(this.bloomPass);
+        this.bloomComposer = bloomComposer;
+
+        const mixPass = new ShaderPass(
+            new ShaderMaterial({
+                uniforms: {
+                    baseTexture: { value: null },
+                    bloomTexture: { value: bloomComposer.renderTarget2.texture }
+                },
+                vertexShader: this.#vertexShaderBloom,
+                fragmentShader: this.#fragmentShaderBloom,
+                defines: {}
+            }), 'baseTexture'
+        );
+        mixPass.needsSwap = true;
+
+        this.bloomMixedPass = mixPass;
+
+    }
+
     async init() {
 
         const { texture } = await loadSingleTexture({ map: TRI_PATTERN });
@@ -134,6 +197,55 @@ class PostProcessor {
 
     }
 
+    render() {
+
+        if (this.bloomMixedPass.enabled) {
+
+            this.#scene.traverse(this.darkenNonBloomed.bind(this));
+            this.#scene.background = black;
+            this.bloomComposer.render();
+            this.#scene.traverse(this.restoreMaterial.bind(this));
+            this.#scene.background = this.#sceneBackground;
+
+        }
+
+        // render the entire scene, then render bloom scene on top
+        this.composer.render();
+
+    }
+
+    darkenNonBloomed(obj) {
+
+        if (!obj.isScene && !bloomLayer.test(obj.layers)) {
+
+            this.bloomMaterials[obj.uuid] = obj.material;
+            obj.material = this.darkMaterial;
+
+        } else if (bloomLayer.test(obj.layers)) {
+
+            obj.visible = true;
+
+        }
+
+    }
+
+    restoreMaterial(obj) {
+
+        if (!obj.isScene && this.bloomMaterials[obj.uuid]) {
+
+            obj.material = this.bloomMaterials[obj.uuid];
+            delete this.bloomMaterials[obj.uuid];
+
+        }
+
+        if (bloomLayer.test(obj.layers)) {
+
+            obj.visible = false;
+
+        } 
+
+    }
+
     disableAllEffects() {
 
         this.effects.forEach(e => e.enabled = false);
@@ -142,9 +254,17 @@ class PostProcessor {
 
     reset() {
 
+        this.resetOutline();
         this.resetSSAO();
         this.resetFXAA();
         this.resetSSAA();
+        this.resetBloom();
+
+    }
+
+    resetOutline() {
+
+        this.outlinePass.setSize(this.renderTargetWidth, this.renderTargetHeight);
 
     }
 
@@ -163,6 +283,12 @@ class PostProcessor {
     resetSSAO() {
 
         this.ssaoPass.setSize(this.renderTargetWidth, this.renderTargetHeight);
+
+    }
+
+    resetBloom() {
+
+        this.bloomPass.setSize(this.renderTargetWidth, this.renderTargetHeight);
 
     }
 
@@ -207,11 +333,6 @@ class PostProcessor {
                     this.ssaaPass.sampleLevel = sampleLevel;
                     this.ssaaPass.unbiased = unbiased;
 
-                    if (enabled)
-                        this.renderPass.enabled = false;
-                    else 
-                        this.renderPass.enabled = true;
-
                 }
                 break;
             
@@ -233,6 +354,7 @@ class PostProcessor {
                     this.#outlineConfig.pulsePeriod = pulsePeriod;
                     this.#outlineConfig.usePatternTexture = usePatternTexture;
 
+                    this.resetOutline();
                     this.outlinePass.edgeStrength = edgeStrength;
                     this.outlinePass.edgeGlow = edgeGlow;
                     this.outlinePass.edgeThickness = edgeThickness;
@@ -280,9 +402,32 @@ class PostProcessor {
 
                 }
                 break;
+
+            case BLOOM:
+                {
+                    const {
+                        enabled = this.#bloomConfig.enabled,
+                        strength = this.#bloomConfig.strength,
+                        radius = this.#bloomConfig.radius,
+                        threshold = this.#bloomConfig.threshold
+                    } = specs;
+
+                    this.#bloomConfig.enabled = enabled;
+                    this.#bloomConfig.strength = strength;
+                    this.#bloomConfig.radius = radius;
+                    this.#bloomConfig.threshold = threshold;
+
+                    this.resetBloom();
+                    this.bloomMixedPass.enabled = enabled;
+                    this.bloomPass.strength = strength;
+                    this.bloomPass.radius = radius;
+                    this.bloomPass.threshold = threshold;
+
+                }
+                break;
         }
     }
 
 }
 
-export { PostProcessor, SSAO_OUTPUT };
+export { PostProcessor, SSAO_OUTPUT, DEFAULT_BLOOM };

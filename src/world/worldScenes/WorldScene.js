@@ -6,8 +6,8 @@ import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRi
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { Gui } from '../systems/Gui.js';
-import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
-import { FXAA, OUTLINE, SSAO, SSAA } from '../components/utils/constants.js';
+import { PostProcessor, SSAO_OUTPUT, DEFAULT_BLOOM } from '../systems/PostProcesser.js';
+import { FXAA, OUTLINE, SSAO, SSAA, BLOOM } from '../components/utils/constants.js';
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
@@ -150,7 +150,7 @@ class WorldScene {
         // console.log(++renderTimes);
         if (this.postProcessingEnabled) {
 
-            this.postProcessor.composer.render();
+            this.postProcessor.render();
 
         } else {
 
@@ -461,6 +461,30 @@ class WorldScene {
                 params: ['Default', 'SSAO Only', 'SSAO+Blur Only', 'Depth', 'Normal'],
                 type: 'dropdown',
                 changeFn: this.changeSSAOOutput.bind(this)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Bloom',
+                value: { Bloom: 'disable' },
+                params: ['enable', 'disable'],
+                type: 'dropdown',
+                changeFn: this.enableBloom.bind(this)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'BloomStrength',
+                value: { BloomStrength: DEFAULT_BLOOM.strength },
+                params: [0, 10],
+                type: 'number',
+                changeFn: this.changeBloomStrength.bind(this)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'BloomRadius',
+                value: { BloomRadius: DEFAULT_BLOOM.radius },
+                params: [0, 1],
+                type: 'number',
+                changeFn: this.changeBloomRadius.bind(this)
             }));
 
             this.guiLeftSpecs.details.push(folder);
@@ -958,6 +982,26 @@ class WorldScene {
         }
 
         this.setEffect(SSAO, { output });
+
+    }
+
+    enableBloom(enable) {
+
+        const e = enable === 'enable' ? true : false;
+
+        this.setEffect(BLOOM, { enabled: e });
+
+    }
+
+    changeBloomStrength(val) {
+
+        this.setEffect(BLOOM, { strength: val });
+
+    }
+
+    changeBloomRadius(val) {
+
+        this.setEffect(BLOOM, { radius: val });
 
     }
 

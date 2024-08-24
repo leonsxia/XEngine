@@ -2,7 +2,7 @@ import { Group, MathUtils } from 'three';
 import { createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, BLOOM_SCENE_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 
 class ObstacleBase extends ObstacleMoveable {
@@ -21,6 +21,8 @@ class ObstacleBase extends ObstacleMoveable {
     triggers = [];
 
     cObjects = [];
+
+    bloomObjects = [];
 
     // set to false, will not add to room obstacles, so the physics engine will ignore this object.
     isObstacle = false;
@@ -103,6 +105,26 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    addBloomObjects() {
+
+        this.bloomObjects.forEach(bloom => {
+
+            this.group.add(bloom.mesh);
+
+        });
+
+        return this;
+    }
+
+    setBloomObjectsTransparent() {
+
+        this.bloomObjects.forEach(bloom => {
+
+            bloom.setTransparent(true, .1);
+
+        })
+    }
+
     setPickLayers() {
 
         const meshes = getVisibleMeshes(this.group);
@@ -111,6 +133,26 @@ class ObstacleBase extends ObstacleMoveable {
 
             m.layers.enable(CAMERA_RAY_LAYER);
             m.layers.enable(PLAYER_CAMERA_RAY_LAYER);
+
+        });
+
+    }
+
+    setBloomObjectsLayers() {
+
+        this.bloomObjects.forEach(bloom => {
+
+            bloom.mesh.layers.enable(BLOOM_SCENE_LAYER);
+
+        });
+
+    }
+
+    setBloomObjectsVisible(show) {
+
+        this.bloomObjects.forEach(bloom => {
+
+            bloom.mesh.visible = show;
 
         });
 

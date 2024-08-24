@@ -1,4 +1,4 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3 } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial } from 'three';
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
@@ -84,8 +84,21 @@ class BasicObject {
 
         const { transparent = false } = specs;
 
-        if (color) 
-            this.material = new MeshPhongMaterial({ color: color });
+        if (color) {
+
+            const { useBasicMaterial = false } = specs;
+
+            if (useBasicMaterial) {
+
+                this.material = new MeshBasicMaterial({ color: color });
+
+            } else {
+
+                this.material = new MeshPhongMaterial({ color: color });
+
+            }
+            
+        }
         else
             this.material = basicMateraials.basic.clone();
 

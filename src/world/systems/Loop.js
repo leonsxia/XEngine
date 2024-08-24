@@ -39,7 +39,7 @@ class Loop {
             // render a frame
             if (this.#postProcessingEnabled) {
 
-                this.#postProcessor.composer.render();
+                this.#postProcessor.render();
 
             } else {
 

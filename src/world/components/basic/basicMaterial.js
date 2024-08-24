@@ -1,4 +1,4 @@
-import { MeshStandardMaterial, LineBasicMaterial, MeshPhongMaterial } from 'three';
+import { MeshStandardMaterial, LineBasicMaterial, MeshPhongMaterial, MeshBasicMaterial } from 'three';
 import * as Color from './colorBase.js';
 
 function createBasicMaterials() {
@@ -10,7 +10,9 @@ function createBasicMaterials() {
 
     const boundingBoxWire = new LineBasicMaterial({ color: Color.BBW });
 
-    return { basic, boundingBox, boundingFace, boundingBoxWire };
+    const dark = new MeshBasicMaterial( { color: Color.black } );
+
+    return { basic, boundingBox, boundingFace, boundingBoxWire, dark };
 }
 
 const basicMateraials = createBasicMaterials();

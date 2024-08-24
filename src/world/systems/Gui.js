@@ -18,7 +18,7 @@ class Gui {
 
     constructor () {
 
-        this.#guis.push(new GUI({ title: CONTROL_TITLES[0], width: 140}));
+        this.#guis.push(new GUI({ title: CONTROL_TITLES[0], width: 200}));
         this.#guis.push(new GUI({ title: CONTROL_TITLES[1] }));
         this.#guis.push(new GUI({ title: CONTROL_TITLES[2] }));
 

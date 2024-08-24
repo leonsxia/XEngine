@@ -64,13 +64,17 @@ const TELEVISION_01 = 'Television01';
 const OUTLINE = 'outline';
 const SSAO = 'ssao';
 const FXAA = 'fxaa';
-const SSAA = 'ssaa'
+const SSAA = 'ssaa';
+const BLOOM = 'bloom';
 
 // raycaster layers
 const CORNOR_RAY_LAYER = 1;
 const PLAYER_RAY_LAYER = 2;
 const CAMERA_RAY_LAYER = 3;
 const PLAYER_CAMERA_RAY_LAYER = 4;
+
+// post processing layers
+const BLOOM_SCENE_LAYER = 5;
 
 // textures
 const TEXTURE_NAMES = {
@@ -229,11 +233,14 @@ export {
     SSAO,
     FXAA,
     SSAA,
+    BLOOM,
 
     CORNOR_RAY_LAYER,
     PLAYER_RAY_LAYER,
     CAMERA_RAY_LAYER,
     PLAYER_CAMERA_RAY_LAYER,
+
+    BLOOM_SCENE_LAYER,
 
     TEXTURE_NAMES,
     TEXTURES,

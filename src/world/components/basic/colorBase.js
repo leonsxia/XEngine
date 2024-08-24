@@ -4,6 +4,7 @@ const black = 0x000000;
 const yankeesBlue = 0x0C2340;
 const violetBlue = 0x324AB2;
 const independence = 0x4C516D;
+const deepSkyBlue = 0x00BFFF;
 const green = 0x00ff00;
 const red = 0xff0000;
 const blue = 0x0000ff;
@@ -22,6 +23,7 @@ export {
     yankeesBlue,
     violetBlue,
     independence,
+    deepSkyBlue,
     green,
     red,
     blue,
