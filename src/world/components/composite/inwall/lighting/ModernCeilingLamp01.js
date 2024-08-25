@@ -73,6 +73,19 @@ class ModernCeilingLamp01 extends ObstacleBase {
 
     }
 
+    setLightPosition(light, position) {
+
+        const pos = new Vector3(...position);
+        light.position.copy(pos.add(this.lightPosition));
+
+    }
+
+    getLightPosition(light) {
+
+        return light.position.clone().sub(this.lightPosition);
+
+    }
+
 }
 
 export { ModernCeilingLamp01 };

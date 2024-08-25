@@ -697,7 +697,7 @@ function makeObjectsGuiConfig(objects) {
 
                 object.father.updateOBBs();
 
-                object.father.updateLightObjects();
+                object.father.updateLightObjects?.();
     
             } else if (object.isMesh) {
 
@@ -748,7 +748,7 @@ function makeObjectsGuiConfig(objects) {
 
                         object.father.updateOBBs();
 
-                        object.father.updateLightObjects();
+                        object.father.updateLightObjects?.();
 
                     } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall)) {
 

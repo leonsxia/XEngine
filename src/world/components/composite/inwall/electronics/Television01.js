@@ -15,6 +15,7 @@ class Television01 extends ObstacleBase {
     gltf;
 
     spotLightPosition = new Vector3();
+    spotLightTargetPos = new Vector3();
     spotLightTarget = new Object3D();
 
     constructor(specs) {
@@ -76,7 +77,8 @@ class Television01 extends ObstacleBase {
         this.addBloomObjects();
 
         this.spotLightPosition.set(screenX, screenY, screenZ);
-        this.spotLightTarget.position.set(screenX, screenY, screenZ + 1);
+        this.spotLightTargetPos.set(screenX, screenY, screenZ + 1);
+        this.spotLightTarget.position.copy(this.spotLightTargetPos);
 
         this.group.add(
             this.gltf.group,
@@ -116,6 +118,40 @@ class Television01 extends ObstacleBase {
 
         this.group.add(light);
 
+    }
+
+    setLightPositionNTarget(light, position, target, type) {
+
+        switch(type) {
+
+            case 'screen':
+                {
+                    const pos = new Vector3(...position);
+                    const tar = new Vector3(...target);
+                    light.position.copy(pos.add(this.spotLightPosition));
+                    light.target.position.copy(tar.add(this.spotLightTargetPos));
+                }
+
+                break;
+        }
+    }
+
+    getLightPositionNTarget(light, type) {
+
+        const results = {};
+
+        switch(type) {
+
+            case 'screen':
+                {
+                    results.position = light.position.clone().sub(this.spotLightPosition);
+                    results.target = light.target.position.clone().sub(this.spotLightTargetPos);
+                }
+
+                break;
+        }
+
+        return results;
     }
 
 }

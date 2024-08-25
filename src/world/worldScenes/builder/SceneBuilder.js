@@ -553,16 +553,30 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
+                        const { attachTo, attachToType } = _origin;
+
                         _origin.detail.color = new Array(...this.colorArr(light.color));
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.distance = light.distance;
                         _origin.detail.decay = light.decay;
-                        _origin.detail.position = new Array(...this.positionArr(light.position));
+
+                        if (attachTo) {
+
+                            const pos = light.parent.father.getLightPosition(light, attachToType);
+
+                            _origin.detail.position = new Array(...this.positionArr(pos));
+
+                        } else {
+
+                            _origin.detail.position = new Array(...this.positionArr(light.position));
+
+                        }
 
                     } else {
 
                         const { intensity = 1, distance = 0, decay = 2, position = [0, 0, 0] } = _target.detail;
                         const { color = [255, 255, 255] } = _target.detail;
+                        const { attachTo, attachToType, turnOn = true } = _origin;
 
                         _origin.detail.color = new Array(...color);
                         _origin.detail.intensity = intensity;
@@ -571,10 +585,19 @@ class SceneBuilder {
                         _origin.detail.position = new Array(...position);
 
                         light.color.setStyle(this.colorStr(...color));
-                        light.intensity = intensity;
+                        light.intensity = turnOn || (this.worldScene.postProcessor.bloomMixedPass?.enabled) ? intensity : 0;
                         light.distance = distance;
                         light.decay = decay;
-                        light.position.set(...position);
+
+                        if (attachTo) {
+
+                            light.parent.father.setLightPosition(light, position, attachToType);
+
+                        } else {
+
+                            light.position.set(...position);
+
+                        }
 
                     }
                 }
@@ -585,19 +608,34 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
+                        const { attachTo, attachToType } = _origin;
+
                         _origin.detail.color = new Array(...this.colorArr(light.color));
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.distance = light.distance;
                         _origin.detail.angle = light.angle;
                         _origin.detail.penumbra = light.penumbra;
                         _origin.detail.decay = light.decay;
-                        _origin.detail.position = new Array(...this.positionArr(light.position));
-                        _origin.detail.target = new Array(...this.positionArr(light.target.position));
+
+                        if (attachTo) {
+
+                            const pos_tar = light.parent.father.getLightPositionNTarget(light, attachToType);
+
+                            _origin.detail.position = new Array(...this.positionArr(pos_tar.position));
+                            _origin.detail.target = new Array(...this.positionArr(pos_tar.target));
+
+                        } else {
+
+                            _origin.detail.position = new Array(...this.positionArr(light.position));
+                            _origin.detail.target = new Array(...this.positionArr(light.target.position));
+
+                        }
 
                     } else {
 
                         const { intensity = 1, distance = 0, angle = Math.PI / 3, penumbra = 0, decay = 2, position = [0, 0, 0], target = [0, 0, 0] } = _target.detail;
                         const { color = [255, 255, 255] } = _target.detail;
+                        const { attachTo, attachToType, turnOn = true } = _origin;
 
                         _origin.detail.color = new Array(...color);
                         _origin.detail.intensity = intensity;
@@ -609,13 +647,22 @@ class SceneBuilder {
                         _origin.detail.target = new Array(...target);
 
                         light.color.setStyle(this.colorStr(...color));
-                        light.intensity = intensity;
+                        light.intensity = turnOn || (this.worldScene.postProcessor.bloomMixedPass?.enabled) ? intensity : 0;
                         light.distance = distance;
                         light.angle = angle;
                         light.penumbra = penumbra;
                         light.decay = decay;
-                        light.position.set(...position);
-                        light.target.position.set(...target);
+
+                        if (attachTo) {
+                            
+                            light.parent.father.setLightPositionNTarget(light, position, target, attachToType);
+                            
+                        }  else {
+
+                            light.position.set(...position);
+                            light.target.position.set(...target);
+
+                        }
 
                     }
                 }
@@ -625,7 +672,8 @@ class SceneBuilder {
 
         if (!updateSetupOnly) {
 
-            updateSingleLightCamera.call(this.worldScene, findLight, false);
+            const needRender = this.worldScene.staticRendering;
+            updateSingleLightCamera.call(this.worldScene, findLight, needRender);
 
         }
 
@@ -740,6 +788,12 @@ class SceneBuilder {
                     find.father.updateOBB();
 
                 }
+
+            }
+
+            if (!updateSetupOnly) {
+
+                find.father.updateLightObjects?.();
 
             }
         }
