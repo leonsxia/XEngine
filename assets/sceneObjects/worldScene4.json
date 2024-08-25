@@ -247,7 +247,7 @@
                     "display": "Point Light",
                     "detail": {
                         "color": [253, 182, 58],
-                        "position": [-0.2, 5.3, 0],
+                        "position": [0, 0, 0],
                         "intensity": 90,
                         "distance": 16.77,
                         "decay": 1
@@ -257,7 +257,9 @@
                     "shadow_debug": true,
                     "helper_show": false,
                     "shadow_cam_show": false,
-                    "visible": true
+                    "visible": true,
+                    "attachTo": "modern_ceiling_lamp_01_1",
+                    "turnOn": true
                 }
             ],
             "spotLightSpecs": [
@@ -265,11 +267,11 @@
                     "name": "spotLight3",
                     "display": "Spot Light",
                     "detail": {
-                        "color": [244, 207, 144],
-                        "position": [5, 4.625, -21],
-                        "target": [0.4, -0.2, 11.8],
+                        "color": [0, 191, 255],
+                        "position": [0, 0, 0],
+                        "target": [0, 0, 0],
                         "intensity": 26,
-                        "distance": 45,
+                        "distance": 87.8,
                         "decay": 0.33,
                         "penumbra": 0.35,
                         "angle": 0.377
@@ -279,7 +281,11 @@
                     "shadow_debug": true,
                     "helper_show": false,
                     "shadow_cam_show": false,
-                    "visible": false
+                    "visible": true,
+                    "attachTo": "television_01_1",
+                    "attachToType": "screen",
+                    "turnOn": false,
+                    "alwaysOn": false
                 }
             ]
         }
@@ -886,6 +892,18 @@
                     "climbable": true,
                     "position": [3, 4, -3],
                     "rotationY": 2.2689
+                },
+                {
+                    "type": "ModernCeilingLamp01",
+                    "src": "MODERN_CEILING_LAMP_01",
+                    "name": "modern_ceiling_lamp_01_1",
+                    "scale": [1.2, 1.3, 1.1],
+                    "isObstacle": false,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [0, 4.2, 0],
+                    "rotationY": 0
                 }
             ],
             "floors": [

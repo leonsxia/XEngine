@@ -213,7 +213,8 @@ class Moveable2D {
         const { floor, player } = params;
 
         const dir = floor.worldPosition.clone();
-        dir.y += player.height * .5;
+        const onGroundPadding = .001;
+        dir.y += player.height * .5 - onGroundPadding;
         player.group.position.y = player.group.parent ? player.group.parent.worldToLocal(dir).y : dir.y;
 
         this.resetFallingState();

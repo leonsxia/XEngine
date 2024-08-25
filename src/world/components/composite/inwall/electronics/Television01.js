@@ -1,3 +1,4 @@
+import { Object3D, Vector3 } from 'three';
 import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionBox, Box } from '../../../Models';
@@ -12,6 +13,9 @@ class Television01 extends ObstacleBase {
     depth = .464;
 
     gltf;
+
+    spotLightPosition = new Vector3();
+    spotLightTarget = new Object3D();
 
     constructor(specs) {
 
@@ -65,14 +69,19 @@ class Television01 extends ObstacleBase {
         const screenZ = .205 * scale[2];
         bloomScreen.setPosition([screenX, screenY, screenZ]);
         this.bloomObjects = [bloomScreen];
+        this.setBloomObjectsFather();
         this.setBloomObjectsTransparent();
         this.setBloomObjectsLayers();
         this.setBloomObjectsVisible(false);
         this.addBloomObjects();
 
+        this.spotLightPosition.set(screenX, screenY, screenZ);
+        this.spotLightTarget.position.set(screenX, screenY, screenZ + 1);
+
         this.group.add(
             this.gltf.group,
-            this.box.mesh
+            this.box.mesh,
+            this.spotLightTarget
         );
 
     }
@@ -82,6 +91,30 @@ class Television01 extends ObstacleBase {
         await this.gltf.init();
 
         this.setPickLayers();
+
+    }
+
+    addLight(lightObj, type) {
+
+        const { light } = lightObj;
+
+        switch(type) {
+
+            case 'screen':  // spot light
+                {
+                    light.position.add(this.spotLightPosition);
+                    this.spotLightTarget.position.add(light.target.position);
+                    light.target = this.spotLightTarget;
+                }
+
+                break;
+
+        }
+
+        this.lightObjs.push(lightObj);
+        this.lightIntensities.push(light.intensity);
+
+        this.group.add(light);
 
     }
 

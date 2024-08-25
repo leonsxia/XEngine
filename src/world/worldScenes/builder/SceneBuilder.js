@@ -5,9 +5,10 @@ import {
     WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand,
     PaintedWoodenBlueChair, PaintedWoodenWhiteChair, PaintedWoodenStool, Sofa03,
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
-    Television01
+    Television01,
+    ModernCeilingLamp01
 } from '../../components/Models.js';
-import { setupShadowLight } from "../../components/shadowMaker.js";
+import { setupShadowLight, updateSingleLightCamera } from "../../components/shadowMaker.js";
 import {
     DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
     AXES, GRID, TRAIN, TOFU,
@@ -17,9 +18,9 @@ import {
     PAINTED_WOODEN_BLUE_CHAIR, PAINTED_WOODEN_WHITE_CHAIR, PAINTED_WOODEN_STOOL, SOFA_03,
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
     TELEVISION_01,
+    MODERN_CEILING_LAMP_01,
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
-import { updateSingleLightCamera } from "../../components/shadowMaker.js";
 
 class SceneBuilder {
 
@@ -118,6 +119,48 @@ class SceneBuilder {
                 worldScene.cPlanes = worldScene.cPlanes.concat(room.walls, room.insideWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
     
                 worldScene.scene.add(room.group);
+
+                // attach lights to specific objects
+                pointLightsSpecsArr.forEach(l => {
+
+                    const { attachTo, turnOn = false, alwaysOn = true, light } = l;
+                    const lightObj = roomLightObjects.find(f => f.light === light);
+
+                    if (attachTo) {
+
+                        let find = room.insideGroups.find(f => f.name === attachTo);
+
+                        find.addLight(lightObj);
+
+                        find.updateLightObjects();
+
+                        if (!turnOn) find.turnOffLights();
+
+                        find.alwaysOn = alwaysOn;
+
+                    }
+
+                });
+
+                spotLightsSpecsArr.forEach(l => {
+
+                    const { attachTo, attachToType, turnOn = true, alwaysOn = true, light } = l;
+                    const lightObj = roomLightObjects.find(f => f.light === light);
+
+                    if (attachTo && attachToType) {
+
+                        let find = room.insideGroups.find(f => f.name === attachTo);
+
+                        find.addLight(lightObj, attachToType);
+
+                        find.updateLightObjects();
+
+                        if (!turnOn) find.turnOffLights();
+
+                        find.alwaysOn = alwaysOn;
+                        
+                    }
+                })
     
             });
     
@@ -1155,6 +1198,19 @@ class SceneBuilder {
                         .setRotationY(rotationY)
     
                     if (updateOBBs) object.updateOBBs();
+                }
+
+                break;
+            case MODERN_CEILING_LAMP_01:
+                {
+                    const { position = [0, 0, 0], rotationY = 0 } = specs;
+                    const { src } = specs;
+    
+                    this.setupObjectGLTF({ src }, specs);
+    
+                    object = new ModernCeilingLamp01(specs);
+                    object.setPosition(position)
+                        .setRotationY(rotationY)
                 }
 
                 break;

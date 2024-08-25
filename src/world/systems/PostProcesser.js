@@ -46,7 +46,7 @@ const DEFAULT_SSAA = {
 }
 
 const DEFAULT_BLOOM = {
-    strength: 2.76,  // 1
+    strength: 2.39,  // 1
     radius: .74,  // .5
     threshold: 0,
     enabled: false
@@ -253,6 +253,34 @@ class PostProcessor {
 
     }
 
+    turnOnBloomLights(obj) {
+
+        if (bloomLayer.test(obj.layers)) {
+
+            if (!obj.father.alwaysOn) {
+
+                obj.father.turnOnLights();
+
+            }
+
+        }
+
+    }
+
+    turnOffBloomLights(obj) {
+
+        if (bloomLayer.test(obj.layers)) {
+
+            if (!obj.father.alwaysOn) {
+
+                obj.father.turnOffLights();
+
+            }
+
+        }
+
+    }
+
     disableAllEffects() {
 
         this.effects.forEach(e => e.enabled = false);
@@ -429,6 +457,16 @@ class PostProcessor {
                     this.bloomPass.strength = strength;
                     this.bloomPass.radius = radius;
                     this.bloomPass.threshold = threshold;
+
+                    if (enabled) {
+
+                        this.#scene.traverse(this.turnOnBloomLights);
+
+                    } else {
+
+                        this.#scene.traverse(this.turnOffBloomLights);
+
+                    }
 
                 }
                 break;

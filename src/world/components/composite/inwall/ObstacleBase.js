@@ -4,6 +4,7 @@ import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, BLOOM_SCENE_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
+import { updateSingleLightCamera } from '../../shadowMaker';
 
 class ObstacleBase extends ObstacleMoveable {
 
@@ -34,6 +35,10 @@ class ObstacleBase extends ObstacleMoveable {
     movable = false;
     // falling ground
     hittingGround;
+
+    lightObjs = [];
+    lightIntensities = [];
+    alwaysOn = true;
 
     specs;
 
@@ -133,6 +138,16 @@ class ObstacleBase extends ObstacleMoveable {
 
             m.layers.enable(CAMERA_RAY_LAYER);
             m.layers.enable(PLAYER_CAMERA_RAY_LAYER);
+
+        });
+
+    }
+
+    setBloomObjectsFather() {
+
+        this.bloomObjects.forEach(bloom => {
+
+            bloom.mesh.father = this;
 
         });
 
@@ -282,7 +297,42 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.triggers.forEach(tri => tri.updateOBB(needUpdateMatrixWorld));
 
-        this.box.updateOBB(needUpdateMatrixWorld);
+        this.box?.updateOBB(needUpdateMatrixWorld);
+
+    }
+
+    updateLightObjects() {
+
+        this.lightObjs?.forEach(l => {
+
+            updateSingleLightCamera.call(null, l, false);
+
+        });
+
+    }
+
+    turnOffLights() {
+
+        for (let i = 0; i < this.lightObjs.length; i++) {
+
+            const { light } = this.lightObjs[i];
+
+            this.lightIntensities[i] = light.intensity;
+            light.intensity = 0;
+
+        }
+
+    }
+
+    turnOnLights() {
+
+        for (let i = 0; i < this.lightObjs.length; i++) {
+
+            const { light } = this.lightObjs[i];
+
+            light.intensity = this.lightIntensities[i];
+
+        }
 
     }
 
@@ -292,6 +342,8 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.updateOBBs();
 
+        this.updateLightObjects();
+
     }
 
     onGround() {
@@ -299,6 +351,8 @@ class ObstacleBase extends ObstacleMoveable {
         this.onGroundTick({ floor: this.hittingGround, obstacle: this });
         
         this.updateOBBs();
+
+        this.updateLightObjects();
         
     }
 

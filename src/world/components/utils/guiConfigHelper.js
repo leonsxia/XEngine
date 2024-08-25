@@ -101,7 +101,7 @@ function addDirectionalLight(light, specs) {
             prop: 'position.y',
             value: null,
             sub: 'position',
-            params: [0, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
+            params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
             type: 'light-num',
             changeFn: null
         }, {
@@ -288,7 +288,7 @@ function addHemisphereLight(light, specs) {
                 prop: 'position.y',
                 value: null,
                 sub: 'position',
-                params: [0, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
+                params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -379,7 +379,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                 prop: 'position.y',
                 value: null,
                 sub: 'position',
-                params: [0, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
+                params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -540,7 +540,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 prop: 'position.y',
                 value: null,
                 sub: 'position',
-                params: [0, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
+                params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -690,12 +690,14 @@ function makeObjectsGuiConfig(objects) {
                 
             if (object.isPlayer) {
     
-                object.father.updateRay();
-                object.father.updateOBB();
+                object.father.updateRay?.();
+                object.father.updateOBB?.();
     
             } else if (object.isGroup) {
-                
+
                 object.father.updateOBBs();
+
+                object.father.updateLightObjects();
     
             } else if (object.isMesh) {
 
@@ -746,9 +748,11 @@ function makeObjectsGuiConfig(objects) {
 
                         object.father.updateOBBs();
 
+                        object.father.updateLightObjects();
+
                     } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall)) {
 
-                        object.father.updateRay();
+                        object.father.updateRay?.();
                         object.father.updateOBB?.();
 
                     }

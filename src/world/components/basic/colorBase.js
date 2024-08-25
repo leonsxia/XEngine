@@ -10,6 +10,7 @@ const red = 0xff0000;
 const blue = 0x0000ff;
 const yellow = 0xffff00;
 const orange = 0xffa500;
+const khaki = 0xF0E68C;
 const BB = 0xffffff;
 const BF = 0xffff33;
 const BBW = 0x00ff00;
@@ -29,6 +30,7 @@ export {
     blue,
     yellow,
     orange,
+    khaki,
     BB,
     BF,
     BBW,
