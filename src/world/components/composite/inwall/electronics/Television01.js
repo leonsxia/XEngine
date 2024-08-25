@@ -35,7 +35,7 @@ class Television01 extends ObstacleBase {
 
         const screenWidth = .36 * scale[0];
         const screenHeight = .28 * scale[1];
-        const screenDepth = .02 * scale[2];
+        const screenDepth = .04 * scale[2];
         const bloomScreenSpecs = { name: `${name}_screen`, size: { width: screenWidth, height: screenHeight, depth: screenDepth }, color: deepSkyBlue, useBasicMaterial: true, transparent: true };
 
         // gltf model
@@ -62,7 +62,7 @@ class Television01 extends ObstacleBase {
         const bloomScreen = new Box(bloomScreenSpecs);
         const screenX = -.068 * scale[0];
         const screenY = .03 * scale[1];
-        const screenZ = .215 * scale[2];
+        const screenZ = .205 * scale[2];
         bloomScreen.setPosition([screenX, screenY, screenZ]);
         this.bloomObjects = [bloomScreen];
         this.setBloomObjectsTransparent();
