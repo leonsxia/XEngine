@@ -20,10 +20,34 @@
     ],
     "lights": [
         {
+            "room": "scene",
+            "basicLightSpecs": [
+                {
+                    "name": "scene_MainLight1",
+                    "display": "Directional Light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "intensity": 0,
+                        "position": [0, 5, 0],
+                        "target": [0, 0, 0]
+                    },
+                    "type": "DirectionalLight",
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [],
+            "spotLightSpecs": []
+        },
+        {
             "room": "room1",
             "basicLightSpecs": [
                 {
-                    "name": "mainLight1",
+                    "name": "room1_mainLight1",
                     "display": "Directional Light",
                     "detail": {
                         "color": [255, 255, 255],
@@ -40,7 +64,7 @@
                     "visible": true
                 },
                 {
-                    "name": "ambientLight1",
+                    "name": "room1_ambientLight1",
                     "display": "Ambient Light",
                     "detail": {
                         "color": [128, 128, 128],
@@ -51,7 +75,7 @@
                     "visible": true
                 },
                 {
-                    "name": "hemisphereLight1",
+                    "name": "room1_hemisphereLight1",
                     "display": "Hemisphere Light",
                     "detail": {
                         "groundColor": [47, 79, 79],
@@ -67,7 +91,7 @@
             ],
             "pointLightSpecs": [
                 {
-                    "name": "pointLight1",
+                    "name": "room1_pointLight1",
                     "display": "Point Light",
                     "detail": {
                         "color": [251, 230, 172],
@@ -86,7 +110,7 @@
             ],
             "spotLightSpecs": [
                 {
-                    "name": "spotLight1",
+                    "name": "room1_spotLight1",
                     "display": "Spot Light",
                     "detail": {
                         "color": [242, 176, 33],
@@ -111,7 +135,7 @@
             "room": "room2",
             "basicLightSpecs": [
                 {
-                    "name": "mainLight2",
+                    "name": "room2_mainLight2",
                     "display": "Directional Light",
                     "detail": {
                         "color": [255, 255, 255],
@@ -128,7 +152,7 @@
                     "visible": true
                 },
                 {
-                    "name": "ambientLight2",
+                    "name": "room2_ambientLight2",
                     "display": "Ambient Light",
                     "detail": {
                         "color": [128, 128, 128],
@@ -139,7 +163,7 @@
                     "visible": true
                 },
                 {
-                    "name": "hemisphereLight2",
+                    "name": "room2_hemisphereLight2",
                     "display": "Hemisphere Light",
                     "detail": {
                         "groundColor": [54, 212, 22],
@@ -155,7 +179,7 @@
             ],
             "pointLightSpecs": [
                 {
-                    "name": "pointLight2",
+                    "name": "room2_pointLight2",
                     "display": "Point Light",
                     "detail": {
                         "color": [255, 199, 44],
@@ -174,7 +198,7 @@
             ],
             "spotLightSpecs": [
                 {
-                    "name": "spotLight2",
+                    "name": "room2_spotLight2",
                     "display": "Spot Light",
                     "detail": {
                         "color": [250, 250, 250],
@@ -199,7 +223,7 @@
             "room": "room3",
             "basicLightSpecs": [
                 {
-                    "name": "mainLight3",
+                    "name": "room3_mainLight3",
                     "display": "Directional Light",
                     "detail": {
                         "color": [255, 255, 255],
@@ -216,7 +240,7 @@
                     "visible": true
                 },
                 {
-                    "name": "ambientLight3",
+                    "name": "room3_ambientLight3",
                     "display": "Ambient Light",
                     "detail": {
                         "color": [128, 128, 128],
@@ -227,7 +251,7 @@
                     "visible": true
                 },
                 {
-                    "name": "hemisphereLight3",
+                    "name": "room3_hemisphereLight3",
                     "display": "Hemisphere Light",
                     "detail": {
                         "groundColor": [47, 79, 79],
@@ -243,7 +267,7 @@
             ],
             "pointLightSpecs": [
                 {
-                    "name": "pointLight3",
+                    "name": "room3_pointLight3",
                     "display": "Point Light",
                     "detail": {
                         "color": [253, 182, 58],
@@ -258,20 +282,20 @@
                     "helper_show": false,
                     "shadow_cam_show": false,
                     "visible": true,
-                    "attachTo": "modern_ceiling_lamp_01_1",
+                    "attachTo": "room3_modern_ceiling_lamp_01_1",
                     "turnOn": true
                 }
             ],
             "spotLightSpecs": [
                 {
-                    "name": "spotLight3",
+                    "name": "room3_spotLight3",
                     "display": "Spot Light",
                     "detail": {
                         "color": [0, 191, 255],
                         "position": [0, 0, 0],
                         "target": [0, 0, 0],
                         "intensity": 26,
-                        "distance": 87.8,
+                        "distance": 10,
                         "decay": 0.33,
                         "penumbra": 0.35,
                         "angle": 0.377
@@ -282,7 +306,7 @@
                     "helper_show": false,
                     "shadow_cam_show": false,
                     "visible": true,
-                    "attachTo": "television_01_1",
+                    "attachTo": "room3_television_01_1",
                     "attachToType": "screen",
                     "turnOn": false,
                     "alwaysOn": false
@@ -367,7 +391,7 @@
                     "topMap": "BRICK_159",
                     "topNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "square_pillar1",
+                    "name": "room1_square_pillar1",
                     "showArrow": true,
                     "enableWallOBBs": true,
                     "isObstacle": true,
@@ -393,7 +417,7 @@
                     "topMap": "BRICK_159",
                     "topNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "square_pillar2",
+                    "name": "room1_square_pillar2",
                     "showArrow": true,
                     "enableWallOBBs": false,
                     "isObstacle": false,
@@ -422,7 +446,7 @@
                     "topMap": "BRICK_159",
                     "topNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "LWall1",
+                    "name": "room1_LWall1",
                     "showArrow": true,
                     "enableWallOBBs": true,
                     "position": [1.5, 0, 5]
@@ -454,7 +478,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "name": "CubeBox1",
+                    "name": "room1_CubeBox1",
                     "position": [-1.5, 2, -5],
                     "rotationY": 2.3562
                 },
@@ -485,7 +509,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "name": "CubeBox2",
+                    "name": "room1_CubeBox2",
                     "position": [-1.5, 4, -5],
                     "rotationY": 1.0367
                 },
@@ -507,7 +531,7 @@
                     "slopeNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
                     "enableOBBs": false,
-                    "name": "Slope1",
+                    "name": "room1_Slope1",
                     "position": [2.5, -1.05, -3]
                 },
                 {
@@ -526,7 +550,7 @@
                     "backNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
                     "enableOBBs": false,
-                    "name": "Stairs1",
+                    "name": "room1_Stairs1",
                     "position": [-2, -0.9, -0.5],
                     "rotationY": 1.5708
                 }
@@ -538,7 +562,7 @@
                     "height": 15,
                     "map": "FABRIC_190",
                     "normalMap": "FABRIC_190_NORMAL",
-                    "name": "floor1",
+                    "name": "room1_floor1",
                     "mapRatio": 1.5,
                     "receiveShadow": true,
                     "position": [0, -2.2, 0],
@@ -588,7 +612,7 @@
                     "topMap": "BRICK_159",
                     "topNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "square_pillar3",
+                    "name": "room2_square_pillar3",
                     "showArrow": true,
                     "position": [-2.5, 0, 9]
                 },
@@ -610,7 +634,7 @@
                     "topMap": "BRICK_159",
                     "topNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "square_pillar4",
+                    "name": "room2_square_pillar4",
                     "showArrow": true,
                     "position": [2.5, 0, 9]
                 },
@@ -625,7 +649,7 @@
                     "topMap": "BRICK_159",
                     "topNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "cylinder_pillar1",
+                    "name": "room2_cylinder_pillar1",
                     "showArrow": true,
                     "enableWallOBBs": true,
                     "isObstacle": true,
@@ -641,7 +665,7 @@
                     "normalMap": "BRICK_159_NORMAL",
                     "topMap": "BRICK_159",
                     "topNormal": "BRICK_159_NORMAL",
-                    "name": "hexCylinder1",
+                    "name": "room2_hexCylinder1",
                     "mapRatio": 1.5,
                     "showArrow": true,
                     "isObstacle": true,
@@ -673,7 +697,7 @@
                     "topMap": "BRICK_159",
                     "topNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "LWall2",
+                    "name": "room2_LWall2",
                     "showArrow": true,
                     "enableWallOBBs": true,
                     "isObstacle": true,
@@ -688,7 +712,7 @@
                     "height": 20,
                     "map": "STONE_165",
                     "normalMap": "STONE_165_NORMAL",
-                    "name": "floor2",
+                    "name": "room2_floor2",
                     "repeatU": 1.3,
                     "repeatV": 1,
                     "repeatModeU": 1002,
@@ -731,7 +755,7 @@
                 {
                     "type": "WoodenPicnicTable",
                     "src": "WOODEN_PICNIC_TABLE",
-                    "name": "wooden_picnic_table_1",
+                    "name": "room3_wooden_picnic_table_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -742,7 +766,7 @@
                 {
                     "type": "WoodenSmallTable",
                     "src": "WOODEN_TABLE",
-                    "name": "wooden_table_1",
+                    "name": "room3_wooden_table_1",
                     "scale": [1.5, 1, 3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -754,7 +778,7 @@
                 {
                     "type": "WoodenSmallTable",
                     "src": "WOODEN_TABLE",
-                    "name": "wooden_table_2",
+                    "name": "room3_wooden_table_2",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -765,7 +789,7 @@
                 {
                     "type": "RoundWoodenTable",
                     "src": "ROUND_WOODEN_TABLE",
-                    "name": "round_wooden_table_1",
+                    "name": "room3_round_wooden_table_1",
                     "scale": [1.5, 1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -777,7 +801,7 @@
                 {
                     "type": "PaintedWoodenTable",
                     "src": "PAINTED_WOODEN_TABLE",
-                    "name": "painted_wooden_table_1",
+                    "name": "room3_painted_wooden_table_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -788,7 +812,7 @@
                 {
                     "type": "PaintedWoodenNightstand",
                     "src": "PAINTED_WOODEN_NIGHTSTAND",
-                    "name": "painted_wooden_nightstand_1",
+                    "name": "room3_painted_wooden_nightstand_1",
                     "scale": [1.3, 1.2, 1.3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -800,7 +824,7 @@
                 {
                     "type": "PaintedWoodenBlueChair",
                     "src": "PAINTED_WOODEN_BLUE_CHAIR",
-                    "name": "painted_wooden_blue_chair_1",
+                    "name": "room3_painted_wooden_blue_chair_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -812,7 +836,7 @@
                 {
                     "type": "PaintedWoodenWhiteChair",
                     "src": "PAINTED_WOODEN_WHITE_CHAIR",
-                    "name": "painted_wooden_white_chair_1",
+                    "name": "room3_painted_wooden_white_chair_1",
                     "scale": [1.3, 1.1, 1.3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -824,7 +848,7 @@
                 {
                     "type": "PaintedWoodenStool",
                     "src": "PAINTED_WOODEN_STOOL",
-                    "name": "painted_wooden_stool_1",
+                    "name": "room3_painted_wooden_stool_1",
                     "scale": [1.3, 1, 1.3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -836,7 +860,7 @@
                 {
                     "type": "Sofa03",
                     "src": "SOFA_03",
-                    "name": "sofa03_1",
+                    "name": "room3_sofa03_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -848,7 +872,7 @@
                 {
                     "type": "PaintedWoodenBlueCabinet",
                     "src": "PAINTED_WOODEN_BLUE_CABINET",
-                    "name": "painted_wooden_blue_cabinet_1",
+                    "name": "room3_painted_wooden_blue_cabinet_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -860,7 +884,7 @@
                 {
                     "type": "Shelf01",
                     "src": "SHELF_01",
-                    "name": "shelf_01_1",
+                    "name": "room3_shelf_01_1",
                     "scale": [1.1, 1.1, 2],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -872,7 +896,7 @@
                 {
                     "type": "PaintedWoodenWhiteCabinet",
                     "src": "PAINTED_WOODEN_WHITE_CABINET",
-                    "name": "painted_wooden_white_cabinet_1",
+                    "name": "room3_painted_wooden_white_cabinet_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -884,7 +908,7 @@
                 {
                     "type": "Television01",
                     "src": "TELEVISION_01",
-                    "name": "television_01_1",
+                    "name": "room3_television_01_1",
                     "scale": [1.2, 1.3, 1.1],
                     "isObstacle": true,
                     "enableWallOBBs": true,
@@ -896,7 +920,7 @@
                 {
                     "type": "ModernCeilingLamp01",
                     "src": "MODERN_CEILING_LAMP_01",
-                    "name": "modern_ceiling_lamp_01_1",
+                    "name": "room3_modern_ceiling_lamp_01_1",
                     "scale": [1.2, 1.3, 1.1],
                     "isObstacle": false,
                     "enableWallOBBs": false,
@@ -913,7 +937,7 @@
                     "height": 20,
                     "map": "WOOD_227",
                     "normalMap": "WOOD_227_NORMAL",
-                    "name": "floor3",
+                    "name": "room3_floor3",
                     "repeatU": 1.5,
                     "repeatV": 2.8,
                     "repeatModeU": 1002,

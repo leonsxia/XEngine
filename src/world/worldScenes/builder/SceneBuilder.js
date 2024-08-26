@@ -80,39 +80,18 @@ class SceneBuilder {
             let basicLightGuiSpecsArr = [];
             let pointLightGuiSpecsArr = [];
             let spotLightGuiSpecsArr = [];
+
+            worldScene.guiLights = { basicLightSpecsArr: basicLightGuiSpecsArr, pointLightSpecsArr: pointLightGuiSpecsArr, spotLightSpecsArr: spotLightGuiSpecsArr };
+
+            // build scene lights
+            {
+                this.buildLights(lights, { name: 'scene', insideGroups: sceneObjects });
+            }
     
             rooms.forEach(room => {
     
-                const roomLights = lights.find(l => l.room === room.name);
-                const basicLightsSpecsArr = roomLights['basicLightSpecs'].map(l => { l.room = room.name; return l; });
-                const pointLightsSpecsArr = roomLights['pointLightSpecs'].map(l => { l.room = room.name; return l; });
-                const spotLightsSpecsArr = roomLights['spotLightSpecs'].map(l => { l.room = room.name; return l; });
-    
-                const _basicLights = createBasicLights(basicLightsSpecsArr);
-                const _pointLights = createPointLights(pointLightsSpecsArr);
-                const _spotLights = createSpotLights(spotLightsSpecsArr);
-    
-                basicLightGuiSpecsArr = basicLightGuiSpecsArr.concat(basicLightsSpecsArr);
-                pointLightGuiSpecsArr = pointLightGuiSpecsArr.concat(pointLightsSpecsArr);
-                spotLightGuiSpecsArr = spotLightGuiSpecsArr.concat(spotLightsSpecsArr);
-    
-                Object.assign(worldScene.lights, _basicLights);
-                Object.assign(worldScene.lights, _pointLights);
-                Object.assign(worldScene.lights, _spotLights);
-    
-                const roomLightObjects = setupShadowLight.call(worldScene,
-                    worldScene.scene, room.group, ...basicLightsSpecsArr, ...pointLightsSpecsArr, ...spotLightsSpecsArr
-                );
-    
-                worldScene.shadowLightObjects = worldScene.shadowLightObjects.concat(roomLightObjects);
-    
-                const basicLights = basicLightsSpecsArr.filter(l => l.visible).map(l => l.light);
-                const pointLights = pointLightsSpecsArr.filter(l => l.visible).map(l => l.light);
-                const spotLights = spotLightsSpecsArr.filter(l => l.visible).map(l => l.light);
-    
-                room.lights = basicLights.concat(pointLights, spotLights);
-    
-                room.setLightsVisible(false);
+                // build room lights
+                this.buildLights(lights, room);
     
                 worldScene.rooms.push(room);
     
@@ -120,51 +99,7 @@ class SceneBuilder {
     
                 worldScene.scene.add(room.group);
 
-                // attach lights to specific objects
-                pointLightsSpecsArr.forEach(l => {
-
-                    const { attachTo, turnOn = false, alwaysOn = true, light } = l;
-                    const lightObj = roomLightObjects.find(f => f.light === light);
-
-                    if (attachTo) {
-
-                        let find = room.insideGroups.find(f => f.name === attachTo);
-
-                        find.addLight(lightObj);
-
-                        find.updateLightObjects();
-
-                        if (!turnOn) find.turnOffLights();
-
-                        find.alwaysOn = alwaysOn;
-
-                    }
-
-                });
-
-                spotLightsSpecsArr.forEach(l => {
-
-                    const { attachTo, attachToType, turnOn = true, alwaysOn = true, light } = l;
-                    const lightObj = roomLightObjects.find(f => f.light === light);
-
-                    if (attachTo && attachToType) {
-
-                        let find = room.insideGroups.find(f => f.name === attachTo);
-
-                        find.addLight(lightObj, attachToType);
-
-                        find.updateLightObjects();
-
-                        if (!turnOn) find.turnOffLights();
-
-                        find.alwaysOn = alwaysOn;
-                        
-                    }
-                })
-    
             });
-    
-            worldScene.guiLights = { basicLightSpecsArr: basicLightGuiSpecsArr, pointLightSpecsArr: pointLightGuiSpecsArr, spotLightSpecsArr: spotLightGuiSpecsArr }
     
         } catch (ex) {
     
@@ -172,6 +107,92 @@ class SceneBuilder {
     
         }
     
+    }
+
+    buildLights(lights, room) {
+        
+        const roomName = room.name;
+        const worldScene = this.worldScene;
+        const roomLights = lights.find(l => l.room === roomName);
+
+        if (!roomLights) return;
+
+        const basicLightsSpecsArr = roomLights['basicLightSpecs'].map(l => { l.room = roomName; return l; });
+        const pointLightsSpecsArr = roomLights['pointLightSpecs'].map(l => { l.room = roomName; return l; });
+        const spotLightsSpecsArr = roomLights['spotLightSpecs'].map(l => { l.room = roomName; return l; });
+
+        const _basicLights = createBasicLights(basicLightsSpecsArr);
+        const _pointLights = createPointLights(pointLightsSpecsArr);
+        const _spotLights = createSpotLights(spotLightsSpecsArr);
+
+        worldScene.guiLights.basicLightSpecsArr = worldScene.guiLights.basicLightSpecsArr.concat(basicLightsSpecsArr);
+        worldScene.guiLights.pointLightSpecsArr = worldScene.guiLights.pointLightSpecsArr.concat(pointLightsSpecsArr);
+        worldScene.guiLights.spotLightSpecsArr = worldScene.guiLights.spotLightSpecsArr.concat(spotLightsSpecsArr);
+
+        Object.assign(worldScene.lights, _basicLights);
+        Object.assign(worldScene.lights, _pointLights);
+        Object.assign(worldScene.lights, _spotLights);
+
+        const roomGroup = roomName === 'scene' ? null : room.group;
+        const roomLightObjects = setupShadowLight.call(worldScene,
+            worldScene.scene, roomGroup, ...basicLightsSpecsArr, ...pointLightsSpecsArr, ...spotLightsSpecsArr
+        );
+
+        worldScene.shadowLightObjects = worldScene.shadowLightObjects.concat(roomLightObjects);
+
+        const basicLights = basicLightsSpecsArr.filter(l => l.visible).map(l => l.light);
+        const pointLights = pointLightsSpecsArr.filter(l => l.visible).map(l => l.light);
+        const spotLights = spotLightsSpecsArr.filter(l => l.visible).map(l => l.light);
+
+        if (roomName !== 'scene') {
+
+            room.lights = basicLights.concat(pointLights, spotLights);
+            room.setLightsVisible(false);
+
+        }
+
+        // attach lights to specific objects
+        pointLightsSpecsArr.forEach(l => {
+
+            const { attachTo, turnOn = false, alwaysOn = true, light } = l;
+            const lightObj = roomLightObjects.find(f => f.light === light); // lightObj to update lightHelper
+
+            if (attachTo) {
+
+                let find = room.insideGroups.find(f => f.name === attachTo);
+
+                find.addLight(lightObj);
+
+                find.updateLightObjects();
+
+                if (!turnOn) find.turnOffLights();
+
+                find.alwaysOn = alwaysOn;
+
+            }
+
+        });
+
+        spotLightsSpecsArr.forEach(l => {
+
+            const { attachTo, attachToType, turnOn = true, alwaysOn = true, light } = l;
+            const lightObj = roomLightObjects.find(f => f.light === light);
+
+            if (attachTo && attachToType) {
+
+                let find = room.insideGroups.find(f => f.name === attachTo);
+
+                find.addLight(lightObj, attachToType);
+
+                find.updateLightObjects();
+
+                if (!turnOn) find.turnOffLights();
+
+                find.alwaysOn = alwaysOn;
+                
+            }
+        });
+
     }
     
     buildPlayers(playerSpecs) {
