@@ -154,44 +154,37 @@ class SceneBuilder {
         // attach lights to specific objects
         pointLightsSpecsArr.forEach(l => {
 
-            const { attachTo, turnOn = false, alwaysOn = true, light } = l;
-            const lightObj = roomLightObjects.find(f => f.light === light); // lightObj to update lightHelper
-
-            if (attachTo) {
-
-                let find = room.insideGroups.find(f => f.name === attachTo);
-
-                find.addLight(lightObj);
-
-                find.updateLightObjects();
-
-                if (!turnOn) find.turnOffLights();
-
-                find.alwaysOn = alwaysOn;
-
-            }
+            this.attachLightToObject(l, roomLightObjects, room);
 
         });
 
         spotLightsSpecsArr.forEach(l => {
 
-            const { attachTo, attachToType, turnOn = true, alwaysOn = true, light } = l;
-            const lightObj = roomLightObjects.find(f => f.light === light);
+            this.attachLightToObject(l, roomLightObjects, room);
 
-            if (attachTo && attachToType) {
-
-                let find = room.insideGroups.find(f => f.name === attachTo);
-
-                find.addLight(lightObj, attachToType);
-
-                find.updateLightObjects();
-
-                if (!turnOn) find.turnOffLights();
-
-                find.alwaysOn = alwaysOn;
-                
-            }
         });
+
+    }
+
+    attachLightToObject(lightSpecs, roomLightObjects, room) {
+
+        const { attachTo, attachToType, turnOn = true, alwaysOn = true, light } = lightSpecs;
+        // light object to update light helper
+        const lightObj = roomLightObjects.find(f => f.light === light);
+
+        if (attachTo) {
+
+            let find = room.insideGroups.find(f => f.name === attachTo);
+
+            find.addLight(lightObj, attachToType);
+
+            find.updateLightObjects();
+
+            if (!turnOn) find.turnOffLights();
+
+            find.alwaysOn = alwaysOn;
+
+        }
 
     }
     
