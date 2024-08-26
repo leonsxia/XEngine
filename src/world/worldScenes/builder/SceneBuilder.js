@@ -6,7 +6,7 @@ import {
     PaintedWoodenBlueChair, PaintedWoodenWhiteChair, PaintedWoodenStool, Sofa03,
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
     Television01,
-    ModernCeilingLamp01
+    ModernCeilingLamp01, SecurityLight
 } from '../../components/Models.js';
 import { setupShadowLight, updateSingleLightCamera } from "../../components/shadowMaker.js";
 import {
@@ -18,7 +18,7 @@ import {
     PAINTED_WOODEN_BLUE_CHAIR, PAINTED_WOODEN_WHITE_CHAIR, PAINTED_WOODEN_STOOL, SOFA_03,
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
     TELEVISION_01,
-    MODERN_CEILING_LAMP_01,
+    MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
 
@@ -1277,6 +1277,19 @@ class SceneBuilder {
                     this.setupObjectGLTF({ src }, specs);
     
                     object = new ModernCeilingLamp01(specs);
+                    object.setPosition(position)
+                        .setRotationY(rotationY)
+                }
+
+                break;
+            case SECURITY_LIGHT:
+                {
+                    const { position = [0, 0, 0], rotationY = 0 } = specs;
+                    const { src } = specs;
+    
+                    this.setupObjectGLTF({ src }, specs);
+    
+                    object = new SecurityLight(specs);
                     object.setPosition(position)
                         .setRotationY(rotationY)
                 }

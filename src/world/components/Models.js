@@ -47,6 +47,7 @@ export { Shelf01 } from './composite/inwall/shelves/Shelf01.js';
 export { PaintedWoodenWhiteCabinet } from './composite/inwall/shelves/PaintedWoodenWhiteCabinet.js';
 export { Television01 } from './composite/inwall/electronics/Television01.js';
 export { ModernCeilingLamp01 } from './composite/inwall/lighting/ModernCeilingLamp01.js';
+export { SecurityLight } from './composite/inwall/lighting/SecurityLight.js';
 
 // collision objects
 export { CollisionBox } from './physics/CollisionObjects/CollisionBox.js';

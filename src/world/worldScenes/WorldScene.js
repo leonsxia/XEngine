@@ -1029,6 +1029,8 @@ class WorldScene {
             updatables.splice(idx, 1);
             updatables.push(this.controls.defControl);
             this.scene.remove(...this.cameraObj.rayArrows);
+            
+            this.cameraObj.resetInterectObjects();
 
         }
 

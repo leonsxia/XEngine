@@ -46,7 +46,7 @@ const DEFAULT_SSAA = {
 }
 
 const DEFAULT_BLOOM = {
-    strength: 2.39,  // 1
+    strength: 1.65,  // 1
     radius: .74,  // .5
     threshold: 0,
     enabled: false
@@ -245,7 +245,7 @@ class PostProcessor {
 
         }
 
-        if (bloomLayer.test(obj.layers)) {
+        if (bloomLayer.test(obj.layers) && !obj.alwaysVisible) {
 
             obj.visible = false;
 

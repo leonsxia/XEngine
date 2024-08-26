@@ -114,20 +114,37 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.bloomObjects.forEach(bloom => {
 
-            this.group.add(bloom.mesh);
+            if (bloom.isMesh) {
+
+                this.group.add(bloom);
+
+            } else {
+
+                this.group.add(bloom.mesh);
+
+            }
 
         });
 
         return this;
     }
 
-    setBloomObjectsTransparent() {
+    setBloomObjectsTransparent(opacity = .1) {
 
         this.bloomObjects.forEach(bloom => {
 
-            bloom.setTransparent(true, .1);
+            if (bloom.isMesh) {
 
-        })
+                bloom.material.transparent = true;
+                bloom.material.opacity = opacity;
+
+            } else {
+
+                bloom.setTransparent(true, opacity);
+
+            }
+
+        });
     }
 
     setPickLayers() {
@@ -147,7 +164,15 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.bloomObjects.forEach(bloom => {
 
-            bloom.mesh.father = this;
+            if (bloom.isMesh) {
+
+                bloom.father = this;
+
+            } else {
+
+                bloom.mesh.father = this;
+
+            }
 
         });
 
@@ -157,7 +182,15 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.bloomObjects.forEach(bloom => {
 
-            bloom.mesh.layers.enable(BLOOM_SCENE_LAYER);
+            if (bloom.isMesh) {
+
+                bloom.layers.enable(BLOOM_SCENE_LAYER);
+
+            } else {
+
+                bloom.mesh.layers.enable(BLOOM_SCENE_LAYER);
+
+            }
 
         });
 
@@ -167,7 +200,15 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.bloomObjects.forEach(bloom => {
 
-            bloom.mesh.visible = show;
+            if (bloom.isMesh) {
+
+                bloom.visible = show;
+
+            } else {
+
+                bloom.mesh.visible = show;
+
+            }
 
         });
 
