@@ -6,6 +6,7 @@ import {
     PaintedWoodenBlueChair, PaintedWoodenWhiteChair, PaintedWoodenStool, Sofa03,
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
     Television01,
+    FancyPictureFrame01, VintageGrandfatherClock,
     ModernCeilingLamp01, SecurityLight
 } from '../../components/Models.js';
 import { setupShadowLight, updateSingleLightCamera } from "../../components/shadowMaker.js";
@@ -18,6 +19,7 @@ import {
     PAINTED_WOODEN_BLUE_CHAIR, PAINTED_WOODEN_WHITE_CHAIR, PAINTED_WOODEN_STOOL, SOFA_03,
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
     TELEVISION_01,
+    FANCY_PICTURE_FRAME_01, VINTAGE_GRANDFATHER_CLOCK,
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
@@ -1098,7 +1100,7 @@ class SceneBuilder {
     
                     object = new WoodenSmallTable(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1113,7 +1115,7 @@ class SceneBuilder {
     
                     object = new RoundWoodenTable(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1128,7 +1130,7 @@ class SceneBuilder {
     
                     object = new PaintedWoodenTable(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1143,7 +1145,7 @@ class SceneBuilder {
     
                     object = new PaintedWoodenNightstand(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1158,7 +1160,7 @@ class SceneBuilder {
     
                     object = new PaintedWoodenBlueChair(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1173,7 +1175,7 @@ class SceneBuilder {
     
                     object = new PaintedWoodenWhiteChair(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1188,7 +1190,7 @@ class SceneBuilder {
     
                     object = new PaintedWoodenStool(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1203,7 +1205,7 @@ class SceneBuilder {
     
                     object = new Sofa03(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1218,7 +1220,7 @@ class SceneBuilder {
     
                     object = new PaintedWoodenBlueCabinet(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1233,7 +1235,7 @@ class SceneBuilder {
     
                     object = new Shelf01(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1248,7 +1250,7 @@ class SceneBuilder {
     
                     object = new PaintedWoodenWhiteCabinet(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1263,7 +1265,7 @@ class SceneBuilder {
     
                     object = new Television01(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
     
                     if (updateOBBs) object.updateOBBs();
                 }
@@ -1278,7 +1280,7 @@ class SceneBuilder {
     
                     object = new ModernCeilingLamp01(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
                 }
 
                 break;
@@ -1291,7 +1293,33 @@ class SceneBuilder {
     
                     object = new SecurityLight(specs);
                     object.setPosition(position)
-                        .setRotationY(rotationY)
+                        .setRotationY(rotationY);
+                }
+
+                break;
+            case FANCY_PICTURE_FRAME_01:
+                {
+                    const { position = [0, 0, 0], rotationY = 0 } = specs;
+                    const { src } = specs;
+    
+                    this.setupObjectGLTF({ src }, specs);
+    
+                    object = new FancyPictureFrame01(specs);
+                    object.setPosition(position)
+                        .setRotationY(rotationY);
+                }
+
+                break;
+            case VINTAGE_GRANDFATHER_CLOCK:
+                {
+                    const { position = [0, 0, 0], rotationY = 0 } = specs;
+                    const { src } = specs;
+    
+                    this.setupObjectGLTF({ src }, specs);
+    
+                    object = new VintageGrandfatherClock(specs);
+                    object.setPosition(position)
+                        .setRotationY(rotationY);
                 }
 
                 break;

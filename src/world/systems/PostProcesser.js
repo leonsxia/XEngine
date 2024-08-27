@@ -46,7 +46,7 @@ const DEFAULT_SSAA = {
 }
 
 const DEFAULT_BLOOM = {
-    strength: 1.65,  // 1
+    strength: 2.2,  // 1
     radius: .74,  // .5
     threshold: 0,
     enabled: false

@@ -1,0 +1,272 @@
+{
+  "asset": {
+    "generator": "Khronos glTF Blender I/O v1.6.16",
+    "version": "2.0"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        0,
+        1
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "fancy_picture_frame_01"
+    },
+    {
+      "mesh": 1,
+      "name": "fancy_picture_frame_01_canvas"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "fancy_picture_frame_01",
+      "normalTexture": {
+        "index": 0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "fancy_picture_frame_01_canvas",
+      "normalTexture": {
+        "index": 3
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 4
+        },
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 5
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Plane.004",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 0,
+            "NORMAL": 1,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "Plane.005",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1
+        }
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    },
+    {
+      "sampler": 0,
+      "source": 4
+    },
+    {
+      "sampler": 0,
+      "source": 5
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/jpeg",
+      "name": "fancy_picture_frame_01_nor_gl",
+      "uri": "textures/fancy_picture_frame_01_nor_gl_1k.jpg"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "name": "fancy_picture_frame_01_diff",
+      "uri": "textures/fancy_picture_frame_01_diff_1k.jpg"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "name": "fancy_picture_frame_01_rough",
+      "uri": "textures/fancy_picture_frame_01_rough_1k.jpg"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "name": "fancy_picture_frame_01_canvas_nor_gl",
+      "uri": "textures/fancy_picture_frame_01_canvas_nor_gl_1k.jpg"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "name": "fancy_picture_frame_01_canvas_diff",
+      "uri": "textures/fancy_picture_frame_01_canvas_diff_1k.jpg"
+    },
+    {
+      "mimeType": "image/jpeg",
+      "name": "fancy_picture_frame_01_canvas_rough",
+      "uri": "textures/fancy_picture_frame_01_canvas_rough_1k.jpg"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5126,
+      "count": 629,
+      "max": [
+        0.301515132188797,
+        0.23206321895122528,
+        0.0218921210616827
+      ],
+      "min": [
+        -0.301515132188797,
+        -0.23206323385238647,
+        0.001899046590551734
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 629,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 629,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5123,
+      "count": 2808,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 6,
+      "max": [
+        0.2693166136741638,
+        0.19914330542087555,
+        0.006578734610229731
+      ],
+      "min": [
+        -0.27005767822265625,
+        -0.2011447250843048,
+        0.006578703876584768
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "componentType": 5126,
+      "count": 6,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "componentType": 5126,
+      "count": 6,
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 7,
+      "componentType": 5123,
+      "count": 6,
+      "type": "SCALAR"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 7548,
+      "byteOffset": 0
+    },
+    {
+      "buffer": 0,
+      "byteLength": 7548,
+      "byteOffset": 7548
+    },
+    {
+      "buffer": 0,
+      "byteLength": 5032,
+      "byteOffset": 15096
+    },
+    {
+      "buffer": 0,
+      "byteLength": 5616,
+      "byteOffset": 20128
+    },
+    {
+      "buffer": 0,
+      "byteLength": 72,
+      "byteOffset": 25744
+    },
+    {
+      "buffer": 0,
+      "byteLength": 72,
+      "byteOffset": 25816
+    },
+    {
+      "buffer": 0,
+      "byteLength": 48,
+      "byteOffset": 25888
+    },
+    {
+      "buffer": 0,
+      "byteLength": 12,
+      "byteOffset": 25936
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 25948,
+      "uri": "fancy_picture_frame_01.bin"
+    }
+  ]
+}

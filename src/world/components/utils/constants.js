@@ -61,6 +61,8 @@ const PAINTED_WOODEN_WHITE_CABINET = 'PaintedWoodenWhiteCabinet';
 const TELEVISION_01 = 'Television01';
 const MODERN_CEILING_LAMP_01 = 'ModernCeilingLamp01';
 const SECURITY_LIGHT = 'SecurityLight';
+const FANCY_PICTURE_FRAME_01 = 'FancyPictureFrame01';
+const VINTAGE_GRANDFATHER_CLOCK = 'VintageGrandfatherClock';
 
 // post-processing
 const OUTLINE = 'outline';
@@ -149,7 +151,10 @@ const GLTF_NAMES = {
     TELEVISION_01: 'TELEVISION_01',
     // lighting
     MODERN_CEILING_LAMP_01: 'MODERN_CEILING_LAMP_01',
-    SECURITY_LIGHT: 'SECURITY_LIGHT'
+    SECURITY_LIGHT: 'SECURITY_LIGHT',
+    // decorative
+    FANCY_PICTURE_FRAME_01: 'FANCY_PICTURE_FRAME_01',
+    VINTAGE_GRANDFATHER_CLOCK: 'VINTAGE_GRANDFATHER_CLOCK'
 }
 
 const GLTFS = [{
@@ -182,6 +187,10 @@ const GLTFS = [{
     name: GLTF_NAMES.MODERN_CEILING_LAMP_01, src: 'inRoom/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_01_1k.gltf'
 }, {
     name: GLTF_NAMES.SECURITY_LIGHT, src: 'inRoom/lighting/security_light_1k/security_light_1k.gltf'
+}, {
+    name: GLTF_NAMES.FANCY_PICTURE_FRAME_01, src: 'inRoom/decorative/fancy_picture_frame_01_1k/fancy_picture_frame_01_1k.gltf'
+}, {
+    name: GLTF_NAMES.VINTAGE_GRANDFATHER_CLOCK, src: 'inRoom/decorative/vintage_grandfather_clock_01_1k/vintage_grandfather_clock_01_1k.gltf'
 }];
 
 const SHADER_NAMES = {
@@ -250,6 +259,8 @@ export {
     TELEVISION_01,
     MODERN_CEILING_LAMP_01,
     SECURITY_LIGHT,
+    FANCY_PICTURE_FRAME_01,
+    VINTAGE_GRANDFATHER_CLOCK,
 
     OUTLINE,
     SSAO,

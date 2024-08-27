@@ -11,7 +11,7 @@ class SecurityLight extends ObstacleBase {
     depth = .389;
 
     gltf;
-    lightPosition = new Vector3(0, - 1.2, .6);
+    lightPosition = new Vector3(0, - 1.2, .07);
 
     constructor(specs) {
 

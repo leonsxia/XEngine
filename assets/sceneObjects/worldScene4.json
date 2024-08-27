@@ -227,7 +227,7 @@
                     "display": "Directional Light",
                     "detail": {
                         "color": [255, 255, 255],
-                        "intensity": 0.7,
+                        "intensity": 0,
                         "position": [-10, 20, 8.5],
                         "target": [0, 0, 0]
                     },
@@ -244,7 +244,7 @@
                     "display": "Ambient Light",
                     "detail": {
                         "color": [128, 128, 128],
-                        "intensity": 1
+                        "intensity": 0.6
                     },
                     "type": "AmbientLight",
                     "debug": true,
@@ -256,7 +256,7 @@
                     "detail": {
                         "groundColor": [47, 79, 79],
                         "skyColor": [160, 160, 160],
-                        "intensity": 0.5,
+                        "intensity": 0,
                         "position": [0, 4.6, 0]
                     },
                     "type": "HemisphereLight",
@@ -287,6 +287,25 @@
                 },
                 {
                     "name": "room3_pointLight2",
+                    "display": "Ceiling Lamp 2",
+                    "detail": {
+                        "color": [253, 182, 58],
+                        "position": [0, 0, 0],
+                        "intensity": 45,
+                        "distance": 16.77,
+                        "decay": 1
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "room3_modern_ceiling_lamp_01_2",
+                    "turnOn": true
+                },
+                {
+                    "name": "room3_pointLight3",
                     "display": "Security Light",
                     "detail": {
                         "color": [253, 182, 58],
@@ -302,7 +321,8 @@
                     "shadow_cam_show": false,
                     "visible": true,
                     "attachTo": "room3_security_light_1",
-                    "turnOn": true
+                    "turnOn": false,
+                    "alwaysOn": false
                 }
             ],
             "spotLightSpecs": [
@@ -949,6 +969,18 @@
                     "rotationY": 0
                 },
                 {
+                    "type": "ModernCeilingLamp01",
+                    "src": "MODERN_CEILING_LAMP_01",
+                    "name": "room3_modern_ceiling_lamp_01_2",
+                    "scale": [1.2, 1.3],
+                    "isObstacle": false,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [-6.5, 3.2, -1.6],
+                    "rotationY": 0
+                },
+                {
                     "type": "SecurityLight",
                     "src": "SECURITY_LIGHT",
                     "name": "room3_security_light_1",
@@ -958,6 +990,30 @@
                     "movable": false,
                     "climbable": false,
                     "position": [0, 0.83, -9.78],
+                    "rotationY": 0
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "name": "room3_fancy_picture_fram_01_1",
+                    "scale": [2, 2, 1.5],
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [5.75, -1.7, -9.98],
+                    "rotationY": 0
+                },
+                {
+                    "type": "VintageGrandfatherClock",
+                    "src": "VINTAGE_GRANDFATHER_CLOCK",
+                    "name": "room3_vintage_grandfather_clock_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "position": [2.1, 3, -7.4],
                     "rotationY": 0
                 }
             ],
