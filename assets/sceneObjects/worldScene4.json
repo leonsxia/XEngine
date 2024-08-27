@@ -355,7 +355,7 @@
     ],
     "objects": [
         {
-            "room": "scene",
+            "type": "Scene",
             "children": [
                 {
                     "type": "Axes",
@@ -391,7 +391,6 @@
             ]
         },
         {
-            "room": "room1",
             "type": "Room",
             "width": 10,
             "height": 4.6,
@@ -613,7 +612,6 @@
             "insideWalls": []
         },
         {
-            "room": "room2",
             "type": "Room",
             "width": 10,
             "height": 4.6,
@@ -768,7 +766,6 @@
             "insideWalls": []
         },
         {
-            "room": "room3",
             "type": "Room",
             "width": 20,
             "height": 9.2,

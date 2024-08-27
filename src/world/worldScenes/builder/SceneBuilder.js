@@ -14,7 +14,7 @@ import {
     DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
     AXES, GRID, TRAIN, TOFU,
     PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
-    ROOM, SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
+    ROOM, SCENE, SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
     WOODEN_PICNIC_TABLE, WOODEN_SMALL_TABLE, ROUND_WOODEN_TABLE, PAINTED_WOODEN_TABLE, PAINTED_WOODEN_NIGHTSTAND,
     PAINTED_WOODEN_BLUE_CHAIR, PAINTED_WOODEN_WHITE_CHAIR, PAINTED_WOODEN_STOOL, SOFA_03,
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
@@ -57,7 +57,7 @@ class SceneBuilder {
             worldScene.sceneSavedSetup = JSON.parse(JSON.stringify(setup));
     
             const { players, lights, objects } = setup;
-            const sceneSpecs = objects.find(o => o.room === 'scene');
+            const sceneSpecs = objects.find(o => o.type === SCENE);
             const roomSpecs = objects.filter(o => o.type === ROOM);
     
             worldScene.players = this.buildPlayers(players);
@@ -360,7 +360,7 @@ class SceneBuilder {
     updateScene(_setup, _targetSetup, needResetPlayers = false, updateSetupOnly = false) {
 
         const { players, lights, objects } = _setup;
-        const sceneSpecs = objects.find(o => o.room === 'scene');
+        const sceneSpecs = objects.find(o => o.type === SCENE);
         const roomSpecs = objects.filter(o => o.type === ROOM);
 
         players.forEach(p => {
@@ -405,7 +405,7 @@ class SceneBuilder {
 
             if (o.type !== AXES && o.type !== GRID) {
 
-                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === 'scene').children.find(f => f.type === o.type && f.name === o.name);
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.type === SCENE).children.find(f => f.type === o.type && f.name === o.name);
                 this.updateObject(o, _target, updateSetupOnly);
 
             }
@@ -413,31 +413,31 @@ class SceneBuilder {
 
         roomSpecs.forEach(room => {
 
-            this.worldScene.rooms.find(r => r.name === room.room).resetDefaultWalls();
+            this.worldScene.rooms.find(r => r.name === room.name).resetDefaultWalls();
 
             room.groups.forEach(group => {
                 
-                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).groups.find(f => f.type === group.type && f.name === group.name);
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).groups.find(f => f.type === group.type && f.name === group.name);
                 this.updateObject(group, _target, updateSetupOnly);
             
             });
             room.floors.forEach(floor => {
                 
-                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).floors.find(f => f.type === floor.type && f.name === floor.name);
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).floors.find(f => f.type === floor.type && f.name === floor.name);
                 this.updateObject(floor, _target, updateSetupOnly);
 
             });
 
             room.ceilings.forEach(ceiling => {
                 
-                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).ceilings.find(f => f.type === ceiling.type && f.name === ceiling.name);
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).ceilings.find(f => f.type === ceiling.type && f.name === ceiling.name);
                 this.updateObject(ceiling, _target, updateSetupOnly);
             
             });
 
             room.walls.forEach(wall => {
                 
-                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).walls.find(f => f.type === wall.type && f.name === wall.name);
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).walls.find(f => f.type === wall.type && f.name === wall.name);
                 this.updateObject(wall, _target, updateSetupOnly);
             
             });
@@ -445,7 +445,7 @@ class SceneBuilder {
 
             room.insideWalls.forEach(inwall => {
                 
-                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.room === room.room).insideWalls.find(f => f.type === inwall.type && f.name === inwall.name);
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).insideWalls.find(f => f.type === inwall.type && f.name === inwall.name);
                 this.updateObject(inwall, _target, updateSetupOnly);
             
             });

@@ -38,6 +38,7 @@ const STAIRS_FRONT = 'StairsFront';
 const STAIRS_TOP = 'StairsTop';
 
 // composite objects
+const SCENE = 'Scene';
 const ROOM = 'Room';
 const SQUARE_PILLAR = 'SquarePillar';
 const LWALL = 'LWall';
@@ -236,6 +237,7 @@ export {
     STAIRS_FRONT,
     STAIRS_TOP,
 
+    SCENE,
     ROOM,
     SQUARE_PILLAR,
     LWALL,

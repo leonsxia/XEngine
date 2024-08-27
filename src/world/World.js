@@ -2,6 +2,7 @@ import { WorldScene1 } from "./worldScenes/WorldScene1";
 import { WorldScene2 } from "./worldScenes/WorldScene2";
 import { WorldScene3 } from "./worldScenes/WorldScene3";
 import { WorldScene4 } from "./worldScenes/WorldScene4";
+import { Mansion } from "./worldScenes/Mansion";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
@@ -14,7 +15,7 @@ import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS, SHADERS } from "./components/utils/constants";
 
 const config = { 
-    scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics'],  // scene list for scene selector
+    scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Mansion'],  // scene list for scene selector
 };
 const movementTypes = ['tankmove'];
 const moveActions = ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump'];
@@ -64,6 +65,7 @@ class World {
         this.worldScenes.push(new WorldScene2(container, this.#renderer, config, this.#movementEventDispatcher));
         this.worldScenes.push(new WorldScene3(container, this.#renderer, config, this.#movementEventDispatcher));
         this.worldScenes.push(new WorldScene4(container, this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new Mansion(container, this.#renderer, config, this.#movementEventDispatcher));
         // this.bindAllMoves();
 
     }
