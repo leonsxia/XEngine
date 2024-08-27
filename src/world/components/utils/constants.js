@@ -89,10 +89,14 @@ const TEXTURE_NAMES = {
     CONCRETE_128_NORMAL: 'CONCRETE_128_NORMAL',
     CONCRETE_132: 'CONCRETE_132',
     CONCRETE_132_NORMAL: 'CONCRETE_132_NORMAL',
+    CONCRETE_165: 'CONCRETE_165',
+    CONCRETE_165_NORMAL: 'CONCRETE_165_NORMAL',
     BRICK_159: 'BRICK_159',
     BRICK_159_NORMAL: 'BRICK_159_NORMAL',
     FABRIC_190: 'FABRIC_190',
     FABRIC_190_NORMAL: 'FABRIC_190_NORMAL',
+    FABRIC_197: 'FABRIC_197',
+    FABRIC_197_NORMAL: 'FABRIC_197_NORMAL',
     STONE_165: 'STONE_165',
     STONE_165_NORMAL: 'STONE_165_NORMAL',
     WOOD_156: 'WOOD_156',
@@ -104,7 +108,11 @@ const TEXTURE_NAMES = {
     METAL_272: 'METAL_272',
     METAL_272_NORMAL: 'METAL_272_NORMAL',
     METAL_274: 'METAL_274',
-    METAL_274_NORMAL: 'METAL_274_NORMAL'
+    METAL_274_NORMAL: 'METAL_274_NORMAL',
+    METAL_290: 'METAL_290',
+    METAL_290_NORMAL: 'METAL_290_NORMAL',
+    METAL_292: 'METAL_292',
+    METAL_292_NORMAL: 'METAL_292_NORMAL'
 }
 
 const TEXTURES = [{
@@ -114,9 +122,13 @@ const TEXTURES = [{
 }, {
     name: TEXTURE_NAMES.CONCRETE_132, map: 'assets/textures/walls/Texturelabs_Concrete_132M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_132L.jpg'
 }, {
+    name: TEXTURE_NAMES.CONCRETE_165, map: 'assets/textures/walls/Texturelabs_Concrete_165M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_165L.jpg'
+}, {
     name: TEXTURE_NAMES.BRICK_159, map: 'assets/textures/walls/Texturelabs_Brick_159M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Brick_159L.jpg'
 }, {
     name: TEXTURE_NAMES.FABRIC_190, map: 'assets/textures/walls/Texturelabs_Fabric_190M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Fabric_190L.jpg'
+}, {
+    name: TEXTURE_NAMES.FABRIC_197, map: 'assets/textures/walls/Texturelabs_Fabric_197M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Fabric_197L.jpg'
 }, {
     name: TEXTURE_NAMES.STONE_165, map: 'assets/textures/walls/Texturelabs_Stone_165M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Stone_165L.jpg'
 }, {
@@ -129,6 +141,10 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.METAL_272, map: 'assets/textures/walls/Texturelabs_Metal_272M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_272L.jpg'
 }, {
     name: TEXTURE_NAMES.METAL_274, map: 'assets/textures/walls/Texturelabs_Metal_274M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_274L.jpg'
+}, {
+    name: TEXTURE_NAMES.METAL_290, map: 'assets/textures/walls/Texturelabs_Metal_290M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_290L.jpg'
+}, {
+    name: TEXTURE_NAMES.METAL_292, map: 'assets/textures/walls/Texturelabs_Metal_292M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_292L.jpg'
 }];
 
 // gltfs
