@@ -87,6 +87,8 @@ const TEXTURE_NAMES = {
     CRATE_NORMAL: 'CRATE_NORMAL',
     PORTRAIT_1: 'PORTRAIT_1',
     PORTRAIT_1_NORMAL: 'PORTRAIT_1_NORMAL',
+    LIGHT_BROWN_CARPET: 'LIGHT_BROWN_CARPET',
+    LIGHT_BROWN_CARPET_NORMAL: 'LIGHT_BROWN_CARPET_NORMAL',
     CONCRETE_128: 'CONCRETE_128',
     CONCRETE_128_NORMAL: 'CONCRETE_128_NORMAL',
     CONCRETE_132: 'CONCRETE_132',
@@ -121,6 +123,8 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.CRATE, map: 'assets/textures/crate.png', normalMap: 'assets/textures/normals/crate.jpg'
 }, {
     name: TEXTURE_NAMES.PORTRAIT_1, map: 'assets/textures/portraits/leon.jpg', normalMap: 'assets/textures/normals/leon.jpg'
+}, {
+    name: TEXTURE_NAMES.LIGHT_BROWN_CARPET, map: 'assets/textures/carpets/Light_Brown_Carpet.jpg', normalMap: 'assets/textures/normals/Light_Brown_Carpet.jpg'
 }, {
     name: TEXTURE_NAMES.CONCRETE_128, map: 'assets/textures/walls/Texturelabs_Concrete_128M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_128L.jpg'
 }, {
