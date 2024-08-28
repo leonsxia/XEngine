@@ -97,21 +97,27 @@ class SquarePillar extends InWallObjectBase {
             switch(i) {
                 case 0:
                     this.frontFace.mesh.visible = false;
+                    this.frontFace.castShadow(false);
                     break;
                 case 1:
                     this.backFace.mesh.visible = false;
+                    this.frontFace.castShadow(false);
                     break;
                 case 2:
                     this.leftFace.mesh.visible = false;
+                    this.frontFace.castShadow(false);
                     break;
                 case 3:
                     this.rightFace.mesh.visible = false;
+                    this.frontFace.castShadow(false);
                     break;
                 case 4:
                     this.topFace.mesh.visible = false;
+                    this.frontFace.castShadow(false);
                     break;
                 case 5:
                     this.bottomFace.mesh.visible = false;
+                    this.frontFace.castShadow(false);
                     break;
             }
 
