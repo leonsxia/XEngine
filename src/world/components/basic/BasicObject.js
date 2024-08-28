@@ -186,7 +186,11 @@ class BasicObject {
             mapRatio 
         } = this.specs;
 
-        texture.colorSpace = SRGBColorSpace;
+        if (!isNormal) {
+
+            texture.colorSpace = SRGBColorSpace;
+            
+        }
 
         if (rotationT) {
 
