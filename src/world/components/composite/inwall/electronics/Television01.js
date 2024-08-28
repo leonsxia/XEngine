@@ -1,12 +1,12 @@
 import { Object3D, Vector3 } from 'three';
 import { createOBBBox } from '../../../physics/collisionHelper';
-import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionBox, Box } from '../../../Models';
 import { deepSkyBlue } from '../../../basic/colorBase';
+import { LightLamp } from '../lighting/LightLamp';
 
 const GLTF_SRC = 'inRoom/electronics/Television_01_1k/Television_01_1k.gltf';
 
-class Television01 extends ObstacleBase {
+class Television01 extends LightLamp {
 
     width = .6;
     height = .456;

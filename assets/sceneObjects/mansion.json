@@ -97,25 +97,6 @@
                     "turnOn": true
                 },
                 {
-                    "name": "room1_pointLight3",
-                    "display": "Ceiling Lamp 3",
-                    "detail": {
-                        "color": [245, 200, 122],
-                        "position": [0, 0, 0],
-                        "intensity": 60,
-                        "distance": 0,
-                        "decay": 2
-                    },
-                    "debug": true,
-                    "shadow": true,
-                    "shadow_debug": true,
-                    "helper_show": false,
-                    "shadow_cam_show": false,
-                    "visible": true,
-                    "attachTo": "room1_modern_ceiling_lamp_01_3",
-                    "turnOn": true
-                },
-                {
                     "name": "room1_pointLight4",
                     "display": "Security Light 1",
                     "detail": {
@@ -551,10 +532,6 @@
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_1",
                     "scale": [1.2, 1.3],
-                    "isObstacle": false,
-                    "enableWallOBBs": false,
-                    "movable": false,
-                    "climbable": false,
                     "position": [0, 3.93, 7.5],
                     "rotationY": 0
                 },
@@ -563,23 +540,7 @@
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_2",
                     "scale": [1.2, 1.3],
-                    "isObstacle": false,
-                    "enableWallOBBs": false,
-                    "movable": false,
-                    "climbable": false,
                     "position": [0, 3.93, -7.5],
-                    "rotationY": 0
-                },
-                {
-                    "type": "ModernCeilingLamp01",
-                    "src": "MODERN_CEILING_LAMP_01",
-                    "name": "room1_modern_ceiling_lamp_01_3",
-                    "scale": [1.2, 1.3],
-                    "isObstacle": false,
-                    "enableWallOBBs": false,
-                    "movable": false,
-                    "climbable": false,
-                    "position": [0, -0.92, 12.5],
                     "rotationY": 0
                 },
                 {
@@ -587,10 +548,6 @@
                     "src": "SECURITY_LIGHT",
                     "name": "room1_security_light_1",
                     "scale": [1.2, 1.3, 1.1],
-                    "isObstacle": false,
-                    "enableWallOBBs": false,
-                    "movable": false,
-                    "climbable": false,
                     "position": [0, -1.5, -5.1945],
                     "rotationY": 3.1416
                 },
@@ -599,11 +556,7 @@
                     "src": "SECURITY_LIGHT",
                     "name": "room1_security_light_2",
                     "scale": [1.2, 1.3, 1.1],
-                    "isObstacle": false,
-                    "enableWallOBBs": false,
-                    "movable": false,
-                    "climbable": false,
-                    "position": [-14.8055, -1.5, 0],
+                    "position": [-14.8055, 2.75, 0],
                     "rotationY": 1.5708
                 },
                 {
@@ -611,11 +564,7 @@
                     "src": "SECURITY_LIGHT",
                     "name": "room1_security_light_3",
                     "scale": [1.2, 1.3, 1.1],
-                    "isObstacle": false,
-                    "enableWallOBBs": false,
-                    "movable": false,
-                    "climbable": false,
-                    "position": [14.8055, -1.5, 0],
+                    "position": [14.8055, 2.75, 0],
                     "rotationY": -1.5708
                 }
             ],

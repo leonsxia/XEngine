@@ -316,7 +316,7 @@ class SimplePhysics {
     }
 
     tick(delta) {
-        if (delta > 0.0333) { // lost frame when fps lower than 30fps
+        if (delta > 0.04167) { // lost frame when fps lower than 24fps
 
             return;
 

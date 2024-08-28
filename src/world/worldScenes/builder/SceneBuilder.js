@@ -1300,9 +1300,10 @@ class SceneBuilder {
             case FANCY_PICTURE_FRAME_01:
                 {
                     const { position = [0, 0, 0], rotationY = 0 } = specs;
-                    const { src } = specs;
+                    const { src, img, imgNormal } = specs;
     
                     this.setupObjectGLTF({ src }, specs);
+                    this.setupObjectTextures([{ img }, { imgNormal }], specs);
     
                     object = new FancyPictureFrame01(specs);
                     object.setPosition(position)

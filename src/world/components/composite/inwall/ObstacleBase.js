@@ -2,9 +2,9 @@ import { Group, MathUtils } from 'three';
 import { createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, BLOOM_SCENE_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
-import { updateSingleLightCamera } from '../../shadowMaker';
+
 
 class ObstacleBase extends ObstacleMoveable {
 
@@ -23,8 +23,6 @@ class ObstacleBase extends ObstacleMoveable {
 
     cObjects = [];
 
-    bloomObjects = [];
-
     // set to false, will not add to room obstacles, so the physics engine will ignore this object.
     isObstacle = false;
     // set four vetical face to OBBPlane, so it can iteract with other object or player
@@ -35,10 +33,6 @@ class ObstacleBase extends ObstacleMoveable {
     movable = false;
     // falling ground
     hittingGround;
-
-    lightObjs = [];
-    lightIntensities = [];
-    alwaysOn = true;
 
     specs;
 
@@ -110,43 +104,6 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
-    addBloomObjects() {
-
-        this.bloomObjects.forEach(bloom => {
-
-            if (bloom.isMesh) {
-
-                this.group.add(bloom);
-
-            } else {
-
-                this.group.add(bloom.mesh);
-
-            }
-
-        });
-
-        return this;
-    }
-
-    setBloomObjectsTransparent(opacity = .1) {
-
-        this.bloomObjects.forEach(bloom => {
-
-            if (bloom.isMesh) {
-
-                bloom.material.transparent = true;
-                bloom.material.opacity = opacity;
-
-            } else {
-
-                bloom.setTransparent(true, opacity);
-
-            }
-
-        });
-    }
-
     setPickLayers() {
 
         const meshes = getVisibleMeshes(this.group);
@@ -155,60 +112,6 @@ class ObstacleBase extends ObstacleMoveable {
 
             m.layers.enable(CAMERA_RAY_LAYER);
             m.layers.enable(PLAYER_CAMERA_RAY_LAYER);
-
-        });
-
-    }
-
-    setBloomObjectsFather() {
-
-        this.bloomObjects.forEach(bloom => {
-
-            if (bloom.isMesh) {
-
-                bloom.father = this;
-
-            } else {
-
-                bloom.mesh.father = this;
-
-            }
-
-        });
-
-    }
-
-    setBloomObjectsLayers() {
-
-        this.bloomObjects.forEach(bloom => {
-
-            if (bloom.isMesh) {
-
-                bloom.layers.enable(BLOOM_SCENE_LAYER);
-
-            } else {
-
-                bloom.mesh.layers.enable(BLOOM_SCENE_LAYER);
-
-            }
-
-        });
-
-    }
-
-    setBloomObjectsVisible(show) {
-
-        this.bloomObjects.forEach(bloom => {
-
-            if (bloom.isMesh) {
-
-                bloom.visible = show;
-
-            } else {
-
-                bloom.mesh.visible = show;
-
-            }
 
         });
 
@@ -342,48 +245,11 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
-    updateLightObjects() {
-
-        this.lightObjs?.forEach(l => {
-
-            updateSingleLightCamera.call(null, l, false);
-
-        });
-
-    }
-
-    turnOffLights() {
-
-        for (let i = 0; i < this.lightObjs.length; i++) {
-
-            const { light } = this.lightObjs[i];
-
-            this.lightIntensities[i] = light.intensity;
-            light.intensity = 0;
-
-        }
-
-    }
-
-    turnOnLights() {
-
-        for (let i = 0; i < this.lightObjs.length; i++) {
-
-            const { light } = this.lightObjs[i];
-
-            light.intensity = this.lightIntensities[i];
-
-        }
-
-    }
-
     tickFall(delta) {
 
         this.fallingTick({ delta, obstacle: this });
 
         this.updateOBBs();
-
-        this.updateLightObjects();
 
     }
 
@@ -392,8 +258,6 @@ class ObstacleBase extends ObstacleMoveable {
         this.onGroundTick({ floor: this.hittingGround, obstacle: this });
         
         this.updateOBBs();
-
-        this.updateLightObjects();
         
     }
 

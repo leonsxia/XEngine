@@ -1,11 +1,11 @@
 import { Vector3 } from 'three';
-import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, Sphere } from '../../../Models';
 import { khaki } from '../../../basic/colorBase';
+import { LightLamp } from './LightLamp';
 
 const GLTF_SRC = 'inRoom/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_01_1k.gltf';
 
-class ModernCeilingLamp01 extends ObstacleBase {
+class ModernCeilingLamp01 extends LightLamp {
 
     radius = .2157;
     ropeHeight = .583;

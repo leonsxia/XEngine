@@ -1,10 +1,10 @@
 import { Vector3 } from 'three';
-import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel } from '../../../Models';
+import { LightLamp } from './LightLamp';
 
 const GLTF_SRC = 'inRoom/lighting/security_light_1k/security_light_1k.gltf';
 
-class SecurityLight extends ObstacleBase {
+class SecurityLight extends LightLamp {
 
     width = .33;
     height = .52;
