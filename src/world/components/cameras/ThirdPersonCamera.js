@@ -1,5 +1,4 @@
 import { Vector3, Raycaster, ArrowHelper, Object3D } from 'three';
-import { Camera } from './Camera';
 import { green, red, yellow } from '../basic/colorBase';
 import { PLAYER_CAMERA_RAY_LAYER } from '../utils/constants';
 
@@ -7,7 +6,10 @@ const PADDING = .1;
 const HEADLENGTH = .5;
 const HEADWIDTH = .1;
 
-class ThirdPersonCamera extends Camera {
+class ThirdPersonCamera {
+
+    camera;
+    target;
 
     #player;
     #control;
@@ -41,9 +43,14 @@ class ThirdPersonCamera extends Camera {
     #invisibleOpacity = .15;
     #intersectObjects = [];
 
+    isThirdPersonCamera = true;
+
     constructor(specs) {
 
-        super(specs);
+        const { defaultCamera } = specs;
+
+        this.camera = defaultCamera.camera;
+        this.target = defaultCamera.target;
 
     }
 
@@ -80,15 +87,6 @@ class ThirdPersonCamera extends Camera {
     get playerBottomBackRight() {
 
         return new Vector3(- this.#player.width * .5 + PADDING, 0, - this.#player.depth * .5 + PADDING);
-
-    }
-
-    /**
-     * @param {any} p
-     */
-    set player(p) {
-
-        this.#player = p;
 
     }
 
@@ -237,7 +235,7 @@ class ThirdPersonCamera extends Camera {
 
         this.rays.forEach(ray => {
 
-            intersects = intersects.concat(ray.intersectObjects(this.#scene.children));
+            intersects.push(...ray.intersectObjects(this.#scene.children));
 
         });
 

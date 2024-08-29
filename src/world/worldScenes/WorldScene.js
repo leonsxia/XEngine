@@ -1,4 +1,6 @@
+import { Camera } from '../components/cameras/Camera.js';
 import { ThirdPersonCamera } from '../components/cameras/ThirdPersonCamera.js';
+import { InspectorCamera } from '../components/cameras/InspectorCamera.js';
 import { createScene } from '../components/scene.js';
 import { WorldControls } from '../systems/Controls.js';
 import { updateSingleLightCamera } from '../components/shadowMaker.js';
@@ -19,7 +21,8 @@ class WorldScene {
     setup = {};
     name = 'default scene';
 
-    cameraObj = null;
+    thirdPersonCamera = null;
+    inspectorCamera = null;
     camera = null;
     scene = null;
     renderer = null;
@@ -71,8 +74,22 @@ class WorldScene {
 
         this.container = container;
         this.renderer = renderer;
-        this.cameraObj = new ThirdPersonCamera(specs.camera);
-        this.camera = this.cameraObj.camera;
+
+        const { enableTPC = false, enableIC = false } = specs;
+        const defaultCamera = new Camera(specs.camera);
+        this.camera = defaultCamera.camera;
+
+        if (enableTPC) {
+
+            this.thirdPersonCamera = new ThirdPersonCamera({ defaultCamera });
+
+        }
+
+        if (enableIC) {
+
+            this.inspectorCamera = new InspectorCamera({ defaultCamera });
+
+        }
         
         this.scene = createScene(specs.scene.backgroundColor);
         this.postProcessor = new PostProcessor(renderer, this.scene, this.camera, container);
@@ -101,6 +118,11 @@ class WorldScene {
             // important!!! no need to render after scene start to update automatically
             // increase the performance fps
             if (this.staticRendering && this.forceStaticRender) this.render();
+
+            const pos = this.camera.position;
+            const tar = this.controls.defControl.target;
+            // console.log(`camera position: x: ${pos.x}, y: ${pos.y}, z: ${pos.z}`);
+            // console.log(`camera target: x: ${tar.x}, y: ${tar.y}, z: ${tar.z}`);
 
         });
 
@@ -495,7 +517,7 @@ class WorldScene {
 
         }
 
-        if (this.player) {
+        if (this.thirdPersonCamera) {
 
             this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
                 folder: 'Third Person Camera',
@@ -503,10 +525,29 @@ class WorldScene {
                 name: 'TPC',
                 value: { TPC: 'disable' },
                 params: ['enable', 'disable'],
-                type: 'dropdown',
+                type: 'camera-dropdown',
                 changeFn: this.enableTPC.bind(this),
                 close: true
             }));
+
+        }
+
+        if (this.inspectorCamera) {
+
+            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+                folder: 'Inspector Camera',
+                parent: 'inspectorCamera',
+                name: 'InsCam',
+                value: { InsCam: 'disable' },
+                params: ['enable', 'disable'],
+                type: 'camera-dropdown',
+                changeFn: this.enableIC.bind(this),
+                close: true
+            }));
+
+        }
+
+        if (this.player) {
 
             const folder = makeFolderGuiConfig({folder: 'Player Control', parent: 'playerControl', close: true});
 
@@ -675,13 +716,10 @@ class WorldScene {
 
             this.scene.add(this.player.group);
 
-            if (firstLoad) {
-                
-                this.cameraObj.player = this.player;
+            if (!firstLoad) {
 
-            } else {
-
-                this.cameraObj.changePlayer(this.player);
+                this.thirdPersonCamera?.changePlayer(this.player);
+                this.inspectorCamera?.changePlayer(this.player);
                 
             }
 
@@ -1018,19 +1056,40 @@ class WorldScene {
 
             const idx = updatables.findIndex(f => f === this.controls.defControl);
             updatables.splice(idx, 1);
-            updatables.push(this.cameraObj);
-            this.scene.add(...this.cameraObj.rayArrows);
+            updatables.push(this.thirdPersonCamera);
+            this.scene.add(...this.thirdPersonCamera.rayArrows);
 
-            this.cameraObj.setPositionFromPlayer();
+            this.thirdPersonCamera.setPositionFromPlayer();
 
         } else {
 
-            const idx = updatables.findIndex(f => f === this.cameraObj);
+            const idx = updatables.findIndex(f => f === this.thirdPersonCamera);
             updatables.splice(idx, 1);
             updatables.push(this.controls.defControl);
-            this.scene.remove(...this.cameraObj.rayArrows);
+            this.scene.remove(...this.thirdPersonCamera.rayArrows);
             
-            this.cameraObj.resetInterectObjects();
+            this.thirdPersonCamera.resetInterectObjects();
+
+        }
+
+    }
+
+    enableIC(enable) {
+
+        const e = enable === 'enable' ? true : false;
+        const { updatables } = this.loop;
+
+        if (e) {
+
+            const idx = updatables.findIndex(f => f === this.controls.defControl);
+            updatables.splice(idx, 1);
+            updatables.push(this.inspectorCamera);
+
+        } else {
+
+            const idx = updatables.findIndex(f => f === this.inspectorCamera);
+            updatables.splice(idx, 1);
+            updatables.push(this.controls.defControl);
 
         }
 

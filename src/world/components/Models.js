@@ -26,6 +26,7 @@ export { OBBBox } from './physics/OBBBox.js';
 
 // room/inwall
 export { Room } from './composite/room/Room.js';
+export { InspectorRoom } from './composite/room/InspectorRoom.js';
 export { SquarePillar } from './composite/inwall/SquarePillar.js';
 export { LWall } from './composite/inwall/LWall.js';
 export { CylinderPillar } from './composite/inwall/CylinderPillar.js';

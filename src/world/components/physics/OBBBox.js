@@ -1,4 +1,4 @@
-import { EdgesGeometry, LineSegments, LineBasicMaterial, Vector3 } from 'three';
+import { EdgesGeometry, LineSegments, LineBasicMaterial, Vector3, MathUtils } from 'three';
 import { OBB } from 'three/examples/jsm/Addons.js';
 import { Box } from '../Models';
 import { white } from '../basic/colorBase';
@@ -35,6 +35,42 @@ class OBBBox extends Box {
     get obb() {
 
         return this.mesh.userData.obb;
+
+    }
+
+    get rotationXDegree() {
+
+        return MathUtils.radToDeg(this.mesh.rotation.x);
+
+    }
+
+    set rotationXDegree(value) {
+
+        this.mesh.rotation.x = MathUtils.degToRad(value);
+
+    }
+
+    get rotationYDegree() {
+
+        return MathUtils.radToDeg(this.mesh.rotation.y);
+
+    }
+
+    set rotationYDegree(value) {
+
+        this.mesh.rotation.y = MathUtils.degToRad(value);
+
+    }
+
+    get rotationZDegree() {
+
+        return MathUtils.radToDeg(this.mesh.rotation.z);
+
+    }
+
+    set rotationZDegree(value) {
+
+        this.mesh.rotation.z = MathUtils.degToRad(value);
 
     }
 

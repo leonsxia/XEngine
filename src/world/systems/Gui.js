@@ -3,6 +3,8 @@ import Stats from 'stats.js';
 
 const CONTROL_TITLES = ['Menu', 'Lights Control', 'Objects Control'];
 const PLAYER_CONTROL = 'Player Control';
+const TPC_CONTROL = 'Third Person Camera';
+const IC_CONTROL = 'Inspector Camera';
 
 class Gui {
 
@@ -195,6 +197,7 @@ class Gui {
                     case 'scene-dropdown':
                     case 'control-dropdown':
                     case 'role-dropdown':
+                    case 'camera-dropdown':
 
                         folder.add(parent, property, spec.params).listen().name(displayName).identifier = target;
 
@@ -301,6 +304,29 @@ class Gui {
                         this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
                             .controllers.find(c => c._name === 'BF')
                             .setValue('hide');
+
+                        break;
+
+                    case 'camera-dropdown':
+
+                        if (val === 'enable') {
+                            
+                            if (find.parent === 'inspectorCamera') {
+
+                                this.#guis[0].folders.find(f => f._title === TPC_CONTROL)
+                                    .controllers.find(c => c._name === 'TPC')
+                                    .setValue('disable');
+
+                            } else if (find.parent === 'thirdPersonCamera') {
+
+                                this.#guis[0].folders.find(f => f._title === IC_CONTROL)
+                                    .controllers.find(c => c._name === 'InsCam')
+                                    .setValue('disable');
+
+                            }
+                        }
+
+                        find.changeFn(val);
 
                         break;
 

@@ -40,6 +40,7 @@ const STAIRS_TOP = 'StairsTop';
 // composite objects
 const SCENE = 'Scene';
 const ROOM = 'Room';
+const INSPECTOR_ROOM = 'InspectorRoom';
 const SQUARE_PILLAR = 'SquarePillar';
 const LWALL = 'LWall';
 const CYLINDER_PILLAR = 'CylinderPillar';
@@ -263,6 +264,7 @@ export {
 
     SCENE,
     ROOM,
+    INSPECTOR_ROOM,
     SQUARE_PILLAR,
     LWALL,
     CYLINDER_PILLAR,

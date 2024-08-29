@@ -1,7 +1,9 @@
 import { createAxesHelper, createGridHelper } from "../../components/utils/helpers.js";
 import { createBasicLights, createPointLights, createSpotLights } from "../../components/lights.js";
 import {
-    Train, Tofu, Plane, OBBPlane, CollisionPlane, CollisionOBBPlane, Room, SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs,
+    Train, Tofu, Plane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
+    Room, InspectorRoom, 
+    SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs,
     WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand,
     PaintedWoodenBlueChair, PaintedWoodenWhiteChair, PaintedWoodenStool, Sofa03,
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
@@ -14,7 +16,8 @@ import {
     DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
     AXES, GRID, TRAIN, TOFU,
     PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
-    ROOM, SCENE, SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
+    ROOM, INSPECTOR_ROOM, SCENE, 
+    SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
     WOODEN_PICNIC_TABLE, WOODEN_SMALL_TABLE, ROUND_WOODEN_TABLE, PAINTED_WOODEN_TABLE, PAINTED_WOODEN_NIGHTSTAND,
     PAINTED_WOODEN_BLUE_CHAIR, PAINTED_WOODEN_WHITE_CHAIR, PAINTED_WOODEN_STOOL, SOFA_03,
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
@@ -58,7 +61,7 @@ class SceneBuilder {
     
             const { players, lights, objects } = setup;
             const sceneSpecs = objects.find(o => o.type === SCENE);
-            const roomSpecs = objects.filter(o => o.type === ROOM);
+            const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);
     
             worldScene.players = this.buildPlayers(players);
     
@@ -296,6 +299,7 @@ class SceneBuilder {
             room.addInsideWalls(insideWalls);
     
             room.updateOBBnRay();
+            room.updateAreasOBBBox?.(false);
     
             loadPromises.push(room.init());
     
@@ -361,7 +365,7 @@ class SceneBuilder {
 
         const { players, lights, objects } = _setup;
         const sceneSpecs = objects.find(o => o.type === SCENE);
-        const roomSpecs = objects.filter(o => o.type === ROOM);
+        const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);
 
         players.forEach(p => {
 
@@ -414,6 +418,16 @@ class SceneBuilder {
         roomSpecs.forEach(room => {
 
             this.worldScene.rooms.find(r => r.name === room.name).resetDefaultWalls();
+
+            if (room.type === INSPECTOR_ROOM) {
+                
+                room.areas.forEach(area => {
+
+                    const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).areas.find(f => f.name === area.name);
+                    this.updateObject(area, _target, updateSetupOnly);
+                    
+                });
+            }
 
             room.groups.forEach(group => {
                 
@@ -949,6 +963,29 @@ class SceneBuilder {
                         .setRotationY(rotationY);
                     
                     if (updateOBBnRay) object.updateOBBnRay();
+                }
+    
+                break;
+            case INSPECTOR_ROOM:
+                {
+                    const { position = [0, 0, 0], rotationY = 0, updateOBBnRay = true } = specs;
+                    const { frontMap, backMap, leftMap, rightMap } = specs;
+                    const { frontNormal, backNormal, leftNormal, rightNormal } = specs;
+    
+                    const maps = [{ frontMap }, { backMap }, { leftMap }, { rightMap }, { frontNormal }, { backNormal }, { leftNormal }, { rightNormal }];
+    
+                    this.setupObjectTextures(maps, specs);
+    
+                    object = new InspectorRoom(specs);
+                    object.setPosition(position)
+                        .setRotationY(rotationY);
+                    
+                    if (updateOBBnRay) {
+
+                        object.updateOBBnRay();
+                        object.updateAreasOBBBox(false);
+
+                    }
                 }
     
                 break;

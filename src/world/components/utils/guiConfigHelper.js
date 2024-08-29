@@ -734,7 +734,7 @@ function makeObjectsGuiConfig(objects) {
             changeFn: posChangeFn
         }));
 
-        if (!object.isPlayer && !object.father.isFloor && !object.father.isCeiling) {
+        if (!object.isPlayer && !object.father.isFloor && !object.father.isCeiling && !object.father.isArea) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationYDegree',
@@ -777,6 +777,48 @@ function makeObjectsGuiConfig(objects) {
                 }
             }));
             
+        }
+
+        if (object.father.isArea) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'rotationXDegree',
+                prop: 'rotation.x',
+                value: object.father,
+                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                type: 'object-angle',
+                changeFn: () => {
+
+                        object.father.updateOBB();
+
+                }
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'rotationYDegree',
+                prop: 'rotation.y',
+                value: object.father,
+                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                type: 'object-angle',
+                changeFn: () => {
+
+                        object.father.updateOBB();
+
+                }
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'rotationZDegree',
+                prop: 'rotation.z',
+                value: object.father,
+                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                type: 'object-angle',
+                changeFn: () => {
+
+                        object.father.updateOBB();
+
+                }
+            }));
         }
 
         objectPanel.details.push(folder);
