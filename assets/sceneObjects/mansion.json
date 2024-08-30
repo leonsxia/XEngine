@@ -60,7 +60,7 @@
             "pointLightSpecs": [
                 {
                     "name": "room1_pointLight1",
-                    "display": "Ceiling Lamp",
+                    "display": "Ceiling Lamp Main Hall",
                     "detail": {
                         "color": [244, 200, 122],
                         "position": [0, 0, 0],
@@ -79,7 +79,7 @@
                 },
                 {
                     "name": "room1_pointLight2",
-                    "display": "Ceiling Lamp 2",
+                    "display": "Ceiling Lamp 2nd Left",
                     "detail": {
                         "color": [245, 200, 122],
                         "position": [0, 0, 0],
@@ -94,6 +94,25 @@
                     "shadow_cam_show": false,
                     "visible": true,
                     "attachTo": "room1_modern_ceiling_lamp_01_2",
+                    "turnOn": true
+                },
+                {
+                    "name": "room1_pointLight3",
+                    "display": "Ceiling Lamp 2nd Right",
+                    "detail": {
+                        "color": [245, 200, 122],
+                        "position": [0, 0, 0],
+                        "intensity": 120,
+                        "distance": 0,
+                        "decay": 2
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "room1_modern_ceiling_lamp_01_3",
                     "turnOn": true
                 },
                 {
@@ -455,8 +474,8 @@
                     "color": "#bbbbbb",
                     "position": [0, 0.5, -10.25],
                     "rotation": [0, 0, 0],
-                    "cameraPosition": [-7.29, 5.03, -4.5],
-                    "cameraTarget": [-0.62, -0.51, -10.68]
+                    "cameraPosition": [-4.34, 4.07, -3.32],
+                    "cameraTarget": [-0.34, -0.55, -11.16]
                 },
                 {
                     "name": "2nd_floor_back_left",
@@ -466,8 +485,8 @@
                     "color": "#cccccc",
                     "position": [7.5, 0.5, -10.25],
                     "rotation": [0, 0, 0],
-                    "cameraPosition": [2.51, 6.29, -3.55],
-                    "cameraTarget": [7.19, 0.71, -9.37]
+                    "cameraPosition": [1.19, 4.05, -6.21],
+                    "cameraTarget": [7.11, 1, -9.66]
                 },
                 {
                     "name": "2nd_floor_back_right",
@@ -477,8 +496,8 @@
                     "color": "#cccccc",
                     "position": [-7.5, 0.5, -10.25],
                     "rotation": [0, 0, 0],
-                    "cameraPosition": [-2.51, 6.29, -3.55],
-                    "cameraTarget": [-7.19, 0.71, -9.37]
+                    "cameraPosition": [-1.19, 4.05, -6.21],
+                    "cameraTarget": [-7.11, 1, -9.66]
                 },
                 {
                     "name": "2nd_floor_back_side_left",
@@ -1032,7 +1051,15 @@
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_2",
                     "scale": [1.2, 1.3],
-                    "position": [0, 3.93, -7.5],
+                    "position": [5, 3.93, -7.5],
+                    "rotationY": 0
+                },
+                {
+                    "type": "ModernCeilingLamp01",
+                    "src": "MODERN_CEILING_LAMP_01",
+                    "name": "room1_modern_ceiling_lamp_01_3",
+                    "scale": [1.2, 1.3],
+                    "position": [-5, 3.93, -7.5],
                     "rotationY": 0
                 },
                 {
@@ -1066,9 +1093,9 @@
                     "name": "room1_wooden_table_1",
                     "scale": [1.5, 1, 3],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-6.27, -4.2, 8.21],
                     "rotationY": 2.618
                 },
@@ -1078,9 +1105,9 @@
                     "name": "room1_painted_wooden_blue_chair_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-7.77, -3.9624, 7.51],
                     "rotationY": 1.4828
                 },
@@ -1090,9 +1117,9 @@
                     "name": "room1_painted_wooden_white_chair_1",
                     "scale": [1.3, 1.1, 1.3],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-4.81, -4.0698, 8.8],
                     "rotationY": -1.9024
                 },
@@ -1102,9 +1129,9 @@
                     "name": "room1_painted_wooden_stool_1",
                     "scale": [1.3, 1, 1.3],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-7.37, -4.31, 9.64],
                     "rotationY": -1.9024
                 },
@@ -1115,9 +1142,9 @@
                     "name": "room1_vintage_grandfather_clock_1",
                     "scale": [1.2, 1.3, 1.1],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [0, 1.68, -14.7],
                     "rotationY": 0
                 },
@@ -1127,9 +1154,9 @@
                     "name": "room1_painted_wooden_white_cabinet_1",
                     "scale": [2, 1, 1],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-1.82, 0.8415, -14.67],
                     "rotationY": 0
                 },
@@ -1139,16 +1166,16 @@
                     "name": "room1_painted_wooden_white_cabinet_2",
                     "scale": [1.5, 1, 1],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [1.51, 0.8415, -14.67],
                     "rotationY": 0
                 },
                 {
                     "type": "FancyPictureFrame01",
                     "src": "FANCY_PICTURE_FRAME_01",
-                    "name": "room3_fancy_picture_fram_01_1",
+                    "name": "room1_fancy_picture_frame_01_1",
                     "scale": [2, 2, 1.5],
                     "position": [-1.88, 3, -14.98],
                     "rotationY": 0
@@ -1156,12 +1183,12 @@
                 {
                     "type": "Sofa03",
                     "src": "SOFA_03",
-                    "name": "room3_sofa03_1",
+                    "name": "room1_sofa03_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-13, 0.8075, -13],
                     "rotationY": 0.7854
                 },
@@ -1171,9 +1198,9 @@
                     "name": "room1_painted_wooden_nightstand_1",
                     "scale": [1.3, 1.2, 1.3],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-14.2, 0.61, -11.23],
                     "rotationY": 1.34
                 },
@@ -1183,9 +1210,9 @@
                     "name": "room1_painted_wooden_blue_cabinet_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-11.07, 1.55, -14.6],
                     "rotationY": 0
                 },
@@ -1195,9 +1222,9 @@
                     "name": "room1_shelf_01_1",
                     "scale": [1.1, 1.1, 2],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
                     "position": [-14.71, 1.3929, -10.15],
                     "rotationY": 1.5708
                 },
@@ -1208,7 +1235,7 @@
                     "scale": [1.5, 1],
                     "isObstacle": true,
                     "enableWallOBBs": false,
-                    "movable": true,
+                    "movable": false,
                     "climbable": false,
                     "position": [-10.23, 0.75, -10.23],
                     "rotationY": 2.0944
@@ -1219,11 +1246,178 @@
                     "name": "room1_television_01_1",
                     "scale": [1.2, 1.3, 1.1],
                     "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [-10.23, 1.5464, -10.23],
+                    "rotationY": 3.8397
+                },
+
+                {
+                    "type": "PaintedWoodenTable",
+                    "src": "PAINTED_WOODEN_TABLE",
+                    "name": "room1_painted_wooden_table_1",
+                    "scale": [1.2, 1, 1.2],
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [-6.54, 0.7319, -14.19]
+                },
+                {
+                    "type": "PaintedWoodenBlueChair",
+                    "src": "PAINTED_WOODEN_BLUE_CHAIR",
+                    "name": "room1_painted_wooden_blue_chair_2",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [-6.54, 0.8875, -12.69],
+                    "rotationY": 3.1416
+                },
+                {
+                    "type": "WoodenPicnicTable",
+                    "src": "WOODEN_PICNIC_TABLE",
+                    "name": "room1_wooden_picnic_table_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": true,
+                    "climbable": false,
+                    "position": [9.5, 0.621, -10],
+                    "rotationY": 1.5708
+                },
+                {
+                    "type": "BoxCube",
+                    "width": 1.5,
+                    "height": 1.5,
+                    "depth": 1.5,
+                    "baseSize": 1,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [-10.23, 1.5464, -10.23],
-                    "rotationY": 3.8397
+                    "name": "room1_CubeBox1",
+                    "position": [14.25, 1, -14.25],
+                    "rotationY": 0
+                },
+
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_BEETHOVEN",
+                    "imgNormal": "WES_BEETHOVEN_NORMAL",
+                    "mapRatio": 0.741,
+                    "name": "room1_picture_frame_wes_beethoven",
+                    "scale": [3, 3, 1.5],
+                    "position": [0, 3, 14.98],
+                    "rotationY": 3.1416
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_CLAW",
+                    "imgNormal": "WES_CLAW_NORMAL",
+                    "mapRatio": 1.67,
+                    "name": "room1_picture_frame_wes_claw",
+                    "scale": [4, 4, 1.5],
+                    "position": [2.37, 2.5, 14.98],
+                    "rotationY": 3.1416
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_ALIEN",
+                    "imgNormal": "WES_ALIEN_NORMAL",
+                    "mapRatio": 0.743,
+                    "name": "room1_picture_frame_wes_alien",
+                    "scale": [2.5, 2.5, 1.5],
+                    "position": [4.63, 2.79, 14.98],
+                    "rotationY": 3.1416
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_CRUEL_MELODY",
+                    "imgNormal": "WES_CRUEL_MELODY_NORMAL",
+                    "mapRatio": 1,
+                    "name": "room1_picture_frame_wes_cruel_melody",
+                    "scale": [2.5, 2.5, 1.5],
+                    "position": [-1.94, 2.56, 14.98],
+                    "rotationY": 3.1416
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_NUT",
+                    "imgNormal": "WES_NUT_NORMAL",
+                    "mapRatio": 0.731,
+                    "name": "room1_picture_frame_wes_nut",
+                    "scale": [2.3, 2.3, 1.5],
+                    "position": [-3.65, 2.75, 14.98],
+                    "rotationY": 3.1416
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_BLACK_LIGHT_BURNS_2",
+                    "imgNormal": "WES_BLACK_LIGHT_BURNS_2_NORMAL",
+                    "mapRatio": 1,
+                    "name": "room1_picture_frame_wes_black_light_burns_2",
+                    "scale": [2, 2, 1.5],
+                    "position": [-6.54, 3, -14.98],
+                    "rotationY": 0
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_EAT_THE_DAY",
+                    "imgNormal": "WES_EAT_THE_DAY_NORMAL",
+                    "mapRatio": 1,
+                    "name": "room1_picture_frame_wes_black_light_burns_2",
+                    "scale": [2, 2, 1.5],
+                    "position": [-14.98, 2.5, -13],
+                    "rotationY": 1.5708
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_HEAD_OFF",
+                    "imgNormal": "WES_HEAD_OFF_NORMAL",
+                    "mapRatio": 0.59,
+                    "name": "room1_picture_frame_wes_head_off",
+                    "scale": [2.5, 2.5, 1.5],
+                    "position": [14.98, 2.5, -10],
+                    "rotationY": -1.5708
+                },
+
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_NAKED_WOMAN",
+                    "imgNormal": "WES_NAKED_WOMAN_NORMAL",
+                    "mapRatio": 0.652,
+                    "name": "room1_picture_frame_wes_naked_woman",
+                    "scale": [3, 3, 1.5],
+                    "position": [2.3, -2.175, -5.02],
+                    "rotationY": 3.1416
+                },
+                {
+                    "type": "FancyPictureFrame01",
+                    "src": "FANCY_PICTURE_FRAME_01",
+                    "img": "WES_LONG_HAIR",
+                    "imgNormal": "WES_LONG_HAIR_NORMAL",
+                    "mapRatio": 0.855,
+                    "name": "room1_picture_frame_wes_long_hair",
+                    "scale": [3, 3, 1.5],
+                    "position": [-2.3, -2.175, -5.02],
+                    "rotationY": 3.1416
                 }
             ],
             "floors": [

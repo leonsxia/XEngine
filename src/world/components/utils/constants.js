@@ -86,8 +86,30 @@ const BLOOM_SCENE_LAYER = 5;
 const TEXTURE_NAMES = {
     CRATE: 'CRATE',
     CRATE_NORMAL: 'CRATE_NORMAL',
+    // gallery
     PORTRAIT_1: 'PORTRAIT_1',
     PORTRAIT_1_NORMAL: 'PORTRAIT_1_NORMAL',
+    WES_ALIEN: 'WES_ALIEN',
+    WES_ALIEN_NORMAL: 'WES_ALIEN_NORMAL',
+    WES_BEETHOVEN: 'WES_BEETHOVEN',
+    WES_BEETHOVEN_NORMAL: 'WES_BEETHOVEN_NORMAL',
+    WES_BLACK_LIGHT_BURNS_2: 'WES_BLACK_LIGHT_BURNS_2',
+    WES_BLACK_LIGHT_BURNS_2_NORMAL: 'WES_BLACK_LIGHT_BURNS_2_NORMAL',
+    WES_CLAW: 'WES_CLAW',
+    WES_CLAW_NORMAL: 'WES_CLAW_NORMAL',
+    WES_CRUEL_MELODY: 'WES_CRUEL_MELODY',
+    WES_CRUEL_MELODY_NORMAL: 'WES_CRUEL_MELODY_NORMAL',
+    WES_EAT_THE_DAY: 'WES_EAT_THE_DAY',
+    WES_EAT_THE_DAY_NORMAL: 'WES_EAT_THE_DAY_NORMAL',
+    WES_HEAD_OFF: 'WES_HEAD_OFF',
+    WES_HEAD_OFF_NORMAL: 'WES_HEAD_OFF_NORMAL',
+    WES_LONG_HAIR: 'WES_LONG_HAIR',
+    WES_LONG_HAIR_NORMAL: 'WES_LONG_HAIR_NORMAL',
+    WES_NAKED_WOMAN: 'WES_NAKED_WOMAN',
+    WES_NAKED_WOMAN_NORMAL: 'WES_NAKED_WOMAN_NORMAL',
+    WES_NUT: 'WES_NUT',
+    WES_NUT_NORMAL: 'WES_NUT_NORMAL',
+    // texture
     LIGHT_BROWN_CARPET: 'LIGHT_BROWN_CARPET',
     LIGHT_BROWN_CARPET_NORMAL: 'LIGHT_BROWN_CARPET_NORMAL',
     CONCRETE_128: 'CONCRETE_128',
@@ -123,7 +145,27 @@ const TEXTURE_NAMES = {
 const TEXTURES = [{
     name: TEXTURE_NAMES.CRATE, map: 'assets/textures/crate.png', normalMap: 'assets/textures/normals/crate.jpg'
 }, {
-    name: TEXTURE_NAMES.PORTRAIT_1, map: 'assets/textures/portraits/leon.jpg', normalMap: 'assets/textures/normals/leon.jpg'
+    name: TEXTURE_NAMES.PORTRAIT_1, map: 'assets/textures/portraits/leon.jpg', normalMap: 'assets/textures/portraits_normal/leon.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_ALIEN, map: 'assets/textures/wes_gallery/wes_alien.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_alien_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_BEETHOVEN, map: 'assets/textures/wes_gallery/wes_beethoven.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_beethoven_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_BLACK_LIGHT_BURNS_2, map: 'assets/textures/wes_gallery/wes_black_light_burns_2.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_black_light_burns_2_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_CLAW, map: 'assets/textures/wes_gallery/wes_claw.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_claw_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_CRUEL_MELODY, map: 'assets/textures/wes_gallery/wes_cruel_melody.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_cruel_melody_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_EAT_THE_DAY, map: 'assets/textures/wes_gallery/wes_eat_the_day.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_eat_the_day_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_HEAD_OFF, map: 'assets/textures/wes_gallery/wes_head_off.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_head_off_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_LONG_HAIR, map: 'assets/textures/wes_gallery/wes_long_hair.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_long_hair_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_NAKED_WOMAN, map: 'assets/textures/wes_gallery/wes_naked_woman.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_naked_woman_normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WES_NUT, map: 'assets/textures/wes_gallery/wes_nut.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_nut_normal.jpg'
 }, {
     name: TEXTURE_NAMES.LIGHT_BROWN_CARPET, map: 'assets/textures/carpets/Light_Brown_Carpet.jpg', normalMap: 'assets/textures/normals/Light_Brown_Carpet.jpg'
 }, {
