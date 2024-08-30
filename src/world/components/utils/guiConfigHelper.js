@@ -339,12 +339,12 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
             specs: [{
                 name: 'intensity',
                 value: null,
-                params: [0, 100, NUMBER_STEPS],
+                params: [0, 150, NUMBER_STEPS],
                 type: 'number'
             }, {
                 name: 'power',
                 value: null,
-                params: [0, 1000, 1],
+                params: [0, 2000, 1],
                 type: 'number'
             }, {
                 name: 'distance',
