@@ -75,6 +75,8 @@ class Mansion extends WorldScene {
 
         // no need to render at this time, so the change event of control won't do the rendering.
         this.changeCharacter('tofu1', false);
+
+        // setup cameras
         this.thirdPersonCamera?.setup({ player: this.player, control: this.controls.defControl, scene: this.scene });
         this.inspectorCamera?.setup({ player: this.player, control: this.controls.defControl, scene: this.scene, rooms: this.rooms });
 

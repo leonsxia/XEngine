@@ -18,7 +18,7 @@ class InspectorRoom extends Room {
 
     initAreas() {
 
-        const { areas } = this.specs;
+        const { areas = [] } = this.specs;
 
         areas.forEach(area => {
 
@@ -45,9 +45,11 @@ class InspectorRoom extends Room {
 
         });
 
+        // set collision areas invisible
         this.areas.forEach(area => {
 
             area.box.mesh.visible = false;
+            area.box.mesh.layers.disable(CAMERA_RAY_LAYER);
 
         });
 
