@@ -25,7 +25,7 @@
                     },
                     "type": "DirectionalLight",
                     "debug": true,
-                    "shadow": true,
+                    "shadow": false,
                     "shadow_debug": true,
                     "helper_show": false,
                     "shadow_cam_show": false,

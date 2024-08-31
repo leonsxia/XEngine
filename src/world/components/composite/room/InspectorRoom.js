@@ -30,7 +30,7 @@ class InspectorRoom extends Room {
             const areaBlock = {
 
                 name,
-                box: createOBBBox(boxSpecs, name, position, rotation, true, true),
+                box: createOBBBox(boxSpecs, name, position, rotation, false, false),
                 cameraPosition,
                 cameraTarget
 
