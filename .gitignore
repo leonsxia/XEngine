@@ -1,3 +1,4 @@
 node_modules
-assets/ignore
+ignore_assets
 package-lock.json
+dist
