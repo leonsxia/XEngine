@@ -692,14 +692,14 @@ class WorldScene {
 
                 this.scene.remove(this.player.group);
 
-                if (this.player.hasRays) {
+                // if (this.player.hasRays) {
 
-                    this.scene.remove(this.player.leftArrow);
-                    this.scene.remove(this.player.rightArrow);
-                    this.scene.remove(this.player.backLeftArrow);
-                    this.scene.remove(this.player.backRightArrow);
+                //     this.scene.remove(this.player.leftArrow);
+                //     this.scene.remove(this.player.rightArrow);
+                //     this.scene.remove(this.player.backLeftArrow);
+                //     this.scene.remove(this.player.backRightArrow);
 
-                }
+                // }
 
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
@@ -723,14 +723,14 @@ class WorldScene {
                 
             }
 
-            if (this.player.hasRays) {
+            // if (this.player.hasRays) {
 
-                this.scene.add(this.player.leftArrow);
-                this.scene.add(this.player.rightArrow);
-                this.scene.add(this.player.backLeftArrow);
-                this.scene.add(this.player.backRightArrow);
+            //     this.scene.add(this.player.leftArrow);
+            //     this.scene.add(this.player.rightArrow);
+            //     this.scene.add(this.player.backLeftArrow);
+            //     this.scene.add(this.player.backRightArrow);
 
-            }
+            // }
 
             this.subscribeEvents(this.player, this.setup.moveType);
 
@@ -896,6 +896,7 @@ class WorldScene {
                 else this.scene.remove(cp.leftArrow);
             
             }
+            
             if (cp.rightArrow) {
                 
                 cp.rightArrow.visible = s;
@@ -1057,7 +1058,7 @@ class WorldScene {
             const idx = updatables.findIndex(f => f === this.controls.defControl);
             updatables.splice(idx, 1);
             updatables.push(this.thirdPersonCamera);
-            this.scene.add(...this.thirdPersonCamera.rayArrows);
+            // this.scene.add(...this.thirdPersonCamera.rayArrows);
 
             this.thirdPersonCamera.setPositionFromPlayer();
 
@@ -1066,7 +1067,7 @@ class WorldScene {
             const idx = updatables.findIndex(f => f === this.thirdPersonCamera);
             updatables.splice(idx, 1);
             updatables.push(this.controls.defControl);
-            this.scene.remove(...this.thirdPersonCamera.rayArrows);
+            // this.scene.remove(...this.thirdPersonCamera.rayArrows);
             
             this.thirdPersonCamera.resetInterectObjects();
 

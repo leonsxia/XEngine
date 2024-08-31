@@ -48,20 +48,20 @@ class CollisionBox {
         // collision faces
         const createPlaneFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
         
-        this.back = createPlaneFunction(frontBackSpecs, `${this.name}_back`, [0, 0, - this.depth * .5], Math.PI, true, true, showArrow);
-        this.left = createPlaneFunction(leftRightSpecs, `${this.name}_left`, [this.width * .5, 0, 0], Math.PI * .5, true, true, showArrow);
-        this.right = createPlaneFunction(leftRightSpecs, `${this.name}_right`, [- this.width * .5, 0, 0], - Math.PI * .5, true, true, showArrow);
+        this.back = createPlaneFunction(frontBackSpecs, `${this.name}_back`, [0, 0, - this.depth * .5], Math.PI, false, false, showArrow);
+        this.left = createPlaneFunction(leftRightSpecs, `${this.name}_left`, [this.width * .5, 0, 0], Math.PI * .5, false, false, showArrow);
+        this.right = createPlaneFunction(leftRightSpecs, `${this.name}_right`, [- this.width * .5, 0, 0], - Math.PI * .5, false, false, showArrow);
 
         {
-            this.top = createOBBPlane(bottomTopSpecs, `${this.name}_top`, [0, this.height * .5, 0], [- Math.PI * .5, 0 ,0], true, true);
-            this.bottom = createOBBPlane(bottomTopSpecs, `${this.name}_bottom`, [0, - this.height * .5, 0], [Math.PI * .5, 0, 0], true, true);
+            this.top = createOBBPlane(bottomTopSpecs, `${this.name}_top`, [0, this.height * .5, 0], [- Math.PI * .5, 0 ,0], false, false);
+            this.bottom = createOBBPlane(bottomTopSpecs, `${this.name}_bottom`, [0, - this.height * .5, 0], [Math.PI * .5, 0, 0], false, false);
 
             this.topOBBs = [this.top];
             this.bottomOBBs = [this.bottom];
 
         }
 
-        this.front = createPlaneFunction(frontBackSpecs, `${this.name}_front`, [0, 0, this.depth * .5], 0, true, true, showArrow);
+        this.front = createPlaneFunction(frontBackSpecs, `${this.name}_front`, [0, 0, this.depth * .5], 0, false, false, showArrow);
         this.front.line?.material.color.setHex(green);
 
         this.walls = [this.front, this.back, this.left, this.right];
