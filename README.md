@@ -28,18 +28,21 @@ Here is the tutorial:
 4. Change cameras, there are 3 types of camera controls:
    
     1). Default OrbitControls based on three.js, use mouse left to rotate camera, use mouse right to move camera.
-    2). ThridPersonCamera, this will bind camera to current player position perspectively. This camera is configurable in scene, select "enable" on the left menu->Third Person Camera->TPC->enable
+   
+    2). ThridPersonCamera, this will bind camera to current player position perspectively. This camera is configurable in scene, select "enable" on the left menu->Third Person Camera->TPC->enable.
+   
    
 ![4](https://github.com/user-attachments/assets/93f2830d-cc21-44fc-bb42-0de2c1b9c669)
 
 
-    3). InspectorCamera, this camera simulates for "Resident Evil" type of camera. This camera is configurable in scene, select "enable" on the left menu->Inspector Camera->InsCam->enable
+    3). InspectorCamera, this camera simulates for "Resident Evil" type of camera. This camera is configurable in scene, select "enable" on the left menu->Inspector Camera->InsCam->enable.
+    
     
 ![5](https://github.com/user-attachments/assets/4c57a8c0-567a-46f7-9b5a-b4996b4d1f85)
 
 5. Enable post-processing and change effects.
    
-    1). Select "enable" on the left menu->Post Processing->PostEffect->enable to turn on post-processing effects
+    1). Select "enable" on the left menu->Post Processing->PostEffect->enable to turn on post-processing effects.
    
 ![6](https://github.com/user-attachments/assets/a6d6f908-aff3-4cf0-b88d-7a60335814ad)
 
