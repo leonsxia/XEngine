@@ -107,9 +107,9 @@ class WorldScene {
         this.resizer = new Resizer(container, this.camera, this.renderer, this.postProcessor);
 
         this.resizer.onResize = 
-        () => {
+        (needRender = true) => {
 
-            if (this.staticRendering && this.forceStaticRender) this.render();
+            if (needRender && this.staticRendering && this.forceStaticRender) this.render();
 
         };
 

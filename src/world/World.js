@@ -183,11 +183,23 @@ class World {
 
         window.addEventListener('resize', () => {
 
-            const resizer = this.#currentScene.resizer;
+            this.worldScenes.forEach(scene => {
 
-            resizer.setSize();
+                const { resizer } = scene;
 
-            resizer.onResize();
+                resizer.setSize();
+
+                if (this.#currentScene === scene) {
+
+                    resizer.onResize();
+
+                } else {
+
+                    resizer.onResize(false);
+
+                }
+
+            });
 
         });
 
