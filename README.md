@@ -4,6 +4,8 @@ This is a 3D scene manager and simple physics simulator based on three.js.
 
 You can use this project to build new scenes like old school "***Resident Evil***" type scenes.
 
+Use WASD to move player, Shift to accelerate, S + Shift to quick turn around.
+
 Have fun!!!
 
 Here is the tutorial:
