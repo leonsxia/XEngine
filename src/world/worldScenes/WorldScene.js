@@ -119,8 +119,8 @@ class WorldScene {
             // increase the performance fps
             if (this.staticRendering && this.forceStaticRender) this.render();
 
-            const pos = this.camera.position;
-            const tar = this.controls.defControl.target;
+            // const pos = this.camera.position;
+            // const tar = this.controls.defControl.target;
             // console.log(`camera position: x: ${pos.x}, y: ${pos.y}, z: ${pos.z}`);
             // console.log(`camera target: x: ${tar.x}, y: ${tar.y}, z: ${tar.z}`);
 
@@ -1060,6 +1060,8 @@ class WorldScene {
             updatables.push(this.thirdPersonCamera);
             // this.scene.add(...this.thirdPersonCamera.rayArrows);
 
+            this.controls.defControl.enabled = false;
+
             this.thirdPersonCamera.setPositionFromPlayer();
 
         } else {
@@ -1068,6 +1070,8 @@ class WorldScene {
             updatables.splice(idx, 1);
             updatables.push(this.controls.defControl);
             // this.scene.remove(...this.thirdPersonCamera.rayArrows);
+
+            this.controls.defControl.enabled = true;
             
             this.thirdPersonCamera.resetInterectObjects();
 
@@ -1086,11 +1090,15 @@ class WorldScene {
             updatables.splice(idx, 1);
             updatables.push(this.inspectorCamera);
 
+            this.controls.defControl.enabled = false;
+
         } else {
 
             const idx = updatables.findIndex(f => f === this.inspectorCamera);
             updatables.splice(idx, 1);
             updatables.push(this.controls.defControl);
+
+            this.controls.defControl.enabled = true;
 
         }
 
