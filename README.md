@@ -10,7 +10,7 @@ Have fun!!!
 
 Here is the tutorial:
 1. The assets inclueds textures and models will downloaded from website first, around 170MB, cost several seconds.
-2. When all loaed, you will see a initial scene like this:
+2. When all loaded, you will see a initial scene like this:
 
       ![1](https://github.com/user-attachments/assets/10f4cc78-e8db-4cff-95cb-78fda63da365)
 
