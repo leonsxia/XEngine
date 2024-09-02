@@ -157,13 +157,13 @@ class SceneBuilder {
         }
 
         // attach lights to specific objects
-        pointLightsSpecsArr.forEach(l => {
+        pointLightsSpecsArr.filter(l => l.visible).forEach(l => {
 
             this.attachLightToObject(l, roomLightObjects, room);
 
         });
 
-        spotLightsSpecsArr.forEach(l => {
+        spotLightsSpecsArr.filter(l => l.visible).forEach(l => {
 
             this.attachLightToObject(l, roomLightObjects, room);
 
