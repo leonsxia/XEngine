@@ -912,8 +912,8 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [-4.6, 3, 4.9],
-                    "rotationY": 1.4828
+                    "position": [-4.06, 3, 5.11],
+                    "rotationY": 1.1856
                 },
                 {
                     "type": "PaintedWoodenWhiteChair",
@@ -924,8 +924,8 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [-1.38, 3, 6.39],
-                    "rotationY": -1.9024
+                    "position": [-1.53, 3, 6.39],
+                    "rotationY": -1.4402
                 },
                 {
                     "type": "PaintedWoodenStool",
