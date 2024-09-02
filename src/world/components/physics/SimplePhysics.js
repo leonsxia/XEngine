@@ -2,7 +2,7 @@ import { Object3D, Vector3 } from 'three';
 import * as Color from '../basic/colorBase.js';
 import { groupHasChild } from '../utils/objectHelper.js';
 
-const DEBUG = true;
+const DEBUG = false;
 const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
 const FACE_DEF = ['frontFace', 'backFace', 'leftFace', 'rightFace'];
 const STAIR_OFFSET_MAX = .3;
@@ -489,17 +489,36 @@ class SimplePhysics {
 
             }
 
+            let playerTicked = false;
+
             if (collisionedWalls.length === 0) {
 
                 player.tick(delta);
+                playerTicked = true;
 
-            } else {
+                this.walls.forEach(wall => {
+
+                    const checkResult = this.checkIntersection(player, wall, delta);
+    
+                    if (checkResult.intersect) {
+    
+                        wall.checkResult = checkResult;
+                        collisionedWalls.push(wall);
+    
+                    } 
+                    
+                });
+
+            }
+            
+            if (collisionedWalls.length > 0) {
 
                 collisionedWalls.forEach(wall => {
 
-                    player.tickWithWall(delta, wall);
+                    player.tickWithWall(delta, wall, playerTicked);
 
                 });
+
             }
 
             // for player falling down check

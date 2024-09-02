@@ -241,9 +241,10 @@ class Train extends Moveable2D {
         // to do
     }
 
-    tickWithWall(delta, wall) {
+    tickWithWall(delta, wall, playerTicked = false) {
         const params = this.setTickParams(delta);
         params.wall = wall;
+        params.playerTicked = playerTicked;
         this.tankmoveTickWithWall(params);
         this.tickWheels(delta, params);
         this.updateOBB();

@@ -486,7 +486,7 @@ class Moveable2D {
 
     tankmoveTickWithWall(params) {
 
-        const { group, R, rotateVel, dist, delta, wall, player } = params;
+        const { group, R, rotateVel, dist, delta, wall, player, playerTicked = false } = params;
         const {
             wallMesh,
             borderReach, leftCorIntersectFace, rightCorIntersectFace, intersectCor,
@@ -573,6 +573,7 @@ class Moveable2D {
 
             const deltaVec3 = new Vector3(0, 0, dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+            offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!this.isForwardBlock) {
 
@@ -616,6 +617,7 @@ class Moveable2D {
 
             const deltaVec3 = new Vector3(0, 0, - dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+            offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!this.isBackwardBlock) {
 
@@ -689,6 +691,7 @@ class Moveable2D {
                 deltaVec3 = this.isMovingForwardLeft ? new Vector3(deltaX, 0, deltaZ) : new Vector3(deltaX, 0, - deltaZ);
 
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+                offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
                 dummyObject.rotation.y += this.isMovingForwardLeft ? rotateRad : - rotateRad;
 
@@ -739,6 +742,7 @@ class Moveable2D {
                 deltaVec3 = this.isMovingForwardRight ? new Vector3(- deltaX, 0, deltaZ) : new Vector3(- deltaX, 0, - deltaZ);
 
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+                offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
                 // dummyObject.position.copy(offsetVec3);
                 dummyObject.rotation.y += this.isMovingForwardRight ? - rotateRad : rotateRad;
