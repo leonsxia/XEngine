@@ -1140,7 +1140,7 @@
                     "type": "VintageGrandfatherClock",
                     "src": "VINTAGE_GRANDFATHER_CLOCK",
                     "name": "room1_vintage_grandfather_clock_1",
-                    "scale": [1.2, 1.3, 1.1],
+                    "scale": [1.3, 1.3, 1.3],
                     "isObstacle": true,
                     "enableWallOBBs": false,
                     "movable": false,
