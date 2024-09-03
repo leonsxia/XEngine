@@ -1,5 +1,5 @@
 import { BoxGeometry, EdgesGeometry, Mesh, LineSegments, Vector3 } from 'three';
-import { OBB } from 'three/examples/jsm/Addons.js';
+import { OBB } from 'three/addons/math/OBB.js';
 import { basicMateraials } from '../basic/basicMaterial';
 import { CollisionPlane } from './CollisionPlane';
 import { CollisionOctagon } from './CollisionOctagon';

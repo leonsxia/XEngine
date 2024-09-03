@@ -1,5 +1,5 @@
 import { Vector3 } from 'three';
-import { OBB } from 'three/examples/jsm/Addons.js';
+import { OBB } from 'three/addons/math/OBB.js';
 import { CollisionPlane } from './CollisionPlane';
 
 class CollisionOBBPlane extends CollisionPlane {

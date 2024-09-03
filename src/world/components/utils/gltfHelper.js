@@ -1,4 +1,4 @@
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 function getGLTFLoader() {
 
