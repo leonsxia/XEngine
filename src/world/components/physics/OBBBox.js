@@ -38,42 +38,6 @@ class OBBBox extends Box {
 
     }
 
-    get rotationXDegree() {
-
-        return MathUtils.radToDeg(this.mesh.rotation.x);
-
-    }
-
-    set rotationXDegree(value) {
-
-        this.mesh.rotation.x = MathUtils.degToRad(value);
-
-    }
-
-    get rotationYDegree() {
-
-        return MathUtils.radToDeg(this.mesh.rotation.y);
-
-    }
-
-    set rotationYDegree(value) {
-
-        this.mesh.rotation.y = MathUtils.degToRad(value);
-
-    }
-
-    get rotationZDegree() {
-
-        return MathUtils.radToDeg(this.mesh.rotation.z);
-
-    }
-
-    set rotationZDegree(value) {
-
-        this.mesh.rotation.z = MathUtils.degToRad(value);
-
-    }
-
     // update OBB
     updateOBB(needUpdateMatrixWorld = true) {
 

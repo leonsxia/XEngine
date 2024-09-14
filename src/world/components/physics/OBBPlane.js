@@ -37,18 +37,6 @@ class OBBPlane extends Plane {
 
     }
 
-    get rotationZDegree() {
-
-        return MathUtils.radToDeg(this.mesh.rotation.z);
-
-    }
-
-    set rotationZDegree(value) {
-
-        this.mesh.rotation.z = MathUtils.degToRad(value);
-
-    }
-
     // update OBB
     updateOBB(needUpdateMatrixWorld = true) {
 

@@ -1,4 +1,4 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils } from 'three';
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
@@ -164,6 +164,42 @@ class BasicObject {
             this.material.normalMap = normal;
 
         }
+
+    }
+
+    get rotationXDegree() {
+
+        return MathUtils.radToDeg(this.mesh.rotation.x);
+
+    }
+
+    set rotationXDegree(value) {
+
+        this.mesh.rotation.x = MathUtils.degToRad(value);
+
+    }
+
+    get rotationYDegree() {
+
+        return MathUtils.radToDeg(this.mesh.rotation.y);
+
+    }
+
+    set rotationYDegree(value) {
+
+        this.mesh.rotation.y = MathUtils.degToRad(value);
+
+    }
+
+    get rotationZDegree() {
+
+        return MathUtils.radToDeg(this.mesh.rotation.z);
+
+    }
+
+    set rotationZDegree(value) {
+
+        this.mesh.rotation.z = MathUtils.degToRad(value);
 
     }
 
