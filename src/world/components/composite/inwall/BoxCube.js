@@ -67,6 +67,10 @@ class BoxCube extends ObstacleBase  {
         }
 
         this.setTriggers();
+        this.createBoundingFaces();
+
+        this.createRay();
+        this.showArrows(false);
 
         this.group.add(
             this.box.mesh,

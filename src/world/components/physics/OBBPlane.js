@@ -37,6 +37,18 @@ class OBBPlane extends Plane {
 
     }
 
+    get layers() {
+
+        return this.mesh.layers;
+        
+    }
+
+    setLayer(layer) {
+
+        this.mesh.layers.enable(layer);
+        
+    }
+
     // update OBB
     updateOBB(needUpdateMatrixWorld = true) {
 

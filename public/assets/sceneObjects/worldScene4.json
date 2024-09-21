@@ -457,7 +457,7 @@
                     "mapRatio": 1.5,
                     "name": "room1_square_pillar2",
                     "showArrow": true,
-                    "enableWallOBBs": false,
+                    "enableWallOBBs": true,
                     "isObstacle": false,
                     "climbable": false,
                     "position": [2.5, -1.05, -6.125]
@@ -525,6 +525,7 @@
                     "width": 1,
                     "height": 1,
                     "depth": 1,
+                    "weight": 1,
                     "baseSize": 1,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
@@ -547,9 +548,10 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
+                    "pushable": true,
                     "name": "room1_CubeBox2",
                     "position": [-1.5, 4, -5],
-                    "rotationY": 1.0367
+                    "rotationY": 0
                 },
                 {
                     "type": "Slope",

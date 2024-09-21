@@ -696,6 +696,7 @@ function makeObjectsGuiConfig(objects) {
             } else if (object.isGroup) {
 
                 object.father.updateOBBs();
+                object.father.updateRay?.();
 
                 object.father.updateLightObjects?.();
     

@@ -7,6 +7,7 @@ const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
 const FACE_DEF = ['frontFace', 'backFace', 'leftFace', 'rightFace'];
 const STAIR_OFFSET_MAX = .3;
 const STAIR_OFFSET_MIN = .1;
+const OBSTACLE_BLOCK_HEIGHT = .2;
 
 class SimplePhysics {
 
@@ -259,7 +260,7 @@ class SimplePhysics {
         
     }
 
-    checkBlockByTopS(player, top){
+    checkBlockByTopT(player, top){
 
         let block = false;
         const offset = Math.abs(top.worldPosition.y - player.bottomY);
@@ -272,6 +273,36 @@ class SimplePhysics {
 
         return block;
 
+    }
+
+    checkObstacleBlockByTop(obs, top) {
+
+        let block = false;
+
+        if (obs.bottomY < top.worldPosition.y - OBSTACLE_BLOCK_HEIGHT) {
+
+            block = true;
+
+        }
+
+        return block;
+
+    }
+
+    checkObstacleInWallRangeT(obs, wall) {
+
+        let inRange = false;
+        const wallTopBorder = wall.worldPosition.y + wall.height * .5 - OBSTACLE_BLOCK_HEIGHT;
+        const wallBottomBorder = wall.worldPosition.y - wall.height * .5 + OBSTACLE_BLOCK_HEIGHT;
+
+        if (obs.bottomY < wallTopBorder && obs.topY > wallBottomBorder) {
+
+            inRange = true;
+
+        }
+
+        return inRange;
+        
     }
 
     checkWallClimbable(player, wall) {
@@ -323,120 +354,178 @@ class SimplePhysics {
 
         }
 
-        // obstacle collision check
-        {
-            // for movable obstacles falling down check
-            const movableObs = this.obstacles.filter(obs => {
+        this.obstacleTick(delta);
 
-                if (obs.movable) obs.hittingGround = null;  // reset hitting ground
-                return obs.movable && !obs.group.isPicked;
+        this.playerTick(delta);
+
+    }
+
+    // obstacle collision check
+    obstacleTick(delta) {
+
+        // for movable obstacles falling down check
+        const movableObs = this.obstacles.filter(obs => {
+
+            if (obs.movable) obs.hittingGround = null;  // reset hitting ground
+            return obs.movable && !obs.group.isPicked;
+
+        });
+
+        const movingObs = this.obstacles.filter(obs => obs.isMoving);
+    
+        movingObs.forEach(obs => {
+
+            obs.resetBlockStatus();
+
+            this.walls.filter(w => w.isOBB).forEach(wall => {
+
+                if (!obs.walls.find(w => w === wall) && this.checkObstacleInWallRangeT(obs, wall) && obs.box.obb.intersectsOBB(wall.obb)) {
+
+                    // console.log(`${wall.name} intersets`);
+
+                    obs.boundingFaces.forEach(bf => {
+
+                        if (bf.obb.intersectsOBB(wall.obb)) {
+
+                            if (obs.testFrontFace(bf)) {
+
+                                obs.forwardBlock = true;
+                                // console.log(`forward block`);
+
+                            } else if (obs.testBackFace(bf)) {
+
+                                obs.backwardBlock = true;
+                                // console.log(`backward block`);
+
+                            } else if (obs.testLeftFace(bf)) {
+
+                                obs.leftBlock = true;
+                                // console.log(`left block`);
+
+                            } else if (obs.testRightFace(bf)) {
+
+                                obs.rightBlock = true;
+                                // console.log(`right block`);
+
+                            }
+                        }
+                    });
+
+                }
 
             });
 
-            const onTopsObs = [];
-            const onSlopesObs = [];
+            obs.tickMoving(delta);
 
-            this.obstacleTops.forEach(top => {
+        });
+        
 
-                movableObs.forEach(obs => {
-                    
+        const onTopsObs = [];
+        const onSlopesObs = [];
+
+        this.obstacleTops.forEach(top => {
+
+            movableObs.forEach(obs => {
+                
+                if (!obs.hittingGround) {
+
+                    if ((!groupHasChild(obs.group, top.mesh)) && obs.box.obb.intersectsOBB(top.obb) && !this.checkObstacleBlockByTop(obs, top)) {
+
+                        onTopsObs.push(obs);
+                        obs.hittingGround = top;
+
+                    }
+
+                }
+            });
+
+        });
+
+        this.slopes.forEach(s => {
+
+            movableObs.forEach(obs => {
+
+                if (!obs.hittingGround) {
+
+                    if (obs.box.obb.intersectsOBB(s.slope.obb)) {
+
+                        onSlopesObs.push(obs);
+                        obs.hittingGround = s.slope;
+
+                    }
+                }
+            })
+        })
+
+        if (onTopsObs.length > 0) {
+
+            onTopsObs.forEach(obs => {
+
+                obs.onGround();
+
+            });
+        }
+
+        if (onSlopesObs.length > 0) {
+
+            onSlopesObs.forEach(obs => {
+
+                obs.onSlope();
+
+            });
+        }
+
+        const fallingObs = movableObs.filter(obs => !onTopsObs.find(t => t === obs) && !onSlopesObs.find(s => s === obs));
+
+        // check obstacles falling on floors
+        if (fallingObs.length > 0) {
+
+            const onGroundObs = [];
+
+            this.floors.forEach(floor => {
+                
+                fallingObs.forEach(obs => {
+
                     if (!obs.hittingGround) {
 
-                        if ((!groupHasChild(obs.group, top.mesh)) && obs.box.obb.intersectsOBB(top.obb)) {
+                        if (obs.box.obb.intersectsOBB(floor.obb)) {
 
-                            onTopsObs.push(obs);
-                            obs.hittingGround = top;
+                            onGroundObs.push(obs);
+                            obs.hittingGround = floor;
+
+                        } else {
+
+                            obs.hittingGround = null;
 
                         }
 
                     }
                 });
-
             });
 
-            this.slopes.forEach(s => {
+            if (onGroundObs.length > 0) {
 
-                movableObs.forEach(obs => {
-
-                    if (!obs.hittingGround) {
-
-                        if (obs.box.obb.intersectsOBB(s.slope.obb)) {
-
-                            onSlopesObs.push(obs);
-                            obs.hittingGround = s.slope;
-
-                        }
-                    }
-                })
-            })
-
-            if (onTopsObs.length > 0) {
-
-                onTopsObs.forEach(obs => {
+                onGroundObs.forEach(obs => {
 
                     obs.onGround();
 
                 });
             }
 
-            if (onSlopesObs.length > 0) {
+            const stillFallingObs = fallingObs.filter(obs => !onGroundObs.find(f => f === obs));
 
-                onSlopesObs.forEach(obs => {
+            if (stillFallingObs.length > 0) {
 
-                    obs.onSlope();
+                stillFallingObs.forEach(obs => {
 
-                });
-            }
+                    obs.tickFall(delta);
 
-            const fallingObs = movableObs.filter(obs => !onTopsObs.find(t => t === obs) && !onSlopesObs.find(s => s === obs));
-
-            // check obstacles falling on floors
-            if (fallingObs.length > 0) {
-
-                const onGroundObs = [];
-
-                this.floors.forEach(floor => {
-                    
-                    fallingObs.forEach(obs => {
-
-                        if (!obs.hittingGround) {
-
-                            if (obs.box.obb.intersectsOBB(floor.obb)) {
-
-                                onGroundObs.push(obs);
-                                obs.hittingGround = floor;
-
-                            } else {
-
-                                obs.hittingGround = null;
-
-                            }
-
-                        }
-                    });
-                });
-
-                if (onGroundObs.length > 0) {
-
-                    onGroundObs.forEach(obs => {
-
-                        obs.onGround();
-
-                    });
-                }
-
-                const stillFallingObs = fallingObs.filter(obs => !onGroundObs.find(f => f === obs));
-
-                if (stillFallingObs.length > 0) {
-
-                    stillFallingObs.forEach(obs => {
-
-                        obs.tickFall(delta);
-
-                    })
-                }
+                })
             }
         }
+    }
+
+    playerTick(delta) {
 
         this.activePlayers.filter(p => !p.group.isPicked).forEach(player => {
 
@@ -448,7 +537,7 @@ class SimplePhysics {
 
             }
 
-            player.resetItersectStatus();
+            player.resetIntersectStatus();
 
             const collisionedWalls = [];
 
@@ -528,7 +617,7 @@ class SimplePhysics {
 
                 if (collisionTops.length === 0) {
 
-                    if (player.obb.intersectsOBB(top.obb) && !this.checkBlockByTopS(player, top)) {
+                    if (player.obb.intersectsOBB(top.obb) && !this.checkBlockByTopT(player, top)) {
 
                         // to do
                         collisionTops.push(top);
@@ -624,10 +713,37 @@ class SimplePhysics {
 
                     if (obs.movable && (obs.pushable || obs.draggable)) {
 
+                        player.stopPushing();
+                        obs.stopMoving();
+
                         obs.triggers?.forEach(tri => {
 
-                            if (player.pushingObb.intersectsOBB(tri.obb)) {
+                            if (player.pushingObb.intersectsOBB(tri.obb) && !player.isClimbingUp && player.isMovingForward) {
                                 // console.log(`${tri.name} is pushed`);
+
+                                player.startPushing();
+
+                                if (obs.testFrontTrigger(tri)) {
+
+                                    // console.log(`front trigger is pushed`);
+                                    obs.movingBackward(true);
+
+                                } else if (obs.testBackTrigger(tri)) {
+
+                                    // console.log(`back trigger is pushed`);
+                                    obs.movingForward(true);
+
+                                } else if (obs.testLeftTrigger(tri)) {
+
+                                    // console.log(`left trigger is pushed`);
+                                    obs.movingRight(true);
+
+                                } else if (obs.testRightTrigger(tri)) {
+
+                                    // console.log(`right trigger is pushed`);
+                                    obs.movingLeft(true);
+
+                                }
                             }
 
                         });
@@ -660,6 +776,7 @@ class SimplePhysics {
                 }
             }
         });
+
     }
 }
 

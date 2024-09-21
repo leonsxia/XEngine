@@ -1,6 +1,5 @@
 import { Object3D, Vector3 } from 'three';
 import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
-import { intersect } from '../basic/colorBase';
 
 const COOLING_TIME = .7;
 
@@ -39,7 +38,7 @@ class Moveable2D {
         this.rightFaceIntersects = false;
     }
 
-    resetItersectStatus() {
+    resetIntersectStatus() {
         this.leftCorIntersects = false;
         this.rightCorIntersects = false;
         this.backLeftCorIntersects = false;
@@ -138,6 +137,10 @@ class Moveable2D {
 
     get isClimbing() {
         return this.#movingForward && this.#jump;
+    }
+
+    get isClimbingUp() {
+        return this.#isClimbingUp || this.#isClimbingForward;
     }
 
     get isQuickTuring() {
@@ -365,7 +368,7 @@ class Moveable2D {
 
         } else if (this.isMovingBackward) {
 
-            const deltaVec3 = new Vector3(0, 0, -dist);
+            deltaVec3 = new Vector3(0, 0, - dist);
             group.position.copy(group.localToWorld(deltaVec3));
 
         } else if (this.isTurnClockwise) {
@@ -571,7 +574,7 @@ class Moveable2D {
 
         if (this.isMovingForward) {
 
-            const deltaVec3 = new Vector3(0, 0, dist);
+            deltaVec3 = new Vector3(0, 0, dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
             offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
@@ -615,7 +618,7 @@ class Moveable2D {
             }
         } else if (this.isMovingBackward) {
 
-            const deltaVec3 = new Vector3(0, 0, - dist);
+            deltaVec3 = new Vector3(0, 0, - dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
             offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 

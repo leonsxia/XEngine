@@ -1108,6 +1108,15 @@ class SceneBuilder {
                     object = new BoxCube(specs);
                     object.setPosition(position)
                         .setRotationY(rotationY);
+
+                    // if (object.hasRays) {
+
+                    //     this.worldScene.scene.add(object.leftArrow);
+                    //     this.worldScene.scene.add(object.rightArrow);
+                    //     this.worldScene.scene.add(object.backLeftArrow);
+                    //     this.worldScene.scene.add(object.backRightArrow);
+
+                    // }
     
                     if (updateOBBs) object.updateOBBs();
                 }

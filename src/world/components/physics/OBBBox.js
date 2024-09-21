@@ -38,6 +38,18 @@ class OBBBox extends Box {
 
     }
 
+    get layers() {
+
+        return this.mesh.layers;
+        
+    }
+
+    setLayer(layer) {
+
+        this.mesh.layers.enable(layer);
+        
+    }
+
     // update OBB
     updateOBB(needUpdateMatrixWorld = true) {
 

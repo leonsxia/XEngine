@@ -453,6 +453,7 @@ class Room {
         this.obstacles.forEach(obs => {
 
             obs.updateOBBs(false, false, false);
+            obs.updateRay?.(false);
 
         });
 

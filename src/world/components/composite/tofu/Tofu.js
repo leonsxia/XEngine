@@ -44,6 +44,7 @@ class Tofu extends Moveable2D {
     #rayPadding = .2;
     #slopeCoefficient = 1;
     #slowDownCoefficient = 1;
+    #isPushing = false;
 
     constructor(name) {
 
@@ -222,7 +223,7 @@ class Tofu extends Moveable2D {
 
     get velocity() {
 
-        return this.isAccelerating && !this.isBackward ? 
+        return this.isAccelerating && !this.isBackward && !this.#isPushing ? 
             this.#vel * ENLARGE * this.#slopeCoefficient * this.#slowDownCoefficient : 
             this.#vel * this.#slopeCoefficient;
 
@@ -509,6 +510,19 @@ class Tofu extends Moveable2D {
 
         this.setSlopeCoefficient(s);
         this.intersectSlope = s;
+
+    }
+
+    startPushing() {
+
+        this.#isPushing = true;
+
+    }
+
+    stopPushing() {
+
+        this.#isPushing = false;
+
     }
 
     castShadow(cast) {
