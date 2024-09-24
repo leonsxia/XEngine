@@ -172,7 +172,7 @@ function addShadow(light) {
                 light.shadow.camera.fov = 90;
                 light.shadow.camera.aspect = 1;
                 light.shadow.camera.near = 0.5;
-                light.shadow.camera.far = 500;
+                light.shadow.camera.far = 100;   // default 500
             }
 
             break;
@@ -184,7 +184,7 @@ function addShadow(light) {
                 light.shadow.camera.fov = 50;
                 light.shadow.camera.aspect = 1;
                 light.shadow.camera.near = 0.5;
-                light.shadow.camera.far = 500;
+                light.shadow.camera.far = 100;   // default 500
             }
 
             break;
