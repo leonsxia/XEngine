@@ -123,14 +123,8 @@ class WorldScene4 extends WorldScene {
     focusNext(forceStaticRender = true) {
         
         this.focusNextProcess(forceStaticRender);
-        const { walls, insideWalls, floors, topOBBs, obstacles, slopes } = this.rooms[this.loadSequence];
-
-        this.physics.walls = walls.concat(insideWalls);
-        this.physics.floors = floors;
-        this.physics.obstacleTops = topOBBs;
-        this.physics.obstacles = obstacles;
-        this.physics.slopes = slopes;
-        this.physics.sortFloorTops();
+        
+        this.physics.initPhysics(this.rooms[this.loadSequence]);
 
         this.rooms.forEach((room, idx) => {
             if (idx === this.loadSequence) {

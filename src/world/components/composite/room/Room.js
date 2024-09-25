@@ -23,6 +23,7 @@ class Room {
     insideWalls = [];
     insideGroups = [];
     slopes = [];
+    slopeSideOBBWalls = [];
     slopeFaces = [];
     stairsSides = [];
     stairsStepFronts = [];
@@ -274,6 +275,7 @@ class Room {
                 
                 this.slopes.push(g);
                 this.slopeFaces.push(g.slope);
+                this.slopeSideOBBWalls.push(g.sideOBBWalls);
             
             };
 
@@ -432,7 +434,7 @@ class Room {
         // this will update all children mesh matrixWorld.
         this.group.updateMatrixWorld();
 
-        this.walls.concat(this.insideWalls).forEach(w => {
+        this.walls.concat(...this.insideWalls).concat(...this.slopeSideOBBWalls).forEach(w => {
 
             w.updateRay(false);
 

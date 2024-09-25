@@ -18,6 +18,8 @@ class SimplePhysics {
     obstacles = [];
     obstacleTops = [];
     slopes = [];
+    slopeSideOBBWalls = [];
+    obstacleCollisionOBBWalls = [];
     activePlayers = [];
 
     constructor(players, floors = [], walls = [], obstacles = []) {
@@ -50,6 +52,21 @@ class SimplePhysics {
             if (idx > -1) this.activePlayers.splice(find, 1);
 
         });
+
+    }
+
+    initPhysics(room) {
+
+        const { walls, insideWalls, floors, topOBBs, obstacles, slopes, slopeSideOBBWalls } = room;
+
+        this.walls = walls.concat(insideWalls);
+        this.floors = floors;
+        this.obstacleTops = topOBBs;
+        this.obstacles = obstacles;
+        this.slopes = slopes;
+        this.slopeSideOBBWalls = slopeSideOBBWalls;
+        this.obstacleCollisionOBBWalls = this.walls.filter(w => w.isOBB).concat(...this.slopeSideOBBWalls)
+        this.sortFloorTops();
 
     }
 
@@ -378,7 +395,7 @@ class SimplePhysics {
 
             obs.resetBlockStatus();
 
-            this.walls.filter(w => w.isOBB).forEach(wall => {
+            this.obstacleCollisionOBBWalls.forEach(wall => {
 
                 if (!obs.walls.find(w => w === wall) && this.checkObstacleInWallRangeT(obs, wall) && obs.box.obb.intersectsOBB(wall.obb)) {
 

@@ -22,6 +22,8 @@ class Slope extends InWallObjectBase {
     leftOBBFace;
     rightOBBFace;
 
+    sideOBBWalls = [];
+
     constructor(specs) {
 
         super(specs);
@@ -126,7 +128,7 @@ class Slope extends InWallObjectBase {
 
             this.group.add(this.leftOBBFace.mesh, this.rightOBBFace.mesh);
 
-            this.walls.push(this.leftOBBFace, this.rightOBBFace);
+            this.sideOBBWalls.push(this.leftOBBFace, this.rightOBBFace);
 
         }
 
@@ -136,7 +138,7 @@ class Slope extends InWallObjectBase {
         
         if (needUpdateWalls) {
 
-            this.walls.forEach(w => {
+            this.walls.concat(...this.sideOBBWalls).forEach(w => {
 
                 w.updateRay();
 
