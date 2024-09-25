@@ -701,7 +701,7 @@ class SimplePhysics {
 
                 this.floors.forEach(floor => {
 
-                    if (collisionFloors.length === 0) {
+                    if (collisionFloors.length === 0 && !this.checkBlockByTopT(player, floor)) {
 
                         if (player.obb.intersectsOBB(floor.obb)) {
                             // to do

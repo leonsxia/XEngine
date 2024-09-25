@@ -1,0 +1,325 @@
+{
+    "scene": "Water Room",
+    "players": [
+        {
+            "name": "tofu1",
+            "type": "Tofu",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [0, 0, 0]
+        }
+    ],
+    "lights": [
+        {
+            "room": "room1",
+            "basicLightSpecs": [
+                {
+                    "name": "room1_mainLight",
+                    "display": "Directional Light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "intensity": 0,
+                        "position": [0, 20, 0],
+                        "target": [0, 0, 0]
+                    },
+                    "type": "DirectionalLight",
+                    "debug": true,
+                    "shadow": false,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                },
+                {
+                    "name": "room1_ambientLight",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [245, 178, 239],
+                        "intensity": 0.2
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true
+                },
+                {
+                    "name": "room1_hemisphereLight",
+                    "display": "Hemisphere Light",
+                    "detail": {
+                        "groundColor": [47, 79, 79],
+                        "skyColor": [160, 160, 160],
+                        "intensity": 0,
+                        "position": [0, 4.6, 0]
+                    },
+                    "type": "HemisphereLight",
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "room1_pointLight1",
+                    "display": "Ceiling Lamp Main",
+                    "detail": {
+                        "color": [244, 200, 122],
+                        "position": [0, 0, 0],
+                        "intensity": 120,
+                        "distance": 0,
+                        "decay": 2
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "room1_modern_ceiling_lamp_01_1",
+                    "turnOn": true
+                }
+            ],
+            "spotLightSpecs": []
+        }
+    ],
+    "objects": [
+        {
+            "type": "Scene",
+            "children": [
+                {
+                    "type": "Axes",
+                    "size": 3,
+                    "position": [-50.5, -0.5, -50.5]
+                },
+                {
+                    "type": "Grid",
+                    "size": 100,
+                    "divisions": 100,
+                    "position": [0, -0.5, 0]
+                },
+                {
+                    "type": "OBBPlane",
+                    "width": 100,
+                    "height": 100,
+                    "color": "#CC8866",
+                    "name": "ground",
+                    "position": [0, -0.5, 0],
+                    "rotation": [-1.5708, 0, 0],
+                    "receiveShadow": false,
+                    "castShadow": false
+                }
+            ]
+        },
+        {
+            "type": "Room",
+            "width": 15,
+            "height": 6,
+            "depth": 20,
+            "baseSize": 6,
+            "frontMap": "CONCRETE_132",
+            "frontNormal": "CONCRETE_132_NORMAL",
+            "backMap": "CONCRETE_132",
+            "backNormal": "CONCRETE_132_NORMAL",
+            "leftMap": "CONCRETE_132",
+            "leftNormal": "CONCRETE_132_NORMAL",
+            "rightMap": "CONCRETE_132",
+            "rightNormal": "CONCRETE_132_NORMAL",
+            "mapRatio": 1.5,
+            "name": "room1",
+            "showArrow": true,
+            "enableWallOBBs": true,
+            "position": [0, 3, 0],
+            "rotationY": 0,
+            "groups": [
+                {
+                    "type": "ModernCeilingLamp01",
+                    "src": "MODERN_CEILING_LAMP_01",
+                    "name": "room1_modern_ceiling_lamp_01_1",
+                    "scale": [1.2, 1.3],
+                    "position": [0, 2.34, 0],
+                    "rotationY": 0
+                },
+                {
+                    "type": "SquarePillar",
+                    "width": 15,
+                    "height": 3,
+                    "depth": 7.5,
+                    "baseSize": 3,
+                    "enableOBBs": true,
+                    "frontMap": "CONCRETE_128",
+                    "frontNormal": "CONCRETE_128_NORMAL",
+                    "backMap": "CONCRETE_128",
+                    "backNormal": "CONCRETE_128_NORMAL",
+                    "leftMap": "CONCRETE_128",
+                    "leftNormal": "CONCRETE_128_NORMAL",
+                    "rightMap": "CONCRETE_128",
+                    "rightNormal": "CONCRETE_128_NORMAL",
+                    "mapRatio": 1.86,
+                    "name": "room1_square_pillar_stairs_front",
+                    "invisibles": [4, 5],
+                    "showArrow": true,
+                    "enableWallOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [0, -1.5, 6.25],
+                    "rotationY": 0
+                },
+                {
+                    "type": "SquarePillar",
+                    "width": 15,
+                    "height": 3,
+                    "depth": 7.5,
+                    "baseSize": 3,
+                    "enableOBBs": true,
+                    "frontMap": "CONCRETE_128",
+                    "frontNormal": "CONCRETE_128_NORMAL",
+                    "backMap": "CONCRETE_128",
+                    "backNormal": "CONCRETE_128_NORMAL",
+                    "leftMap": "CONCRETE_128",
+                    "leftNormal": "CONCRETE_128_NORMAL",
+                    "rightMap": "CONCRETE_128",
+                    "rightNormal": "CONCRETE_128_NORMAL",
+                    "mapRatio": 1.86,
+                    "name": "room1_square_pillar_stairs_back",
+                    "invisibles": [4, 5],
+                    "showArrow": true,
+                    "enableWallOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [0, -1.5, -6.25],
+                    "rotationY": 0
+                },
+                {
+                    "type": "BoxCube",
+                    "width": 1.5,
+                    "height": 1.5,
+                    "depth": 1.5,
+                    "weight": 1.5,
+                    "baseSize": 1,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "pushable": true,
+                    "name": "room1_CubeBox1",
+                    "position": [3, 1.5, 6.25],
+                    "rotationY": 0
+                },
+                {
+                    "type": "BoxCube",
+                    "width": 1.5,
+                    "height": 1.5,
+                    "depth": 1.5,
+                    "weight": 1.5,
+                    "baseSize": 1,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "pushable": true,
+                    "name": "room1_CubeBox2",
+                    "position": [-3, 1.5, 6.25],
+                    "rotationY": 0
+                },
+                {
+                    "type": "BoxCube",
+                    "width": 1.5,
+                    "height": 1.5,
+                    "depth": 1.5,
+                    "weight": 1.5,
+                    "baseSize": 1,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "pushable": true,
+                    "name": "room1_CubeBox3",
+                    "position": [0, 1.5, 8],
+                    "rotationY": 0
+                }
+            ],
+            "floors": [
+                {
+                    "type": "OBBPlane",
+                    "width": 15,
+                    "height": 20,
+                    "map": "STONE_165",
+                    "normalMap": "STONE_165_NORMAL",
+                    "name": "room1_floor1",
+                    "repeatU": 0.889,
+                    "repeatV": 1,
+                    "repeatModeU": 1002,
+                    "repeatModeV": 1002,
+                    "rotationT": 1.5708,
+                    "receiveShadow": true,
+                    "position": [0, -3, 0],
+                    "rotation": [-1.5708, 0, 0]
+                },
+                {
+                    "type": "OBBPlane",
+                    "width": 15,
+                    "height": 7.5,
+                    "map": "CONCRETE_165",
+                    "normalMap": "CONCRETE_165_NORMAL",
+                    "name": "room1_front_stage",
+                    "repeatU": 1.33,
+                    "repeatV": 1,
+                    "repeatModeU": 1002,
+                    "repeatModeV": 1002,
+                    "receiveShadow": true,
+                    "position": [0, 0, 6.25],
+                    "rotation": [-1.5708, 0, 0]
+                },
+                {
+                    "type": "OBBPlane",
+                    "width": 15,
+                    "height": 7.5,
+                    "map": "CONCRETE_165",
+                    "normalMap": "CONCRETE_165_NORMAL",
+                    "name": "room1_back_stage",
+                    "repeatU": 1.33,
+                    "repeatV": 1,
+                    "repeatModeU": 1002,
+                    "repeatModeV": 1002,
+                    "receiveShadow": true,
+                    "position": [0, 0, -6.25],
+                    "rotation": [-1.5708, 0, 3.1416]
+                }
+            ],
+            "ceilings": [
+                {
+                    "type": "Plane",
+                    "width": 15,
+                    "height": 20,
+                    "map": "METAL_292",
+                    "normalMap": "METAL_292_NORMAL",
+                    "name": "room1_ceiling",
+                    "repeatU": 1,
+                    "repeatV": 1,
+                    "repeatModeU": 1000,
+                    "repeatModeV": 1000,
+                    "position": [0, 3, 0],
+                    "rotation": [1.5708, 0, 0],
+                    "receiveShadow": true,
+                    "castShadow": false
+                }
+            ],
+            "walls": [],
+            "insideWalls": []
+        }
+    ]
+}
