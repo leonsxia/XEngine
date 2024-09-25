@@ -976,6 +976,7 @@
                     "sideNormal": "CONCRETE_128_NORMAL",
                     "mapRatio": 1.8,
                     "enableOBBs": false,
+                    "enableWallOBBs": true,
                     "name": "room1_Stairs1",
                     "position": [0, -2.175, 0.5],
                     "rotationY": 0

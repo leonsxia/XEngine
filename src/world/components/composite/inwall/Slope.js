@@ -1,7 +1,9 @@
-import { createCollisionPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree, createOBBBox } from '../../physics/collisionHelper';
+import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree, createOBBBox } from '../../physics/collisionHelper';
 import { InWallObjectBase } from './InWallObjectBase';
 import { yankeesBlue, basic } from '../../basic/colorBase';
 import { PLAYER_RAY_LAYER, OBSTACLE_RAY_LAYER } from '../../utils/constants';
+
+const DEFAULT_STEP_HEIGHT = .25;
 
 class Slope extends InWallObjectBase {
 
@@ -16,6 +18,9 @@ class Slope extends InWallObjectBase {
     rightFace;
     backFace;
     bottomFace;
+
+    leftOBBFace;
+    rightOBBFace;
 
     constructor(specs) {
 
@@ -40,6 +45,8 @@ class Slope extends InWallObjectBase {
         this.height = height;
         this.depth = depth;
 
+        const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
+
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], false, false);
         this.bottomBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_bottom_buffer`, [0, - height * .5 + bufferSpecs.size.height * .5, depth * .5 + bufferSpecs.size.depth * .5], [0, 0, 0], false, false);
         this.topBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_top_buffer`, [0, height * .5 + bufferSpecs.size.height * .5, - depth * .5 - bufferSpecs.size.depth * .5], [0, 0, 0], false, false);
@@ -47,7 +54,9 @@ class Slope extends InWallObjectBase {
         this.slope = createOBBPlane(slopeSpecs, `${name}_slope`, [0, 0, 0], [- Math.atan(depth / height), 0, 0], receiveShadow, castShadow);
         this.leftFace = createCollisionTrianglePlane(leftSpecs, `${name}_left`, [width * .5, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
         this.rightFace = createCollisionTrianglePlane(rightSpecs, `${name}_right`, [- width * .5, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
-        this.backFace = createCollisionPlane(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, receiveShadow, castShadow, showArrow);
+        this.backFace = createWallFunction(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, receiveShadow, castShadow, showArrow);
+
+        this.createSideOBBs();
 
         this.slope.mesh.layers.enable(PLAYER_RAY_LAYER);
         this.slope.mesh.layers.enable(OBSTACLE_RAY_LAYER);
@@ -69,7 +78,7 @@ class Slope extends InWallObjectBase {
 
         }
 
-        this.walls = [this.leftFace, this.rightFace, this.backFace];
+        this.walls.push(this.leftFace, this.rightFace, this.backFace);
 
         this.group.add(
             this.box.mesh,
@@ -95,6 +104,31 @@ class Slope extends InWallObjectBase {
             this.backFace.init(),
             this.bottomFace.init()
         ]);
+
+    }
+
+    createSideOBBs() {
+
+        if (this.enableWallOBBs) {
+
+            const { name, width = 1, depth = 1, height = 1, stepHeight = DEFAULT_STEP_HEIGHT } = this.specs;
+            const { showArrow = false } = this.specs;
+
+            const leftOBBSpecs = { width: depth, height: stepHeight, color: basic };
+            const rightOBBSpecs = { width: depth, height: stepHeight, color: basic };
+            const bottomY = (stepHeight - height) * .5;
+
+            this.leftOBBFace = createCollisionOBBPlane(leftOBBSpecs, `${name}_left_obb`, [width * .5, bottomY, 0], Math.PI * .5, false, false, showArrow);
+            this.rightOBBFace = createCollisionOBBPlane(rightOBBSpecs, `${name}_right_obb`, [- width * .5, bottomY, 0], - Math.PI * .5, false, false, showArrow);
+
+            this.leftOBBFace.mesh.visible = false;
+            this.rightOBBFace.mesh.visible = false;
+
+            this.group.add(this.leftOBBFace.mesh, this.rightOBBFace.mesh);
+
+            this.walls.push(this.leftOBBFace, this.rightOBBFace);
+
+        }
 
     }
 

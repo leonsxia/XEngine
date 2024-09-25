@@ -7,7 +7,8 @@ const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
 const FACE_DEF = ['frontFace', 'backFace', 'leftFace', 'rightFace'];
 const STAIR_OFFSET_MAX = .3;
 const STAIR_OFFSET_MIN = .1;
-const OBSTACLE_BLOCK_HEIGHT = .2;
+const OBSTACLE_BLOCK_OFFSET_MAX = .2;
+const OBSTACLE_BLOCK_OFFSET_MIN = .05;
 
 class SimplePhysics {
 
@@ -279,7 +280,7 @@ class SimplePhysics {
 
         let block = false;
 
-        if (obs.bottomY < top.worldPosition.y - OBSTACLE_BLOCK_HEIGHT) {
+        if (obs.bottomY < top.worldPosition.y - OBSTACLE_BLOCK_OFFSET_MAX) {
 
             block = true;
 
@@ -292,8 +293,8 @@ class SimplePhysics {
     checkObstacleInWallRangeT(obs, wall) {
 
         let inRange = false;
-        const wallTopBorder = wall.worldPosition.y + wall.height * .5 - OBSTACLE_BLOCK_HEIGHT;
-        const wallBottomBorder = wall.worldPosition.y - wall.height * .5 + OBSTACLE_BLOCK_HEIGHT;
+        const wallTopBorder = wall.worldPosition.y + wall.height * .5 - OBSTACLE_BLOCK_OFFSET_MIN;
+        const wallBottomBorder = wall.worldPosition.y - wall.height * .5 + OBSTACLE_BLOCK_OFFSET_MIN;
 
         if (obs.bottomY < wallTopBorder && obs.topY > wallBottomBorder) {
 
