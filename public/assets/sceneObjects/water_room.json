@@ -154,7 +154,7 @@
                     "rightMap": "CONCRETE_128",
                     "rightNormal": "CONCRETE_128_NORMAL",
                     "mapRatio": 1.86,
-                    "name": "room1_square_pillar_stairs_front",
+                    "name": "room1_square_pillar_front",
                     "invisibles": [4, 5],
                     "showArrow": true,
                     "enableWallOBBs": true,
@@ -179,7 +179,7 @@
                     "rightMap": "CONCRETE_128",
                     "rightNormal": "CONCRETE_128_NORMAL",
                     "mapRatio": 1.86,
-                    "name": "room1_square_pillar_stairs_back",
+                    "name": "room1_square_pillar_back",
                     "invisibles": [4, 5],
                     "showArrow": true,
                     "enableWallOBBs": true,
@@ -319,7 +319,17 @@
                 }
             ],
             "walls": [],
-            "insideWalls": []
+            "insideWalls": [],
+            "waters": [
+                {
+                    "type": "WaterPlane",
+                    "width": 15,
+                    "height": 5,
+                    "position": [0, -0.5, 0],
+                    "rotation": [-1.5708, 0, 0],
+                    "flowSpeed": 0.01
+                }
+            ]
         }
     ]
 }

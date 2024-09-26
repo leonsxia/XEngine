@@ -36,6 +36,7 @@ const TRIANGLE = 'Triangle';
 const STAIRS_SIDE = 'StairsSide';
 const STAIRS_FRONT = 'StairsFront';
 const STAIRS_TOP = 'StairsTop';
+const WATER_PLANE = 'WaterPlane';
 
 // composite objects
 const SCENE = 'Scene';
@@ -150,7 +151,12 @@ const TEXTURE_NAMES = {
     METAL_290: 'METAL_290',
     METAL_290_NORMAL: 'METAL_290_NORMAL',
     METAL_292: 'METAL_292',
-    METAL_292_NORMAL: 'METAL_292_NORMAL'
+    METAL_292_NORMAL: 'METAL_292_NORMAL',
+    // water
+    WATER_1_M: 'WATER_1_M',
+    WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
+    WATER_2_M: 'WATER_2_M',
+    WATER_2_M_NORMAL: 'WATER_2_M_NORMAL'
 }
 
 const TEXTURES = [{
@@ -207,6 +213,10 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.METAL_290, map: 'assets/textures/walls/Texturelabs_Metal_290M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_290L.jpg'
 }, {
     name: TEXTURE_NAMES.METAL_292, map: 'assets/textures/walls/Texturelabs_Metal_292M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_292L.jpg'
+}, {
+    name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
+}, {
+    name: TEXTURE_NAMES.WATER_2_M, normalMap: 'assets/textures/water/Water_2_M_Normal.jpg'
 }];
 
 // gltfs
@@ -314,6 +324,7 @@ export {
     STAIRS_SIDE,
     STAIRS_FRONT,
     STAIRS_TOP,
+    WATER_PLANE,
 
     SCENE,
     ROOM,

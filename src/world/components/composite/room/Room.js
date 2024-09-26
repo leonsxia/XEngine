@@ -240,6 +240,19 @@ class Room {
             c.isCeiling = true;
 
         });
+
+    }
+
+    addWaters(waters) {
+
+        waters.forEach(w => {
+
+            this.group.add(w.mesh);
+
+            w.mesh.layers.enable(CAMERA_RAY_LAYER);
+
+        });
+
     }
 
     addGroups(groups) {

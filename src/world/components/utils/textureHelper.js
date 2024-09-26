@@ -9,6 +9,7 @@ function getTextureLoader() {
 }
 
 const worldTextureLoader = getTextureLoader();
+const loadedTextures = {};
 
 async function loadSingleTexture(specs) {
 
@@ -68,4 +69,4 @@ async function loadTextures(mapsArr) {
 
 }
 
-export { worldTextureLoader, loadSingleTexture, loadTextures };
+export { worldTextureLoader, loadSingleTexture, loadTextures, loadedTextures };

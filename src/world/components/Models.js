@@ -4,6 +4,7 @@ export * as MeshGroup from './basic/meshGroup.js';
 export { Box } from './basic/Box.js';
 export { Sphere } from './basic/Sphere.js';
 export { Plane } from './basic/Plane.js';
+export { WaterPlane } from './basic/WaterPlane.js';
 export { Circle } from './basic/Circle.js';
 export { Cylinder } from './basic/Cylinder.js';
 export { TrianglePlane } from './basic/TrianglePlane.js';

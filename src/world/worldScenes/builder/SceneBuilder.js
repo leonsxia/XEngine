@@ -1,7 +1,7 @@
 import { createAxesHelper, createGridHelper } from "../../components/utils/helpers.js";
 import { createBasicLights, createPointLights, createSpotLights } from "../../components/lights.js";
 import {
-    Train, Tofu, Plane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
+    Train, Tofu, Plane, WaterPlane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
     Room, InspectorRoom, 
     SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs,
     WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand,
@@ -15,7 +15,7 @@ import { setupShadowLight, updateSingleLightCamera } from "../../components/shad
 import {
     DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
     AXES, GRID, TRAIN, TOFU,
-    PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
+    PLANE, WATER_PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
     ROOM, INSPECTOR_ROOM, SCENE, 
     SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
     WOODEN_PICNIC_TABLE, WOODEN_SMALL_TABLE, ROUND_WOODEN_TABLE, PAINTED_WOODEN_TABLE, PAINTED_WOODEN_NIGHTSTAND,
@@ -26,6 +26,7 @@ import {
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
+import { colorStr, colorArr } from "../../components/basic/colorBase.js";
 
 class SceneBuilder {
 
@@ -250,6 +251,7 @@ class SceneBuilder {
             const ceilings = [];
             const walls = [];
             const insideWalls = [];
+            const waters = [];
     
             roomSpec.groups.forEach(spec => {
     
@@ -277,6 +279,14 @@ class SceneBuilder {
 
             });
             room.addCeilings(ceilings);
+
+            roomSpec.waters?.forEach(spec => {
+
+                const water = this.buildObject(spec);
+                waters.push(water);
+
+            });
+            room.addWaters(waters);
     
             roomSpec.walls.forEach(spec => {
     
@@ -501,7 +511,7 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
-                        _origin.detail.color = new Array(...this.colorArr(light.color));
+                        _origin.detail.color = new Array(...colorArr(light.color));
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.position = new Array(...this.positionArr(light.position));
                         _origin.detail.target = new Array(...this.positionArr(light.target.position));
@@ -516,7 +526,7 @@ class SceneBuilder {
                         _origin.detail.position = new Array(...position);
                         _origin.detail.target = new Array(...target);
 
-                        light.color.setStyle(this.colorStr(...color));
+                        light.color.setStyle(colorStr(...color));
                         light.intensity = intensity;
                         light.position.set(...position);
                         light.target.position.set(...target);
@@ -530,7 +540,7 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
-                        _origin.detail.color = new Array(...this.colorArr(light.color));
+                        _origin.detail.color = new Array(...colorArr(light.color));
                         _origin.detail.intensity = light.intensity;
 
                     } else {
@@ -541,7 +551,7 @@ class SceneBuilder {
                         _origin.detail.color = new Array(...color);
                         _origin.detail.intensity = intensity;
 
-                        light.color.setStyle(this.colorStr(...color));
+                        light.color.setStyle(colorStr(...color));
                         light.intensity = intensity;
 
                     }
@@ -554,8 +564,8 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
-                        _origin.detail.skyColor = new Array(...this.colorArr(light.color));
-                        _origin.detail.groundColor = new Array(...this.colorArr(light.groundColor));
+                        _origin.detail.skyColor = new Array(...colorArr(light.color));
+                        _origin.detail.groundColor = new Array(...colorArr(light.groundColor));
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.position = new Array(...this.positionArr(light.position));
 
@@ -569,8 +579,8 @@ class SceneBuilder {
                         _origin.detail.intensity = intensity;
                         _origin.detail.position = new Array(...position);
 
-                        light.color.setStyle(this.colorStr(...skyColor));
-                        light.groundColor.setStyle(this.colorStr(...groundColor));
+                        light.color.setStyle(colorStr(...skyColor));
+                        light.groundColor.setStyle(colorStr(...groundColor));
                         light.intensity = intensity;
                         light.position.set(...position);
 
@@ -585,7 +595,7 @@ class SceneBuilder {
 
                         const { attachTo, attachToType } = _origin;
 
-                        _origin.detail.color = new Array(...this.colorArr(light.color));
+                        _origin.detail.color = new Array(...colorArr(light.color));
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.distance = light.distance;
                         _origin.detail.decay = light.decay;
@@ -614,7 +624,7 @@ class SceneBuilder {
                         _origin.detail.decay = decay;
                         _origin.detail.position = new Array(...position);
 
-                        light.color.setStyle(this.colorStr(...color));
+                        light.color.setStyle(colorStr(...color));
                         light.intensity = turnOn || (this.worldScene.postProcessor.bloomMixedPass?.enabled) ? intensity : 0;
                         light.distance = distance;
                         light.decay = decay;
@@ -640,7 +650,7 @@ class SceneBuilder {
 
                         const { attachTo, attachToType } = _origin;
 
-                        _origin.detail.color = new Array(...this.colorArr(light.color));
+                        _origin.detail.color = new Array(...colorArr(light.color));
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.distance = light.distance;
                         _origin.detail.angle = light.angle;
@@ -676,7 +686,7 @@ class SceneBuilder {
                         _origin.detail.position = new Array(...position);
                         _origin.detail.target = new Array(...target);
 
-                        light.color.setStyle(this.colorStr(...color));
+                        light.color.setStyle(colorStr(...color));
                         light.intensity = turnOn || (this.worldScene.postProcessor.bloomMixedPass?.enabled) ? intensity : 0;
                         light.distance = distance;
                         light.angle = angle;
@@ -890,6 +900,20 @@ class SceneBuilder {
                         .castShadow(castShadow);
                 }
     
+                break;
+            case WATER_PLANE:
+                {
+                    const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
+                    const { normalMap0, normalMap1 } = specs;
+
+                    const maps = [{ normalMap0 }, { normalMap1 }];
+                    this.setupObjectTextures(maps, specs);
+
+                    object = new WaterPlane(specs);
+                    object.setRotation(rotation)
+                        .setPosition(position);
+                }
+
                 break;
             case OBBPLANE:
                 {
@@ -1404,19 +1428,6 @@ class SceneBuilder {
             }
         }
     
-    }
-
-    colorStr(r, g, b) {
-
-        return `rgb(${r},${g},${b})`;
-
-    }
-
-    colorArr(objColor) {
-
-        const color = objColor.clone().convertLinearToSRGB();
-        return [Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255)];
-
     }
 
     positionArr(objPosition) {

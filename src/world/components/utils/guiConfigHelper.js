@@ -735,7 +735,11 @@ function makeObjectsGuiConfig(objects) {
             changeFn: posChangeFn
         }));
 
-        if (!object.isPlayer && !object.father.isFloor && !object.father.isCeiling && !object.father.isArea) {
+        if (!object.isPlayer && 
+            !object.father.isFloor && !object.father.isCeiling && 
+            !object.father.isArea &&
+            !object.father.isWater
+        ) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationYDegree',
@@ -826,7 +830,7 @@ function makeObjectsGuiConfig(objects) {
             }
         }
 
-        if (object.father.isArea) {
+        if (object.father.isArea || object.father.isWater) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationXDegree',
@@ -836,7 +840,7 @@ function makeObjectsGuiConfig(objects) {
                 type: 'object-angle',
                 changeFn: () => {
 
-                        object.father.updateOBB();
+                        object.father.updateOBB?.();
 
                 }
             }));
@@ -849,7 +853,7 @@ function makeObjectsGuiConfig(objects) {
                 type: 'object-angle',
                 changeFn: () => {
 
-                        object.father.updateOBB();
+                        object.father.updateOBB?.();
 
                 }
             }));
@@ -862,10 +866,51 @@ function makeObjectsGuiConfig(objects) {
                 type: 'object-angle',
                 changeFn: () => {
 
-                        object.father.updateOBB();
+                        object.father.updateOBB?.();
 
                 }
             }));
+        }
+
+        if (object.father.isWater) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'waterColor',
+                prop: 'color',
+                value: object.father,
+                params: [255],
+                type: 'water-color',
+                changeFn: (val) => {
+
+                    object.father.waterColor = val;
+
+                }
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'waterScale',
+                prop: 'scale',
+                value: object.father,
+                params: [1, 10, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'waterFlowX',
+                prop: 'flowX',
+                value: object.father,
+                params: [-1, 1, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'waterFlowY',
+                prop: 'flowY',
+                value: object.father,
+                params: [-1, 1, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
         }
 
         objectPanel.details.push(folder);

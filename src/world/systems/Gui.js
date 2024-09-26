@@ -1,5 +1,6 @@
 import { GUI } from 'lil-gui';
 import Stats from 'stats.js';
+import { colorStr } from '../components/basic/colorBase';
 
 const CONTROL_TITLES = ['Menu', 'Lights Control', 'Objects Control'];
 const PLAYER_CONTROL = 'Player Control';
@@ -185,6 +186,12 @@ class Gui {
                         folder.add(parent, property, ...spec.params).listen().name(displayName).identifier = target ?? displayName;
 
                         break;
+                        
+                    case 'water-color':
+
+                        folder.addColor(parent, property, ...spec.params).listen().name(displayName).identifier = target ?? displayName;
+
+                        break;
 
                     case 'light-num':
                     case 'angle':
@@ -253,7 +260,7 @@ class Gui {
                 switch(find.type) {
                     case 'color':
 
-                        target.color.setStyle(this.colorStr(...val));
+                        target.color.setStyle(colorStr(...val));
 
                         if (find.changeFn) find.changeFn();
 
@@ -261,7 +268,7 @@ class Gui {
 
                     case 'groundColor':
 
-                        target.groundColor.setStyle(this.colorStr(...val));
+                        target.groundColor.setStyle(colorStr(...val));
 
                         if (find.changeFn) find.changeFn();
 
@@ -332,6 +339,7 @@ class Gui {
 
                     case 'number':
                     case 'object-angle':
+                    case 'water-color':
 
                         if (find.changeFn) find.changeFn(val);
 
@@ -423,12 +431,6 @@ class Gui {
     removeObjects() {
 
         this.#guis[2].children.forEach(c => c.destroy());
-
-    }
-
-    colorStr(r, g, b) {
-
-        return `rgb(${r},${g},${b})`;
 
     }
     

@@ -9,7 +9,7 @@ import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
 import { EventDispatcher } from "./systems/EventDispatcher";
 
-import { loadTextures } from "./components/utils/textureHelper";
+import { loadTextures, loadedTextures } from "./components/utils/textureHelper";
 import { loadGLTFModels } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
@@ -85,6 +85,7 @@ class World {
         const end = Date.now();
         console.log(`loading assests in ${(end - start) * .001} s`);
 
+        Object.assign(loadedTextures, textures);
         this.#textures = textures;
         this.#gltfs = gltfs;
 

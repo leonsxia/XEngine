@@ -1,11 +1,6 @@
 import { DirectionalLight, PointLight, AmbientLight, HemisphereLight, SpotLight, Color } from 'three';
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './utils/constants';
-
-function colorStr(r, g, b) {
-
-    return `rgb(${r},${g},${b})`;
-
-}
+import { colorStr } from './basic/colorBase';
 
 function createBasicLights(basicLightSpecsArr) {
 

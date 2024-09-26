@@ -5,7 +5,7 @@ import { worldTextureLoader } from '../utils/textureHelper';
 import { basicMateraials } from './basicMaterial';
 import { white } from './colorBase';
 import { REPEAT_WRAPPING } from '../utils/constants';
-import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP } from '../utils/constants';
+import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP, WATER_PLANE } from '../utils/constants';
 
 class BasicObject {
     
@@ -30,6 +30,7 @@ class BasicObject {
 
         switch (type) {
             case PLANE:
+            case WATER_PLANE:
                 {
                     const { width, height } = specs;
                     this.geometry = new PlaneGeometry(width, height);
@@ -82,27 +83,31 @@ class BasicObject {
                 break;
         }
 
-        const { transparent = false } = specs;
+        const { needMaterial = true, transparent = false } = specs;
 
-        if (color) {
+        if (needMaterial) {
 
-            const { useBasicMaterial = false } = specs;
+            if (color) {
 
-            if (useBasicMaterial) {
-
-                this.material = new MeshBasicMaterial({ color: color });
-
-            } else {
-
-                this.material = new MeshPhongMaterial({ color: color });
-
+                const { useBasicMaterial = false } = specs;
+    
+                if (useBasicMaterial) {
+    
+                    this.material = new MeshBasicMaterial({ color: color });
+    
+                } else {
+    
+                    this.material = new MeshPhongMaterial({ color: color });
+    
+                }
+                
             }
+            else
+                this.material = basicMateraials.basic.clone();
+    
+            this.material.transparent = transparent;
             
         }
-        else
-            this.material = basicMateraials.basic.clone();
-
-        this.material.transparent = transparent;
 
     }
 

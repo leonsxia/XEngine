@@ -17,6 +17,19 @@ const BBW = 0x00ff00;
 const intersect = 0xff0000;
 const specular = 0x111111;
 
+function colorStr(r, g, b) {
+
+    return `rgb(${r},${g},${b})`;
+
+}
+
+function colorArr(objColor) {
+
+    const color = objColor.clone().convertLinearToSRGB();
+    return [Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255)];
+
+}
+
 export {
     basic,
     white,
@@ -35,5 +48,7 @@ export {
     BF,
     BBW,
     intersect,
-    specular
+    specular,
+    colorStr,
+    colorArr
 }
