@@ -59,7 +59,9 @@ class ObstacleBase extends ObstacleMoveable {
     pushable = false;
     draggable = false;
 
-    weight = 1;
+    density = .5;
+    #volume = undefined;
+    #weight = undefined;
 
     specs;
 
@@ -69,7 +71,7 @@ class ObstacleBase extends ObstacleMoveable {
         
         this.specs = specs;
 
-        const { name, width, depth, height, weight = 1 } = specs;
+        const { name, density = .5 } = specs;
         const { isObstacle = false, enableWallOBBs = false, climbable = false, movable = false, pushable = false, draggable = false } = specs;
 
         this.name = name;
@@ -86,11 +88,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.rotationY = 0;     // local rotation y
 
-        this.#w = width;
-        this.#d = depth;
-        this.#h = height;
-
-        this.weight = weight;
+        this.density = density;
 
     }
 
@@ -102,19 +100,61 @@ class ObstacleBase extends ObstacleMoveable {
 
     get width() {
 
-        return this.box.width;
+        if (!this.#w) {
+
+            this.#w = this.box.width;
+
+        }
+
+        return this.#w;
 
     }
 
     get height() {
 
-        return this.box.height;
+        if (!this.#h) {
+
+            this.#h = this.box.height;
+
+        }
+
+        return this.#h;
 
     }
 
     get depth() {
 
-        return this.box.depth;
+        if (!this.#d) {
+
+            this.#d = this.box.depth;
+
+        }
+
+        return this.#d;
+
+    }
+
+    get volume() {
+
+        if (!this.#volume) {
+
+            this.#volume = this.width * this.height * this.depth;
+
+        }
+
+        return this.#volume;
+
+    }
+
+    get weight() {
+
+        if (!this.#weight) {
+
+            this.#weight = this.volume * this.density;
+
+        }
+
+        return this.#weight;
 
     }
 
@@ -153,30 +193,6 @@ class ObstacleBase extends ObstacleMoveable {
         return [this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay];
 
     }
-
-    get leftCorVec3() {
-
-        return new Vector3(this.#w * .5, 0, this.#d * .5);
-
-    }
-
-    get rightCorVec3() {
-
-        return new Vector3(- this.#w * .5, 0, this.#d * .5);
-
-    }
-
-    get leftBackCorVec3() {
-
-        return new Vector3(this.#w * .5, 0, - this.#d * .5);
-
-    }
-
-    get rightBackCorVec3() {
-
-        return new Vector3( - this.#w * .5, 0, - this.#d * .5);
-
-    } 
 
     getWalls() {
 
