@@ -738,7 +738,7 @@ function makeObjectsGuiConfig(objects) {
         if (!object.isPlayer && 
             !object.father.isFloor && !object.father.isCeiling && 
             !object.father.isArea &&
-            !object.father.isWater
+            !object.father.isWater && !object.father.isWaterCube
         ) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -830,7 +830,7 @@ function makeObjectsGuiConfig(objects) {
             }
         }
 
-        if (object.father.isArea || object.father.isWater) {
+        if (object.father.isArea || object.father.isWater || object.father.isWaterCube ) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationXDegree',
@@ -841,6 +841,7 @@ function makeObjectsGuiConfig(objects) {
                 changeFn: () => {
 
                         object.father.updateOBB?.();
+                        object.father.updateOBBs?.();
 
                 }
             }));
@@ -854,6 +855,7 @@ function makeObjectsGuiConfig(objects) {
                 changeFn: () => {
 
                         object.father.updateOBB?.();
+                        object.father.updateOBBs?.();
 
                 }
             }));
@@ -867,12 +869,13 @@ function makeObjectsGuiConfig(objects) {
                 changeFn: () => {
 
                         object.father.updateOBB?.();
+                        object.father.updateOBBs?.();
 
                 }
             }));
         }
 
-        if (object.father.isWater) {
+        if (object.father.isWater || object.father.isWaterCube) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'waterColor',

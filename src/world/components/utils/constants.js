@@ -47,6 +47,7 @@ const LWALL = 'LWall';
 const CYLINDER_PILLAR = 'CylinderPillar';
 const HEX_CYLINDER_PILLAR = 'HexCylinderPillar';
 const BOX_CUBE = 'BoxCube';
+const WATER_CUBE = 'WaterCube';
 const SLOPE = 'Slope';
 const STAIRS = 'Stairs';
 const WOODEN_PICNIC_TABLE = 'WoodenPicnicTable';
@@ -334,6 +335,7 @@ export {
     CYLINDER_PILLAR,
     HEX_CYLINDER_PILLAR,
     BOX_CUBE,
+    WATER_CUBE,
     SLOPE,
     STAIRS,
     WOODEN_PICNIC_TABLE,

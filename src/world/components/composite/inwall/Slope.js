@@ -114,14 +114,13 @@ class Slope extends InWallObjectBase {
         if (this.enableWallOBBs) {
 
             const { name, width = 1, depth = 1, height = 1, stepHeight = DEFAULT_STEP_HEIGHT } = this.specs;
-            const { showArrow = false } = this.specs;
 
             const leftOBBSpecs = { width: depth, height: stepHeight, color: basic };
             const rightOBBSpecs = { width: depth, height: stepHeight, color: basic };
             const bottomY = (stepHeight - height) * .5;
 
-            this.leftOBBFace = createCollisionOBBPlane(leftOBBSpecs, `${name}_left_obb`, [width * .5, bottomY, 0], Math.PI * .5, false, false, showArrow);
-            this.rightOBBFace = createCollisionOBBPlane(rightOBBSpecs, `${name}_right_obb`, [- width * .5, bottomY, 0], - Math.PI * .5, false, false, showArrow);
+            this.leftOBBFace = createOBBPlane(leftOBBSpecs, `${name}_left_obb`, [width * .5, bottomY, 0], [0, Math.PI * .5, 0], false, false);
+            this.rightOBBFace = createOBBPlane(rightOBBSpecs, `${name}_right_obb`, [- width * .5, bottomY, 0], [0, - Math.PI * .5, 0], false, false);
 
             this.leftOBBFace.mesh.visible = false;
             this.rightOBBFace.mesh.visible = false;
@@ -138,7 +137,7 @@ class Slope extends InWallObjectBase {
         
         if (needUpdateWalls) {
 
-            this.walls.concat(...this.sideOBBWalls).forEach(w => {
+            this.walls.forEach(w => {
 
                 w.updateRay();
 
@@ -148,6 +147,12 @@ class Slope extends InWallObjectBase {
 
                 }
 
+            });
+
+            this.sideOBBWalls.forEach(w => {
+
+                w.updateOBB(needUpdateMatrixWorld);
+                
             });
 
         }

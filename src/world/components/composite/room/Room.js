@@ -28,6 +28,7 @@ class Room {
     stairsSides = [];
     stairsStepFronts = [];
     stairsStepTops = [];
+    waterCubes = [];
 
     lights = [];
     directionalLightTarget = new Object3D();
@@ -247,9 +248,19 @@ class Room {
 
         waters.forEach(w => {
 
-            this.group.add(w.mesh);
+            if (w.isWater) {
 
-            w.mesh.layers.enable(CAMERA_RAY_LAYER);
+                this.group.add(w.mesh);
+
+                w.mesh.layers.enable(CAMERA_RAY_LAYER);
+
+            } else if (w.isWaterCube) {
+
+                this.group.add(w.group);
+
+                this.waterCubes.push(w);
+
+            }
 
         });
 
@@ -288,7 +299,7 @@ class Room {
                 
                 this.slopes.push(g);
                 this.slopeFaces.push(g.slope);
-                this.slopeSideOBBWalls.push(g.sideOBBWalls);
+                this.slopeSideOBBWalls.push(...g.sideOBBWalls);
             
             };
 
@@ -447,7 +458,7 @@ class Room {
         // this will update all children mesh matrixWorld.
         this.group.updateMatrixWorld();
 
-        this.walls.concat(...this.insideWalls).concat(...this.slopeSideOBBWalls).forEach(w => {
+        this.walls.concat(...this.insideWalls).forEach(w => {
 
             w.updateRay(false);
 
@@ -458,6 +469,8 @@ class Room {
             }
 
         });
+
+        this.slopeSideOBBWalls.forEach(s => s.updateOBB(false));
 
         this.floors.forEach(f => f.updateOBB(false));
 
@@ -476,7 +489,13 @@ class Room {
 
             slope.updateOBBs(false, false, false);
 
-        })
+        });
+
+        this.waterCubes.forEach(waterCube => {
+
+            waterCube.updateOBBs(false, false, false);
+
+        });
 
     }
 }

@@ -3,7 +3,7 @@ import { createBasicLights, createPointLights, createSpotLights } from "../../co
 import {
     Train, Tofu, Plane, WaterPlane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
     Room, InspectorRoom, 
-    SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, Slope, Stairs,
+    SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, WaterCube, Slope, Stairs,
     WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand,
     PaintedWoodenBlueChair, PaintedWoodenWhiteChair, PaintedWoodenStool, Sofa03,
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
@@ -17,7 +17,7 @@ import {
     AXES, GRID, TRAIN, TOFU,
     PLANE, WATER_PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
     ROOM, INSPECTOR_ROOM, SCENE, 
-    SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, SLOPE, STAIRS,
+    SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, WATER_CUBE, SLOPE, STAIRS,
     WOODEN_PICNIC_TABLE, WOODEN_SMALL_TABLE, ROUND_WOODEN_TABLE, PAINTED_WOODEN_TABLE, PAINTED_WOODEN_NIGHTSTAND,
     PAINTED_WOODEN_BLUE_CHAIR, PAINTED_WOODEN_WHITE_CHAIR, PAINTED_WOODEN_STOOL, SOFA_03,
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
@@ -282,6 +282,12 @@ class SceneBuilder {
 
             roomSpec.waters?.forEach(spec => {
 
+                if (spec.type === WATER_CUBE) {
+
+                    spec.updateOBBs = false;
+
+                }
+
                 const water = this.buildObject(spec);
                 waters.push(water);
 
@@ -472,6 +478,13 @@ class SceneBuilder {
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).insideWalls.find(f => f.type === inwall.type && f.name === inwall.name);
                 this.updateObject(inwall, _target, updateSetupOnly);
             
+            });
+
+            room.waters?.forEach(water => {
+
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).waters.find(f => f.type === water.type && f.name === water.name);
+                this.updateObject(water, _target, updateSetupOnly);
+
             });
 
         });
@@ -763,16 +776,43 @@ class SceneBuilder {
 
                 if (find.isGroup) {
 
-                    if (updateSetupOnly) {
+                    if (find.father.isWaterCube) {
 
-                        _origin.rotationY = find.father.rotationY;
+                        if (updateSetupOnly) {
+
+                            _origin.rotation = new Array(...this.rotationArr(find.rotation));
+                            _origin.color = new Array(...find.father.color);
+                            _origin.scale = find.father.scale;
+                            _origin.flowX = find.father.flowX;
+                            _origin.flowY = find.father.flowY;
+
+                        } else {
+
+                            const { rotation = [0, 0, 0], color = [255, 255, 255], scale = 1, flowX = 1, flowY = 0 } = _target;
+
+                            find.father.setRotation(rotation);
+                            find.father.waterColor = new Array(...color);
+                            find.father.scale = scale;
+                            find.father.flowX = flowX;
+                            find.father.flowY = flowY;
+                            find.father.updateOBBs();
+
+                        }
 
                     } else {
 
-                        const { rotationY = 0 } = _target;
+                        if (updateSetupOnly) {
 
-                        find.father.setRotationY(rotationY);
-                        find.father.updateOBBs();
+                            _origin.rotationY = find.father.rotationY;
+
+                        } else {
+
+                            const { rotationY = 0 } = _target;
+
+                            find.father.setRotationY(rotationY);
+                            find.father.updateOBBs();
+
+                        }
 
                     }
 
@@ -792,6 +832,28 @@ class SceneBuilder {
                             find.father.updateRay();
                             find.father.updateOBB?.();
                         
+                        }
+
+                    } else if (find.father.isWater) {
+
+                        if (updateSetupOnly) {
+
+                            _origin.rotation = new Array(...this.rotationArr(find.rotation));
+                            _origin.color = new Array(...find.father.color);
+                            _origin.scale = find.father.scale;
+                            _origin.flowX = find.father.flowX;
+                            _origin.flowY = find.father.flowY;
+
+                        } else {
+
+                            const { rotation = [0, 0, 0], color = [255, 255, 255], scale = 1, flowX = 1, flowY = 0 } = _target;
+
+                            find.father.setRotation(rotation);
+                            find.father.waterColor = new Array(...color);
+                            find.father.scale = scale;
+                            find.father.flowX = flowX;
+                            find.father.flowY = flowY;
+
                         }
 
                     } else {
@@ -1145,6 +1207,22 @@ class SceneBuilder {
                     if (updateOBBs) object.updateOBBs();
                 }
     
+                break;
+            case WATER_CUBE:
+                {
+                    const { position = [0, 0, 0], rotation = [0, 0, 0], updateOBBs = true } = specs;
+                    const { normalMap0, normalMap1 } = specs;
+
+                    const maps = [{ normalMap0 }, { normalMap1 }];
+                    this.setupObjectTextures(maps, specs);
+
+                    object = new WaterCube(specs);
+                    object.setRotation(rotation)
+                        .setPosition(position);
+
+                    if (updateOBBs) object.updateOBBs();
+                }
+
                 break;
             case WOODEN_PICNIC_TABLE:
                 {

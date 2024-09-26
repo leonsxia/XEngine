@@ -393,6 +393,14 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    setRotation(rot) {
+
+        this.group.rotation.set(...rot);
+
+        return this;
+        
+    }
+
     setRotationY(y) {
 
         const preGroupRotY = this.rotationY;

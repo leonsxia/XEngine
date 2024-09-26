@@ -33,6 +33,7 @@ export { LWall } from './composite/inwall/LWall.js';
 export { CylinderPillar } from './composite/inwall/CylinderPillar.js';
 export { HexCylinderPillar } from './composite/inwall/HexCylinderPillar.js';
 export { BoxCube } from './composite/inwall/BoxCube.js';
+export { WaterCube } from './composite/inwall/WaterCube.js';
 export { Slope } from './composite/inwall/Slope.js';
 export { Stairs } from './composite/inwall/Stairs.js';
 export { WoodenPicnicTable } from './composite/inwall/tables/WoodenPicnicTable.js';
