@@ -223,6 +223,13 @@ class PostProcessor {
 
     darkenNonBloomed(obj) {
 
+        if (obj.father?.isWater) {
+
+            obj.visible = false;
+            return;
+
+        }
+
         if (!obj.isScene && !bloomLayer.test(obj.layers)) {
 
             this.bloomMaterials[obj.uuid] = obj.material;
@@ -237,6 +244,13 @@ class PostProcessor {
     }
 
     restoreMaterial(obj) {
+
+        if (obj.father?.isWater) {
+
+            obj.visible = true;
+            return;
+
+        }
 
         if (!obj.isScene && this.bloomMaterials[obj.uuid]) {
 
