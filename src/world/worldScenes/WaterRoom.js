@@ -24,7 +24,7 @@ const worldSceneSpecs = {
         { x: 5, y: 15, z: 15 }
     ],
     allPlayerPos: [
-        [0, 4.5, 6.25]
+        [0, 6, 6.25]
     ]
 };
 

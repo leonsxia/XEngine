@@ -112,9 +112,9 @@
         {
             "type": "Room",
             "width": 15,
-            "height": 6,
+            "height": 9,
             "depth": 20,
-            "baseSize": 6,
+            "baseSize": 9,
             "frontMap": "CONCRETE_132",
             "frontNormal": "CONCRETE_132_NORMAL",
             "backMap": "CONCRETE_132",
@@ -127,7 +127,7 @@
             "name": "room1",
             "showArrow": true,
             "enableWallOBBs": true,
-            "position": [0, 3, 0],
+            "position": [0, 4.5, 0],
             "rotationY": 0,
             "groups": [
                 {
@@ -135,15 +135,15 @@
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_1",
                     "scale": [1.2, 1.3],
-                    "position": [0, 2.34, 0],
+                    "position": [0, 3.84, 0],
                     "rotationY": 0
                 },
                 {
                     "type": "SquarePillar",
                     "width": 15,
-                    "height": 3,
+                    "height": 4.5,
                     "depth": 7.5,
-                    "baseSize": 3,
+                    "baseSize": 4.5,
                     "enableOBBs": true,
                     "frontMap": "CONCRETE_128",
                     "frontNormal": "CONCRETE_128_NORMAL",
@@ -160,15 +160,15 @@
                     "enableWallOBBs": true,
                     "isObstacle": true,
                     "climbable": true,
-                    "position": [0, -1.5, 6.25],
+                    "position": [0, -2.25, 6.25],
                     "rotationY": 0
                 },
                 {
                     "type": "SquarePillar",
                     "width": 15,
-                    "height": 3,
+                    "height": 4.5,
                     "depth": 7.5,
-                    "baseSize": 3,
+                    "baseSize": 4.5,
                     "enableOBBs": true,
                     "frontMap": "CONCRETE_128",
                     "frontNormal": "CONCRETE_128_NORMAL",
@@ -185,7 +185,7 @@
                     "enableWallOBBs": true,
                     "isObstacle": true,
                     "climbable": true,
-                    "position": [0, -1.5, -6.25],
+                    "position": [0, -2.25, -6.25],
                     "rotationY": 0
                 },
                 {
@@ -263,7 +263,7 @@
                     "repeatModeV": 1002,
                     "rotationT": 1.5708,
                     "receiveShadow": true,
-                    "position": [0, -3, 0],
+                    "position": [0, -4.5, 0],
                     "rotation": [-1.5708, 0, 0]
                 },
                 {
@@ -309,7 +309,7 @@
                     "repeatV": 1,
                     "repeatModeU": 1000,
                     "repeatModeV": 1000,
-                    "position": [0, 3, 0],
+                    "position": [0, 4.5, 0],
                     "rotation": [1.5708, 0, 0],
                     "receiveShadow": true,
                     "castShadow": false
@@ -322,10 +322,10 @@
                     "type": "WaterCube",
                     "name": "drowning_pool",
                     "width": 15,
-                    "height": 2.5,
+                    "height": 4,
                     "depth": 5,
                     "color": [139, 216, 248],
-                    "position": [0, -1.75, 0],
+                    "position": [0, -2.5, 0],
                     "rotation": [0, 0, 0],
                     "flowSpeed": 0.01
                 }
