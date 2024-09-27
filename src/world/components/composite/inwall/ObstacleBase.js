@@ -55,6 +55,8 @@ class ObstacleBase extends ObstacleMoveable {
     movable = false;
     // falling ground
     hittingGround;
+    // falling water
+    hittingWater;
 
     pushable = false;
     draggable = false;
@@ -398,7 +400,7 @@ class ObstacleBase extends ObstacleMoveable {
         this.group.rotation.set(...rot);
 
         return this;
-        
+
     }
 
     setRotationY(y) {
@@ -655,6 +657,15 @@ class ObstacleBase extends ObstacleMoveable {
     onSlope() {
 
         this.onSlopeTick({ slope: this.hittingGround, obstacle: this });
+
+        this.updateOBBs();
+        this.updateRay();
+
+    }
+
+    onWater() {
+
+        this.onWaterTick({ waterCube: this.hittingWater, obstacle: this });
 
         this.updateOBBs();
         this.updateRay();

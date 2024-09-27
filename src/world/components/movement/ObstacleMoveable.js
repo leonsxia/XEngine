@@ -15,6 +15,7 @@ class ObstacleMoveable {
     #fallingTime = 0;
     #isFalling = false;
     #g = 9.8;
+    #verticalForceSpeed = 0;
 
     frictionCoefficient = 1;
 
@@ -53,10 +54,22 @@ class ObstacleMoveable {
             
     }
 
+    get verticalAcceleratedSpeed() {
+
+        return parseFloat((this.#g + this.#verticalForceSpeed).toFixed(3));
+
+    }
+
     resetFallingState() {
 
         this.#isFalling = false;
         this.#fallingTime = 0;
+
+    }
+
+    resetInwaterState() {
+
+        this.#verticalForceSpeed = 0;
 
     }
 
@@ -111,7 +124,7 @@ class ObstacleMoveable {
         const { delta, obstacle } = params;
 
         const now = this.#fallingTime + delta;
-        const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
+        const deltaY = .5 * this.verticalAcceleratedSpeed * (now * now - this.#fallingTime * this.#fallingTime);
         obstacle.group.position.y -= deltaY;
 
         this.#isFalling = true;
@@ -158,6 +171,32 @@ class ObstacleMoveable {
 
         }
         
+    }
+
+    onWaterTick(params) {
+
+        if (this.verticalAcceleratedSpeed === 0) {
+
+            return;
+
+        }
+
+        const { waterCube, obstacle } = params;
+        const dropHeight = waterCube.topY - obstacle.bottomY;
+        const inwaterHeight = dropHeight >= obstacle.height ? obstacle.height : dropHeight;
+
+        // console.log(`${obstacle.name} ${inwaterHeight} m in water`);
+
+        const inwaterVolume = obstacle.width * obstacle.depth * inwaterHeight;
+        this.#verticalForceSpeed = - this.#g * waterCube.waterDensity * inwaterVolume / obstacle.weight;
+
+        // console.log(`${obstacle.name}: verticalForceSpeed: ${this.#verticalForceSpeed}, verticalAcceleratedSpeed: ${this.verticalAcceleratedSpeed}`);
+        if (this.verticalAcceleratedSpeed === 0) {
+
+            this.resetFallingState();
+
+        }
+
     }
 
     movingTick(params) {

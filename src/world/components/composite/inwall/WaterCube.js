@@ -14,16 +14,19 @@ class WaterCube extends ObstacleBase {
     scale;
     waterFace;
     faces = [];
+
+    waterDensity = 1;
     
     constructor(specs) {
 
         super(specs);
 
         this.specs = specs;
-        const { name, width, depth, height } = specs;
+        const { name, width, depth, height, waterDensity = 1 } = specs;
         const { color = [255, 255, 255], flowX = 1, flowY = 0, scale = 1, flowSpeed = 0.03, normalMap0, normalMap1 } = specs;
         const waterColor = colorHex(...color);
 
+        this.waterDensity = waterDensity;
         this.color = color;
         this.scale = scale;
         this.flowX = flowX;

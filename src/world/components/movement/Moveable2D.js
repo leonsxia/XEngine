@@ -523,7 +523,7 @@ class Moveable2D {
         let deltaVec3, deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
 
-        // when climb forward has collistion will other walls, need to stop moving forward.
+        // when climb forward has collistion with other walls, need to stop moving forward.
         if (this.#isClimbingForward) {
 
             if (leftCorVec3.z <= 0 || rightCorVec3.z <= 0) {

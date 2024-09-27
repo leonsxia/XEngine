@@ -19,6 +19,7 @@ class SimplePhysics {
     obstacleTops = [];
     slopes = [];
     slopeSideOBBWalls = [];
+    waterCubes = [];
     obstacleCollisionOBBWalls = [];
     activePlayers = [];
 
@@ -57,7 +58,7 @@ class SimplePhysics {
 
     initPhysics(room) {
 
-        const { walls, insideWalls, floors, topOBBs, obstacles, slopes, slopeSideOBBWalls } = room;
+        const { walls, insideWalls, floors, topOBBs, obstacles, slopes, slopeSideOBBWalls, waterCubes } = room;
 
         this.walls = walls.concat(insideWalls);
         this.floors = floors;
@@ -65,6 +66,7 @@ class SimplePhysics {
         this.obstacles = obstacles;
         this.slopes = slopes;
         this.slopeSideOBBWalls = slopeSideOBBWalls;
+        this.waterCubes = waterCubes;
         this.obstacleCollisionOBBWalls = this.walls.filter(w => w.isOBB).concat(...this.slopeSideOBBWalls)
         this.sortFloorTops();
 
@@ -74,7 +76,7 @@ class SimplePhysics {
 
         let result = false;
         const paddingX = .1
-        const paddingTopY = STAIR_OFFSET_MAX;
+        const paddingTopY = .2;
         const paddingBottomY = .1;
 
         const leftBorderX = - wall.width * .5 + paddingX;
@@ -100,7 +102,7 @@ class SimplePhysics {
 
         let result = false;
         const paddingX = .1;
-        const paddingTopY = STAIR_OFFSET_MAX;
+        const paddingTopY = .1;
         const paddingBottomY = .1;
         const { x, y } = player.position;
         const { width, height, geometry: { parameters: { leftHanded } } } = wall;
@@ -278,7 +280,7 @@ class SimplePhysics {
         
     }
 
-    checkBlockByTopT(player, top){
+    checkBlockByTopT(player, top) {
 
         let block = false;
         const offset = Math.abs(top.worldPosition.y - player.bottomY);
@@ -384,7 +386,13 @@ class SimplePhysics {
         // for movable obstacles falling down check
         const movableObs = this.obstacles.filter(obs => {
 
-            if (obs.movable) obs.hittingGround = null;  // reset hitting ground
+            if (obs.movable) {
+                
+                obs.hittingGround = null;   // reset hitting ground
+                obs.hittingWater = null;    // reset hitting water
+
+            }
+
             return obs.movable && !obs.group.isPicked;
 
         });
@@ -437,6 +445,32 @@ class SimplePhysics {
 
         });
         
+        this.waterCubes.forEach(waterCube => {
+
+            movableObs.forEach(obs => {
+
+                if (obs.box.obb.intersectsOBB(waterCube.box.obb)) {
+
+                    // console.log(`${obs.name} is on water of ${waterCube.name}`);
+
+                    obs.hittingWater = waterCube;
+                    obs.onWater();
+
+                }
+
+            });
+
+        });
+
+        movableObs.forEach(obs => {
+
+            if (!obs.hittingWater) {
+
+                obs.resetInwaterState();
+
+            }
+
+        });
 
         const onTopsObs = [];
         const onSlopesObs = [];
@@ -493,7 +527,7 @@ class SimplePhysics {
             });
         }
 
-        const fallingObs = movableObs.filter(obs => !onTopsObs.find(t => t === obs) && !onSlopesObs.find(s => s === obs));
+        const fallingObs = movableObs.filter(obs => obs.verticalAcceleratedSpeed !== 0 && !onTopsObs.find(t => t === obs) && !onSlopesObs.find(s => s === obs));
 
         // check obstacles falling on floors
         if (fallingObs.length > 0) {
@@ -701,7 +735,7 @@ class SimplePhysics {
 
                 this.floors.forEach(floor => {
 
-                    if (collisionFloors.length === 0 && !this.checkBlockByTopT(player, floor)) {
+                    if (collisionFloors.length === 0 && !player.isClimbingUp && !this.checkBlockByTopT(player, floor)) {
 
                         if (player.obb.intersectsOBB(floor.obb)) {
                             // to do
