@@ -47,20 +47,20 @@ class LWall extends InWallObjectBase {
 
         if (!this.enableOBBs) {
 
-            this.topWallT = createCollisionPlaneFree(topTSpecs, `${name}_topT`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
-            this.topWallS = createCollisionPlaneFree(topSSpecs, `${name}_topS`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
-            this.bottomWallT = createCollisionPlaneFree(bottomTSpecs, `${name}_bottomT`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
-            this.bottomWallS = createCollisionPlaneFree(bottomSSpecs, `${name}_bottomS`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], receiveShadow, false, false, showArrow);
+            this.topWallT = createCollisionPlaneFree(topTSpecs, `${name}_topT`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow, false, showArrow);
+            this.topWallS = createCollisionPlaneFree(topSSpecs, `${name}_topS`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], receiveShadow, castShadow, false, showArrow);
+            this.bottomWallT = createCollisionPlaneFree(bottomTSpecs, `${name}_bottomT`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, castShadow, false, showArrow);
+            this.bottomWallS = createCollisionPlaneFree(bottomSSpecs, `${name}_bottomS`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], receiveShadow, castShadow, false, showArrow);
 
             this.tops.push(this.topWallT, this.topWallS);
             this.bottoms.push(this.bottomWallT, this.bottomWallS);
 
         } else {
 
-            this.topWallT = createOBBPlane(topTSpecs, `${name}_topT_OBB`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, false);
-            this.topWallS = createOBBPlane(topSSpecs, `${name}_topS_OBB`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], receiveShadow, false);
-            this.bottomWallT = createOBBPlane(bottomTSpecs, `${name}_bottomT_OBB`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, false);
-            this.bottomWallS = createOBBPlane(bottomSSpecs, `${name}_bottomS_OBB`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], receiveShadow, false);
+            this.topWallT = createOBBPlane(topTSpecs, `${name}_topT_OBB`, [- (width - thickness) * .5 , height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);
+            this.topWallS = createOBBPlane(topSSpecs, `${name}_topS_OBB`, [thickness * .5 , height * .5, - (depth - thickness) * .5], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);
+            this.bottomWallT = createOBBPlane(bottomTSpecs, `${name}_bottomT_OBB`, [- (width - thickness) * .5 , - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, castShadow);
+            this.bottomWallS = createOBBPlane(bottomSSpecs, `${name}_bottomS_OBB`, [thickness * .5 , - height * .5, - (depth - thickness) * .5], [Math.PI * .5, 0, 0], receiveShadow, castShadow);
 
             this.topOBBs.push(this.topWallT, this.topWallS);
             this.bottomOBBs.push(this.bottomWallT, this.bottomWallS);
