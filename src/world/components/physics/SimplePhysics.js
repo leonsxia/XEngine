@@ -390,6 +390,7 @@ class SimplePhysics {
                 
                 obs.hittingGround = null;   // reset hitting ground
                 obs.hittingWater = null;    // reset hitting water
+                obs.resetInwaterState();
 
             }
 
@@ -459,16 +460,6 @@ class SimplePhysics {
                 }
 
             });
-
-        });
-
-        movableObs.forEach(obs => {
-
-            if (!obs.hittingWater) {
-
-                obs.resetInwaterState();
-
-            }
 
         });
 
