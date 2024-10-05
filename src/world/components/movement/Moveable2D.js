@@ -606,11 +606,13 @@ class Moveable2D {
 
                         const dirVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftCorVec3.z);
                         dummyObject.position.copy(dirVec3);
+                        // console.log(`left cornor reach`);
 
                     } else if (rightCorVec3.z <= 0) {
 
                         const dirVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightCorVec3.z);
                         dummyObject.position.copy(dirVec3);
+                        // console.log(`right cornor reach`);
 
                     } else {
 
@@ -624,15 +626,19 @@ class Moveable2D {
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
                         dummyObject.position.x += recoverCoefficient;
+                        // console.log(`left face reach`);
+
 
                     } else {
 
                         dummyObject.position.x -= recoverCoefficient;
+                        // console.log(`right face reach`);
 
                     }
                 } else if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) {
 
                     dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
+                    // console.log(`front/back face reach`);
 
                 }
             }

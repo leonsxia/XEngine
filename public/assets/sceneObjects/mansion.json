@@ -1167,7 +1167,7 @@
                     "enableWallOBBs": true,
                     "movable": false,
                     "climbable": false,
-                    "position": [-1.82, 0.8415, -14.67],
+                    "position": [-1.62, 0.8415, -14.67],
                     "rotationY": 0
                 },
                 {
@@ -1179,7 +1179,7 @@
                     "enableWallOBBs": true,
                     "movable": false,
                     "climbable": false,
-                    "position": [1.51, 0.8415, -14.67],
+                    "position": [1.31, 0.8415, -14.67],
                     "rotationY": 0
                 },
                 {

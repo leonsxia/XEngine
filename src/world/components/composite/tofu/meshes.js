@@ -33,7 +33,7 @@ function createMeshes() {
 
         width, depth, height, 
         bbfThickness: .18,  // calculated by faster speed = 10 m/s, 30fps needs at least 1/30 * 10 = 0.333 m to cover.
-        gap: .04,
+        gap: .1,
         showBB: false, showBBW: false, showBF: false
 
     };
