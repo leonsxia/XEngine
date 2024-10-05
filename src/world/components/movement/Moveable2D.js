@@ -212,7 +212,25 @@ class Moveable2D {
         }
     }
 
+    onHittingBottomTick(params) {
+
+        const {bottomWall, player} = params;
+
+        // when climbing up, need to stop climbing
+        if (this.#isClimbingUp) {
+
+            this.resetClimbingState();
+            
+        }
+
+        const dir = bottomWall.worldPosition.clone();
+        dir.y -= player.height * .5;
+        player.group.position.y = player.group.parent ? player.group.parent.worldToLocal(dir).y : dir.y;
+
+    }
+
     onGroundTick(params) {
+
         const { floor, player } = params;
 
         const dir = floor.worldPosition.clone();
@@ -294,6 +312,16 @@ class Moveable2D {
         return result;
     }
 
+    resetClimbingState() {
+
+        this.#isClimbingUp = false;
+        this.#isClimbingForward = false;
+        this.#climbHeight = 0;
+        this.#climbDist = 0;
+        this.#climbForwardDist = 0;
+
+    }
+
     climbWallTick(params) {
         const { delta, wall, player } = params;
 
@@ -333,11 +361,7 @@ class Moveable2D {
 
                 } else {
 
-                    this.#isClimbingUp = false;
-                    this.#isClimbingForward = false;
-                    this.#climbHeight = 0;
-                    this.#climbDist = 0;
-                    this.#climbForwardDist = 0;
+                    this.resetClimbingState();
 
                 }
             }
@@ -528,11 +552,7 @@ class Moveable2D {
 
             if (leftCorVec3.z <= 0 || rightCorVec3.z <= 0) {
 
-                this.#isClimbingUp = false;
-                this.#isClimbingForward = false;
-                this.#climbHeight = 0;
-                this.#climbDist = 0;
-                this.#climbForwardDist = 0;
+                this.resetClimbingState();
 
             }
 

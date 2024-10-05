@@ -191,6 +191,16 @@ class Tofu extends Moveable2D {
 
     }
 
+    get topY() {
+
+        const target = new Vector3();
+
+        this.boundingBoxMesh.getWorldPosition(target);
+
+        return target.y + this.height * .5;
+
+    }
+
     get rays() {
         
         return [this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay];
@@ -618,6 +628,16 @@ class Tofu extends Moveable2D {
 
         this.updateRay(false);
 
+    }
+
+    tickOnHittingBottom(bottomWall) {
+
+        this.onHittingBottomTick({ bottomWall, player: this });
+
+        this.updateOBB();
+
+        this.updateRay(false);
+        
     }
 
     tickOnSlope(slope) {

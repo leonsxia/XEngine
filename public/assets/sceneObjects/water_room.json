@@ -250,6 +250,27 @@
                     "name": "room1_CubeBox3",
                     "position": [0, 1.5, 8],
                     "rotationY": 0
+                },
+                {
+                    "type": "BoxCube",
+                    "width": 1.5,
+                    "height": 1.5,
+                    "depth": 1.5,
+                    "baseSize": 1,
+                    "density": 0.67,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "pushable": true,
+                    "name": "room1_CubeBox4",
+                    "position": [0, 3.5, 8.25],
+                    "rotationY": 0
                 }
             ],
             "floors": [
@@ -302,7 +323,7 @@
             ],
             "ceilings": [
                 {
-                    "type": "Plane",
+                    "type": "OBBPlane",
                     "width": 15,
                     "height": 20,
                     "map": "METAL_292",

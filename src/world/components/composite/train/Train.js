@@ -106,6 +106,16 @@ class Train extends Moveable2D {
         return target.y - this.height * .5;
     }
 
+    get topY() {
+
+        const target = new Vector3();
+
+        this.boundingBoxMesh.getWorldPosition(target);
+
+        return target.y + this.height * .5;
+
+    }
+
     get leftCorVec3() {
         return new Vector3(this.#w / 2, 0, this.#d / 2);
     }
@@ -239,6 +249,14 @@ class Train extends Moveable2D {
 
     tickOnSlope(slope) {
         // to do
+    }
+
+    tickOnHittingBottom(bottomWall) {
+
+        this.onHittingBottomTick({ bottomWall, player: this });
+
+        this.updateOBB();
+        
     }
 
     tickWithWall(delta, wall, playerTicked = false) {

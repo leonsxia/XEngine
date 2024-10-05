@@ -14,9 +14,11 @@ class SimplePhysics {
 
     players = [];
     floors = [];
+    ceilings = [];
     walls = [];
     obstacles = [];
     obstacleTops = [];
+    obstacleBottoms = [];
     slopes = [];
     slopeSideOBBWalls = [];
     waterCubes = [];
@@ -58,11 +60,13 @@ class SimplePhysics {
 
     initPhysics(room) {
 
-        const { walls, insideWalls, floors, topOBBs, obstacles, slopes, slopeSideOBBWalls, waterCubes } = room;
+        const { walls, insideWalls, floors, ceilings, topOBBs, bottomOBBs, obstacles, slopes, slopeSideOBBWalls, waterCubes } = room;
 
         this.walls = walls.concat(insideWalls);
         this.floors = floors;
+        this.ceilings = ceilings;
         this.obstacleTops = topOBBs;
+        this.obstacleBottoms = bottomOBBs;
         this.obstacles = obstacles;
         this.slopes = slopes;
         this.slopeSideOBBWalls = slopeSideOBBWalls;
@@ -286,6 +290,21 @@ class SimplePhysics {
         const offset = Math.abs(top.worldPosition.y - player.bottomY);
 
         if (player.bottomY < top.worldPosition.y && offset > STAIR_OFFSET_MAX) {
+            
+            block = true;
+
+        }
+
+        return block;
+
+    }
+
+    checkBlockByBottomT(player, bottom) {
+
+        let block = false;
+        const offset = Math.abs(bottom.worldPosition.y - player.topY);
+
+        if (player.topY > bottom.worldPosition.y && offset > .1) {
             
             block = true;
 
@@ -662,7 +681,6 @@ class SimplePhysics {
 
                     if (player.obb.intersectsOBB(top.obb) && !this.checkBlockByTopT(player, top)) {
 
-                        // to do
                         collisionTops.push(top);
 
                     }
@@ -670,6 +688,40 @@ class SimplePhysics {
                 }
 
             });
+
+            // for player hitting bottoms check
+            const collisionBottoms = [];
+
+            this.obstacleBottoms.forEach(bottom => {
+
+                if (collisionBottoms.length === 0) {
+
+                    if (player.obb.intersectsOBB(bottom.obb) && !this.checkBlockByBottomT(player, bottom)) {
+
+                        // console.log(`player hitting bottom: ${bottom.name}`);
+                        collisionBottoms.push(bottom);
+
+                    }
+
+                }
+            });
+
+            if (collisionBottoms.length === 0) {
+
+                for (let i = 0; i < this.ceilings.length; i++) {
+
+                    const ceiling = this.ceilings[i];
+
+                    if (ceiling.isOBB && player.obb.intersectsOBB(ceiling.obb) && !this.checkBlockByBottomT(player, ceiling)) {
+
+                        // console.log(`player hitting ceiling: ${ceiling.name}`);
+                        collisionBottoms.push(ceiling);
+                        break;
+
+                    }
+                }
+
+            }
 
             // check slope collision
             const collisionSlopes = [];
@@ -706,7 +758,11 @@ class SimplePhysics {
 
             });
 
-            if (collisionTops.length > 0 && collisionSlopes.length === 0) {
+            if (collisionBottoms.length > 0) {
+
+                player.tickOnHittingBottom(collisionBottoms[0]);
+
+            } else if (collisionTops.length > 0 && collisionSlopes.length === 0) {
 
                 player.onGround(collisionTops[0]);
 
@@ -717,6 +773,7 @@ class SimplePhysics {
             } else {
 
                 player.isInAir = true;
+                // console.log(`is in air`);
 
             }
 

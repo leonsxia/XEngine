@@ -474,6 +474,8 @@ class Room {
 
         this.floors.forEach(f => f.updateOBB(false));
 
+        this.ceilings.forEach(c => c.updateOBB?.(false));
+
         this.topOBBs.forEach(t => t.updateOBB(false));
 
         this.bottomOBBs.forEach(b => b.updateOBB(false));
