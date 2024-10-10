@@ -406,7 +406,7 @@ class WorldScene {
 
     setupGuiConfig() {
 
-        const { resolution = 1 } = this.setup;
+        let { resolution = 1 } = this.setup;
         
         if (devicePixelRatio === 1) resolution = 1;
 
