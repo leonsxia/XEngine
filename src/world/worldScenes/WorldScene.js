@@ -15,6 +15,7 @@ const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
 const RESOLUTION_RATIO = {'0.5x': 0.5, '0.8x': 0.8, '1x': 1, '2x': 2};
 let renderTimes = 0;
+const devicePixelRatio = window.devicePixelRatio;
 
 class WorldScene {
     
@@ -174,8 +175,12 @@ class WorldScene {
 
         this.sceneBuilder.worldScene = this;
         
-        // set default scene resolution
-        this.resizer.changeResolution(resolution);
+        if (devicePixelRatio > 1) {
+
+            // set default scene resolution
+            this.resizer.changeResolution(resolution);
+
+        }
 
     }
 
@@ -402,6 +407,8 @@ class WorldScene {
     setupGuiConfig() {
 
         const { resolution = 1 } = this.setup;
+        
+        if (devicePixelRatio === 1) resolution = 1;
 
         const rightGuiConfig = makeSceneRightGuiConfig(this.guiLights);
 
