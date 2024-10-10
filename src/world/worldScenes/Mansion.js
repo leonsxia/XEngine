@@ -16,6 +16,7 @@ const worldSceneSpecs = {
     enableGui: true,
     moveType: 'tankmove',
     enableShadow: true,
+    enablePicker: true,
     // target, camera setup
     allTargets: [
         { x: 0, y: 0, z: 0 }
@@ -25,7 +26,8 @@ const worldSceneSpecs = {
     ],
     allPlayerPos: [
         [0, 5, 0]
-    ]
+    ],
+    resolution: .5
 };
 
 class Mansion extends WorldScene {
@@ -55,9 +57,7 @@ class Mansion extends WorldScene {
 
     async init() {
 
-        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
-        this.picker.setup(this);
-        this.sceneBuilder.worldScene = this;
+        this.initBasic();
 
         if (this.#loaded) {
             this.initContainer();

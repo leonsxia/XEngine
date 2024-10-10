@@ -16,6 +16,7 @@ const worldSceneSpecs = {
     enableGui: true,
     moveType: 'tankmove',
     enableShadow: true,
+    enablePicker: true,
     // target, camera setup
     allTargets: [
         { x: 0, y: 0, z: 0 }
@@ -55,9 +56,7 @@ class WaterRoom extends WorldScene {
 
     async init() {
 
-        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
-        this.picker.setup(this);
-        this.sceneBuilder.worldScene = this;
+        this.initBasic();
 
         if (this.#loaded) {
             this.initContainer();

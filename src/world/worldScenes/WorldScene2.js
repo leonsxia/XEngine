@@ -16,7 +16,8 @@ const worldSceneSpecs = {
     },
     enableGui: true,
     moveType: 'tankmove',
-    enableShadow: true
+    enableShadow: true,
+    enablePicker: false
 };
 // basic lights
 const mainLightCtlSpecs = {
@@ -115,8 +116,7 @@ class WorldScene2 extends WorldScene {
 
     async init() {
 
-        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
-        this.sceneBuilder.worldScene = this;
+        this.initBasic();
 
         if (this.#loaded) {
             this.initContainer();

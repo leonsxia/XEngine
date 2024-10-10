@@ -160,6 +160,25 @@ class WorldScene {
 
     }
 
+    initBasic() {
+
+        const { enablePicker = false, enableShadow = false, resolution = 1 } = this.setup;
+
+        this.renderer.shadowMap.enabled = enableShadow;
+
+        if (enablePicker) { 
+            
+            this.picker.setup(this); 
+        
+        }
+
+        this.sceneBuilder.worldScene = this;
+        
+        // set default scene resolution
+        this.resizer.changeResolution(resolution);
+
+    }
+
     initGUIControl() {
 
         this.gui.init({ 
@@ -382,6 +401,8 @@ class WorldScene {
 
     setupGuiConfig() {
 
+        const { resolution = 1 } = this.setup;
+
         const rightGuiConfig = makeSceneRightGuiConfig(this.guiLights);
 
         Object.assign(rightGuiConfig.parents, this.lights);
@@ -395,7 +416,7 @@ class WorldScene {
             folder: 'Change Resolution',
             parent: 'changeResolution',
             name: 'ratio',
-            value: { ratio: 1 },
+            value: { ratio: resolution },
             params: RESOLUTION_RATIO,
             type: 'dropdown',
             changeFn: this.changeResolution.bind(this),

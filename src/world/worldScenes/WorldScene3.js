@@ -15,7 +15,8 @@ const worldSceneSpecs = {
         backgroundColor: 'lightblue'
     },
     enableGui: true,
-    enableShadow: false
+    enableShadow: false,
+    enablePicker: false
 };
 // basic lights
 const mainLightCtlSpecs = {
@@ -115,8 +116,7 @@ class WorldScene3 extends WorldScene {
 
     async init() {
 
-        this.renderer.shadowMap.enabled = worldSceneSpecs.enableShadow;
-        this.sceneBuilder.worldScene = this;
+        this.initBasic();
 
         if (this.#loaded) {
             this.initContainer();
