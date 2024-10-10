@@ -253,8 +253,6 @@ class WorldScene {
         // no need to render at this time.
         this.resetCamera(false);
 
-        this.controls.defControl.enabled = false;
-
         this.loadSequence = -1;
 
         // no need to render at this time too.
@@ -271,6 +269,11 @@ class WorldScene {
             this.gui.hide();
 
         }
+
+        // must disable default orbit control after gui reest, 
+        // the gui will disable all cameras which will enable default camera again
+        this.controls.defControl.enabled = false;
+
     }
 
     focusNext( /* forceStaticRender = true */ ) {}
