@@ -9,6 +9,7 @@ const ENABLE_QUICK_TURN = true;
 const ENABLE_CLIMBING = true;
 const SLOWDOWN_COEFFICIENT = .78;
 const SLOPE_COEFFICIENT = .6;
+const PLAYER_DETECT_SCOPE_MIN = 1;
 
 class Tofu extends Moveable2D {
 
@@ -291,6 +292,12 @@ class Tofu extends Moveable2D {
 
         this.#slopeCoefficient = val;
 
+    }
+
+    get playerDetectScopeMin() {
+
+        return PLAYER_DETECT_SCOPE_MIN;
+        
     }
  
     showBB(show) {

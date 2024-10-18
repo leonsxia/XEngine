@@ -9,7 +9,6 @@ const STAIR_OFFSET_MAX = .3;
 const STAIR_OFFSET_MIN = .1;
 const OBSTACLE_BLOCK_OFFSET_MAX = .2;
 const OBSTACLE_BLOCK_OFFSET_MIN = .05;
-const PLAYER_DETECT_SCOPE_MIN = 1;
 
 class SimplePhysics {
 
@@ -24,6 +23,7 @@ class SimplePhysics {
     slopeSideOBBWalls = [];
     waterCubes = [];
     obstacleCollisionOBBWalls = [];
+    interactiveObs = [];
     activePlayers = [];
 
     constructor(players, floors = [], walls = [], obstacles = []) {
@@ -72,7 +72,14 @@ class SimplePhysics {
         this.slopes = slopes;
         this.slopeSideOBBWalls = slopeSideOBBWalls;
         this.waterCubes = waterCubes;
-        this.obstacleCollisionOBBWalls = this.walls.filter(w => w.isOBB).concat(...this.slopeSideOBBWalls)
+        this.obstacleCollisionOBBWalls = this.walls.filter(w => w.isOBB).concat(...this.slopeSideOBBWalls);
+
+        this.interactiveObs = this.obstacles.filter(obs => 
+                    
+            obs.movable && (obs.pushable || obs.draggable) || obs.climbable
+        
+        );
+
         this.sortFloorTops();
 
     }
@@ -612,7 +619,7 @@ class SimplePhysics {
 
             const collisionedWalls = [];
 
-            const wallsInScope = this.walls.filter(w => this.getObject2WallDistance(player, w) <= PLAYER_DETECT_SCOPE_MIN);
+            const wallsInScope = this.walls.filter(w => this.getObject2WallDistance(player, w) <= player.playerDetectScopeMin);
 
             wallsInScope.forEach(wall => {
 
@@ -815,7 +822,7 @@ class SimplePhysics {
 
                 const climbWalls = [];
 
-                this.obstacles.forEach(obs => {
+                this.interactiveObs.forEach(obs => {
 
                     if (obs.movable && (obs.pushable || obs.draggable)) {
 

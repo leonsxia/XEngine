@@ -321,6 +321,8 @@ class WorldScene {
             }
 
             this.player.setSlopeIntersection?.();
+
+            this.player.resetFallingState?.();
             
         }
 
@@ -775,6 +777,8 @@ class WorldScene {
             const { allPlayerPos } = this.setup;
 
             this.player.setPosition(allPlayerPos[this.loadSequence]);
+
+            this.player.resetFallingState?.();
 
         }
 
