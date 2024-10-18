@@ -9,6 +9,7 @@ const STAIR_OFFSET_MAX = .3;
 const STAIR_OFFSET_MIN = .1;
 const OBSTACLE_BLOCK_OFFSET_MAX = .2;
 const OBSTACLE_BLOCK_OFFSET_MIN = .05;
+const PLAYER_DETECT_SCOPE_MIN = 1;
 
 class SimplePhysics {
 
@@ -385,6 +386,14 @@ class SimplePhysics {
 
     }
 
+    getObject2WallDistance(obj, wall) {
+
+        const objLocalPos = wall.mesh.worldToLocal(obj.position.clone());
+
+        return Math.abs(objLocalPos.z);
+
+    }
+
     tick(delta) {
         
         if (delta > 0.056) { // lost frame when fps lower than 18fps
@@ -603,7 +612,9 @@ class SimplePhysics {
 
             const collisionedWalls = [];
 
-            this.walls.forEach(wall => {
+            const wallsInScope = this.walls.filter(w => this.getObject2WallDistance(player, w) <= PLAYER_DETECT_SCOPE_MIN);
+
+            wallsInScope.forEach(wall => {
 
                 const checkResult = this.checkIntersection(player, wall, delta);
 
@@ -623,12 +634,7 @@ class SimplePhysics {
                     wall.checkResult = { intersect: false, borderReach: false };
 
                 }
-
-                if (wall.isOBB) {
-                    // if (player.pushingObb.intersectsOBB(wall.obb)) {
-                    //     console.log(`${wall.name} intersets`);
-                    // }
-                }
+                
             });
 
             if (DEBUG) {
@@ -647,7 +653,7 @@ class SimplePhysics {
                 player.tick(delta);
                 playerTicked = true;
 
-                this.walls.forEach(wall => {
+                wallsInScope.forEach(wall => {
 
                     const checkResult = this.checkIntersection(player, wall, delta);
     
@@ -808,8 +814,9 @@ class SimplePhysics {
             if (player.pushingObb) {
 
                 const climbWalls = [];
+                const intersectedObstacles = this.obstacles.filter(obs => obs.box && obs.box.obb.intersectsOBB(player.pushingObb));
 
-                this.obstacles.forEach(obs => {
+                intersectedObstacles.forEach(obs => {
 
                     if (obs.movable && (obs.pushable || obs.draggable)) {
 
