@@ -634,7 +634,7 @@ class SimplePhysics {
                     wall.checkResult = { intersect: false, borderReach: false };
 
                 }
-                
+
             });
 
             if (DEBUG) {
@@ -814,9 +814,8 @@ class SimplePhysics {
             if (player.pushingObb) {
 
                 const climbWalls = [];
-                const intersectedObstacles = this.obstacles.filter(obs => obs.box && obs.box.obb.intersectsOBB(player.pushingObb));
 
-                intersectedObstacles.forEach(obs => {
+                this.obstacles.forEach(obs => {
 
                     if (obs.movable && (obs.pushable || obs.draggable)) {
 
