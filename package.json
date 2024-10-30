@@ -7,9 +7,9 @@
   "dependencies": {
     "lil-gui": "^0.19.2",
     "stats.js": "^0.17.0",
-    "three": "^0.168.0"
+    "three": "^0.169.0"
   },
   "devDependencies": {
-    "vite": "^5.4.2"
+    "vite": "^5.4.10"
   }
 }
