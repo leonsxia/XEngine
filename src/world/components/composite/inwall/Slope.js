@@ -139,11 +139,11 @@ class Slope extends InWallObjectBase {
 
             this.walls.forEach(w => {
 
-                w.updateRay();
+                w.updateRay(needUpdateMatrixWorld);
 
                 if (w.isOBB) {
 
-                    w.updateOBB(needUpdateMatrixWorld);
+                    w.updateOBB(false);
 
                 }
 

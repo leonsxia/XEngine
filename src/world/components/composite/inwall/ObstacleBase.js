@@ -611,11 +611,11 @@ class ObstacleBase extends ObstacleMoveable {
 
             this.walls.forEach(w => {
 
-                w.updateRay();
+                w.updateRay(needUpdateMatrixWorld);
 
                 if (w.isOBB) {
 
-                    w.updateOBB(needUpdateMatrixWorld);
+                    w.updateOBB(false);
 
                 }
 
