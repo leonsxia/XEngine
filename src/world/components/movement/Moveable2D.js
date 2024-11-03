@@ -274,6 +274,7 @@ class Moveable2D {
     quickTurnTick(params) {
         let result = false;
         const { group, delta, player } = params;
+        const worldY = player.worldYDirection;
 
         if (player.enableQuickTurn && !this.#isClimbingUp && !this.#isClimbingForward) {
 
@@ -289,7 +290,8 @@ class Moveable2D {
 
                     const ang = player.turnBackVel * delta;
 
-                    group.rotation.y -= ang;
+                    // group.rotation.y -= ang;
+                    group.rotateOnWorldAxis(worldY, - ang);
                     this.#turingRad += ang;
                     result = true;
 
@@ -369,9 +371,10 @@ class Moveable2D {
     }
 
     tankmoveTick(params) {
-        const { group, R, rotateVel, dist, delta } = params;
+        const { group, R, rotateVel, dist, delta, player } = params;
         let deltaVec3, deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
+        const worldY = player.worldYDirection;
 
         if(this.quickTurnTick(params) || this.#isClimbingUp || this.#isClimbingForward) {
             
@@ -397,11 +400,13 @@ class Moveable2D {
 
         } else if (this.isTurnClockwise) {
 
-            group.rotation.y -= rotateRad;
+            // group.rotation.y -= rotateRad;
+            group.rotateOnWorldAxis(worldY, - rotateRad);
 
         } else if (this.isTurnCounterClockwise) {
 
-            group.rotation.y += rotateRad;
+            // group.rotation.y += rotateRad;
+            group.rotateOnWorldAxis(worldY, rotateRad);
 
         } else {
 
@@ -412,25 +417,29 @@ class Moveable2D {
 
                 deltaVec3 = new Vector3(deltaX, 0, deltaZ);
                 group.position.copy(group.localToWorld(deltaVec3));
-                group.rotation.y += rotateRad;
+                // group.rotation.y += rotateRad;
+                group.rotateOnWorldAxis(worldY, rotateRad);
 
             } else if (this.isMovingForwardRight) {
 
                 deltaVec3 = new Vector3(-deltaX, 0, deltaZ);
                 group.position.copy(group.localToWorld(deltaVec3));
-                group.rotation.y -= rotateRad;
+                // group.rotation.y -= rotateRad;
+                group.rotateOnWorldAxis(worldY, - rotateRad);
 
             } else if (this.isMovingBackwardLeft) {
 
                 deltaVec3 = new Vector3(deltaX, 0, -deltaZ);
                 group.position.copy(group.localToWorld(deltaVec3));
-                group.rotation.y -= rotateRad;
+                // group.rotation.y -= rotateRad;
+                group.rotateOnWorldAxis(worldY, - rotateRad);
 
             } else if (this.isMovingBackwardRight) {
 
                 deltaVec3 = new Vector3(-deltaX, 0, -deltaZ);
                 group.position.copy(group.localToWorld(deltaVec3));
-                group.rotation.y += rotateRad;
+                // group.rotation.y += rotateRad;
+                group.rotateOnWorldAxis(worldY, rotateRad);
 
             }
         }
@@ -535,9 +544,14 @@ class Moveable2D {
         // set dummy object related to zero position.
         const dummyObject = this.dummyObject;
 
-        dummyObject.position.copy(wallMesh.worldToLocal(group.position.clone()));
-        dummyObject.rotation.y = group.rotation.y - wallMesh.rotation.y;
-        dummyObject.scale.copy(group.scale);
+        group.updateWorldMatrix(true, false);
+
+        const wallTransformMtx4 = wallMesh.matrixWorld;
+        const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();
+        // get player position towards wall local space
+        const dummy2WallMtx4 = group.matrixWorld.clone().premultiply(wallWorldMatrixInverted);
+        const dummyMatrixInverted = dummyObject.matrix.clone().invert();
+        dummyObject.applyMatrix4(dummy2WallMtx4.multiply(dummyMatrixInverted));
 
         const posY = dummyObject.position.y;
 
@@ -546,6 +560,8 @@ class Moveable2D {
         const backwardCoefficient = player.backwardCoefficient;
         let deltaVec3, deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
+
+        const worldY = player.worldYDirection;
 
         // when climb forward has collistion with other walls, need to stop moving forward.
         if (this.#isClimbingForward) {
@@ -696,7 +712,8 @@ class Moveable2D {
 
             }
 
-            dummyObject.rotation.y -= rotateRad;
+            // dummyObject.rotation.y -= rotateRad;
+            dummyObject.rotateOnWorldAxis(worldY, - rotateRad);
 
         } else if (this.isTurnCounterClockwise) {
 
@@ -708,7 +725,8 @@ class Moveable2D {
 
             }
 
-            dummyObject.rotation.y += rotateRad;
+            // dummyObject.rotation.y += rotateRad;
+            dummyObject.rotateOnWorldAxis(worldY, rotateRad);
 
         } else {
 
@@ -722,7 +740,16 @@ class Moveable2D {
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
                 offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
-                dummyObject.rotation.y += this.isMovingForwardLeft ? rotateRad : - rotateRad;
+                // dummyObject.rotation.y += this.isMovingForwardLeft ? rotateRad : - rotateRad;
+                if (this.isMovingForwardLeft) {
+
+                    dummyObject.rotateOnWorldAxis(worldY, rotateRad);
+
+                } else {
+
+                    dummyObject.rotateOnWorldAxis(worldY, - rotateRad);
+
+                }
 
                 if (!borderReach) {
 
@@ -774,7 +801,16 @@ class Moveable2D {
                 offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
                 // dummyObject.position.copy(offsetVec3);
-                dummyObject.rotation.y += this.isMovingForwardRight ? - rotateRad : rotateRad;
+                // dummyObject.rotation.y += this.isMovingForwardRight ? - rotateRad : rotateRad;
+                if (this.isMovingForwardRight) {
+
+                    dummyObject.rotateOnWorldAxis(worldY, - rotateRad);
+
+                } else {
+
+                    dummyObject.rotateOnWorldAxis(worldY, rotateRad);
+                    
+                }
 
                 if (!borderReach) {
 
@@ -822,8 +858,15 @@ class Moveable2D {
         }
 
         // transfer dummy to group world position.
-        group.position.copy(wallMesh.localToWorld(dummyObject.position.clone()));
-        group.rotation.y = dummyObject.rotation.y + wallMesh.rotation.y;
+        dummyObject.updateMatrix();
+
+        const recoverMtx4 = dummyObject.matrix.clone().premultiply(wallTransformMtx4);
+
+        const playerMatrixInverted = group.matrix.invert();
+        const playerWorldMatrixInvterted = group.parent.matrixWorld.invert();
+        // follow the euquition:
+        // parentWorldMatirx * localMatrix = recoverMtx4 => localMatrix = parentWorldMatrix.invert() * recoverMtx4
+        group.applyMatrix4(playerWorldMatrixInvterted.multiply(recoverMtx4.multiply(playerMatrixInverted)));
 
     }
 }

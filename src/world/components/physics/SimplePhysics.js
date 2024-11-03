@@ -150,16 +150,16 @@ class SimplePhysics {
         // set dummy object related to zero position.
         const dummyObject = player.dummyObject;
         const wallMesh = new Object3D();
-        const wallWorldPos = new Vector3();
-        
-        plane.mesh.getWorldPosition(wallWorldPos);
 
-        wallMesh.position.copy(wallWorldPos);
-        wallMesh.rotation.y = plane.mesh.rotationY;
+        plane.mesh.updateWorldMatrix(true, false);
+        wallMesh.applyMatrix4(plane.mesh.matrixWorld);
+        wallMesh.updateMatrixWorld();
 
-        dummyObject.position.copy(wallMesh.worldToLocal(player.position.clone()));
-        dummyObject.rotation.y = player.rotation.y - wallMesh.rotation.y;
-        dummyObject.scale.copy(player.scale);
+        const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();
+        // get player position towards wall local space
+        const dummy2WallMtx4 = player.group.matrixWorld.clone().premultiply(wallWorldMatrixInverted);
+        const dummyMatrixInverted = dummyObject.matrix.clone().invert();
+        dummyObject.applyMatrix4(dummy2WallMtx4.multiply(dummyMatrixInverted));
         
         const leftCorVec3 = player.leftCorVec3;
         const rightCorVec3 = player.rightCorVec3;

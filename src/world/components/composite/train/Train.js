@@ -133,6 +133,11 @@ class Train extends Moveable2D {
         return new Vector3( - this.#w / 2, 0, - this.#d / 2);
     }
 
+    get worldYDirection() {
+        const dir = this.group.up;
+        return this.group.localToWorld(dir.clone()).sub(this.worldPosition).normalize();
+    }
+
     get velocity() {
         return this.isAccelerating ? 10 : 2.55;
     }
