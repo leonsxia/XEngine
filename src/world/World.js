@@ -190,9 +190,10 @@ class World {
 
                 const { resizer } = scene;
 
+                resizer.setSize();
+                
                 if (this.#currentScene === scene) {
-
-                    resizer.setSize();
+                    
                     resizer.onResize();
 
                 }
