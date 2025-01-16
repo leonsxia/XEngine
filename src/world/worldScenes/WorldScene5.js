@@ -1,12 +1,13 @@
+
 import { WorldScene } from './WorldScene.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { independence } from '../components/basic/colorBase.js';
 
-const sceneName = 'Mansion';
+const sceneName = 'Animated Characters';
 const worldSceneSpecs = {
     name: sceneName,
     camera: {
-        position: [10, 10, 10]
+        position: [-1.5, 4.5, 6.5]
     },
     enableTPC: true,
     enableIC: true,
@@ -25,25 +26,24 @@ const worldSceneSpecs = {
         { x: 5, y: 15, z: 15 }
     ],
     allPlayerPos: [
-        [0, 5, 0]
-    ],
-    resolution: .5
+        [0, 6, 6.25]
+    ]
 };
 
-class Mansion extends WorldScene {
+class WorldScene5 extends WorldScene {
 
     #loaded = false;
 
     constructor(container, renderer, globalConfig, eventDispatcher) {
-        Object.assign(worldSceneSpecs, globalConfig);
+        Object.assign(worldSceneSpecs, globalConfig)
         super(container, renderer, worldSceneSpecs, eventDispatcher);
-        
+
         return {
             name: this.name,
             renderer: this.renderer,
             scene: this.scene,
             resizer: this.resizer,
-            init: this.init.bind(this), 
+            init: this.init.bind(this),
             render: this.render.bind(this),
             start: this.start.bind(this),
             stop: this.stop.bind(this),
@@ -61,11 +61,11 @@ class Mansion extends WorldScene {
 
         if (this.#loaded) {
             this.initContainer();
-            return;
+            return
         }
 
         await this.postProcessor.init();
-        await this.sceneBuilder.buildScene({ src: 'assets/sceneObjects/mansion.json' });
+        await this.sceneBuilder.buildScene({ src: 'assets/sceneObjects/worldScene5.json' });
 
         this.physics = new SimplePhysics(this.players);
 
@@ -95,6 +95,7 @@ class Mansion extends WorldScene {
 
         this.initContainer();
         this.#loaded = true;
+
     }
 
     setupLeftFunctionPanle() {
@@ -114,7 +115,6 @@ class Mansion extends WorldScene {
     }
 
     focusNext(forceStaticRender = true) {
-        
         this.focusNextProcess(forceStaticRender);
 
         this.physics.initPhysics(this.rooms[this.loadSequence]);
@@ -126,9 +126,7 @@ class Mansion extends WorldScene {
                 room.setLightsVisible(false);
             }
         });
-
     }
-
 }
 
-export { Mansion };
+export { WorldScene5 };

@@ -1,7 +1,7 @@
-import { AnimationClip, NumberKeyframeTrack, VectorKeyframeTrack, AnimationMixer } from 'three';
+import { AnimationClip, NumberKeyframeTrack, VectorKeyframeTrack, AnimationMixer, LoopOnce } from 'three';
 
 function setupModel(data, position) {
-    const model = data.scene.children[0];
+    const model = data.scene;
     const clip = data.animations[0];
     const [ x, y, z ] = position;
     const positionKF = new VectorKeyframeTrack(
@@ -24,18 +24,20 @@ function setupModel(data, position) {
 
     const mixer = new AnimationMixer(model);
     const action = mixer.clipAction(clip);
-    const action2 = mixer.clipAction(moveScaleClip);
+    action.clampWhenFinished = true;
+    // const action2 = mixer.clipAction(moveScaleClip);
     // action.play();
     action
-        .startAt(1)
+    .setLoop(LoopOnce, 1)
+        .startAt(0)
         .setEffectiveTimeScale(1) // 0.5
         .setEffectiveWeight(1)
         .play();
-    action2
-        .startAt(1)
-        .setEffectiveTimeScale(0.5)
-        .setEffectiveWeight(0.2)
-        .play();
+    // action2
+    //     .startAt(1)
+    //     .setEffectiveTimeScale(0.5)
+    //     .setEffectiveWeight(0.2)
+    //     .play();
     model.tick = (delta) => mixer.update(delta);
     return model;
 }

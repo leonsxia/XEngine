@@ -45,17 +45,37 @@ class Tofu extends Moveable2D {
     #rayPadding = .2;
     #slopeCoefficient = 1;
     #slowDownCoefficient = 1;
+    #backwardSlowdownCoefficient = .7;
+    #backwardRotatingRadiusCoefficient = .7;
     #isPushing = false;
 
-    constructor(name) {
+    constructor(specs) {
 
         super();
+
+        const { name, size = { width: .9, depth: .9, height: 1.8 } } = specs;
+        const { 
+            rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, climbingVel = 1.34, rayPaddiing = .2, 
+            recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7 
+        } = specs;
+
+        this.#rotateR = rotateR;
+        this.#vel = vel;
+        this.#turnBackVel = turnbackVel;
+        this.#climbingVel = climbingVel;
+        this.#rayPadding = rayPaddiing;
+        this.#recoverCoefficient = recoverCt;
+        this.#quickRecoverCoefficient = quickRecoverCt;
+        this.#slopeCoefficient = slopeCt;
+        this.#slowDownCoefficient = slowdownCt;
+        this.#backwardSlowdownCoefficient = backwardSlowdownCt;
+        this.#backwardRotatingRadiusCoefficient = backwardRotatingRCt;
 
         this.name = name;
         this.group = new Group();
         this.group.isPlayer = true;
         this.group.father = this;
-        this.meshes = createMeshes();
+        this.meshes = createMeshes(size);
 
         const { 
 
@@ -63,8 +83,7 @@ class Tofu extends Moveable2D {
             bbObjects: {
                 boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace
             },
-            pushingOBBBox,
-            specs: { width, depth, height }
+            pushingOBBBox
 
         } = this.meshes;
 
@@ -81,9 +100,9 @@ class Tofu extends Moveable2D {
 
         ).name = name;
 
-        this.#w = width;
-        this.#d = depth;
-        this.#h = height;
+        this.#w = size.width;
+        this.#d = size.depth;
+        this.#h = size.height;
 
         this.boundingBox = new Box3();
         this.boundingBoxHelper = new Box3Helper(this.boundingBox, 0x00ff00);
@@ -93,6 +112,18 @@ class Tofu extends Moveable2D {
         this.showArrows(false);
 
         this.paddingCoefficient = .05 * ENLARGE;
+
+    }
+
+    get bodyMesh() {
+
+        return this.group.getObjectByName('body');
+
+    }
+
+    get slotMeshes() {
+
+        return [this.group.getObjectByName('slotLeft'), this.group.getObjectByName('slotRight')];
 
     }
 
@@ -243,7 +274,7 @@ class Tofu extends Moveable2D {
 
         return this.isAccelerating && !this.isBackward && !this.#isPushing ? 
             this.#vel * ENLARGE * this.#slopeCoefficient * this.#slowDownCoefficient : 
-            this.#vel * this.#slopeCoefficient;
+            (this.isBackward ? this.#vel * this.#backwardSlowdownCoefficient : this.#vel * this.#slopeCoefficient);
 
     }
 
@@ -305,6 +336,13 @@ class Tofu extends Moveable2D {
 
         return PLAYER_DETECT_SCOPE_MIN;
         
+    }
+
+    showTofu(show) {
+
+        this.bodyMesh.visible = show;
+        this.slotMeshes.forEach(slot => slot.visible = show);
+
     }
  
     showBB(show) {
@@ -394,9 +432,10 @@ class Tofu extends Moveable2D {
 
         }
 
-        const posY = this.height * .5;
-        const posX = this.width * .5 - this.#rayPadding;
-        const posZ = this.depth * .5 - this.#rayPadding;
+        const length = this.height;
+        const posY = this.#h * .5;
+        const posX = this.#w * .5 - this.#rayPadding;
+        const posZ = this.#d * .5 - this.#rayPadding;
         const dir = new Vector3(0, - 1, 0);
         let fromVec3;
 
@@ -404,29 +443,37 @@ class Tofu extends Moveable2D {
         fromVec3 = new Vector3(posX, posY, posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
         this.leftRay.set(fromVec3, dir);
+        this.leftRay.far = length;
         this.leftArrow.position.copy(fromVec3);
         this.leftArrow.setDirection(dir);
+        this.leftArrow.setLength(length);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
         this.rightRay.set(fromVec3, dir);
+        this.rightRay.far = length;
         this.rightArrow.position.copy(fromVec3);
         this.rightArrow.setDirection(dir);
+        this.rightArrow.setLength(length);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
         this.backLeftRay.set(fromVec3, dir);
+        this.backLeftRay.far = length;
         this.backLeftArrow.position.copy(fromVec3);
         this.backLeftArrow.setDirection(dir);
+        this.backLeftArrow.setLength(length);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
         this.backRightRay.set(fromVec3, dir);
+        this.backRightRay.far = length;
         this.backRightArrow.position.copy(fromVec3);
         this.backRightArrow.setDirection(dir);
+        this.backRightArrow.setLength(length);
 
         return this;
 
@@ -583,7 +630,7 @@ class Tofu extends Moveable2D {
 
     setTickParams(delta) {
 
-        const R = this.isAccelerating ? this.#rotateR * ENLARGE : this.#rotateR;
+        const R = this.isAccelerating && !this.isBackward ? this.#rotateR * ENLARGE : (this.isBackward ? this.#rotateR * this.#backwardRotatingRadiusCoefficient : this.#rotateR);
         
         const rotateVel = this.velocity / R;
 
@@ -680,6 +727,9 @@ class Tofu extends Moveable2D {
         this.updateRay(false);
 
     }
+
+    finalTick(delta) {}
+
 }
 
 export { Tofu };

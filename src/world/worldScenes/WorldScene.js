@@ -725,14 +725,14 @@ class WorldScene {
 
                 this.scene.remove(this.player.group);
 
-                // if (this.player.hasRays) {
+                if (this.player.hasRays) {
 
-                //     this.scene.remove(this.player.leftArrow);
-                //     this.scene.remove(this.player.rightArrow);
-                //     this.scene.remove(this.player.backLeftArrow);
-                //     this.scene.remove(this.player.backRightArrow);
+                    this.scene.remove(this.player.leftArrow);
+                    this.scene.remove(this.player.rightArrow);
+                    this.scene.remove(this.player.backLeftArrow);
+                    this.scene.remove(this.player.backRightArrow);
 
-                // }
+                }
 
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
@@ -756,14 +756,14 @@ class WorldScene {
                 
             }
 
-            // if (this.player.hasRays) {
+            if (this.player.hasRays) {
 
-            //     this.scene.add(this.player.leftArrow);
-            //     this.scene.add(this.player.rightArrow);
-            //     this.scene.add(this.player.backLeftArrow);
-            //     this.scene.add(this.player.backRightArrow);
+                this.scene.add(this.player.leftArrow);
+                this.scene.add(this.player.rightArrow);
+                this.scene.add(this.player.backLeftArrow);
+                this.scene.add(this.player.backRightArrow);
 
-            // }
+            }
 
             this.subscribeEvents(this.player, this.setup.moveType);
 

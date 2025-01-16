@@ -79,13 +79,39 @@ class Moveable2D {
         // console.log(`[moveable2D]:jump ${this.#jump}`);
     }
 
+    // animation state
+    get forward() {
+        return this.#movingForward;
+    }
+
+    get backward() {
+        return this.#movingBackward;
+    }
+
+    get turningLeft() {
+        return this.#movingLeft;
+    }
+
+    get turningRight() {
+        return this.#movingRight;
+    }
+
+    get rotating() {
+        return this.turningLeft || this.turningRight;
+    }
+
+    get accelerating() {
+        return this.#accelerate;
+    }
+    // animation state
+
     get dummyObject() {
         return this.#dummyObject;
     }
 
     get stopped() {
         return !this.#movingLeft && !this.#movingRight && !this.#movingForward && !this.#movingBackward;
-    }
+    }    
 
     get isForward() {
         return this.isMovingForward || this.isMovingForwardLeft || this.isMovingForwardRight;
@@ -337,7 +363,7 @@ class Moveable2D {
                 const pos = new Vector3(0, wall.height * .5 + marginTop, 0);
                 wall.mesh.localToWorld(pos);
                 this.#climbHeight = pos.y;
-                this.#climbDist = player.depth;
+                this.#climbDist = player.boundingBoxMesh.geometry.parameters.depth;
 
                 this.#isClimbingUp = true;
 

@@ -138,7 +138,7 @@ function createCollisionGeometries(specs) {
 
     const { width, height, depth, bbfThickness, gap } = specs;
 
-    const boundingBox = new BoxGeometry(width, height, depth);
+    const boundingBox = new BoxGeometry(width, height, depth * 2 / 3);
 
     const boundingBoxEdges = new EdgesGeometry(boundingBox);
 
@@ -146,7 +146,7 @@ function createCollisionGeometries(specs) {
 
     // setup OBB on geometry level
     boundingBox.userData.obb = new OBB();
-    boundingBox.userData.obb.halfSize.copy( new Vector3(width, height, depth) ).multiplyScalar( 0.5 );
+    boundingBox.userData.obb.halfSize.copy( new Vector3(width, height, depth * 2 / 3) ).multiplyScalar( 0.5 );
 
     return { boundingBox, boundingBoxEdges, boundingFace };
 

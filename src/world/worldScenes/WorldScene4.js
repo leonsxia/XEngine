@@ -80,7 +80,7 @@ class WorldScene4 extends WorldScene {
         // initialize player
 
         // no need to render at this time, so the change event of control won't do the rendering.
-        this.changeCharacter('tofu1', false);
+        this.changeCharacter('jill', false);
 
         // setup cameras
         this.thirdPersonCamera?.setup({ player: this.player, control: this.controls.defControl, scene: this.scene });

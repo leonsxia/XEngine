@@ -1,6 +1,7 @@
 import { Group } from 'three';
 import { worldGLTFLoader } from '../utils/gltfHelper';
 import { clone } from '../utils/objectHelper';
+import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js'
 
 class GLTFModel {
 
@@ -25,7 +26,7 @@ class GLTFModel {
 
     async init() {
 
-        const { src, receiveShadow = false, castShadow = false, offsetX = 0, offsetY = 0, offsetZ = 0 } = this.specs;
+        const { src, receiveShadow = false, castShadow = false, offsetX = 0, offsetY = 0, offsetZ = 0, hasBones = false } = this.specs;
 
         let model;
 
@@ -44,14 +45,14 @@ class GLTFModel {
             let gltfModel = model;
             let modelGroup;
 
-            if (Array.isArray(model)) {
+            if (!hasBones) {
 
-                gltfModel = model[0];
-                modelGroup = gltfModel.scene;
+                modelGroup = gltfModel.scene.clone();
 
             } else {
 
-                modelGroup = gltfModel.scene.clone();
+                // use skeleton clone to bind mesh with skeleton
+                modelGroup = skeletonClone(gltfModel.scene);
 
             }
 
@@ -72,11 +73,11 @@ class GLTFModel {
 
     getMeshes(object) {
 
-        if (object.isGroup) {
+        if (object.isGroup || object.isObject3D && !object.isMesh && !object.isBone) {
 
             object.children.forEach(child => {
 
-                if (child.isGroup) {
+                if (child.isGroup || child.isObject3D && !child.isMesh && !child.isBone) {
 
                     this.getMeshes(child);
 

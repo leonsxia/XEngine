@@ -1,0 +1,179 @@
+{
+    "scene": "Animated Characters",
+    "players": [
+        {
+            "name": "jill",
+            "type": "SoldierFemale",
+            "src": "SOLDIER_FEMALE",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [0, 0, 0]
+        }
+    ],
+    "lights": [
+        {
+            "room": "room1",
+            "basicLightSpecs": [
+                {
+                    "name": "room1_mainLight",
+                    "display": "Directional Light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "intensity": 1,
+                        "position": [0, 20, 0],
+                        "target": [0, 0, 0]
+                    },
+                    "type": "DirectionalLight",
+                    "debug": true,
+                    "shadow": false,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                },
+                {
+                    "name": "room1_ambientLight",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [245, 178, 239],
+                        "intensity": 0.2
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true
+                },
+                {
+                    "name": "room1_hemisphereLight",
+                    "display": "Hemisphere Light",
+                    "detail": {
+                        "groundColor": [47, 79, 79],
+                        "skyColor": [160, 160, 160],
+                        "intensity": 0,
+                        "position": [0, 4.6, 0]
+                    },
+                    "type": "HemisphereLight",
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "room1_pointLight1",
+                    "display": "Ceiling Lamp Main",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "position": [0, 4.5, 0],
+                        "intensity": 120,
+                        "distance": 0,
+                        "decay": 2
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "turnOn": true
+                }
+            ],
+            "spotLightSpecs": []
+        }
+    ],
+    "objects": [
+        {
+            "type": "Scene",
+            "children": [
+                {
+                    "type": "Axes",
+                    "size": 3,
+                    "position": [-50.5, 0, -50.5]
+                },
+                {
+                    "type": "Grid",
+                    "size": 100,
+                    "divisions": 100,
+                    "position": [0, 0.01, 0]
+                }
+            ]
+        },
+        {
+            "type": "Room",
+            "width": 30,
+            "height": 5,
+            "depth": 30,
+            "baseSize": 9,
+            "frontMap": "CONCRETE_132",
+            "frontNormal": "CONCRETE_132_NORMAL",
+            "backMap": "CONCRETE_132",
+            "backNormal": "CONCRETE_132_NORMAL",
+            "leftMap": "CONCRETE_132",
+            "leftNormal": "CONCRETE_132_NORMAL",
+            "rightMap": "CONCRETE_132",
+            "rightNormal": "CONCRETE_132_NORMAL",
+            "mapRatio": 1.5,
+            "name": "room1",
+            "showArrow": true,
+            "enableWallOBBs": true,
+            "position": [0, 2.5, 0],
+            "rotationY": 0,
+            "groups": [
+                {
+                    "type": "BoxCube",
+                    "width": 1.2,
+                    "height": 1.2,
+                    "depth": 1.2,
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "frontMap": "CRATE",
+                    "frontNormal": "CRATE_NORMAL",
+                    "backMap": "CRATE",
+                    "backNormal": "CRATE_NORMAL",
+                    "leftMap": "CRATE",
+                    "leftNormal": "CRATE_NORMAL",
+                    "rightMap": "CRATE",
+                    "rightNormal": "CRATE_NORMAL",
+                    "topMap": "CRATE",
+                    "topNormal": "CRATE_NORMAL",
+                    "bottomMap": "CRATE",
+                    "bottomNormal": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": true,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "pushable": true,
+                    "name": "room1_CubeBox1",
+                    "position": [-1.5, 2, 1],
+                    "rotationY": 0
+                }
+            ],
+            "floors": [
+                {
+                    "type": "OBBPlane",
+                    "width": 30,
+                    "height": 30,
+                    "map": "STONE_165",
+                    "normalMap": "STONE_165_NORMAL",
+                    "name": "room1_floor1",
+                    "repeatU": 1.33,
+                    "repeatV": 2,
+                    "repeatModeU": 1002,
+                    "repeatModeV": 1002,
+                    "rotationT": 1.5708,
+                    "receiveShadow": true,
+                    "position": [0, -2.5, 0],
+                    "rotation": [-1.5708, 0, 0]
+                }
+            ],
+            "ceilings": [],
+            "walls": [],
+            "insideWalls": [],
+            "waters": []
+        }
+    ]
+}

@@ -22,6 +22,7 @@ const GRID = 'Grid';
 // players
 const TOFU = 'Tofu';
 const TRAIN = 'Train';
+const SOLDIER_FEMALE = 'SoldierFemale';
 
 // objects
 const PLANE = 'Plane';
@@ -222,6 +223,8 @@ const TEXTURES = [{
 
 // gltfs
 const GLTF_NAMES = {
+    // characters
+    SOLDIER_FEMALE: 'SOLDIER_FEMALE',
     // tables
     WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
     WOODEN_TABLE: 'WOODEN_TABLE',
@@ -248,6 +251,8 @@ const GLTF_NAMES = {
 }
 
 const GLTFS = [{
+    name: GLTF_NAMES.SOLDIER_FEMALE, src: 'characters/soldier_female.glb'
+}, {
     name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
 }, {
     name: GLTF_NAMES.WOODEN_TABLE, src: 'inRoom/tables/wooden_table_1k/wooden_table_02_1k.gltf'
@@ -256,7 +261,7 @@ const GLTFS = [{
 }, {
     name: GLTF_NAMES.PAINTED_WOODEN_TABLE, src: 'inRoom/tables/painted_wooden_table_1k/painted_wooden_table_1k.gltf'
 }, {
-    nmae: GLTF_NAMES.PAINTED_WOODEN_NIGHTSTAND, src: 'inRoom/tables/painted_wooden_nightstand_1k/painted_wooden_nightstand_1k.gltf'
+    name: GLTF_NAMES.PAINTED_WOODEN_NIGHTSTAND, src: 'inRoom/tables/painted_wooden_nightstand_1k/painted_wooden_nightstand_1k.gltf'
 }, {
     name: GLTF_NAMES.PAINTED_WOODEN_BLUE_CHAIR, src: 'inRoom/seats/painted_wooden_chair_02_1k/painted_wooden_chair_02_1k.gltf'
 }, {
@@ -294,6 +299,34 @@ const SHADERS = [{
     name: SHADER_NAMES.BLOOM_FRAGMENT, src: 'assets/shaders/bloom_fragmentshader.shader'
 }];
 
+// animation clips
+const SOLDIER_FEMALE_CLIPS = {
+    DEATH: { nick: 'death', name: 'CharacterArmature|Death', idx: 0, enable: true, loopOnce: true },
+    GUN_SHOOT: { nick: 'gun_shoot', name: 'CharacterArmature|Gun_Shoot', idx: 1, enable: false },
+    HIT_RECEIVE: { nick: 'hit_receive', name: 'CharacterArmature|HitRecieve', idx: 2, enable: true, loopOnce: true },
+    HIT_RECEIVE_2: { nick: 'hit_receive_2', name: 'CharacterArmature|HitRecieve_2', idx: 3, enable: false },
+    IDLE: { nick: 'idle', name: 'CharacterArmature|Idle', idx: 4, enable: true },
+    IDLE_GUN: { nick: 'idle_gun', name: 'CharacterArmature|Idle_Gun', idx: 5, enable: false },
+    IDLE_GUN_POINTING: { nick: 'idle_gun_pointing', name: 'CharacterArmature|Idle_Gun_Pointing', idx: 6, enable: false },
+    IDLE_GUN_SHOOT: { nick: 'idle_gun_shoot', name: 'CharacterArmature|Idle_Gun_Shoot', idx: 7, enable: false },
+    IDLE_NEUTRAL: { nick: 'idle_neutral', name: 'CharacterArmature|Idle_Neutral', idx: 8, enable: false },
+    IDLE_SWORD: { nick: 'idle_sword', name: 'CharacterArmature|Idle_Sword', idx: 9, enable: false },
+    INTERACT: { nick: 'interact', name: 'CharacterArmature|Interact', idx: 10, enable: true, loopOnce: true },
+    KICK_LEFT: { nick: 'kick_left', name: 'CharacterArmature|Kick_Left', idx: 11, enable: false },
+    KICK_RIGHT: { nick: 'kick_right', name: 'CharacterArmature|Kick_Right', idx: 12, enable: false },
+    PUNCH_LEFT: { nick: 'punch_left', name: 'CharacterArmature|Punch_Left', idx: 13, enable: false },
+    PUNCH_RIGHT: { nick: 'punch_right', name: 'CharacterArmature|Punch_Right', idx: 14, enable: true },
+    ROLL: { nick: 'roll', name: 'CharacterArmature|Roll', idx: 15, enable: false },
+    RUN: { nick: 'run', name: 'CharacterArmature|Run', idx: 16, enable: true },
+    RUN_BACK: { nick: 'run_back', name: 'CharacterArmature|Run_Back', idx: 17, enable: true },
+    RUN_LEFT: { nick: 'run_left', name: 'CharacterArmature|Run_Left', idx: 18, enable: false },
+    RUN_RIGHT: { nick: 'run_right', name: 'CharacterArmature|Run_Right', idx: 19, enable: false },
+    RUN_SHOOT: { nick: 'run_shoot', name: 'CharacterArmature|Run_Shoot', idx: 20, enable: false },
+    SWORD_SLASH: { nick: 'sword_slash', name: 'CharacterArmature|Sword_Slash', idx: 21, enable: false },
+    WALK: { nick: 'walk', name: 'CharacterArmature|Walk', idx: 22, enable: true },
+    WAVE: { nick: 'wave', name: 'CharacterArmature|Wave', idx: 23, enable: false }
+}
+
 export { 
     REPEAT_WRAPPING,
     MIRRORED_REPEAT_WRAPPING,
@@ -312,6 +345,7 @@ export {
 
     TOFU,
     TRAIN,
+    SOLDIER_FEMALE,
 
     PLANE,
     OBBPLANE,
@@ -384,5 +418,7 @@ export {
     GLTF_NAMES,
     GLTFS,
     SHADER_NAMES,
-    SHADERS
+    SHADERS,
+
+    SOLDIER_FEMALE_CLIPS
 };

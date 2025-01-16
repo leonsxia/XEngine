@@ -888,6 +888,9 @@ class SimplePhysics {
 
                 }
             }
+
+            player.finalTick?.(delta);
+            
         });
 
     }

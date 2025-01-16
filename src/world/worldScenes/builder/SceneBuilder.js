@@ -1,7 +1,8 @@
 import { createAxesHelper, createGridHelper } from "../../components/utils/helpers.js";
 import { createBasicLights, createPointLights, createSpotLights } from "../../components/lights.js";
 import {
-    Train, Tofu, Plane, WaterPlane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
+    Train, Tofu, SoldierFemale,
+    Plane, WaterPlane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
     Room, InspectorRoom, 
     SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, WaterCube, Slope, Stairs,
     WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand,
@@ -14,7 +15,7 @@ import {
 import { setupShadowLight, updateSingleLightCamera } from "../../components/shadowMaker.js";
 import {
     DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
-    AXES, GRID, TRAIN, TOFU,
+    AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE,
     PLANE, WATER_PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
     ROOM, INSPECTOR_ROOM, SCENE, 
     SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, WATER_CUBE, SLOPE, STAIRS,
@@ -63,16 +64,17 @@ class SceneBuilder {
             const { players, lights, objects } = setup;
             const sceneSpecs = objects.find(o => o.type === SCENE);
             const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);
-    
-            worldScene.players = this.buildPlayers(players);
-    
-            const [sceneObjects, rooms] = await Promise.all(
+
+            const [loadedPlayers, sceneObjects, rooms] = await Promise.all(
                 [
+                    this.buildPlayers(players),
                     this.buildSceneObjects(sceneSpecs),
                     this.buildRooms(roomSpecs)
                 ]
             );
     
+            worldScene.players = loadedPlayers;
+
             sceneObjects.forEach(obj => {
     
                 const { mesh, group } = obj;
@@ -194,15 +196,28 @@ class SceneBuilder {
 
     }
     
-    buildPlayers(playerSpecs) {
+    async buildPlayers(playerSpecs) {
     
         const players = [];
+        const loadPromises = [];
     
         playerSpecs.forEach(specs => {
     
             players.push(this.buildObject(specs));
     
         });
+
+        players.forEach(player => {
+
+            if (player.init) {
+
+                loadPromises.push(player.init());
+
+            }
+
+        });
+
+        await Promise.all(loadPromises);
     
         return players;
     
@@ -912,7 +927,7 @@ class SceneBuilder {
                 {
                     const { name, position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
     
-                    object = new Tofu(name);
+                    object = new Tofu({ name });
                     object.setPosition(position)
                         .setScale(scale)
                         .receiveShadow(receiveShadow)
@@ -934,6 +949,23 @@ class SceneBuilder {
                         .updateOBB();
                 }
     
+                break;
+            case SOLDIER_FEMALE:
+                {
+                    const { position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
+                    const { src } = specs;
+    
+                    this.setupObjectGLTF({ src }, specs);
+
+                    object = new SoldierFemale(specs);
+                    object.setPosition(position)
+                        .setScale(scale)
+                        .receiveShadow(receiveShadow)
+                        .castShadow(castShadow)
+                        .updateOBB()
+                        .updateRay();
+                }
+
                 break;
             case AXES:
                 {
