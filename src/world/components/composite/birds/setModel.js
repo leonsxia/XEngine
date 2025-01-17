@@ -24,11 +24,11 @@ function setupModel(data, position) {
 
     const mixer = new AnimationMixer(model);
     const action = mixer.clipAction(clip);
-    action.clampWhenFinished = true;
+    // action.clampWhenFinished = true;
     // const action2 = mixer.clipAction(moveScaleClip);
     // action.play();
     action
-    .setLoop(LoopOnce, 1)
+    // .setLoop(LoopOnce, 1)
         .startAt(0)
         .setEffectiveTimeScale(1) // 0.5
         .setEffectiveWeight(1)

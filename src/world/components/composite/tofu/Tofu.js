@@ -8,7 +8,7 @@ const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
 const ENABLE_CLIMBING = true;
 const SLOWDOWN_COEFFICIENT = .78;
-const SLOPE_COEFFICIENT = .6;
+const SLOPE_COEFFICIENT = .8;
 const PLAYER_DETECT_SCOPE_MIN = 1;
 
 class Tofu extends Moveable2D {

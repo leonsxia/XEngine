@@ -7,7 +7,7 @@
             "src": "SOLDIER_FEMALE",
             "castShadow": true,
             "receiveShadow": true,
-            "scale": [1.2, 1.2, 1.2],
+            "scale": [1.3, 1.3, 1.3],
             "position": [0, 0, 0]
         }
     ],
@@ -967,7 +967,7 @@
                     "width": 4,
                     "height": 4.85,
                     "depth": 7,
-                    "stepHeight": 0.3,
+                    "stepHeight": 0.25,
                     "baseSize": 4.85,
                     "frontMap": "FABRIC_197",
                     "frontNormal": "FABRIC_197_NORMAL",
@@ -1195,12 +1195,12 @@
                     "type": "Sofa03",
                     "src": "SOFA_03",
                     "name": "room1_sofa03_1",
-                    "scale": [1, 1, 1],
+                    "scale": [1.2, 1.2, 1.2],
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": false,
                     "climbable": false,
-                    "position": [-13, 0.8075, -13],
+                    "position": [-13, 0.91, -13],
                     "rotationY": 0.7854
                 },
                 {

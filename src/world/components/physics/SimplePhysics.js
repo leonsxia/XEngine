@@ -88,7 +88,7 @@ class SimplePhysics {
 
         let result = false;
         const paddingX = .1
-        const paddingTopY = .2;
+        const paddingTopY = .26;
         const paddingBottomY = .1;
 
         const leftBorderX = - wall.width * .5 + paddingX;
