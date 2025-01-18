@@ -312,6 +312,18 @@ class Gui {
                             .controllers.find(c => c._name === 'BF')
                             .setValue('hide');
 
+                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
+                            .controllers.find(c => c._name === 'PushingBox')
+                            .setValue('hide');
+
+                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
+                            .controllers.find(c => c._name === 'Arrows')
+                            .setValue('hide');
+
+                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
+                            .controllers.find(c => c._name === 'Skeleton')
+                            .setValue('hide');
+
                         break;
 
                     case 'camera-dropdown':

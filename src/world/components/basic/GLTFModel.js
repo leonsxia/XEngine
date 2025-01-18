@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { Group, SkeletonHelper } from 'three';
 import { worldGLTFLoader } from '../utils/gltfHelper';
 import { clone } from '../utils/objectHelper';
 import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js'
@@ -9,6 +9,7 @@ class GLTFModel {
     group;
     meshes = [];
     gltf;
+    skeleton;
     specs;
 
     constructor(specs) {
@@ -53,6 +54,7 @@ class GLTFModel {
 
                 // use skeleton clone to bind mesh with skeleton
                 modelGroup = skeletonClone(gltfModel.scene);
+                this.skeleton = new SkeletonHelper(modelGroup);
 
             }
 
@@ -73,27 +75,33 @@ class GLTFModel {
 
     getMeshes(object) {
 
-        if (object.isGroup || object.isObject3D && !object.isMesh && !object.isBone) {
+        // if (object.isGroup || object.isObject3D && !object.isMesh && !object.isBone) {
 
-            object.children.forEach(child => {
+        //     object.children.forEach(child => {
 
-                if (child.isGroup || child.isObject3D && !child.isMesh && !child.isBone) {
+        //         if (child.isGroup || child.isObject3D && !child.isMesh && !child.isBone) {
 
-                    this.getMeshes(child);
+        //             this.getMeshes(child);
 
-                } else if (child.isMesh) {
+        //         } else if (child.isMesh) {
 
-                    this.meshes.push(child);
+        //             this.meshes.push(child);
                     
-                }
+        //         }
 
-            });
+        //     });
 
-        } else if (object.isMesh) {
+        // } else if (object.isMesh) {
 
-            this.meshes.push(object);
+        //     this.meshes.push(object);
 
-        }
+        // }
+
+        object.traverse((object) => {
+
+            if (object.isMesh) this.meshes.push(object);
+            
+        });
 
     }
 

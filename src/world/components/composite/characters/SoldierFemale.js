@@ -55,10 +55,22 @@ class SoldierFemale extends Tofu {
 
         await this.gltf.init();
 
+        this.showSkeleton(false);
+
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: CLIPS });
         this.AWS.init();
 
-    }    
+    }
+
+    showSkeleton(show) {
+
+        if (this.gltf.skeleton) {
+
+            this.gltf.skeleton.visible = show;
+
+        }
+
+    }
 
     // animation controls
     movingForward(val) {        

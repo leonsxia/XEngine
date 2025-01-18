@@ -644,6 +644,14 @@ class WorldScene {
 
             }
 
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Skeleton',
+                value: { Skeleton: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: this.showPlayerSkeleton.bind(this)
+            }));
+
             this.guiLeftSpecs.details.push(folder);
 
         }
@@ -720,10 +728,14 @@ class WorldScene {
                 firstLoad = false;
 
                 // remove old player.
-                this.showPlayerBBHelper(false)
-                    .showPlayerBB(false)
-                    .showPlayerBBW(false)
-                    .showPlayerBF(false);
+                const cmdHide = 'hide';
+                this.showPlayerBBHelper(cmdHide)
+                    .showPlayerBB(cmdHide)
+                    .showPlayerBBW(cmdHide)
+                    .showPlayerBF(cmdHide)
+                    .showPlayerPushingBox(cmdHide)
+                    .showPlayerArrows(cmdHide)
+                    .showPlayerSkeleton(cmdHide);
 
                 this.physics.removeActivePlayers(this.player.name);
 
@@ -736,6 +748,12 @@ class WorldScene {
                     this.scene.remove(this.player.backLeftArrow);
                     this.scene.remove(this.player.backRightArrow);
 
+                }
+
+                if (this.player?.gltf?.skeleton) {
+
+                    this.scene.remove(this.player.gltf.skeleton);
+    
                 }
 
                 this.unsubscribeEvents(this.player, this.setup.moveType);
@@ -766,6 +784,12 @@ class WorldScene {
                 this.scene.add(this.player.rightArrow);
                 this.scene.add(this.player.backLeftArrow);
                 this.scene.add(this.player.backRightArrow);
+
+            }
+
+            if (this.player?.gltf?.skeleton) {
+
+                this.scene.add(this.player.gltf.skeleton);
 
             }
 
@@ -808,7 +832,7 @@ class WorldScene {
 
     showPlayerBBHelper(show) {
 
-        if (!this.player || !this.player.boundingBoxHelper) return;
+        if (!this.player || !this.player.boundingBoxHelper) return this;
 
         const find = this.scene.getObjectByName(this.player.boundingBoxHelper.name);
 
@@ -828,7 +852,7 @@ class WorldScene {
 
     showPlayerBB(show) {
 
-        if (!this.player || !this.player.boundingBoxMesh) return;
+        if (!this.player || !this.player.boundingBoxMesh) return this;
 
         const s = show === 'show' ? true : false;
 
@@ -840,7 +864,7 @@ class WorldScene {
 
     showPlayerBBW(show) {
 
-        if (!this.player || !this.player.boundingBoxWireMesh) return;
+        if (!this.player || !this.player.boundingBoxWireMesh) return this;
 
         const s = show === 'show' ? true : false;
 
@@ -852,7 +876,7 @@ class WorldScene {
 
     showPlayerBF(show) {
 
-        if (!this.player) return;
+        if (!this.player) return this;
 
         const s = show === 'show' ? true : false;
 
@@ -864,7 +888,7 @@ class WorldScene {
 
     showPlayerPushingBox(show) {
 
-        if (!this.player || !this.player.showPushingBox) return;
+        if (!this.player || !this.player.showPushingBox) return this;
 
         const s = show === 'show' ? true : false;
 
@@ -876,11 +900,23 @@ class WorldScene {
 
     showPlayerArrows(show) {
 
-        if (!this.player || !this.player.showArrows) return;
+        if (!this.player || !this.player.showArrows) return this;
 
         const s = show === 'show' ? true : false;
 
         this.player.showArrows(s);
+
+        return this;
+
+    }
+
+    showPlayerSkeleton(show) {
+
+        if (!this.player.showSkeleton) return this;
+
+        const s = show === 'show' ? true : false;
+
+        this.player.showSkeleton(s);
 
         return this;
 
