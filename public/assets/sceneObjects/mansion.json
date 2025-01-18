@@ -1102,12 +1102,12 @@
                     "type": "WoodenSmallTable",
                     "src": "WOODEN_TABLE",
                     "name": "room1_wooden_table_1",
-                    "scale": [1.5, 1, 3],
+                    "scale": [1.5, 1.3, 3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": false,
                     "climbable": false,
-                    "position": [-6.27, -4.2, 8.21],
+                    "position": [-6.27, -4.08, 8.21],
                     "rotationY": 2.618
                 },
                 {
@@ -1126,24 +1126,24 @@
                     "type": "PaintedWoodenWhiteChair",
                     "src": "PAINTED_WOODEN_WHITE_CHAIR",
                     "name": "room1_painted_wooden_white_chair_1",
-                    "scale": [1.3, 1.1, 1.3],
+                    "scale": [1.3, 1.3, 1.3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": false,
                     "climbable": false,
-                    "position": [-4.78, -4.0698, 8.8],
+                    "position": [-4.78, -3.9734, 8.8],
                     "rotationY": -1.7492
                 },
                 {
                     "type": "PaintedWoodenStool",
                     "src": "PAINTED_WOODEN_STOOL",
                     "name": "room1_painted_wooden_stool_1",
-                    "scale": [1.3, 1, 1.3],
+                    "scale": [1.3, 1.1, 1.3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": false,
                     "climbable": false,
-                    "position": [-7.37, -4.31, 9.64],
+                    "position": [-7.37, -4.281, 9.64],
                     "rotationY": -1.9024
                 },
 
