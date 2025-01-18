@@ -368,7 +368,7 @@ class WorldScene {
 
     subscribeEvents(obj, moveType) {
 
-        this.eventDispatcher.actions.forEach(action => {
+        this.eventDispatcher.getActionTypes(moveType).forEach(action => {
 
             const callback = obj[action];
 
@@ -383,12 +383,14 @@ class WorldScene {
                 this.eventDispatcher.subscribe(moveType, action, subscriber);
 
             }
+
         });
+
     }
 
     unsubscribeEvents(obj, moveType) {
 
-        this.eventDispatcher.actions.forEach(action => {
+        this.eventDispatcher.getActionTypes(moveType).forEach(action => {
 
             const callback = obj[action];
 
@@ -403,7 +405,9 @@ class WorldScene {
                 this.eventDispatcher.unsubscribe(moveType, action, subscriber);
 
             }
+
         });
+        
     }
 
     setupGuiConfig() {

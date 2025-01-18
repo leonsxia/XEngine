@@ -20,7 +20,12 @@ const config = {
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters'],  // scene list for scene selector
 };
 const movementTypes = ['tankmove'];
-const moveActions = ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump'];
+const moveActions = [
+    { 
+        category: 'tankmove', 
+        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump']
+    }
+];
 
 class World {
 
@@ -218,6 +223,7 @@ class World {
 
         const eventDispatcher = this.#movementEventDispatcher;
         const messageType = movementTypes[0];
+        const actions = moveActions.find(f => f.category === 'tankmove').types;
 
         window.addEventListener('keydown', e => {
 
@@ -235,14 +241,14 @@ class World {
                             // console.log('<');
                             this.#movingLeft = true;
 
-                            eventDispatcher.publish(messageType, moveActions[0], this.current, this.#movingLeft);
+                            eventDispatcher.publish(messageType, actions[0], this.current, this.#movingLeft);
 
                         } else {
 
                             // console.log('stop >'); // stop on local x
                             this.#movingRight = false;
 
-                            eventDispatcher.publish(messageType, moveActions[1], this.current, this.#movingRight);
+                            eventDispatcher.publish(messageType, actions[1], this.current, this.#movingRight);
 
                         }
 
@@ -265,14 +271,14 @@ class World {
                             // console.log('>');
                             this.#movingRight = true;
 
-                            eventDispatcher.publish(messageType, moveActions[1], this.current, this.#movingRight);
+                            eventDispatcher.publish(messageType, actions[1], this.current, this.#movingRight);
                             
                         } else {
 
                             // console.log('stop <'); // stop on local x
                             this.#movingLeft = false;
 
-                            eventDispatcher.publish(messageType, moveActions[0], this.current, this.#movingLeft);
+                            eventDispatcher.publish(messageType, actions[0], this.current, this.#movingLeft);
 
                         }
 
@@ -295,14 +301,14 @@ class World {
                             // console.log('^');
                             this.#movingForward = true;
 
-                            eventDispatcher.publish(messageType, moveActions[2], this.current, this.#movingForward);
+                            eventDispatcher.publish(messageType, actions[2], this.current, this.#movingForward);
 
                         } else {
 
                             // console.log('stop v');
                             this.#movingBackward = false;
 
-                            eventDispatcher.publish(messageType, moveActions[3], this.current, this.#movingBackward);
+                            eventDispatcher.publish(messageType, actions[3], this.current, this.#movingBackward);
 
                         }
 
@@ -325,14 +331,14 @@ class World {
                             // console.log('v');
                             this.#movingBackward = true;
 
-                            eventDispatcher.publish(messageType, moveActions[3], this.current, this.#movingBackward);
+                            eventDispatcher.publish(messageType, actions[3], this.current, this.#movingBackward);
 
                         } else {
 
                             // console.log('stop ^');
                             this.#movingForward = false;
 
-                            eventDispatcher.publish(messageType, moveActions[2], this.current, this.#movingForward);
+                            eventDispatcher.publish(messageType, actions[2], this.current, this.#movingForward);
 
                         }
 
@@ -350,7 +356,7 @@ class World {
                         this.#accelerate = true;
 
                         // console.log('faster!');
-                        eventDispatcher.publish(messageType, moveActions[4], this.current, this.#accelerate);
+                        eventDispatcher.publish(messageType, actions[4], this.current, this.#accelerate);
 
                     }
 
@@ -363,7 +369,7 @@ class World {
                         this.#keySpaceDown = true;
                         this.#jump = true;
 
-                        eventDispatcher.publish(messageType, moveActions[5], this.current, this.#jump);
+                        eventDispatcher.publish(messageType, actions[5], this.current, this.#jump);
 
                     }
 
@@ -383,14 +389,14 @@ class World {
                         // console.log('>');
                         this.#movingRight = true;
 
-                        eventDispatcher.publish(messageType, moveActions[1], this.current, this.#movingRight);
+                        eventDispatcher.publish(messageType, actions[1], this.current, this.#movingRight);
 
                     } else {
 
                         // console.log('stop <'); // stop on local x
                         this.#movingLeft = false;
 
-                        eventDispatcher.publish(messageType, moveActions[0], this.current, this.#movingLeft);
+                        eventDispatcher.publish(messageType, actions[0], this.current, this.#movingLeft);
 
                     }
 
@@ -409,14 +415,14 @@ class World {
                         // console.log('<');
                         this.#movingLeft = true;
 
-                        eventDispatcher.publish(messageType, moveActions[0], this.current, this.#movingLeft);
+                        eventDispatcher.publish(messageType, actions[0], this.current, this.#movingLeft);
 
                     } else {
 
                         // console.log('stop >'); // stop on local x
                         this.#movingRight = false;
 
-                        eventDispatcher.publish(messageType, moveActions[1], this.current, this.#movingRight);
+                        eventDispatcher.publish(messageType, actions[1], this.current, this.#movingRight);
 
                     }
 
@@ -435,14 +441,14 @@ class World {
                         // console.log('v');
                         this.#movingBackward = true;
 
-                        eventDispatcher.publish(messageType, moveActions[3], this.current, this.#movingBackward);
+                        eventDispatcher.publish(messageType, actions[3], this.current, this.#movingBackward);
 
                     } else {
 
                         // console.log('stop ^'); // stop on local z
                         this.#movingForward = false;
 
-                        eventDispatcher.publish(messageType, moveActions[2], this.current, this.#movingForward);
+                        eventDispatcher.publish(messageType, actions[2], this.current, this.#movingForward);
 
                     }
 
@@ -461,14 +467,14 @@ class World {
                         // console.log('^');
                         this.#movingForward = true;
 
-                        eventDispatcher.publish(messageType, moveActions[2], this.current, this.#movingForward);
+                        eventDispatcher.publish(messageType, actions[2], this.current, this.#movingForward);
 
                     } else {
 
                         // console.log('stop v'); // stop on local z
                         this.#movingBackward = false;
 
-                        eventDispatcher.publish(messageType, moveActions[3], this.current, this.#movingBackward);
+                        eventDispatcher.publish(messageType, actions[3], this.current, this.#movingBackward);
 
                     }
 
@@ -484,7 +490,7 @@ class World {
                     this.#accelerate = false;
 
                     // console.log('slow down');
-                    eventDispatcher.publish(messageType, moveActions[4], this.current, this.#accelerate);
+                    eventDispatcher.publish(messageType, actions[4], this.current, this.#accelerate);
 
                     break;
 
@@ -493,7 +499,7 @@ class World {
                     this.#keySpaceDown = false;
                     this.#jump = false;
 
-                    eventDispatcher.publish(messageType, moveActions[5], this.current, this.#jump);
+                    eventDispatcher.publish(messageType, actions[5], this.current, this.#jump);
 
                     break;
 
