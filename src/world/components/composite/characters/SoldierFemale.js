@@ -1,6 +1,7 @@
 import { GLTFModel, Tofu } from '../../Models';
 import { SOLDIER_FEMALE_CLIPS as CLIPS } from '../../utils/constants';
 import { AnimateWorkstation } from '../../Animation/AnimateWorkstation';
+import { Logger } from '../../../systems/Logger';
 
 const GLTF_SRC = 'characters/soldier_female.glb';
 const ANIMATION_SETTINGS = {
@@ -25,18 +26,19 @@ class SoldierFemale extends Tofu {
     mixer;
     clips = {};    
     actions = {};
+    logger = new Logger();
 
     AWS;
 
     constructor(specs) {
 
         const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true } = specs;
-        const { offsetY = - .89 } = specs;
+        const { offsetY = - .89, offsetZ = - .1 } = specs;
 
-        super({ name, size: { width: .7, depth: .9, height: 1.78 } });
+        super({ name, size: { width: .6, depth: .9, height: 1.78 } });
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow, hasBones };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, offsetZ, receiveShadow, castShadow, hasBones };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);    
@@ -44,6 +46,8 @@ class SoldierFemale extends Tofu {
         this.group.add(this.gltf.group);
 
         this.showTofu(false);
+
+        this.logger.enable = false;
 
     }
 
@@ -65,24 +69,24 @@ class SoldierFemale extends Tofu {
 
                 if (this.rotating) {
 
-                    console.log(`walk turn to run`);
+                    this.logger.log(`walk turn to run`);
                     this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.RUN.nick], ANIMATION_SETTINGS.WALK_TO_RUN);
 
                 } else {
 
-                    console.log(`idle to run`);
+                    this.logger.log(`idle to run`);
                     this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.RUN.nick], ANIMATION_SETTINGS.IDLE_TO_RUN);
 
                 }
 
             } else if (!this.rotating) {
 
-                console.log('idle to walk');
+                this.logger.log('idle to walk');
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_WALK);
 
             } else {
 
-                console.log(`zero turn to walk turn`);
+                this.logger.log(`zero turn to walk turn`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.WALK_TURN_TO_ZERO_TURN, 1);
 
             }
@@ -93,24 +97,24 @@ class SoldierFemale extends Tofu {
 
                 if (this.rotating) {
 
-                    console.log(`run to zero turn`);
+                    this.logger.log(`run to zero turn`);
                     this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.RUN.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.RUN_TO_WALK, ANIMATION_SETTINGS.TURN_WEIGHT);
 
                 } else {
 
-                    console.log(`run to idle`);
+                    this.logger.log(`run to idle`);
                     this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.RUN.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.RUN_TO_IDLE);
 
                 }
 
             } else if (!this.rotating) {
 
-                console.log(`walk to idle`);
+                this.logger.log(`walk to idle`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.WALK_TO_IDLE);
 
             } else {
 
-                console.log(`walk turn to zero turn`);
+                this.logger.log(`walk turn to zero turn`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.WALK_TURN_TO_ZERO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
 
             }
@@ -127,12 +131,12 @@ class SoldierFemale extends Tofu {
 
             if (this.accelerating && !this.rotating) {
 
-                console.log(`quick turn 1`);
+                this.logger.log(`quick turn 1`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_WALK, ANIMATION_SETTINGS.QUICK_TURN_WEIGHT);
 
             } else {
 
-                console.log(`idle to walk backward`);
+                this.logger.log(`idle to walk backward`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_WALK, ANIMATION_SETTINGS.BACK_WALK_WEIGHT);
                 this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
                 
@@ -142,12 +146,12 @@ class SoldierFemale extends Tofu {
 
             if (!this.rotating) {
 
-                console.log(`walk back to idle`);
+                this.logger.log(`walk back to idle`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.WALK_TO_IDLE);                
 
             } else {
 
-                console.log(`walk back to turning`);
+                this.logger.log(`walk back to turning`);
                 this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, 1).setActionEffectiveTimeScale(CLIPS.WALK.nick, 1);
 
             }
@@ -164,7 +168,7 @@ class SoldierFemale extends Tofu {
 
             if (!this.forward && !this.backward) {
 
-                console.log(`idle to left turn`);
+                this.logger.log(`idle to left turn`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
 
             }
@@ -173,7 +177,7 @@ class SoldierFemale extends Tofu {
 
             if (!this.forward && !this.backward) {
 
-                console.log(`left turn to idle`);
+                this.logger.log(`left turn to idle`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.TURN_TO_IDLE);
 
             }
@@ -189,7 +193,7 @@ class SoldierFemale extends Tofu {
 
             if (!this.forward && !this.backward) {
 
-                console.log(`idle to right turn`);
+                this.logger.log(`idle to right turn`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
 
             }
@@ -198,7 +202,7 @@ class SoldierFemale extends Tofu {
 
             if (!this.forward && !this.backward) {
 
-                console.log(`right turn to idle`);
+                this.logger.log(`right turn to idle`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.TURN_TO_IDLE);
 
             }
@@ -214,12 +218,12 @@ class SoldierFemale extends Tofu {
             
             if (this.forward) {
 
-                console.log(`walk to run`);
+                this.logger.log(`walk to run`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.RUN.nick], ANIMATION_SETTINGS.WALK_TO_RUN);
 
             } else if (this.isBackward && !this.rotating) {
 
-                console.log(`quick turn 2`);
+                this.logger.log(`quick turn 2`);
 
             }
             
@@ -227,17 +231,17 @@ class SoldierFemale extends Tofu {
 
             if (this.forward) {
 
-                console.log(`run to walk`);
+                this.logger.log(`run to walk`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.RUN.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.RUN_TO_WALK);
 
             } else if (this.backward) {
 
-                console.log(`quick turn to walk back`);
+                this.logger.log(`quick turn to walk back`);
                 this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.BACK_WALK_WEIGHT).setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
 
             } else if (!this.rotating) {
 
-                console.log(`run to idle`);
+                this.logger.log(`run to idle`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.RUN.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.RUN_TO_IDLE);
 
             }
