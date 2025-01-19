@@ -122,6 +122,9 @@ class World {
         
         await loadScene.init();
 
+        // need to resize current loaded scene in case that size has changed on last scene
+        loadScene.resizer.setSize();
+
         this.#currentScene = loadScene;
 
         console.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
