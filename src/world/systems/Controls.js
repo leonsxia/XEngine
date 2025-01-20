@@ -1,9 +1,13 @@
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Vector3 } from 'three';
+import { Logger } from './Logger';
 
 // module scope const
 const vel = 0.5;
 const velPerSecond = vel * 60;
+const _v0 = new Vector3();
+let _alpha = 0;
+const DEBUG = false;
 
 class WorldControls {
 
@@ -13,6 +17,7 @@ class WorldControls {
     #panels = [];
     #preTarget;
     #preCamPos;
+    #logger = new Logger();
 
     constructor(camera, canvas) {
 
@@ -28,6 +33,8 @@ class WorldControls {
     
         this.resetTick();
         this.#controls.enabled = false;
+
+        this.#logger.enable = DEBUG;
 
     }
 
@@ -191,14 +198,14 @@ class WorldControls {
         const pos0Vec3 = new Vector3(position0.x, position0.y, position0.z);
         const pos1Vec3 = new Vector3(position1.x, position1.y, position1.z);
         const tarDirVec3 = tar1Vec3.clone().sub(tar0Vec3);
-        const tarDirNormal = tarDirVec3.clone().normalize();
-        const tarDist = tarDirVec3.length();
+        // const tarDirNormal = tarDirVec3.clone().normalize();
+        // const tarDist = tarDirVec3.length();
         const posDirVec3 = pos1Vec3.clone().sub(pos0Vec3);
-        const posDirNormal = posDirVec3.clone().normalize();
+        // const posDirNormal = posDirVec3.clone().normalize();
         const posDist = posDirVec3.length();
-        const movingTime = posDist / velPerSecond;
+        // const movingTime = posDist / velPerSecond;
         // const camVelPerSec = posDist < 0.001 ? 0 : posDist / movingTime;
-        const tarVelPerSec = tarDist / movingTime;
+        // const tarVelPerSec = tarDist / movingTime;
         let movingDist = 0;
 
         this.setPanelState(true);
@@ -211,8 +218,17 @@ class WorldControls {
 
             if (movingDist <= posDist) {
 
-                this.#thisCamera.position.add(posDirNormal.clone().multiplyScalar(velPerSecond * delta));
-                this.#controls.target.add(tarDirNormal.clone().multiplyScalar(tarVelPerSec * delta));
+                // this.#logger.log(`movingDist:${movingDist} posDist:${posDist}`);
+                // this.#thisCamera.position.add(posDirNormal.clone().multiplyScalar(velPerSecond * delta));
+                // this.#controls.target.add(tarDirNormal.clone().multiplyScalar(tarVelPerSec * delta));
+
+                _v0.copy(pos1Vec3.clone().sub(this.#thisCamera.position));
+                _alpha = delta * velPerSecond / _v0.length();
+                this.#thisCamera.position.lerp(pos1Vec3, _alpha);
+                this.#controls.target.lerp(tar1Vec3, _alpha);
+
+                this.#logger.log(`camPos:${this.#thisCamera.position.x} ${this.#thisCamera.position.y} ${this.#thisCamera.position.z}`);
+                this.#logger.log(`tarPos:${this.#controls.target.x} ${this.#controls.target.y} ${this.#controls.target.z}`);
 
                 this.#controls.update();
 
