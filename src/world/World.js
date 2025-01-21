@@ -62,8 +62,8 @@ class World {
 
     #sceneBuilder;
 
-    _systemLogger = new Logger();
-    _eventLogger = new Logger(DEBUG);
+    _systemLogger = new Logger(true, World.name);
+    _eventLogger = new Logger(DEBUG, World.name);
 
     constructor(container, infos) {
 

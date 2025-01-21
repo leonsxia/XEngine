@@ -17,7 +17,7 @@ class WorldControls {
     #panels = [];
     #preTarget;
     #preCamPos;
-    #logger = new Logger(DEBUG);
+    #logger = new Logger(DEBUG, WorldControls.name);
 
     constructor(camera, canvas) {
 

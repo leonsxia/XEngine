@@ -1,10 +1,12 @@
 class Logger {
 
     enable = true;
+    module;
 
-    constructor(enable = true) {
+    constructor(enable = true, module = Logger.name) {
 
         this.enable = enable;
+        this.module = module;
 
     }
 
@@ -12,7 +14,7 @@ class Logger {
 
         if (this.enable) {
 
-            console.log(message);
+            console.log(`[${this.module}] ${message}`);
             
         }
 

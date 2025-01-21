@@ -30,7 +30,7 @@ class SoldierFemale extends Tofu {
     mixer;
     clips = {};    
     actions = {};
-    logger = new Logger(DEBUG);
+    logger = new Logger(DEBUG, SoldierFemale.name);
 
     AWS;
 
