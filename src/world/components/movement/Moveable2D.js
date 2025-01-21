@@ -1,7 +1,9 @@
 import { Object3D, Vector3 } from 'three';
 import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
+import { Logger } from '../../systems/Logger';
 
 const COOLING_TIME = .7;
+const DEBUG = true;
 
 class Moveable2D {
     #movingLeft = false;
@@ -12,6 +14,7 @@ class Moveable2D {
     #jump;
     #melee;
     #interact;
+    #gunPoint;
     
     #dummyObject = new Object3D();
 
@@ -28,6 +31,8 @@ class Moveable2D {
     #climbHeight = 0;
     #climbDist = 0;
     #climbForwardDist = 0;
+
+    #logger = new Logger(DEBUG, Moveable2D.name);
 
     constructor() {
         this.leftCorIntersects = false;
@@ -53,42 +58,47 @@ class Moveable2D {
 
     movingLeft(val) {
         this.#movingLeft = val;
-        // console.log(`[moveable2D]:movingLeft ${this.#movingLeft}`);
+        // this.#logger.log(`[moveable2D]:movingLeft ${this.#movingLeft}`);
     }
 
     movingRight(val) {
         this.#movingRight = val;
-        // console.log(`[moveable2D]:movingRight ${this.#movingRight}`);
+        // this.#logger.log(`movingRight ${this.#movingRight}`);
     }
 
     movingForward(val) {
         this.#movingForward = val;
-        // console.log(`[moveable2D]:movingForward ${this.#movingForward}`);
+        // this.#logger.log(`movingForward ${this.#movingForward}`);
     }
 
     movingBackward(val) {
         this.#movingBackward = val;
-        // console.log(`[moveable2D]:movingBackward ${this.#movingBackward}`);
+        // this.#logger.log(`movingBackward ${this.#movingBackward}`);
     }
 
     accelerate(val) {
         this.#accelerate = val;
-        // console.log(`[moveable2D]:accelerate ${this.#accelerate}`);
+        // this.#logger.log(`accelerate ${this.#accelerate}`);
     }
 
     jump(val) {
         this.#jump = val;
-        // console.log(`[moveable2D]:jump ${this.#jump}`);
+        // this.#logger.log(`jump ${this.#jump}`);
     }
 
     melee(val) {
         this.#melee = val;
-        // console.log(`[moveable2D]:melee ${this.#melee}`);
+        // this.#logger.log(`melee ${this.#melee}`);
+    }
+
+    gunPoint(val) {
+        this.#gunPoint = val;
+        this.#logger.log(`gunPoint ${this.#gunPoint}`);
     }
 
     interact(val) {
         this.#interact = val;
-        // console.log(`[moveable2D]:interact ${this.#interact}`);
+        // this.#logger.log(`interact ${this.#interact}`);
     }
 
     // animation state
@@ -120,8 +130,12 @@ class Moveable2D {
         return this.#melee;
     }
 
+    get gunPointing() {
+        return this.#gunPoint;
+    }
+
     get attacking() {
-        return this.#melee;
+        return this.#melee || this.#gunPoint;
     }
 
     get interacting() {
@@ -150,35 +164,35 @@ class Moveable2D {
     }
 
     get isTurnCounterClockwise() {
-        return this.#movingLeft && !this.#movingForward && !this.#movingBackward && !this.#interact;
+        return (this.#movingLeft && !this.#movingForward && !this.#movingBackward) || (this.#movingLeft && (this.#melee || this.#gunPoint)) && !this.#interact;
     }
 
     get isTurnClockwise() {
-        return this.#movingRight && !this.#movingForward && !this.#movingBackward && !this.#interact;
+        return (this.#movingRight && !this.#movingForward && !this.#movingBackward) || (this.#movingRight && (this.#melee || this.#gunPoint)) && !this.#interact;
     }
 
     get isMovingForward() {
-        return  this.#movingForward && !this.#movingLeft && !this.#movingRight && !this.#melee && !this.#interact;
+        return  this.#movingForward && !this.#movingLeft && !this.#movingRight && !this.#melee && !this.#gunPoint && !this.#interact;
     }
 
     get isMovingBackward() {
-        return this.#movingBackward && !this.#movingLeft && !this.#movingRight && !this.#melee && !this.#interact;
+        return this.#movingBackward && !this.#movingLeft && !this.#movingRight && !this.#melee && !this.#gunPoint && !this.#interact;
     }
 
     get isMovingForwardLeft() {
-        return this.#movingForward && this.#movingLeft && !this.#melee && !this.#interact;
+        return this.#movingForward && this.#movingLeft && !this.#melee && !this.#gunPoint && !this.#interact;
     }
 
     get isMovingForwardRight() {
-        return this.#movingForward && this.#movingRight && !this.#melee && !this.#interact;
+        return this.#movingForward && this.#movingRight && !this.#melee && !this.#gunPoint && !this.#interact;
     }
 
     get isMovingBackwardLeft() {
-        return this.#movingBackward && this.#movingLeft && !this.#melee && !this.#interact;
+        return this.#movingBackward && this.#movingLeft && !this.#melee && !this.#gunPoint && !this.#interact;
     }
 
     get isMovingBackwardRight() {
-        return this.#movingBackward && this.#movingRight && !this.#melee && !this.#interact;
+        return this.#movingBackward && this.#movingRight && !this.#melee && !this.#gunPoint && !this.#interact;
     }
 
     get isAccelerating() {
@@ -187,6 +201,10 @@ class Moveable2D {
 
     get isMeleeing() {
         return this.#melee;
+    }
+
+    get isGunPointing() {
+        return this.#gunPoint;
     }
 
     get isInteracting() {
@@ -389,7 +407,7 @@ class Moveable2D {
 
             if (!this.#isClimbingUp && !this.#isClimbingForward && this.isClimbing && !this.#isFalling) {
 
-                console.log(`${player.name} is climbing ${wall.name}`);
+                this.#logger.log(`${player.name} is climbing ${wall.name}`);
 
                 const marginTop = .01;
                 const pos = new Vector3(0, wall.height * .5 + marginTop, 0);
@@ -680,13 +698,13 @@ class Moveable2D {
 
                         const dirVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftCorVec3.z);
                         dummyObject.position.copy(dirVec3);
-                        // console.log(`left cornor reach`);
+                        // this.#logger.log(`left cornor reach`);
 
                     } else if (rightCorVec3.z <= 0) {
 
                         const dirVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightCorVec3.z);
                         dummyObject.position.copy(dirVec3);
-                        // console.log(`right cornor reach`);
+                        // this.#logger.log(`right cornor reach`);
 
                     } else {
 
@@ -700,19 +718,19 @@ class Moveable2D {
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
                         dummyObject.position.x += recoverCoefficient;
-                        // console.log(`left face reach`);
+                        // this.#logger.log(`left face reach`);
 
 
                     } else {
 
                         dummyObject.position.x -= recoverCoefficient;
-                        // console.log(`right face reach`);
+                        // this.#logger.log(`right face reach`);
 
                     }
                 } else if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) {
 
                     dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
-                    // console.log(`front/back face reach`);
+                    // this.#logger.log(`front/back face reach`);
 
                 }
             }

@@ -23,7 +23,7 @@ const worldSceneSpecs = {
         { x: 0, y: 0, z: 0 }
     ],
     allCameraPos: [
-        { x: 5, y: 15, z: 15 }
+        { x: 3, y: 7, z: 8 }
     ],
     allPlayerPos: [
         [0, 3, 0]

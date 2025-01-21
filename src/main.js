@@ -10,7 +10,7 @@ const world = new World(container, { header, msg });
 
 // create the main function
 async function main() {
-    await world.initScene('Mansion');
+    await world.initScene('Animated Characters');
 }
 
 main().catch((err) => {

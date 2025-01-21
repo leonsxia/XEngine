@@ -24,7 +24,7 @@ const movementTypes = ['tankmove'];
 const moveActions = [
     { 
         category: 'tankmove', 
-        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump', 'melee', 'interact']
+        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump', 'melee', 'interact', 'gunPoint']
     }
 ];
 const DEBUG = true;
@@ -42,7 +42,9 @@ class World {
         D: { upper: 'D', lower: 'd', isDown: false },
         W: { upper: 'W', lower: 'w', isDown: false },
         S: { upper: 'S', lower: 's', isDown: false },
+        V: { upper: 'V', lower: 'v', isDown: false },
         J: { upper: 'J', lower: 'j', isDown: false },
+        K: { upper: 'K', lower: 'k', isDown: false },
         F: { upper: 'F', lower: 'f', isDown: false },
         Shift: { code: 'Shift', isDown: false },
         Space: { code: ' ', isDown: false }
@@ -56,6 +58,7 @@ class World {
     #jump = false;
     #melee = false;
     #interact = false;
+    #gunPointing = false;
 
     #textures;
     #gltfs;
@@ -239,7 +242,7 @@ class World {
         const eventDispatcher = this.#movementEventDispatcher;
         const messageType = movementTypes[0];
         const actions = moveActions.find(f => f.category === 'tankmove').types;
-        const { A, D, W, S, J, F, Shift, Space } = this.keys;
+        const { A, D, W, S, V, J, K, F, Shift, Space } = this.keys;
 
         window.addEventListener('keydown', e => {
 
@@ -364,16 +367,30 @@ class World {
 
                     break;
 
+                case V.lower:
+                case V.upper:
+
+                    if (!V.isDown) {
+
+                        V.isDown = true;
+                        this.#melee = true;
+
+                        // this._eventLogger.log('melee');
+                        eventDispatcher.publish(messageType, actions[6], this.current, this.#melee);
+
+                    }
+
+                    break;
                 case J.lower:
                 case J.upper:
 
                     if (!J.isDown) {
 
                         J.isDown = true;
-                        this.#melee = true;
+                        this.#gunPointing = true;
 
-                        // this._eventLogger.log('melee');
-                        eventDispatcher.publish(messageType, actions[6], this.current, this.#melee);
+                        // this._eventLogger.log('gun pointing');
+                        eventDispatcher.publish(messageType, actions[8], this.current, this.#gunPointing);
 
                     }
 
@@ -530,14 +547,25 @@ class World {
 
                     break;
 
-                case J.lower:
-                case J.upper:
+                case V.lower:
+                case V.upper:
 
-                    J.isDown = false;
+                    V.isDown = false;
                     this.#melee = false;
 
                     // this._eventLogger.log('cancel melee');
                     eventDispatcher.publish(messageType, actions[6], this.current, this.#melee);
+
+                    break;
+
+                case J.lower:
+                case J.upper:
+
+                    J.isDown = false;
+                    this.#gunPointing = false;
+
+                    // this._eventLogger.log('cancel gun pointing');
+                    eventDispatcher.publish(messageType, actions[8], this.current, this.#gunPointing);
 
                     break;
 
