@@ -47,9 +47,9 @@
                     "name": "room1_hemisphereLight",
                     "display": "Hemisphere Light",
                     "detail": {
-                        "groundColor": [47, 79, 79],
-                        "skyColor": [160, 160, 160],
-                        "intensity": 0,
+                        "groundColor": [210, 130, 96],
+                        "skyColor": [255, 255, 255],
+                        "intensity": 0.5,
                         "position": [0, 4.6, 0]
                     },
                     "type": "HemisphereLight",

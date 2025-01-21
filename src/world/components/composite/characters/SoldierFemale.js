@@ -17,8 +17,12 @@ const ANIMATION_SETTINGS = {
     RUN_TURN_TO_ZERO_TURN: 0.3,
     BACK_WALK_WEIGHT: 0.7,
     TURN_WEIGHT: 0.5,
-    QUICK_TURN_WEIGHT: 0.7
+    QUICK_TURN_WEIGHT: 0.7,
+    MELEE: .2,
+    INTERACT: .1
 }
+
+const DEBUG = true;
 
 class SoldierFemale extends Tofu {
 
@@ -26,7 +30,7 @@ class SoldierFemale extends Tofu {
     mixer;
     clips = {};    
     actions = {};
-    logger = new Logger();
+    logger = new Logger(DEBUG);
 
     AWS;
 
@@ -46,8 +50,6 @@ class SoldierFemale extends Tofu {
         this.group.add(this.gltf.group);
 
         this.showTofu(false);
-
-        this.logger.enable = false;
 
     }
 
@@ -73,13 +75,18 @@ class SoldierFemale extends Tofu {
     }
 
     // animation controls
-    movingForward(val) {        
+    movingForward(val) {
 
         if (val) {
 
             if (this.accelerating) {
 
-                if (this.rotating) {
+                if (this.attacking) {
+
+                    this.logger.log(`run in queue`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.RUN.nick];
+
+                } else if (this.rotating) {
 
                     this.logger.log(`walk turn to run`);
                     this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.RUN.nick], ANIMATION_SETTINGS.WALK_TO_RUN);
@@ -91,12 +98,18 @@ class SoldierFemale extends Tofu {
 
                 }
 
+            } else if (this.attacking) {
+
+                this.logger.log(`walk in queue`);
+                this.AWS.previousAction = this.AWS.actions[CLIPS.WALK.nick];
+                this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, 1);
+
             } else if (!this.rotating) {
 
                 this.logger.log('idle to walk');
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_WALK);
 
-            } else {
+            } else if (this.rotating) {
 
                 this.logger.log(`zero turn to walk turn`);
                 this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.WALK_TURN_TO_ZERO_TURN, 1);
@@ -107,7 +120,23 @@ class SoldierFemale extends Tofu {
             
             if (this.accelerating) {
 
-                if (this.rotating) {
+                if (this.attacking) {
+
+                    if (this.rotating) {
+
+                        this.logger.log(`walk turn in queue`);
+                        this.AWS.previousAction = this.AWS.actions[CLIPS.WALK.nick];
+                        this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.TURN_WEIGHT);
+
+                    } else {
+
+                        this.logger.log(`idle in queue`);
+                        this.AWS.previousAction = this.AWS.actions[CLIPS.IDLE.nick];
+                        
+                    }
+
+
+                } else if (this.rotating) {
 
                     this.logger.log(`run to zero turn`);
                     this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.RUN.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.RUN_TO_WALK, ANIMATION_SETTINGS.TURN_WEIGHT);
@@ -119,6 +148,20 @@ class SoldierFemale extends Tofu {
 
                 }
 
+            } else if (this.attacking) {
+
+                if (this.rotating) {
+
+                    this.logger.log(`walk turn in queue 2`);
+                    this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.TURN_WEIGHT);
+
+                } else {
+
+                    this.logger.log(`idle in queue 2`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.IDLE.nick];
+
+                }
+
             } else if (!this.rotating) {
 
                 this.logger.log(`walk to idle`);
@@ -127,7 +170,7 @@ class SoldierFemale extends Tofu {
             } else {
 
                 this.logger.log(`walk turn to zero turn`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.WALK_TURN_TO_ZERO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
+                this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.TURN_WEIGHT);
 
             }
             
@@ -148,25 +191,59 @@ class SoldierFemale extends Tofu {
 
             } else {
 
-                this.logger.log(`idle to walk backward`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_WALK, ANIMATION_SETTINGS.BACK_WALK_WEIGHT);
-                this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
+                if (this.attacking) {
+
+                    this.logger.log(`walk backward in queue`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.WALK.nick];
+                    this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.BACK_WALK_WEIGHT);
+                    this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
+
+                } else if (this.rotating) {
+
+                    this.logger.log(`walk turn to walk backward`);
+                    this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.BACK_WALK_WEIGHT);
+                    this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
+
+                } else {
+
+                    this.logger.log(`idle to walk backward`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_WALK, ANIMATION_SETTINGS.BACK_WALK_WEIGHT);
+                    this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
+
+                }
                 
             }
 
         } else {
 
-            if (!this.rotating) {
+            if (this.attacking) {
+
+                if (this.rotating) {
+
+                    this.logger.log(`walk turn in queue 3`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.WALK.nick];
+                    this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.TURN_WEIGHT);
+
+                } else {
+
+                    this.logger.log(`idle in queue 3`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.IDLE.nick];
+
+                }
+
+            } else if (!this.rotating) {
 
                 this.logger.log(`walk back to idle`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.WALK_TO_IDLE);                
+                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.WALK_TO_IDLE);
 
             } else {
 
                 this.logger.log(`walk back to turning`);
-                this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, 1).setActionEffectiveTimeScale(CLIPS.WALK.nick, 1);
+                this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.TURN_WEIGHT)
 
             }
+
+            this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, 1);
 
         }
 
@@ -180,8 +257,18 @@ class SoldierFemale extends Tofu {
 
             if (!this.forward && !this.backward) {
 
-                this.logger.log(`idle to left turn`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
+                if (this.attacking) {
+
+                    this.logger.log(`left turn in queue`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.WALK.nick];
+                    this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.TURN_WEIGHT);
+
+                } else {
+
+                    this.logger.log(`idle to left turn`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
+
+                }
 
             }
 
@@ -189,8 +276,17 @@ class SoldierFemale extends Tofu {
 
             if (!this.forward && !this.backward) {
 
-                this.logger.log(`left turn to idle`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.TURN_TO_IDLE);
+                if (this.attacking) {
+
+                    this.logger.log(`idle in queue 3`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.IDLE.nick];
+
+                } else {
+
+                    this.logger.log(`left turn to idle`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.TURN_TO_IDLE);
+
+                }
 
             }
         }
@@ -205,8 +301,18 @@ class SoldierFemale extends Tofu {
 
             if (!this.forward && !this.backward) {
 
-                this.logger.log(`idle to right turn`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
+                if (this.attacking) {
+
+                    this.logger.log(`right turn in queue`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.WALK.nick];
+                    this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.TURN_WEIGHT);
+
+                } else {
+
+                    this.logger.log(`idle to right turn`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
+
+                }
 
             }
 
@@ -214,8 +320,17 @@ class SoldierFemale extends Tofu {
 
             if (!this.forward && !this.backward) {
 
-                this.logger.log(`right turn to idle`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.TURN_TO_IDLE);
+                if (this.attacking) {
+
+                    this.logger.log(`idle in queue 3`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.IDLE.nick];
+
+                } else {
+
+                    this.logger.log(`right turn to idle`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.TURN_TO_IDLE);
+
+                }
 
             }
         }
@@ -230,8 +345,18 @@ class SoldierFemale extends Tofu {
             
             if (this.forward) {
 
-                this.logger.log(`walk to run`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.RUN.nick], ANIMATION_SETTINGS.WALK_TO_RUN);
+                if (this.attacking) {
+
+                    this.logger.log(`run in queue 2`);
+                    this.AWS.setActionEffectiveWeight(CLIPS.RUN.nick, 1);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.RUN.nick];
+
+                } else {
+
+                    this.logger.log(`walk to run`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.WALK.nick], this.AWS.actions[CLIPS.RUN.nick], ANIMATION_SETTINGS.WALK_TO_RUN);
+
+                }
 
             } else if (this.isBackward && !this.rotating) {
 
@@ -243,24 +368,70 @@ class SoldierFemale extends Tofu {
 
             if (this.forward) {
 
-                this.logger.log(`run to walk`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.RUN.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.RUN_TO_WALK);
+                if (this.attacking) {
+
+                    this.logger.log(`walk in queue 2`);
+                    this.AWS.previousAction = this.AWS.actions[CLIPS.WALK.nick];
+                    this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, 1);
+                    
+                } else {
+
+                    this.logger.log(`run to walk`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.RUN.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.RUN_TO_WALK);
+
+                }
 
             } else if (this.backward) {
 
                 this.logger.log(`quick turn to walk back`);
                 this.AWS.setActionEffectiveWeight(CLIPS.WALK.nick, ANIMATION_SETTINGS.BACK_WALK_WEIGHT).setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
 
-            } else if (!this.rotating) {
-
-                this.logger.log(`run to idle`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.RUN.nick], this.AWS.actions[CLIPS.IDLE.nick], ANIMATION_SETTINGS.RUN_TO_IDLE);
-
             }
 
         }
 
         super.accelerate(val);
+
+    }
+
+    melee(val) {
+
+        if (val) {
+
+            this.logger.log(`melee attack!`);
+            this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[CLIPS.SWORD_SLASH.nick], ANIMATION_SETTINGS.MELEE, 1);
+
+        } else {
+
+            this.logger.log(`cancel melee attack!`);
+            this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.SWORD_SLASH.nick], this.AWS.previousAction, ANIMATION_SETTINGS.MELEE, this.AWS.previousAction.weight);            
+
+        }
+
+        super.melee(val);
+
+    }
+
+    interact(val) {
+
+        if (val) {
+
+            const endCallback = () => {
+
+                super.interact(false);
+
+            }
+
+            this.logger.log(`interact !`);
+            this.AWS.prepareCrossFade(null, this.AWS.actions[CLIPS.INTERACT.nick], ANIMATION_SETTINGS.INTERACT, 1, false, false, ANIMATION_SETTINGS.INTERACT, endCallback);
+
+        } else if (this.AWS.isLooping) {
+
+            return;
+
+        }
+
+        super.interact(val);
 
     }
 

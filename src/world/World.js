@@ -15,6 +15,7 @@ import { loadGLTFModels } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS, SHADERS } from "./components/utils/constants";
+import { Logger } from "./systems/Logger";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters'],  // scene list for scene selector
@@ -23,9 +24,10 @@ const movementTypes = ['tankmove'];
 const moveActions = [
     { 
         category: 'tankmove', 
-        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump']
+        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump', 'melee', 'interact']
     }
 ];
+const DEBUG = true;
 
 class World {
 
@@ -34,23 +36,34 @@ class World {
     #infosDomElements;
     #container;
     #movementEventDispatcher;
-    #keyADown = false;
-    #keyDDown = false;
-    #keyWDown = false;
-    #keySDown = false;
-    #keyShiftDown = false;
-    #keySpaceDown = false;
+
+    keys = {
+        A: { upper: 'A', lower: 'a', isDown: false },
+        D: { upper: 'D', lower: 'd', isDown: false },
+        W: { upper: 'W', lower: 'w', isDown: false },
+        S: { upper: 'S', lower: 's', isDown: false },
+        J: { upper: 'J', lower: 'j', isDown: false },
+        F: { upper: 'F', lower: 'f', isDown: false },
+        Shift: { code: 'Shift', isDown: false },
+        Space: { code: ' ', isDown: false }
+    }
+
     #movingLeft = false;
     #movingRight = false;
     #movingForward = false;
     #movingBackward = false;
     #accelerate = false;
     #jump = false;
+    #melee = false;
+    #interact = false;
 
     #textures;
     #gltfs;
 
     #sceneBuilder;
+
+    _systemLogger = new Logger();
+    _eventLogger = new Logger(DEBUG);
 
     constructor(container, infos) {
 
@@ -90,7 +103,7 @@ class World {
         ]);
 
         const end = Date.now();
-        console.log(`loading assests in ${(end - start) * .001} s`);
+        this._systemLogger.log(`loading assests in ${(end - start) * .001} s`);
 
         Object.assign(loadedTextures, textures);
         this.#textures = textures;
@@ -127,7 +140,7 @@ class World {
 
         this.#currentScene = loadScene;
 
-        console.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
+        this._systemLogger.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
 
         if (this.#infosDomElements) this.#infosDomElements.msg.textContent = 'assets all loaded. => renderding scene...';
 
@@ -140,11 +153,11 @@ class World {
             this.#container.append(this.#renderer.domElement);
 
             const end = Date.now();
-            console.log(`render in ${(end - start) * .001} s`);
+            this._systemLogger.log(`render in ${(end - start) * .001} s`);
 
             const { objects, vertices, triangles } = this.countObjects(loadScene.scene);
 
-            console.log(`objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
+            this._systemLogger.log(`objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
 
             if (this.#infosDomElements) this.#infosDomElements.msg.textContent = 'render complete!';
 
@@ -226,28 +239,29 @@ class World {
         const eventDispatcher = this.#movementEventDispatcher;
         const messageType = movementTypes[0];
         const actions = moveActions.find(f => f.category === 'tankmove').types;
+        const { A, D, W, S, J, F, Shift, Space } = this.keys;
 
         window.addEventListener('keydown', e => {
 
             switch (e.key) {
-                case 'a':
-                case 'A':
+                case A.lower:
+                case A.upper:
                 case 'ArrowLeft':
 
-                    if (!this.#keyADown) {
+                    if (!A.isDown) {
 
-                        this.#keyADown = true;
+                        A.isDown = true;
 
-                        if (!this.#keyDDown) {
+                        if (!D.isDown) {
 
-                            // console.log('<');
+                            // this._eventLogger.log('<');
                             this.#movingLeft = true;
 
                             eventDispatcher.publish(messageType, actions[0], this.current, this.#movingLeft);
 
                         } else {
 
-                            // console.log('stop >'); // stop on local x
+                            // this._eventLogger.log('stop >'); // stop on local x
                             this.#movingRight = false;
 
                             eventDispatcher.publish(messageType, actions[1], this.current, this.#movingRight);
@@ -260,24 +274,24 @@ class World {
 
                     break;
 
-                case 'd':
-                case 'D':
+                case D.lower:
+                case D.upper:
                 case 'ArrowRight':
 
-                    if (!this.#keyDDown) {
+                    if (!D.isDown) {
 
-                        this.#keyDDown = true;
+                        D.isDown = true;
 
-                        if (!this.#keyADown) {
+                        if (!A.isDown) {
 
-                            // console.log('>');
+                            // this._eventLogger.log('>');
                             this.#movingRight = true;
 
                             eventDispatcher.publish(messageType, actions[1], this.current, this.#movingRight);
                             
                         } else {
 
-                            // console.log('stop <'); // stop on local x
+                            // this._eventLogger.log('stop <'); // stop on local x
                             this.#movingLeft = false;
 
                             eventDispatcher.publish(messageType, actions[0], this.current, this.#movingLeft);
@@ -290,24 +304,24 @@ class World {
 
                     break;
 
-                case 'w':
-                case 'W':
+                case W.lower:
+                case W.upper:
                 case 'ArrowUp':
 
-                    if (!this.#keyWDown) {
+                    if (!W.isDown) {
 
-                        this.#keyWDown = true;
+                        W.isDown = true;
 
-                        if (!this.#keySDown) {
+                        if (!S.isDown) {
 
-                            // console.log('^');
+                            // this._eventLogger.log('^');
                             this.#movingForward = true;
 
                             eventDispatcher.publish(messageType, actions[2], this.current, this.#movingForward);
 
                         } else {
 
-                            // console.log('stop v');
+                            // this._eventLogger.log('stop v');
                             this.#movingBackward = false;
 
                             eventDispatcher.publish(messageType, actions[3], this.current, this.#movingBackward);
@@ -320,24 +334,24 @@ class World {
 
                     break;
 
-                case 's':
-                case 'S':
+                case S.lower:
+                case S.upper:
                 case 'ArrowDown':
 
-                    if (!this.#keySDown) {
+                    if (!S.isDown) {
 
-                        this.#keySDown = true;
+                        S.isDown = true;
 
-                        if (!this.#keyWDown) {
+                        if (!W.isDown) {
 
-                            // console.log('v');
+                            // this._eventLogger.log('v');
                             this.#movingBackward = true;
 
                             eventDispatcher.publish(messageType, actions[3], this.current, this.#movingBackward);
 
                         } else {
 
-                            // console.log('stop ^');
+                            // this._eventLogger.log('stop ^');
                             this.#movingForward = false;
 
                             eventDispatcher.publish(messageType, actions[2], this.current, this.#movingForward);
@@ -350,25 +364,55 @@ class World {
 
                     break;
 
-                case 'Shift':
+                case J.lower:
+                case J.upper:
 
-                    if (!this.#keyShiftDown) {
+                    if (!J.isDown) {
 
-                        this.#keyShiftDown = true;
+                        J.isDown = true;
+                        this.#melee = true;
+
+                        // this._eventLogger.log('melee');
+                        eventDispatcher.publish(messageType, actions[6], this.current, this.#melee);
+
+                    }
+
+                    break;
+
+                case F.lower:
+                case F.upper:
+
+                    if (!F.isDown) {
+
+                        F.isDown = true;
+                        this.#interact = true;
+
+                        // this._eventLogger.log('interact');
+                        eventDispatcher.publish(messageType, actions[7], this.current, this.#interact);
+
+                    }
+
+                    break;
+
+                case Shift.code:
+
+                    if (!Shift.isDown) {
+
+                        Shift.isDown = true;
                         this.#accelerate = true;
 
-                        // console.log('faster!');
+                        // this._eventLogger.log('faster!');
                         eventDispatcher.publish(messageType, actions[4], this.current, this.#accelerate);
 
                     }
 
                     break;
 
-                case ' ':
+                case Space.code:
 
-                    if (!this.#keySpaceDown) {
+                    if (!Space.isDown) {
 
-                        this.#keySpaceDown = true;
+                        Space.isDown = true;
                         this.#jump = true;
 
                         eventDispatcher.publish(messageType, actions[5], this.current, this.#jump);
@@ -383,122 +427,144 @@ class World {
         window.addEventListener('keyup', e => {
 
             switch (e.key) {
-                case 'a':
-                case 'A':
+                case A.lower:
+                case A.upper:
                 case 'ArrowLeft':
-                    if (this.#keyDDown) {
+                    if (D.isDown) {
 
-                        // console.log('>');
+                        // this._eventLogger.log('>');
                         this.#movingRight = true;
 
                         eventDispatcher.publish(messageType, actions[1], this.current, this.#movingRight);
 
                     } else {
 
-                        // console.log('stop <'); // stop on local x
+                        // this._eventLogger.log('stop <'); // stop on local x
                         this.#movingLeft = false;
 
                         eventDispatcher.publish(messageType, actions[0], this.current, this.#movingLeft);
 
                     }
 
-                    this.#keyADown = false;
+                    A.isDown = false;
 
                     // this.logMovement();
 
                     break;
 
-                case 'd':
-                case 'D':
+                case D.lower:
+                case D.upper:
                 case 'ArrowRight':
 
-                    if (this.#keyADown) {
+                    if (A.isDown) {
 
-                        // console.log('<');
+                        // this._eventLogger.log('<');
                         this.#movingLeft = true;
 
                         eventDispatcher.publish(messageType, actions[0], this.current, this.#movingLeft);
 
                     } else {
 
-                        // console.log('stop >'); // stop on local x
+                        // this._eventLogger.log('stop >'); // stop on local x
                         this.#movingRight = false;
 
                         eventDispatcher.publish(messageType, actions[1], this.current, this.#movingRight);
 
                     }
 
-                    this.#keyDDown = false;
+                    D.isDown = false;
 
                     // this.logMovement();
 
                     break;
 
-                case 'w':
-                case 'W':
+                case W.lower:
+                case W.upper:
                 case 'ArrowUp':
 
-                    if (this.#keySDown) {
+                    if (S.isDown) {
 
-                        // console.log('v');
+                        // this._eventLogger.log('v');
                         this.#movingBackward = true;
 
                         eventDispatcher.publish(messageType, actions[3], this.current, this.#movingBackward);
 
                     } else {
 
-                        // console.log('stop ^'); // stop on local z
+                        // this._eventLogger.log('stop ^'); // stop on local z
                         this.#movingForward = false;
 
                         eventDispatcher.publish(messageType, actions[2], this.current, this.#movingForward);
 
                     }
 
-                    this.#keyWDown = false;
+                    W.isDown = false;
 
                     // this.logMovement();
 
                     break;
 
-                case 's':
-                case 'S':
+                case S.lower:
+                case S.upper:
                 case 'ArrowDown':
                     
-                    if (this.#keyWDown) {
+                    if (W.isDown) {
 
-                        // console.log('^');
+                        // this._eventLogger.log('^');
                         this.#movingForward = true;
 
                         eventDispatcher.publish(messageType, actions[2], this.current, this.#movingForward);
 
                     } else {
 
-                        // console.log('stop v'); // stop on local z
+                        // this._eventLogger.log('stop v'); // stop on local z
                         this.#movingBackward = false;
 
                         eventDispatcher.publish(messageType, actions[3], this.current, this.#movingBackward);
 
                     }
 
-                    this.#keySDown = false;
+                    S.isDown = false;
 
                     // this.logMovement();
 
                     break;
 
-                case 'Shift':
+                case J.lower:
+                case J.upper:
 
-                    this.#keyShiftDown = false;
+                    J.isDown = false;
+                    this.#melee = false;
+
+                    // this._eventLogger.log('cancel melee');
+                    eventDispatcher.publish(messageType, actions[6], this.current, this.#melee);
+
+                    break;
+
+                case F.lower:
+                case F.upper:
+
+                    F.isDown = false;
+                    this.#interact = false;
+
+                    // this._eventLogger.log('cancel interact');
+                    eventDispatcher.publish(messageType, actions[7], this.current, this.#interact);
+
+                    break;
+
+                case Shift.code:
+
+                    Shift.isDown = false;
                     this.#accelerate = false;
 
-                    // console.log('slow down');
+                    // this._eventLogger.log('slow down');
                     eventDispatcher.publish(messageType, actions[4], this.current, this.#accelerate);
 
                     break;
 
-                case ' ':
+                case Space.code:
 
-                    this.#keySpaceDown = false;
+                    Space.isDown = false;
                     this.#jump = false;
 
                     eventDispatcher.publish(messageType, actions[5], this.current, this.#jump);
@@ -515,22 +581,22 @@ class World {
                 case 'a':
                 case 'A':
                 case 'ArrowLeft':
-                    console.log('other left');
+                    this._eventLogger.log('other left');
                     break;
                 case 'd':
                 case 'D':
                 case 'ArrowRight':
-                    console.log('other right');
+                    this._eventLogger.log('other right');
                     break;
                 case 'w':
                 case 'W':
                 case 'ArrowUp':
-                    console.log('other up');
+                    this._eventLogger.log('other up');
                     break;
                 case 's':
                 case 'S':
                 case 'ArrowDown':
-                    console.log('other down');
+                    this._eventLogger.log('other down');
                     break;
                 case 'Shift':
                     break;
@@ -542,7 +608,7 @@ class World {
 
     logMovement() {
 
-        console.log(`
+        this._eventLogger.log(`
             left:${this.#movingLeft} 
             right:${this.#movingRight} 
             forward:${this.#movingForward} 

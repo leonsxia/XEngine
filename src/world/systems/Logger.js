@@ -2,7 +2,9 @@ class Logger {
 
     enable = true;
 
-    constructor() {
+    constructor(enable = true) {
+
+        this.enable = enable;
 
     }
 

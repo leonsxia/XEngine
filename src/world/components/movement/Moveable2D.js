@@ -10,6 +10,8 @@ class Moveable2D {
     #movingBackward = false;
     #accelerate = false;
     #jump;
+    #melee;
+    #interact;
     
     #dummyObject = new Object3D();
 
@@ -79,6 +81,16 @@ class Moveable2D {
         // console.log(`[moveable2D]:jump ${this.#jump}`);
     }
 
+    melee(val) {
+        this.#melee = val;
+        // console.log(`[moveable2D]:melee ${this.#melee}`);
+    }
+
+    interact(val) {
+        this.#interact = val;
+        // console.log(`[moveable2D]:interact ${this.#interact}`);
+    }
+
     // animation state
     get forward() {
         return this.#movingForward;
@@ -103,6 +115,18 @@ class Moveable2D {
     get accelerating() {
         return this.#accelerate;
     }
+
+    get meleeing() {
+        return this.#melee;
+    }
+
+    get attacking() {
+        return this.#melee;
+    }
+
+    get interacting() {
+        return this.#interact;
+    }
     // animation state
 
     get dummyObject() {
@@ -126,39 +150,47 @@ class Moveable2D {
     }
 
     get isTurnCounterClockwise() {
-        return this.#movingLeft && !this.#movingForward && !this.#movingBackward;
+        return this.#movingLeft && !this.#movingForward && !this.#movingBackward && !this.#interact;
     }
 
     get isTurnClockwise() {
-        return this.#movingRight && !this.#movingForward && !this.#movingBackward;
+        return this.#movingRight && !this.#movingForward && !this.#movingBackward && !this.#interact;
     }
 
     get isMovingForward() {
-        return  this.#movingForward && !this.#movingLeft && !this.#movingRight;
+        return  this.#movingForward && !this.#movingLeft && !this.#movingRight && !this.#melee && !this.#interact;
     }
 
     get isMovingBackward() {
-        return this.#movingBackward && !this.#movingLeft && !this.#movingRight;
+        return this.#movingBackward && !this.#movingLeft && !this.#movingRight && !this.#melee && !this.#interact;
     }
 
     get isMovingForwardLeft() {
-        return this.#movingForward && this.#movingLeft;
+        return this.#movingForward && this.#movingLeft && !this.#melee && !this.#interact;
     }
 
     get isMovingForwardRight() {
-        return this.#movingForward && this.#movingRight;
+        return this.#movingForward && this.#movingRight && !this.#melee && !this.#interact;
     }
 
     get isMovingBackwardLeft() {
-        return this.#movingBackward && this.#movingLeft;
+        return this.#movingBackward && this.#movingLeft && !this.#melee && !this.#interact;
     }
 
     get isMovingBackwardRight() {
-        return this.#movingBackward && this.#movingRight;
+        return this.#movingBackward && this.#movingRight && !this.#melee && !this.#interact;
     }
 
     get isAccelerating() {
         return this.#accelerate;
+    }
+
+    get isMeleeing() {
+        return this.#melee;
+    }
+
+    get isInteracting() {
+        return this.#interact;
     }
 
     get isClimbing() {

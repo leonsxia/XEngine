@@ -17,7 +17,7 @@ class WorldControls {
     #panels = [];
     #preTarget;
     #preCamPos;
-    #logger = new Logger();
+    #logger = new Logger(DEBUG);
 
     constructor(camera, canvas) {
 
@@ -33,8 +33,6 @@ class WorldControls {
     
         this.resetTick();
         this.#controls.enabled = false;
-
-        this.#logger.enable = DEBUG;
 
     }
 

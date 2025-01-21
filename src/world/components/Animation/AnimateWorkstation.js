@@ -1,4 +1,7 @@
 import { AnimationMixer, LoopOnce } from 'three';
+import { Logger } from '../../systems/Logger';
+
+const DEBUG = true;
 
 class AnimateWorkstation {
 
@@ -9,6 +12,11 @@ class AnimateWorkstation {
     mixer;
     clips = {};
     actions = {};
+    previousAction;
+    activeAction;
+    logger = new Logger(DEBUG);
+    isLooping = false;
+    cachedAction;
 
     constructor(specs) {
 
@@ -63,7 +71,7 @@ class AnimateWorkstation {
             
             action.startAt(0);
 
-            const { nick, loopOnce, timeScale } = config;
+            const { nick, loopOnce, timeScale, isDefault = false } = config;
             if (loopOnce) {
 
                 action.clampWhenFinished = true;
@@ -77,7 +85,15 @@ class AnimateWorkstation {
 
             }
 
-            this.actions[nick] = action;
+            this.actions[nick] = { 
+                action, 
+                weight: 1, 
+                timeScale: 1,
+                play: () => { action.play(); },
+                name: action._clip.name,
+                nick,
+                isDefault
+            };
 
         }
 
@@ -91,16 +107,19 @@ class AnimateWorkstation {
 
             const action = this.actions[act];
 
-            if (act !== this.clipConfigs.IDLE.nick) {
+            if (action.isDefault) {
 
-                this.setWeight(action, 0);
+                this.setWeight(action, 1);
+                this.activeAction = action;
+                action.play();
 
             } else {
 
-                this.setWeight(action, 1);
+                this.setWeight(action, 0);
+
             }
 
-            action.play();
+            // action.play();
 
         }
 
@@ -110,7 +129,7 @@ class AnimateWorkstation {
 
         for (const act in this.actions) {
 
-            const action = this.actions[act];
+            const action = this.actions[act].action;
             action.paused = true;
 
         }
@@ -121,7 +140,7 @@ class AnimateWorkstation {
 
         for (const act in this.actions) {
 
-            const action = this.actions[act];
+            const action = this.actions[act].action;
             action.paused = false;
 
         }
@@ -132,7 +151,7 @@ class AnimateWorkstation {
 
         const onLoopFinished = (event) => {
 
-            if (event.action === startAction) {
+            if (event.action === startAction.action) {
 
                 this.mixer.removeEventListener('loop', onLoopFinished);
 
@@ -142,6 +161,31 @@ class AnimateWorkstation {
         }
 
         this.mixer.addEventListener('loop', onLoopFinished);
+
+    }
+
+    oneTimeCrossFade(endAction, duration, restoreDuration = duration, endWeight = 1, endCallback) {
+
+        // this.executeCrossFade(startAction, endAction, duration);
+        this.setWeight(endAction, endWeight);
+        this.fadeToAction(endAction, duration);
+        this.isLooping = true;
+
+        const onLoopFinished = (event) => {
+
+            this.mixer.removeEventListener('finished', onLoopFinished);
+            this.isLooping = false;
+
+            // this.executeCrossFade(this.activeAction, this.previousAction, restoreDuration);
+            const fadeToAction = this.cachedAction ? this.cachedAction : this.previousAction;
+            this.fadeToAction(fadeToAction, restoreDuration);
+
+            if (endCallback) endCallback();
+            
+        }
+
+        this.mixer.addEventListener('finished', onLoopFinished);
+
     }
 
     executeCrossFade(startAction, endAction, duration, endWeight = 1) {
@@ -149,37 +193,81 @@ class AnimateWorkstation {
         // Not only the start action, but also the end action must get a weight of 1 before fading
         // (concerning the start action this is already guaranteed in this place)
         this.setWeight(endAction, endWeight);
-        endAction.time = 0;
+        endAction.action.time = 0;
+        this.previousAction = this.activeAction;
+        this.activeAction = endAction;
 
+        this.logger.log(`previous action: ${this.previousAction.name} cross fade to active action: ${this.activeAction.name}`);
+
+        this.activeAction.play();
         // Crossfade with warping - you can also try without warping by setting the third parameter to false
-        startAction.crossFadeTo(endAction, duration, true);
+        startAction.action.crossFadeTo(endAction.action, duration, true);
+        // this.previousAction.stop();
+
+        if (endAction.timeScale !== 1) endAction.action.setEffectiveTimeScale(endAction.timeScale);
         
+    }
+
+    fadeToAction(endAction, duration) {
+
+        this.previousAction = this.activeAction;
+        this.activeAction = endAction;
+
+        if (this.previousAction !== this.activeAction) {
+
+            this.previousAction.action.fadeOut(duration);
+
+        }
+
+        this.logger.log(`previous action: ${this.previousAction.name} fade to active action: ${this.activeAction.name}`);
+
+        this.activeAction.action
+            .reset()
+            .setEffectiveTimeScale(endAction.timeScale)
+            .setEffectiveWeight(endAction.weight)
+            .fadeIn(duration)
+            .play();
+
     }
 
     // This function is needed, since animationAction.crossFadeTo() disables its start action and sets
     // the start action's timeScale to ((start animation's duration) / (end animation's duration))
     setWeight(action, weight) {
 
-        action.enabled = true;
-        action.setEffectiveTimeScale(1);
-        action.setEffectiveWeight(weight);
+        action.action.enabled = true;
+        // this.setActionEffectiveTimeScale(action.nick, 1);
+        this.setActionEffectiveWeight(action.nick, weight);
 
     }
 
-    prepareCrossFade(startAction, endAction, duration, endWeight = 1) {
+    prepareCrossFade(startAction, endAction, duration, endWeight = 1, sync = false, loop = true, restoreDuration = duration, endCallback) {
 
         this.unPauseAllActions();
 
-        // If the current action is 'idle' (duration 4 sec), execute the crossfade immediately;
-        // else wait until the current action has finished its current loop
-        if (startAction === this.actions[this.clipConfigs.IDLE.nick]) {
+        if (this.isLooping && endAction !== this.activeAction) {
+            
+            this.cachedAction = endAction;
+            return;
+            
+        };
+
+        this.cachedAction = null;
+
+        if (loop) {
 
             this.executeCrossFade(startAction, endAction, duration, endWeight);
+
+        } else if (sync) {
+
+            this.synchronizeCrossFade(startAction, endAction, duration);
 
         } else {
 
-            // this.synchronizeCrossFade( startAction, endAction, duration );
-            this.executeCrossFade(startAction, endAction, duration, endWeight);
+            if (endAction !== this.activeAction) {
+
+                this.oneTimeCrossFade(endAction, duration, restoreDuration, endWeight, endCallback);
+
+            }
 
         }
 
@@ -189,7 +277,8 @@ class AnimateWorkstation {
 
         const findAction = this.actions[action];
 
-        findAction.setEffectiveTimeScale(timescale);
+        findAction.action.setEffectiveTimeScale(timescale);
+        findAction.timeScale = timescale;
 
         return this;
 
@@ -199,7 +288,8 @@ class AnimateWorkstation {
 
         const findAction = this.actions[action];
 
-        findAction.setEffectiveWeight(weight);
+        findAction.action.setEffectiveWeight(weight);
+        findAction.weight = weight;
 
         return this;
 
