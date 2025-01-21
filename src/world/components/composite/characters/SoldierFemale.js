@@ -31,7 +31,7 @@ class SoldierFemale extends Tofu {
     mixer;
     clips = {};    
     actions = {};
-    #logger = new Logger(DEBUG, SoldierFemale.name);
+    #logger = new Logger(DEBUG, 'SoldierFemale');
 
     AWS;
 
@@ -228,6 +228,11 @@ class SoldierFemale extends Tofu {
                     this.#logger.log(`quick turn 1`);
                     this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_WALK, ANIMATION_SETTINGS.QUICK_TURN_WEIGHT);
 
+                } else {
+
+                    this.#logger.log(`back walk turn`);
+                    this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
+
                 }
 
             } else {
@@ -321,6 +326,11 @@ class SoldierFemale extends Tofu {
 
                 }
 
+            } else if (this.backward) {
+
+                this.#logger.log(`left back walk turn`);
+                this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
+
             }
 
         } else {
@@ -364,6 +374,11 @@ class SoldierFemale extends Tofu {
                     this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE.nick], this.AWS.actions[CLIPS.WALK.nick], ANIMATION_SETTINGS.IDLE_TO_TURN, ANIMATION_SETTINGS.TURN_WEIGHT);
 
                 }
+
+            } else if (this.backward) {
+
+                this.#logger.log(`right back walk turn`);
+                this.AWS.setActionEffectiveTimeScale(CLIPS.WALK.nick, -1);
 
             }
 

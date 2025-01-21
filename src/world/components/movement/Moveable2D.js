@@ -32,7 +32,7 @@ class Moveable2D {
     #climbDist = 0;
     #climbForwardDist = 0;
 
-    #logger = new Logger(DEBUG, Moveable2D.name);
+    #logger = new Logger(DEBUG, 'Moveable2D');
 
     constructor() {
         this.leftCorIntersects = false;

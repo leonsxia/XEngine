@@ -14,7 +14,7 @@ class AnimateWorkstation {
     actions = {};
     previousAction;
     activeAction;
-    logger = new Logger(DEBUG, AnimateWorkstation.name);
+    logger = new Logger(DEBUG, 'AnimateWorkstation');
     isLooping = false;
     cachedAction;
 
