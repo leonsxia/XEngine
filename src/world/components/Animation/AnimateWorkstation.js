@@ -110,7 +110,7 @@ class AnimateWorkstation {
             if (action.isDefault) {
 
                 this.setWeight(action, 1);
-                this.activeAction = action;
+                this.activeAction = this.previousAction = action;
                 action.play();
 
             } else {
@@ -190,14 +190,14 @@ class AnimateWorkstation {
 
     executeCrossFade(startAction, endAction, duration, endWeight = 1) {
         
+        this.logger.log(`start action: ${startAction.name} cross fade to end action: ${endAction.name}`);
+
         // Not only the start action, but also the end action must get a weight of 1 before fading
         // (concerning the start action this is already guaranteed in this place)
         this.setWeight(endAction, endWeight);
         endAction.action.time = 0;
         this.previousAction = this.activeAction;
         this.activeAction = endAction;
-
-        this.logger.log(`previous action: ${this.previousAction.name} cross fade to active action: ${this.activeAction.name}`);
 
         this.activeAction.play();
         // Crossfade with warping - you can also try without warping by setting the third parameter to false
@@ -210,6 +210,8 @@ class AnimateWorkstation {
 
     fadeToAction(endAction, duration) {
 
+        this.logger.log(`active action: ${this.activeAction.name} fade to end action: ${endAction.name}`);
+
         this.previousAction = this.activeAction;
         this.activeAction = endAction;
 
@@ -218,8 +220,6 @@ class AnimateWorkstation {
             this.previousAction.action.fadeOut(duration);
 
         }
-
-        this.logger.log(`previous action: ${this.previousAction.name} fade to active action: ${this.activeAction.name}`);
 
         this.activeAction.action
             .reset()

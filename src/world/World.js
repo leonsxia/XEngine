@@ -24,7 +24,7 @@ const movementTypes = ['tankmove'];
 const moveActions = [
     { 
         category: 'tankmove', 
-        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump', 'melee', 'interact', 'gunPoint']
+        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump', 'melee', 'interact', 'gunPoint', 'shoot']
     }
 ];
 const DEBUG = true;
@@ -59,6 +59,7 @@ class World {
     #melee = false;
     #interact = false;
     #gunPointing = false;
+    #shoot = false;
 
     #textures;
     #gltfs;
@@ -404,6 +405,21 @@ class World {
 
                     break;
 
+                case K.lower:
+                case K.upper:
+
+                    if (!K.isDown) {
+
+                        K.isDown = true;
+                        this.#shoot = true;
+
+                        // this._eventLogger.log('gun shooting');
+                        eventDispatcher.publish(messageType, actions[9], this.current, this.#shoot);
+
+                    }
+
+                    break;
+
                 case F.lower:
                 case F.upper:
 
@@ -576,6 +592,17 @@ class World {
 
                     // this._eventLogger.log('cancel gun pointing');
                     eventDispatcher.publish(messageType, actions[8], this.current, this.#gunPointing);
+
+                    break;
+
+                case K.lower:
+                case K.upper:
+
+                    K.isDown = false;
+                    this.#shoot = false;
+
+                    // this._eventLogger.log('cancel gun shoot');
+                    eventDispatcher.publish(messageType, actions[9], this.current, this.#shoot);
 
                     break;
 

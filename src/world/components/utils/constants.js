@@ -308,7 +308,7 @@ const SOLDIER_FEMALE_CLIPS = {
     IDLE: { nick: 'idle', name: 'CharacterArmature|Idle', idx: 4, enable: true, isDefault: true },
     IDLE_GUN: { nick: 'idle_gun', name: 'CharacterArmature|Idle_Gun', idx: 5, enable: false },
     IDLE_GUN_POINTING: { nick: 'idle_gun_pointing', name: 'CharacterArmature|Idle_Gun_Pointing', idx: 6, enable: true },
-    IDLE_GUN_SHOOT: { nick: 'idle_gun_shoot', name: 'CharacterArmature|Idle_Gun_Shoot', idx: 7, enable: false },
+    IDLE_GUN_SHOOT: { nick: 'idle_gun_shoot', name: 'CharacterArmature|Idle_Gun_Shoot', idx: 7, enable: true },
     IDLE_NEUTRAL: { nick: 'idle_neutral', name: 'CharacterArmature|Idle_Neutral', idx: 8, enable: false },
     IDLE_SWORD: { nick: 'idle_sword', name: 'CharacterArmature|Idle_Sword', idx: 9, enable: false },
     INTERACT: { nick: 'interact', name: 'CharacterArmature|Interact', idx: 10, enable: true, loopOnce: true },

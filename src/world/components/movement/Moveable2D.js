@@ -15,6 +15,7 @@ class Moveable2D {
     #melee;
     #interact;
     #gunPoint;
+    #shoot;
     
     #dummyObject = new Object3D();
 
@@ -96,6 +97,11 @@ class Moveable2D {
         // this.#logger.log(`gunPoint ${this.#gunPoint}`);
     }
 
+    shoot(val) {
+        this.#shoot = val;
+        // this.#logger.log(`shoot ${this.#shoot}`);
+    }
+
     interact(val) {
         this.#interact = val;
         // this.#logger.log(`interact ${this.#interact}`);
@@ -134,8 +140,12 @@ class Moveable2D {
         return this.#gunPoint;
     }
 
+    get shooting() {
+        return this.#shoot;
+    }
+
     get attacking() {
-        return this.#melee || this.#gunPoint;
+        return this.#melee || this.#gunPoint || this.#shoot;
     }
 
     get interacting() {

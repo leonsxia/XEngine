@@ -2,6 +2,7 @@ class Logger {
 
     enable = true;
     module;
+    func;
 
     constructor(enable = true, module = Logger.name) {
 
@@ -14,7 +15,15 @@ class Logger {
 
         if (this.enable) {
 
-            console.log(`[${this.module}] ${message}`);
+            if (this.func) {
+
+                console.log(`[${this.module}] -> [${this.func}]: ${message}`);
+
+            } else {
+
+                console.log(`[${this.module}] ${message}`);
+
+            }
             
         }
 
