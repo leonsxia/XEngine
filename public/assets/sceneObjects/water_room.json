@@ -8,6 +8,15 @@
             "receiveShadow": true,
             "scale": [1, 1, 1],
             "position": [0, 0, 0]
+        },
+        {
+            "name": "jill",
+            "type": "SoldierFemale",
+            "src": "SOLDIER_FEMALE",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1.2, 1.2, 1.2],
+            "position": [0, 0, 0]
         }
     ],
     "lights": [

@@ -59,3 +59,15 @@ h1 {
     color: #fff;
     background-color: #111;
 }
+
+#manual {
+    position: absolute;
+    left: 81px;
+    top: 1px;
+    height: 19px;
+    width: auto;
+    padding: 0 10px 0 10px;
+    color: #fff;
+    background-color: #111;
+    display: none;
+}

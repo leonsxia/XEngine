@@ -483,16 +483,10 @@ class SoldierFemale extends Tofu {
             this.#logger.log(`melee attack!`);
             this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[CLIPS.SWORD_SLASH.nick], ANIMATION_SETTINGS.MELEE, 1);
 
-        } else {
+        } else if (this.meleeing) {
 
-            if (this.AWS.previousAction !== this.AWS.actions[CLIPS.INTERACT.nick] && 
-                this.AWS.previousAction !== this.AWS.actions[CLIPS.IDLE_GUN_POINTING.nick]
-            ) {
-
-                this.#logger.log(`cancel melee attack!`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.SWORD_SLASH.nick], this.AWS.previousAction, ANIMATION_SETTINGS.MELEE, this.AWS.previousAction.weight);
-
-            }
+            this.#logger.log(`cancel melee attack!`);
+            this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.SWORD_SLASH.nick], this.AWS.previousAction, ANIMATION_SETTINGS.MELEE, this.AWS.previousAction.weight);
 
         }
 
@@ -523,16 +517,10 @@ class SoldierFemale extends Tofu {
             this.#logger.log(`gun point!`);
             this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[CLIPS.IDLE_GUN_POINTING.nick], ANIMATION_SETTINGS.GUN_POINT, 1);
 
-        } else {
+        } else if (this.gunPointing) {
 
-            if (this.AWS.previousAction !== this.AWS.actions[CLIPS.INTERACT.nick] &&
-                this.AWS.previousAction !== this.AWS.actions[CLIPS.SWORD_SLASH.nick]
-            ) {
-
-                this.#logger.log(`cancel gun point!`);
-                this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE_GUN_POINTING.nick], this.AWS.previousAction, ANIMATION_SETTINGS.GUN_POINT, this.AWS.previousAction.weight);
-
-            }
+            this.#logger.log(`cancel gun point!`);
+            this.AWS.prepareCrossFade(this.AWS.actions[CLIPS.IDLE_GUN_POINTING.nick], this.AWS.previousAction, ANIMATION_SETTINGS.GUN_POINT, this.AWS.previousAction.weight);
 
         }
 

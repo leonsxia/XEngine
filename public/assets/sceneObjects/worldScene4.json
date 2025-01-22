@@ -11,6 +11,14 @@
             "position": [0, 0, 0]
         },
         {
+            "name": "tofu1",
+            "type": "Tofu",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [0, 0, 0]
+        },
+        {
             "name": "red train 2",
             "type": "Train",
             "castShadow": true,

@@ -6,7 +6,8 @@ import { World } from "./world/World";
 const container = document.querySelector('#scene-container');
 const header = document.querySelector('#sceneTitle');
 const msg = document.querySelector('#msg');
-const world = new World(container, { header, msg });
+const manual = document.querySelector('#manual');
+const world = new World(container, { header, msg, manual });
 
 // create the main function
 async function main() {

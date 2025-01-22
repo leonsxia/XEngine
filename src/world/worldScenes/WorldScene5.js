@@ -27,7 +27,8 @@ const worldSceneSpecs = {
     ],
     allPlayerPos: [
         [0, 3, 0]
-    ]
+    ],
+    showManual: true
 };
 
 class WorldScene5 extends WorldScene {
@@ -51,7 +52,8 @@ class WorldScene5 extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
-            dispose: this.dispose.bind(this)
+            dispose: this.dispose.bind(this),
+            setup: this.setup
         };
     }
 

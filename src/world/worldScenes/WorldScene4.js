@@ -33,7 +33,8 @@ const worldSceneSpecs = {
         [0, 6, - 13],
         [25, 3, 4],
     ],
-    resolution: .8
+    resolution: .8,
+    showManual: true
 };
 
 class WorldScene4 extends WorldScene {
@@ -57,7 +58,8 @@ class WorldScene4 extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
-            dispose: this.dispose.bind(this)
+            dispose: this.dispose.bind(this),
+            setup: this.setup
         };
     }
 

@@ -162,7 +162,13 @@ class World {
 
             this._systemLogger.log(`objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
 
-            if (this.#infosDomElements) this.#infosDomElements.msg.textContent = 'render complete!';
+            if (this.#infosDomElements) {
+                
+                this.#infosDomElements.msg.textContent = 'render complete!';
+
+                this.#infosDomElements.manual.style.display = loadScene.setup?.showManual ? 'block' : 'none';
+                
+            }
 
         }, 0);
 

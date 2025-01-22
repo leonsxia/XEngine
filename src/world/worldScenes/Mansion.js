@@ -27,7 +27,8 @@ const worldSceneSpecs = {
     allPlayerPos: [
         [0, 5, 0]
     ],
-    resolution: .5
+    resolution: .5,
+    showManual: true
 };
 
 class Mansion extends WorldScene {
@@ -51,7 +52,8 @@ class Mansion extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
-            dispose: this.dispose.bind(this)
+            dispose: this.dispose.bind(this),
+            setup: this.setup
         };
     }
 

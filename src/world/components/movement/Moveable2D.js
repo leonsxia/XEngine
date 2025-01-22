@@ -93,7 +93,7 @@ class Moveable2D {
 
     gunPoint(val) {
         this.#gunPoint = val;
-        this.#logger.log(`gunPoint ${this.#gunPoint}`);
+        // this.#logger.log(`gunPoint ${this.#gunPoint}`);
     }
 
     interact(val) {

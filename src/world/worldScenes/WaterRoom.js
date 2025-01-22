@@ -26,7 +26,8 @@ const worldSceneSpecs = {
     ],
     allPlayerPos: [
         [0, 6, 6.25]
-    ]
+    ],
+    showManual: true
 };
 
 class WaterRoom extends WorldScene {
@@ -50,7 +51,8 @@ class WaterRoom extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
-            dispose: this.dispose.bind(this)
+            dispose: this.dispose.bind(this),
+            setup: this.setup
         };
     }
 
