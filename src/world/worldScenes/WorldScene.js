@@ -68,6 +68,8 @@ class WorldScene {
     sceneSavedSetup;
     jsonFileName;
 
+    #paused = true;
+
     constructor(container, renderer, specs, eventDispatcher) {
 
         this.setup = specs;
@@ -217,6 +219,7 @@ class WorldScene {
         this.controls.defControl.enableDamping = true;
         this.controls.defControl.dampingFactor = 0.1; // default 0.05
         this.loop.start(this.gui.stats);
+        this.#paused = false;
 
     }
 
@@ -225,6 +228,13 @@ class WorldScene {
         this.staticRendering = true;
         this.controls.defControl.enableDamping = false;
         this.loop.stop();
+        this.#paused = true;
+
+    }
+
+    isScenePaused() {
+
+        return this.#paused;
 
     }
 

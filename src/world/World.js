@@ -252,6 +252,8 @@ class World {
 
         window.addEventListener('keydown', e => {
 
+            if (this.#currentScene.paused()) return;
+
             switch (e.key) {
                 case A.lower:
                 case A.upper:
@@ -448,6 +450,8 @@ class World {
         });
 
         window.addEventListener('keyup', e => {
+
+            if (this.#currentScene.paused()) return;
 
             switch (e.key) {
                 case A.lower:

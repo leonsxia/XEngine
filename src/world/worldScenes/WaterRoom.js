@@ -52,7 +52,8 @@ class WaterRoom extends WorldScene {
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
             dispose: this.dispose.bind(this),
-            setup: this.setup
+            setup: this.setup,
+            paused: this.isScenePaused.bind(this)
         };
     }
 

@@ -110,7 +110,8 @@ class WorldScene3 extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
-            dispose: this.dispose.bind(this)
+            dispose: this.dispose.bind(this),
+            paused: this.isScenePaused.bind(this)
         };
     }
 
