@@ -15,6 +15,7 @@ export { Train } from './composite/train/Train.js';
 
 // Characters
 export { Tofu } from './composite/tofu/Tofu.js';
+export { CombatPlayerBase } from './composite/characters/CombatPlayerBase.js';
 export { SoldierFemale } from './composite/characters/SoldierFemale.js';
 
 // GLTF
