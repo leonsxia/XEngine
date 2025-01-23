@@ -39,6 +39,8 @@ class Tofu extends Moveable2D {
     #rotateR = .9;
     #vel = 1.34;
     #turnBackVel = 2.5 * Math.PI;
+    #velEnlarge = 2.5;
+    #rotateREnlarge = 2.5;
     #recoverCoefficient = .01;
     #quickRecoverCoefficient = .03;
     #climbingVel = 1.34;
@@ -55,12 +57,14 @@ class Tofu extends Moveable2D {
 
         const { name, size = { width: .9, depth: .9, height: 1.8 } } = specs;
         const { 
-            rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, climbingVel = 1.34, rayPaddiing = .2, 
+            rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = .2, 
             recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7 
         } = specs;
 
         this.#rotateR = rotateR;
         this.#vel = vel;
+        this.#velEnlarge = velEnlarge;
+        this.#rotateREnlarge = rotateREnlarge;
         this.#turnBackVel = turnbackVel;
         this.#climbingVel = climbingVel;
         this.#rayPadding = rayPaddiing;
@@ -273,7 +277,7 @@ class Tofu extends Moveable2D {
     get velocity() {
 
         return this.isAccelerating && !this.isBackward && !this.#isPushing ? 
-            this.#vel * ENLARGE * this.#slopeCoefficient * this.#slowDownCoefficient : 
+            this.#vel * this.#velEnlarge * this.#slopeCoefficient * this.#slowDownCoefficient : 
             (this.isBackward ? this.#vel * this.#backwardSlowdownCoefficient : this.#vel * this.#slopeCoefficient);
 
     }
@@ -630,7 +634,9 @@ class Tofu extends Moveable2D {
 
     setTickParams(delta) {
 
-        const R = this.isAccelerating && !this.isBackward ? this.#rotateR * ENLARGE : (this.isBackward ? this.#rotateR * this.#backwardRotatingRadiusCoefficient : this.#rotateR);
+        const R = this.isAccelerating && !this.isBackward ?
+            this.#rotateR * this.#rotateREnlarge :
+            (this.isBackward ? this.#rotateR * this.#backwardRotatingRadiusCoefficient : this.#rotateR);
         
         const rotateVel = this.velocity / R;
 

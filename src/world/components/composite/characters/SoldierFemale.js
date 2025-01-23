@@ -34,10 +34,12 @@ class SoldierFemale extends CombatPlayerBase {
         const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true } = specs;
         const { offsetY = - .89, offsetZ = - .1 } = specs;
         const { width = .6, depth = .9, height = 1.78 } = specs;
+        const { vel = 1.2, velEnlarge = 2.8 } = specs;
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
             offsetY, offsetZ, width, depth, height, 
+            vel, velEnlarge,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS
         };
 
