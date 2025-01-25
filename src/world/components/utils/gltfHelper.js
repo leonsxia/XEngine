@@ -9,6 +9,7 @@ function getGLTFLoader() {
 }
 
 const worldGLTFLoader = getGLTFLoader();
+const loadedGLTFModels = {};
 
 async function loadGLTFModels(sources) {
 
@@ -49,4 +50,4 @@ async function loadGLTFModels(sources) {
 
 }
 
-export { worldGLTFLoader, loadGLTFModels };
+export { worldGLTFLoader, loadedGLTFModels, loadGLTFModels };

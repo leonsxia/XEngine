@@ -18,6 +18,10 @@ export { Tofu } from './composite/tofu/Tofu.js';
 export { CombatPlayerBase } from './composite/characters/CombatPlayerBase.js';
 export { SoldierFemale } from './composite/characters/SoldierFemale.js';
 
+// Weapons
+export { Pistol } from './composite/weapons/Pistol.js';
+export { Bayonet } from './composite/weapons/Bayonet.js';
+
 // GLTF
 export { GLTFModel } from './basic/GLTFModel.js';
 

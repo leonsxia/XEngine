@@ -959,9 +959,9 @@ class SceneBuilder {
 
                     object = new SoldierFemale(specs);
                     object.setPosition(position)
-                        .setScale(scale)
-                        .receiveShadow(receiveShadow)
-                        .castShadow(castShadow)
+                        // .setScale(scale)
+                        // .receiveShadow(receiveShadow)
+                        // .castShadow(castShadow)
                         .updateOBB()
                         .updateRay();
                 }

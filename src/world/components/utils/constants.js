@@ -24,6 +24,12 @@ const TOFU = 'Tofu';
 const TRAIN = 'Train';
 const SOLDIER_FEMALE = 'SoldierFemale';
 
+// weapons
+const WEAPONS = {
+    PISTOL: 'PISTOL',
+    BAYONET: 'BAYONET'
+}
+
 // objects
 const PLANE = 'Plane';
 const OBBPLANE = 'OBBPlane';
@@ -306,7 +312,7 @@ const SOLDIER_FEMALE_CLIPS = {
     HIT_RECEIVE: { nick: 'hit_receive', name: 'CharacterArmature|HitRecieve', idx: 2, enable: true, loopOnce: true },
     HIT_RECEIVE_2: { nick: 'hit_receive_2', name: 'CharacterArmature|HitRecieve_2', idx: 3, enable: false },
     IDLE: { nick: 'idle', name: 'CharacterArmature|Idle', idx: 4, enable: true, isDefault: true },
-    IDLE_GUN: { nick: 'idle_gun', name: 'CharacterArmature|Idle_Gun', idx: 5, enable: false },
+    IDLE_GUN: { nick: 'idle_gun', name: 'CharacterArmature|Idle_Gun', idx: 5, enable: true },
     IDLE_GUN_POINTING: { nick: 'idle_gun_pointing', name: 'CharacterArmature|Idle_Gun_Pointing', idx: 6, enable: true },
     IDLE_GUN_SHOOT: { nick: 'idle_gun_shoot', name: 'CharacterArmature|Idle_Gun_Shoot', idx: 7, enable: true },
     IDLE_NEUTRAL: { nick: 'idle_neutral', name: 'CharacterArmature|Idle_Neutral', idx: 8, enable: false },
@@ -346,6 +352,8 @@ export {
     TOFU,
     TRAIN,
     SOLDIER_FEMALE,
+
+    WEAPONS,
 
     PLANE,
     OBBPLANE,

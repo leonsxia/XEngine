@@ -43,7 +43,7 @@ class GLTFModel {
 
         if (model) {
 
-            let gltfModel = model;
+            let gltfModel = Array.isArray(model) ? model[0] : model;
             let modelGroup;
 
             if (!hasBones) {
@@ -102,6 +102,20 @@ class GLTFModel {
             if (object.isMesh) this.meshes.push(object);
             
         });
+
+    }
+
+    getChildByName(name) {
+
+        let result;
+
+        this.group.traverse((child) => {
+
+            if (child.name === name) result = child;
+
+        });
+
+        return result;
 
     }
 

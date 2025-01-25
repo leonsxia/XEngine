@@ -11,7 +11,7 @@ import { Picker } from "./systems/Picker";
 import { EventDispatcher } from "./systems/EventDispatcher";
 
 import { loadTextures, loadedTextures } from "./components/utils/textureHelper";
-import { loadGLTFModels } from "./components/utils/gltfHelper";
+import { loadGLTFModels, loadedGLTFModels } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS, SHADERS } from "./components/utils/constants";
@@ -45,6 +45,7 @@ class World {
         V: { upper: 'V', lower: 'v', isDown: false },
         J: { upper: 'J', lower: 'j', isDown: false },
         K: { upper: 'K', lower: 'k', isDown: false },
+        L: { upper: 'L', lower: 'l', isDown: false },
         F: { upper: 'F', lower: 'f', isDown: false },
         Shift: { code: 'Shift', isDown: false },
         Space: { code: ' ', isDown: false }
@@ -110,6 +111,7 @@ class World {
         this._systemLogger.log(`loading assests in ${(end - start) * .001} s`);
 
         Object.assign(loadedTextures, textures);
+        Object.assign(loadedGLTFModels, gltfs);
         this.#textures = textures;
         this.#gltfs = gltfs;
 
@@ -249,7 +251,7 @@ class World {
         const eventDispatcher = this.#movementEventDispatcher;
         const messageType = movementTypes[0];
         const actions = moveActions.find(f => f.category === 'tankmove').types;
-        const { A, D, W, S, V, J, K, F, Shift, Space } = this.keys;
+        const { A, D, W, S, V, J, K, L, F, Shift, Space } = this.keys;
 
         window.addEventListener('keydown', e => {
 
@@ -376,12 +378,12 @@ class World {
 
                     break;
 
-                case V.lower:
-                case V.upper:
+                case L.lower:
+                case L.upper:
 
-                    if (!V.isDown) {
+                    if (!L.isDown) {
 
-                        V.isDown = true;
+                        L.isDown = true;
                         this.#melee = true;
 
                         // this._eventLogger.log('melee');
@@ -390,6 +392,7 @@ class World {
                     }
 
                     break;
+
                 case J.lower:
                 case J.upper:
 
@@ -573,10 +576,10 @@ class World {
 
                     break;
 
-                case V.lower:
-                case V.upper:
+                case L.lower:
+                case L.upper:
 
-                    V.isDown = false;
+                    L.isDown = false;
                     this.#melee = false;
 
                     // this._eventLogger.log('cancel melee');

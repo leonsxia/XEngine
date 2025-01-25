@@ -832,7 +832,7 @@
                 {
                     "type": "SquarePillar",
                     "width": 9,
-                    "height": 4.85,
+                    "height": 4.35,
                     "depth": 2,
                     "baseSize": 4.85,
                     "enableOBBs": true,
@@ -851,7 +851,7 @@
                     "enableWallOBBs": true,
                     "isObstacle": true,
                     "climbable": false,
-                    "position": [0, -2.175, -4],
+                    "position": [0, -2.425, -4],
                     "rotationY": 0
                 },
                 {
