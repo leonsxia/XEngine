@@ -21,7 +21,7 @@ class Gui {
 
     constructor () {
 
-        this.#guis.push(new GUI({ title: CONTROL_TITLES[0], width: 200}));
+        this.#guis.push(new GUI({ title: CONTROL_TITLES[0], width: 200 }));
         this.#guis.push(new GUI({ title: CONTROL_TITLES[1] }));
         this.#guis.push(new GUI({ title: CONTROL_TITLES[2] }));
 
@@ -61,6 +61,7 @@ class Gui {
         this.#attachedTo = specs.attachedTo;
 
         this.initLeft(specs.left);
+        this.initRight();
         this.initRightLights(specs.right_lights);
 
     }
@@ -74,6 +75,13 @@ class Gui {
 
         this.addControl(this.#guis[0], specs, eventObjs);
         this.bindChange(this.#guis[0], eventObjs);
+
+    }
+
+    initRight() {
+
+        this.#guis[1].domElement.style.setProperty('right', '0');
+        this.#guis[2].domElement.style.setProperty('right', '0');
 
     }
 

@@ -9,7 +9,7 @@ import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { Gui } from '../systems/Gui.js';
 import { PostProcessor, SSAO_OUTPUT, DEFAULT_BLOOM } from '../systems/PostProcesser.js';
-import { FXAA, OUTLINE, SSAO, SSAA, BLOOM } from '../components/utils/constants.js';
+import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS } from '../components/utils/constants.js';
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
@@ -664,6 +664,19 @@ class WorldScene {
 
             this.guiLeftSpecs.details.push(folder);
 
+            // add weapons control
+            const folderWeapon = makeFolderGuiConfig({folder: 'Weapons', parent: 'weapons', close: true});
+
+            folderWeapon.specs.push(makeFolderSpecGuiConfig({
+                name: 'Arm Pistol1',
+                value: { 'Arm Pistol1': 'yes' },
+                params: ['yes', 'no'],
+                type: 'dropdown',
+                changeFn: this.armWeaponPistol1.bind(this)
+            }));
+
+            this.guiLeftSpecs.details.push(folderWeapon);
+
         }
 
         if (this.cPlanes.length > 0) {
@@ -929,6 +942,24 @@ class WorldScene {
         this.player.showSkeleton(s);
 
         return this;
+
+    }
+
+    armWeaponPistol1(arm) {
+
+        if (!this.player.weapons || this.player.attacking) return this;
+
+        const s = arm === 'yes' ? true : false;
+
+        if (s) {
+
+            this.player.armWeapon(this.player.weapons[WEAPONS.PISTOL1], this.player.armedIdleNick);
+
+        } else {
+
+            this.player.armWeapon(null, this.player.idleNick);
+
+        }
 
     }
 

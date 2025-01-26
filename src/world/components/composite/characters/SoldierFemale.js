@@ -1,5 +1,5 @@
 import { CombatPlayerBase, Pistol, Bayonet } from '../../Models';
-import { SOLDIER_FEMALE_CLIPS as CLIPS } from '../../utils/constants';
+import { SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 
 const GLTF_SRC = 'characters/soldier_female.glb';
@@ -27,11 +27,7 @@ const DEBUG = true;
 
 class SoldierFemale extends CombatPlayerBase {
 
-    weapons = {
-        pistol: {},
-        bayonet: {}
-    }
-    pistol;
+    weapons = {}
     #logger = new Logger(DEBUG, 'SoldierFemale');
 
     constructor(specs) {
@@ -54,13 +50,13 @@ class SoldierFemale extends CombatPlayerBase {
 
         this._idleNick = CLIPS.IDLE.nick;
 
-        this.weapons.pistol = new Pistol({ 
+        this.weapons[WEAPONS.PISTOL1] = new Pistol({ 
             name: `${name}_pistol`,
             position: [- .18, - .028 , .065],
             rotation: [- 0.35, - 1.3, - 1.6]
         });
 
-        this.weapons.bayonet = new Bayonet({
+        this.weapons[WEAPONS.BAYONET] = new Bayonet({
             name: `${name}_bayonet`,
             scale: [.35, .3, .25],
             position: [- .18, .01 , .046],
@@ -74,23 +70,26 @@ class SoldierFemale extends CombatPlayerBase {
     async init() {
 
         await Promise.all([
-            this.weapons.pistol.init(), 
-            this.weapons.bayonet.init(), 
+            this.weapons[WEAPONS.PISTOL1].init(), 
+            this.weapons[WEAPONS.BAYONET].init(), 
             super.init()
         ]);
 
-        this._activeWeapon = this.weapons.pistol;
-        this._meleeWeapon = this.weapons.bayonet;
+        this._armedWeapon = this.weapons[WEAPONS.PISTOL1];
+        this._meleeWeapon = this.weapons[WEAPONS.BAYONET];
 
         const holdingHand = this.gltf.getChildByName('WristR');
-        holdingHand.attach(this.weapons.pistol.group);
-        holdingHand.attach(this.weapons.bayonet.group);
+        holdingHand.attach(this.weapons[WEAPONS.PISTOL1].group);
+        holdingHand.attach(this.weapons[WEAPONS.BAYONET].group);
 
         this.setupWeaponScale();
         
-        this.switchWeapon(this.weapons.pistol);
+        this.switchWeapon(this.weapons[WEAPONS.PISTOL1]);
 
-        this.switchIdleAction(CLIPS.IDLE_GUN.nick, true);
+        this.switchIdleAction(CLIPS.IDLE_GUN.nick);
+
+        this.idleNick = CLIPS.IDLE.nick;
+        this.armedIdleNick = CLIPS.IDLE_GUN.nick;
         
     }
 

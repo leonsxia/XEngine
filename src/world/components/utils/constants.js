@@ -26,7 +26,7 @@ const SOLDIER_FEMALE = 'SoldierFemale';
 
 // weapons
 const WEAPONS = {
-    PISTOL: 'PISTOL',
+    PISTOL1: 'PISTOL1',
     BAYONET: 'BAYONET'
 }
 
