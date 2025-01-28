@@ -151,6 +151,16 @@ class CombatPlayerBase extends Tofu {
 
     }
 
+    showArmedWeapon(show) {
+
+        if (this._armedWeapon) {
+
+            this._armedWeapon.group.visible = show;
+
+        }
+
+    }
+
     showSkeleton(show) {
 
         if (this.gltf.skeleton) {
@@ -883,10 +893,12 @@ class CombatPlayerBase extends Tofu {
             const endCallback = () => {
 
                 super.interact(false);
+                this.showArmedWeapon(true);
 
             }
 
             this.#logger.log(`interact !`);
+            this.showArmedWeapon(false);
             this.AWS.prepareCrossFade(null, this.AWS.actions[this._clips.INTERACT.nick], this._animationSettings.INTERACT, 1, false, false, this._animationSettings.INTERACT, endCallback);
 
         } else if (this.AWS.isLooping) {
