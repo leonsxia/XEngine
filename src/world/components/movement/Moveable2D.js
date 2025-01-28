@@ -649,37 +649,62 @@ class Moveable2D {
 
         const worldY = player.worldYDirection;
 
+        const transformBack = () => {
+
+            // transfer dummy to group world position.
+            dummyObject.updateMatrix();
+
+            const recoverMtx4 = dummyObject.matrix.clone().premultiply(wallTransformMtx4);
+
+            const playerMatrixInverted = group.matrix.invert();
+            const playerWorldMatrixInvterted = group.parent.matrixWorld.invert();
+            // follow the euquition:
+            // parentWorldMatirx * localMatrix = recoverMtx4 => localMatrix = parentWorldMatrix.invert() * recoverMtx4
+            group.applyMatrix4(playerWorldMatrixInvterted.multiply(recoverMtx4.multiply(playerMatrixInverted)));
+
+        }
+
         // when climb forward has collistion with other walls, need to stop moving forward.
         if (this.#isClimbingForward) {
 
             if (leftCorVec3.z <= 0 || rightCorVec3.z <= 0) {
 
                 this.resetClimbingState();
+                return;
 
             }
 
+            this.climbWallTick(params);
             return;
             
         }
 
         // recover position z when static
-        if (
-            this.stopped &&
-            (
+        if (this.stopped) {
+
+            if (
                 (intersectCor === COR_DEF[0] && leftCorVec3.z < 0) ||
                 (intersectCor === COR_DEF[1] && rightCorVec3.z < 0) ||
                 (intersectCor === COR_DEF[2] && leftBackCorVec3.z < 0) ||
                 (intersectCor === COR_DEF[3] && rightBackCorVec3.z < 0)
-            )
-        ) {
+            ) {
 
-            dummyObject.position.z += quickRecoverCoefficient;
+                dummyObject.position.z += quickRecoverCoefficient;
+                
+            }
 
-        }
+            if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) {
+    
+                dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
+                
+            } else if (leftCorIntersectFace === FACE_DEF[1] || rightCorIntersectFace === FACE_DEF[1]) {
 
-        // recover position when reach the wall cornor and is rotating
-        if (borderReach && !this.isMovingForward && !this.isMovingBackward) {
+                dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, backwardCoefficient)));
+                
+            }
 
+        } else if (borderReach && !this.isMovingForward && !this.isMovingBackward) {
+            // recover position when reach the wall cornor and is rotating
             if (rightCorIntersectFace) {
 
                 dummyObject.position.x -= recoverCoefficient;
@@ -737,13 +762,9 @@ class Moveable2D {
                         // this.#logger.log(`right face reach`);
 
                     }
-                } else if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) {
-
-                    dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
-                    // this.#logger.log(`front/back face reach`);
-
                 }
             }
+
         } else if (this.isMovingBackward) {
 
             deltaVec3 = new Vector3(0, 0, - dist);
@@ -782,12 +803,9 @@ class Moveable2D {
                         dummyObject.position.x -= recoverCoefficient;
 
                     }
-                } else if (leftCorIntersectFace === FACE_DEF[1] || rightCorIntersectFace === FACE_DEF[1]) {
-
-                    dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, backwardCoefficient)));
-
                 }
             }
+            
         } else if (this.isTurnClockwise) {
 
             if (!borderReach) {
@@ -943,16 +961,7 @@ class Moveable2D {
             }
         }
 
-        // transfer dummy to group world position.
-        dummyObject.updateMatrix();
-
-        const recoverMtx4 = dummyObject.matrix.clone().premultiply(wallTransformMtx4);
-
-        const playerMatrixInverted = group.matrix.invert();
-        const playerWorldMatrixInvterted = group.parent.matrixWorld.invert();
-        // follow the euquition:
-        // parentWorldMatirx * localMatrix = recoverMtx4 => localMatrix = parentWorldMatrix.invert() * recoverMtx4
-        group.applyMatrix4(playerWorldMatrixInvterted.multiply(recoverMtx4.multiply(playerMatrixInverted)));
+        transformBack();
 
     }
 }

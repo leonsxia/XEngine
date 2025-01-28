@@ -308,7 +308,7 @@ class Tofu extends Moveable2D {
     
     get backwardCoefficient() {
 
-        return this.isAccelerating ? 0.002 : 0.001;
+        return this.#recoverCoefficient + 0.001;
 
     }
 
