@@ -1,4 +1,4 @@
-import { CombatPlayerBase, Pistol, Bayonet } from '../../Models';
+import { CombatPlayerBase, Pistol, Bayonet, Revolver } from '../../Models';
 import { SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 
@@ -56,6 +56,12 @@ class SoldierFemale extends CombatPlayerBase {
             rotation: [- 0.35, - 1.3, - 1.6]
         });
 
+        this.weapons[WEAPONS.REVOLVER] = new Revolver({
+            name: `${name}_magnum357`,
+            position: [- .168, - .005 , .075],
+            rotation:[- 0.35, - 1.3, - 1.6]
+        });
+
         this.weapons[WEAPONS.BAYONET] = new Bayonet({
             name: `${name}_bayonet`,
             scale: [.35, .3, .25],
@@ -71,16 +77,19 @@ class SoldierFemale extends CombatPlayerBase {
 
         await Promise.all([
             this.weapons[WEAPONS.PISTOL1].init(), 
-            this.weapons[WEAPONS.BAYONET].init(), 
+            this.weapons[WEAPONS.BAYONET].init(),
+            this.weapons[WEAPONS.REVOLVER].init(),
             super.init()
         ]);
 
         this._armedWeapon = this.weapons[WEAPONS.PISTOL1];
+        // this._armedWeapon = this.weapons[WEAPONS.REVOLVER];
         this._meleeWeapon = this.weapons[WEAPONS.BAYONET];
 
         const holdingHand = this.gltf.getChildByName('WristR');
         holdingHand.attach(this.weapons[WEAPONS.PISTOL1].group);
         holdingHand.attach(this.weapons[WEAPONS.BAYONET].group);
+        holdingHand.attach(this.weapons[WEAPONS.REVOLVER].group);
 
         this.setupWeaponScale();
         

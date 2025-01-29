@@ -21,6 +21,7 @@ export { SoldierFemale } from './composite/characters/SoldierFemale.js';
 // Weapons
 export { WeaponBase } from './composite/weapons/WeaponBase.js';
 export { Pistol } from './composite/weapons/Pistol.js';
+export { Revolver } from './composite/weapons/Revolver.js';
 export { Bayonet } from './composite/weapons/Bayonet.js';
 
 // GLTF

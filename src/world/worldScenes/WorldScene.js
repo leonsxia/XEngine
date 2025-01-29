@@ -675,6 +675,14 @@ class WorldScene {
                 changeFn: this.armWeaponPistol1.bind(this)
             }));
 
+            folderWeapon.specs.push(makeFolderSpecGuiConfig({
+                name: 'Arm Magnum357',
+                value: { 'Arm Magnum357': 'no' },
+                params: ['yes', 'no'],
+                type: 'dropdown',
+                changeFn: this.armMagnum357.bind(this)
+            }));
+
             this.guiLeftSpecs.details.push(folderWeapon);
 
         }
@@ -954,6 +962,24 @@ class WorldScene {
         if (s) {
 
             this.player.armWeapon(this.player.weapons[WEAPONS.PISTOL1], this.player.armedIdleNick);
+
+        } else {
+
+            this.player.armWeapon(null, this.player.idleNick);
+
+        }
+
+    }
+
+    armMagnum357(arm) {
+
+        if (!this.player.weapons || this.player.attacking) return this;
+
+        const s = arm === 'yes' ? true : false;
+
+        if (s) {
+
+            this.player.armWeapon(this.player.weapons[WEAPONS.REVOLVER], this.player.armedIdleNick);
 
         } else {
 

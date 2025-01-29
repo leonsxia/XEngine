@@ -27,8 +27,9 @@ const SOLDIER_FEMALE = 'SoldierFemale';
 // weapons
 const WEAPONS = {
     PISTOL1: 'PISTOL1',
-    BAYONET: 'BAYONET'
-}
+    BAYONET: 'BAYONET',
+    REVOLVER: 'REVOLVER'
+};
 
 // objects
 const PLANE = 'Plane';
@@ -165,7 +166,7 @@ const TEXTURE_NAMES = {
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
     WATER_2_M: 'WATER_2_M',
     WATER_2_M_NORMAL: 'WATER_2_M_NORMAL'
-}
+};
 
 const TEXTURES = [{
     name: TEXTURE_NAMES.CRATE, map: 'assets/textures/crate.png', normalMap: 'assets/textures/normals/crate.jpg'
@@ -254,7 +255,7 @@ const GLTF_NAMES = {
     // decorative
     FANCY_PICTURE_FRAME_01: 'FANCY_PICTURE_FRAME_01',
     VINTAGE_GRANDFATHER_CLOCK: 'VINTAGE_GRANDFATHER_CLOCK'
-}
+};
 
 const GLTFS = [{
     name: GLTF_NAMES.SOLDIER_FEMALE, src: 'characters/soldier_female.glb'
@@ -331,7 +332,7 @@ const SOLDIER_FEMALE_CLIPS = {
     SWORD_SLASH: { nick: 'sword_slash', name: 'CharacterArmature|Sword_Slash', idx: 21, enable: true },
     WALK: { nick: 'walk', name: 'CharacterArmature|Walk', idx: 22, enable: true },
     WAVE: { nick: 'wave', name: 'CharacterArmature|Wave', idx: 23, enable: false }
-}
+};
 
 export { 
     REPEAT_WRAPPING,

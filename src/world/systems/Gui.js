@@ -6,6 +6,7 @@ const CONTROL_TITLES = ['Menu', 'Lights Control', 'Objects Control'];
 const PLAYER_CONTROL = 'Player Control';
 const TPC_CONTROL = 'Third Person Camera';
 const IC_CONTROL = 'Inspector Camera';
+const WEAPONS_CONTROL = 'Weapons';
 
 class Gui {
 
@@ -294,7 +295,18 @@ class Gui {
 
                     case 'control-dropdown':
                         // if (this.#sceneChanged) return;
-                    case 'dropdown':
+                    case 'dropdown':                        
+
+                        if (val === 'yes') {
+                            
+                            if (find.parent === 'weapons') {
+
+                                this.#guis[0].folders.find(f => f._title === WEAPONS_CONTROL)
+                                    .controllers.find(c => c._name !== find.name)
+                                    .setValue('no');
+
+                            }
+                        }
 
                         find.changeFn(val);
 
