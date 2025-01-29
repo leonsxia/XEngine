@@ -182,27 +182,27 @@ class Moveable2D {
     }
 
     get isMovingForward() {
-        return  this.#movingForward && !this.#movingLeft && !this.#movingRight && !this.#melee && !this.#gunPoint && !this.#interact;
+        return  this.#movingForward && !this.#movingLeft && !this.#movingRight && !this.isActing;
     }
 
     get isMovingBackward() {
-        return this.#movingBackward && !this.#movingLeft && !this.#movingRight && !this.#melee && !this.#gunPoint && !this.#interact;
+        return this.#movingBackward && !this.#movingLeft && !this.#movingRight && !this.isActing;
     }
 
     get isMovingForwardLeft() {
-        return this.#movingForward && this.#movingLeft && !this.#melee && !this.#gunPoint && !this.#interact;
+        return this.#movingForward && this.#movingLeft && !this.isActing;
     }
 
     get isMovingForwardRight() {
-        return this.#movingForward && this.#movingRight && !this.#melee && !this.#gunPoint && !this.#interact;
+        return this.#movingForward && this.#movingRight && !this.isActing;
     }
 
     get isMovingBackwardLeft() {
-        return this.#movingBackward && this.#movingLeft && !this.#melee && !this.#gunPoint && !this.#interact;
+        return this.#movingBackward && this.#movingLeft && !this.isActing;
     }
 
     get isMovingBackwardRight() {
-        return this.#movingBackward && this.#movingRight && !this.#melee && !this.#gunPoint && !this.#interact;
+        return this.#movingBackward && this.#movingRight && !this.isActing;
     }
 
     get isAccelerating() {
@@ -222,7 +222,7 @@ class Moveable2D {
     }
 
     get isClimbing() {
-        return this.#movingForward && this.#jump;
+        return this.isMovingForward && this.#jump;
     }
 
     get isClimbingUp() {
@@ -235,6 +235,10 @@ class Moveable2D {
 
     get isInAir() {
         return this.#isFalling;
+    }
+
+    get isActing() {
+        return this.#melee || this.#gunPoint || this.#interact;
     }
 
     get isForwardBlock() {
@@ -426,6 +430,9 @@ class Moveable2D {
                 this.#climbDist = player.boundingBoxMesh.geometry.parameters.depth;
 
                 this.#isClimbingUp = true;
+
+                // only climb once
+                this.#jump = false;
 
             }
 
