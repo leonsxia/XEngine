@@ -136,7 +136,7 @@ function createOBBBox(specs, name, position, rotation, receiveShadow = false, ca
 
 function createCollisionGeometries(specs) {
 
-    const { width, height, depth, bbfThickness, gap } = specs;
+    const { width, width2, height, depth, bbfThickness, gap } = specs;
 
     const boundingBox = new BoxGeometry(width, height, depth * 2 / 3);
 
@@ -144,17 +144,19 @@ function createCollisionGeometries(specs) {
 
     const boundingFace = new BoxGeometry(width - gap, height, bbfThickness);
 
+    const boundingFace2 = new BoxGeometry(width2 - gap, height, bbfThickness);
+
     // setup OBB on geometry level
     boundingBox.userData.obb = new OBB();
     boundingBox.userData.obb.halfSize.copy( new Vector3(width, height, depth * 2 / 3) ).multiplyScalar( 0.5 );
 
-    return { boundingBox, boundingBoxEdges, boundingFace };
+    return { boundingBox, boundingBoxEdges, boundingFace, boundingFace2 };
 
 }
 
 function createBoundingBoxFaces(specs) {
     
-    const { width, depth, bbfThickness, showBB, showBBW, showBF, gap } = specs;
+    const { width, width2, depth, depth2, bbfThickness, showBB, showBBW, showBF, gap } = specs;
 
     const collisionGeometries = createCollisionGeometries(specs);
 
@@ -173,22 +175,23 @@ function createBoundingBoxFaces(specs) {
     // bounding volume on object level (this will reflect the current world transform)
     boundingBox.userData.obb = new OBB();
 
+    // original bounding faces
     const BBFDepthOffset = depth / 2 - bbfThickness / 2;
     const BBFWidthOffset = width / 2 - bbfThickness / 2;
-    const boundingFaceMaterial = basicMateraials.boundingFace.clone();
-    const frontBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
+    const boundingFaceMaterial = basicMateraials.boundingFace;
+    const frontBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial.clone());
     frontBoundingFace.name = 'frontFace';
     frontBoundingFace.position.set(0, 0, BBFDepthOffset);
     frontBoundingFace.visible = showBF;
     frontBoundingFace.layers.enable(CORNOR_RAY_LAYER);
 
-    const backBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
+    const backBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial.clone());
     backBoundingFace.name = 'backFace';
     backBoundingFace.position.set(0, 0, - BBFDepthOffset);
     backBoundingFace.visible = showBF;
     backBoundingFace.layers.enable(CORNOR_RAY_LAYER);
 
-    const leftBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
+    const leftBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial.clone());
     leftBoundingFace.name = 'leftFace';
     leftBoundingFace.position.set(BBFWidthOffset, 0, 0);
     leftBoundingFace.scale.x = (depth - gap) / (width - gap);
@@ -196,7 +199,7 @@ function createBoundingBoxFaces(specs) {
     leftBoundingFace.visible = showBF;
     leftBoundingFace.layers.enable(CORNOR_RAY_LAYER);
      
-    const rightBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial);
+    const rightBoundingFace = new Mesh(collisionGeometries.boundingFace, boundingFaceMaterial.clone());
     rightBoundingFace.name = 'rightFace';
     rightBoundingFace.position.set(- BBFWidthOffset, 0, 0);
     rightBoundingFace.scale.x = (depth - gap) / (width - gap);
@@ -204,7 +207,44 @@ function createBoundingBoxFaces(specs) {
     rightBoundingFace.visible = showBF;
     rightBoundingFace.layers.enable(CORNOR_RAY_LAYER);
 
-    return { boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace };
+    // bounding faces 2
+    const BBFDepthOffset2 = depth2 / 2 - bbfThickness / 2;
+    const BBFWidthOffset2 = width2 / 2 - bbfThickness / 2;
+    const boundingFace2Material = basicMateraials.boundingFace2;
+    const frontBoundingFace2 = new Mesh(collisionGeometries.boundingFace2, boundingFace2Material.clone());
+    frontBoundingFace2.name = 'frontFace2';
+    frontBoundingFace2.position.set(0, 0, BBFDepthOffset2);
+    frontBoundingFace2.visible = showBF;
+    frontBoundingFace2.layers.enable(CORNOR_RAY_LAYER);
+
+    const backBoundingFace2 = new Mesh(collisionGeometries.boundingFace2, boundingFace2Material.clone());
+    backBoundingFace2.name = 'backFace2';
+    backBoundingFace2.position.set(0, 0, - BBFDepthOffset2);
+    backBoundingFace2.visible = showBF;
+    backBoundingFace2.layers.enable(CORNOR_RAY_LAYER);
+
+    const leftBoundingFace2 = new Mesh(collisionGeometries.boundingFace2, boundingFace2Material.clone());
+    leftBoundingFace2.name = 'leftFace2';
+    leftBoundingFace2.position.set(BBFWidthOffset2, 0, 0);
+    leftBoundingFace2.scale.x = (depth2 - gap) / (width2 - gap);
+    leftBoundingFace2.rotation.y += Math.PI / 2;
+    leftBoundingFace2.visible = showBF;
+    leftBoundingFace2.layers.enable(CORNOR_RAY_LAYER);
+     
+    const rightBoundingFace2 = new Mesh(collisionGeometries.boundingFace2, boundingFace2Material.clone());
+    rightBoundingFace2.name = 'rightFace2';
+    rightBoundingFace2.position.set(- BBFWidthOffset2, 0, 0);
+    rightBoundingFace2.scale.x = (depth2 - gap) / (width2 - gap);
+    rightBoundingFace2.rotation.y += Math.PI / 2;
+    rightBoundingFace2.visible = showBF;
+    rightBoundingFace2.layers.enable(CORNOR_RAY_LAYER);
+
+
+    return { 
+        boundingBox, boundingBoxWire, 
+        frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
+        frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
+    };
 
 }
 

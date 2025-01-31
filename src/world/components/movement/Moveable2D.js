@@ -700,11 +700,11 @@ class Moveable2D {
                 
             }
 
-            if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) {
+            if (leftCorIntersectFace?.includes(FACE_DEF[0]) || rightCorIntersectFace?.includes(FACE_DEF[0])) {
     
                 dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
                 
-            } else if (leftCorIntersectFace === FACE_DEF[1] || rightCorIntersectFace === FACE_DEF[1]) {
+            } else if (leftCorIntersectFace?.includes(FACE_DEF[1]) || rightCorIntersectFace?.includes(FACE_DEF[1])) {
 
                 dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, backwardCoefficient)));
                 
@@ -753,7 +753,7 @@ class Moveable2D {
                         dummyObject.position.copy(offsetVec3);
 
                     }
-                } else if (leftCorIntersectFace !== FACE_DEF[0] && rightCorIntersectFace !== FACE_DEF[0]) {
+                } else if (!leftCorIntersectFace?.includes(FACE_DEF[0]) && !rightCorIntersectFace?.includes(FACE_DEF[0])) {
 
                     dummyObject.position.copy(offsetVec3);
 
@@ -797,7 +797,7 @@ class Moveable2D {
                         dummyObject.position.copy(offsetVec3);
 
                     }
-                } else if (leftCorIntersectFace !== FACE_DEF[1] && rightCorIntersectFace !== FACE_DEF[1]) {
+                } else if (!leftCorIntersectFace?.includes(FACE_DEF[1]) && !rightCorIntersectFace?.includes(FACE_DEF[1])) {
 
                     dummyObject.position.copy(offsetVec3);
 

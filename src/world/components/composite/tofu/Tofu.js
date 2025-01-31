@@ -1,8 +1,8 @@
 import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three';
 import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
-import { orange } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, PLAYER_RAY_LAYER } from '../../utils/constants';
+import { orange, BF, BF2 } from '../../basic/colorBase';
+import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, PLAYER_RAY_LAYER } from '../../utils/constants';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -32,6 +32,12 @@ class Tofu extends Moveable2D {
     backRightArrow;
 
     intersectSlope;
+    
+    _size;
+    _useBF2 = false;
+    _showBF = false;
+    _showBBHelper = false;
+    _showBBW = false;
 
     #w;
     #d;
@@ -55,11 +61,13 @@ class Tofu extends Moveable2D {
 
         super();
 
-        const { name, size = { width: .9, depth: .9, height: 1.8 } } = specs;
+        const { name, size = { width: .9, width2: .9, depth: .9, depth2: .9, height: 1.8 } } = specs;
         const { 
             rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = .2, 
             recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7 
         } = specs;
+
+        this._size = size;
 
         this.#rotateR = rotateR;
         this.#vel = vel;
@@ -85,7 +93,9 @@ class Tofu extends Moveable2D {
 
             body, slotLeft, slotRight, 
             bbObjects: {
-                boundingBox, boundingBoxWire, frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace
+                boundingBox, boundingBoxWire, 
+                frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
+                frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
             },
             pushingOBBBox
 
@@ -100,6 +110,7 @@ class Tofu extends Moveable2D {
             body, slotLeft, slotRight, 
             boundingBox, boundingBoxWire, 
             frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
+            frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2,
             pushingOBBBox
 
         ).name = name;
@@ -157,6 +168,100 @@ class Tofu extends Moveable2D {
             this.group.getObjectByName('leftFace'),
             this.group.getObjectByName('rightFace')
         ];
+
+    }
+
+    get boundingFace2Mesh() {
+
+        return [
+            this.group.getObjectByName('frontFace2'),
+            this.group.getObjectByName('backFace2'),
+            this.group.getObjectByName('leftFace2'),
+            this.group.getObjectByName('rightFace2')
+        ];
+
+    }
+
+    get activeBoundingFace() {
+
+        if (this._useBF2) {
+
+            return this.boundingFace2Mesh;
+
+        } else {
+
+            return this.boundingFaceMesh;
+
+        }
+
+    }
+
+    switchBoundingFace() {
+
+        if (this.isRotating) {
+            
+            this.boundingFaceMesh.forEach(bf => { bf.layers.disable(CORNOR_RAY_LAYER) });
+            this.boundingFace2Mesh.forEach(bf2 => { bf2.layers.enable(CORNOR_RAY_LAYER) });
+            this.#w = this._size.width2;
+            this.#d = this._size.depth2;
+            this._useBF2 = true;
+
+        } else {
+
+            this.boundingFaceMesh.forEach(bf => { bf.layers.enable(CORNOR_RAY_LAYER) });
+            this.boundingFace2Mesh.forEach(bf2 => { bf2.layers.disable(CORNOR_RAY_LAYER) });
+            this.#w = this._size.width;
+            this.#d = this._size.depth;
+            this._useBF2 = false;
+
+        }
+
+        this.setBoundingFaceVisibility();
+
+    }
+
+    setBoundingFaceVisibility() {
+
+        this.boundingFace2Mesh.forEach(bf2 => { bf2.visible = false });
+        this.boundingFaceMesh.forEach(bf => { bf.visible = false });
+
+        if (this._showBF) {
+
+            this.activeBoundingFace.forEach(bf => bf.visible = true);
+
+        }
+
+    }
+
+    movingLeft(val) {
+
+        super.movingLeft(val);
+
+        this.switchBoundingFace();
+
+    }
+
+    movingRight(val) {
+
+        super.movingRight(val);
+
+        this.switchBoundingFace();
+
+    }
+
+    movingForward(val) {
+
+        super.movingForward(val);
+
+        this.switchBoundingFace();
+
+    }
+
+    movingBackward(val) {
+
+        super.movingBackward(val);
+
+        this.switchBoundingFace();
 
     }
 
@@ -357,6 +462,8 @@ class Tofu extends Moveable2D {
 
     showBBW(show) {
 
+        this._showBBW = show;
+
         this.boundingBoxWireMesh.visible = show;
 
         return this;
@@ -364,8 +471,10 @@ class Tofu extends Moveable2D {
     }
 
     showBF(show) {
+        
+        this._showBF = show;
 
-        this.boundingFaceMesh.forEach(bf => { if (bf) bf.visible = show });
+        this.setBoundingFaceVisibility();
 
         return this;
 
@@ -510,7 +619,7 @@ class Tofu extends Moveable2D {
 
     setBFColor(color, face) {
 
-        const find = this.boundingFaceMesh.find(bf => bf.name === face);
+        const find = this.activeBoundingFace.find(bf => bf.name.includes(face));
 
         if (find) find.material.color.setHex(color);
 
@@ -518,9 +627,10 @@ class Tofu extends Moveable2D {
 
     }
 
-    resetBFColor(color) {
+    resetBFColor() {
 
-        this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(color));
+        this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(BF));
+        this.boundingFace2Mesh.forEach(bf2 => bf2.material.color.setHex(BF2));
 
         return this;
 
@@ -529,6 +639,12 @@ class Tofu extends Moveable2D {
     setBoundingBoxHelperColor(color) {
 
         this.boundingBoxHelper.material.color.setHex(color);
+
+        return this;
+
+    }
+
+    setBoundingBoxWireColor(color) {
 
         this.boundingBoxWireMesh.material.color.setHex(color);
 

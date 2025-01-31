@@ -8,11 +8,13 @@ function createBasicMaterials() {
 
     const boundingFace = new MeshStandardMaterial({color: Color.BF });
 
+    const boundingFace2 = new MeshStandardMaterial({ color: Color.BF2 });
+
     const boundingBoxWire = new LineBasicMaterial({ color: Color.BBW });
 
     const dark = new MeshBasicMaterial( { color: Color.black } );
 
-    return { basic, boundingBox, boundingFace, boundingBoxWire, dark };
+    return { basic, boundingBox, boundingFace, boundingFace2, boundingBoxWire, dark };
 }
 
 const basicMateraials = createBasicMaterials();

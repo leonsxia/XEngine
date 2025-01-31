@@ -32,12 +32,12 @@ class CombatPlayerBase extends Tofu {
 
         const { name, src, receiveShadow = true, castShadow = true, hasBones = true } = specs;
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
-        const { width = .9, depth = .9, height = 1.8 } = specs;
+        const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8 } = specs;
         const { rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5 } = specs;
         const { clips, animationSetting } = specs;
         const { scale = [1, 1, 1] } = specs;
 
-        super({ name, size: { width, depth, height }, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge });
+        super({ name, size: { width, width2, depth, depth2, height }, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge });
 
         this.specs = specs;
         

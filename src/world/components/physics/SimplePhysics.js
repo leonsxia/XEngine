@@ -2,7 +2,7 @@ import { Object3D, Vector3 } from 'three';
 import * as Color from '../basic/colorBase.js';
 import { groupHasChild } from '../utils/objectHelper.js';
 
-const DEBUG = false;
+const DEBUG = true;
 const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
 const FACE_DEF = ['frontFace', 'backFace', 'leftFace', 'rightFace'];
 const STAIR_OFFSET_MAX = .3;
@@ -244,19 +244,19 @@ class SimplePhysics {
                     const leftCorIntersectFace = leftBorderIntersects.length > 0 ? leftBorderIntersects[0].object.name : null;
                     const rightCorIntersectFace = rightBorderIntersects.length > 0 ? rightBorderIntersects[0].object.name : null;
                     
-                    if (leftCorIntersectFace === FACE_DEF[0] || rightCorIntersectFace === FACE_DEF[0]) 
+                    if (leftCorIntersectFace?.includes(FACE_DEF[0]) || rightCorIntersectFace?.includes(FACE_DEF[0])) 
                         
                         player.frontFaceIntersects = true;
 
-                    else if (leftCorIntersectFace === FACE_DEF[1] || rightCorIntersectFace === FACE_DEF[1]) 
+                    else if (leftCorIntersectFace?.includes(FACE_DEF[1]) || rightCorIntersectFace?.includes(FACE_DEF[1])) 
                         
                         player.backFaceIntersects = true;
 
-                    else if (leftCorIntersectFace === FACE_DEF[2] || rightCorIntersectFace === FACE_DEF[2]) 
+                    else if (leftCorIntersectFace?.includes(FACE_DEF[2]) || rightCorIntersectFace?.includes(FACE_DEF[2])) 
                         
                         player.leftFaceIntersects = true;
 
-                    else if (leftCorIntersectFace === FACE_DEF[3] || rightCorIntersectFace === FACE_DEF[3])
+                    else if (leftCorIntersectFace?.includes(FACE_DEF[3]) || rightCorIntersectFace?.includes(FACE_DEF[3]))
                         
                         player.rightFaceIntersects = true;
 
@@ -609,9 +609,21 @@ class SimplePhysics {
 
             // console.log(`is in air: ${player.isInAir}`);
 
-            if (DEBUG) {
+            if (DEBUG && player._showBBHelper) {
 
-                player.setBoundingBoxHelperColor(Color.BBW).resetBFColor(Color.BF);
+                player?.setBoundingBoxHelperColor(Color.BBW);
+
+            }
+
+            if (DEBUG && player._showBBW) {
+
+                player?.setBoundingBoxWireColor(Color.BBW);
+
+            }
+
+            if (DEBUG && player._showBF) {
+
+                player?.resetBFColor();
 
             }
 
@@ -627,9 +639,15 @@ class SimplePhysics {
 
                 if (checkResult.intersect) {
 
-                    if (DEBUG) {
+                    if (DEBUG && player._showBBHelper) {
 
-                        player.setBoundingBoxHelperColor(Color.intersect);
+                        player?.setBoundingBoxHelperColor(Color.intersect);
+
+                    }
+
+                    if (DEBUG && player._showBBW) {
+
+                        player?.setBoundingBoxWireColor(Color.intersect);
 
                     }
 
@@ -644,7 +662,7 @@ class SimplePhysics {
 
             });
 
-            if (DEBUG) {
+            if (DEBUG && player._showBF) {
 
                 if (player.frontFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[0])
                 else if (player.backFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[1])

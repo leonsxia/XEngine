@@ -867,13 +867,25 @@ class WorldScene {
 
         const find = this.scene.getObjectByName(this.player.boundingBoxHelper.name);
 
+        const s = show === 'show' ? true : false;
+
         if (show === 'show') {
 
-            if (!find) this.scene.add(this.player.boundingBoxHelper);
+            if (!find) {
+
+                this.scene.add(this.player.boundingBoxHelper);
+                if (this.player.hasOwnProperty('_showBBHelper')) this.player._showBBHelper = s;
+
+            }
 
         } else {
 
-            if (find) this.scene.remove(this.player.boundingBoxHelper);
+            if (find) {
+
+                this.scene.remove(this.player.boundingBoxHelper);
+                if (this.player.hasOwnProperty('_showBBHelper')) this.player._showBBHelper = s;
+
+            }
 
         }
 

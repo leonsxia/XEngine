@@ -12,9 +12,10 @@ const yellow = 0xffff00;
 const orange = 0xffa500;
 const khaki = 0xF0E68C;
 const BB = 0xffffff;
-const BF = 0xffff33;
+const BF = 0xFFD700;
+const BF2 = 0xFF6347;
 const BBW = 0x00ff00;
-const intersect = 0xff0000;
+const intersect = 0xFF2400;
 const specular = 0x111111;
 
 function colorStr(r, g, b) {
@@ -62,6 +63,7 @@ export {
     khaki,
     BB,
     BF,
+    BF2,
     BBW,
     intersect,
     specular,
