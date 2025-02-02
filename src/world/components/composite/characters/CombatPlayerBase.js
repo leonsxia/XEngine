@@ -2,7 +2,7 @@ import { GLTFModel, Tofu } from '../../Models';
 import { AnimateWorkstation } from '../../Animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
 
-const DEBUG = true;
+const DEBUG = false;
 
 class CombatPlayerBase extends Tofu {
 

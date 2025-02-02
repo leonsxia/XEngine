@@ -1,4 +1,4 @@
-import { Object3D, Vector3 } from 'three';
+import { Object3D, Quaternion, Vector3 } from 'three';
 import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
 import { Logger } from '../../systems/Logger';
 
@@ -34,6 +34,9 @@ class Moveable2D {
     #climbForwardDist = 0;
 
     #logger = new Logger(DEBUG, 'Moveable2D');
+
+    _deltaV3 = new Vector3();
+    _worldDeltaV3 = new Vector3();
 
     constructor() {
         this.leftCorIntersects = false;
@@ -547,25 +550,41 @@ class Moveable2D {
         });
     }
 
+    resetDeltaV3() {
+
+        this._deltaV3.set(0, 0, 0);
+
+    }
+
+    resetWorldDeltaV3() {
+        
+        this._worldDeltaV3.set(0, 0, 0);
+
+    }
+
     rotateOffsetCorrection(dummyObject, cornors) {
 
         const { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 } = cornors;
 
         if (leftCorVec3.z <= 0) {
 
-            dummyObject.position.z = dummyObject.position.z - leftCorVec3.z;
+            // dummyObject.position.z = dummyObject.position.z - leftCorVec3.z;
+            this._deltaV3.add(new Vector3(0, 0, - leftCorVec3.z));
 
         } else if (rightCorVec3.z <= 0) {
 
-            dummyObject.position.z = dummyObject.position.z - rightCorVec3.z;
+            // dummyObject.position.z = dummyObject.position.z - rightCorVec3.z;
+            this._deltaV3.add(new Vector3(0, 0, - rightCorVec3.z));
 
         } else if (leftBackCorVec3.z <= 0) {
 
-            dummyObject.position.z = dummyObject.position.z - leftBackCorVec3.z;
+            // dummyObject.position.z = dummyObject.position.z - leftBackCorVec3.z;
+            this._deltaV3.add(new Vector3(0, 0, - leftBackCorVec3.z));
 
         } else if (rightBackCorVec3.z <= 0) {
 
-            dummyObject.position.z = dummyObject.position.z - rightBackCorVec3.z;
+            // dummyObject.position.z = dummyObject.position.z - rightBackCorVec3.z;
+            this._deltaV3.add(new Vector3(0, 0, - rightBackCorVec3.z));
 
         }
     }
@@ -581,7 +600,8 @@ class Moveable2D {
                 this.rightCorIntersects && this.leftFaceIntersects
             ) {
 
-                dummyObject.position.x += quickRecoverCoefficient;
+                // dummyObject.position.x += quickRecoverCoefficient;
+                this._deltaV3.add(new Vector3(quickRecoverCoefficient, 0, 0));
 
             }
 
@@ -592,7 +612,8 @@ class Moveable2D {
                 this.backRightCorIntersects && this.leftFaceIntersects
             ) {
 
-                dummyObject.position.x -= quickRecoverCoefficient;
+                // dummyObject.position.x -= quickRecoverCoefficient;
+                this._deltaV3.add(new Vector3(- quickRecoverCoefficient, 0, 0));
 
             }
 
@@ -663,6 +684,12 @@ class Moveable2D {
 
             const recoverMtx4 = dummyObject.matrix.clone().premultiply(wallTransformMtx4);
 
+            // add delta position transfer to worldDeltaV3
+            // console.log(`deltaV3:${this._deltaV3.x}, ${this._deltaV3.y}, ${this._deltaV3.z}`);
+            const wallWorldQuat = new Quaternion(); 
+            wallMesh.getWorldQuaternion(wallWorldQuat);
+            this._worldDeltaV3.add(this._deltaV3.applyQuaternion(wallWorldQuat));
+
             const playerMatrixInverted = group.matrix.invert();
             const playerWorldMatrixInvterted = group.parent.matrixWorld.invert();
             // follow the euquition:
@@ -686,6 +713,8 @@ class Moveable2D {
             
         }
 
+        this.resetDeltaV3();
+
         // recover position z when static
         if (this.stopped) {
 
@@ -696,17 +725,20 @@ class Moveable2D {
                 (intersectCor === COR_DEF[3] && rightBackCorVec3.z < 0)
             ) {
 
-                dummyObject.position.z += quickRecoverCoefficient;
+                // dummyObject.position.z += quickRecoverCoefficient;
+                this._deltaV3.add(new Vector3(0, 0, quickRecoverCoefficient));
                 
             }
 
             if (leftCorIntersectFace?.includes(FACE_DEF[0]) || rightCorIntersectFace?.includes(FACE_DEF[0])) {
     
-                dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
+                // dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
+                this._deltaV3.add(new Vector3(0, 0, - backwardCoefficient));
                 
             } else if (leftCorIntersectFace?.includes(FACE_DEF[1]) || rightCorIntersectFace?.includes(FACE_DEF[1])) {
 
-                dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, backwardCoefficient)));
+                // dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, backwardCoefficient)));
+                this._deltaV3.add(new Vector3(0, 0, backwardCoefficient));
                 
             }
 
@@ -714,13 +746,15 @@ class Moveable2D {
             // recover position when reach the wall cornor and is rotating
             if (rightCorIntersectFace) {
 
-                dummyObject.position.x -= recoverCoefficient;
-                dummyObject.position.z += recoverCoefficient;
+                // dummyObject.position.x -= recoverCoefficient;
+                // dummyObject.position.z += recoverCoefficient;
+                this._deltaV3.add(new Vector3(- recoverCoefficient, 0, recoverCoefficient));
             
             } else {
 
-                dummyObject.position.x += recoverCoefficient;
-                dummyObject.position.z += recoverCoefficient;
+                // dummyObject.position.x += recoverCoefficient;
+                // dummyObject.position.z += recoverCoefficient;
+                this._deltaV3.add(new Vector3(recoverCoefficient, 0, recoverCoefficient));
 
             }
 
@@ -729,7 +763,7 @@ class Moveable2D {
         if (this.isMovingForward) {
 
             deltaVec3 = new Vector3(0, 0, dist);
-            const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+            const offsetVec3 = dummyObject.localToWorld(deltaVec3.clone());
             offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!this.isForwardBlock) {
@@ -739,34 +773,41 @@ class Moveable2D {
                     if (leftCorVec3.z <= 0) {
 
                         const dirVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftCorVec3.z);
-                        dummyObject.position.copy(dirVec3);
-                        // this.#logger.log(`left cornor reach`);
+                        this._deltaV3.add(dirVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(dirVec3);
+                        // this.#logger.log(`left cornor reach`);                        
 
                     } else if (rightCorVec3.z <= 0) {
 
                         const dirVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightCorVec3.z);
-                        dummyObject.position.copy(dirVec3);
-                        // this.#logger.log(`right cornor reach`);
+                        this._deltaV3.add(dirVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(dirVec3);
+                        // this.#logger.log(`right cornor reach`);                        
 
                     } else {
 
-                        dummyObject.position.copy(offsetVec3);
+                        this._deltaV3.add(deltaVec3);
+                        // dummyObject.position.copy(offsetVec3);
 
                     }
+
                 } else if (!leftCorIntersectFace?.includes(FACE_DEF[0]) && !rightCorIntersectFace?.includes(FACE_DEF[0])) {
 
-                    dummyObject.position.copy(offsetVec3);
+                    this._deltaV3.add(deltaVec3);
+                    // dummyObject.position.copy(offsetVec3);
 
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
-                        dummyObject.position.x += recoverCoefficient;
+                        // dummyObject.position.x += recoverCoefficient;
                         // this.#logger.log(`left face reach`);
+                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, 0));
 
 
                     } else {
 
-                        dummyObject.position.x -= recoverCoefficient;
+                        // dummyObject.position.x -= recoverCoefficient;
                         // this.#logger.log(`right face reach`);
+                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, 0));
 
                     }
                 }
@@ -775,7 +816,7 @@ class Moveable2D {
         } else if (this.isMovingBackward) {
 
             deltaVec3 = new Vector3(0, 0, - dist);
-            const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+            const offsetVec3 = dummyObject.localToWorld(deltaVec3.clone());
             offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!this.isBackwardBlock) {
@@ -785,29 +826,36 @@ class Moveable2D {
                     if (rightBackCorVec3.z <= 0) {
 
                         const dirVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightBackCorVec3.z);
-                        dummyObject.position.copy(dirVec3);
+                        this._deltaV3.add(dirVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(dirVec3);
 
                     } else if (leftBackCorVec3.z <= 0) {
 
                         const dirVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftBackCorVec3.z);
-                        dummyObject.position.copy(dirVec3);
+                        this._deltaV3.add(dirVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(dirVec3);
 
                     } else {
 
-                        dummyObject.position.copy(offsetVec3);
+                        this._deltaV3.add(deltaVec3);
+                        // dummyObject.position.copy(offsetVec3);
 
                     }
+
                 } else if (!leftCorIntersectFace?.includes(FACE_DEF[1]) && !rightCorIntersectFace?.includes(FACE_DEF[1])) {
 
-                    dummyObject.position.copy(offsetVec3);
+                    this._deltaV3.add(deltaVec3);
+                    // dummyObject.position.copy(offsetVec3);
 
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
-                        dummyObject.position.x += recoverCoefficient;
+                        // dummyObject.position.x += recoverCoefficient;
+                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, 0));
 
                     } else {
 
-                        dummyObject.position.x -= recoverCoefficient;
+                        // dummyObject.position.x -= recoverCoefficient;
+                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, 0));
 
                     }
                 }
@@ -848,7 +896,7 @@ class Moveable2D {
 
                 deltaVec3 = this.isMovingForwardLeft ? new Vector3(deltaX, 0, deltaZ) : new Vector3(deltaX, 0, - deltaZ);
 
-                const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+                const offsetVec3 = dummyObject.localToWorld(deltaVec3.clone());
                 offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
                 // dummyObject.rotation.y += this.isMovingForwardLeft ? rotateRad : - rotateRad;
@@ -871,26 +919,31 @@ class Moveable2D {
                     } else if (rightCorVec3.z <= 0 && this.isMovingForwardLeft) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightCorVec3.z);
-                        dummyObject.position.copy(newVec3);
+                        this._deltaV3.add(newVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(newVec3);
 
                     } else if (leftCorVec3.z <= 0 && this.isMovingForwardLeft) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftCorVec3.z);
-                        dummyObject.position.copy(newVec3);
+                        this._deltaV3.add(newVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(newVec3);
 
                     } else if (rightBackCorVec3.z <= 0 && this.isMovingBackwardLeft) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightBackCorVec3.z);
-                        dummyObject.position.copy(newVec3);
+                        this._deltaV3.add(newVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(newVec3);
 
                     } else if (leftBackCorVec3.z <= 0 && this.isMovingBackwardLeft) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftBackCorVec3.z);
-                        dummyObject.position.copy(newVec3);
+                        this._deltaV3.add(newVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(newVec3);
 
                     } else {
 
-                        dummyObject.position.copy(offsetVec3);
+                        this._deltaV3.add(deltaVec3);
+                        // dummyObject.position.copy(offsetVec3);
 
                     }
 
@@ -908,7 +961,7 @@ class Moveable2D {
 
                 deltaVec3 = this.isMovingForwardRight ? new Vector3(- deltaX, 0, deltaZ) : new Vector3(- deltaX, 0, - deltaZ);
 
-                const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+                const offsetVec3 = dummyObject.localToWorld(deltaVec3.clone());
                 offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
                 // dummyObject.position.copy(offsetVec3);
@@ -932,26 +985,31 @@ class Moveable2D {
                     } else if (leftCorVec3.z <= 0 && this.isMovingForwardRight) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftCorVec3.z);
-                        dummyObject.position.copy(newVec3);
+                        this._deltaV3.add(newVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(newVec3);
 
                     } else if (rightCorVec3.z <= 0 && this.isMovingForwardRight) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightCorVec3.z);
-                        dummyObject.position.copy(newVec3);
+                        this._deltaV3.add(newVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(newVec3);
 
                     } else if (leftBackCorVec3.z <= 0 && this.isMovingBackwardRight) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - leftBackCorVec3.z);
-                        dummyObject.position.copy(newVec3);
+                        this._deltaV3.add(newVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(newVec3);
 
                     } else if (rightBackCorVec3.z <= 0 && this.isMovingBackwardRight) {
 
                         const newVec3 = new Vector3(offsetVec3.x, posY, dummyObject.position.z - rightBackCorVec3.z);
-                        dummyObject.position.copy(newVec3);
+                        this._deltaV3.add(newVec3.clone().sub(dummyObject.position));
+                        // dummyObject.position.copy(newVec3);
 
                     } else {
 
-                        dummyObject.position.copy(offsetVec3);
+                        this._deltaV3.add(deltaVec3);
+                        // dummyObject.position.copy(offsetVec3);
 
                     }
 
@@ -969,6 +1027,14 @@ class Moveable2D {
         }
 
         transformBack();
+
+    }
+
+    applyWorldDeltaV3(params) {
+
+        const { group } = params;
+
+        group.position.add(this._worldDeltaV3);
 
     }
 }

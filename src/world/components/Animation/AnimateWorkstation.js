@@ -1,7 +1,7 @@
 import { AnimationMixer, LoopOnce } from 'three';
 import { Logger } from '../../systems/Logger';
 
-const DEBUG = true;
+const DEBUG = false;
 
 class AnimateWorkstation {
 

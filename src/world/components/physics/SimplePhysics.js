@@ -633,6 +633,8 @@ class SimplePhysics {
 
             const wallsInScope = this.walls.filter(w => this.getObject2WallDistance(player, w) <= player.playerDetectScopeMin);
 
+            player.resetWorldDeltaV3();
+
             wallsInScope.forEach(wall => {
 
                 const checkResult = this.checkIntersection(player, wall, delta);
@@ -701,7 +703,11 @@ class SimplePhysics {
 
                 });
 
+                player.applyPositionAdjustment();
+
             }
+
+            // console.log(`player world deltaV3:${player._worldDeltaV3.x}, ${player._worldDeltaV3.y}, ${player._worldDeltaV3.z}`);
 
             // for player falling down check
             const collisionTops = [];

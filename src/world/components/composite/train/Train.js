@@ -280,6 +280,14 @@ class Train extends Moveable2D {
         this.updateOBB();
     }
 
+    applyPositionAdjustment() {
+
+        this.applyWorldDeltaV3({ group: this.group });
+
+        this.updateOBB();
+
+    }
+
     tickWheels(delta, params) {
         const { smallWheelRotateVel, largeWheelRotateVel } = params;
         if (this.isForward) {

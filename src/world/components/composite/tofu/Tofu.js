@@ -850,6 +850,16 @@ class Tofu extends Moveable2D {
 
     }
 
+    applyPositionAdjustment() {
+
+        this.applyWorldDeltaV3({ group: this.group });
+
+        this.updateOBB();
+
+        this.updateRay(false);
+
+    }
+
     finalTick(delta) {}
 
 }
