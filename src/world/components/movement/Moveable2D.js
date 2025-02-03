@@ -252,7 +252,8 @@ class Moveable2D {
             (this.leftCorIntersects && this.backRightCorIntersects) ||
             (this.rightCorIntersects && this.backLeftCorIntersects) ||
             (this.frontFaceIntersects && (this.isMovingForwardLeft || this.isMovingForwardRight)) ||
-            (this.frontFaceIntersects && (this.leftFaceIntersects || this.rightFaceIntersects))
+            (this.frontFaceIntersects && (this.leftFaceIntersects || this.rightFaceIntersects)) ||
+            (this.leftFaceIntersects && this.rightFaceIntersects)
         );
     }
 
@@ -264,7 +265,8 @@ class Moveable2D {
             (this.backRightCorIntersects && this.leftCorIntersects) ||
             (this.backLeftCorIntersects && this.rightCorIntersects) ||
             (this.backFaceIntersects && (this.isMovingBackwardLeft || this.isMovingBackwardRight)) ||
-            (this.backFaceIntersects && (this.leftFaceIntersects || this.rightFaceIntersects))
+            (this.backFaceIntersects && (this.leftFaceIntersects || this.rightFaceIntersects)) ||
+            (this.leftFaceIntersects && this.rightFaceIntersects)
         );
     }
 
