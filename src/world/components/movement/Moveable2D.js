@@ -786,14 +786,14 @@ class Moveable2D {
 
                     } else {
 
-                        this._deltaV3.add(deltaVec3);
+                        this._deltaV3.add(offsetVec3.clone().sub(dummyObject.position));
                         // dummyObject.position.copy(offsetVec3);
 
                     }
 
                 } else if (!leftCorIntersectFace?.includes(FACE_DEF[0]) && !rightCorIntersectFace?.includes(FACE_DEF[0])) {
 
-                    this._deltaV3.add(deltaVec3);
+                    this._deltaV3.add(offsetVec3.clone().sub(dummyObject.position));
                     // dummyObject.position.copy(offsetVec3);
 
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
@@ -837,14 +837,14 @@ class Moveable2D {
 
                     } else {
 
-                        this._deltaV3.add(deltaVec3);
+                        this._deltaV3.add(offsetVec3.clone().sub(dummyObject.position));
                         // dummyObject.position.copy(offsetVec3);
 
                     }
 
                 } else if (!leftCorIntersectFace?.includes(FACE_DEF[1]) && !rightCorIntersectFace?.includes(FACE_DEF[1])) {
 
-                    this._deltaV3.add(deltaVec3);
+                    this._deltaV3.add(offsetVec3.clone().sub(dummyObject.position));
                     // dummyObject.position.copy(offsetVec3);
 
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
@@ -855,7 +855,7 @@ class Moveable2D {
                     } else {
 
                         // dummyObject.position.x -= recoverCoefficient;
-                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, 0));
+                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, 0));
 
                     }
                 }
@@ -942,7 +942,7 @@ class Moveable2D {
 
                     } else {
 
-                        this._deltaV3.add(deltaVec3);
+                        this._deltaV3.add(offsetVec3.clone().sub(dummyObject.position));
                         // dummyObject.position.copy(offsetVec3);
 
                     }
@@ -1008,7 +1008,7 @@ class Moveable2D {
 
                     } else {
 
-                        this._deltaV3.add(deltaVec3);
+                        this._deltaV3.add(offsetVec3.clone().sub(dummyObject.position));
                         // dummyObject.position.copy(offsetVec3);
 
                     }
