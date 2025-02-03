@@ -2,7 +2,7 @@ import { GLTFModel, Tofu } from '../../Models';
 import { AnimateWorkstation } from '../../Animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
 
-const DEBUG = false;
+const DEBUG = true;
 
 class CombatPlayerBase extends Tofu {
 
@@ -375,7 +375,7 @@ class CombatPlayerBase extends Tofu {
 
             if (this.accelerating) {
 
-                if (this.attacking) {
+                if (this.attacking && !this.rotating) {
 
                     if (this.shooting) {
 
@@ -400,18 +400,22 @@ class CombatPlayerBase extends Tofu {
                     }
 
                     this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.QUICK_TURN_WEIGHT);
+                    // this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
 
                 } else if (!this.rotating) {
 
                     this.#logger.log(`quick turn 1`);
                     this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.IDLE_TO_WALK, this._animationSettings.QUICK_TURN_WEIGHT);
+                    // this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
 
                 } else {
 
                     this.#logger.log(`back walk turn`);
-                    this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                    // this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
 
                 }
+
+                this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
 
             } else {
 
