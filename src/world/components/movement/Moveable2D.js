@@ -1038,9 +1038,14 @@ class Moveable2D {
 
         const { group } = params;
 
-        group.position.add(this._worldDeltaV3);
+        const worldPos = group.getWorldPosition(new Vector3());
+        
+        worldPos.add(this._worldDeltaV3);
+
+        group.position.copy(group.parent.worldToLocal(worldPos));
 
     }
+    
 }
 
 export { Moveable2D };
