@@ -856,7 +856,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [0, 3, 0]
+                    "position": [0, -2, 0]
                 },
                 {
                     "type": "WoodenSmallTable",
@@ -867,7 +867,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [-2.86, 3, 5.75],
+                    "position": [-2.86, -2, 5.75],
                     "rotationY": 2.618
                 },
                 {
@@ -879,7 +879,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [3, 4, 5]
+                    "position": [3, -2, 5]
                 },
                 {
                     "type": "RoundWoodenTable",
@@ -890,7 +890,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [3, 3, -3],
+                    "position": [3, -2, -3],
                     "rotationY": 2.3562
                 },
                 {
@@ -902,7 +902,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [-3, 3, -3.5]
+                    "position": [-3, -2, -3.5]
                 },
                 {
                     "type": "PaintedWoodenNightstand",
@@ -913,7 +913,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [4.8, 3, -6.98],
+                    "position": [4.8, -2, -6.98],
                     "rotationY": -0.6632
                 },
                 {
@@ -925,7 +925,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [-4.06, 3, 5.11],
+                    "position": [-4.06, -2, 5.11],
                     "rotationY": 1.6492
                 },
                 {
@@ -937,7 +937,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [-1.53, 3, 6.39],
+                    "position": [-1.53, -2, 6.39],
                     "rotationY": -1.4402
                 },
                 {
@@ -949,7 +949,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [-3.72, 3, 7.31],
+                    "position": [-3.72, -2, 7.31],
                     "rotationY": -1.9024
                 },
                 {
@@ -961,7 +961,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [6, 3, -5.32],
+                    "position": [6, -2, -5.32],
                     "rotationY": -0.96
                 },
                 {
@@ -973,7 +973,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [3.29, 3, -7.41],
+                    "position": [3.29, -2, -7.41],
                     "rotationY": -0.05
                 },
                 {
@@ -985,7 +985,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [7.39, 3, -3.32],
+                    "position": [7.39, -2, -3.32],
                     "rotationY": -1.2858
                 },
                 {
@@ -997,7 +997,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [7.62, 3, -1.6],
+                    "position": [7.62, -2, -1.6],
                     "rotationY": -1.5947
                 },
                 {
@@ -1009,7 +1009,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [3, 4, -3],
+                    "position": [3, -1, -3],
                     "rotationY": 2.2689
                 },
                 {
@@ -1056,7 +1056,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [2.1, 3, -7.4],
+                    "position": [2.1, -2, -7.4],
                     "rotationY": 0
                 }
             ],
