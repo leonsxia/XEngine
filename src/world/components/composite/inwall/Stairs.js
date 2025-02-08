@@ -29,9 +29,9 @@ class Stairs extends Slope {
         this.#lastStepHeight = height % stepHeight;
         this.#stepDepth = depth / this.#steps;
 
-        this.slope.mesh.visible = false;
-        this.leftFace.mesh.visible = false;
-        this.rightFace.mesh.visible = false;
+        this.slope.visible = false;
+        this.leftFace.visible = false;
+        this.rightFace.visible = false;
 
         this.createSideFaces();
         this.createStepFaces();

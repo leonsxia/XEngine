@@ -61,9 +61,9 @@ class SimplePhysics {
 
     initPhysics(room) {
 
-        const { walls, insideWalls, floors, ceilings, topOBBs, bottomOBBs, obstacles, slopes, slopeSideOBBWalls, waterCubes } = room;
+        const { walls, insideWalls, airWalls, floors, ceilings, topOBBs, bottomOBBs, obstacles, slopes, slopeSideOBBWalls, waterCubes } = room;
 
-        this.walls = walls.concat(insideWalls);
+        this.walls = walls.concat(insideWalls, airWalls);
         this.floors = floors;
         this.ceilings = ceilings;
         this.obstacleTops = topOBBs;

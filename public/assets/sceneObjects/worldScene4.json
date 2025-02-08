@@ -1078,7 +1078,30 @@
             ],
             "ceilings": [],
             "walls": [],
-            "insideWalls": []
+            "insideWalls": [],
+            "airWalls": [
+                {
+                    "type": "CollisionOBBPlane",
+                    "width": 2,
+                    "height": 1,
+                    "name": "air_0",
+                    "receiveShadow": true,
+                    "castShadow": true,
+                    "position": [-2.63, -4, 7.15],
+                    "rotationY": 0.4538,
+                    "color": "#cc0000"
+                },
+                {
+                    "type": "CollisionOBBPlane",
+                    "width": 2,
+                    "height": 1,
+                    "name": "air_0",
+                    "receiveShadow": true,
+                    "castShadow": true,
+                    "position": [-4.21, -4, 6.43],
+                    "rotationY": -1.4486
+                }
+            ]
         }
     ]
 }

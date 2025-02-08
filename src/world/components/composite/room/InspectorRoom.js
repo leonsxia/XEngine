@@ -48,7 +48,7 @@ class InspectorRoom extends Room {
         // set collision areas invisible
         this.areas.forEach(area => {
 
-            area.box.mesh.visible = false;
+            area.box.visible = false;
             area.box.mesh.layers.disable(CAMERA_RAY_LAYER);
 
         });

@@ -256,7 +256,7 @@ function createPlayerPushingOBBBox(specs) {
 
     const pushingOBBBox = createOBBBox(pushingBoxSpecs, 'pushingOBBBox', [0, 0, depth * .5 + .1 - pushingBoxSpecs.size.depth * .5], [0, 0, 0], false, false);
 
-    pushingOBBBox.mesh.visible = show;
+    pushingOBBBox.visible = show;
 
     return pushingOBBBox.mesh;
 

@@ -62,7 +62,7 @@ class BoxCube extends ObstacleBase  {
 
         } else {
 
-            this.box.mesh.visible = false;
+            this.box.visible = false;
 
         }
 

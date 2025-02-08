@@ -105,7 +105,7 @@ class LightLamp extends ObstacleBase {
 
             } else {
 
-                bloom.mesh.visible = show;
+                bloom.visible = show;
 
             }
 

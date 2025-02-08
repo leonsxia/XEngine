@@ -107,7 +107,9 @@ class SceneBuilder {
     
                 worldScene.rooms.push(room);
     
-                worldScene.cPlanes = worldScene.cPlanes.concat(room.walls, room.insideWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
+                worldScene.cPlanes = worldScene.cPlanes.concat(room.walls, room.insideWalls, room.airWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
+
+                worldScene.airWalls.push(...room.airWalls);
     
                 worldScene.scene.add(room.group);
 
@@ -276,6 +278,7 @@ class SceneBuilder {
             const ceilings = [];
             const walls = [];
             const insideWalls = [];
+            const airWalls = [];
             const waters = [];
     
             roomSpec.groups.forEach(spec => {
@@ -338,6 +341,16 @@ class SceneBuilder {
     
             });
             room.addInsideWalls(insideWalls);
+
+            roomSpec.airWalls?.forEach(spec => {
+
+                spec.updateOBB = false;
+                spec.updateRay = false;
+                const airWall = this.buildObject(spec);
+                airWalls.push(airWall);
+
+            });
+            room.addAirWalls(airWalls);
     
             room.updateOBBnRay();
             room.updateAreasOBBBox?.(false);
@@ -502,6 +515,13 @@ class SceneBuilder {
                 
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).insideWalls.find(f => f.type === inwall.type && f.name === inwall.name);
                 this.updateObject(inwall, _target, updateSetupOnly);
+            
+            });
+
+            room.airWalls?.forEach(airwall => {
+                
+                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).airWalls.find(f => f.type === airwall.type && f.name === airwall.name);
+                this.updateObject(airwall, _target, updateSetupOnly);
             
             });
 

@@ -430,23 +430,23 @@ class ObstacleBase extends ObstacleMoveable {
 
     setPlaneVisible(show) {
 
-        this.walls.forEach(w => w.mesh.visible = show);
+        this.walls.forEach(w => w.visible = show);
 
-        this.topOBBs.forEach(t => t.mesh.visible = show);
+        this.topOBBs.forEach(t => t.visible = show);
 
-        this.bottomOBBs.forEach(b => b.mesh.visible = show);
+        this.bottomOBBs.forEach(b => b.visible = show);
 
     }
 
     setTriggerVisible(show) {
 
-        this.triggers.forEach(tri => tri.mesh.visible = show);
+        this.triggers.forEach(tri => tri.visible = show);
 
     }
 
     setBoundingFaceVisible(show) {
 
-        this.boundingFaces.forEach(bf => bf.mesh.visible = show);
+        this.boundingFaces.forEach(bf => bf.visible = show);
 
     }
 

@@ -21,6 +21,7 @@ class Room {
     bottomOBBs = [];
     obstacles = [];
     insideWalls = [];
+    airWalls = [];
     insideGroups = [];
     slopes = [];
     slopeSideOBBWalls = [];
@@ -115,13 +116,14 @@ class Room {
     async init() {
         
         const insideWallsInit = this.initInsideWalls();
+        const airWallsInit = this.initAirWalls();
         const floorsInit = this.initFloors();
         const ceilingsInit = this.initCeilings();
         const insideGroupsInit = this.initInsideGroups();
         
         await Promise.all(
             this.initWalls()
-            .concat(insideWallsInit, floorsInit, ceilingsInit, insideGroupsInit)
+            .concat(insideWallsInit, airWallsInit, floorsInit, ceilingsInit, insideGroupsInit)
         );
 
     }
@@ -141,6 +143,16 @@ class Room {
         const promises = [];
 
         this.insideWalls.forEach(w => promises.push(w.init()));
+
+        return promises;
+
+    }
+
+    initAirWalls() {
+
+        const promises = [];
+
+        this.airWalls.forEach(w => promises.push(w.init()));
 
         return promises;
 
@@ -207,6 +219,26 @@ class Room {
             w.isInsideWall = true;
 
             w.mesh.rotationY += this.rotationY;     // update wall mesh world rotation y
+
+        });
+        
+    }
+
+    addAirWalls(walls) {
+
+        walls.forEach(w => {
+
+            this.group.add(w.mesh);
+
+            this.airWalls.push(w);
+
+            w.mesh.layers.enable(CAMERA_RAY_LAYER);
+
+            w.isAirWall = true;
+
+            w.mesh.rotationY += this.rotationY;     // update wall mesh world rotation y
+
+            w.visible = false;
 
         });
         
@@ -388,7 +420,7 @@ class Room {
         this.group.rotation.y = y;
         this.rotationY = y;
 
-        this.walls.concat(this.insideWalls).forEach(w => {
+        this.walls.concat(this.insideWalls, this.airWalls).forEach(w => {
             
             w.mesh.rotationY = w.mesh.rotationY - preRotY + y;
         
@@ -458,7 +490,7 @@ class Room {
         // this will update all children mesh matrixWorld.
         this.group.updateMatrixWorld();
 
-        this.walls.concat(...this.insideWalls).forEach(w => {
+        this.walls.concat(...this.insideWalls, ...this.airWalls).forEach(w => {
 
             w.updateRay(false);
 

@@ -218,6 +218,18 @@ class BasicObject {
 
     }
 
+    get visible() {
+
+        return this.mesh.visible;
+
+    }
+
+    set visible(val) {
+
+        this.mesh.visible = val;
+        
+    }
+
     setTexture(texture, isNormal = false) {
 
         const { 

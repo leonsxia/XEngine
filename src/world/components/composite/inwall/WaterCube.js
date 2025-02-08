@@ -58,7 +58,7 @@ class WaterCube extends ObstacleBase {
 
         this.faces = [frontFace, backFace, leftFace, rightFace, bottomFace];
 
-        this.box.mesh.visible = false;
+        this.box.visible = false;
 
         this.group.add(
             this.box.mesh,

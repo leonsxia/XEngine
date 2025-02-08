@@ -62,9 +62,9 @@ class Slope extends InWallObjectBase {
 
         this.slope.mesh.layers.enable(PLAYER_RAY_LAYER);
         this.slope.mesh.layers.enable(OBSTACLE_RAY_LAYER);
-        this.box.mesh.visible = false;
-        this.bottomBoxBuffer.mesh.visible = false;
-        this.topBoxBuffer.mesh.visible = false;
+        this.box.visible = false;
+        this.bottomBoxBuffer.visible = false;
+        this.topBoxBuffer.visible = false;
 
         if (!this.enableOBBs) {
 
@@ -122,8 +122,8 @@ class Slope extends InWallObjectBase {
             this.leftOBBFace = createOBBPlane(leftOBBSpecs, `${name}_left_obb`, [width * .5, bottomY, 0], [0, Math.PI * .5, 0], false, false);
             this.rightOBBFace = createOBBPlane(rightOBBSpecs, `${name}_right_obb`, [- width * .5, bottomY, 0], [0, - Math.PI * .5, 0], false, false);
 
-            this.leftOBBFace.mesh.visible = false;
-            this.rightOBBFace.mesh.visible = false;
+            this.leftOBBFace.visible = false;
+            this.rightOBBFace.visible = false;
 
             this.group.add(this.leftOBBFace.mesh, this.rightOBBFace.mesh);
 

@@ -137,8 +137,8 @@ class CylinderPillar extends InWallObjectBase {
 
     setOBBPlaneVisible(visible) {
 
-        this.topOBBs.forEach(t => t.mesh.visible = visible);
-        this.bottomOBBs.forEach(b => b.mesh.visible = visible);
+        this.topOBBs.forEach(t => t.visible = visible);
+        this.bottomOBBs.forEach(b => b.visible = visible);
 
     }
 

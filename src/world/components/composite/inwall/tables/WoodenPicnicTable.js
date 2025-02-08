@@ -46,7 +46,7 @@ class WoodenPicnicTable extends ObstacleBase {
 
         // obb box
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
-        this.box.mesh.visible = false;
+        this.box.visible = false;
 
         // collision box
         const cBoxTop = new CollisionBox(cBoxTopSpecs);

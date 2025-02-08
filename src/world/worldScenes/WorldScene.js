@@ -41,6 +41,7 @@ class WorldScene {
     rooms = [];
     cPlanes = [];
     cBoxes = [];
+    airWalls = [];
     player;
     loadSequence = 0;
     showRoleSelector = false;
@@ -905,6 +906,18 @@ class WorldScene {
             this.controls.enableDefControl();
 
         }
+
+    }
+
+    showAirWalls(show) {
+
+        const s = show === 'show' ? true : false;
+
+        this.airWalls.forEach(w => {
+
+            w.mesh.visible = s;
+
+        });
 
     }
 

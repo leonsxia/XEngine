@@ -86,8 +86,8 @@ class GuiMaker {
         this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
             folder: 'Change Resolution',
             parent: 'changeResolution',
-            name: 'ratio',
-            value: { ratio: resolution },
+            name: 'Ratio',
+            value: { Ratio: resolution },
             params: RESOLUTION_RATIO,
             type: 'dropdown',
             changeFn: $scene.changeResolution.bind($scene),
@@ -97,8 +97,8 @@ class GuiMaker {
         this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
             folder: 'Select Control',
             parent: 'selectControl',
-            name: 'control',
-            value: { control: INITIAL_RIGHT_PANEL },
+            name: 'Control',
+            value: { Control: INITIAL_RIGHT_PANEL },
             params: CONTROL_TITLES,
             type: 'control-dropdown',
             changeFn: this.gui.selectControl.bind(this.gui),
@@ -111,8 +111,8 @@ class GuiMaker {
             this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
                 folder: 'Select Role',
                 parent: 'selectRole',
-                name: 'role',
-                value: { role: $scene.player.name },
+                name: 'Role',
+                value: { Role: $scene.player.name },
                 params: roles,
                 type: 'role-dropdown',
                 changeFn: $scene.changeCharacter.bind($scene),
@@ -348,19 +348,35 @@ class GuiMaker {
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'lines',
-                value: { lines: 'hide' },
+                name: 'Lines',
+                value: { Lines: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: $scene.showCPlaneLines.bind($scene)
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'arrows',
-                value: { arrows: 'hide' },
+                name: 'Arrows',
+                value: { Arrows: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: $scene.showCPlaneArrows.bind($scene)
+            }));
+
+            this.guiLeftSpecs.details.push(folder);
+
+        }
+
+        if ($scene.airWalls.length > 0) {
+
+            const folder = makeFolderGuiConfig({ folder: 'Air Walls Control', parent: 'airWallsControl', close: true });
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Visibile',
+                value: { Visibile: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showAirWalls.bind($scene)
             }));
 
             this.guiLeftSpecs.details.push(folder);
