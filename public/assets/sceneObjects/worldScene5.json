@@ -114,7 +114,7 @@
             "rightNormal": "CONCRETE_132_NORMAL",
             "mapRatio": 1.5,
             "name": "room1",
-            "showArrow": true,
+            "showArrow": false,
             "enableWallOBBs": true,
             "position": [0, 2.5, 0],
             "rotationY": 0,

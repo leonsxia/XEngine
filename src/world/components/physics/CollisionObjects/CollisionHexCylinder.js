@@ -28,7 +28,8 @@ class CollisionHexCylinder {
         const d = 2 * radius * Math.cos(theta);
 
         const prefix = 'cHexCylinder';
-        const boxSpecs = { width: w, height: h, depth: d, enableWallOBBs, showArrow, lines };
+        const ignoreFaces = [2, 3];
+        const boxSpecs = { width: w, height: h, depth: d, enableWallOBBs, showArrow, lines, ignoreFaces };
         const boxSpecs1 = this.makeBoxConfig(`${name}_${prefix}_cbox_1`, boxSpecs);
         const boxSpecs2 = this.makeBoxConfig(`${name}_${prefix}_cbox_2`, boxSpecs);;
         const boxSpecs3 = this.makeBoxConfig(`${name}_${prefix}_cbox_3`, boxSpecs);;
@@ -86,8 +87,8 @@ class CollisionHexCylinder {
 
     makeBoxConfig(name, specs) {
 
-        const { width, height, depth, enableWallOBBs, showArrow, lines } = specs;
-        const config = { name, width, height, depth, enableWallOBBs, showArrow, lines };
+        const { width, height, depth, enableWallOBBs, showArrow, lines, ignoreFaces } = specs;
+        const config = { name, width, height, depth, enableWallOBBs, showArrow, lines, ignoreFaces };
 
         return config;
         

@@ -48,9 +48,9 @@ class CollisionBox {
         // collision faces
         const createPlaneFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
         
-        this.back = createPlaneFunction(frontBackSpecs, `${this.name}_back`, [0, 0, - this.depth * .5], Math.PI, false, false, showArrow);
-        this.left = createPlaneFunction(leftRightSpecs, `${this.name}_left`, [this.width * .5, 0, 0], Math.PI * .5, false, false, showArrow);
-        this.right = createPlaneFunction(leftRightSpecs, `${this.name}_right`, [- this.width * .5, 0, 0], - Math.PI * .5, false, false, showArrow);
+        this.back = this.ignoreFace('back') ? null : createPlaneFunction(frontBackSpecs, `${this.name}_back`, [0, 0, - this.depth * .5], Math.PI, false, false, showArrow);
+        this.left = this.ignoreFace('left') ? null : createPlaneFunction(leftRightSpecs, `${this.name}_left`, [this.width * .5, 0, 0], Math.PI * .5, false, false, showArrow);
+        this.right = this.ignoreFace('right') ? null : createPlaneFunction(leftRightSpecs, `${this.name}_right`, [- this.width * .5, 0, 0], - Math.PI * .5, false, false, showArrow);
 
         {
             this.top = createOBBPlane(bottomTopSpecs, `${this.name}_top`, [0, this.height * .5, 0], [- Math.PI * .5, 0 ,0], false, false);
@@ -61,16 +61,12 @@ class CollisionBox {
 
         }
 
-        this.front = createPlaneFunction(frontBackSpecs, `${this.name}_front`, [0, 0, this.depth * .5], 0, false, false, showArrow);
-        this.front.line?.material.color.setHex(green);
+        this.front = this.ignoreFace('front') ? null : createPlaneFunction(frontBackSpecs, `${this.name}_front`, [0, 0, this.depth * .5], 0, false, false, showArrow);
+        this.front?.line?.material.color.setHex(green);
 
-        this.walls = [this.front, this.back, this.left, this.right];
+        this.addWalls();
 
         this.group.add(
-            this.front.mesh,
-            this.back.mesh,
-            this.left.mesh,
-            this.right.mesh,
             this.top.mesh,
             this.bottom.mesh
         );
@@ -103,6 +99,60 @@ class CollisionBox {
         this.rotationY = rotY;
 
         return this;
+
+    }
+
+    ignoreFace(face) {
+
+        const { ignoreFaces = [] } = this.specs;
+
+        let ignore = false;
+
+        switch (face) {
+
+            case 'front':
+                ignore = ignoreFaces.findIndex(i => i === 0) > - 1;
+                break;
+
+            case 'back':
+                ignore = ignoreFaces.findIndex(i => i === 1) > - 1;
+                break;
+
+            case 'left':
+                ignore = ignoreFaces.findIndex(i => i === 2) > - 1;
+                break;
+            
+            case 'right':
+                ignore = ignoreFaces.findIndex(i => i === 3) > - 1;
+                break;
+
+        }
+
+        return ignore;
+
+    }
+
+    addWalls() {
+
+        if (this.front) {
+            this.walls.push(this.front);
+            this.group.add(this.front.mesh);
+        }
+
+        if (this.back) {
+            this.walls.push(this.back);
+            this.group.add(this.back.mesh);
+        }
+
+        if (this.left) {
+            this.walls.push(this.left);
+            this.group.add(this.left.mesh);
+        }
+
+        if (this.right) {
+            this.walls.push(this.right);
+            this.group.add(this.right.mesh);
+        }
 
     }
 
