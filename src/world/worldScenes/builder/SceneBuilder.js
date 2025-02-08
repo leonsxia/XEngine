@@ -89,7 +89,11 @@ class SceneBuilder {
             let pointLightGuiSpecsArr = [];
             let spotLightGuiSpecsArr = [];
 
-            worldScene.guiLights = { basicLightSpecsArr: basicLightGuiSpecsArr, pointLightSpecsArr: pointLightGuiSpecsArr, spotLightSpecsArr: spotLightGuiSpecsArr };
+            if (worldScene.guiMaker) {
+
+                worldScene.guiMaker.guiLights = { basicLightSpecsArr: basicLightGuiSpecsArr, pointLightSpecsArr: pointLightGuiSpecsArr, spotLightSpecsArr: spotLightGuiSpecsArr };
+
+            }
 
             // build scene lights
             {
@@ -133,10 +137,16 @@ class SceneBuilder {
         const _pointLights = createPointLights(pointLightsSpecsArr);
         const _spotLights = createSpotLights(spotLightsSpecsArr);
 
-        worldScene.guiLights.basicLightSpecsArr = worldScene.guiLights.basicLightSpecsArr.concat(basicLightsSpecsArr);
-        worldScene.guiLights.pointLightSpecsArr = worldScene.guiLights.pointLightSpecsArr.concat(pointLightsSpecsArr);
-        worldScene.guiLights.spotLightSpecsArr = worldScene.guiLights.spotLightSpecsArr.concat(spotLightsSpecsArr);
+        if (worldScene.guiMaker) {
 
+            const { guiLights } = worldScene.guiMaker;
+            
+            guiLights.basicLightSpecsArr = guiLights.basicLightSpecsArr.concat(basicLightsSpecsArr);
+            guiLights.pointLightSpecsArr = guiLights.pointLightSpecsArr.concat(pointLightsSpecsArr);
+            guiLights.spotLightSpecsArr = guiLights.spotLightSpecsArr.concat(spotLightsSpecsArr);
+    
+        }
+        
         Object.assign(worldScene.lights, _basicLights);
         Object.assign(worldScene.lights, _pointLights);
         Object.assign(worldScene.lights, _spotLights);

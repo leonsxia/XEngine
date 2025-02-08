@@ -84,7 +84,7 @@ class Picker {
 
         this.#postProcessor.clearOutlineObjects();
         this.#worldScene.pickedObject = null;
-        this.#worldScene.clearObjectsPanel();
+        this.#worldScene.guiMaker.clearObjectsPanel();
 
         if (intersects.length > 0) {
 
@@ -99,7 +99,7 @@ class Picker {
 
             this.#worldScene.pickedObject = selectedObject;
 
-            this.#worldScene.setupObjectsGuiConfig([this.#worldScene.pickedObject]);
+            this.#worldScene.guiMaker.setupObjectsGuiConfig([this.#worldScene.pickedObject]);
 
         }
 

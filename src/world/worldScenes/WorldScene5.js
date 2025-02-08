@@ -90,7 +90,22 @@ class WorldScene5 extends WorldScene {
 
         // Gui setup
         if (worldSceneSpecs.enableGui) {
-            this.setupGuiConfig();
+
+            this.guiMaker.leftActions = {
+                'actions': {
+                    start: this.start.bind(this),
+                    stop: this.stop.bind(this),
+                    resetCamera: this.resetCamera.bind(this, false),
+                    focusNext: this.focusNext.bind(this, false),
+                    resetPlayer: this.resetCharacterPosition.bind(this),
+                    resetScene: this.resetScene.bind(this),
+                    saveScene: this.saveScene.bind(this),
+                    loadScene: this.loadScene.bind(this)
+                }
+            };
+
+            this.guiMaker.setupGuiConfig();
+
         }
 
         this.showCPlaneLines(false);
@@ -99,22 +114,6 @@ class WorldScene5 extends WorldScene {
         this.initContainer();
         this.#loaded = true;
 
-    }
-
-    setupLeftFunctionPanle() {
-        // assgin left panel parents
-        Object.assign(this.guiLeftSpecs.parents, {
-            'actions': {
-                start: this.start.bind(this),
-                stop: this.stop.bind(this),
-                resetCamera: this.resetCamera.bind(this, false),
-                focusNext: this.focusNext.bind(this, false),
-                resetPlayer: this.resetCharacterPosition.bind(this),
-                resetScene: this.resetScene.bind(this),
-                saveScene: this.saveScene.bind(this),
-                loadScene: this.loadScene.bind(this)
-            }
-        });
     }
 
     focusNext(forceStaticRender = true) {

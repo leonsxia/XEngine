@@ -57,6 +57,15 @@ class WorldControls {
 
     }
 
+    enableDefControl(enable = true) {
+
+        this.#controls.enabled = enable;
+        // this.#controls.enablePan = enable;
+        // this.#controls.enableRotate = enable;
+        // this.#controls.enableZoom = enable;
+
+    }
+
     resetCamera() {
 
         this.#controls.reset();

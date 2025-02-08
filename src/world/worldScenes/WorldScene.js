@@ -3,17 +3,12 @@ import { ThirdPersonCamera } from '../components/cameras/ThirdPersonCamera.js';
 import { InspectorCamera } from '../components/cameras/InspectorCamera.js';
 import { createScene } from '../components/scene.js';
 import { WorldControls } from '../systems/Controls.js';
-import { updateSingleLightCamera } from '../components/shadowMaker.js';
-import { makeGuiPanel, makeDropdownGuiConfig, makeFunctionGuiConfig, makeSceneRightGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeObjectsGuiConfig } from '../components/utils/guiConfigHelper.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
-import { Gui } from '../systems/Gui.js';
-import { PostProcessor, SSAO_OUTPUT, DEFAULT_BLOOM } from '../systems/PostProcesser.js';
+import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
 import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS } from '../components/utils/constants.js';
+import { GuiMaker } from '../systems/GuiMaker.js';
 
-const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
-const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
-const RESOLUTION_RATIO = {'0.5x': 0.5, '0.8x': 0.8, '1x': 1, '2x': 2};
 let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
 
@@ -37,11 +32,7 @@ class WorldScene {
     lights = {};
     shadowLightObjects = [];
 
-    gui = null;
-    guiRightLightsSpecs = {};
-    guiLeftSpecs = {};
-    guiLights = {};
-    guiObjects = {};
+    guiMaker;
 
     eventDispatcher;
     
@@ -131,21 +122,10 @@ class WorldScene {
 
         if (specs.enableGui) {
 
-            this.gui = new Gui();
+            this.guiMaker = new GuiMaker(this);
+            this.guiMaker.init();
 
-            this.controls.initPanels(this.gui);
-
-            this.guiLeftSpecs = makeGuiPanel();
-
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Select World',
-                parent: 'selectWorld',
-                name: 'scene',
-                value: { scene: specs.name },
-                params: specs.scenes,
-                type: 'scene-dropdown',
-                changeFn: specs.changeCallback
-            }));
+            this.controls.initPanels(this.guiMaker.gui);
 
         }
 
@@ -155,9 +135,9 @@ class WorldScene {
 
         this.controls.defControl.enabled = true;
 
-        if (this.gui) {
+        if (this.guiMaker?.enabled) {
 
-            this.initGUIControl();
+            this.guiMaker.initGuiControl();
 
         }
 
@@ -186,17 +166,6 @@ class WorldScene {
 
     }
 
-    initGUIControl() {
-
-        this.gui.init({ 
-            attachedTo: this, 
-            left: this.guiLeftSpecs, 
-            right_lights: this.guiRightLightsSpecs,
-            initialRightPanel: INITIAL_RIGHT_PANEL
-        });
-
-    }
-
     render() {
 
         // console.log(++renderTimes);
@@ -218,7 +187,7 @@ class WorldScene {
         this.controls.initPreCoordinates();
         this.controls.defControl.enableDamping = true;
         this.controls.defControl.dampingFactor = 0.1; // default 0.05
-        this.loop.start(this.gui.stats);
+        this.loop.start(this.guiMaker.gui.stats);
         this.#paused = false;
 
     }
@@ -297,10 +266,9 @@ class WorldScene {
         this.picker.reset();
         this.postProcessor.clearOutlineObjects();
 
-        if (this.gui) {
+        if (this.guiMaker?.enabled) {
 
-            this.gui.reset();
-            this.gui.hide();
+            this.guiMaker.resetGui();
 
         }
 
@@ -418,324 +386,6 @@ class WorldScene {
 
         });
         
-    }
-
-    setupGuiConfig() {
-
-        let { resolution = 1 } = this.setup;
-        
-        if (devicePixelRatio === 1) resolution = 1;
-
-        const rightGuiConfig = makeSceneRightGuiConfig(this.guiLights);
-
-        Object.assign(rightGuiConfig.parents, this.lights);
-
-        this.guiRightLightsSpecs = rightGuiConfig;
-        
-        this.setupLeftFunctionPanle();
-
-        this.guiLeftSpecs.details.push(makeFunctionGuiConfig('Actions', 'actions'));
-        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-            folder: 'Change Resolution',
-            parent: 'changeResolution',
-            name: 'ratio',
-            value: { ratio: resolution },
-            params: RESOLUTION_RATIO,
-            type: 'dropdown',
-            changeFn: this.changeResolution.bind(this),
-            close: true
-        }));
-
-        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-            folder: 'Select Control',
-            parent: 'selectControl',
-            name: 'control',
-            value: { control: INITIAL_RIGHT_PANEL },
-            params: CONTROL_TITLES,
-            type: 'control-dropdown',
-            changeFn: this.gui.selectControl.bind(this.gui),
-            close: true
-        }));
-
-        if (this.showRoleSelector) {
-            const roles = [];
-            this.players.forEach(p => roles.push(p.name));
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Select Role',
-                parent: 'selectRole',
-                name: 'role',
-                value: { role: this.player.name },
-                params: roles,
-                type: 'role-dropdown',
-                changeFn: this.changeCharacter.bind(this),
-                close: true
-            }));
-        }
-
-        if (this.postProcessor) {
-
-            const folder = makeFolderGuiConfig({folder: 'Post Processing', parent: 'postProcessing', close: true});
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'PostEffect',
-                value: { PostEffect: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'dropdown',
-                changeFn: this.enablePostEffect.bind(this)
-            }));
-
-            if (!this.picker.isUnavailable) {
-
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'Picker',
-                    value: { Picker: 'disable' },
-                    params: ['enable', 'disable'],
-                    type: 'dropdown',
-                    changeFn: this.enablePicking.bind(this)
-                }));
-
-            }
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'FXAA',
-                value: { FXAA: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'dropdown',
-                changeFn: this.enableFXAA.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'SSAA',
-                value: { SSAA: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'dropdown',
-                changeFn: this.enableSSAA.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'SSAASampleLevel',
-                value: { SSAASampleLevel: 'Level 2: 4 Samples' },
-                params: ['Level 0: 1 Sample', 'Level 2: 4 Samples', 'Level 3: 8 Samples', 'Level 4: 16 Samples', 'Level 5: 32 Samples'],
-                type: 'dropdown',
-                changeFn: this.changeSSAASampleLevel.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'SSAO',
-                value: { SSAO: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'dropdown',
-                changeFn: this.enableSSAO.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'SSAOOutput',
-                value: { SSAOOutput: 'Default' },
-                params: ['Default', 'SSAO Only', 'SSAO+Blur Only', 'Depth', 'Normal'],
-                type: 'dropdown',
-                changeFn: this.changeSSAOOutput.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'Bloom',
-                value: { Bloom: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'dropdown',
-                changeFn: this.enableBloom.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'BloomStrength',
-                value: { BloomStrength: DEFAULT_BLOOM.strength },
-                params: [0, 10],
-                type: 'number',
-                changeFn: this.changeBloomStrength.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'BloomRadius',
-                value: { BloomRadius: DEFAULT_BLOOM.radius },
-                params: [0, 1],
-                type: 'number',
-                changeFn: this.changeBloomRadius.bind(this)
-            }));
-
-            this.guiLeftSpecs.details.push(folder);
-
-        }
-
-        if (this.thirdPersonCamera) {
-
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Third Person Camera',
-                parent: 'thirdPersonCamera',
-                name: 'TPC',
-                value: { TPC: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'camera-dropdown',
-                changeFn: this.enableTPC.bind(this),
-                close: true
-            }));
-
-        }
-
-        if (this.inspectorCamera) {
-
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Inspector Camera',
-                parent: 'inspectorCamera',
-                name: 'InsCam',
-                value: { InsCam: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'camera-dropdown',
-                changeFn: this.enableIC.bind(this),
-                close: true
-            }));
-
-        }
-
-        if (this.player) {
-
-            const folder = makeFolderGuiConfig({folder: 'Player Control', parent: 'playerControl', close: true});
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'BBHelper',
-                value: { BBHelper: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showPlayerBBHelper.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'BB',
-                value: { BB: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showPlayerBB.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'BBW',
-                value: { BBW: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showPlayerBBW.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'BF',
-                value: { BF: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showPlayerBF.bind(this)
-            }));
-
-            if (this.player.showPushingBox) {
-
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'PushingBox',
-                    value: { PushingBox: 'hide' },
-                    params: ['show', 'hide'],
-                    type: 'dropdown',
-                    changeFn: this.showPlayerPushingBox.bind(this)
-                }));
-
-            } 
-
-            if (this.player.showArrows) {
-
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'Arrows',
-                    value: { Arrows: 'hide' },
-                    params: ['show', 'hide'],
-                    type: 'dropdown',
-                    changeFn: this.showPlayerArrows.bind(this)
-                }));
-
-            }
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'Skeleton',
-                value: { Skeleton: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showPlayerSkeleton.bind(this)
-            }));
-
-            this.guiLeftSpecs.details.push(folder);
-
-            // add weapons control
-            const folderWeapon = makeFolderGuiConfig({folder: 'Weapons', parent: 'weapons', close: true});
-
-            folderWeapon.specs.push(makeFolderSpecGuiConfig({
-                name: 'Arm Pistol1',
-                value: { 'Arm Pistol1': 'yes' },
-                params: ['yes', 'no'],
-                type: 'dropdown',
-                changeFn: this.armWeaponPistol1.bind(this)
-            }));
-
-            folderWeapon.specs.push(makeFolderSpecGuiConfig({
-                name: 'Arm Magnum357',
-                value: { 'Arm Magnum357': 'no' },
-                params: ['yes', 'no'],
-                type: 'dropdown',
-                changeFn: this.armMagnum357.bind(this)
-            }));
-
-            this.guiLeftSpecs.details.push(folderWeapon);
-
-        }
-
-        if (this.cPlanes.length > 0) {
-
-            const folder = makeFolderGuiConfig({folder: 'cPlanes Control', parent: 'cPlanesControl', close: true});
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'Wire',
-                value: { Wire: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showWireframe.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'lines',
-                value: { lines: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showCPlaneLines.bind(this)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'arrows',
-                value: { arrows: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: this.showCPlaneArrows.bind(this)
-            }));
-
-            this.guiLeftSpecs.details.push(folder);
-
-        }
-        
-        // bind callback to light helper and shadow cam helper
-        this.bindLightShadowHelperGuiCallback();
-
-    }
-
-    setupObjectsGuiConfig(objects) {
-
-        const objectsConfig = makeObjectsGuiConfig(objects);
-
-        this.gui.addObjects(objectsConfig);
-
-    }
-
-    clearObjectsPanel() {
-
-        this.gui.removeObjects();
-
     }
     
     changeResolution (ratio) {
@@ -1072,7 +722,7 @@ class WorldScene {
         if (!e) {
 
             this.postProcessor.clearOutlineObjects();
-            this.clearObjectsPanel();
+            this.guiMaker.clearObjectsPanel();
         
         }
 
@@ -1089,7 +739,7 @@ class WorldScene {
         if (!e) {
             
             this.postProcessor.clearOutlineObjects();
-            this.clearObjectsPanel();
+            this.guiMaker.clearObjectsPanel();
 
         }
 
@@ -1214,7 +864,7 @@ class WorldScene {
             updatables.push(this.thirdPersonCamera);
             // this.scene.add(...this.thirdPersonCamera.rayArrows);
 
-            this.controls.defControl.enabled = false;
+            this.controls.enableDefControl(false);
 
             this.thirdPersonCamera.setPositionFromPlayer();
 
@@ -1225,7 +875,7 @@ class WorldScene {
             updatables.push(this.controls.defControl);
             // this.scene.remove(...this.thirdPersonCamera.rayArrows);
 
-            this.controls.defControl.enabled = true;
+            this.controls.enableDefControl();
             
             this.thirdPersonCamera.resetInterectObjects();
 
@@ -1244,7 +894,7 @@ class WorldScene {
             updatables.splice(idx, 1);
             updatables.push(this.inspectorCamera);
 
-            this.controls.defControl.enabled = false;
+            this.controls.enableDefControl(false);
 
         } else {
 
@@ -1252,29 +902,12 @@ class WorldScene {
             updatables.splice(idx, 1);
             updatables.push(this.controls.defControl);
 
-            this.controls.defControl.enabled = true;
+            this.controls.enableDefControl();
 
         }
 
     }
 
-    bindLightShadowHelperGuiCallback() {
-
-        // bind callback to light helper and shadow cam helper
-        this.shadowLightObjects.forEach(lightObj => {
-
-            const { specs } = this.guiRightLightsSpecs.details.find(d => d.parent === lightObj.name);
-
-            const changeObjs = specs.filter(s => s.hasOwnProperty('changeFn') && (s.type === 'light-num' || s.type === 'color' || s.type === 'groundColor' || s.type === 'angle'));
-
-            changeObjs.forEach(o => {
-
-                o['changeFn'] = updateSingleLightCamera.bind(this, lightObj, false);
-
-            });
-
-        });
-    }
 }
 
 export { WorldScene };

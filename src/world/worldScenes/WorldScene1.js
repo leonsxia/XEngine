@@ -192,26 +192,27 @@ class WorldScene1 extends WorldScene  {
 
         // Gui setup
         if (worldSceneSpecs.enableGui) {
-            this.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr};
-            this.setupGuiConfig();
+
+            this.guiMaker.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr};
+
+            this.guiMaker.leftActions = {
+                'actions': {
+                    start: this.start.bind(this),
+                    stop: this.stop.bind(this),
+                    moveCamera: this.moveCamera.bind(this, false),
+                    resetCamera: this.resetCamera.bind(this, false),
+                    focusNext: this.focusNext.bind(this, false)
+                }
+            };
+
+            this.guiMaker.setupGuiConfig();
+            
         }
         
         this.initContainer();
         this.#loaded = true;
     }
 
-    setupLeftFunctionPanle() {
-        // assgin left panel parents
-        Object.assign(this.guiLeftSpecs.parents, {
-            'actions': {
-                start: this.start.bind(this),
-                stop: this.stop.bind(this),
-                moveCamera: this.moveCamera.bind(this, false),
-                resetCamera: this.resetCamera.bind(this, false),
-                focusNext: this.focusNext.bind(this, false)
-            }
-        });
-    }
 }
 
 export { WorldScene1 };
