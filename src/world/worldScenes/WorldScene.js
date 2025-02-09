@@ -40,7 +40,7 @@ class WorldScene {
     players = [];
     rooms = [];
     cPlanes = [];
-    cBoxes = [];
+    cObjects = [];
     airWalls = [];
     player;
     loadSequence = 0;
@@ -662,12 +662,6 @@ class WorldScene {
 
         });
 
-        this.cBoxes.forEach(cb => {
-
-            cb.setWireframe(s);
-
-        });
-
     }
 
     showCPlaneLines(show) {
@@ -677,12 +671,6 @@ class WorldScene {
         this.cPlanes.forEach(cp => {
 
             if (cp.line) cp.line.visible = s;
-
-        });
-
-        this.cBoxes.forEach(cb => {
-
-            if (cb.line) cb.line.visible = s;
 
         });
 
@@ -916,6 +904,18 @@ class WorldScene {
         this.airWalls.forEach(w => {
 
             w.mesh.visible = s;
+
+        });
+
+    }
+
+    showCObjects(show) {
+
+        const s = show === 'show' ? true : false;
+
+        this.cObjects.forEach(obj => {
+
+            obj.setVisible(s);
 
         });
 

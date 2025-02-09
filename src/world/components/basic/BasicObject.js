@@ -218,6 +218,12 @@ class BasicObject {
 
     }
 
+    get scale() {
+
+        return this.mesh.scale;
+
+    }
+
     get scaleX() {
 
         return this.mesh.scale.x;

@@ -367,13 +367,29 @@ class GuiMaker {
 
         }
 
+        if ($scene.cObjects.length > 0) {
+
+            const folder = makeFolderGuiConfig({ folder: 'cObjects Control', parent: 'cObjectsControl', close: true });
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Visible',
+                value: { Visible: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showCObjects.bind($scene)
+            }));
+
+            this.guiLeftSpecs.details.push(folder);
+
+        }
+
         if ($scene.airWalls.length > 0) {
 
             const folder = makeFolderGuiConfig({ folder: 'Air Walls Control', parent: 'airWallsControl', close: true });
 
             folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'Visibile',
-                value: { Visibile: 'hide' },
+                name: 'Visible',
+                value: { Visible: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: $scene.showAirWalls.bind($scene)

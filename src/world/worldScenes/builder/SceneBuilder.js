@@ -110,6 +110,8 @@ class SceneBuilder {
                 worldScene.cPlanes = worldScene.cPlanes.concat(room.walls, room.insideWalls, room.airWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
 
                 worldScene.airWalls.push(...room.airWalls);
+
+                worldScene.cObjects.push(...room.cObjects);
     
                 worldScene.scene.add(room.group);
 
@@ -917,6 +919,24 @@ class SceneBuilder {
                         }
                         
                     }
+
+                    if (find.father.isAirWall) {
+
+                        if (updateSetupOnly) {
+
+                            _origin.scale = this.scaleArr(find.father.scale);
+
+                        } else {
+
+                            const { scale = [1, 1, 1] } = _target;
+
+                            find.father.setScale(scale);
+                            find.father.updateRay();
+                            find.father.updateOBB?.();
+                        
+                        }
+
+                    }
                 }
                 
             }
@@ -1579,6 +1599,12 @@ class SceneBuilder {
     rotationArr(objRotation) {
 
         return [objRotation.x, objRotation.y, objRotation.z];
+
+    }
+
+    scaleArr(objScale) {
+
+        return [objScale.x, objScale.y, objScale.z];
 
     }
 

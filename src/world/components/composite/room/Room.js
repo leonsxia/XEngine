@@ -30,6 +30,7 @@ class Room {
     stairsStepFronts = [];
     stairsStepTops = [];
     waterCubes = [];
+    cObjects = [];
 
     lights = [];
     directionalLightTarget = new Object3D();
@@ -342,6 +343,8 @@ class Room {
                 this.stairsStepTops.push(g.stepTop);
 
             }
+
+            g.cObjects?.forEach(obj => this.cObjects.push(obj));
 
         });
 
