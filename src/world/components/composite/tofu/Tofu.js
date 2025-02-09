@@ -11,6 +11,9 @@ const SLOWDOWN_COEFFICIENT = .78;
 const SLOPE_COEFFICIENT = .8;
 const PLAYER_DETECT_SCOPE_MIN = 1;
 
+const HEAD_LENGTH = .5;
+const HEAD_WIDTH = .1;
+
 class Tofu extends Moveable2D {
 
     name = '';
@@ -506,33 +509,31 @@ class Tofu extends Moveable2D {
         const posY = this.height * .5;
         const posX = this.width * .5 - this.#rayPadding;
         const posZ = this.depth * .5 - this.#rayPadding;
-        const headLength = .5;
-        const headWidth = .1;
         let fromVec3;
 
         // left
         fromVec3 = new Vector3(posX, posY, posZ);
         this.leftRay = new Raycaster(fromVec3, dir, 0, length);
         this.leftRay.layers.set(PLAYER_RAY_LAYER);
-        this.leftArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+        this.leftArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
         this.rightRay = new Raycaster(fromVec3, dir, 0, length);
         this.rightRay.layers.set(PLAYER_RAY_LAYER);
-        this.rightArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+        this.rightArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
         this.backLeftRay = new Raycaster(fromVec3, dir, 0, length);
         this.backLeftRay.layers.set(PLAYER_RAY_LAYER);
-        this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+        this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
         this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
         this.backRightRay.layers.set(PLAYER_RAY_LAYER);
-        this.backRightArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+        this.backRightArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
     }
@@ -559,7 +560,7 @@ class Tofu extends Moveable2D {
         this.leftRay.far = length;
         this.leftArrow.position.copy(fromVec3);
         this.leftArrow.setDirection(dir);
-        this.leftArrow.setLength(length);
+        this.leftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
@@ -568,7 +569,7 @@ class Tofu extends Moveable2D {
         this.rightRay.far = length;
         this.rightArrow.position.copy(fromVec3);
         this.rightArrow.setDirection(dir);
-        this.rightArrow.setLength(length);
+        this.rightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
@@ -577,7 +578,7 @@ class Tofu extends Moveable2D {
         this.backLeftRay.far = length;
         this.backLeftArrow.position.copy(fromVec3);
         this.backLeftArrow.setDirection(dir);
-        this.backLeftArrow.setLength(length);
+        this.backLeftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
@@ -586,7 +587,7 @@ class Tofu extends Moveable2D {
         this.backRightRay.far = length;
         this.backRightArrow.position.copy(fromVec3);
         this.backRightArrow.setDirection(dir);
-        this.backRightArrow.setLength(length);
+        this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
 

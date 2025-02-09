@@ -153,6 +153,7 @@ class SimplePhysics {
 
         plane.mesh.updateWorldMatrix(true, false);
         wallMesh.applyMatrix4(plane.mesh.matrixWorld);
+        wallMesh.scale.set(1, 1, 1);    // ignore wall plane scale
         wallMesh.updateMatrixWorld();
 
         const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();

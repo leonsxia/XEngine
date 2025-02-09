@@ -218,6 +218,30 @@ class BasicObject {
 
     }
 
+    get scaleX() {
+
+        return this.mesh.scale.x;
+
+    }
+
+    set scaleX(val) {
+
+        this.mesh.scale.x = val;
+
+    }
+
+    get scaleY() {
+
+        return this.mesh.scale.y;
+
+    }
+
+    set scaleY(val) {
+
+        this.mesh.scale.y = val;
+
+    }
+
     get visible() {
 
         return this.mesh.visible;

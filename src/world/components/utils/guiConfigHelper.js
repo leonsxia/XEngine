@@ -4,8 +4,10 @@ const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
 const DEFALUT_GRID_DEPTH = 50;
 const NUMBER_STEPS = .01;
+const SCALE_MIN = .1;
+const SCALE_MAX = 10;
 const PICKED_NUMBER_STEPS = .01;
-const PICKED_ANGLE_STEPS = .01;
+const PICKED_ANGLE_STEPS = .1;
 
 function combineGuiConfigs(...details) {
     let specs = [];
@@ -767,6 +769,38 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
+        if (object.father.isAirWall) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleX',
+                prop: 'scale.x',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number',
+                changeFn: () => {
+
+                    object.father.updateRay();
+                    object.father.updateOBB();
+
+                }
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleY',
+                prop: 'scale.y',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number',
+                changeFn: () => {
+
+                    object.father.updateRay();
+                    object.father.updateOBB();
+
+                }
+            }));
+
+        }
+
         if (object.father.isFloor) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -777,7 +811,7 @@ function makeObjectsGuiConfig(objects) {
                 type: 'object-angle',
                 changeFn: () => {
 
-                        object.father.updateOBB();
+                    object.father.updateOBB();
 
                 }
             }));
@@ -796,7 +830,7 @@ function makeObjectsGuiConfig(objects) {
                     type: 'object-angle',
                     changeFn: () => {
     
-                            object.father.updateOBB();
+                        object.father.updateOBB();
     
                     }
                 }));
@@ -840,8 +874,8 @@ function makeObjectsGuiConfig(objects) {
                 type: 'object-angle',
                 changeFn: () => {
 
-                        object.father.updateOBB?.();
-                        object.father.updateOBBs?.();
+                    object.father.updateOBB?.();
+                    object.father.updateOBBs?.();
 
                 }
             }));
@@ -854,8 +888,8 @@ function makeObjectsGuiConfig(objects) {
                 type: 'object-angle',
                 changeFn: () => {
 
-                        object.father.updateOBB?.();
-                        object.father.updateOBBs?.();
+                    object.father.updateOBB?.();
+                    object.father.updateOBBs?.();
 
                 }
             }));
@@ -868,8 +902,8 @@ function makeObjectsGuiConfig(objects) {
                 type: 'object-angle',
                 changeFn: () => {
 
-                        object.father.updateOBB?.();
-                        object.father.updateOBBs?.();
+                    object.father.updateOBB?.();
+                    object.father.updateOBBs?.();
 
                 }
             }));
