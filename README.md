@@ -2,6 +2,7 @@
 
 install:
 npm install
+
 run:
 npx vite
 
