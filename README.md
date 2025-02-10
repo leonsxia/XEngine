@@ -1,12 +1,9 @@
 # XEngine
 
-------------------------
 install:
 npm install
-------------------------
 run:
 npx vite
-------------------------
 
 This is a 3D scene manager and simple physics simulator based on three.js.
 
