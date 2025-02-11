@@ -71,3 +71,7 @@ h1 {
     background-color: #111;
     display: none;
 }
+
+.control-inactive button {
+    color: #888;
+}

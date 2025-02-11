@@ -6,7 +6,10 @@ const CONTROL_TITLES = ['Menu', 'Lights Control', 'Objects Control'];
 const PLAYER_CONTROL = 'Player Control';
 const TPC_CONTROL = 'Third Person Camera';
 const IC_CONTROL = 'Inspector Camera';
-const WEAPONS_CONTROL = 'Weapons';
+const SELECT_WEAPONS = 'Select Weapons';
+const SELECT_WEAPONS_PARENT = 'weapon_actions';
+const INACTIVES = '_inactive';
+const CLASS_INACTIVE = 'control-inactive';
 
 class Gui {
 
@@ -19,6 +22,8 @@ class Gui {
     #sceneChanged = false;
     #currentRightPanel;
     #initialRightPanel;
+
+    _lockWeapons = true;
 
     constructor () {
 
@@ -162,7 +167,7 @@ class Gui {
 
             detail.specs.forEach(spec => {
 
-                if (spec.value || spec.changeFn) {
+                if (spec.value || spec.changeFn || spec.type === 'function') {
 
                     Object.defineProperty(spec, 'parent', {
                         value: target ?? spec.prop, // if target not exists, will use prop for identifier/parent check in object panel.
@@ -228,7 +233,7 @@ class Gui {
 
                     case 'function':
 
-                        this.bindFunctions(folder, parent);
+                        this.bindFunctions(folder, parent).identifier = target;
 
                         break;
                 }
@@ -249,9 +254,23 @@ class Gui {
 
         fnames.forEach(f => {
 
-            parent.add(functions, f);
+            if (f !== INACTIVES) parent.add(functions, f);
 
         });
+
+        parent.controllers.forEach(ctl => {
+            
+            this.bindControllerProperties(ctl);
+
+            if (functions[INACTIVES]?.find(item => item === ctl._name)) {
+
+                ctl.domElement.classList.add(CLASS_INACTIVE);
+
+            }
+        
+        });
+
+        return parent;
 
     }
 
@@ -259,7 +278,12 @@ class Gui {
 
         gui.onChange(event => {
 
-            const find = eventObjs.find(o => (o.name === event.property || o.prop === event.controller._name) && o.parent === event.controller.identifier);
+            const find = eventObjs.find(o => 
+                (
+                    o.name === event.property || 
+                    o.prop === event.controller._name 
+                ) && o.parent === event.controller.identifier || 
+                o.type === 'function' && o.parent === event.controller.parent.identifier);
 
             if (find) {
 
@@ -295,18 +319,7 @@ class Gui {
 
                     case 'control-dropdown':
                         // if (this.#sceneChanged) return;
-                    case 'dropdown':                        
-
-                        if (val === 'yes') {
-                            
-                            if (find.parent === 'weapons') {
-
-                                this.#guis[0].folders.find(f => f._title === WEAPONS_CONTROL)
-                                    .controllers.find(c => c._name !== find.name)
-                                    .setValue('no');
-
-                            }
-                        }
+                    case 'dropdown':
 
                         find.changeFn(val);
 
@@ -314,35 +327,23 @@ class Gui {
 
                     case 'role-dropdown':
 
+                        const gui = this.#guis[0];
+
                         find.changeFn(val, false);
 
-                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
-                            .controllers.find(c => c._name === 'BBHelper')
-                            .setValue('hide');
+                        this.findController(gui, PLAYER_CONTROL, 'BBHelper').setValue('hide');
+          
+                        this.findController(gui, PLAYER_CONTROL, 'BB').setValue('hide');
 
-                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
-                            .controllers.find(c => c._name === 'BB')
-                            .setValue('hide');
+                        this.findController(gui, PLAYER_CONTROL, 'BBW').setValue('hide');
 
-                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
-                            .controllers.find(c => c._name === 'BBW')
-                            .setValue('hide');
+                        this.findController(gui, PLAYER_CONTROL, 'BF').setValue('hide');
 
-                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
-                            .controllers.find(c => c._name === 'BF')
-                            .setValue('hide');
+                        this.findController(gui, PLAYER_CONTROL, 'PushingBox').setValue('hide');
 
-                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
-                            .controllers.find(c => c._name === 'PushingBox')
-                            .setValue('hide');
+                        this.findController(gui, PLAYER_CONTROL, 'Arrows').setValue('hide');
 
-                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
-                            .controllers.find(c => c._name === 'Arrows')
-                            .setValue('hide');
-
-                        this.#guis[0].folders.find(f => f._title === PLAYER_CONTROL)
-                            .controllers.find(c => c._name === 'Skeleton')
-                            .setValue('hide');
+                        this.findController(gui, PLAYER_CONTROL, 'Skeleton').setValue('hide');
 
                         break;
 
@@ -352,15 +353,11 @@ class Gui {
                             
                             if (find.parent === 'inspectorCamera') {
 
-                                this.#guis[0].folders.find(f => f._title === TPC_CONTROL)
-                                    .controllers.find(c => c._name === 'TPC')
-                                    .setValue('disable');
+                                this.findController(this.#guis[0], TPC_CONTROL, 'TPC').setValue('disable');
 
                             } else if (find.parent === 'thirdPersonCamera') {
 
-                                this.#guis[0].folders.find(f => f._title === IC_CONTROL)
-                                    .controllers.find(c => c._name === 'InsCam')
-                                    .setValue('disable');
+                                this.findController(this.#guis[0], IC_CONTROL, 'InsCam').setValue('disable');
 
                             }
                         }
@@ -384,12 +381,36 @@ class Gui {
 
                         break;
 
+                    case 'function':
+
+                        if (!this._lockWeapons && find.parent === SELECT_WEAPONS_PARENT) {
+
+                            const isActive = !event.controller.domElement.classList.contains(CLASS_INACTIVE);
+
+                            if (isActive) {
+
+                                event.controller.setInactive();
+
+                            } else {
+
+                                event.controller.setActive();
+                                this.findOtherControllers(this.#guis[0], SELECT_WEAPONS, event.controller._name)
+                                    .forEach(ctl => ctl.setInactive());
+
+                            }
+
+                        }
+
+                        break;
+
                 }
             }
 
             if (this.#attachedTo.staticRendering && !this.#sceneChanged && find?.type !== 'scene-dropdown') 
                 this.#attachedTo.render();
+
         });
+
     }
 
     show() {
@@ -465,7 +486,48 @@ class Gui {
         this.#guis[2].children.forEach(c => c.destroy());
 
     }
+
+    findController(gui, folder, controller) {
+
+        const ctl = gui.folders
+            .find(f => f._title === folder).controllers
+            .find(c => c._name === controller);
+
+        return ctl;
+        
+    }
+
+    findOtherControllers(gui, folder, controller) {
+
+        const ctls = gui.folders
+            .find(f => f._title === folder).controllers
+            .filter (c => c._name !== controller);
+
+        return ctls;
+
+    }
+
+    bindControllerProperties(controller) {
+
+        controller.setInactive = () => {
+
+            controller.domElement.classList.add(CLASS_INACTIVE);
+
+        };
+
+        controller.setActive = () => {
+
+            controller.domElement.classList.remove(CLASS_INACTIVE);
+
+        };
+
+    }
     
 }
 
-export { Gui };
+export { 
+    Gui, 
+    PLAYER_CONTROL, 
+    SELECT_WEAPONS, SELECT_WEAPONS_PARENT,
+    TPC_CONTROL, IC_CONTROL
+};

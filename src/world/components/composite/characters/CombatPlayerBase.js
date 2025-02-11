@@ -28,6 +28,8 @@ class CombatPlayerBase extends Tofu {
     _armedWeapon;
     _meleeWeapon;
 
+    isCombatPlayer = true;
+
     constructor(specs) {
 
         const { name, src, receiveShadow = true, castShadow = true, hasBones = true } = specs;

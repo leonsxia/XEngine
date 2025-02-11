@@ -1,6 +1,7 @@
 import { updateSingleLightCamera } from "../components/shadowMaker";
+import { WEAPONS } from "../components/utils/constants";
 import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig } from "../components/utils/guiConfigHelper";
-import { Gui } from "./Gui";
+import { Gui, IC_CONTROL, PLAYER_CONTROL, SELECT_WEAPONS, SELECT_WEAPONS_PARENT, TPC_CONTROL } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcesser";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
@@ -215,7 +216,7 @@ class GuiMaker {
         if ($scene.thirdPersonCamera) {
 
             this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Third Person Camera',
+                folder: TPC_CONTROL,
                 parent: 'thirdPersonCamera',
                 name: 'TPC',
                 value: { TPC: 'disable' },
@@ -230,7 +231,7 @@ class GuiMaker {
         if ($scene.inspectorCamera) {
 
             this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: 'Inspector Camera',
+                folder: IC_CONTROL,
                 parent: 'inspectorCamera',
                 name: 'InsCam',
                 value: { InsCam: 'disable' },
@@ -244,7 +245,7 @@ class GuiMaker {
 
         if ($scene.player) {
 
-            const folder = makeFolderGuiConfig({ folder: 'Player Control', parent: 'playerControl', close: true });
+            const folder = makeFolderGuiConfig({ folder: PLAYER_CONTROL, parent: 'playerControl', close: true });
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BBHelper',
@@ -313,25 +314,16 @@ class GuiMaker {
             this.guiLeftSpecs.details.push(folder);
 
             // add weapons control
-            const folderWeapon = makeFolderGuiConfig({folder: 'Weapons', parent: 'weapons', close: true});
+            const weaponActions = {
+                'weapon_actions': {
+                    'Pistol1': $scene.armWeapon.bind($scene, WEAPONS.PISTOL1),
+                    'Magnum357': $scene.armWeapon.bind($scene, WEAPONS.REVOLVER),
+                    _inactive: ['Magnum357']
+                }
+            };
 
-            folderWeapon.specs.push(makeFolderSpecGuiConfig({
-                name: 'Arm Pistol1',
-                value: { 'Arm Pistol1': 'yes' },
-                params: ['yes', 'no'],
-                type: 'dropdown',
-                changeFn: $scene.armWeaponPistol1.bind($scene)
-            }));
-
-            folderWeapon.specs.push(makeFolderSpecGuiConfig({
-                name: 'Arm Magnum357',
-                value: { 'Arm Magnum357': 'no' },
-                params: ['yes', 'no'],
-                type: 'dropdown',
-                changeFn: $scene.armMagnum357.bind($scene)
-            }));
-
-            this.guiLeftSpecs.details.push(folderWeapon);
+            this.setupFunctionPanel(this.guiLeftSpecs, weaponActions);
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(SELECT_WEAPONS, SELECT_WEAPONS_PARENT, true));
 
         }
 
@@ -415,7 +407,13 @@ class GuiMaker {
     setupLeftFunctionPanel() {
 
         // assgin left panel parents
-        Object.assign(this.guiLeftSpecs.parents, this.leftActions);
+        this.setupFunctionPanel(this.guiLeftSpecs, this.leftActions);
+
+    }
+
+    setupFunctionPanel(panelSpecs, functions) {
+
+        Object.assign(panelSpecs.parents, functions);
 
     }
 

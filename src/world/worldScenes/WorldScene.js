@@ -615,37 +615,56 @@ class WorldScene {
 
     }
 
-    armWeaponPistol1(arm) {
+    armWeapon(name) {
 
-        if (!this.player.weapons || this.player.attacking) return this;
-
-        const s = arm === 'yes' ? true : false;
-
-        if (s) {
-
-            this.player.armWeapon(this.player.weapons[WEAPONS.PISTOL1], this.player.armedIdleNick);
-
-        } else {
-
-            this.player.armWeapon(null, this.player.idleNick);
-
+        if (!this.player.isCombatPlayer) {
+            
+            this.guiMaker.gui._lockWeapons = true;
+            // console.log(`weapons locked: ${this.guiMaker.gui._lockWeapons}`);
+            return;
+        
         }
 
-    }
+        this.guiMaker.gui._lockWeapons = false;
+        // console.log(`weapons locked: ${this.guiMaker.gui._lockWeapons}`);
 
-    armMagnum357(arm) {
+        switch(name) {
 
-        if (!this.player.weapons || this.player.attacking) return this;
+            case WEAPONS.PISTOL1:
 
-        const s = arm === 'yes' ? true : false;
+                {
+                    const weapon = this.player.weapons[WEAPONS.PISTOL1];
 
-        if (s) {
+                    if (!this.player._armedWeapon || this.player._armedWeapon !== weapon) {
 
-            this.player.armWeapon(this.player.weapons[WEAPONS.REVOLVER], this.player.armedIdleNick);
+                        this.player.armWeapon(weapon, this.player.armedIdleNick);
 
-        } else {
+                    } else {
 
-            this.player.armWeapon(null, this.player.idleNick);
+                        this.player.armWeapon(null, this.player.idleNick);
+
+                    }
+                }
+
+                break;
+
+            case WEAPONS.REVOLVER:
+
+                {
+                    const weapon = this.player.weapons[WEAPONS.REVOLVER];
+
+                    if (!this.player._armedWeapon || this.player._armedWeapon !== weapon) {
+
+                        this.player.armWeapon(weapon, this.player.armedIdleNick);
+
+                    } else {
+
+                        this.player.armWeapon(null, this.player.idleNick);
+
+                    }
+                }
+
+                break;
 
         }
 
