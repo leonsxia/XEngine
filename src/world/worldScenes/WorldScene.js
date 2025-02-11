@@ -186,8 +186,7 @@ class WorldScene {
 
         this.staticRendering = false;
         this.controls.initPreCoordinates();
-        this.controls.defControl.enableDamping = true;
-        this.controls.defControl.dampingFactor = 0.1; // default 0.05
+        this.controls.setDamping(true, 0.1); // default damping factor 0.05
         this.loop.start(this.guiMaker.gui.stats);
         this.#paused = false;
 
@@ -196,7 +195,7 @@ class WorldScene {
     stop() {
 
         this.staticRendering = true;
-        this.controls.defControl.enableDamping = false;
+        this.controls.setDamping(false);
         this.loop.stop();
         this.#paused = true;
 

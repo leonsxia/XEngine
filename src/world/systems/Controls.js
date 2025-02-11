@@ -17,6 +17,7 @@ class WorldControls {
     #panels = [];
     #preTarget;
     #preCamPos;
+    _enableDamping = false;
     #logger = new Logger(DEBUG, 'WorldControls');
 
     constructor(camera, canvas) {
@@ -28,7 +29,7 @@ class WorldControls {
         // damping and auto rotation require
         // the controls to be updated each frame
         // controls.autoRotate = true;
-        this.#controls.enableDamping = false;
+        this.#controls.enableDamping = this._enableDamping;
         this.#controls.update();
     
         this.resetTick();
@@ -49,6 +50,16 @@ class WorldControls {
 
         }
 
+    }
+
+    setDamping(enable, factor) {
+
+        this.#controls.enableDamping = enable;
+
+        if (factor) this.#controls.dampingFactor = factor;
+        
+        this._enableDamping = enable;
+        
     }
 
     get defControl() {
@@ -103,27 +114,8 @@ class WorldControls {
 
             this.#length = 0;
             this.#controls.enabled = true;
-
-            const tarX = this.#controls.target.x.toFixed(4);
-            const tarY = this.#controls.target.y.toFixed(4);
-            const tarZ = this.#controls.target.z.toFixed(4);
-            const camX = this.#thisCamera.position.x.toFixed(4);
-            const camY = this.#thisCamera.position.y.toFixed(4);
-            const camZ = this.#thisCamera.position.z.toFixed(4);
-
-            if (this.coordinatesEqual(this.#preTarget, {x: tarX, y: tarY, z: tarZ}) && 
-                this.coordinatesEqual(this.#preCamPos, {x: camX, y: camY, z: camZ})) {
-                    
-                this.setPanelState(false);
-
-            } else {
-
-                this.setPanelState(true);
-
-            }
-
-            this.setPreCoordinates(this.#controls.target, this.#thisCamera.position);
-
+            this.#controls.enableDamping = this._enableDamping;
+            
             this.#controls.update();
 
         };
@@ -159,10 +151,10 @@ class WorldControls {
     moveCamera(dist) {
 
         this.setPanelState(true);
+        this.#controls.enabled = false;
+        this.#controls.enableDamping = false;
 
         this.#controls.tick = (delta) => {
-
-            this.#controls.enabled = false;
 
             if (this.#length < dist) {
 
@@ -216,10 +208,10 @@ class WorldControls {
         let movingDist = 0;
 
         this.setPanelState(true);
+        this.#controls.enabled = false;
+        this.#controls.enableDamping = false;
 
         this.#controls.tick = (delta) => {
-
-            this.#controls.enabled = false;
 
             movingDist += delta * velPerSecond;
 
