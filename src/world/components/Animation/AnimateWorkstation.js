@@ -71,7 +71,7 @@ class AnimateWorkstation {
             
             action.startAt(0);
 
-            const { nick, loopOnce, timeScale, isDefault = false } = config;
+            const { nick, loopOnce = false, timeScale, isDefault = false } = config;
             if (loopOnce) {
 
                 action.clampWhenFinished = true;
@@ -93,6 +93,7 @@ class AnimateWorkstation {
                 name: action._clip.name,
                 nick,
                 isDefault,
+                loopOnce,
                 callback: null
             };
 
@@ -112,7 +113,7 @@ class AnimateWorkstation {
 
                 this.setWeight(action, 1);
                 this.activeAction = this.previousAction = action;
-                action.play();
+                // action.play();
 
             } else {
 
@@ -120,7 +121,11 @@ class AnimateWorkstation {
 
             }
 
-            // action.play();
+            if (!action.loopOnce) {
+
+                action.play();
+
+            }
 
         }
 
