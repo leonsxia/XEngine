@@ -54,14 +54,16 @@ class SoldierFemale extends CombatPlayerBase {
             name: `${name}_pistol`,
             position: [- .18, - .028 , .065],
             rotation: [- 0.35, - 1.3, - 1.6],
-            fireRate: 1.2
+            fireRate: 1.2,
+            ammo: 12
         });
 
         this.weapons[WEAPONS.REVOLVER] = new Revolver({
             name: `${name}_magnum357`,
             position: [- .168, - .005 , .075],
             rotation:[- 0.35, - 1.3, - 1.6],
-            fireRate: 0.8
+            fireRate: 0.8,
+            ammo: 6
         });
 
         this.weapons[WEAPONS.BAYONET] = new Bayonet({
@@ -72,9 +74,9 @@ class SoldierFemale extends CombatPlayerBase {
             fireRate: 1.25
         });
 
-        this.weaponActionMapping[WEAPONS.PISTOL1] = { idle: CLIPS.IDLE_GUN, shoot: CLIPS.IDLE_GUN_SHOOT };
-        this.weaponActionMapping[WEAPONS.REVOLVER] = { idle: CLIPS.IDLE_GUN, shoot: CLIPS.IDLE_GUN_SHOOT };
-        this.weaponActionMapping[WEAPONS.BAYONET] = { attack: CLIPS.SWORD_SLASH };
+        this.weaponActionMapping[WEAPONS.PISTOL1] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.7 };
+        this.weaponActionMapping[WEAPONS.REVOLVER] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 1.05 };
+        this.weaponActionMapping[WEAPONS.BAYONET] = { attack: CLIPS.SWORD_SLASH, attackInterval: 1.03, prepareInterval: 0.5 };
 
         this.showTofu(false);
 
@@ -92,7 +94,7 @@ class SoldierFemale extends CombatPlayerBase {
         this.idleNick = CLIPS.IDLE.nick;
 
         this._meleeWeapon = this.weapons[WEAPONS.BAYONET];
-        this.AWS.setActionEffectiveTimeScale(this.meleeAttack, this._meleeWeapon.fireRate);
+        this.AWS.setActionEffectiveTimeScale(this.meleeAttackAction.attack.nick, this._meleeWeapon.fireRate);
 
         const holdingHand = this.gltf.getChildByName('WristR');
         holdingHand.attach(this.weapons[WEAPONS.PISTOL1].group);

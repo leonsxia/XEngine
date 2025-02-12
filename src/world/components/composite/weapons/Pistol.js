@@ -12,7 +12,7 @@ class Pistol extends WeaponBase {
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { src = GLTF_SRC } = specs;
-        const { fireRate = 1 } = specs;
+        const { fireRate = 1, ammo = 12 } = specs;
 
         super({
             name, scale, 
@@ -21,7 +21,7 @@ class Pistol extends WeaponBase {
             receiveShadow, castShadow,
             weaponType: WEAPONS.PISTOL1,
             src,
-            fireRate
+            fireRate, ammo
         });
 
     }

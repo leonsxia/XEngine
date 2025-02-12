@@ -71,7 +71,7 @@ class AnimateWorkstation {
             
             action.startAt(0);
 
-            const { nick, loopOnce = false, timeScale, isDefault = false } = config;
+            const { nick, loopOnce = false, startImmediately = true, timeScale, isDefault = false } = config;
             if (loopOnce) {
 
                 action.clampWhenFinished = true;
@@ -94,6 +94,7 @@ class AnimateWorkstation {
                 nick,
                 isDefault,
                 loopOnce,
+                startImmediately,
                 callback: null
             };
 
@@ -121,7 +122,7 @@ class AnimateWorkstation {
 
             }
 
-            if (!action.loopOnce) {
+            if (!action.loopOnce && action.startImmediately) {
 
                 action.play();
 

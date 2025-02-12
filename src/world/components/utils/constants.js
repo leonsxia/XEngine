@@ -324,13 +324,13 @@ const SOLDIER_FEMALE_CLIPS = {
     PUNCH_LEFT: { nick: 'punch_left', name: 'CharacterArmature|Punch_Left', idx: 13, enable: false },
     PUNCH_RIGHT: { nick: 'punch_right', name: 'CharacterArmature|Punch_Right', idx: 14, enable: true },
     ROLL: { nick: 'roll', name: 'CharacterArmature|Roll', idx: 15, enable: false },
-    RUN: { nick: 'run', name: 'CharacterArmature|Run', idx: 16, enable: true },
+    RUN: { nick: 'run', name: 'CharacterArmature|Run', idx: 16, startImmediately: false, enable: true },
     RUN_BACK: { nick: 'run_back', name: 'CharacterArmature|Run_Back', idx: 17, enable: true },
     RUN_LEFT: { nick: 'run_left', name: 'CharacterArmature|Run_Left', idx: 18, enable: false },
     RUN_RIGHT: { nick: 'run_right', name: 'CharacterArmature|Run_Right', idx: 19, enable: false },
     RUN_SHOOT: { nick: 'run_shoot', name: 'CharacterArmature|Run_Shoot', idx: 20, enable: false },
     SWORD_SLASH: { nick: 'sword_slash', name: 'CharacterArmature|Sword_Slash', idx: 21, enable: true },
-    WALK: { nick: 'walk', name: 'CharacterArmature|Walk', idx: 22, enable: true },
+    WALK: { nick: 'walk', name: 'CharacterArmature|Walk', idx: 22, startImmediately: false, enable: true },
     WAVE: { nick: 'wave', name: 'CharacterArmature|Wave', idx: 23, enable: false }
 };
 

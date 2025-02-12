@@ -914,6 +914,8 @@ class SimplePhysics {
                 }
             }
 
+            player.tickWeaponAttack?.(delta);
+
             player.finalTick?.(delta);
             
         });
