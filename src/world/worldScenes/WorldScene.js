@@ -635,13 +635,13 @@ class WorldScene {
                 {
                     const weapon = this.player.weapons[WEAPONS.PISTOL1];
 
-                    if (!this.player._armedWeapon || this.player._armedWeapon !== weapon) {
+                    if (!this.player.armedWeapon || this.player.armedWeapon !== weapon) {
 
-                        this.player.armWeapon(weapon, this.player.armedIdleNick);
+                        this.player.armWeapon(weapon);
 
                     } else {
 
-                        this.player.armWeapon(null, this.player.idleNick);
+                        this.player.armWeapon(null);
 
                     }
                 }
@@ -653,13 +653,13 @@ class WorldScene {
                 {
                     const weapon = this.player.weapons[WEAPONS.REVOLVER];
 
-                    if (!this.player._armedWeapon || this.player._armedWeapon !== weapon) {
+                    if (!this.player.armedWeapon || this.player.armedWeapon !== weapon) {
 
-                        this.player.armWeapon(weapon, this.player.armedIdleNick);
+                        this.player.armWeapon(weapon);
 
                     } else {
 
-                        this.player.armWeapon(null, this.player.idleNick);
+                        this.player.armWeapon(null);
 
                     }
                 }

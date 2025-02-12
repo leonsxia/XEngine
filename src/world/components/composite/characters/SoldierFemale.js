@@ -53,21 +53,28 @@ class SoldierFemale extends CombatPlayerBase {
         this.weapons[WEAPONS.PISTOL1] = new Pistol({ 
             name: `${name}_pistol`,
             position: [- .18, - .028 , .065],
-            rotation: [- 0.35, - 1.3, - 1.6]
+            rotation: [- 0.35, - 1.3, - 1.6],
+            fireRate: 1.2
         });
 
         this.weapons[WEAPONS.REVOLVER] = new Revolver({
             name: `${name}_magnum357`,
             position: [- .168, - .005 , .075],
-            rotation:[- 0.35, - 1.3, - 1.6]
+            rotation:[- 0.35, - 1.3, - 1.6],
+            fireRate: 0.8
         });
 
         this.weapons[WEAPONS.BAYONET] = new Bayonet({
             name: `${name}_bayonet`,
             scale: [.35, .3, .25],
             position: [- .18, .01 , .046],
-            rotation: [- .5, - 1, - .3]
+            rotation: [- .5, - 1, - .3],
+            fireRate: 1.25
         });
+
+        this.weaponActionMapping[WEAPONS.PISTOL1] = { idle: CLIPS.IDLE_GUN, shoot: CLIPS.IDLE_GUN_SHOOT };
+        this.weaponActionMapping[WEAPONS.REVOLVER] = { idle: CLIPS.IDLE_GUN, shoot: CLIPS.IDLE_GUN_SHOOT };
+        this.weaponActionMapping[WEAPONS.BAYONET] = { attack: CLIPS.SWORD_SLASH };
 
         this.showTofu(false);
 
@@ -82,9 +89,10 @@ class SoldierFemale extends CombatPlayerBase {
             super.init()
         ]);
 
-        this._armedWeapon = this.weapons[WEAPONS.PISTOL1];
-        // this._armedWeapon = this.weapons[WEAPONS.REVOLVER];
+        this.idleNick = CLIPS.IDLE.nick;
+
         this._meleeWeapon = this.weapons[WEAPONS.BAYONET];
+        this.AWS.setActionEffectiveTimeScale(this.meleeAttack, this._meleeWeapon.fireRate);
 
         const holdingHand = this.gltf.getChildByName('WristR');
         holdingHand.attach(this.weapons[WEAPONS.PISTOL1].group);
@@ -93,12 +101,7 @@ class SoldierFemale extends CombatPlayerBase {
 
         this.setupWeaponScale();
         
-        this.switchWeapon(this.weapons[WEAPONS.PISTOL1]);
-
-        this.switchIdleAction(CLIPS.IDLE_GUN.nick);
-
-        this.idleNick = CLIPS.IDLE.nick;
-        this.armedIdleNick = CLIPS.IDLE_GUN.nick;
+        this.armWeapon(this.weapons[WEAPONS.PISTOL1]);
         
     }
 

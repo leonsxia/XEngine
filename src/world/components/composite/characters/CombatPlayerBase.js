@@ -15,17 +15,16 @@ class CombatPlayerBase extends Tofu {
     AWS;
 
     weapons = {};
+    weaponActionMapping = {};
 
     _clips = {};
     _animationSettings = {};
 
     _tempAction;
 
-    _idleNick;
-    idleNick;
-    armedIdleNick;
-
-    _armedWeapon;
+    _idleNick;  // current idle
+    idleNick;   // default idle
+    armedWeapon;
     _meleeWeapon;
 
     isCombatPlayer = true;
@@ -68,6 +67,12 @@ class CombatPlayerBase extends Tofu {
 
     }
 
+    get meleeAttack() {
+
+        return this.weaponActionMapping[this._meleeWeapon.weaponType].attack.nick;
+
+    }
+
     setupWeaponScale() {
 
         const { scale = [1, 1, 1] } = this.specs;
@@ -84,18 +89,19 @@ class CombatPlayerBase extends Tofu {
 
     }
 
-    armWeapon(armedWeapon, idleName) {
+    armWeapon(weapon) {
 
-        if (armedWeapon) {
+        if (weapon) {
 
-            this.switchWeapon(armedWeapon);
-            this.switchIdleAction(idleName);
-            this._armedWeapon = armedWeapon;
+            this.switchWeapon(weapon);
+            this.switchIdleAction(this.weaponActionMapping[weapon.weaponType].idle.nick);
+            this.armedWeapon = weapon;
+            this.AWS.setActionEffectiveTimeScale(this.weaponActionMapping[weapon.weaponType].shoot.nick, weapon.fireRate);
 
         } else {
 
             this.switchWeapon();
-            this.switchIdleAction(idleName);
+            this.switchIdleAction(this.idleNick);
 
         }
 
@@ -121,7 +127,7 @@ class CombatPlayerBase extends Tofu {
 
         if (!weapon) {
 
-            this._armedWeapon = null;
+            this.armedWeapon = null;
 
             for (const item in this.weapons) {
 
@@ -155,9 +161,9 @@ class CombatPlayerBase extends Tofu {
 
     showArmedWeapon(show) {
 
-        if (this._armedWeapon) {
+        if (this.armedWeapon) {
 
-            this._armedWeapon.group.visible = show;
+            this.armedWeapon.group.visible = show;
 
         }
 
@@ -781,13 +787,13 @@ class CombatPlayerBase extends Tofu {
 
             this.#logger.log(`melee attack!`);
             this.switchWeapon(this._meleeWeapon);
-            this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this._clips.SWORD_SLASH.nick], this._animationSettings.MELEE, 1);
+            this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.meleeAttack], this._animationSettings.MELEE, 1);
 
         } else if (this.meleeing) {
 
             this.#logger.log(`cancel melee attack!`);
-            this.switchWeapon(this._armedWeapon);
-            this.AWS.prepareCrossFade(this.AWS.actions[this._clips.SWORD_SLASH.nick], this.AWS.previousAction, this._animationSettings.MELEE, this.AWS.previousAction.weight);
+            this.switchWeapon(this.armedWeapon);
+            this.AWS.prepareCrossFade(this.AWS.actions[this.meleeAttack], this.AWS.previousAction, this._animationSettings.MELEE, this.AWS.previousAction.weight);
 
         }
 
@@ -799,7 +805,7 @@ class CombatPlayerBase extends Tofu {
 
         this.#logger.func = this.gunPoint.name;
 
-        if (this.interacting || this.meleeing || !this._armedWeapon) {
+        if (this.interacting || this.meleeing || !this.armedWeapon) {
 
             return;
 
