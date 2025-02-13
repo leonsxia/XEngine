@@ -233,7 +233,11 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.setActionEffectiveWeight(this._clips.RUN.nick, 1);
+                    this.AWS.actions[this._clips.RUN.nick].callback = () => {
+
+                        this.AWS.setActionEffectiveWeight(this._clips.RUN.nick, 1);
+
+                    }
 
                 } else if (this.rotating) {
 
@@ -275,7 +279,7 @@ class CombatPlayerBase extends Tofu {
 
                     this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, 1);
 
-                };                
+                };
 
             } else if (!this.rotating) {
 
@@ -727,7 +731,11 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.setActionEffectiveWeight(this._clips.RUN.nick, 1);
+                    this.AWS.actions[this._clips.RUN.nick].callback = () => {
+
+                        this.AWS.setActionEffectiveWeight(this._clips.RUN.nick, 1);
+
+                    }
 
                 } else {
 
