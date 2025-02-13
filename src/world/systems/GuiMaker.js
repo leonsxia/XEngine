@@ -1,7 +1,7 @@
 import { updateSingleLightCamera } from "../components/shadowMaker";
 import { WEAPONS } from "../components/utils/constants";
 import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig } from "../components/utils/guiConfigHelper";
-import { Gui, IC_CONTROL, PLAYER_CONTROL, SELECT_WEAPONS, SELECT_WEAPONS_PARENT, TPC_CONTROL } from "./Gui";
+import { Gui, IC_CONTROL, PLAYER_CONTROL, SELECT_WEAPONS, WEAPONS_OPTIONS_PARENT, TPC_CONTROL, WEAPON_CONTROL, WEAPONS_ACTIONS_PARENT, WEAPON_ACTIONS } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcesser";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
@@ -314,16 +314,24 @@ class GuiMaker {
             this.guiLeftSpecs.details.push(folder);
 
             // add weapons control
-            const weaponActions = {
-                'weapon_actions': {
+            const weaponOptionsActions = {
+                'weapon_options_actions': {
                     'Pistol1': $scene.armWeapon.bind($scene, WEAPONS.PISTOL1),
-                    'Magnum357': $scene.armWeapon.bind($scene, WEAPONS.REVOLVER),
+                    'Magnum357': $scene.armWeapon.bind($scene, WEAPONS.REVOLVER),                    
                     _inactive: ['Magnum357']
                 }
             };
 
+            const weaponActions = {
+                'weapon_actions': {
+                    'Reload All Weapons': $scene.reloadAllWeapons.bind($scene)
+                }
+            }
+
+            this.setupFunctionPanel(this.guiLeftSpecs, weaponOptionsActions);
             this.setupFunctionPanel(this.guiLeftSpecs, weaponActions);
-            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(SELECT_WEAPONS, SELECT_WEAPONS_PARENT, true));
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(WEAPON_CONTROL, WEAPONS_OPTIONS_PARENT, SELECT_WEAPONS, true));
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(WEAPON_CONTROL, WEAPONS_ACTIONS_PARENT, WEAPON_ACTIONS, true));
 
         }
 

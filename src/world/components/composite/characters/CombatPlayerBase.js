@@ -3,7 +3,7 @@ import { AnimateWorkstation } from '../../Animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
 
 const DEBUG = false;
-const DEBUG_TIMER = true;
+const DEBUG_WEAPON = true;
 
 class CombatPlayerBase extends Tofu {
 
@@ -12,7 +12,7 @@ class CombatPlayerBase extends Tofu {
     gltf;
 
     #logger = new Logger(DEBUG, 'CombatPlayerBase');
-    #timerLogger = new Logger(DEBUG_TIMER, 'CombatPlayerBase');
+    #weaponLogger = new Logger(DEBUG_WEAPON, 'CombatPlayerBase');
 
     AWS;
 
@@ -84,19 +84,31 @@ class CombatPlayerBase extends Tofu {
 
     }
 
+    get weaponArray() {
+
+        const arr = [];
+
+        for (const item in this.weapons) {
+
+            arr.push(this.weapons[item]);
+
+        }
+
+        return arr;
+
+    }
+
     setupWeaponScale() {
 
         const { scale = [1, 1, 1] } = this.specs;
 
-        for (const item in this.weapons) {
-
-            const weaponItem = this.weapons[item];
+        this.weaponArray.forEach(weaponItem => {
 
             weaponItem.group.scale.x *= scale[0];
             weaponItem.group.scale.y *= scale[1];
             weaponItem.group.scale.z *= scale[2];
 
-        }
+        });
 
     }
 
@@ -140,20 +152,18 @@ class CombatPlayerBase extends Tofu {
 
             this.armedWeapon = null;
 
-            for (const item in this.weapons) {
+            this.weaponArray.forEach(weaponItem => {
 
-                const weaponItem = this.weapons[item];
                 weaponItem.group.visible = false;
 
-            }
+            });
             
             return;
 
         }
 
-        for (const item in this.weapons) {
+        this.weaponArray.forEach(weaponItem => {
 
-            const weaponItem = this.weapons[item];
             const { group } = weaponItem;
 
             if (weaponItem === weapon) {
@@ -166,7 +176,7 @@ class CombatPlayerBase extends Tofu {
 
             }
 
-        }
+        });
 
     }
 
@@ -948,6 +958,32 @@ class CombatPlayerBase extends Tofu {
 
     }
 
+    reloadWeapon(weapon) {
+
+        weapon.fillMagzine();
+
+    }
+
+    reloadAllWeapons() {
+
+        this.#weaponLogger.func = this.reloadAllWeapons.name;
+
+        const weapons = this.weaponArray;
+        
+        for (let i = 0; i < weapons.length; i++) {
+
+            const weaponItem = weapons[i];
+
+            if (!weaponItem.ammoCount) continue;
+
+            this.reloadWeapon(weaponItem);
+
+            this.#weaponLogger.log(`${weaponItem.weaponType} reload magzine, ammo count: ${weaponItem.ammo}`);
+
+        }
+
+    }
+
     startAttackTimer() {
 
         this._delta = 0;
@@ -957,7 +993,7 @@ class CombatPlayerBase extends Tofu {
 
     tickWeaponAttack(delta) {        
 
-        this.#timerLogger.func = this.tickWeaponAttack.name;        
+        this.#weaponLogger.func = this.tickWeaponAttack.name;        
 
         if (this.shooting || this.meleeing) {
 
@@ -976,12 +1012,12 @@ class CombatPlayerBase extends Tofu {
                     if (this.armedWeapon.magzineEmpty) {
 
                         this.cancelGunShoot();
-                        this.#timerLogger.log(`${this.armedWeapon.weaponType} magzine empty`);
+                        this.#weaponLogger.log(`${this.armedWeapon.weaponType} magzine empty`);
 
                     } else {
 
                         this.armedWeapon.ammo--;
-                        this.#timerLogger.log(`${this.armedWeapon.weaponType} fire ${this._i}, ammo count: ${this.armedWeapon.ammo}`);                    
+                        this.#weaponLogger.log(`${this.armedWeapon.weaponType} fire ${this._i}, ammo count: ${this.armedWeapon.ammo}`);                    
 
                     }
 
@@ -995,7 +1031,7 @@ class CombatPlayerBase extends Tofu {
                 if (this._delta >= attackInterval) {
 
                     this._i++;
-                    this.#timerLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}`);
+                    this.#weaponLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}`);
 
                 }
 

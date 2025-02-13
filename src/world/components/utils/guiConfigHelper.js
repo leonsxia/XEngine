@@ -24,11 +24,13 @@ function makeGuiPanel() {
     };
 }
 
-function makeFunctionGuiConfig(folder, parent, close = false) {
+function makeFunctionGuiConfig(folder, parent, subFolder, close = false, closeSub = false) {
     return {
         folder,
+        subFolder,
         parent,
         close,
+        closeSub,
         specs: [{
             value: null,
             type: 'function'

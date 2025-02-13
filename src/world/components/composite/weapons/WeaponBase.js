@@ -91,6 +91,12 @@ class WeaponBase {
 
     }
 
+    fillMagzine(ammo = this.ammoCount) {
+
+        this._ammo = ammo;
+        
+    }
+
 }
 
 export { WeaponBase };

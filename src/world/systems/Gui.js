@@ -6,8 +6,11 @@ const CONTROL_TITLES = ['Menu', 'Lights Control', 'Objects Control'];
 const PLAYER_CONTROL = 'Player Control';
 const TPC_CONTROL = 'Third Person Camera';
 const IC_CONTROL = 'Inspector Camera';
+const WEAPON_CONTROL = 'Weapons';
 const SELECT_WEAPONS = 'Select Weapons';
-const SELECT_WEAPONS_PARENT = 'weapon_actions';
+const WEAPON_ACTIONS = 'Weapon Actions';
+const WEAPONS_OPTIONS_PARENT = 'weapon_options_actions';
+const WEAPONS_ACTIONS_PARENT = 'weapon_actions';
 const INACTIVES = '_inactive';
 const CLASS_INACTIVE = 'control-inactive';
 
@@ -155,7 +158,24 @@ class Gui {
             let folder;
             const target = detail.parent;
 
-            if (needRoom && detail.room && rooms.length > 0) {
+            if (detail.subFolder) {
+
+                let findParentFolder = gui.folders.find(f => f._title === detail.folder);
+                if (!findParentFolder) {
+
+                    findParentFolder = gui.addFolder(detail.folder);
+
+                }
+
+                folder = findParentFolder.addFolder(detail.subFolder);
+
+                if (detail.close) {
+
+                    findParentFolder.close();
+
+                }
+
+            } else if (needRoom && detail.room && rooms.length > 0) {
 
                 folder = gui.folders.find(f => f._title === detail.room).addFolder(detail.folder)
 
@@ -240,7 +260,7 @@ class Gui {
 
             });
 
-            if (detail.close) {
+            if ((!detail.subFolder && detail.close) || detail.closeSub) {
 
                 folder.close();
 
@@ -383,7 +403,7 @@ class Gui {
 
                     case 'function':
 
-                        if (!this._lockWeapons && find.parent === SELECT_WEAPONS_PARENT) {
+                        if (!this._lockWeapons && find.parent === WEAPONS_OPTIONS_PARENT) {
 
                             const isActive = !event.controller.domElement.classList.contains(CLASS_INACTIVE);
 
@@ -499,7 +519,7 @@ class Gui {
 
     findOtherControllers(gui, folder, controller) {
 
-        const ctls = gui.folders
+        const ctls = gui.foldersRecursive()
             .find(f => f._title === folder).controllers
             .filter (c => c._name !== controller);
 
@@ -528,6 +548,6 @@ class Gui {
 export { 
     Gui, 
     PLAYER_CONTROL, 
-    SELECT_WEAPONS, SELECT_WEAPONS_PARENT,
+    WEAPON_CONTROL, SELECT_WEAPONS, WEAPON_ACTIONS, WEAPONS_ACTIONS_PARENT, WEAPONS_OPTIONS_PARENT,
     TPC_CONTROL, IC_CONTROL
 };

@@ -670,6 +670,14 @@ class WorldScene {
 
     }
 
+    reloadAllWeapons() {
+
+        if (!this.player.isCombatPlayer) return;
+
+        this.player.reloadAllWeapons();
+        
+    }
+
     showWireframe(show) {
 
         const s = show === 'show' ? true : false;
