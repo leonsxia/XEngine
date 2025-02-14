@@ -601,7 +601,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.setActionEffectiveWeight(this._idleNick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
                     this.AWS.clearActionCallback(this._clips.WALK.nick);
 
                 } else {
@@ -676,7 +676,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.setActionEffectiveWeight(this._idleNick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
                     this.AWS.clearActionCallback(this._clips.WALK.nick);
 
                 } else {
