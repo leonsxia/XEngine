@@ -420,22 +420,20 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.QUICK_TURN_WEIGHT);
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.QUICK_TURN_WEIGHT, -1);
                     
                 } else if (!this.rotating) {
 
                     this.#logger.log(`quick turn 1`);
                     this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.IDLE_TO_WALK, this._animationSettings.QUICK_TURN_WEIGHT);
-                    // this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                    this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
 
                 } else {
 
                     this.#logger.log(`back walk turn`);
-                    // this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                    this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
 
                 }
-
-                this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
 
             } else {
 

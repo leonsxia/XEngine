@@ -207,7 +207,7 @@ class AnimateWorkstation {
 
             this.logger.log(`end ${endAction.name} callback`);
             endAction.callback();
-            this.logger.log(`end ${endAction.name} weight: ${endAction.weight}`);
+            this.logger.log(`end ${endAction.name} weight: ${endAction.weight}, timeScale: ${endAction.timeScale}`);
             endAction.callback = null;
 
         }
@@ -216,7 +216,7 @@ class AnimateWorkstation {
         // Crossfade with warping - you can also try without warping by setting the third parameter to false
         startAction.action.crossFadeTo(endAction.action, duration, true);
         // this.previousAction.stop();
-        this.logger.log(`start action: ${startAction.name} cross fade to end action: ${endAction.name} - weight: ${endAction.weight}`);        
+        this.logger.log(`start action: ${startAction.name} cross fade to end action: ${endAction.name} - weight: ${endAction.weight} - timeScale: ${endAction.timeScale}`);        
 
         if (endAction.timeScale !== 1) endAction.action.setEffectiveTimeScale(endAction.timeScale);
         
@@ -315,7 +315,7 @@ class AnimateWorkstation {
 
         findAction.callback = () => {
 
-            if (weight) this.setActionEffectiveTimeScale(action, weight);
+            if (weight) this.setActionEffectiveWeight(action, weight);
 
             if (timescale) this.setActionEffectiveTimeScale(action, timescale);
 
