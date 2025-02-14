@@ -233,11 +233,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.actions[this._clips.RUN.nick].callback = () => {
-
-                        this.AWS.setActionEffectiveWeight(this._clips.RUN.nick, 1);
-
-                    }
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.RUN.nick, 1);
 
                 } else if (this.rotating) {
 
@@ -275,11 +271,7 @@ class CombatPlayerBase extends Tofu {
 
                 }
 
-                this.AWS.actions[this._clips.WALK.nick].callback = () => {
-
-                    this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, 1);
-
-                };
+                this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, 1);
 
             } else if (!this.rotating) {
 
@@ -351,11 +343,7 @@ class CombatPlayerBase extends Tofu {
 
                     this.#logger.log(`walk turn in queue 2`);
 
-                    this.AWS.actions[this._clips.WALK.nick].callback = () => {
-
-                        this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
-
-                    };                    
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
 
                     if (this.shooting) {
 
@@ -432,9 +420,8 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.QUICK_TURN_WEIGHT);
-                    // this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
-
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.QUICK_TURN_WEIGHT);
+                    
                 } else if (!this.rotating) {
 
                     this.#logger.log(`quick turn 1`);
@@ -476,12 +463,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.actions[this._clips.WALK.nick].callback = () => {
-
-                        this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.BACK_WALK_WEIGHT)
-                            .setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
-
-                    };
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.BACK_WALK_WEIGHT, -1);
 
                 } else if (this.rotating) {
 
@@ -517,11 +499,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.actions[this._clips.WALK.nick].callback = () => {
-
-                        this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
-
-                    }
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
 
                 } else {
 
@@ -583,8 +561,8 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
-
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                    
                 } else {
 
                     this.#logger.log(`idle to left turn`);
@@ -657,7 +635,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
 
                 } else {
 
@@ -731,11 +709,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
-                    this.AWS.actions[this._clips.RUN.nick].callback = () => {
-
-                        this.AWS.setActionEffectiveWeight(this._clips.RUN.nick, 1);
-
-                    }
+                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.RUN.nick, 1);
 
                 } else {
 
@@ -977,7 +951,7 @@ class CombatPlayerBase extends Tofu {
         this.#weaponLogger.func = this.reloadAllWeapons.name;
 
         const weapons = this.weaponArray;
-        
+
         for (let i = 0; i < weapons.length; i++) {
 
             const weaponItem = weapons[i];

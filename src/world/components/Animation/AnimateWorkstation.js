@@ -309,6 +309,22 @@ class AnimateWorkstation {
 
     }
 
+    setActionWeightTimeScaleInCallback(action, weight, timescale) {
+
+        const findAction = this.actions[action];
+
+        findAction.callback = () => {
+
+            if (weight) this.setActionEffectiveTimeScale(action, weight);
+
+            if (timescale) this.setActionEffectiveTimeScale(action, timescale);
+
+        };
+
+        return this;
+
+    }
+
 }
 
 export { AnimateWorkstation };
