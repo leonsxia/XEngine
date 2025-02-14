@@ -236,6 +236,14 @@ class Moveable2D {
         return this.isMovingBackward && this.#accelerate;
     }
 
+    set isQuickTuring(val) {
+
+        this.#isQuickTuring = val;
+        this.#turingRad = 0;
+        this.#coolingT = COOLING_TIME;
+
+    }
+
     get isInAir() {
         return this.#isFalling;
     }

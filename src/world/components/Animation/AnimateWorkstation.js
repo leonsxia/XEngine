@@ -218,7 +218,7 @@ class AnimateWorkstation {
         // this.previousAction.stop();
         this.logger.log(`start action: ${startAction.name} cross fade to end action: ${endAction.name} - weight: ${endAction.weight} - timeScale: ${endAction.timeScale}`);        
 
-        if (endAction.timeScale !== 1) endAction.action.setEffectiveTimeScale(endAction.timeScale);
+        if (endAction.timeScale) endAction.action.setEffectiveTimeScale(endAction.timeScale);
         
     }
 
@@ -322,6 +322,14 @@ class AnimateWorkstation {
         };
 
         return this;
+
+    }
+
+    clearActionCallback(action) {
+
+        const findAction = this.actions[action];
+
+        if (findAction) findAction.callback = null;
 
     }
 

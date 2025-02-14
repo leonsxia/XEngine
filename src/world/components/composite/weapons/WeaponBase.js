@@ -13,6 +13,8 @@ class WeaponBase {
     _damage;
     _fireRate = 1;
     _ammo;
+    _isFiring = false;
+    _isSemiAutomatic = true;
     ammoCount;
 
     constructor(specs) {
@@ -21,12 +23,13 @@ class WeaponBase {
         const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
-        const { weaponType, fireRate = 1, ammo } = specs;
+        const { weaponType, fireRate = 1, ammo, isSemiAutomatic = true } = specs;
         let { src } = specs;
 
         this._weaponType = weaponType;
         this._fireRate = fireRate;
         this._ammo = this.ammoCount = ammo;
+        this._isSemiAutomatic = isSemiAutomatic;
 
         if (loadedGLTFModels[weaponType]) {
 
@@ -91,10 +94,34 @@ class WeaponBase {
 
     }
 
+    get isFiring() {
+
+        return this._isFiring;
+
+    }
+
+    set isFiring(val) {
+
+        this._isFiring = val;
+
+    }
+
+    get isSemiAutomatic() {
+
+        return this._isSemiAutomatic;
+
+    }
+
+    set isSemiAutomatic(val) {
+
+        this._isSemiAutomatic = val;
+        
+    }
+
     fillMagzine(ammo = this.ammoCount) {
 
         this._ammo = ammo;
-        
+
     }
 
 }

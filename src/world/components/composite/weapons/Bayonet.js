@@ -7,22 +7,24 @@ class Bayonet extends WeaponBase {
 
     constructor(specs) {
 
-        const { name, scale = [.25, .25, .25] } = specs;
-        const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
-        const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
-        const { receiveShadow = true, castShadow = true } = specs;
-        const { src = GLTF_SRC } = specs;
-        const { fireRate = 1 } = specs;
-
-        super({
-            name, scale,
-            position, rotation,
-            offsetX, offsetY, offsetZ,
-            receiveShadow, castShadow,
+        const superSpecs = {
             weaponType: WEAPONS.BAYONET,
-            src,
-            fireRate
-        });
+            name: null,
+            scale: [.25, .25, .25],
+            position: [0, 0, 0],
+            rotation: [0, 0, 0],
+            offsetX: 0,
+            offsetY: 0,
+            offsetZ: 0,
+            receiveShadow: true,
+            castShadow: true,
+            src: GLTF_SRC,
+            fireRate: 1
+        };
+
+        Object.assign(superSpecs, specs);
+
+        super(superSpecs);
 
     }
 
