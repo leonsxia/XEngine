@@ -1051,7 +1051,7 @@ class CombatPlayerBase extends Tofu {
 
             let attackInterval;
 
-            if ((this.armedWeapon.isFiring || this.shooting) && this._i <= this.armedWeapon.ammoCount) {
+            if (this.armedWeapon && (this.armedWeapon.isFiring || this.shooting) && this._i <= this.armedWeapon.ammoCount) {
 
                 attackInterval = this.armedWeaponAction.attackInterval * this._i;
 

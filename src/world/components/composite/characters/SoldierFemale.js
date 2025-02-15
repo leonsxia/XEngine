@@ -1,4 +1,4 @@
-import { CombatPlayerBase, Pistol, Bayonet, Revolver } from '../../Models';
+import { CombatPlayerBase, Pistol, Bayonet, Revolver, SMGShort } from '../../Models';
 import { SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 
@@ -66,6 +66,15 @@ class SoldierFemale extends CombatPlayerBase {
             ammo: 6
         });
 
+        this.weapons[WEAPONS.SMG_SHORT] = new SMGShort({ 
+            name: `${name}_smg_short`,
+            position: [- .18, - .028 , .065],
+            rotation: [- 0.35, - 1.3, - 1.6],
+            fireRate: 10.2,
+            ammo: 35,
+            isSemiAutomatic: false
+        });
+
         this.weapons[WEAPONS.BAYONET] = new Bayonet({
             name: `${name}_bayonet`,
             scale: [.35, .3, .25],
@@ -76,6 +85,7 @@ class SoldierFemale extends CombatPlayerBase {
 
         this.weaponActionMapping[WEAPONS.PISTOL1] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.7 };
         this.weaponActionMapping[WEAPONS.REVOLVER] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 1.05 };
+        this.weaponActionMapping[WEAPONS.SMG_SHORT] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.08 };
         this.weaponActionMapping[WEAPONS.BAYONET] = { attack: CLIPS.SWORD_SLASH, attackInterval: 1.03, prepareInterval: 0.5 };
 
         this.showTofu(false);
@@ -88,6 +98,7 @@ class SoldierFemale extends CombatPlayerBase {
             this.weapons[WEAPONS.PISTOL1].init(), 
             this.weapons[WEAPONS.BAYONET].init(),
             this.weapons[WEAPONS.REVOLVER].init(),
+            this.weapons[WEAPONS.SMG_SHORT].init(),
             super.init()
         ]);
 
@@ -100,6 +111,7 @@ class SoldierFemale extends CombatPlayerBase {
         holdingHand.attach(this.weapons[WEAPONS.PISTOL1].group);
         holdingHand.attach(this.weapons[WEAPONS.BAYONET].group);
         holdingHand.attach(this.weapons[WEAPONS.REVOLVER].group);
+        holdingHand.attach(this.weapons[WEAPONS.SMG_SHORT].group);
 
         this.setupWeaponScale();
         

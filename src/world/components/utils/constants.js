@@ -28,7 +28,8 @@ const SOLDIER_FEMALE = 'SoldierFemale';
 const WEAPONS = {
     PISTOL1: 'PISTOL1',
     BAYONET: 'BAYONET',
-    REVOLVER: 'REVOLVER'
+    REVOLVER: 'REVOLVER',
+    SMG_SHORT: 'SMG_SHORT'
 };
 
 // objects

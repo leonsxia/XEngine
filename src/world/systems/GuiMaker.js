@@ -317,8 +317,9 @@ class GuiMaker {
             const weaponOptionsActions = {
                 'weapon_options_actions': {
                     'Pistol1': $scene.armWeapon.bind($scene, WEAPONS.PISTOL1),
-                    'Magnum357': $scene.armWeapon.bind($scene, WEAPONS.REVOLVER),                    
-                    _inactive: ['Magnum357']
+                    'Magnum357': $scene.armWeapon.bind($scene, WEAPONS.REVOLVER),
+                    'SMG Short': $scene.armWeapon.bind($scene, WEAPONS.SMG_SHORT),
+                    _inactive: ['Magnum357', 'SMG Short']
                 }
             };
 
@@ -442,7 +443,13 @@ class GuiMaker {
 
             changeObjs.forEach(o => {
 
-                o['changeFn'] = updateSingleLightCamera.bind(this.scene, lightObj, false);
+                o['changeFn'] = () => {
+                    
+                    updateSingleLightCamera.bind(this.scene, lightObj, false);
+
+                    lightObj.updateAttachedObject?.();
+                
+                };
 
             });
 

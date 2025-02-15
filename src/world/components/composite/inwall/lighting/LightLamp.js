@@ -123,6 +123,24 @@ class LightLamp extends ObstacleBase {
 
     }
 
+    bindBloomEvents(lightObj) {
+
+        const { light } = lightObj;
+
+        lightObj.updateAttachedObject = () => {
+
+            const bloomObj = this.bloomObjects.find(f => f.linked === light);
+
+            if (bloomObj) {
+
+                bloomObj.material.color.copy(light.color);
+
+            };
+
+        };
+
+    }
+
     turnOffLights() {
 
         for (let i = 0; i < this.lightObjs.length; i++) {

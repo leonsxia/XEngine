@@ -20,8 +20,8 @@
                     "display": "Directional Light",
                     "detail": {
                         "color": [255, 255, 255],
-                        "intensity": 1,
-                        "position": [0, 20, 0],
+                        "intensity": 2.62,
+                        "position": [0, 20, 28],
                         "target": [0, 0, 0]
                     },
                     "type": "DirectionalLight",
@@ -36,8 +36,8 @@
                     "name": "room1_ambientLight",
                     "display": "Ambient Light",
                     "detail": {
-                        "color": [245, 178, 239],
-                        "intensity": 0.2
+                        "color": [255, 219, 204],
+                        "intensity": 0.72
                     },
                     "type": "AmbientLight",
                     "debug": true,
@@ -49,7 +49,7 @@
                     "detail": {
                         "groundColor": [210, 130, 96],
                         "skyColor": [255, 255, 255],
-                        "intensity": 0.5,
+                        "intensity": 1.12,
                         "position": [0, 4.6, 0]
                     },
                     "type": "HemisphereLight",

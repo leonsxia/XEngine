@@ -665,6 +665,24 @@ class WorldScene {
                 }
 
                 break;
+            
+            case WEAPONS.SMG_SHORT:
+
+                {
+                    const weapon = this.player.weapons[WEAPONS.SMG_SHORT];
+
+                    if (!this.player.armedWeapon || this.player.armedWeapon !== weapon) {
+
+                        this.player.armWeapon(weapon);
+
+                    } else {
+
+                        this.player.armWeapon(null);
+
+                    }
+                }
+
+                break;
 
         }
 

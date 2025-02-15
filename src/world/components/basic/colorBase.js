@@ -5,6 +5,8 @@ const yankeesBlue = 0x0C2340;
 const violetBlue = 0x324AB2;
 const independence = 0x4C516D;
 const deepSkyBlue = 0x00BFFF;
+const lightSkyBlue = 0xb3ecff;
+const TVNoise = 0xc9ecfd;
 const green = 0x00ff00;
 const red = 0xff0000;
 const blue = 0x0000ff;
@@ -55,6 +57,8 @@ export {
     violetBlue,
     independence,
     deepSkyBlue,
+    lightSkyBlue,
+    TVNoise,
     green,
     red,
     blue,

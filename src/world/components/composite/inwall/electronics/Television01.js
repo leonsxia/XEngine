@@ -1,7 +1,7 @@
 import { Object3D, Vector3 } from 'three';
 import { createOBBBox } from '../../../physics/collisionHelper';
 import { GLTFModel, CollisionBox, Box } from '../../../Models';
-import { deepSkyBlue } from '../../../basic/colorBase';
+import { TVNoise } from '../../../basic/colorBase';
 import { LightLamp } from '../lighting/LightLamp';
 
 const GLTF_SRC = 'inRoom/electronics/Television_01_1k/Television_01_1k.gltf';
@@ -41,7 +41,7 @@ class Television01 extends LightLamp {
         const screenWidth = .36 * scale[0];
         const screenHeight = .28 * scale[1];
         const screenDepth = .04 * scale[2];
-        const bloomScreenSpecs = { name: `${name}_screen`, size: { width: screenWidth, height: screenHeight, depth: screenDepth }, color: deepSkyBlue, useBasicMaterial: true, transparent: true };
+        const bloomScreenSpecs = { name: `${name}_screen`, size: { width: screenWidth, height: screenHeight, depth: screenDepth }, color: TVNoise, useBasicMaterial: true, transparent: true };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
@@ -107,6 +107,9 @@ class Television01 extends LightLamp {
                     light.position.add(this.spotLightPosition);
                     this.spotLightTarget.position.add(light.target.position);
                     light.target = this.spotLightTarget;
+
+                    this.bloomObjects[0].linked = light;
+                    this.bloomObjects[0].material.color.copy(light.color);
                 }
 
                 break;
@@ -115,6 +118,8 @@ class Television01 extends LightLamp {
 
         this.lightObjs.push(lightObj);
         this.lightIntensities.push(light.intensity);
+
+        this.bindBloomEvents(lightObj);
 
         this.group.add(light);
 
