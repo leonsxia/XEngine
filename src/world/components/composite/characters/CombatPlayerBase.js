@@ -323,7 +323,9 @@ class CombatPlayerBase extends Tofu {
 
                         }
 
+                        // TEST: gun fire -> run and release w while gun firing
                         this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                        // TEST: gun fire -> press and hold w, then press hold shift, then release w -> walk backward
                         this.AWS.clearActionCallback(this._clips.WALK.nick);
                         
                     }
@@ -370,6 +372,7 @@ class CombatPlayerBase extends Tofu {
                     }
 
                     this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                    // TEST: gun fire -> press and release w once -> walk backward
                     this.AWS.clearActionCallback(this._clips.WALK.nick);
 
                 }
@@ -518,6 +521,7 @@ class CombatPlayerBase extends Tofu {
                     }
 
                     this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                    // TEST: gun point or gun fire -> press w twice quickly while gun firing
                     this.AWS.clearActionCallback(this._clips.WALK.nick);
 
                 }
@@ -526,13 +530,15 @@ class CombatPlayerBase extends Tofu {
 
                 this.#logger.log(`walk back to idle`);
                 this.AWS.prepareCrossFade(this.AWS.actions[this._clips.WALK.nick], this.AWS.actions[this._idleNick], this._animationSettings.WALK_TO_IDLE);
-                // this.AWS.clearActionCallback(this._clips.WALK.nick);
+                // TEST: quick turn -> release shift and walk backward -> walk forward
+                this.AWS.clearActionCallback(this._clips.WALK.nick);
 
             } else {
 
                 this.#logger.log(`walk back to turning`);
                 this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
-                // this.AWS.clearActionCallback(this._clips.WALK.nick);
+                // TEST: walk back turning -> press shift -> release shift and walk back and turning -> release a/d walk forward
+                this.AWS.clearActionCallback(this._clips.WALK.nick);
 
             }
 
@@ -602,7 +608,9 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
+                    // TEST: gun fire -> press and release a once while gun firing
                     this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                    // TEST: gun fire -> press and releas a once -> walk forward
                     this.AWS.clearActionCallback(this._clips.WALK.nick);
 
                 } else {
@@ -677,7 +685,9 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
+                    // TEST: gun fire -> press and release a once while gun firing
                     this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                    // TEST: gun fire -> press and releas d once -> walk forward
                     this.AWS.clearActionCallback(this._clips.WALK.nick);
 
                 } else {
@@ -750,7 +760,9 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
+                    // TEST: walk or run -> gun firing -> accelerate (shift -> w) -> relese shift while gun firing
                     this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, 1);
+
                     
                 } else {
 
@@ -762,6 +774,7 @@ class CombatPlayerBase extends Tofu {
             } else if (this.backward) {
 
                 this.#logger.log(`quick turn to walk back`);
+                // TEST: quick turn -> gun firing -> release shift while gun firing
                 this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.BACK_WALK_WEIGHT, -1);
 
             }
