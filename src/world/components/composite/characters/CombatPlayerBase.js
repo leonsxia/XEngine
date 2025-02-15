@@ -307,7 +307,8 @@ class CombatPlayerBase extends Tofu {
                             
                         }
 
-                        this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                        // TEST: turing and press shift -> gun fire -> press and release w while gun firing
+                        this.AWS.setActionWeightTimeScaleInCallback (this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
 
                     } else {
 
