@@ -348,6 +348,7 @@ class CombatPlayerBase extends Tofu {
 
                     this.#logger.log(`walk turn in queue 2`);
 
+                    // TEST: turning -> gun fire -> press and release w once while gun firing
                     this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
 
                     if (this.shooting) {
@@ -371,6 +372,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
+                    // TEST: gun fire -> press and release w once while gun firing
                     this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
                     // TEST: gun fire -> press and release w once -> walk backward
                     this.AWS.clearActionCallback(this._clips.WALK.nick);
@@ -504,6 +506,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
+                    // TEST: turning -> gun fire -> press and release s once while gun firing
                     this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
 
                 } else {
@@ -520,6 +523,7 @@ class CombatPlayerBase extends Tofu {
 
                     }
 
+                    // TEST: gun fire -> press and release s once while gun firing
                     this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
                     // TEST: gun point or gun fire -> press w twice quickly while gun firing
                     this.AWS.clearActionCallback(this._clips.WALK.nick);
@@ -537,7 +541,7 @@ class CombatPlayerBase extends Tofu {
 
                 this.#logger.log(`walk back to turning`);
                 this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
-                // TEST: walk back turning -> press shift -> release shift and walk back and turning -> release a/d walk forward
+                // TEST: walk back turning -> press shift -> release shift and walk back and turning -> release s and turning -> walk forward
                 this.AWS.clearActionCallback(this._clips.WALK.nick);
 
             }
