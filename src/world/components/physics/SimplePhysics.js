@@ -716,7 +716,7 @@ class SimplePhysics {
             
             if (collisionedWalls.length > 0) {
 
-                if (player.isForwardBlock) this.locked = true;
+                if (player.isForwardBlock || player.isBackwardBlock) this.locked = true;
 
                 collisionedWalls.forEach(wall => {
 
