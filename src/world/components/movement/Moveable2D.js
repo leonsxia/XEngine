@@ -279,6 +279,13 @@ class Moveable2D {
         );
     }
 
+    get isRotatingBlock() {
+        return (
+            (this.frontFaceIntersects && (this.backLeftCorIntersects || this.backRightCorIntersects)) ||
+            (this.frontFaceIntersects && (this.leftFaceIntersects || this.rightFaceIntersects))
+        );
+    }
+
     get isClockwiseBlock() {
         return (
             (this.rightCorIntersects && this.backLeftCorIntersects)
@@ -898,7 +905,7 @@ class Moveable2D {
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
                 offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
-                if (!this._rotated) {
+                if (!this._rotated && !this.isRotatingBlock) {
 
                     if (this.isMovingForwardLeft) {
 
@@ -916,12 +923,11 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    // if (this.isForwardBlock || this.isBackwardBlock) {
+                    if (this.isForwardBlock || this.isBackwardBlock) {
 
-                    //     this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
+                        this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
 
-                    // } else 
-                    if (cornorsIsOverlap()) {
+                    } else if (cornorsIsOverlap()) {
 
                         const overlap = getMinCornorZ();
                         const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
@@ -944,7 +950,7 @@ class Moveable2D {
     
                     }
                     
-                }                
+                }
 
             } else if (this.isMovingForwardRight || this.isMovingBackwardRight) {
 
@@ -953,7 +959,7 @@ class Moveable2D {
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
                 offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
-                if (!this._rotated) {
+                if (!this._rotated && !this.isRotatingBlock) {
 
                     if (this.isMovingForwardRight) {
 
@@ -971,12 +977,11 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    // if (this.isForwardBlock || this.isBackwardBlock) {
+                    if (this.isForwardBlock || this.isBackwardBlock) {
 
-                    //     this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
+                        this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
 
-                    // } else 
-                    if (cornorsIsOverlap()) {
+                    } else if (cornorsIsOverlap()) {
 
                         const overlap = getMinCornorZ();
                         const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
@@ -999,7 +1004,7 @@ class Moveable2D {
     
                     }
                     
-                }                
+                }
                 
             }
         }
