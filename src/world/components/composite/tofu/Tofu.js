@@ -63,6 +63,7 @@ class Tofu extends Moveable2D {
     constructor(specs) {
 
         super();
+        this._fastRotVel = 2;
 
         const { name, size = { width: .9, width2: .9, depth: .9, depth2: .9, height: 1.8 } } = specs;
         const { 

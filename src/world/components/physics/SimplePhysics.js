@@ -26,6 +26,8 @@ class SimplePhysics {
     interactiveObs = [];
     activePlayers = [];
 
+    locked = false;
+
     constructor(players, floors = [], walls = [], obstacles = []) {
 
         this.players = players;
@@ -212,17 +214,20 @@ class SimplePhysics {
                     player.leftCorIntersects = true;
                     intersectCor = COR_DEF[0]; // left cornor
 
-                } else if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
+                }
+                if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
                     
                     player.rightCorIntersects = true;
                     intersectCor = COR_DEF[1]; // right cornor
 
-                } else if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
+                }
+                if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
                     
                     player.backLeftCorIntersects = true;
                     intersectCor = COR_DEF[2]; // left back cornor
 
-                } else if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
+                }
+                if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
                     
                     player.backRightCorIntersects = true;
                     intersectCor = COR_DEF[3]; // right back cornor
@@ -249,15 +254,15 @@ class SimplePhysics {
                         
                         player.frontFaceIntersects = true;
 
-                    else if (leftCorIntersectFace?.includes(FACE_DEF[1]) || rightCorIntersectFace?.includes(FACE_DEF[1])) 
+                    if (leftCorIntersectFace?.includes(FACE_DEF[1]) || rightCorIntersectFace?.includes(FACE_DEF[1])) 
                         
                         player.backFaceIntersects = true;
 
-                    else if (leftCorIntersectFace?.includes(FACE_DEF[2]) || rightCorIntersectFace?.includes(FACE_DEF[2])) 
+                    if (leftCorIntersectFace?.includes(FACE_DEF[2]) || rightCorIntersectFace?.includes(FACE_DEF[2])) 
                         
                         player.leftFaceIntersects = true;
 
-                    else if (leftCorIntersectFace?.includes(FACE_DEF[3]) || rightCorIntersectFace?.includes(FACE_DEF[3]))
+                    if (leftCorIntersectFace?.includes(FACE_DEF[3]) || rightCorIntersectFace?.includes(FACE_DEF[3]))
                         
                         player.rightFaceIntersects = true;
 
@@ -636,6 +641,16 @@ class SimplePhysics {
 
             player.resetWorldDeltaV3();
 
+            let playerTicked = true;
+
+            if (!this.locked) {
+
+                player.tick(delta);
+
+            }
+
+            this.locked = false;
+
             wallsInScope.forEach(wall => {
 
                 const checkResult = this.checkIntersection(player, wall, delta);
@@ -657,6 +672,8 @@ class SimplePhysics {
                     wall.checkResult = checkResult;
                     collisionedWalls.push(wall);
 
+                    if (checkResult.borderReach) this.locked = true;
+
                 } else {
 
                     wall.checkResult = { intersect: false, borderReach: false };
@@ -673,31 +690,13 @@ class SimplePhysics {
                 else if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
 
             }
-
-            let playerTicked = false;
-
-            if (collisionedWalls.length === 0) {
-
-                player.tick(delta);
-                playerTicked = true;
-
-                wallsInScope.forEach(wall => {
-
-                    const checkResult = this.checkIntersection(player, wall, delta);
-    
-                    if (checkResult.intersect) {
-    
-                        wall.checkResult = checkResult;
-                        collisionedWalls.push(wall);
-    
-                    } 
-                    
-                });
-
-            }
             
             if (collisionedWalls.length > 0) {
 
+                if (player.isForwardBlock || player.isBackwardBlock) this.locked = true;
+
+                player.intersectNum = collisionedWalls.length;
+                
                 collisionedWalls.forEach(wall => {
 
                     player.tickWithWall(delta, wall, playerTicked);
@@ -707,6 +706,8 @@ class SimplePhysics {
                 player.applyPositionAdjustment();
 
             }
+
+            player.resetCollisionInfo();
 
             // console.log(`player world deltaV3:${player._worldDeltaV3.x}, ${player._worldDeltaV3.y}, ${player._worldDeltaV3.z}`);
 
