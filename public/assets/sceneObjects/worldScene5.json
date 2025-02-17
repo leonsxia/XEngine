@@ -146,7 +146,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "pushable": true,
+                    "pushable": false,
                     "name": "room1_CubeBox1",
                     "position": [-2.7, 1, 1.2],
                     "rotationY": 0
@@ -178,7 +178,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "pushable": true,
+                    "pushable": false,
                     "name": "room1_CubeBox2",
                     "position": [-1.5, 1, 0],
                     "rotationY": 0

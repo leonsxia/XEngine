@@ -551,6 +551,7 @@ class Moveable2D {
 
             }
         }
+
     }
 
     localToWorldBatch(object, positions) {
@@ -576,29 +577,16 @@ class Moveable2D {
 
     rotateOffsetCorrection(dummyObject, cornors) {
 
-        const { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 } = cornors;
+        const { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 } = cornors;        
 
-        if (leftCorVec3.z <= 0) {
+        if (leftCorVec3.z <= 0 || rightCorVec3.z <= 0 || leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) {
 
-            // dummyObject.position.z = dummyObject.position.z - leftCorVec3.z;
-            this._deltaV3.add(new Vector3(0, 0, - leftCorVec3.z));
+            const overlap = Math.min(leftCorVec3.z, rightCorVec3.z, leftBackCorVec3.z, rightBackCorVec3.z);
 
-        } else if (rightCorVec3.z <= 0) {
-
-            // dummyObject.position.z = dummyObject.position.z - rightCorVec3.z;
-            this._deltaV3.add(new Vector3(0, 0, - rightCorVec3.z));
-
-        } else if (leftBackCorVec3.z <= 0) {
-
-            // dummyObject.position.z = dummyObject.position.z - leftBackCorVec3.z;
-            this._deltaV3.add(new Vector3(0, 0, - leftBackCorVec3.z));
-
-        } else if (rightBackCorVec3.z <= 0) {
-
-            // dummyObject.position.z = dummyObject.position.z - rightBackCorVec3.z;
-            this._deltaV3.add(new Vector3(0, 0, - rightBackCorVec3.z));
+            this._deltaV3.add(new Vector3(0, 0, - overlap));
 
         }
+
     }
 
     rotateOffsetCorrection2(dummyObject, clockWise = true, player) {
@@ -772,29 +760,36 @@ class Moveable2D {
 
         }
 
+        const cornorsIsOverlap = () => {
+
+            return leftCorVec3.z <= 0 || rightCorVec3.z <= 0 ||
+                rightBackCorVec3.z <= 0 || leftBackCorVec3.z <= 0;
+
+        }
+
+        const getMinCornorZ = () => {
+
+            return Math.min(leftCorVec3.z, rightCorVec3.z, leftBackCorVec3.z, rightBackCorVec3.z);
+
+        }
+
         if (this.isMovingForward) {
 
             deltaVec3 = new Vector3(0, 0, dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
             offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
-            if (!this.isForwardBlock) {
+            // if (!this.isForwardBlock) {
 
                 if (!borderReach) {
 
-                    if (leftCorVec3.z <= 0) {
+                    if (cornorsIsOverlap()) {
 
-                        const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - leftCorVec3.z);
+                        const overlap = getMinCornorZ();
+
+                        const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
                         this._deltaV3.add(dirVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(dirVec3);
-                        // this.#logger.log(`left cornor reach`);                        
-
-                    } else if (rightCorVec3.z <= 0) {
-
-                        const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - rightCorVec3.z);
-                        this._deltaV3.add(dirVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(dirVec3);
-                        // this.#logger.log(`right cornor reach`);                        
+                        // dummyObject.position.copy(dirVec3);        
 
                     } else {
 
@@ -822,8 +817,9 @@ class Moveable2D {
                         this._deltaV3.add(new Vector3(- recoverCoefficient, 0, 0));
 
                     }
+
                 }
-            }
+            // }
 
         } else if (this.isMovingBackward) {
 
@@ -835,15 +831,11 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    if (rightBackCorVec3.z <= 0) {
+                    if (cornorsIsOverlap()) {
 
-                        const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - rightBackCorVec3.z);
-                        this._deltaV3.add(dirVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(dirVec3);
+                        const overlap = getMinCornorZ();
 
-                    } else if (leftBackCorVec3.z <= 0) {
-
-                        const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - leftBackCorVec3.z);
+                        const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
                         this._deltaV3.add(dirVec3.sub(dummyObject.position));
                         // dummyObject.position.copy(dirVec3);
 
@@ -924,33 +916,16 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    if (this.isForwardBlock || this.isBackwardBlock) {
+                    // if (this.isForwardBlock || this.isBackwardBlock) {
 
-                        this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
-                        
-                    } else if (rightCorVec3.z <= 0 && this.isMovingForwardLeft) {
+                    //     this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
 
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - rightCorVec3.z);
+                    // } else 
+                    if (cornorsIsOverlap()) {
+
+                        const overlap = getMinCornorZ();
+                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
                         this._deltaV3.add(newVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(newVec3);
-
-                    } else if (leftCorVec3.z <= 0 && this.isMovingForwardLeft) {
-
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - leftCorVec3.z);
-                        this._deltaV3.add(newVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(newVec3);
-
-                    } else if (rightBackCorVec3.z <= 0 && this.isMovingBackwardLeft) {
-
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - rightBackCorVec3.z);
-                        this._deltaV3.add(newVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(newVec3);
-
-                    } else if (leftBackCorVec3.z <= 0 && this.isMovingBackwardLeft) {
-
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - leftBackCorVec3.z);
-                        this._deltaV3.add(newVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(newVec3);
 
                     } else {
 
@@ -962,13 +937,15 @@ class Moveable2D {
                     if (this.isMovingBackwardLeft) {
                         
                         this.rotateOffsetCorrection2(dummyObject, true, player);
-
+    
                     } else if (this.isMovingForwardLeft) {
                         
                         this.rotateOffsetCorrection2(dummyObject, false, player);
-
+    
                     }
-                }
+                    
+                }                
+
             } else if (this.isMovingForwardRight || this.isMovingBackwardRight) {
 
                 deltaVec3 = this.isMovingForwardRight ? new Vector3(- deltaX, 0, deltaZ) : new Vector3(- deltaX, 0, - deltaZ);
@@ -990,33 +967,16 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    if (this.isForwardBlock || this.isBackwardBlock) {
+                    // if (this.isForwardBlock || this.isBackwardBlock) {
 
-                        this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
+                    //     this.rotateOffsetCorrection(dummyObject, wall.checkResult.cornors);
 
-                    } else if (leftCorVec3.z <= 0 && this.isMovingForwardRight) {
+                    // } else 
+                    if (cornorsIsOverlap()) {
 
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - leftCorVec3.z);
+                        const overlap = getMinCornorZ();
+                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
                         this._deltaV3.add(newVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(newVec3);
-
-                    } else if (rightCorVec3.z <= 0 && this.isMovingForwardRight) {
-
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - rightCorVec3.z);
-                        this._deltaV3.add(newVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(newVec3);
-
-                    } else if (leftBackCorVec3.z <= 0 && this.isMovingBackwardRight) {
-
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - leftBackCorVec3.z);
-                        this._deltaV3.add(newVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(newVec3);
-
-                    } else if (rightBackCorVec3.z <= 0 && this.isMovingBackwardRight) {
-
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - rightBackCorVec3.z);
-                        this._deltaV3.add(newVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(newVec3);
 
                     } else {
 
@@ -1028,13 +988,15 @@ class Moveable2D {
                     if (this.isMovingForwardRight) {
 
                         this.rotateOffsetCorrection2(dummyObject, true, player);
-
+    
                     } else if (this.isMovingBackwardRight) {
-
+    
                         this.rotateOffsetCorrection2(dummyObject, false, player);
-
+    
                     }
-                }
+                    
+                }                
+                
             }
         }
 

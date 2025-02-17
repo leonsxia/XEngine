@@ -26,6 +26,8 @@ class SimplePhysics {
     interactiveObs = [];
     activePlayers = [];
 
+    locked = false;
+
     constructor(players, floors = [], walls = [], obstacles = []) {
 
         this.players = players;
@@ -212,17 +214,20 @@ class SimplePhysics {
                     player.leftCorIntersects = true;
                     intersectCor = COR_DEF[0]; // left cornor
 
-                } else if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
+                }
+                if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
                     
                     player.rightCorIntersects = true;
                     intersectCor = COR_DEF[1]; // right cornor
 
-                } else if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
+                }
+                if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
                     
                     player.backLeftCorIntersects = true;
                     intersectCor = COR_DEF[2]; // left back cornor
 
-                } else if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
+                }
+                if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
                     
                     player.backRightCorIntersects = true;
                     intersectCor = COR_DEF[3]; // right back cornor
@@ -636,6 +641,17 @@ class SimplePhysics {
 
             player.resetWorldDeltaV3();
 
+            let playerTicked = true;
+
+            if (!this.locked) {
+
+                player.tick(delta);
+                // playerTicked = true;
+
+            }
+
+            this.locked = false;
+
             wallsInScope.forEach(wall => {
 
                 const checkResult = this.checkIntersection(player, wall, delta);
@@ -657,6 +673,8 @@ class SimplePhysics {
                     wall.checkResult = checkResult;
                     collisionedWalls.push(wall);
 
+                    if (checkResult.borderReach) this.locked = true;
+
                 } else {
 
                     wall.checkResult = { intersect: false, borderReach: false };
@@ -674,29 +692,31 @@ class SimplePhysics {
 
             }
 
-            let playerTicked = false;
+            // let playerTicked = true;
 
-            if (collisionedWalls.length === 0) {
+            // if (collisionedWalls.length === 0) {
 
-                player.tick(delta);
-                playerTicked = true;
+            //     player.tick(delta);
+            //     playerTicked = true;
 
-                wallsInScope.forEach(wall => {
+            //     wallsInScope.forEach(wall => {
 
-                    const checkResult = this.checkIntersection(player, wall, delta);
+            //         const checkResult = this.checkIntersection(player, wall, delta);
     
-                    if (checkResult.intersect) {
+            //         if (checkResult.intersect) {
     
-                        wall.checkResult = checkResult;
-                        collisionedWalls.push(wall);
+            //             wall.checkResult = checkResult;
+            //             collisionedWalls.push(wall);
     
-                    } 
+            //         } 
                     
-                });
+            //     });
 
-            }
+            // }
             
             if (collisionedWalls.length > 0) {
+
+                if (player.isForwardBlock) this.locked = true;
 
                 collisionedWalls.forEach(wall => {
 
