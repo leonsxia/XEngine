@@ -37,6 +37,7 @@ class Moveable2D {
 
     _deltaV3 = new Vector3();
     _worldDeltaV3 = new Vector3();
+    _rotated = false;
 
     constructor() {
         this.leftCorIntersects = false;
@@ -779,47 +780,44 @@ class Moveable2D {
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
             offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
-            // if (!this.isForwardBlock) {
+            if (!borderReach) {
 
-                if (!borderReach) {
+                if (cornorsIsOverlap()) {
 
-                    if (cornorsIsOverlap()) {
+                    const overlap = getMinCornorZ();
 
-                        const overlap = getMinCornorZ();
+                    const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
+                    this._deltaV3.add(dirVec3.sub(dummyObject.position));
+                    // dummyObject.position.copy(dirVec3);        
 
-                        const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                        this._deltaV3.add(dirVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(dirVec3);        
-
-                    } else {
-
-                        this._deltaV3.add(offsetVec3.sub(dummyObject.position));
-                        // dummyObject.position.copy(offsetVec3);
-
-                    }
-
-                } else if (!leftCorIntersectFace?.includes(FACE_DEF[0]) && !rightCorIntersectFace?.includes(FACE_DEF[0])) {
+                } else {
 
                     this._deltaV3.add(offsetVec3.sub(dummyObject.position));
                     // dummyObject.position.copy(offsetVec3);
 
-                    if (leftCorIntersectFace) { // when left or right faces intersect the cornor
+                }
 
-                        // dummyObject.position.x += recoverCoefficient;
-                        // this.#logger.log(`left face reach`);
-                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, 0));
+            } else if (!leftCorIntersectFace?.includes(FACE_DEF[0]) && !rightCorIntersectFace?.includes(FACE_DEF[0])) {
+
+                this._deltaV3.add(offsetVec3.sub(dummyObject.position));
+                // dummyObject.position.copy(offsetVec3);
+
+                if (leftCorIntersectFace) { // when left or right faces intersect the cornor
+
+                    // dummyObject.position.x += recoverCoefficient;
+                    // this.#logger.log(`left face reach`);
+                    this._deltaV3.add(new Vector3(recoverCoefficient, 0, 0));
 
 
-                    } else {
+                } else {
 
-                        // dummyObject.position.x -= recoverCoefficient;
-                        // this.#logger.log(`right face reach`);
-                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, 0));
-
-                    }
+                    // dummyObject.position.x -= recoverCoefficient;
+                    // this.#logger.log(`right face reach`);
+                    this._deltaV3.add(new Vector3(- recoverCoefficient, 0, 0));
 
                 }
-            // }
+
+            }
 
         } else if (this.isMovingBackward) {
 
@@ -900,14 +898,19 @@ class Moveable2D {
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
                 offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
-                // dummyObject.rotation.y += this.isMovingForwardLeft ? rotateRad : - rotateRad;
-                if (this.isMovingForwardLeft) {
+                if (!this._rotated) {
 
-                    dummyObject.rotateOnWorldAxis(worldY, rotateRad);
+                    if (this.isMovingForwardLeft) {
 
-                } else {
+                        dummyObject.rotateOnWorldAxis(worldY, rotateRad);
 
-                    dummyObject.rotateOnWorldAxis(worldY, - rotateRad);
+                    } else {
+
+                        dummyObject.rotateOnWorldAxis(worldY, - rotateRad);
+
+                    }
+
+                    this._rotated = true;
 
                 }
 
@@ -950,15 +953,19 @@ class Moveable2D {
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
                 offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
 
-                // dummyObject.position.copy(offsetVec3);
-                // dummyObject.rotation.y += this.isMovingForwardRight ? - rotateRad : rotateRad;
-                if (this.isMovingForwardRight) {
+                if (!this._rotated) {
 
-                    dummyObject.rotateOnWorldAxis(worldY, - rotateRad);
+                    if (this.isMovingForwardRight) {
 
-                } else {
+                        dummyObject.rotateOnWorldAxis(worldY, - rotateRad);
 
-                    dummyObject.rotateOnWorldAxis(worldY, rotateRad);
+                    } else {
+
+                        dummyObject.rotateOnWorldAxis(worldY, rotateRad);
+
+                    }
+
+                    this._rotated = true;
                     
                 }
 

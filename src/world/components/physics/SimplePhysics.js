@@ -718,6 +718,8 @@ class SimplePhysics {
 
                 if (player.isForwardBlock || player.isBackwardBlock) this.locked = true;
 
+                player._rotated = false;
+                
                 collisionedWalls.forEach(wall => {
 
                     player.tickWithWall(delta, wall, playerTicked);
