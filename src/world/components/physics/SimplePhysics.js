@@ -646,7 +646,6 @@ class SimplePhysics {
             if (!this.locked) {
 
                 player.tick(delta);
-                // playerTicked = true;
 
             }
 
@@ -691,34 +690,12 @@ class SimplePhysics {
                 else if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
 
             }
-
-            // let playerTicked = true;
-
-            // if (collisionedWalls.length === 0) {
-
-            //     player.tick(delta);
-            //     playerTicked = true;
-
-            //     wallsInScope.forEach(wall => {
-
-            //         const checkResult = this.checkIntersection(player, wall, delta);
-    
-            //         if (checkResult.intersect) {
-    
-            //             wall.checkResult = checkResult;
-            //             collisionedWalls.push(wall);
-    
-            //         } 
-                    
-            //     });
-
-            // }
             
             if (collisionedWalls.length > 0) {
 
                 if (player.isForwardBlock || player.isBackwardBlock) this.locked = true;
 
-                player._rotated = false;
+                player.intersectNum = collisionedWalls.length;
                 
                 collisionedWalls.forEach(wall => {
 
@@ -729,6 +706,8 @@ class SimplePhysics {
                 player.applyPositionAdjustment();
 
             }
+
+            player.resetCollisionInfo();
 
             // console.log(`player world deltaV3:${player._worldDeltaV3.x}, ${player._worldDeltaV3.y}, ${player._worldDeltaV3.z}`);
 
