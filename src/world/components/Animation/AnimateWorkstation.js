@@ -1,4 +1,4 @@
-import { AnimationMixer, LoopOnce } from 'three';
+import { AnimationMixer, AnimationUtils, LoopOnce } from 'three';
 import { Logger } from '../../systems/Logger';
 
 const DEBUG = false;
@@ -71,25 +71,22 @@ class AnimateWorkstation {
             
             action.startAt(0);
 
-            const { nick, loopOnce = false, startImmediately = true, timeScale, isDefault = false } = config;
+            const { nick, loopOnce = false, startImmediately = true, timeScale, weight = 1, isDefault = false } = config;
+
             if (loopOnce) {
 
                 action.clampWhenFinished = true;
                 action.setLoop(LoopOnce, 1);
 
-            }
-
-            if (timeScale) {
-
-                action.setEffectiveTimeScale(timeScale);
-
-            }
+            }            
 
             this.actions[nick] = { 
                 action, 
-                weight: 1, 
+                weight, 
                 timeScale: 1,
-                play: () => { action.play(); },
+                play: () => { action.play(); return action; },
+                stop: () => { action.stop(); return action; },
+                reset: () => { action.reset(); return action; },
                 name: action._clip.name,
                 nick,
                 isDefault,
@@ -97,6 +94,13 @@ class AnimateWorkstation {
                 startImmediately,
                 callback: null
             };
+
+            if (timeScale) {
+
+                action.setEffectiveTimeScale(timeScale);
+                this.actions[nick].timeScale = timeScale;
+
+            }
 
         }
 
@@ -112,7 +116,8 @@ class AnimateWorkstation {
 
             if (action.isDefault) {
 
-                this.setWeight(action, 1);
+                const { weight } = action;
+                this.setWeight(action, weight);
                 this.activeAction = this.previousAction = action;
                 // action.play();
 
@@ -330,6 +335,59 @@ class AnimateWorkstation {
         const findAction = this.actions[action];
 
         if (findAction) findAction.callback = null;
+
+    }
+
+    makeSubAction(target, name, startFrame, endFrame, config, fps = 30) {
+
+        const tarClip = this.clips[target].animate;
+
+        const subclip = AnimationUtils.subclip(tarClip, name, startFrame, endFrame, fps);
+
+        const subAction = this.mixer.clipAction(subclip);
+
+        const { nick = name, loopOnce = false, startImmediately = true, isDefault = false, weight = 1, timeScale = 1 } = config;
+
+        if (loopOnce) {
+
+            subAction.clampWhenFinished = true;
+            subAction.setLoop(LoopOnce, 1);
+
+        }
+
+        subAction.setEffectiveTimeScale(timeScale);
+        subAction.setEffectiveWeight(weight);
+
+        this.actions[nick] = { 
+            action: subAction, 
+            weight, 
+            timeScale,
+            play: () => { subAction.play(); return subAction; },
+            stop: () => { subAction.stop(); return subAction; },
+            name: `${tarClip.name}_${name}`,
+            nick,
+            isDefault,
+            loopOnce,
+            startImmediately,
+            callback: null
+        };
+
+        if (!loopOnce && startImmediately) {
+
+            subAction.play();
+
+        }
+
+    }
+
+    playAction(action) {
+
+        const findAction = this.actions[action];
+
+        this.setActionEffectiveWeight(action, 1);
+        this.setActionEffectiveTimeScale(action, findAction.timeScale);
+
+        findAction.reset().play();
 
     }
 

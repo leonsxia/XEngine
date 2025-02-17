@@ -648,6 +648,24 @@ class WorldScene {
 
                 break;
 
+            case WEAPONS.GLOCK:
+
+                {
+                    const weapon = this.player.weapons[WEAPONS.GLOCK];
+
+                    if (!this.player.armedWeapon || this.player.armedWeapon !== weapon) {
+
+                        this.player.armWeapon(weapon);
+
+                    } else {
+
+                        this.player.armWeapon(null);
+
+                    }
+                }
+
+                break;
+
             case WEAPONS.REVOLVER:
 
                 {

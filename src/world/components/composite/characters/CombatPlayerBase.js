@@ -121,7 +121,9 @@ class CombatPlayerBase extends Tofu {
             this.switchWeapon(weapon);
             this.switchIdleAction(this.weaponActionMapping[weapon.weaponType].idle.nick);
             this.armedWeapon = weapon;
-            this.AWS.setActionEffectiveTimeScale(this.weaponActionMapping[weapon.weaponType].shoot.nick, weapon.fireRate);
+
+            const { shoot: { nick }, fireRate } = this.weaponActionMapping[weapon.weaponType];
+            this.AWS.setActionEffectiveTimeScale(nick, fireRate);
 
         } else {
 
@@ -886,6 +888,9 @@ class CombatPlayerBase extends Tofu {
             this.armedWeapon.isFiring = false;
 
             this.AWS.prepareCrossFade(this.AWS.activeAction, this._tempAction, this._animationSettings.GUN_POINT, this._tempAction.weight);
+
+            this.armedWeapon.cancelShoot();
+
             super.shoot(false);
 
         } else {
@@ -904,9 +909,16 @@ class CombatPlayerBase extends Tofu {
 
         this.#logger.func = this.shoot.name;
 
-        if (this.gunPointing && !this.armedWeapon.magzineEmpty) {
+        if (this.gunPointing) {
 
             if (val) {
+
+                if (this.armedWeapon.magzineEmpty) {
+
+                    this.armedWeapon.weaponEmpty();
+                    return;
+                    
+                }
 
                 if (this.armedWeapon.isFiring) {
                     
@@ -934,6 +946,8 @@ class CombatPlayerBase extends Tofu {
                 this.#logger.log(`gun shoot!`);
                 this.#logger.log(`active: ${this.AWS.activeAction.nick}`)
                 this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.armedWeaponAction.shoot.nick], this._animationSettings.SHOOT, 1);                
+
+                this.armedWeapon.shoot();
 
                 super.shoot(val);
 
@@ -971,6 +985,9 @@ class CombatPlayerBase extends Tofu {
         this.armedWeapon.isFiring = false;
 
         this._cancelShoot = false;
+
+        this.armedWeapon.cancelShoot();
+
         super.shoot(false);
 
     }
@@ -1074,6 +1091,7 @@ class CombatPlayerBase extends Tofu {
                             this.armedWeapon.isFiring = false;
                             this.cancelGunShoot();
                             this.#weaponLogger.log(`${this.armedWeapon.weaponType} magzine empty`);
+                            this.armedWeapon.weaponEmpty();
 
                         } else {
 
@@ -1107,6 +1125,12 @@ class CombatPlayerBase extends Tofu {
     finalTick(delta) {
 
         this.AWS.mixer.update(delta);
+
+        this.weaponArray.forEach(weapon => {
+
+            weapon.AWS?.mixer.update(delta);
+
+        });
 
     }
 

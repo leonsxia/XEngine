@@ -27,6 +27,7 @@ const SOLDIER_FEMALE = 'SoldierFemale';
 // weapons
 const WEAPONS = {
     PISTOL1: 'PISTOL1',
+    GLOCK: 'GLOCK',
     BAYONET: 'BAYONET',
     REVOLVER: 'REVOLVER',
     SMG_SHORT: 'SMG_SHORT'
@@ -335,6 +336,10 @@ const SOLDIER_FEMALE_CLIPS = {
     WAVE: { nick: 'wave', name: 'CharacterArmature|Wave', idx: 23, enable: false }
 };
 
+const GLOCK_CLIPS = {
+    SHOOT: { nick: 'shoot', name: 'glock_19|Shoot', idx: 0, enable: true, isDefault: true, startImmediately: false, weight: 0 }
+}
+
 export { 
     REPEAT_WRAPPING,
     MIRRORED_REPEAT_WRAPPING,
@@ -430,5 +435,6 @@ export {
     SHADER_NAMES,
     SHADERS,
 
-    SOLDIER_FEMALE_CLIPS
+    SOLDIER_FEMALE_CLIPS,
+    GLOCK_CLIPS
 };

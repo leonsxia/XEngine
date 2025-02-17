@@ -2,6 +2,7 @@ import { Group } from 'three';
 import { GLTFModel } from '../../Models';
 import { loadedGLTFModels } from '../../utils/gltfHelper';
 import { Logger } from '../../../systems/Logger';
+import { AnimateWorkstation } from '../../Animation/AnimateWorkstation';
 
 const DEBUG = true;
 
@@ -9,6 +10,13 @@ class WeaponBase {
 
     gltf;
     group;
+
+    specs;
+
+    AWS;
+    _clips = {};
+    _animationSettings = {};
+
     _weaponType;
     _damage;
     _fireRate = 1;
@@ -17,6 +25,10 @@ class WeaponBase {
     _isSemiAutomatic = true;
     ammoCount;
 
+    _shootNick;
+    _emptyNick = 'empty';
+    _animateMapping = {};
+
     constructor(specs) {
 
         const { name, scale = [1, 1, 1] } = specs;
@@ -24,12 +36,18 @@ class WeaponBase {
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { weaponType, fireRate = 1, ammo, isSemiAutomatic = true } = specs;
+        const { clips, animationSetting } = specs;
         let { src } = specs;
+
+        this.specs = specs;
 
         this._weaponType = weaponType;
         this._fireRate = fireRate;
         this._ammo = this.ammoCount = ammo;
         this._isSemiAutomatic = isSemiAutomatic;
+
+        Object.assign(this._clips, clips);
+        Object.assign(this._animationSettings, animationSetting);
 
         if (loadedGLTFModels[weaponType]) {
 
@@ -59,6 +77,16 @@ class WeaponBase {
         if (!loadedGLTFModels[this._weaponType]) {
 
             loadedGLTFModels[this._weaponType] = this.gltf.gltf;
+
+        }
+
+        if (Object.getOwnPropertyNames(this._clips).length) {
+
+            this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
+
+            this.AWS.init();
+
+            this.AWS.setActionEffectiveTimeScale(this._shootNick, this._fireRate);
 
         }
 
@@ -118,9 +146,58 @@ class WeaponBase {
         
     }
 
+    get animateEnabled() {
+
+        return this.AWS ? true: false;
+        
+    }
+
     fillMagzine(ammo = this.ammoCount) {
 
         this._ammo = ammo;
+
+        this.resetWeaponEmpty();
+
+    }
+
+    shoot() {
+
+        if (this.animateEnabled) {
+
+            this.AWS.playAction(this._shootNick);
+            // this.AWS.prepareCrossFade(this.AWS.actions[this._shootNick], this.AWS.actions[this._shootNick], this._animationSettings.SHOOT, 1);
+
+        }
+
+    }
+
+    cancelShoot() {
+
+        if (this.animateEnabled) {
+
+            this.AWS.setActionEffectiveWeight(this._shootNick, 0);
+
+        }
+
+    }
+
+    weaponEmpty() {
+
+        if (this.animateEnabled) {
+
+            this.AWS.prepareCrossFade(this.AWS.actions[this._shootNick], this.AWS.actions[this._emptyNick], 0.08, 1);
+
+        }
+
+    }
+
+    resetWeaponEmpty() {
+
+        if (this.animateEnabled) {
+
+            this.AWS.actions[this._emptyNick].stop();
+
+        }
 
     }
 
