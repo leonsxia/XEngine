@@ -62,7 +62,7 @@ class SoldierFemale extends CombatPlayerBase {
             name: `${name}_glock19`,
             position: [- .18, - .08, .096],
             rotation: [1.2, 0, - .2],
-            fireRate: 0.75,
+            fireRate: 0.72,
             ammo: 19
         });
 
