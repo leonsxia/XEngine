@@ -67,7 +67,8 @@
                         "position": [0, 0, 0],
                         "intensity": 180,
                         "distance": 0,
-                        "decay": 2
+                        "decay": 2,
+                        "shadowCameraAspect": 1.0025
                     },
                     "debug": true,
                     "shadow": true,

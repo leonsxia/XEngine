@@ -169,8 +169,11 @@ function addShadow(light) {
         case POINT_LIGHT:
 
             {
+
+                const { shadow: { camera: { aspect } } } = light;
+
                 light.shadow.camera.fov = 90;
-                light.shadow.camera.aspect = 1;
+                light.shadow.camera.aspect = aspect;
                 light.shadow.camera.near = 0.5;
                 light.shadow.camera.far = 100;   // default 500
             }

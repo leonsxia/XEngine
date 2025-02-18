@@ -659,6 +659,7 @@ class SceneBuilder {
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.distance = light.distance;
                         _origin.detail.decay = light.decay;
+                        _origin.detail.shadowCameraAspect = light.shadow.camera.aspect;
 
                         if (attachTo) {
 
@@ -674,7 +675,7 @@ class SceneBuilder {
 
                     } else {
 
-                        const { intensity = 1, distance = 0, decay = 2, position = [0, 0, 0] } = _target.detail;
+                        const { intensity = 1, distance = 0, decay = 2, shadowCameraAspect = 1, position = [0, 0, 0] } = _target.detail;
                         const { color = [255, 255, 255] } = _target.detail;
                         const { attachTo, attachToType, turnOn = true } = _origin;
 
@@ -682,12 +683,14 @@ class SceneBuilder {
                         _origin.detail.intensity = intensity;
                         _origin.detail.distance = distance;
                         _origin.detail.decay = decay;
+                        _origin.detail.shadowCameraAspect = shadowCameraAspect;
                         _origin.detail.position = new Array(...position);
 
                         light.color.setStyle(colorStr(...color));
                         light.intensity = turnOn || (this.worldScene.postProcessor.bloomMixedPass?.enabled) ? intensity : 0;
                         light.distance = distance;
                         light.decay = decay;
+                        light.shadow.camera.aspect = shadowCameraAspect;
 
                         if (attachTo) {
 

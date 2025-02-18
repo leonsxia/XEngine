@@ -110,11 +110,12 @@ function createHemisphereLight(lightSpecs) {
 
 function createPointLight(lightSpecs) {
 
-    const { detail: { color, position, intensity, distance = 0, decay = 2, shadowRadius = 5 } } = lightSpecs;
+    const { detail: { color, position, intensity, distance = 0, decay = 2, shadowRadius = 5, shadowCameraAspect = 1 } } = lightSpecs;
 
     const light = new PointLight(new Color(colorStr(...color)), intensity, distance, decay);
 
     light.shadow.radius = shadowRadius;
+    light.shadow.camera.aspect = shadowCameraAspect;
 
     light.position.set(...position);
 
