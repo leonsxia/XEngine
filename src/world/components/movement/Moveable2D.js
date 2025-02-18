@@ -658,7 +658,8 @@ class Moveable2D {
         const {
             wallMesh,
             borderReach, leftCorIntersectFace, rightCorIntersectFace, intersectCor,
-            cornors: { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 }
+            cornors: { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 },
+            halfEdgeLength
          } = wall.checkResult;
 
         if (this.quickTurnTick(params) || this.#isClimbingUp) {
@@ -778,16 +779,27 @@ class Moveable2D {
 
         }
 
+        let checkCornors = [];
+
         const cornorsIsOverlap = () => {
 
-            return leftCorVec3.z <= 0 || rightCorVec3.z <= 0 ||
-                rightBackCorVec3.z <= 0 || leftBackCorVec3.z <= 0;
+            checkCornors = [];
+            
+            if (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) checkCornors.push(leftCorVec3.z);
+
+            if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) checkCornors.push(rightCorVec3.z);
+
+            if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) checkCornors.push(leftBackCorVec3.z);
+
+            if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) checkCornors.push(rightBackCorVec3.z);
+            
+            return checkCornors.length ? true : false;
 
         }
 
         const getMinCornorZ = () => {
-
-            return Math.min(leftCorVec3.z, rightCorVec3.z, leftBackCorVec3.z, rightBackCorVec3.z);
+            
+            return Math.min(...checkCornors);
 
         }
 

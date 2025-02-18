@@ -192,11 +192,12 @@ class SimplePhysics {
 
         }
 
+        const halfEdgeLength = plane.width / 2;
+
         if ((leftCorVec3.z <=0 || rightCorVec3.z <= 0 || leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) 
             && Math.abs(dummyObject.position.z) - halfPlayerDepth <= 0
         ) {
             
-            const halfEdgeLength = plane.width / 2;
             const padding = player.velocity * delta + player.paddingCoefficient;
 
             if (
@@ -268,7 +269,7 @@ class SimplePhysics {
 
                     intersect = true;
                     
-                    return { wallMesh, intersect, borderReach: true, cornors, leftCorIntersectFace, rightCorIntersectFace };
+                    return { wallMesh, intersect, borderReach: true, cornors, leftCorIntersectFace, rightCorIntersectFace, halfEdgeLength };
                 }
 
                 return { intersect, borderReach: false };
@@ -277,7 +278,7 @@ class SimplePhysics {
         }
 
         if (intersect)  
-            return { wallMesh, intersect, borderReach: false, intersectCor, cornors };
+            return { wallMesh, intersect, borderReach: false, intersectCor, cornors, halfEdgeLength };
         else
             return { intersect, borderReach: false }
 
@@ -685,9 +686,9 @@ class SimplePhysics {
             if (DEBUG && player._showBF) {
 
                 if (player.frontFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[0])
-                else if (player.backFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[1])
-                else if (player.leftFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[2])
-                else if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
+                if (player.backFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[1])
+                if (player.leftFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[2])
+                if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
 
             }
             
