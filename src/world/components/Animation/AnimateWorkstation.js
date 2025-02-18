@@ -87,6 +87,7 @@ class AnimateWorkstation {
                 play: () => { action.play(); return action; },
                 stop: () => { action.stop(); return action; },
                 reset: () => { action.reset(); return action; },
+                fadeOut: (dur) => { action.fadeOut(dur); return action; },
                 name: action._clip.name,
                 nick,
                 isDefault,

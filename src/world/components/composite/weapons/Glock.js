@@ -3,7 +3,9 @@ import { GLOCK_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 
 const GLTF_SRC = 'weapons/Glock19.glb';
 const ANIMATION_SETTINGS = {
-    SHOOT: 0.1
+    SHOOT: 0.1,
+    CANCEL_SHOOT: 0.1,
+    EMPTY: 0.08
 };
 
 class Glock extends WeaponBase {

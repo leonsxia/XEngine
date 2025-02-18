@@ -175,7 +175,9 @@ class WeaponBase {
 
         if (this.animateEnabled) {
 
-            this.AWS.setActionEffectiveWeight(this._shootNick, 0);
+            // this.AWS.setActionEffectiveWeight(this._shootNick, 0);
+            // this.AWS.actions[this._shootNick].stop();
+            this.AWS.actions[this._shootNick].fadeOut(this._animationSettings.CANCEL_SHOOT);
 
         }
 
@@ -185,7 +187,7 @@ class WeaponBase {
 
         if (this.animateEnabled) {
 
-            this.AWS.prepareCrossFade(this.AWS.actions[this._shootNick], this.AWS.actions[this._emptyNick], 0.08, 1);
+            this.AWS.prepareCrossFade(this.AWS.actions[this._shootNick], this.AWS.actions[this._emptyNick], this._animationSettings.EMPTY, 1);
 
         }
 
