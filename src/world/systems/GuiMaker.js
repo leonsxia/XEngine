@@ -446,7 +446,7 @@ class GuiMaker {
 
                 o['changeFn'] = () => {
                     
-                    updateSingleLightCamera.bind(this.scene, lightObj, false);
+                    updateSingleLightCamera.call(this.scene, lightObj, false);
 
                     lightObj.updateAttachedObject?.();
                 

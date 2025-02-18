@@ -273,9 +273,9 @@
                     "detail": {
                         "color": [253, 182, 58],
                         "position": [0, 0, 0],
-                        "intensity": 90,
+                        "intensity": 200,
                         "distance": 16.77,
-                        "decay": 1
+                        "decay": 2
                     },
                     "debug": true,
                     "shadow": true,
@@ -292,9 +292,9 @@
                     "detail": {
                         "color": [253, 182, 58],
                         "position": [0, 0, 0],
-                        "intensity": 45,
+                        "intensity": 300,
                         "distance": 16.77,
-                        "decay": 1
+                        "decay": 2
                     },
                     "debug": true,
                     "shadow": true,
@@ -311,9 +311,9 @@
                     "detail": {
                         "color": [253, 182, 58],
                         "position": [0, 0, 0],
-                        "intensity": 45,
+                        "intensity": 300,
                         "distance": 15,
-                        "decay": 1
+                        "decay": 2
                     },
                     "debug": true,
                     "shadow": true,
@@ -334,9 +334,9 @@
                         "color": [0, 191, 255],
                         "position": [0, 0, 0],
                         "target": [0, 0, 0],
-                        "intensity": 26,
+                        "intensity": 55,
                         "distance": 10,
-                        "decay": 0.33,
+                        "decay": 1.7,
                         "penumbra": 0.35,
                         "angle": 0.377
                     },
