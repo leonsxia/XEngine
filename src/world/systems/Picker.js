@@ -66,7 +66,11 @@ class Picker {
 
     clickEvent(event) {
 
-        if (!this.#scene || !this.#worldScene.postProcessingEnabled || !this.#worldScene.enablePick) 
+        if (!this.#scene || 
+            !this.#worldScene.postProcessingEnabled || 
+            !this.#worldScene.enablePick || 
+            this.#worldScene.objectLocked
+        ) 
             return;
 
         this.#mouse.x = (event.clientX / this.clientWidth) * 2 - 1;

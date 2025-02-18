@@ -53,6 +53,7 @@ class WorldScene {
     picker;
     enablePick = false;
     pickedObject = null;
+    objectLocked = false;
 
     sceneBuilder;
     sceneSetup;
@@ -777,6 +778,8 @@ class WorldScene {
         
         }
 
+        this.objectLocked = false;
+
     }
 
     enablePicking(enable) {
@@ -784,6 +787,7 @@ class WorldScene {
         const e = enable === 'enable' ? true : false;
 
         this.enablePick = e;    // for picker click event
+        this.objectLocked = false;
 
         this.setEffect(OUTLINE, { enabled: e });
 
@@ -981,6 +985,12 @@ class WorldScene {
 
         });
 
+    }
+
+    lockObjects() {
+
+        this.objectLocked = !this.objectLocked;
+        
     }
 
 }

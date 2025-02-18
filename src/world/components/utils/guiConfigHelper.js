@@ -680,12 +680,17 @@ function makeSceneRightGuiConfig(lightSpecs) {
     return panel;
 }
 
+function setupFunctionPanel(panelSpecs, functions) {
+
+    Object.assign(panelSpecs.parents, functions);
+
+}
+
 function makeObjectsGuiConfig(objects) {
 
     const objectPanel = makeGuiPanel();
     
     objects.forEach(object => {
-
 
         // set parent to null, so gui will use prop to set identifier
         const folder = makeFolderGuiConfig({ folder: object.name, parent: null, close: false });
@@ -967,5 +972,6 @@ export {
     makeFolderGuiConfig,
     makeFolderSpecGuiConfig,
     makeSceneRightGuiConfig,
-    makeObjectsGuiConfig
+    makeObjectsGuiConfig,
+    setupFunctionPanel
  };

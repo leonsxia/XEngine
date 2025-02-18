@@ -421,6 +421,29 @@ class Gui {
 
                         }
 
+                        if (find.parent.search(/_object_actions/) >= 0) {
+
+                            const isActive = !event.controller.domElement.classList.contains(CLASS_INACTIVE);
+                            const ctl = event.controller;
+
+                            if (isActive) {
+
+                                ctl.setInactive();
+
+                            } else {
+
+                                ctl.setActive();                                
+
+                            }
+
+                            if (ctl._name.search(/(L|l)ock/) >= 0) {
+
+                                ctl.name(`${ctl._name === 'Lock' ? 'Unl' : 'L'}ock`);
+
+                            }
+
+                        }
+
                         break;
 
                 }
@@ -540,6 +563,12 @@ class Gui {
             controller.domElement.classList.remove(CLASS_INACTIVE);
 
         };
+
+    }
+
+    addPanelParentObjects(object) {
+
+        Object.assign(this.#objects, object);
 
     }
     

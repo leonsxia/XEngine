@@ -1,6 +1,6 @@
 import { updateSingleLightCamera } from "../components/shadowMaker";
 import { WEAPONS } from "../components/utils/constants";
-import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig } from "../components/utils/guiConfigHelper";
+import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, setupFunctionPanel } from "../components/utils/guiConfigHelper";
 import { Gui, IC_CONTROL, PLAYER_CONTROL, SELECT_WEAPONS, WEAPONS_OPTIONS_PARENT, TPC_CONTROL, WEAPON_CONTROL, WEAPONS_ACTIONS_PARENT, WEAPON_ACTIONS } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcesser";
 
@@ -330,8 +330,8 @@ class GuiMaker {
                 }
             }
 
-            this.setupFunctionPanel(this.guiLeftSpecs, weaponOptionsActions);
-            this.setupFunctionPanel(this.guiLeftSpecs, weaponActions);
+            setupFunctionPanel(this.guiLeftSpecs, weaponOptionsActions);
+            setupFunctionPanel(this.guiLeftSpecs, weaponActions);
             this.guiLeftSpecs.details.push(makeFunctionGuiConfig(WEAPON_CONTROL, WEAPONS_OPTIONS_PARENT, SELECT_WEAPONS, true));
             this.guiLeftSpecs.details.push(makeFunctionGuiConfig(WEAPON_CONTROL, WEAPONS_ACTIONS_PARENT, WEAPON_ACTIONS, true));
 
@@ -408,7 +408,21 @@ class GuiMaker {
 
     setupObjectsGuiConfig(objects) {
 
+        const $scene = this.scene;
+
         const objectsConfig = makeObjectsGuiConfig(objects);
+
+        objectsConfig.details.forEach(detail => {
+
+            const parent = `${detail.folder}_object_actions`;
+            const objectActions = {};
+            objectActions[parent] = { 'Lock': $scene.lockObjects.bind($scene) };
+    
+            this.gui.addPanelParentObjects(objectActions);
+            objectsConfig.details.push(makeFunctionGuiConfig(detail.folder, parent, 'Actions', false, false));
+
+        });
+        
 
         this.gui.addObjects(objectsConfig);
 
@@ -417,13 +431,7 @@ class GuiMaker {
     setupLeftFunctionPanel() {
 
         // assgin left panel parents
-        this.setupFunctionPanel(this.guiLeftSpecs, this.leftActions);
-
-    }
-
-    setupFunctionPanel(panelSpecs, functions) {
-
-        Object.assign(panelSpecs.parents, functions);
+        setupFunctionPanel(this.guiLeftSpecs, this.leftActions);
 
     }
 
