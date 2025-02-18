@@ -561,8 +561,8 @@ class SceneBuilder {
     updateLight(_origin, _target, updateSetupOnly = false) {
 
         const { name, room } = _origin;
-        const findLight = this.worldScene.shadowLightObjects.find(l => l.room === room && l.name === name);
-        const light = findLight.light;
+        const findLightObj = this.worldScene.shadowLightObjects.find(l => l.room === room && l.name === name);
+        const light = findLightObj.light;
 
         switch (light.type) {
 
@@ -773,7 +773,9 @@ class SceneBuilder {
         if (!updateSetupOnly) {
 
             const needRender = this.worldScene.staticRendering;
-            updateSingleLightCamera.call(this.worldScene, findLight, needRender);
+            updateSingleLightCamera.call(this.worldScene, findLightObj, needRender);
+
+            findLightObj.updateAttachedObject?.();
 
         }
 
