@@ -92,6 +92,8 @@ class PostProcessor {
 
     effects = [];
 
+    ready = false;
+
     constructor(renderer, scene, camera, container) {
 
         this.#renderer = renderer;
@@ -201,6 +203,8 @@ class PostProcessor {
         this.triTexture = texture;
 
         this.outlinePass.patternTexture = texture;
+
+        this.ready = true;
 
     }
 

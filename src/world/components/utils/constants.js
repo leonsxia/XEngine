@@ -78,6 +78,12 @@ const SECURITY_LIGHT = 'SecurityLight';
 const FANCY_PICTURE_FRAME_01 = 'FancyPictureFrame01';
 const VINTAGE_GRANDFATHER_CLOCK = 'VintageGrandfatherClock';
 
+// cameras
+const CAMERAS = {
+    INSPECTOR: 'INSPECTOR',
+    THIRD_PERSON: 'THIRD_PERSON'
+}
+
 // post-processing
 const OUTLINE = 'outline';
 const SSAO = 'ssao';
@@ -340,6 +346,28 @@ const GLOCK_CLIPS = {
     SHOOT: { nick: 'shoot', name: 'glock_19|Shoot', idx: 0, enable: true, isDefault: true, startImmediately: false, weight: 0 }
 }
 
+// Gui
+const GUI_CONFIG = {
+    CONTROL_TITLES : {
+        MENU: 'Menu', 
+        LIGHT_CONTROL: 'Lights Control', 
+        OBJECTS_CONTROL: 'Objects Control'
+    },
+    PLAYER_CONTROL: 'Player Control',
+    POST_PROCESS_CONTROL: 'Post Processing',
+    TPC_CONTROL: 'Third Person Camera',
+    IC_CONTROL: 'Inspector Camera',
+    PICKER_CONTROL: 'Picker',
+    WEAPON_CONTROL: 'Weapons',
+    SELECT_WEAPONS: 'Select Weapons',
+    WEAPON_ACTIONS: 'Weapon Actions',
+    WEAPONS_OPTIONS_PARENT: 'weapon_options_actions',
+    WEAPONS_ACTIONS_PARENT: 'weapon_actions',
+    PICKER_ACTIONS_PARENT: 'picker_actions',
+    INACTIVES: '_inactive',
+    CLASS_INACTIVE: 'control-inactive'
+}
+
 export { 
     REPEAT_WRAPPING,
     MIRRORED_REPEAT_WRAPPING,
@@ -405,6 +433,8 @@ export {
     FANCY_PICTURE_FRAME_01,
     VINTAGE_GRANDFATHER_CLOCK,
 
+    CAMERAS,
+
     OUTLINE,
     SSAO,
     FXAA,
@@ -436,5 +466,7 @@ export {
     SHADERS,
 
     SOLDIER_FEMALE_CLIPS,
-    GLOCK_CLIPS
+    GLOCK_CLIPS,
+
+    GUI_CONFIG
 };

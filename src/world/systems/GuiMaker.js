@@ -1,7 +1,7 @@
 import { updateSingleLightCamera } from "../components/shadowMaker";
-import { WEAPONS } from "../components/utils/constants";
+import { WEAPONS, GUI_CONFIG } from "../components/utils/constants";
 import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, setupFunctionPanel } from "../components/utils/guiConfigHelper";
-import { Gui, IC_CONTROL, PLAYER_CONTROL, SELECT_WEAPONS, WEAPONS_OPTIONS_PARENT, TPC_CONTROL, WEAPON_CONTROL, WEAPONS_ACTIONS_PARENT, WEAPON_ACTIONS, POST_PROCESS_CONTROL, PICKER_ACTIONS_PARENT, PICKER_CONTROL } from "./Gui";
+import { Gui } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcesser";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
@@ -131,13 +131,13 @@ class GuiMaker {
 
             setupFunctionPanel(this.guiLeftSpecs, pickerActions);
 
-            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(PICKER_CONTROL, PICKER_ACTIONS_PARENT, null, true));
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.PICKER_CONTROL, GUI_CONFIG.PICKER_ACTIONS_PARENT, null, true));
 
         }
 
-        if ($scene.postProcessor) {
+        if ($scene.postProcessor.ready) {
 
-            const folder = makeFolderGuiConfig({ folder: POST_PROCESS_CONTROL, parent: 'postProcessing', close: true });
+            const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.POST_PROCESS_CONTROL, parent: 'postProcessing', close: true });
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'PostEffect',
@@ -220,7 +220,7 @@ class GuiMaker {
         if ($scene.thirdPersonCamera) {
 
             this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: TPC_CONTROL,
+                folder: GUI_CONFIG.TPC_CONTROL,
                 parent: 'thirdPersonCamera',
                 name: 'TPC',
                 value: { TPC: 'disable' },
@@ -235,7 +235,7 @@ class GuiMaker {
         if ($scene.inspectorCamera) {
 
             this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: IC_CONTROL,
+                folder: GUI_CONFIG.IC_CONTROL,
                 parent: 'inspectorCamera',
                 name: 'InsCam',
                 value: { InsCam: 'disable' },
@@ -249,7 +249,7 @@ class GuiMaker {
 
         if ($scene.player) {
 
-            const folder = makeFolderGuiConfig({ folder: PLAYER_CONTROL, parent: 'playerControl', close: true });
+            const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.PLAYER_CONTROL, parent: 'playerControl', close: true });
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BBHelper',
@@ -336,8 +336,8 @@ class GuiMaker {
 
             setupFunctionPanel(this.guiLeftSpecs, weaponOptionsActions);
             setupFunctionPanel(this.guiLeftSpecs, weaponActions);
-            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(WEAPON_CONTROL, WEAPONS_OPTIONS_PARENT, SELECT_WEAPONS, true));
-            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(WEAPON_CONTROL, WEAPONS_ACTIONS_PARENT, WEAPON_ACTIONS, true));
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.WEAPON_CONTROL, GUI_CONFIG.WEAPONS_OPTIONS_PARENT, GUI_CONFIG.SELECT_WEAPONS, true));
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.WEAPON_CONTROL, GUI_CONFIG.WEAPONS_ACTIONS_PARENT, GUI_CONFIG.WEAPON_ACTIONS, true));
 
         }
 

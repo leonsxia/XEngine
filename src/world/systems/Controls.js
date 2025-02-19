@@ -14,7 +14,7 @@ class WorldControls {
     #controls;
     #thisCamera;
     #length = 0;
-    #panels = [];
+    #gui;
     #preTarget;
     #preCamPos;
     _enableDamping = false;
@@ -44,11 +44,7 @@ class WorldControls {
 
     initPanels(gui) {
 
-        if (gui) {
-
-            this.#panels.push(gui.leftPanel);
-
-        }
+        this.#gui = gui;
 
     }
 
@@ -85,26 +81,7 @@ class WorldControls {
 
     setPanelState(disabled) {
 
-        if (this.#panels.length === 0) return;
-
-        this.#panels.forEach(panel => {
-
-            panel.children.forEach((child) => {
-
-                child.controllers.forEach(ctl => {
-
-                    if (disabled) {
-
-                        ctl.disable();
-
-                    } else {
-
-                        ctl.enable();
-                    }
-
-                });
-            });
-        });
+        this.#gui?.setPanelState(disabled);
 
     }
     

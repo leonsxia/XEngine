@@ -1,21 +1,7 @@
 import { GUI } from 'lil-gui';
 import Stats from 'stats.js';
 import { colorStr } from '../components/basic/colorBase';
-
-const CONTROL_TITLES = ['Menu', 'Lights Control', 'Objects Control'];
-const PLAYER_CONTROL = 'Player Control';
-const POST_PROCESS_CONTROL = 'Post Processing';
-const TPC_CONTROL = 'Third Person Camera';
-const IC_CONTROL = 'Inspector Camera';
-const PICKER_CONTROL = 'Picker';
-const WEAPON_CONTROL = 'Weapons';
-const SELECT_WEAPONS = 'Select Weapons';
-const WEAPON_ACTIONS = 'Weapon Actions';
-const WEAPONS_OPTIONS_PARENT = 'weapon_options_actions';
-const WEAPONS_ACTIONS_PARENT = 'weapon_actions';
-const PICKER_ACTIONS_PARENT = 'picker_actions';
-const INACTIVES = '_inactive';
-const CLASS_INACTIVE = 'control-inactive';
+import { GUI_CONFIG } from '../components/utils/constants';
 
 class Gui {
 
@@ -33,9 +19,9 @@ class Gui {
 
     constructor () {
 
-        this.#guis.push(new GUI({ title: CONTROL_TITLES[0], width: 200 }));
-        this.#guis.push(new GUI({ title: CONTROL_TITLES[1] }));
-        this.#guis.push(new GUI({ title: CONTROL_TITLES[2] }));
+        this.#guis.push(new GUI({ title: GUI_CONFIG.CONTROL_TITLES.MENU, width: 200 }));
+        this.#guis.push(new GUI({ title: GUI_CONFIG.CONTROL_TITLES.LIGHT_CONTROL }));
+        this.#guis.push(new GUI({ title: GUI_CONFIG.CONTROL_TITLES.OBJECTS_CONTROL }));
 
         this.#guis.forEach(gui => gui.hide());
 
@@ -47,9 +33,9 @@ class Gui {
 
     }
 
-    get leftPanel() {
+    get panels() {
 
-        return this.#guis[0];
+        return this.#guis;
 
     }
 
@@ -295,7 +281,7 @@ class Gui {
 
         fnames.forEach(f => {
 
-            if (f !== INACTIVES) parent.add(functions, f);
+            if (f !== GUI_CONFIG.INACTIVES) parent.add(functions, f);
 
         });
 
@@ -303,9 +289,9 @@ class Gui {
             
             this.bindControllerProperties(ctl);
 
-            if (functions[INACTIVES]?.find(item => item === ctl._name)) {
+            if (functions[GUI_CONFIG.INACTIVES]?.find(item => item === ctl._name)) {
 
-                ctl.domElement.classList.add(CLASS_INACTIVE);
+                ctl.domElement.classList.add(GUI_CONFIG.CLASS_INACTIVE);
 
             }
         
@@ -368,23 +354,23 @@ class Gui {
 
                     case 'role-dropdown':
 
-                        const gui = this.#guis[0];
+                        const gui = this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU);
 
                         find.changeFn(val, false);
 
-                        this.findController(gui, PLAYER_CONTROL, 'BBHelper').setValue('hide');
+                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BBHelper').setValue('hide');
           
-                        this.findController(gui, PLAYER_CONTROL, 'BB').setValue('hide');
+                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BB').setValue('hide');
 
-                        this.findController(gui, PLAYER_CONTROL, 'BBW').setValue('hide');
+                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BBW').setValue('hide');
 
-                        this.findController(gui, PLAYER_CONTROL, 'BF').setValue('hide');
+                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BF').setValue('hide');
 
-                        this.findController(gui, PLAYER_CONTROL, 'PushingBox').setValue('hide');
+                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'PushingBox').setValue('hide');
 
-                        this.findController(gui, PLAYER_CONTROL, 'Arrows').setValue('hide');
+                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Arrows').setValue('hide');
 
-                        this.findController(gui, PLAYER_CONTROL, 'Skeleton').setValue('hide');
+                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Skeleton').setValue('hide');
 
                         break;
 
@@ -394,11 +380,11 @@ class Gui {
                             
                             if (find.parent === 'inspectorCamera') {
 
-                                this.findController(this.#guis[0], TPC_CONTROL, 'TPC').setValue('disable');
+                                this.findController(this.#guis[0], GUI_CONFIG.TPC_CONTROL, 'TPC').setValue('disable');
 
                             } else if (find.parent === 'thirdPersonCamera') {
 
-                                this.findController(this.#guis[0], IC_CONTROL, 'InsCam').setValue('disable');
+                                this.findController(this.#guis[0], GUI_CONFIG.IC_CONTROL, 'InsCam').setValue('disable');
 
                             }
                         }
@@ -424,18 +410,19 @@ class Gui {
 
                     case 'function':
 
-                        if (!this._lockWeapons && find.parent === WEAPONS_OPTIONS_PARENT) {
+                        const ctl = event.controller;
+                        const isActive = this.controlIsActive(ctl);
 
-                            const isActive = !event.controller.domElement.classList.contains(CLASS_INACTIVE);
+                        if (!this._lockWeapons && find.parent === GUI_CONFIG.WEAPONS_OPTIONS_PARENT) {
 
                             if (isActive) {
 
-                                event.controller.setInactive();
+                                ctl.setInactive();
 
                             } else {
 
-                                event.controller.setActive();
-                                this.findOtherControllers(this.#guis[0], SELECT_WEAPONS, event.controller._name)
+                                ctl.setActive();
+                                this.findOtherControllers(this.#guis[0], GUI_CONFIG.SELECT_WEAPONS, event.controller._name)
                                     .forEach(ctl => ctl.setInactive());
 
                             }
@@ -443,12 +430,8 @@ class Gui {
                         }
 
                         if (find.parent.search(/_object_actions/) >= 0) {
-                            
-                            const ctl = event.controller;
 
                             if (ctl._name.search(/(L|l)ock/) >= 0) {
-
-                                const isActive = !ctl.domElement.classList.contains(CLASS_INACTIVE);
 
                                 if (isActive) {
 
@@ -466,11 +449,7 @@ class Gui {
 
                         }
 
-                        if (find.parent === PICKER_ACTIONS_PARENT) {
-
-                            const ctl = event.controller;
-
-                            const isActive = !ctl.domElement.classList.contains(CLASS_INACTIVE);
+                        if (find.parent === GUI_CONFIG.PICKER_ACTIONS_PARENT) {
 
                             if (isActive) {
 
@@ -498,17 +477,33 @@ class Gui {
 
     }
 
-    setLeftControlValue(control, action, value) {
+    controlIsActive(control) {
 
-        this.findController(this.#guis[0], control, action).setValue(value);
+        return !control.domElement.classList.contains(GUI_CONFIG.CLASS_INACTIVE);
 
     }
 
-    switchLeftFunctionControl(control, val, counterVal) {
+    findGui(title) {
 
-        const ctl = this.findController(this.#guis[0], control, val);
+        return this.#guis.find(g => g._title === title);
 
-        const isActive = !ctl.domElement.classList.contains(CLASS_INACTIVE);
+    }
+
+    setControlValue(gui, control, action, value) {
+
+        const ctl = this.findController(this.findGui(gui), control, action)
+        
+        ctl?.setValue(value);
+
+    }
+
+    switchFunctionControl(gui, control, val, counterVal) {
+
+        const ctl = this.findController(this.findGui(gui), control, val);
+
+        if (!ctl) return;
+        
+        const isActive = this.controlIsActive(ctl);
 
         if (isActive) {
 
@@ -532,7 +527,7 @@ class Gui {
 
     showAt(title) {
 
-        const find = this.#guis.find(g => g._title === title);
+        const find = this.findGui(title);
 
         if (find) find.show();
 
@@ -542,11 +537,16 @@ class Gui {
 
         const rightCtlNames = [];
 
-        CONTROL_TITLES.forEach(c => {
+        for (let gui in GUI_CONFIG.CONTROL_TITLES) {
 
-            if (c !== 'Menu') rightCtlNames.push(c);
+            const ctl = GUI_CONFIG.CONTROL_TITLES[gui];
+            if (ctl !== GUI_CONFIG.CONTROL_TITLES.MENU) {
 
-        });
+                rightCtlNames.push(ctl);
+
+            }
+
+        }
 
         rightCtlNames.forEach(c => {
 
@@ -566,7 +566,7 @@ class Gui {
 
     hideAt(title) {
 
-        const find = this.#guis.find(g => g._title === title);
+        const find = this.findGui(title);
 
         if (find) find.hide();
 
@@ -594,11 +594,12 @@ class Gui {
 
     removeObjects() {
 
-        const length = this.#guis[2].children.length;
+        const objCtl = this.findGui(GUI_CONFIG.CONTROL_TITLES.OBJECTS_CONTROL)
+        const length = objCtl.children.length;
 
         for (let i = 0; i < length; i++) {
 
-            this.#guis[2].children[0].destroy();
+            objCtl.children[0].destroy();
 
         }
 
@@ -606,9 +607,19 @@ class Gui {
 
     findController(gui, folder, controller) {
 
-        const ctl = gui.foldersRecursive()
-            .find(f => f._title === folder).controllers
-            .find(c => c._name === controller);
+        let ctl = null;
+        
+        if (folder) {
+
+            ctl = gui.foldersRecursive()
+                .find(f => f._title === folder).controllers
+                .find(c => c._name === controller);
+
+        } else {
+
+            ctl = gui.controllersRecursive().find(c => c._name === controller);
+
+        }
 
         return ctl;
         
@@ -628,13 +639,13 @@ class Gui {
 
         controller.setInactive = () => {
 
-            controller.domElement.classList.add(CLASS_INACTIVE);
+            controller.domElement.classList.add(GUI_CONFIG.CLASS_INACTIVE);
 
         };
 
         controller.setActive = () => {
 
-            controller.domElement.classList.remove(CLASS_INACTIVE);
+            controller.domElement.classList.remove(GUI_CONFIG.CLASS_INACTIVE);
 
         };
 
@@ -645,14 +656,46 @@ class Gui {
         Object.assign(this.#objects, object);
 
     }
+
+    setPanelState(disabled) {
+
+        if (this.panels.length === 0) return;
+
+        const ctlAction = (ctl) => {
+
+            if (disabled) {
+
+                ctl.disable();
+
+            } else {
+
+                ctl.enable();
+            }
+
+        }
+
+        this.panels.forEach(panel => {
+
+            panel.controllersRecursive().forEach((ctl) => {
+
+                ctlAction(ctl);
+
+            });
+
+            panel.foldersRecursive().forEach(folder => {
+
+                folder.controllers.forEach(ctl => {
+
+                    ctlAction(ctl);
+
+                });
+
+            });
+
+        });
+
+    }
     
 }
 
-export { 
-    Gui, 
-    PLAYER_CONTROL, 
-    WEAPON_CONTROL, SELECT_WEAPONS, WEAPON_ACTIONS, WEAPONS_ACTIONS_PARENT, WEAPONS_OPTIONS_PARENT,
-    TPC_CONTROL, IC_CONTROL,
-    POST_PROCESS_CONTROL,
-    PICKER_CONTROL, PICKER_ACTIONS_PARENT
-};
+export { Gui };

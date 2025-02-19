@@ -6,9 +6,8 @@ import { WorldControls } from '../systems/Controls.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
-import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS } from '../components/utils/constants.js';
+import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
-import { PICKER_CONTROL, POST_PROCESS_CONTROL } from '../systems/Gui.js';
 
 let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -793,7 +792,7 @@ class WorldScene {
 
         if (this.enablePick && !this.postProcessOn) {
 
-            this.guiMaker.gui.switchLeftFunctionControl(PICKER_CONTROL, 'disable', 'enable');
+            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, 'disable', 'enable');
             this.enablePick = false;
 
         }
@@ -811,7 +810,7 @@ class WorldScene {
 
             const postProcState = this.postProcessOn;
 
-            this.guiMaker.gui.setLeftControlValue(POST_PROCESS_CONTROL, 'PostEffect', val);
+            this.guiMaker.gui.setControlValue(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.POST_PROCESS_CONTROL, 'PostEffect', val);
 
             this.postProcessOn = postProcState;
 
