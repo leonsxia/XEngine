@@ -8,6 +8,7 @@ import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
 import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
+import { PICKER_CONTROL, POST_PROCESS_CONTROL } from '../systems/Gui.js';
 
 let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -49,6 +50,7 @@ class WorldScene {
     postProcessor;
     triTexture;
     postProcessingEnabled = false;
+    postProcessOn = false;
 
     picker;
     enablePick = false;
@@ -778,6 +780,8 @@ class WorldScene {
 
         this.enablePostProcessing(e);
 
+        this.postProcessOn = e;
+
         if (!e) {
 
             this.postProcessor.clearOutlineObjects();
@@ -787,21 +791,53 @@ class WorldScene {
 
         this.objectLocked = false;
 
+        if (this.enablePick && !this.postProcessOn) {
+
+            this.guiMaker.gui.switchLeftFunctionControl(PICKER_CONTROL, 'disable', 'enable');
+            this.enablePick = false;
+
+        }
+
     }
 
-    enablePicking(enable) {
+    enablePicking() {
 
-        const e = enable === 'enable' ? true : false;
-
-        this.enablePick = e;    // for picker click event
+        this.enablePick = !this.enablePick;    // for picker click event
         this.objectLocked = false;
 
-        this.setEffect(OUTLINE, { enabled: e });
+        this.setEffect(OUTLINE, { enabled: this.enablePick });
 
-        if (!e) {
+        const triggerPostProcess = (val) => {
+
+            const postProcState = this.postProcessOn;
+
+            this.guiMaker.gui.setLeftControlValue(POST_PROCESS_CONTROL, 'PostEffect', val);
+
+            this.postProcessOn = postProcState;
+
+        }
+
+        if (this.enablePick) {
+
+            if (!this.postProcessOn) {
+
+                this.enablePostProcessing(true);
+
+            }
+
+            triggerPostProcess('enable');
+
+        } else {
             
             this.postProcessor.clearOutlineObjects();
             this.guiMaker.clearObjectsPanel();
+
+            if (!this.postProcessOn) {
+
+                this.enablePostProcessing(false);  
+                triggerPostProcess('disable');              
+
+            }            
 
         }
 

@@ -4,13 +4,16 @@ import { colorStr } from '../components/basic/colorBase';
 
 const CONTROL_TITLES = ['Menu', 'Lights Control', 'Objects Control'];
 const PLAYER_CONTROL = 'Player Control';
+const POST_PROCESS_CONTROL = 'Post Processing';
 const TPC_CONTROL = 'Third Person Camera';
 const IC_CONTROL = 'Inspector Camera';
+const PICKER_CONTROL = 'Picker';
 const WEAPON_CONTROL = 'Weapons';
 const SELECT_WEAPONS = 'Select Weapons';
 const WEAPON_ACTIONS = 'Weapon Actions';
 const WEAPONS_OPTIONS_PARENT = 'weapon_options_actions';
 const WEAPONS_ACTIONS_PARENT = 'weapon_actions';
+const PICKER_ACTIONS_PARENT = 'picker_actions';
 const INACTIVES = '_inactive';
 const CLASS_INACTIVE = 'control-inactive';
 
@@ -440,9 +443,34 @@ class Gui {
                         }
 
                         if (find.parent.search(/_object_actions/) >= 0) {
-
-                            const isActive = !event.controller.domElement.classList.contains(CLASS_INACTIVE);
+                            
                             const ctl = event.controller;
+
+                            if (ctl._name.search(/(L|l)ock/) >= 0) {
+
+                                const isActive = !ctl.domElement.classList.contains(CLASS_INACTIVE);
+
+                                if (isActive) {
+
+                                    ctl.setInactive();
+
+                                } else {
+
+                                    ctl.setActive();
+
+                                }
+
+                                ctl.name(`${ctl._name === 'lock' ? 'unl' : 'l'}ock`);
+
+                            }
+
+                        }
+
+                        if (find.parent === PICKER_ACTIONS_PARENT) {
+
+                            const ctl = event.controller;
+
+                            const isActive = !ctl.domElement.classList.contains(CLASS_INACTIVE);
 
                             if (isActive) {
 
@@ -450,15 +478,11 @@ class Gui {
 
                             } else {
 
-                                ctl.setActive();                                
+                                ctl.setActive();
 
                             }
 
-                            if (ctl._name.search(/(L|l)ock/) >= 0) {
-
-                                ctl.name(`${ctl._name === 'Lock' ? 'Unl' : 'L'}ock`);
-
-                            }
+                            ctl.name(`${ctl._name === 'enable' ? 'disable' : 'enable'}`);
 
                         }
 
@@ -471,6 +495,32 @@ class Gui {
                 this.#attachedTo.render();
 
         });
+
+    }
+
+    setLeftControlValue(control, action, value) {
+
+        this.findController(this.#guis[0], control, action).setValue(value);
+
+    }
+
+    switchLeftFunctionControl(control, val, counterVal) {
+
+        const ctl = this.findController(this.#guis[0], control, val);
+
+        const isActive = !ctl.domElement.classList.contains(CLASS_INACTIVE);
+
+        if (isActive) {
+
+            ctl.setInactive();
+
+        } else {
+
+            ctl.setActive();
+
+        }
+
+        ctl.name(counterVal);
 
     }
 
@@ -556,7 +606,7 @@ class Gui {
 
     findController(gui, folder, controller) {
 
-        const ctl = gui.folders
+        const ctl = gui.foldersRecursive()
             .find(f => f._title === folder).controllers
             .find(c => c._name === controller);
 
@@ -602,5 +652,7 @@ export {
     Gui, 
     PLAYER_CONTROL, 
     WEAPON_CONTROL, SELECT_WEAPONS, WEAPON_ACTIONS, WEAPONS_ACTIONS_PARENT, WEAPONS_OPTIONS_PARENT,
-    TPC_CONTROL, IC_CONTROL
+    TPC_CONTROL, IC_CONTROL,
+    POST_PROCESS_CONTROL,
+    PICKER_CONTROL, PICKER_ACTIONS_PARENT
 };

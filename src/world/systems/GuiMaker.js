@@ -1,7 +1,7 @@
 import { updateSingleLightCamera } from "../components/shadowMaker";
 import { WEAPONS } from "../components/utils/constants";
 import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, setupFunctionPanel } from "../components/utils/guiConfigHelper";
-import { Gui, IC_CONTROL, PLAYER_CONTROL, SELECT_WEAPONS, WEAPONS_OPTIONS_PARENT, TPC_CONTROL, WEAPON_CONTROL, WEAPONS_ACTIONS_PARENT, WEAPON_ACTIONS } from "./Gui";
+import { Gui, IC_CONTROL, PLAYER_CONTROL, SELECT_WEAPONS, WEAPONS_OPTIONS_PARENT, TPC_CONTROL, WEAPON_CONTROL, WEAPONS_ACTIONS_PARENT, WEAPON_ACTIONS, POST_PROCESS_CONTROL, PICKER_ACTIONS_PARENT, PICKER_CONTROL } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcesser";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
@@ -121,9 +121,23 @@ class GuiMaker {
             }));
         }
 
+        if (!$scene.picker.isUnavailable) {
+           
+            const pickerActions = {
+                'picker_actions': {
+                    'enable': $scene.enablePicking.bind($scene)
+                }
+            }
+
+            setupFunctionPanel(this.guiLeftSpecs, pickerActions);
+
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(PICKER_CONTROL, PICKER_ACTIONS_PARENT, null, true));
+
+        }
+
         if ($scene.postProcessor) {
 
-            const folder = makeFolderGuiConfig({ folder: 'Post Processing', parent: 'postProcessing', close: true });
+            const folder = makeFolderGuiConfig({ folder: POST_PROCESS_CONTROL, parent: 'postProcessing', close: true });
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'PostEffect',
@@ -133,25 +147,15 @@ class GuiMaker {
                 changeFn: $scene.enablePostEffect.bind($scene)
             }));
 
-            if (!$scene.picker.isUnavailable) {
-
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'Picker',
-                    value: { Picker: 'disable' },
-                    params: ['enable', 'disable'],
-                    type: 'dropdown',
-                    changeFn: $scene.enablePicking.bind($scene)
-                }));
-
-            }
-
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'FXAA',
-                value: { FXAA: 'disable' },
+                value: { FXAA: 'enable' },
                 params: ['enable', 'disable'],
                 type: 'dropdown',
                 changeFn: $scene.enableFXAA.bind($scene)
             }));
+
+            $scene.enableFXAA('enable');
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'SSAA',
@@ -416,7 +420,7 @@ class GuiMaker {
 
             const parent = `${detail.folder}_object_actions`;
             const objectActions = {};
-            objectActions[parent] = { 'Lock': $scene.lockObjects.bind($scene) };
+            objectActions[parent] = { 'lock': $scene.lockObjects.bind($scene) };
     
             this.gui.addPanelParentObjects(objectActions);
             objectsConfig.details.push(makeFunctionGuiConfig(detail.folder, parent));
