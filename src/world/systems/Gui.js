@@ -139,6 +139,18 @@ class Gui {
 
         this.addControl(this.#guis[2], specs, eventObjs);
 
+        specs.functions = {};
+
+        Object.defineProperty(specs.functions, 'reset', {
+            value: () => {
+                this.#guis[2].reset();
+                console.log('reset object successful!');
+            },
+            writable: true
+        });
+
+        this.bindFunctions(this.#guis[2], specs.functions);
+
         this.bindChange(this.#guis[2], eventObjs);
 
     }
@@ -181,7 +193,13 @@ class Gui {
 
             } else {
 
-                folder = gui.addFolder(detail.folder);
+                folder = gui.folders.find(f => f._title === detail.folder);
+
+                if (!folder) {
+
+                    folder = gui.addFolder(detail.folder);
+
+                }
 
             }
 
@@ -526,7 +544,13 @@ class Gui {
 
     removeObjects() {
 
-        this.#guis[2].children.forEach(c => c.destroy());
+        const length = this.#guis[2].children.length;
+
+        for (let i = 0; i < length; i++) {
+
+            this.#guis[2].children[0].destroy();
+
+        }
 
     }
 

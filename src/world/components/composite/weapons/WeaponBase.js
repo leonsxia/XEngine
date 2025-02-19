@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { EventDispatcher, Group } from 'three';
 import { GLTFModel } from '../../Models';
 import { loadedGLTFModels } from '../../utils/gltfHelper';
 import { Logger } from '../../../systems/Logger';
@@ -6,7 +6,7 @@ import { AnimateWorkstation } from '../../Animation/AnimateWorkstation';
 
 const DEBUG = true;
 
-class WeaponBase {
+class WeaponBase extends EventDispatcher {
 
     gltf;
     group;
@@ -31,6 +31,8 @@ class WeaponBase {
 
     constructor(specs) {
 
+        super();
+        
         const { name, scale = [1, 1, 1] } = specs;
         const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
@@ -63,8 +65,9 @@ class WeaponBase {
         this.gltf.setScale(scale);
         this.gltf.setPosition(position);
         this.gltf.setRotation(rotation);
+        this.gltf.group.isWeapon = true;
 
-        this.group = new Group();
+        this.group = new Group();        
 
         this.group.add(this.gltf.group);
 
@@ -89,6 +92,20 @@ class WeaponBase {
             this.AWS.setActionEffectiveTimeScale(this._shootNick, this._fireRate);
 
         }
+
+    }
+
+    get visible() {
+
+        return this.group.visible;
+
+    }
+
+    set visible(val) {
+
+        this.group.visible = val;
+
+        this.dispatchEvent({ type: 'visibleChanged', message: 'visible changed triggered' });
 
     }
 

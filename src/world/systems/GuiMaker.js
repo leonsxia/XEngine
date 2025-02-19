@@ -419,7 +419,7 @@ class GuiMaker {
             objectActions[parent] = { 'Lock': $scene.lockObjects.bind($scene) };
     
             this.gui.addPanelParentObjects(objectActions);
-            objectsConfig.details.push(makeFunctionGuiConfig(detail.folder, parent, 'Actions', false, false));
+            objectsConfig.details.push(makeFunctionGuiConfig(detail.folder, parent));
 
         });
         

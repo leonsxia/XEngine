@@ -19,7 +19,8 @@ class GLTFModel {
         this.name = name;
 
         this.group = new Group();
-        this.group.name = name;
+        this.group.name = `${name}_group`;
+        this.group.father = this;
 
         this.specs = specs;
 
@@ -73,6 +74,20 @@ class GLTFModel {
 
     }
 
+    traverse(callback) {
+
+        this.group.traverse((object) => {
+
+            if (object.isMesh) {
+                
+                callback(object);
+            
+            }
+
+        });
+
+    }
+
     getMeshes(object) {
 
         // if (object.isGroup || object.isObject3D && !object.isMesh && !object.isBone) {
@@ -99,7 +114,11 @@ class GLTFModel {
 
         object.traverse((object) => {
 
-            if (object.isMesh) this.meshes.push(object);
+            if (object.isMesh) {
+                
+                this.meshes.push(object);
+            
+            }
             
         });
 

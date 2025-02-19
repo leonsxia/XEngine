@@ -701,9 +701,16 @@ class WorldScene {
                     }
                 }
 
-                break;
+                break;    
 
         }
+
+        if (this.pickedObject?.isWeapon) {
+            
+            this.guiMaker.gui.removeObjects();
+            this.objectLocked = false;
+        
+        };
 
     }
 

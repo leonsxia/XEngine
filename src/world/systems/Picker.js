@@ -1,6 +1,6 @@
 import { Raycaster, Vector2 } from 'three';
 import { CAMERA_RAY_LAYER } from '../components/utils/constants';
-import { getInwallParent } from '../components/utils/objectHelper';
+import { getInwallParent, getTopParent } from '../components/utils/objectHelper';
 
 class Picker {
 
@@ -93,8 +93,27 @@ class Picker {
         if (intersects.length > 0) {
 
             const intersectObj = intersects[0].object;
-            const selectedObject = intersectObj.parent.isRoom ? intersectObj : 
-                intersectObj.parent.isPlayer ? intersectObj.parent : getInwallParent(intersectObj);
+            let player = {};
+            let weapon = {};
+            let selectedObject = null;
+            
+            if ( intersectObj.parent.isRoom) {
+
+                selectedObject = intersectObj;
+
+            } else if (getTopParent(intersectObj, weapon, 'isWeapon').isWeapon) {
+
+                selectedObject = weapon.value;
+
+            } else if (getTopParent(intersectObj, player).isPlayer) {
+
+                selectedObject = player.value;
+
+            } else {
+
+                selectedObject = getInwallParent(intersectObj);
+
+            }
 
             selectedObject.isPicked = true;
             selectedObject.father?.resetFallingState?.();

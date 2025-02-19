@@ -105,9 +105,7 @@ class Tofu extends Moveable2D {
 
         } = this.meshes;
 
-        body.layers.enable(CAMERA_RAY_LAYER);
-        slotLeft.layers.enable(CAMERA_RAY_LAYER);
-        slotRight.layers.enable(CAMERA_RAY_LAYER);
+        this.enablePickLayers(body, slotLeft, slotRight);
 
         this.group.add(
 
@@ -451,10 +449,36 @@ class Tofu extends Moveable2D {
         
     }
 
+    enablePickLayers(...meshes) {
+
+        meshes.forEach(mesh => {
+
+            if (mesh.visible) {
+
+                mesh.layers.enable(CAMERA_RAY_LAYER);
+    
+            } else {
+    
+                mesh.layers.disable(CAMERA_RAY_LAYER);
+    
+            }
+    
+        });
+        
+    }
+
     showTofu(show) {
 
-        this.bodyMesh.visible = show;
-        this.slotMeshes.forEach(slot => slot.visible = show);
+        this.meshes.body.visible = show;
+        this.enablePickLayers(this.meshes.body);
+        
+        this.slotMeshes.forEach(slot => {
+            
+            slot.visible = show;
+            
+            this.enablePickLayers(slot);
+        
+        });
 
     }
  
@@ -479,6 +503,8 @@ class Tofu extends Moveable2D {
         this._showBF = show;
 
         this.setBoundingFaceVisibility();
+
+        this.enablePickLayers(...this.boundingFaceMesh, ...this.boundingFace2Mesh);
 
         return this;
 

@@ -9,6 +9,12 @@ const SCALE_MAX = 10;
 const PICKED_NUMBER_STEPS = .01;
 const PICKED_ANGLE_STEPS = .1;
 
+const PICKED_WEAPON_NUMBER_STEPS = .001;
+const PICKED_WEAPON_ANGLE_STEPS = .01;
+
+const MAX_ANGLE = 360;
+const MAX_RADIUS = 3.14;
+
 function combineGuiConfigs(...details) {
     let specs = [];
     details.forEach(detail => 
@@ -702,6 +708,10 @@ function makeObjectsGuiConfig(objects) {
                 object.father.updateRay?.();
                 object.father.updateOBB?.();
     
+            } else if (object.isWeapon) {
+
+                // weapon post change
+
             } else if (object.isGroup) {
 
                 object.father.updateOBBs();
@@ -717,11 +727,13 @@ function makeObjectsGuiConfig(objects) {
             }
         }
 
+        const picked_number_steps = !object.isWeapon ? PICKED_NUMBER_STEPS : PICKED_WEAPON_NUMBER_STEPS;
+
         folder.specs.push(makeFolderSpecGuiConfig({
             name: 'x',
             prop: 'position.x',
             value: object.position,
-            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, PICKED_NUMBER_STEPS],
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
             type: 'number',
             changeFn: posChangeFn
         }));
@@ -730,7 +742,7 @@ function makeObjectsGuiConfig(objects) {
             name: 'y',
             prop: 'position.y',
             value: object.position,
-            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, PICKED_NUMBER_STEPS],
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
             type: 'number',
             changeFn: posChangeFn
         }));
@@ -739,12 +751,12 @@ function makeObjectsGuiConfig(objects) {
             name: 'z',
             prop: 'position.z',
             value: object.position,
-            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, PICKED_NUMBER_STEPS],
+            params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
             type: 'number',
             changeFn: posChangeFn
         }));
 
-        if (!object.isPlayer && 
+        if (!object.isPlayer && !object.isWeapon &&
             !object.father.isFloor && !object.father.isCeiling && 
             !object.father.isArea &&
             !object.father.isWater && !object.father.isWaterCube
@@ -754,7 +766,7 @@ function makeObjectsGuiConfig(objects) {
                 name: 'rotationYDegree',
                 prop: 'rotation.y',
                 value: object.father,
-                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                 type: 'object-angle',
                 changeFn: (val) => {
 
@@ -814,7 +826,7 @@ function makeObjectsGuiConfig(objects) {
                 name: 'rotationZDegree',
                 prop: 'rotation.z',
                 value: object.father,
-                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                 type: 'object-angle',
                 changeFn: () => {
 
@@ -833,7 +845,7 @@ function makeObjectsGuiConfig(objects) {
                     name: 'rotationZDegree',
                     prop: 'rotation.z',
                     value: object.father,
-                    params: [- 360, 360, PICKED_ANGLE_STEPS],
+                    params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                     type: 'object-angle',
                     changeFn: () => {
     
@@ -848,7 +860,7 @@ function makeObjectsGuiConfig(objects) {
                     name: 'rotationXDegree',
                     prop: 'rotation.x',
                     value: object.father,
-                    params: [- 360, 360, PICKED_ANGLE_STEPS],
+                    params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                     type: 'object-angle'
                 }));
     
@@ -856,7 +868,7 @@ function makeObjectsGuiConfig(objects) {
                     name: 'rotationYDegree',
                     prop: 'rotation.y',
                     value: object.father,
-                    params: [- 360, 360, PICKED_ANGLE_STEPS],
+                    params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                     type: 'object-angle'
                 }));
     
@@ -864,7 +876,7 @@ function makeObjectsGuiConfig(objects) {
                     name: 'rotationZDegree',
                     prop: 'rotation.z',
                     value: object.father,
-                    params: [- 360, 360, PICKED_ANGLE_STEPS],
+                    params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                     type: 'object-angle'
                 }));
 
@@ -877,7 +889,7 @@ function makeObjectsGuiConfig(objects) {
                 name: 'rotationXDegree',
                 prop: 'rotation.x',
                 value: object.father,
-                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                 type: 'object-angle',
                 changeFn: () => {
 
@@ -891,7 +903,7 @@ function makeObjectsGuiConfig(objects) {
                 name: 'rotationYDegree',
                 prop: 'rotation.y',
                 value: object.father,
-                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                 type: 'object-angle',
                 changeFn: () => {
 
@@ -905,7 +917,7 @@ function makeObjectsGuiConfig(objects) {
                 name: 'rotationZDegree',
                 prop: 'rotation.z',
                 value: object.father,
-                params: [- 360, 360, PICKED_ANGLE_STEPS],
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                 type: 'object-angle',
                 changeFn: () => {
 
@@ -953,6 +965,37 @@ function makeObjectsGuiConfig(objects) {
                 value: object.father,
                 params: [-1, 1, PICKED_NUMBER_STEPS],
                 type: 'number'
+            }));
+
+        }
+
+        if (object.isWeapon) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'x',
+                prop: 'rotation.x',
+                value: object.rotation,
+                params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
+                type: 'number',
+                changeFn: posChangeFn
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'y',
+                prop: 'rotation.y',
+                value: object.rotation,
+                params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
+                type: 'number',
+                changeFn: posChangeFn
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'z',
+                prop: 'rotation.z',
+                value: object.rotation,
+                params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
+                type: 'number',
+                changeFn: posChangeFn
             }));
 
         }

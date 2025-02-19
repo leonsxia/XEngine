@@ -89,7 +89,7 @@ function getInwallParent(object) {
 
         } else {
 
-            target = getInwallParent(object.parent, target);
+            target = getInwallParent(object.parent);
 
         }
     }
@@ -97,4 +97,26 @@ function getInwallParent(object) {
     return target;
 }
 
-export { clone, groupHasChild, getVisibleMeshes, getInwallParent };
+/**
+@param level - isPlayer, isWeapon and so on
+*/
+function getTopParent(object, out, level = '') {
+
+    let target = null;
+    
+    if (!object[level] && object.parent && !object.parent.isScene) {
+
+        target = getTopParent(object.parent, out, level);
+
+    } else {
+
+        target = object;
+        out['value'] = target;
+
+    }
+    
+    return target;
+
+}
+
+export { clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent };

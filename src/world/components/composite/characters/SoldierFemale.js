@@ -105,12 +105,14 @@ class SoldierFemale extends CombatPlayerBase {
 
         await Promise.all([
             this.weapons[WEAPONS.PISTOL1].init(),
-            this.weapons[WEAPONS.GLOCK].init(), 
-            this.weapons[WEAPONS.BAYONET].init(),
+            this.weapons[WEAPONS.GLOCK].init(),            
             this.weapons[WEAPONS.REVOLVER].init(),
             this.weapons[WEAPONS.SMG_SHORT].init(),
+            this.weapons[WEAPONS.BAYONET].init(),
             super.init()
         ]);
+
+        this.bindWeaponEvents();
 
         this.idleNick = CLIPS.IDLE.nick;
 
