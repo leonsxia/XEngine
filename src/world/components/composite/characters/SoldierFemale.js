@@ -1,6 +1,7 @@
 import { CombatPlayerBase, Pistol, Bayonet, Revolver, SMGShort, Glock } from '../../Models';
 import { SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
+import { WeaponActionMapping } from './WeaponActionMapping';
 
 const GLTF_SRC = 'characters/soldier_female.glb';
 const ANIMATION_SETTINGS = {
@@ -91,11 +92,11 @@ class SoldierFemale extends CombatPlayerBase {
             fireRate: 1.25
         });
 
-        this.weaponActionMapping[WEAPONS.PISTOL1] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.7, fireRate: 1.2 };
-        this.weaponActionMapping[WEAPONS.GLOCK] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.4667, fireRate: 1.8 };
-        this.weaponActionMapping[WEAPONS.REVOLVER] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 1.05, fireRate: 0.8 };
-        this.weaponActionMapping[WEAPONS.SMG_SHORT] = { idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.08, fireRate: 10.2 };
-        this.weaponActionMapping[WEAPONS.BAYONET] = { attack: CLIPS.SWORD_SLASH, attackInterval: 1.03, prepareInterval: 0.5, fireRate: 1.25 };
+        this.weaponActionMapping[WEAPONS.PISTOL1] = new WeaponActionMapping({ idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.7, fireRate: 1.2 });
+        this.weaponActionMapping[WEAPONS.GLOCK] = new WeaponActionMapping({ idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.4667, fireRate: 1.8 });
+        this.weaponActionMapping[WEAPONS.REVOLVER] = new WeaponActionMapping({ idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 1.05, fireRate: 0.8 });
+        this.weaponActionMapping[WEAPONS.SMG_SHORT] = new WeaponActionMapping({ idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.08, fireRate: 10.2 });
+        this.weaponActionMapping[WEAPONS.BAYONET] = new WeaponActionMapping({ attack: CLIPS.SWORD_SLASH, attackInterval: 1.03, prepareInterval: 0.5, fireRate: 1.25 });
 
         this.showTofu(false);
 
