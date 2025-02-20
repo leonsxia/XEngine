@@ -1071,7 +1071,7 @@ class WorldScene {
 
         this.airWalls.forEach(w => {
 
-            w.mesh.visible = s;
+            w.visible = s;
 
         });
 

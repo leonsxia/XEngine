@@ -1,12 +1,13 @@
-import { EventDispatcher, Group } from 'three';
+import { Group } from 'three';
 import { GLTFModel } from '../../Models';
 import { loadedGLTFModels } from '../../utils/gltfHelper';
 import { Logger } from '../../../systems/Logger';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
+import { CAMERA_RAY_LAYER } from '../../utils/constants';
 
-const DEBUG = true;
+const DEBUG = false;
 
-class WeaponBase extends EventDispatcher {
+class WeaponBase {
 
     gltf;
     group;
@@ -29,9 +30,9 @@ class WeaponBase extends EventDispatcher {
     _emptyNick = 'empty';
     _animateMapping = {};
 
-    constructor(specs) {
+    #logger = new Logger(DEBUG, 'WeaponBase');
 
-        super();
+    constructor(specs) {
         
         const { name, scale = [1, 1, 1] } = specs;
         const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
@@ -83,6 +84,8 @@ class WeaponBase extends EventDispatcher {
 
         }
 
+        this.bindEvents();
+
         if (Object.getOwnPropertyNames(this._clips).length) {
 
             this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
@@ -95,17 +98,33 @@ class WeaponBase extends EventDispatcher {
 
     }
 
+    bindEvents() {
+
+        const type = 'visibleChanged';
+        const listener = (event) => {
+
+            this.#logger.log(`${this.gltf.name}: ${event.message}`);
+            this.gltf.setLayers(CAMERA_RAY_LAYER);
+
+        };
+
+        if (!this.gltf.hasEventListener(type, listener)) {
+
+            this.gltf.addEventListener(type, listener);
+
+        }
+
+    }
+
     get visible() {
 
-        return this.group.visible;
+        return this.gltf.visible;
 
     }
 
     set visible(val) {
 
-        this.group.visible = val;
-
-        this.dispatchEvent({ type: 'visibleChanged', message: 'visible changed triggered' });
+        this.gltf.visible = val;
 
     }
 

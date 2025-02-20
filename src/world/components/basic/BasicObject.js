@@ -1,4 +1,4 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher } from 'three';
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
@@ -7,7 +7,7 @@ import { white } from './colorBase';
 import { REPEAT_WRAPPING } from '../utils/constants';
 import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP, WATER_PLANE } from '../utils/constants';
 
-class BasicObject {
+class BasicObject extends EventDispatcher {
     
     geometry = null;
     material = null;
@@ -18,6 +18,8 @@ class BasicObject {
     specs;
 
     constructor(type, specs) {
+
+        super();
 
         const { name, color, empty } = specs;
 
@@ -257,7 +259,23 @@ class BasicObject {
     set visible(val) {
 
         this.mesh.visible = val;
+
+        this.dispatchEvent({ type: 'visibleChanged', message: 'basic object visible changed' });
         
+    }
+
+    setLayers(layer) {
+
+        if (this.visible) {
+
+            this.mesh.layers.enable(layer);
+
+        } else {
+
+            this.mesh.layers.disable(layer);
+
+        }
+
     }
 
     setTexture(texture, isNormal = false) {

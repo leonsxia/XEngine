@@ -1,9 +1,9 @@
-import { Group, SkeletonHelper } from 'three';
+import { EventDispatcher, Group, SkeletonHelper } from 'three';
 import { worldGLTFLoader } from '../utils/gltfHelper';
 import { clone } from '../utils/objectHelper';
 import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js'
 
-class GLTFModel {
+class GLTFModel extends EventDispatcher {
 
     name = '';
     group;
@@ -13,6 +13,8 @@ class GLTFModel {
     specs;
 
     constructor(specs) {
+
+        super();
 
         const { name } = specs;
 
@@ -71,6 +73,38 @@ class GLTFModel {
             this.gltf = gltfModel;
 
         }
+
+    }
+
+    get visible() {
+
+        return this.group.visible;
+
+    }
+
+    set visible(val) {
+
+        this.group.visible = val;
+
+        this.dispatchEvent({ type: 'visibleChanged', message: 'gltf visible changed' });
+
+    }
+
+    setLayers(layer) {
+
+        this.traverse((mesh) => {
+
+            if (this.group.visible) {
+
+                mesh.layers.enable(layer);
+
+            } else {
+
+                mesh.layers.disable(layer);
+
+            }
+            
+        });
 
     }
 

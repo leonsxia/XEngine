@@ -448,7 +448,7 @@ class SimplePhysics {
 
             this.obstacleCollisionOBBWalls.forEach(wall => {
 
-                if (!obs.walls.find(w => w === wall) && this.checkObstacleInWallRangeT(obs, wall) && obs.box.obb.intersectsOBB(wall.obb)) {
+                if (!obs.walls.find(w => w === wall) && this.checkObstacleInWallRangeT(obs, wall) && obs.intersectsOBB(wall.obb)) {
 
                     // console.log(`${wall.name} intersets`);
 
@@ -500,7 +500,7 @@ class SimplePhysics {
 
                 const waterCube = this.waterCubes[j];
 
-                if (obs.box.obb.intersectsOBB(waterCube.box.obb)) {
+                if (obs.intersectsOBB(waterCube.box.obb)) {
 
                     // console.log(`${obs.name} is on water of ${waterCube.name}`);
 
@@ -517,7 +517,7 @@ class SimplePhysics {
 
                 const top = this.obstacleTops[j];
 
-                if ((!groupHasChild(obs.group, top.mesh)) && obs.box.obb.intersectsOBB(top.obb) && !this.checkObstacleBlockByTop(obs, top)) {
+                if ((!groupHasChild(obs.group, top.mesh)) && obs.intersectsOBB(top.obb) && !this.checkObstacleBlockByTop(obs, top)) {
 
                     onTopsObs.push(obs);
                     obs.hittingGround = top;
@@ -534,7 +534,7 @@ class SimplePhysics {
 
                     const s = this.slopes[j];
 
-                    if (obs.box.obb.intersectsOBB(s.slope.obb)) {
+                    if (obs.intersectsOBB(s.slope.obb)) {
 
                         onSlopesObs.push(obs);
                         obs.hittingGround = s.slope;
@@ -598,7 +598,7 @@ class SimplePhysics {
 
                     const floor = this.floors[j];
 
-                    if (obs.box.obb.intersectsOBB(floor.obb)) {
+                    if (obs.intersectsOBB(floor.obb)) {
 
                         onGroundObs.push(obs);
                         obs.hittingGround = floor;

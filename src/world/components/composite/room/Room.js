@@ -2,6 +2,9 @@ import { Object3D, Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
 import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER } from '../../utils/constants';
+import { Logger } from '../../../systems/Logger';
+
+const DEBUG = false;
 
 class Room {
 
@@ -38,6 +41,8 @@ class Room {
     
     specs;
 
+    #logger = new Logger(DEBUG, 'Room');
+
     constructor(specs) {
 
         this.specs = specs;
@@ -67,7 +72,8 @@ class Room {
             this.backWall.isWall = true;
             this.walls.push(this.backWall);
             this.group.add(this.backWall.mesh);
-            this.backWall.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(this.backWall);
+            this.backWall.visible = true;
 
         }
 
@@ -77,7 +83,8 @@ class Room {
             this.leftWall.isWall = true;
             this.walls.push(this.leftWall);
             this.group.add(this.leftWall.mesh);
-            this.leftWall.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(this.leftWall);
+            this.leftWall.visible = true;
 
         }
 
@@ -87,7 +94,8 @@ class Room {
             this.rightWall.isWall = true;
             this.walls.push(this.rightWall);
             this.group.add(this.rightWall.mesh);
-            this.rightWall.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(this.rightWall);
+            this.rightWall.visible = true;
 
         }
         
@@ -98,7 +106,8 @@ class Room {
             this.frontWall.line?.material.color.setHex(green);
             this.walls.push(this.frontWall);
             this.group.add(this.frontWall.mesh);
-            this.frontWall.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(this.frontWall);
+            this.frontWall.visible = true;
 
         }
 
@@ -189,6 +198,24 @@ class Room {
 
     }
 
+    bindWallEvents(wall) {
+
+        const type = 'visibleChanged';
+        const listener = (event) => {
+
+            this.#logger.log(`${wall.name}: ${event.message}`);
+            wall.setLayers(CAMERA_RAY_LAYER);
+
+        };
+
+        if (!wall.hasEventListener(type, listener)) {
+
+            wall.addEventListener(type, listener);
+
+        }
+
+    }
+
     addWalls(walls) {
 
         walls.forEach(w => {
@@ -197,11 +224,13 @@ class Room {
 
             this.walls.push(w);
 
-            w.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(w);
 
             w.isWall = true;
 
             w.mesh.rotationY += this.rotationY;     // update wall mesh world rotation y
+
+            w.visible = true;
 
         });
 
@@ -215,11 +244,13 @@ class Room {
 
             this.insideWalls.push(w);
 
-            w.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(w);
 
             w.isInsideWall = true;
 
             w.mesh.rotationY += this.rotationY;     // update wall mesh world rotation y
+
+            w.visible = true;
 
         });
         
@@ -233,7 +264,7 @@ class Room {
 
             this.airWalls.push(w);
 
-            w.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(w);
 
             w.isAirWall = true;
 
@@ -253,9 +284,11 @@ class Room {
 
             this.floors.push(f);
 
-            f.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(f);
 
             f.isFloor = true;
+
+            f.visible = true;
 
         });
 
@@ -269,9 +302,11 @@ class Room {
 
             this.ceilings.push(c);
 
-            c.mesh.layers.enable(CAMERA_RAY_LAYER);
+            this.bindWallEvents(c);
 
             c.isCeiling = true;
+
+            c.visible = true;
 
         });
 

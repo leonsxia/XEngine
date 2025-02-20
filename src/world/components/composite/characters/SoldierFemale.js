@@ -113,8 +113,6 @@ class SoldierFemale extends CombatPlayerBase {
             super.init()
         ]);
 
-        this.bindWeaponEvents();
-
         this.idleNick = CLIPS.IDLE.nick;
 
         this._meleeWeapon = this.weapons[WEAPONS.BAYONET];

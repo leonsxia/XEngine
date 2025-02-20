@@ -67,5 +67,6 @@ export { FancyPictureFrame01 } from './composite/inwall/decorative/FancyPictureF
 export { VintageGrandfatherClock } from './composite/inwall/decorative/VintageGrandFatherClock.js';
 
 // collision objects
+export { CollisionBase } from './physics/collisionObjects/CollisionBase.js';
 export { CollisionBox } from './physics/collisionObjects/CollisionBox.js';
 export { CollisionHexCylinder } from './physics/collisionObjects/CollisionHexCylinder.js';

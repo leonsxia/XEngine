@@ -1,11 +1,8 @@
-import { Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane } from '../collisionHelper';
 import { yankeesBlue, green } from '../../basic/colorBase';
+import { CollisionBase } from './CollisionBase';
 
-class CollisionBox {
-
-    name;
-    group = new Group();
+class CollisionBox extends CollisionBase {
 
     width;
     height;
@@ -18,15 +15,9 @@ class CollisionBox {
     top;
     bottom;
 
-    walls = [];
-    topOBBs = [];
-    bottomOBBs = [];
-
-    specs;
-
     constructor(specs) {
 
-        this.specs = specs;
+        super(specs);
 
         const { name, enableWallOBBs, showArrow, lines = true } = specs;
         const { width, height, depth } = specs;
@@ -42,8 +33,6 @@ class CollisionBox {
         this.height = height;
         this.depth = depth;
         this.group.name = this.name;
-
-        this.rotationY = 0;     // local rotation y
 
         // collision faces
         const createPlaneFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
@@ -70,35 +59,6 @@ class CollisionBox {
             this.top.mesh,
             this.bottom.mesh
         );
-
-    }
-
-    setVisible(show) {
-
-        this.group.visible = show;
-
-        return this;
-
-    }
-
-    setPosition(pos) {
-
-        this.group.position.set(...pos);
-
-        return this;
-
-    }
-
-    setRotationY(rotY) {
-
-        const preRotY = this.rotationY;
-
-        this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preRotY + rotY);
-
-        this.group.rotation.set(0, rotY, 0);
-        this.rotationY = rotY;
-
-        return this;
 
     }
 

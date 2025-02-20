@@ -1,23 +1,14 @@
-import { Group } from 'three';
 import { CollisionBox } from './CollisionBox';
+import { CollisionBase } from './CollisionBase';
 
-class CollisionHexCylinder {
-
-    name;
-    group = new Group();
+class CollisionHexCylinder extends CollisionBase {
 
     radius;
     height;
 
-    walls = [];
-    topOBBs = [];
-    bottomOBBs = [];
-
-    specs;
-
     constructor(specs) {
 
-        this.specs = specs;
+        super(specs);
 
         const { name, enableWallOBBs, showArrow, lines = true } = specs;
         const { radius, height } = specs;
@@ -43,8 +34,6 @@ class CollisionHexCylinder {
         this.radius = radius;
         this.height = height;
         this.group.name = this.name;
-
-        this.rotationY = 0;     // local rotation y
 
         const cbox1 = new CollisionBox(boxSpecs1);
         const cbox2 = new CollisionBox(boxSpecs2);
@@ -92,35 +81,6 @@ class CollisionHexCylinder {
 
         return config;
         
-    }
-
-    setVisible(show) {
-
-        this.group.visible = show;
-
-        return this;
-
-    }
-
-    setPosition(pos) {
-
-        this.group.position.set(...pos);
-
-        return this;
-
-    }
-
-    setRotationY(rotY) {
-
-        const preRotY = this.rotationY;
-
-        this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preRotY + rotY);
-
-        this.group.rotation.set(0, rotY, 0);
-        this.rotationY = rotY;
-
-        return this;
-
     }
 
 }

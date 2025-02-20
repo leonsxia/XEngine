@@ -5,7 +5,6 @@ import { CAMERA_RAY_LAYER } from '../../utils/constants';
 
 const DEBUG = false;
 const DEBUG_WEAPON = true;
-const DEBUG_EVENT = false;
 
 class CombatPlayerBase extends Tofu {
 
@@ -15,7 +14,6 @@ class CombatPlayerBase extends Tofu {
 
     #logger = new Logger(DEBUG, 'CombatPlayerBase');
     #weaponLogger = new Logger(DEBUG_WEAPON, 'CombatPlayerBase');
-    #eventLogger = new Logger(DEBUG_EVENT, 'CombatPlayerBase');
 
     AWS;
 
@@ -78,8 +76,30 @@ class CombatPlayerBase extends Tofu {
 
         });
 
+        this.bindEvents();
+
+        this.gltf.visible = true;
+
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
+
+    }
+
+    bindEvents() {
+
+        const type = 'visibleChanged';
+        const listener = (event) => {
+
+            this.#logger.log(`${this.gltf.name}: ${event.message}`);
+            this.gltf.setLayers(CAMERA_RAY_LAYER);
+
+        };
+
+        if (!this.gltf.hasEventListener(type, listener)) {
+
+            this.gltf.addEventListener(type, listener);
+
+        }
 
     }
 
@@ -118,45 +138,6 @@ class CombatPlayerBase extends Tofu {
             weaponItem.group.scale.x *= scale[0];
             weaponItem.group.scale.y *= scale[1];
             weaponItem.group.scale.z *= scale[2];
-
-        });
-
-    }
-
-    setupWeaponLayers(weapon, layer) {
-
-        if (weapon.group.visible) {
-
-            weapon.gltf.traverse((mesh) => {
-            
-                mesh.layers.enable(layer);
-    
-            });
-
-        } else {
-
-            weapon.gltf.traverse((mesh) => {
-            
-                mesh.layers.disable(layer);
-    
-            });
-
-        }
-        
-    }
-
-    bindWeaponEvents() {
-
-        this.#eventLogger.func = 'visibleChanged';
-
-        this.weaponArray.forEach(weaponItem => {            
-
-            weaponItem.addEventListener('visibleChanged', (event) => {
-
-                this.#eventLogger.log(`${event.message}`);
-                this.setupWeaponLayers(weaponItem, CAMERA_RAY_LAYER);
-
-            });
 
         });
 
@@ -234,7 +215,7 @@ class CombatPlayerBase extends Tofu {
 
         if (this.armedWeapon) {
 
-            this.armedWeapon.group.visible = show;
+            this.armedWeapon.visible = show;
 
         }
 

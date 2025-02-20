@@ -4,6 +4,7 @@ import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue, orange, BF } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
+import { Logger } from '../../../systems/Logger';
 
 const frontTriggerLayer = new Layers();
 const backTriggerLayer = new Layers();
@@ -24,6 +25,8 @@ frontFaceLayer.set(FRONT_FACE_LAYER);
 backFaceLayer.set(BACK_FACE_LAYER);
 leftFaceLayer.set(LEFT_FACE_LAYER);
 rightFaceLayer.set(RIGHT_FACE_LAYER);
+
+const DEBUG = false;
 
 class ObstacleBase extends ObstacleMoveable {
 
@@ -66,6 +69,8 @@ class ObstacleBase extends ObstacleMoveable {
     #weight = undefined;
 
     specs;
+
+    #logger = new Logger(DEBUG, 'ObstacleBase')
 
     constructor(specs) {
 
@@ -237,6 +242,24 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    bindCObjectEvents(obj) {
+
+        const listener = (event) => {
+
+            this.#logger.log(`${obj.name}: ${event.message}`);
+            obj.setLayers(CAMERA_RAY_LAYER);
+
+        }
+        const type = 'visibleChanged';
+
+        if (!obj.hasEventListener(type, listener)) {
+
+            obj.addEventListener(type, listener);
+
+        }
+        
+    }
+
     setPickLayers() {
 
         const meshes = getVisibleMeshes(this.group);
@@ -252,7 +275,13 @@ class ObstacleBase extends ObstacleMoveable {
 
     setCObjectsVisible(show) {
 
-        this.cObjects.forEach(obj => obj.setVisible(show));
+        this.cObjects.forEach(obj => {
+            
+            this.bindCObjectEvents(obj);
+
+            obj.setVisible(show);
+        
+        });
 
         return this;
 
@@ -633,6 +662,33 @@ class ObstacleBase extends ObstacleMoveable {
         this.box?.updateOBB(needUpdateMatrixWorld);
 
         this.boundingFaces.forEach(bf => bf.updateOBB(needUpdateMatrixWorld));
+
+    }
+
+    get obbPlanes() {
+
+        return this.walls.filter(w => w.isOBB).concat(this.topOBBs).concat(this.bottomOBBs);
+
+    }
+
+    intersectsOBB(obb) {
+
+        let result = false;
+
+        for (let i = 0; i < this.obbPlanes.length; i++) {
+
+            const plane = this.obbPlanes[i];
+
+            if (plane.obb.intersectsOBB(obb)) {
+
+                result = true;
+                break;
+
+            }
+
+        }
+
+        return result;
 
     }
 
