@@ -343,7 +343,7 @@ const SOLDIER_FEMALE_CLIPS = {
 };
 
 const GLOCK_CLIPS = {
-    SHOOT: { nick: 'shoot', name: 'glock_19|Shoot', idx: 0, enable: true, isDefault: true, startImmediately: false, weight: 0 }
+    SHOOT: { nick: 'shoot', name: 'glock_19|Shoot', idx: 0, enable: true, isDefault: true, startImmediately: false, weight: 0, loopOnce: true }
 }
 
 // Gui

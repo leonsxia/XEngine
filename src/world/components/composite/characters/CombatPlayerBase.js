@@ -1144,6 +1144,8 @@ class CombatPlayerBase extends Tofu {
                             this.armedWeapon.ammo--;
                             this.#weaponLogger.log(`${this.armedWeapon.weaponType} fire ${this._i}, ammo count: ${this.armedWeapon.ammo}`);
 
+                            this.armedWeapon.shoot();
+
                         }
 
                     }
