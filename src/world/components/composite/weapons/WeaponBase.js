@@ -2,7 +2,7 @@ import { EventDispatcher, Group } from 'three';
 import { GLTFModel } from '../../Models';
 import { loadedGLTFModels } from '../../utils/gltfHelper';
 import { Logger } from '../../../systems/Logger';
-import { AnimateWorkstation } from '../../Animation/AnimateWorkstation';
+import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 
 const DEBUG = true;
 

@@ -1,5 +1,5 @@
 import { Group } from 'three';
-import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createOBBBox } from '../../physics/collisionHelper';
+import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane } from '../collisionHelper';
 import { yankeesBlue, green } from '../../basic/colorBase';
 
 class CollisionBox {

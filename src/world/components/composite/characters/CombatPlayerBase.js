@@ -1,5 +1,5 @@
 import { GLTFModel, Tofu } from '../../Models';
-import { AnimateWorkstation } from '../../Animation/AnimateWorkstation';
+import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
 import { CAMERA_RAY_LAYER } from '../../utils/constants';
 
@@ -963,7 +963,7 @@ class CombatPlayerBase extends Tofu {
 
                     this.armedWeapon.weaponEmpty();
                     return;
-                    
+
                 }
 
                 if (this.armedWeapon.isFiring) {
