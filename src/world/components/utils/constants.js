@@ -357,6 +357,7 @@ const GUI_CONFIG = {
     POST_PROCESS_CONTROL: 'Post Processing',
     TPC_CONTROL: 'Third Person Camera',
     IC_CONTROL: 'Inspector Camera',
+    CAMERA_CONTROL: 'Cameras',
     PICKER_CONTROL: 'Picker',
     WEAPON_CONTROL: 'Weapons',
     SELECT_WEAPONS: 'Select Weapons',
@@ -364,6 +365,8 @@ const GUI_CONFIG = {
     WEAPONS_OPTIONS_PARENT: 'weapon_options_actions',
     WEAPONS_ACTIONS_PARENT: 'weapon_actions',
     PICKER_ACTIONS_PARENT: 'picker_actions',
+    TPC_ACTIONS_PARENT: 'tpc_actions',
+    IC_ACTIONS_PARENT: 'ic_actions',
     INACTIVES: '_inactive',
     CLASS_INACTIVE: 'control-inactive'
 }

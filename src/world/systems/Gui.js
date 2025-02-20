@@ -422,14 +422,12 @@ class Gui {
                             } else {
 
                                 ctl.setActive();
-                                this.findOtherControllers(this.#guis[0], GUI_CONFIG.SELECT_WEAPONS, event.controller._name)
+                                this.findOtherControllers(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.SELECT_WEAPONS, event.controller._name)
                                     .forEach(ctl => ctl.setInactive());
 
                             }
 
-                        }
-
-                        if (find.parent.search(/_object_actions/) >= 0) {
+                        } else if (find.parent.search(/_object_actions/) >= 0) {
 
                             if (ctl._name.search(/(L|l)ock/) >= 0) {
 
@@ -447,9 +445,7 @@ class Gui {
 
                             }
 
-                        }
-
-                        if (find.parent === GUI_CONFIG.PICKER_ACTIONS_PARENT) {
+                        } else if (find.parent === GUI_CONFIG.PICKER_ACTIONS_PARENT) {
 
                             if (isActive) {
 
@@ -463,6 +459,20 @@ class Gui {
 
                             ctl.name(`${ctl._name === 'enable' ? 'disable' : 'enable'}`);
 
+                        } else if (find.parent.search(/tpc_actions|ic_actions/) >= 0) {
+
+                            if (isActive) {
+
+                                ctl.setInactive();
+                                this.findOtherControllers(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.CAMERA_CONTROL, event.controller._name)
+                                    .forEach(ctl => ctl.setActive());
+
+                            } else {
+
+                                ctl.setActive();
+                                
+                            }
+                            
                         }
 
                         break;
@@ -502,7 +512,7 @@ class Gui {
         const ctl = this.findController(this.findGui(gui), control, val);
 
         if (!ctl) return;
-        
+
         const isActive = this.controlIsActive(ctl);
 
         if (isActive) {

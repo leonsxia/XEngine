@@ -74,13 +74,13 @@ class InspectorCamera {
             this.camera.lookAt(camTarWorld);
             this.target = camTarWorld;
 
+            this.#control.target.copy(this.target);
+
         }
 
     }
 
     tick(delta) {
-
-        this.#control.target.copy(this.target);
 
         this.checkIntersection();
 

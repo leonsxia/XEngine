@@ -1,5 +1,5 @@
 import { updateSingleLightCamera } from "../components/shadowMaker";
-import { WEAPONS, GUI_CONFIG } from "../components/utils/constants";
+import { WEAPONS, GUI_CONFIG, CAMERAS } from "../components/utils/constants";
 import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, setupFunctionPanel } from "../components/utils/guiConfigHelper";
 import { Gui } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcesser";
@@ -219,31 +219,27 @@ class GuiMaker {
 
         if ($scene.thirdPersonCamera) {
 
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: GUI_CONFIG.TPC_CONTROL,
-                parent: 'thirdPersonCamera',
-                name: 'TPC',
-                value: { TPC: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'camera-dropdown',
-                changeFn: $scene.enableTPC.bind($scene),
-                close: true
-            }));
+            const tpcActions = {
+                'tpc_actions': {
+                    'enable TPC': $scene.switchCamera.bind($scene, CAMERAS.THIRD_PERSON)
+                }
+            };
+
+            setupFunctionPanel(this.guiLeftSpecs, tpcActions);
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.CAMERA_CONTROL, GUI_CONFIG.TPC_ACTIONS_PARENT, null, true));
 
         }
 
         if ($scene.inspectorCamera) {
 
-            this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-                folder: GUI_CONFIG.IC_CONTROL,
-                parent: 'inspectorCamera',
-                name: 'InsCam',
-                value: { InsCam: 'disable' },
-                params: ['enable', 'disable'],
-                type: 'camera-dropdown',
-                changeFn: $scene.enableIC.bind($scene),
-                close: true
-            }));
+            const icActions = {
+                'ic_actions': {
+                    'enable IC': $scene.switchCamera.bind($scene, CAMERAS.INSPECTOR)
+                }
+            };
+
+            setupFunctionPanel(this.guiLeftSpecs, icActions);
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.CAMERA_CONTROL, GUI_CONFIG.IC_ACTIONS_PARENT, null, true));
 
         }
 

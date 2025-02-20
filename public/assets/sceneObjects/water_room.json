@@ -266,7 +266,7 @@
                     "height": 1.5,
                     "depth": 1.5,
                     "baseSize": 1,
-                    "density": 0.67,
+                    "density": 1.2,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
                     "mapRatio": 1,

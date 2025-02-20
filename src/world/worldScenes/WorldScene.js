@@ -6,7 +6,7 @@ import { WorldControls } from '../systems/Controls.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
-import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG } from '../components/utils/constants.js';
+import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
 
 let renderTimes = 0;
@@ -949,51 +949,111 @@ class WorldScene {
 
     }
 
-    enableTPC(enable) {
+    switchCamera(type) {
 
-        const e = enable === 'enable' ? true : false;
         const { updatables } = this.loop;
+        const tpcIdx = updatables.findIndex(f => f === this.thirdPersonCamera);
+        const icIdx = updatables.findIndex(f => f === this.inspectorCamera);
 
-        if (e) {
+        switch (type) {
 
-            const idx = updatables.findIndex(f => f === this.controls.defControl);
-            updatables.splice(idx, 1);
-            updatables.push(this.thirdPersonCamera);
-            // this.scene.add(...this.thirdPersonCamera.rayArrows);
+            case CAMERAS.THIRD_PERSON:
 
-            this.controls.enableDefControl(false);
+                {
+                    if (icIdx > -1) {
 
-            this.thirdPersonCamera.setPositionFromPlayer();
+                        this.enableIC(false);
 
-        } else {
+                    }
 
-            const idx = updatables.findIndex(f => f === this.thirdPersonCamera);
-            updatables.splice(idx, 1);
-            updatables.push(this.controls.defControl);
-            // this.scene.remove(...this.thirdPersonCamera.rayArrows);
+                    if (tpcIdx === -1) {
 
-            this.controls.enableDefControl();
-            
-            this.thirdPersonCamera.resetInterectObjects();
+                        this.enableTPC(true);
+
+                    } else {
+
+                        this.enableTPC(false);
+
+                    }
+                }
+                break;
+
+            case CAMERAS.INSPECTOR:
+                
+                {
+                    if (tpcIdx > -1) {
+
+                        this.enableTPC(false);
+        
+                    }
+
+                    if (icIdx === -1) {
+
+                        this.enableIC(true);
+        
+                    } else {
+
+                        this.enableIC(false);
+
+                    }
+                }
+                break;
 
         }
 
     }
 
-    enableIC(enable) {
+    enableTPC(e) {
 
-        const e = enable === 'enable' ? true : false;
         const { updatables } = this.loop;
+        const tpcIdx = updatables.findIndex(f => f === this.thirdPersonCamera);
 
         if (e) {
 
-            const idx = updatables.findIndex(f => f === this.controls.defControl);
-            updatables.splice(idx, 1);
-            updatables.push(this.inspectorCamera);
+            if (tpcIdx === -1) {
 
-            this.controls.enableDefControl(false);
+                const idx = updatables.findIndex(f => f === this.controls.defControl);
+                updatables.splice(idx, 1);
+                updatables.push(this.thirdPersonCamera);
+                // this.scene.add(...this.thirdPersonCamera.rayArrows);
 
-        } else {
+                this.controls.enableDefControl(false);
+
+                this.thirdPersonCamera.setPositionFromPlayer();
+
+            }
+
+        } else if (tpcIdx > -1) {
+
+            updatables.splice(tpcIdx, 1);
+            updatables.push(this.controls.defControl);
+            // this.scene.remove(...this.thirdPersonCamera.rayArrows);
+
+            this.controls.enableDefControl();
+
+            this.thirdPersonCamera.resetInterectObjects();
+
+        }
+    }
+
+    enableIC(e) {
+
+        const { updatables } = this.loop;
+        const icIdx = updatables.findIndex(f => f === this.inspectorCamera);
+
+        if (e) {
+
+            if (icIdx === -1) {
+
+                const idx = updatables.findIndex(f => f === this.controls.defControl);
+                updatables.splice(idx, 1);
+                updatables.push(this.inspectorCamera);
+
+                this.controls.enableDefControl(false);
+
+            }
+            
+        } else if (icIdx > -1) {
 
             const idx = updatables.findIndex(f => f === this.inspectorCamera);
             updatables.splice(idx, 1);

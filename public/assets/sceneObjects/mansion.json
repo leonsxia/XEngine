@@ -1337,7 +1337,7 @@
                     "climbable": true,
                     "pushable": true,
                     "name": "room1_CubeBox2",
-                    "position": [6, 1.5, -10],
+                    "position": [6, 1.5, -14.25],
                     "rotationY": 0
                 },
 

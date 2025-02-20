@@ -487,60 +487,77 @@ class SimplePhysics {
             obs.tickMoving(delta);
 
         });
-        
-        this.waterCubes.forEach(waterCube => {
 
-            movableObs.forEach(obs => {
+        const onWaterObs = [];
+        const onTopsObs = [];
+        const onSlopesObs = [];
+
+        for (let i = 0; i < movableObs.length; i++) {
+
+            const obs = movableObs[i];
+
+            for (let j = 0; j < this.waterCubes.length; j++) {
+
+                const waterCube = this.waterCubes[j];
 
                 if (obs.box.obb.intersectsOBB(waterCube.box.obb)) {
 
                     // console.log(`${obs.name} is on water of ${waterCube.name}`);
 
+                    onWaterObs.push(obs);
                     obs.hittingWater = waterCube;
-                    obs.onWater();
+
+                    break;
 
                 }
 
-            });
+            }
 
-        });
+            for (let j = 0; j < this.obstacleTops.length; j++) {
 
-        const onTopsObs = [];
-        const onSlopesObs = [];
+                const top = this.obstacleTops[j];
 
-        this.obstacleTops.forEach(top => {
+                if ((!groupHasChild(obs.group, top.mesh)) && obs.box.obb.intersectsOBB(top.obb) && !this.checkObstacleBlockByTop(obs, top)) {
 
-            movableObs.forEach(obs => {
-                
-                if (!obs.hittingGround) {
-
-                    if ((!groupHasChild(obs.group, top.mesh)) && obs.box.obb.intersectsOBB(top.obb) && !this.checkObstacleBlockByTop(obs, top)) {
-
-                        onTopsObs.push(obs);
-                        obs.hittingGround = top;
-
-                    }
-
+                    onTopsObs.push(obs);
+                    obs.hittingGround = top;
+    
+                    break;
+    
                 }
-            });
 
-        });
+            }
 
-        this.slopes.forEach(s => {
+            if (!obs.hittingGround) {
 
-            movableObs.forEach(obs => {
+                for (let j = 0; j < this.slopes.length; j++) {
 
-                if (!obs.hittingGround) {
+                    const s = this.slopes[j];
 
                     if (obs.box.obb.intersectsOBB(s.slope.obb)) {
 
                         onSlopesObs.push(obs);
                         obs.hittingGround = s.slope;
 
+                        break;
+
                     }
+
                 }
-            })
-        })
+
+            }
+
+        }
+
+        if (onWaterObs.length > 0) {
+
+            onWaterObs.forEach(obs => {
+
+                obs.onWater();
+
+            });
+
+        }
 
         if (onTopsObs.length > 0) {
 
@@ -549,6 +566,7 @@ class SimplePhysics {
                 obs.onGround();
 
             });
+
         }
 
         if (onSlopesObs.length > 0) {
@@ -558,35 +576,39 @@ class SimplePhysics {
                 obs.onSlope();
 
             });
+
         }
 
-        const fallingObs = movableObs.filter(obs => obs.verticalAcceleratedSpeed !== 0 && !onTopsObs.find(t => t === obs) && !onSlopesObs.find(s => s === obs));
+        const fallingObs = movableObs.filter(
+            obs => obs.verticalAcceleratedSpeed !== 0 &&
+            !onTopsObs.find(t => t === obs) && 
+            !onSlopesObs.find(s => s === obs)
+        );
 
         // check obstacles falling on floors
         if (fallingObs.length > 0) {
 
             const onGroundObs = [];
 
-            this.floors.forEach(floor => {
-                
-                fallingObs.forEach(obs => {
+            for (let i = 0; i < fallingObs.length; i++) {
 
-                    if (!obs.hittingGround) {
+                const obs = fallingObs[i];
 
-                        if (obs.box.obb.intersectsOBB(floor.obb)) {
+                for (let j = 0; j < this.floors.length; j++) {
 
-                            onGroundObs.push(obs);
-                            obs.hittingGround = floor;
+                    const floor = this.floors[j];
 
-                        } else {
+                    if (obs.box.obb.intersectsOBB(floor.obb)) {
 
-                            obs.hittingGround = null;
-
-                        }
+                        onGroundObs.push(obs);
+                        obs.hittingGround = floor;
+                        break;
 
                     }
-                });
-            });
+
+                }
+
+            }
 
             if (onGroundObs.length > 0) {
 
@@ -715,7 +737,9 @@ class SimplePhysics {
             // for player falling down check
             const collisionTops = [];
 
-            this.obstacleTops.forEach(top => {
+            for (let i = 0; i < this.obstacleTops.length; i++) {
+
+                const top = this.obstacleTops[i];
 
                 if (collisionTops.length === 0) {
 
@@ -723,28 +747,31 @@ class SimplePhysics {
 
                         collisionTops.push(top);
 
+                        break;
+
                     }
 
                 }
 
-            });
+            }
 
             // for player hitting bottoms check
             const collisionBottoms = [];
 
-            this.obstacleBottoms.forEach(bottom => {
+            for (let i = 0; i < this.obstacleBottoms.length; i++) {
 
-                if (collisionBottoms.length === 0) {
+                const bottom = this.obstacleBottoms[i];
 
-                    if (player.obb.intersectsOBB(bottom.obb) && !this.checkBlockByBottomT(player, bottom)) {
+                if (player.obb.intersectsOBB(bottom.obb) && !this.checkBlockByBottomT(player, bottom)) {
 
-                        // console.log(`player hitting bottom: ${bottom.name}`);
-                        collisionBottoms.push(bottom);
+                    // console.log(`player hitting bottom: ${bottom.name}`);
+                    collisionBottoms.push(bottom);
 
-                    }
+                    break;
 
                 }
-            });
+
+            }
 
             if (collisionBottoms.length === 0) {
 
@@ -756,6 +783,7 @@ class SimplePhysics {
 
                         // console.log(`player hitting ceiling: ${ceiling.name}`);
                         collisionBottoms.push(ceiling);
+
                         break;
 
                     }
@@ -766,37 +794,37 @@ class SimplePhysics {
             // check slope collision
             const collisionSlopes = [];
 
-            this.slopes.forEach(s => {
+            for (let i = 0; i < this.slopes.length; i++) {
 
-                if (collisionSlopes.length === 0) {
+                const s = this.slopes[i];
 
-                    // check if player is on slope, and slow it down
-                    const playerIntersectSlopeBox = player.obb.intersectsOBB(s.box.obb);
-                    const playerIntersectSlope = player.obb.intersectsOBB(s.slope.obb);
+                // check if player is on slope, and slow it down
+                const playerIntersectSlopeBox = player.obb.intersectsOBB(s.box.obb);
+                const playerIntersectSlope = player.obb.intersectsOBB(s.slope.obb);
 
-                    if (!playerIntersectSlopeBox && (player.intersectSlope === s || !player.intersectSlope)) {
+                if (!playerIntersectSlopeBox && (player.intersectSlope === s || !player.intersectSlope)) {
 
-                        player.setSlopeIntersection?.();
+                    player.setSlopeIntersection?.();
 
-                    } else if (player.isInAir && playerIntersectSlope) {
+                } else if (player.isInAir && playerIntersectSlope) {
 
-                        player.setSlopeIntersection?.(s);
+                    player.setSlopeIntersection?.(s);
 
-                    } else if (playerIntersectSlope && (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
+                } else if (playerIntersectSlope && (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
 
-                        player.setSlopeIntersection?.(s);
-
-                    }
-
-                    if (playerIntersectSlope) {
-
-                        collisionSlopes.push(s.slope.mesh);
-
-                    }
+                    player.setSlopeIntersection?.(s);
 
                 }
 
-            });
+                if (playerIntersectSlope) {
+
+                    collisionSlopes.push(s.slope.mesh);
+
+                    break;
+
+                }
+
+            }
 
             if (collisionBottoms.length > 0) {
 
@@ -821,17 +849,21 @@ class SimplePhysics {
 
                 const collisionFloors = [];
 
-                this.floors.forEach(floor => {
+                for (let i = 0; i < this.floors.length; i++) {
 
-                    if (collisionFloors.length === 0 && !player.isClimbingUp && !this.checkBlockByTopT(player, floor)) {
+                    const floor = this.floors[i];
+
+                    if (!player.isClimbingUp && !this.checkBlockByTopT(player, floor)) {
 
                         if (player.obb.intersectsOBB(floor.obb)) {
-                            // to do
+
                             collisionFloors.push(floor);
+
+                            break;
 
                         }
                     }
-                });
+                }
 
                 if (collisionFloors.length === 0) {
 
