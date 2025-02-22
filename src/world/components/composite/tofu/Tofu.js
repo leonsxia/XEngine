@@ -47,6 +47,7 @@ class Tofu extends Moveable2D {
     #h;
     #rotateR = .9;
     #vel = 1.34;
+    #stoodTurningVel = 1.5;
     #turnBackVel = 2.5 * Math.PI;
     #velEnlarge = 2.5;
     #rotateREnlarge = 2.5;
@@ -67,7 +68,7 @@ class Tofu extends Moveable2D {
 
         const { name, size = { width: .9, width2: .9, depth: .9, depth2: .9, height: 1.8 } } = specs;
         const { 
-            rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = .2, 
+            rotateR = .9, vel = 1.34, stoodTurningVel = 1.5, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = .2, 
             recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7 
         } = specs;
 
@@ -75,6 +76,7 @@ class Tofu extends Moveable2D {
 
         this.#rotateR = rotateR;
         this.#vel = vel;
+        this.#stoodTurningVel = stoodTurningVel;
         this.#velEnlarge = velEnlarge;
         this.#rotateREnlarge = rotateREnlarge;
         this.#turnBackVel = turnbackVel;
@@ -383,7 +385,7 @@ class Tofu extends Moveable2D {
 
     get velocity() {
 
-        return this.isAccelerating && !this.isBackward && !this.#isPushing ? 
+        return this.isAccelerating && this.isForward && !this.#isPushing ? 
             this.#vel * this.#velEnlarge * this.#slopeCoefficient * this.#slowDownCoefficient : 
             (this.isBackward ? this.#vel * this.#backwardSlowdownCoefficient : this.#vel * this.#slopeCoefficient);
 
@@ -778,17 +780,18 @@ class Tofu extends Moveable2D {
 
     setTickParams(delta) {
 
-        const R = this.isAccelerating && !this.isBackward ?
+        const R = this.isAccelerating && this.isForward ?
             this.#rotateR * this.#rotateREnlarge :
             (this.isBackward ? this.#rotateR * this.#backwardRotatingRadiusCoefficient : this.#rotateR);
         
         const rotateVel = this.velocity / R;
+        const stoodRotateVel = this.#stoodTurningVel / R;
 
         const dist = this.velocity * delta;
 
         const params = {
 
-            group: this.group, R, rotateVel, dist, delta,
+            group: this.group, R, rotateVel, stoodRotateVel, dist, delta,
             player: this
 
         };

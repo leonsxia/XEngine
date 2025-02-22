@@ -498,9 +498,10 @@ class Moveable2D {
     }
 
     tankmoveTick(params) {
-        const { group, R, rotateVel, dist, delta, player } = params;
+        const { group, R, rotateVel, stoodRotateVel, dist, delta, player } = params;
         let deltaVec3, deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
+        const stoodRotateRad = stoodRotateVel * delta;
         const worldY = player.worldYDirection;
 
         if(this.quickTurnTick(params) || this.#isClimbingUp || this.#isClimbingForward) {
@@ -522,12 +523,12 @@ class Moveable2D {
         } else if (this.isTurnClockwise) {
 
             // group.rotation.y -= rotateRad;
-            group.rotateOnWorldAxis(worldY, - rotateRad);
+            group.rotateOnWorldAxis(worldY, - stoodRotateRad);
 
         } else if (this.isTurnCounterClockwise) {
 
             // group.rotation.y += rotateRad;
-            group.rotateOnWorldAxis(worldY, rotateRad);
+            group.rotateOnWorldAxis(worldY, stoodRotateRad);
 
         } else {
 
@@ -647,7 +648,7 @@ class Moveable2D {
 
     tankmoveTickWithWall(params) {
 
-        const { group, R, rotateVel, dist, delta, wall, player, playerTicked = false } = params;
+        const { group, R, rotateVel, stoodRotateVel, dist, delta, wall, player, playerTicked = false } = params;
         const {
             wallMesh,
             borderReach, leftCorIntersectFace, rightCorIntersectFace, intersectCor,
@@ -680,6 +681,7 @@ class Moveable2D {
         const backwardCoefficient = player.backwardCoefficient;
         let deltaVec3, deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
+        const stoodRotateRad = stoodRotateVel * delta;
 
         const worldY = player.worldYDirection;
 
@@ -884,7 +886,7 @@ class Moveable2D {
             }
 
             // dummyObject.rotation.y -= rotateRad;
-            dummyObject.rotateOnWorldAxis(worldY, - rotateRad);
+            dummyObject.rotateOnWorldAxis(worldY, - stoodRotateRad);
 
         } else if (this.isTurnCounterClockwise) {
 
@@ -897,7 +899,7 @@ class Moveable2D {
             }
 
             // dummyObject.rotation.y += rotateRad;
-            dummyObject.rotateOnWorldAxis(worldY, rotateRad);
+            dummyObject.rotateOnWorldAxis(worldY, stoodRotateRad);
 
         } else {
 
