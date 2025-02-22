@@ -22,9 +22,9 @@ class CollisionBox extends CollisionBase {
         const { name, enableWallOBBs, showArrow, lines = true } = specs;
         const { width, height, depth } = specs;
 
-        const frontBackSpecs = { width, height, lines };
-        const leftRightSpecs = { width: depth, height, lines };
-        const bottomTopSpecs = { width, height: depth, color: yankeesBlue, lines };
+        const frontBackSpecs = { width, height, lines, transparent: true };
+        const leftRightSpecs = { width: depth, height, lines, transparent: true };
+        const bottomTopSpecs = { width, height: depth, color: yankeesBlue, lines, transparent: true };
 
         const prefix = 'cbox';
 

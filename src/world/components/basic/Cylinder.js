@@ -33,6 +33,8 @@ class Cylinder extends BasicObject {
         this.mesh = new Mesh(this.geometry, [this.material, this.topMaterial, this.bottomMaterial]);
         this.mesh.name = specs.name;
 
+        this.mesh.father = this;
+
     }
 
     async init() {

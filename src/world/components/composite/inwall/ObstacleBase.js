@@ -2,9 +2,10 @@ import { Group, MathUtils, Vector3, Layers, Raycaster, ArrowHelper } from 'three
 import { createOBBBox, createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue, orange, BF } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER, HEX_CYLINDER_PILLAR } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 import { Logger } from '../../../systems/Logger';
+import { BasicObject } from '../../basic/BasicObject';
 
 const frontTriggerLayer = new Layers();
 const backTriggerLayer = new Layers();
@@ -35,6 +36,7 @@ class ObstacleBase extends ObstacleMoveable {
     name = '';
     box;
     group;
+    gltf;
 
     #w;
     #h;
@@ -249,8 +251,10 @@ class ObstacleBase extends ObstacleMoveable {
 
         const listener = (event) => {
 
+            this.#logger.func = 'bindCObjectEvents';
             this.#logger.log(`${obj.name}: ${event.message}`);
             obj.setLayers(CAMERA_RAY_LAYER);
+            obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
 
         }
         const type = 'visibleChanged';
@@ -263,16 +267,67 @@ class ObstacleBase extends ObstacleMoveable {
         
     }
 
+    bindBasicObjectEvents(obj) {
+        
+        const listener = (event) => {
+
+            this.#logger.func = 'bindBasicObjectEvents';
+            this.#logger.log(`${obj.name}: ${event.message}`);
+            obj.setLayers(CAMERA_RAY_LAYER);
+            obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
+
+        }
+        const type = 'visibleChanged';
+
+        if (!obj.hasEventListener(type, listener)) {
+
+            obj.addEventListener(type, listener);
+
+        }
+
+    }
+
+    bindGLTFEvents() {
+
+        if (!this.gltf) return;        
+
+        const type = 'visibleChanged';
+        const listener = (event) => {
+
+            this.#logger.func = 'bindGLTFEvents';
+            this.#logger.log(`${this.gltf.name}: ${event.message}`);
+            this.gltf.setLayers(CAMERA_RAY_LAYER);
+            this.gltf.setLayers(PLAYER_CAMERA_RAY_LAYER);
+
+        };
+
+        if (!this.gltf.hasEventListener(type, listener)) {
+
+            this.gltf.addEventListener(type, listener);
+
+        }
+
+        this.gltf.visible = true;
+
+    }
+
     setPickLayers() {
 
         const meshes = getVisibleMeshes(this.group);
 
         meshes.forEach(m => {
 
-            m.layers.enable(CAMERA_RAY_LAYER);
-            m.layers.enable(PLAYER_CAMERA_RAY_LAYER);
+            if (m.father instanceof BasicObject) {
+
+                this.bindBasicObjectEvents(m.father);
+
+                m.father.visible = true;
+
+            }
 
         });
+
+        this.bindGLTFEvents();
 
     }
 
@@ -738,11 +793,9 @@ class ObstacleBase extends ObstacleMoveable {
 
             this.gltf.visible = show;
 
-        }
+        } else if (this.constructor.name === HEX_CYLINDER_PILLAR) {
 
-        if (this.cylinder) {
-
-            this.cylinder.mesh.visible = show;
+            this.cylinder.visible = show;
             
         }
 

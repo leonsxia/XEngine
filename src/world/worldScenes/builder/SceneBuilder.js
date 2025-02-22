@@ -125,6 +125,12 @@ class SceneBuilder {
     
     }
 
+    /**
+     * 
+     * @param {Object} lights - light config from json file
+     * @param {Object} room - builded room object
+     * @returns 
+     */
     buildLights(lights, room) {
         
         const roomName = room.name;
@@ -137,6 +143,7 @@ class SceneBuilder {
         const pointLightsSpecsArr = roomLights['pointLightSpecs'].map(l => { l.room = roomName; return l; });
         const spotLightsSpecsArr = roomLights['spotLightSpecs'].map(l => { l.room = roomName; return l; });
 
+        // read light objects
         const _basicLights = createBasicLights(basicLightsSpecsArr);
         const _pointLights = createPointLights(pointLightsSpecsArr);
         const _spotLights = createSpotLights(spotLightsSpecsArr);
@@ -151,6 +158,7 @@ class SceneBuilder {
     
         }
         
+        // worldScene.lights are used for Gui as parents, the light objects controlled by Gui controllers
         Object.assign(worldScene.lights, _basicLights);
         Object.assign(worldScene.lights, _pointLights);
         Object.assign(worldScene.lights, _spotLights);
@@ -160,6 +168,7 @@ class SceneBuilder {
             worldScene.scene, roomGroup, ...basicLightsSpecsArr, ...pointLightsSpecsArr, ...spotLightsSpecsArr
         );
 
+        // shadowLightObjects are used for binding callback to light helper and shadow cam helper
         worldScene.shadowLightObjects = worldScene.shadowLightObjects.concat(roomLightObjects);
 
         const basicLights = basicLightsSpecsArr.filter(l => l.visible).map(l => l.light);
