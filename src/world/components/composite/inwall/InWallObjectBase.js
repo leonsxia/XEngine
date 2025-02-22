@@ -4,6 +4,8 @@ import { getVisibleMeshes } from '../../utils/objectHelper';
 
 class InWallObjectBase {
 
+    isInWallObjectBase = true;
+
     name = '';
 
     walls = [];

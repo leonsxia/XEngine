@@ -741,15 +741,11 @@ class SimplePhysics {
 
                 const top = this.obstacleTops[i];
 
-                if (collisionTops.length === 0) {
+                if (player.obb.intersectsOBB(top.obb) && !this.checkBlockByTopT(player, top)) {
 
-                    if (player.obb.intersectsOBB(top.obb) && !this.checkBlockByTopT(player, top)) {
+                    collisionTops.push(top);
 
-                        collisionTops.push(top);
-
-                        break;
-
-                    }
+                    break;
 
                 }
 
@@ -921,7 +917,7 @@ class SimplePhysics {
                         });
                     }
 
-                    if (obs.climbable) {
+                    if (obs.climbable && !player.isClimbingUp) {
 
                         obs.walls.forEach(w => {
 
@@ -944,6 +940,10 @@ class SimplePhysics {
 
                     // console.log(`${climbWalls[0].name} is climbed`);
                     player.tickClimb(delta, wall);
+
+                } else if (player.isClimbingUp) {
+
+                    player.tickClimb(delta);
 
                 }
             }

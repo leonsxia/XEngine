@@ -44,6 +44,15 @@ class CollisionHexCylinder extends CollisionBase {
         const cbox7 = new CollisionBox(boxSpecs7);
         const cbox8 = new CollisionBox(boxSpecs8);
 
+        cbox1.father = this;
+        cbox2.father = this;
+        cbox3.father = this;
+        cbox4.father = this;
+        cbox5.father = this;
+        cbox6.father = this;
+        cbox7.father = this;
+        cbox8.father = this;
+
         cbox2.setRotationY(Math.PI * .125);
         cbox3.setRotationY(2 * Math.PI * .125);
         cbox4.setRotationY(3 * Math.PI * .125);

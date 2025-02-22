@@ -1083,7 +1083,15 @@ class WorldScene {
 
         this.cObjects.forEach(obj => {
 
+            const father = obj.father?.isObstacleBase ? obj.father : obj.father?.father;
+
             obj.setVisible(s);
+
+            if (father) {
+
+                father.setModelVisible(!s);
+
+            }
 
         });
 

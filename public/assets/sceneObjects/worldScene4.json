@@ -488,6 +488,7 @@
                     "name": "room1_LWall1",
                     "showArrow": false,
                     "enableWallOBBs": true,
+                    "enableOBBs": true,
                     "position": [1.5, 0, 5]
                 },
                 {

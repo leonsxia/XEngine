@@ -833,20 +833,20 @@ class SceneBuilder {
                         if (updateSetupOnly) {
 
                             _origin.rotation = new Array(...this.rotationArr(find.rotation));
-                            _origin.color = new Array(...find.father.color);
-                            _origin.scale = find.father.scale;
-                            _origin.flowX = find.father.flowX;
-                            _origin.flowY = find.father.flowY;
+                            _origin.color = new Array(...find.father.waterColor);
+                            _origin.waterScale = find.father.waterScale;
+                            _origin.flowX = find.father.waterFlowX;
+                            _origin.flowY = find.father.waterFlowY;
 
                         } else {
 
-                            const { rotation = [0, 0, 0], color = [255, 255, 255], scale = 1, flowX = 1, flowY = 0 } = _target;
+                            const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
 
                             find.father.setRotation(rotation);
                             find.father.waterColor = new Array(...color);
-                            find.father.scale = scale;
-                            find.father.flowX = flowX;
-                            find.father.flowY = flowY;
+                            find.father.waterScale = waterScale;
+                            find.father.waterFlowX = flowX;
+                            find.father.waterFlowY = flowY;
                             find.father.updateOBBs();
 
                         }
@@ -891,20 +891,20 @@ class SceneBuilder {
                         if (updateSetupOnly) {
 
                             _origin.rotation = new Array(...this.rotationArr(find.rotation));
-                            _origin.color = new Array(...find.father.color);
-                            _origin.scale = find.father.scale;
-                            _origin.flowX = find.father.flowX;
-                            _origin.flowY = find.father.flowY;
+                            _origin.color = new Array(...find.father.waterColor);
+                            _origin.waterScale = find.father.waterScale;
+                            _origin.flowX = find.father.waterFlowX;
+                            _origin.flowY = find.father.waterFlowY;
 
                         } else {
 
-                            const { rotation = [0, 0, 0], color = [255, 255, 255], scale = 1, flowX = 1, flowY = 0 } = _target;
+                            const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
 
                             find.father.setRotation(rotation);
                             find.father.waterColor = new Array(...color);
-                            find.father.scale = scale;
-                            find.father.flowX = flowX;
-                            find.father.flowY = flowY;
+                            find.father.waterScale = waterScale;
+                            find.father.waterFlowX = flowX;
+                            find.father.waterFlowY = flowY;
 
                         }
 

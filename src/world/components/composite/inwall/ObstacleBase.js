@@ -30,6 +30,8 @@ const DEBUG = false;
 
 class ObstacleBase extends ObstacleMoveable {
 
+    isObstacleBase = true;
+
     name = '';
     box;
     group;
@@ -235,6 +237,7 @@ class ObstacleBase extends ObstacleMoveable {
         this.cObjects.forEach(obj => {
 
             this.group.add(obj.group);
+            obj.father = this;
 
         });
 
@@ -667,7 +670,7 @@ class ObstacleBase extends ObstacleMoveable {
 
     get obbPlanes() {
 
-        return this.walls.filter(w => w.isOBB).concat(this.topOBBs).concat(this.bottomOBBs);
+        return this.walls.filter(w => w.isOBB).concat(...this.topOBBs, ...this.bottomOBBs);
 
     }
 
@@ -689,6 +692,59 @@ class ObstacleBase extends ObstacleMoveable {
         }
 
         return result;
+
+    }
+
+    intersects(plane) {
+
+        let result = false;
+
+        if (plane.isOBB) {
+
+            result = this.intersectsOBB(plane.obb);
+
+        }
+
+        // if (!result) {
+            
+        //     if (plane.father?.father?.isObstacleBase || plane.father?.father?.father?.isObstacleBase) {
+
+        //         const father = plane.father.father.isObstacleBase ? plane.father.father : plane.father.father.father;
+
+        //         for (let i = 0; i < this.bottomOBBs.length; i++) {
+
+        //             const thisPlane = this.bottomOBBs[i];
+
+        //             if (father.intersectsOBB(thisPlane.obb)) {
+
+        //                 result = true;
+        //                 break;
+
+        //             }
+
+        //         }
+
+        //     }
+
+        // }
+
+        return result;
+
+    }
+
+    setModelVisible(show) {
+
+        if (this.gltf) {
+
+            this.gltf.visible = show;
+
+        }
+
+        if (this.cylinder) {
+
+            this.cylinder.mesh.visible = show;
+            
+        }
 
     }
 

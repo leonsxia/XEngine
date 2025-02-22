@@ -9,17 +9,17 @@ class WaterPlane extends BasicObject {
 
     isWater = true;
 
-    color;
-    flowX;
-    flowY;
-    scale;
+    _color;
+    _flowX;
+    _flowY;
+    _scale;  // waterScale
 
     constructor(specs) {
 
         specs.needMaterial = false;
         super(WATER_PLANE, specs);
 
-        const { color = [255, 255, 255], flowX = 1, flowY = 0, textureWidth = 512, textureHeight = 512, scale = 1, flowSpeed = 0.03 } = specs;
+        const { color = [255, 255, 255], flowX = 1, flowY = 0, textureWidth = 512, textureHeight = 512, waterScale = 1, flowSpeed = 0.03 } = specs;
         let { normalMap0, normalMap1 } = specs;
         const waterColor = colorStr(...color);
         const flowDirection = new Vector2(flowX, flowY);
@@ -31,14 +31,14 @@ class WaterPlane extends BasicObject {
 
         }
 
-        this.color = color;
-        this.scale = scale;
-        this.flowX = flowX;
-        this.flowY = flowY;
+        this._color = color;
+        this._scale = waterScale;
+        this._flowX = flowX;
+        this._flowY = flowY;
         
         const waterConfig = {
             color: waterColor,
-            scale,
+            scale: waterScale,
             flowDirection,
             flowSpeed,
             textureWidth,
@@ -56,39 +56,39 @@ class WaterPlane extends BasicObject {
 
     get waterColor() {
 
-        return this.color;
+        return this._color;
 
     }
 
     set waterColor(color) {
 
-        this.color = color;
+        this._color = color;
         this.mesh.material.uniforms['color'].value.setStyle(colorStr(...color));
 
     }
 
     get waterScale() {
 
-        return this.scale;
+        return this._scale;
 
     }
 
     set waterScale(scale) {
 
-        this.scale = scale;
+        this._scale = scale;
         this.mesh.material.uniforms[ 'config' ].value.w = scale;
 
     }
 
     get waterFlowX() {
 
-        return this.flowX;
+        return this._flowX;
 
     }
 
     set waterFlowX(val) {
 
-        this.flowX = val;
+        this._flowX = val;
         this.mesh.material.uniforms['flowDirection'].value.x = val;
         this.mesh.material.uniforms['flowDirection'].value.normalize();
 
@@ -96,13 +96,13 @@ class WaterPlane extends BasicObject {
 
     get waterFlowY() {
 
-        return this.flowY;
+        return this._flowY;
 
     }
 
     set waterFlowY(val) {
 
-        this.flowY = val;
+        this._flowY = val;
         this.mesh.material.uniforms['flowDirection'].value.y = val;
         this.mesh.material.uniforms['flowDirection'].value.normalize();
 

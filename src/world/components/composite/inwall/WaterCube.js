@@ -8,14 +8,14 @@ class WaterCube extends ObstacleBase {
 
     isWaterCube = true;
 
-    color;
-    flowX;
-    flowY;
-    scale;
+    _color;
+    _flowX;
+    _flowY;
+    _scale;
     waterFace;
     faces = [];
 
-    waterDensity = 1;
+    _waterDensity = 1;
     
     constructor(specs) {
 
@@ -23,21 +23,21 @@ class WaterCube extends ObstacleBase {
 
         this.specs = specs;
         const { name, width, depth, height, waterDensity = 1 } = specs;
-        const { color = [255, 255, 255], flowX = 1, flowY = 0, scale = 1, flowSpeed = 0.03, normalMap0, normalMap1 } = specs;
+        const { color = [255, 255, 255], flowX = 1, flowY = 0, waterScale = 1, flowSpeed = 0.03, normalMap0, normalMap1 } = specs;
         const waterColor = colorHex(...color);
 
-        this.waterDensity = waterDensity;
-        this.color = color;
-        this.scale = scale;
-        this.flowX = flowX;
-        this.flowY = flowY;
+        this._waterDensity = waterDensity;
+        this._color = color;
+        this._scale = waterScale;
+        this._flowX = flowX;
+        this._flowY = flowY;
         
         const boxSpecs = { size: { width, depth, height } };
 
         const FBSpecs = { width, height, color: waterColor, transparent: true };
         const LRSpecs = { width: depth, height, color: waterColor, transparent: true };
         const TBSpecs = { width, height: depth, color: waterColor, transparent: true };
-        const waterSpecs = { width, height: depth, color, flowX, flowY, scale, flowSpeed, normalMap0, normalMap1 };
+        const waterSpecs = { width, height: depth, color, flowX, flowY, waterScale, flowSpeed, normalMap0, normalMap1 };
 
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], false, false);
 
@@ -90,13 +90,13 @@ class WaterCube extends ObstacleBase {
 
     get waterColor() {
 
-        return this.color;
+        return this._color;
 
     }
 
     set waterColor(color) {
 
-        this.color = color;
+        this._color = color;
         this.waterFace.mesh.material.uniforms['color'].value.setStyle(colorStr(...color));
 
         this.faces.forEach(face => {
@@ -107,28 +107,40 @@ class WaterCube extends ObstacleBase {
 
     }
 
+    get waterDensity() {
+
+        return this._waterDensity;
+
+    }
+
+    set waterDensity(den) {
+        
+        this._waterDensity = den;
+
+    }
+
     get waterScale() {
 
-        return this.scale;
+        return this._scale;
 
     }
 
     set waterScale(scale) {
 
-        this.scale = scale;
+        this._scale = scale;
         this.waterFace.mesh.material.uniforms[ 'config' ].value.w = scale;
 
     }
 
     get waterFlowX() {
 
-        return this.flowX;
+        return this._flowX;
 
     }
 
     set waterFlowX(val) {
 
-        this.flowX = val;
+        this._flowX = val;
         this.waterFace.mesh.material.uniforms['flowDirection'].value.x = val;
         this.waterFace.mesh.material.uniforms['flowDirection'].value.normalize();
 
@@ -136,13 +148,13 @@ class WaterCube extends ObstacleBase {
 
     get waterFlowY() {
 
-        return this.flowY;
+        return this._flowY;
 
     }
 
     set waterFlowY(val) {
 
-        this.flowY = val;
+        this._flowY = val;
         this.waterFace.mesh.material.uniforms['flowDirection'].value.y = val;
         this.waterFace.mesh.material.uniforms['flowDirection'].value.normalize();
 

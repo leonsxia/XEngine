@@ -113,10 +113,11 @@ class CollisionPlane extends Plane {
         const dir = new Vector3(0, 1, 0);
 
         // udpate left ray and arrow
-        const leftfrom = new Vector3(width * .5, originY, 0);
+        const leftfrom = new Vector3(width * .5, 0, 0);
         leftfrom.applyMatrix4(this.mesh.matrixWorld);
+        leftfrom.y = this.worldPosition.y + originY;
 
-        const leftLen = this.#rayLength * this.mesh.scale.y;
+        const leftLen = this.#rayLength;
         this.leftRay.set(leftfrom, dir);
         this.leftRay.far = leftLen;
 
@@ -125,10 +126,11 @@ class CollisionPlane extends Plane {
         this.leftArrow.setLength(leftLen, HEAD_LENGTH, HEAD_WIDTH);
          
         // udpate right ray and arrow
-        const rightfrom = new Vector3(- width * .5, originY, 0);
+        const rightfrom = new Vector3(- width * .5, 0, 0);
         rightfrom.applyMatrix4(this.mesh.matrixWorld);
+        rightfrom.y = this.worldPosition.y + originY;
 
-        const rightLen = this.#rayLength * this.mesh.scale.y;
+        const rightLen = this.#rayLength;
         this.rightRay.set(rightfrom, dir);
         this.rightRay.far = rightLen;
 

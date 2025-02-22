@@ -450,18 +450,17 @@ class Moveable2D {
     }
 
     climbWallTick(params) {
+        
         const { delta, wall, player } = params;
 
         if (player.enableClimbing) {
 
-            if (!this.#isClimbingUp && !this.#isClimbingForward && this.isClimbing && !this.#isFalling) {
+            if (wall && !this.#isClimbingUp && !this.#isClimbingForward && this.isClimbing && !this.#isFalling) {
 
                 this.#logger.log(`${player.name} is climbing ${wall.name}`);
 
-                const marginTop = .01;
-                const pos = new Vector3(0, wall.height * .5 + marginTop, 0);
-                wall.mesh.localToWorld(pos);
-                this.#climbHeight = pos.y;
+                const marginTop = .01;           
+                this.#climbHeight = wall.worldPosition.y + wall.height * .5 + marginTop;
                 this.#climbDist = player.boundingBoxMesh.geometry.parameters.depth;
 
                 this.#isClimbingUp = true;
@@ -505,12 +504,6 @@ class Moveable2D {
         const worldY = player.worldYDirection;
 
         if(this.quickTurnTick(params) || this.#isClimbingUp || this.#isClimbingForward) {
-            
-            if (this.#isClimbingUp || this.#isClimbingForward) {
-
-                this.climbWallTick(params);
-
-            }
 
             return;
 
@@ -664,12 +657,6 @@ class Moveable2D {
 
         if (this.quickTurnTick(params) || this.#isClimbingUp) {
 
-            if (this.#isClimbingUp) {
-
-                this.climbWallTick(params);
-
-            }
-
             return;
 
         }
@@ -723,11 +710,9 @@ class Moveable2D {
             if (leftCorVec3.z <= 0 || rightCorVec3.z <= 0) {
 
                 this.resetClimbingState();
-                return;
 
             }
 
-            this.climbWallTick(params);
             return;
             
         }

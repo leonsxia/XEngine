@@ -45,6 +45,9 @@ class CollisionBox extends CollisionBase {
             this.top = createOBBPlane(bottomTopSpecs, `${this.name}_top`, [0, this.height * .5, 0], [- Math.PI * .5, 0 ,0], false, false);
             this.bottom = createOBBPlane(bottomTopSpecs, `${this.name}_bottom`, [0, - this.height * .5, 0], [Math.PI * .5, 0, 0], false, false);
 
+            this.top.father = this;
+            this.bottom.father = this;
+            
             this.topOBBs = [this.top];
             this.bottomOBBs = [this.bottom];
 
@@ -95,23 +98,35 @@ class CollisionBox extends CollisionBase {
     addWalls() {
 
         if (this.front) {
+
             this.walls.push(this.front);
             this.group.add(this.front.mesh);
+            this.front.father = this;
+
         }
 
         if (this.back) {
+
             this.walls.push(this.back);
             this.group.add(this.back.mesh);
+            this.back.father = this;
+
         }
 
         if (this.left) {
+
             this.walls.push(this.left);
             this.group.add(this.left.mesh);
+            this.left.father = this;
+
         }
 
         if (this.right) {
+
             this.walls.push(this.right);
             this.group.add(this.right.mesh);
+            this.right.father = this;
+
         }
 
     }
