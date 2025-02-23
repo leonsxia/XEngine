@@ -23,7 +23,7 @@ class InspectorCamera {
 
 
     setup(specs) {
-        
+
         const { player, control, scene, rooms } = specs;
 
         this.#player = player;
@@ -32,11 +32,13 @@ class InspectorCamera {
 
         const inspectorRooms = rooms.filter(r => r.isInspectorRoom);
 
-        inspectorRooms.forEach(room => {
+        for (let i = 0, il = inspectorRooms.length; i < il; i++) {
+
+            const room = inspectorRooms[i];
 
             this.#roomAreas.push(...room.areas);
 
-        });
+        }
 
     }
 

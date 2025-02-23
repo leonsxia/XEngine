@@ -28,7 +28,6 @@ const DEBUG = true;
 
 class SoldierFemale extends CombatPlayerBase {
 
-    weapons = {}
     #logger = new Logger(DEBUG, 'SoldierFemale');
 
     constructor(specs) {
@@ -51,46 +50,46 @@ class SoldierFemale extends CombatPlayerBase {
 
         this._idleNick = CLIPS.IDLE.nick;
 
-        this.weapons[WEAPONS.PISTOL1] = new Pistol({
+        this.weapons.push(new Pistol({
             name: `${name}_pistol`,
             position: [- .18, - .028 , .065],
             rotation: [- 0.35, - 1.3, - 1.6],
             fireRate: 1,
             ammo: 12
-        });
+        }));
 
-        this.weapons[WEAPONS.GLOCK] = new Glock({
+        this.weapons.push(new Glock({
             name: `${name}_glock19`,
             position: [- .18, - .08, .096],
             rotation: [1.2, 0, - .2],
             fireRate: 1.5,
             ammo: 19
-        });
+        }));
 
-        this.weapons[WEAPONS.REVOLVER] = new Revolver({
+        this.weapons.push(new Revolver({
             name: `${name}_magnum357`,
             position: [- .168, - .005 , .075],
             rotation:[- 0.35, - 1.3, - 1.6],
             fireRate: 1,
             ammo: 6
-        });
+        }));
 
-        this.weapons[WEAPONS.SMG_SHORT] = new SMGShort({
+        this.weapons.push(new SMGShort({
             name: `${name}_smg_short`,
             position: [- .18, - .028 , .065],
             rotation: [- 0.35, - 1.3, - 1.6],
             fireRate: 1,
             ammo: 35,
             isSemiAutomatic: false
-        });
+        }));
 
-        this.weapons[WEAPONS.BAYONET] = new Bayonet({
+        this.weapons.push(new Bayonet({
             name: `${name}_bayonet`,
             scale: [.35, .3, .25],
             position: [- .18, .01 , .046],
             rotation: [- .5, - 1, - .3],
             fireRate: 1.25
-        });
+        }));
 
         this.weaponActionMapping[WEAPONS.PISTOL1] = new WeaponActionMapping({ idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.7, fireRate: 1.2 });
         this.weaponActionMapping[WEAPONS.GLOCK] = new WeaponActionMapping({ idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, attackInterval: 0.4667, fireRate: 1.8 });
@@ -104,30 +103,19 @@ class SoldierFemale extends CombatPlayerBase {
 
     async init() {
 
-        await Promise.all([
-            this.weapons[WEAPONS.PISTOL1].init(),
-            this.weapons[WEAPONS.GLOCK].init(),            
-            this.weapons[WEAPONS.REVOLVER].init(),
-            this.weapons[WEAPONS.SMG_SHORT].init(),
-            this.weapons[WEAPONS.BAYONET].init(),
-            super.init()
-        ]);
+        await super.init();
 
         this.idleNick = CLIPS.IDLE.nick;
 
-        this._meleeWeapon = this.weapons[WEAPONS.BAYONET];
+        this._meleeWeapon = this.weapons.find(w => w.weaponType === WEAPONS.BAYONET);
         this.AWS.setActionEffectiveTimeScale(this.meleeAttackAction.attack.nick, this._meleeWeapon.fireRate);
 
         const holdingHand = this.gltf.getChildByName('WristR');
-        holdingHand.attach(this.weapons[WEAPONS.PISTOL1].group);
-        holdingHand.attach(this.weapons[WEAPONS.GLOCK].group);
-        holdingHand.attach(this.weapons[WEAPONS.BAYONET].group);
-        holdingHand.attach(this.weapons[WEAPONS.REVOLVER].group);
-        holdingHand.attach(this.weapons[WEAPONS.SMG_SHORT].group);
+        this.attachWeapons(holdingHand);
 
         this.setupWeaponScale();
         
-        this.armWeapon(this.weapons[WEAPONS.GLOCK]);
+        this.armWeapon(this.weapons.find(w => w.weaponType === WEAPONS.GLOCK));
         
     }
 

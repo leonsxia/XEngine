@@ -348,7 +348,11 @@ class WorldScene {
 
     subscribeEvents(obj, moveType) {
 
-        this.eventDispatcher.getActionTypes(moveType).forEach(action => {
+        const actionTypes = this.eventDispatcher.getActionTypes(moveType);
+
+        for (let i = 0, il = actionTypes.length; i < il; i++) {
+
+            const action = actionTypes[i];
 
             const callback = obj[action];
 
@@ -364,13 +368,17 @@ class WorldScene {
 
             }
 
-        });
+        }
 
     }
 
     unsubscribeEvents(obj, moveType) {
 
-        this.eventDispatcher.getActionTypes(moveType).forEach(action => {
+        const actionTypes = this.eventDispatcher.getActionTypes(moveType);
+
+        for (let i = 0, il = actionTypes.length; i < il; i++) {
+
+            const action = actionTypes[i];
 
             const callback = obj[action];
 
@@ -386,7 +394,7 @@ class WorldScene {
 
             }
 
-        });
+        }
         
     }
     
@@ -619,7 +627,7 @@ class WorldScene {
 
     armWeapon(name) {
 
-        if (!this.player.isCombatPlayer) {
+        if (!this.player.isCombatPlayer || this.player.attacking) {
             
             this.guiMaker.gui._lockWeapons = true;
             // console.log(`weapons locked: ${this.guiMaker.gui._lockWeapons}`);
@@ -635,7 +643,7 @@ class WorldScene {
             case WEAPONS.PISTOL1:
 
                 {
-                    const weapon = this.player.weapons[WEAPONS.PISTOL1];
+                    const weapon = this.player.weapons.find(w => w.weaponType === WEAPONS.PISTOL1);
 
                     if (!this.player.armedWeapon || this.player.armedWeapon !== weapon) {
 
@@ -653,7 +661,7 @@ class WorldScene {
             case WEAPONS.GLOCK:
 
                 {
-                    const weapon = this.player.weapons[WEAPONS.GLOCK];
+                    const weapon = this.player.weapons.find(w => w.weaponType === WEAPONS.GLOCK);
 
                     if (!this.player.armedWeapon || this.player.armedWeapon !== weapon) {
 
@@ -671,7 +679,7 @@ class WorldScene {
             case WEAPONS.REVOLVER:
 
                 {
-                    const weapon = this.player.weapons[WEAPONS.REVOLVER];
+                    const weapon = this.player.weapons.find(w => w.weaponType === WEAPONS.REVOLVER);
 
                     if (!this.player.armedWeapon || this.player.armedWeapon !== weapon) {
 
@@ -682,6 +690,7 @@ class WorldScene {
                         this.player.armWeapon(null);
 
                     }
+
                 }
 
                 break;
@@ -689,7 +698,7 @@ class WorldScene {
             case WEAPONS.SMG_SHORT:
 
                 {
-                    const weapon = this.player.weapons[WEAPONS.SMG_SHORT];
+                    const weapon = this.player.weapons.find(w => w.weaponType === WEAPONS.SMG_SHORT);
 
                     if (!this.player.armedWeapon || this.player.armedWeapon !== weapon) {
 
@@ -700,6 +709,7 @@ class WorldScene {
                         this.player.armWeapon(null);
 
                     }
+
                 }
 
                 break;    
@@ -717,7 +727,15 @@ class WorldScene {
 
     reloadAllWeapons() {
 
-        if (!this.player.isCombatPlayer) return;
+        if (!this.player.isCombatPlayer || this.player.attacking) {
+            
+            this.guiMaker.gui._lockWeapons = true;
+
+            return;
+
+        }
+
+        this.guiMaker.gui._lockWeapons = false;
 
         this.player.reloadAllWeapons();
         

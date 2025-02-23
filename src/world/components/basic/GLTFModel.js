@@ -124,28 +124,6 @@ class GLTFModel extends EventDispatcher {
 
     getMeshes(object) {
 
-        // if (object.isGroup || object.isObject3D && !object.isMesh && !object.isBone) {
-
-        //     object.children.forEach(child => {
-
-        //         if (child.isGroup || child.isObject3D && !child.isMesh && !child.isBone) {
-
-        //             this.getMeshes(child);
-
-        //         } else if (child.isMesh) {
-
-        //             this.meshes.push(child);
-                    
-        //         }
-
-        //     });
-
-        // } else if (object.isMesh) {
-
-        //     this.meshes.push(object);
-
-        // }
-
         object.traverse((object) => {
 
             if (object.isMesh) {
@@ -198,7 +176,13 @@ class GLTFModel extends EventDispatcher {
 
     setWireframe(show) {
 
-        this.meshes.forEach(mesh => mesh.material.wireframe = show);
+        for (let i = 0, il = this.meshes.length; i < il; i++) {
+
+            const mesh = this.meshes[i];
+
+            mesh.material.wireframe = show;
+
+        }
 
         return this;
 
@@ -206,7 +190,13 @@ class GLTFModel extends EventDispatcher {
 
     castShadow(cast) {
 
-        this.meshes.forEach(mesh => mesh.castShadow = cast);
+        for (let i = 0, il = this.meshes.length; i < il; i++) {
+
+            const mesh = this.meshes[i];
+
+            mesh.castShadow = cast;
+
+        }
 
         return this;
 
@@ -214,7 +204,13 @@ class GLTFModel extends EventDispatcher {
 
     receiveShadow(receive) {
 
-        this.meshes.forEach(mesh => mesh.receiveShadow = receive);
+        for (let i = 0, il = this.meshes.length; i < il; i++) {
+
+            const mesh = this.meshes[i];
+
+            mesh.receiveShadow = receive;
+
+        }
 
         return this;
 

@@ -20,7 +20,9 @@ class InspectorRoom extends Room {
 
         const { areas = [] } = this.specs;
 
-        areas.forEach(area => {
+        for (let i = 0, il = areas.length; i < il; i++) {
+
+            const area = areas[i];
 
             const { name, width, height, depth, color = basic } = area;
             const { position = [0, 0, 0], rotation = [0, 0, 0] } = area;
@@ -39,31 +41,27 @@ class InspectorRoom extends Room {
             areaBlock.box.isArea = true;
             areaBlock.box.mesh.layers.enable(CAMERA_RAY_LAYER);
 
+            // set collision areas invisible
+            areaBlock.box.visible = false;
+            areaBlock.box.mesh.layers.disable(CAMERA_RAY_LAYER);
+
             this.areas.push(areaBlock);
 
             this.group.add(areaBlock.box.mesh);
 
-        });
-
-        // set collision areas invisible
-        this.areas.forEach(area => {
-
-            area.box.visible = false;
-            area.box.mesh.layers.disable(CAMERA_RAY_LAYER);
-
-        });
+        }
 
     }
 
     updateAreasOBBBox(needUpdateMatrixWorld = true) {
 
-        this.areas.forEach(area => {
+        for (let i = 0, il = this.areas.length; i < il; i++) {
 
-            const { box } = area;
+            const { box } = this.areas[i];
 
             box.updateOBB(needUpdateMatrixWorld);
 
-        });
+        }
         
     }
 

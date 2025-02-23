@@ -453,7 +453,9 @@ class Tofu extends Moveable2D {
 
     enablePickLayers(...meshes) {
 
-        meshes.forEach(mesh => {
+        for (let i = 0, il = meshes.length; i < il; i++) {
+
+            const mesh = meshes[i];
 
             if (mesh.visible) {
 
@@ -465,7 +467,7 @@ class Tofu extends Moveable2D {
     
             }
     
-        });
+        }
         
     }
 

@@ -169,7 +169,13 @@ class ThirdPersonCamera {
             this.#rayBottomBackLeft, this.#rayBottomBackRight
         ];
 
-        this.rays.forEach(r => r.layers.set(PLAYER_CAMERA_RAY_LAYER));
+        for (let i = 0, il = this.rays.length; i < il; i++) {
+
+            const r = this.rays[i];
+
+            r.layers.set(PLAYER_CAMERA_RAY_LAYER);
+
+        }
 
         this.rayArrows = [
             this.#rayArrowTopFrontLeft, this.#rayArrowTopFrontRight, this.#rayArrowTopBackLeft, this.#rayArrowTopBackRight,
@@ -177,7 +183,14 @@ class ThirdPersonCamera {
             this.#rayArrowBottomBackLeft, this.#rayArrowBottomBackRight
         ];
 
-        this.rayArrows.forEach(a => a.visible = false);
+
+        for (let i = 0, il = this.rayArrows.length; i < il; i++) {
+
+            const a = this.rayArrows[i];
+
+            a.visible = false;
+
+        }
 
     }
 
@@ -199,7 +212,13 @@ class ThirdPersonCamera {
         this.#rayBottomBackLeft.set(camPosWorld, dirBottomBackLeft);
         this.#rayBottomBackRight.set(camPosWorld, dirBottomBackRight);
 
-        this.rayArrows.forEach(a => a.position.copy(camPosWorld));
+        for (let i = 0, il = this.rayArrows.length; i < il; i++) {
+
+            const a = this.rayArrows[i];
+
+            a.position.copy(camPosWorld);
+
+        }
 
         this.#rayArrowTopFrontLeft.setDirection(dirTopFrontLeft);
         this.#rayArrowTopFrontRight.setDirection(dirTopFrontRight);
@@ -233,30 +252,34 @@ class ThirdPersonCamera {
 
         let intersects = [];
 
-        this.rays.forEach(ray => {
+        for (let i = 0, il = this.rays.length; i < il; i++) {
+
+            const ray = this.rays[i];
 
             intersects.push(...ray.intersectObjects(this.#scene.children));
 
-        });
+        }
 
         this.resetInterectObjects();
 
         if (intersects.length > 0) {
             
-            intersects.forEach(i => {
+            for (let i = 0, il = intersects.length; i < il; i++) {
 
-                const { object } = i;
+                const { object } = intersects[i];
 
                 this.#intersectObjects.push(object);
 
                 if (Array.isArray(object.material)) {
 
-                    object.material.forEach(m => {
+                    for (let j = 0, jl = object.material.length; j < jl; j++) {
+
+                        const m = object.material[j];
 
                         m.transparent = true;
                         m.opacity = this.#invisibleOpacity;
 
-                    });
+                    }
 
                 } else {
 
@@ -265,7 +288,7 @@ class ThirdPersonCamera {
 
                 }
 
-            });
+            }
 
         }
 
@@ -273,15 +296,19 @@ class ThirdPersonCamera {
 
     resetInterectObjects() {
 
-        this.#intersectObjects.forEach(obj => {
+        for (let i = 0, il = this.#intersectObjects.length; i < il; i++) {
+
+            const obj = this.#intersectObjects[i];
 
             if (Array.isArray(obj.material)) {
 
-                obj.material.forEach(m => {
+                for (let j = 0, jl = obj.material.length; j < jl; j++) {
+
+                    const m = obj.material[j];
 
                     m.opacity = 1;
 
-                });
+                }
 
             } else {
 
@@ -289,7 +316,7 @@ class ThirdPersonCamera {
 
             }
 
-        });
+        }
 
         this.#intersectObjects = [];
 

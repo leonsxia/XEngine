@@ -137,7 +137,9 @@ class Slope extends InWallObjectBase {
         
         if (needUpdateWalls) {
 
-            this.walls.forEach(w => {
+            for (let i = 0, il = this.walls.length; i < il; i++) {
+
+                const w = this.walls[i];
 
                 w.updateRay(needUpdateMatrixWorld);
 
@@ -147,18 +149,22 @@ class Slope extends InWallObjectBase {
 
                 }
 
-            });
+            }
 
-            this.sideOBBWalls.forEach(w => {
+            for (let i = 0, il = this.sideOBBWalls.length; i < il; i++) {
+
+                const w = this.sideOBBWalls[i];
 
                 w.updateOBB(needUpdateMatrixWorld);
                 
-            });
+            }
 
         }
 
         if (needUpdateBottom) {
+
             this.bottomOBBs.forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+            
         }
 
         this.slope.updateOBB(needUpdateMatrixWorld);

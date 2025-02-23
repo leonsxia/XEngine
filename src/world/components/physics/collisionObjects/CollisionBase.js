@@ -29,7 +29,9 @@ class CollisionBase extends EventDispatcher {
 
     setLayers(layer) {
 
-        this.planes.forEach(p => {
+        for (let i = 0, il = this.planes.length; i < il; i++) {
+
+            const p = this.planes[i];
 
             if (this.group.visible) {
 
@@ -41,7 +43,7 @@ class CollisionBase extends EventDispatcher {
 
             }
 
-        });
+        }
 
     }
 
@@ -67,7 +69,13 @@ class CollisionBase extends EventDispatcher {
 
         const preRotY = this.rotationY;
 
-        this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preRotY + rotY);
+        for (let i = 0, il = this.walls.length; i < il; i++) {
+
+            const w = this.walls[i];
+
+            w.mesh.rotationY = w.mesh.rotationY - preRotY + rotY;
+
+        }
 
         this.group.rotation.set(0, rotY, 0);
         this.rotationY = rotY;

@@ -125,74 +125,30 @@ class Room {
 
     async init() {
         
-        const insideWallsInit = this.initInsideWalls();
-        const airWallsInit = this.initAirWalls();
-        const floorsInit = this.initFloors();
-        const ceilingsInit = this.initCeilings();
-        const insideGroupsInit = this.initInsideGroups();
+        const insideWallsInit = this.initObjects(this.insideWalls);
+        const airWallsInit = this.initObjects(this.airWalls);
+        const floorsInit = this.initObjects(this.floors);
+        const ceilingsInit = this.initObjects(this.ceilings);
+        const insideGroupsInit = this.initObjects(this.insideGroups);
         
         await Promise.all(
-            this.initWalls()
+            this.initObjects(this.walls)
             .concat(insideWallsInit, airWallsInit, floorsInit, ceilingsInit, insideGroupsInit)
         );
 
     }
 
-    initWalls() {
+    initObjects(objects) {
 
         const promises = [];
 
-        this.walls.forEach(w => promises.push(w.init()));
+        for (let i = 0, il = objects.length; i < il; i++) {
 
-        return promises;
-        
-    }
+            const obj = objects[i];
 
-    initInsideWalls() {
+            promises.push(obj.init());
 
-        const promises = [];
-
-        this.insideWalls.forEach(w => promises.push(w.init()));
-
-        return promises;
-
-    }
-
-    initAirWalls() {
-
-        const promises = [];
-
-        this.airWalls.forEach(w => promises.push(w.init()));
-
-        return promises;
-
-    }
-
-    initFloors() {
-
-        const promises = [];
-
-        this.floors.forEach(f => promises.push(f.init()));
-
-        return promises;
-
-    }
-
-    initCeilings() {
-
-        const promises = [];
-
-        this.ceilings.forEach(c => promises.push(c.init()));
-
-        return promises;
-
-    }
-
-    initInsideGroups() {
-
-        const promises = [];
-
-        this.insideGroups.forEach(g => promises.push(g.init()));
+        }
 
         return promises;
 
@@ -218,7 +174,9 @@ class Room {
 
     addWalls(walls) {
 
-        walls.forEach(w => {
+        for (let i = 0, il = walls.length; i < il; i++) {
+
+            const w = walls[i];
 
             this.group.add(w.mesh);
 
@@ -232,13 +190,15 @@ class Room {
 
             w.visible = true;
 
-        });
+        }
 
     }
 
     addInsideWalls(walls) {
 
-        walls.forEach(w => {
+        for (let i = 0, il = walls.length; i < il; i++) {
+
+            const w = walls[i];
 
             this.group.add(w.mesh);
 
@@ -252,13 +212,15 @@ class Room {
 
             w.visible = true;
 
-        });
+        }
         
     }
 
     addAirWalls(walls) {
 
-        walls.forEach(w => {
+        for (let i = 0, il = walls.length; i < il; i++) {
+
+            const w = walls[i];
 
             this.group.add(w.mesh);
 
@@ -272,13 +234,15 @@ class Room {
 
             w.visible = false;
 
-        });
+        }
         
     }
 
     addFloors(floors) {
 
-        floors.forEach(f => {
+        for (let i = 0, il = floors.length; i < il; i++) {
+
+            const f = floors[i];
 
             this.group.add(f.mesh);
 
@@ -290,13 +254,15 @@ class Room {
 
             f.visible = true;
 
-        });
+        }
 
     }
 
     addCeilings(ceilings) {
 
-        ceilings.forEach(c => {
+        for (let i = 0, il = ceilings.length; i < il; i++) {
+
+            const c = ceilings[i];
 
             this.group.add(c.mesh);
 
@@ -308,13 +274,15 @@ class Room {
 
             c.visible = true;
 
-        });
+        }
 
     }
 
     addWaters(waters) {
 
-        waters.forEach(w => {
+        for (let i = 0, il = waters.length; i < il; i++) {
+
+            const w = waters[i];
 
             if (w.isWater) {
 
@@ -330,13 +298,15 @@ class Room {
 
             }
 
-        });
+        }
 
     }
 
     addGroups(groups) {
 
-        groups.forEach(g => {
+        for (let i = 0, il = groups.length; i < il; i++) {
+
+            const g = groups[i];
 
             this.group.add(g.group);
 
@@ -344,22 +314,24 @@ class Room {
 
             if (g.walls) {
                 
-                g.walls.forEach(w => {
+                for (let j = 0, jl = g.walls.length; j < jl; j++) {
+
+                    const w = g.walls[j];
 
                     w.mesh.rotationY += this.rotationY;
                     this.insideWalls.push(w);
                     
-                });
+                }
             
             }
 
-            if (g.tops) this.tops = this.tops.concat(g.tops);
+            if (g.tops) this.tops.push(...g.tops);
 
-            if (g.bottoms) this.bottoms = this.bottoms.concat(g.bottoms);
+            if (g.bottoms) this.bottoms.push(...g.bottoms);
 
-            if (g.topOBBs) this.topOBBs = this.topOBBs.concat(g.topOBBs);
+            if (g.topOBBs) this.topOBBs.push(...g.topOBBs);
 
-            if (g.bottomOBBs) this.bottomOBBs = this.bottomOBBs.concat(g.bottomOBBs);
+            if (g.bottomOBBs) this.bottomOBBs.push(...g.bottomOBBs);
 
             if (g.isObstacle) this.obstacles.push(g);
 
@@ -379,9 +351,19 @@ class Room {
 
             }
 
-            g.cObjects?.forEach(obj => this.cObjects.push(obj));
+            if (g.cObjects) {
 
-        });
+                for (let j = 0, jl = g.cObjects.length; j < jl; j++) {
+
+                    const obj = g.cObjects[j];
+
+                    this.cObjects.push(obj);
+
+                }
+
+            }
+
+        }
 
     }
 
@@ -458,11 +440,15 @@ class Room {
         this.group.rotation.y = y;
         this.rotationY = y;
 
-        this.walls.concat(this.insideWalls, this.airWalls).forEach(w => {
-            
+        const allWalls = this.walls.concat(...this.insideWalls, ...this.airWalls);
+
+        for (let i = 0, il = allWalls.length; i < il; i++) {
+
+            const w = allWalls[i];
+
             w.mesh.rotationY = w.mesh.rotationY - preRotY + y;
-        
-        });
+
+        }
 
         return this;
 
@@ -470,7 +456,9 @@ class Room {
 
     setLightsVisible(lightVisible = true, helperVisible = false) {
 
-        this.lights.forEach(l => {
+        for (let i = 0, il = this.lights.length; i < il; i++) {
+
+            const l = this.lights[i];
 
             l.visible = lightVisible;
 
@@ -478,7 +466,7 @@ class Room {
 
             if (l.lightShadowCamHelper) l.lightShadowCamHelper.visible = helperVisible;
             
-        });
+        }
 
     }
 
@@ -528,7 +516,11 @@ class Room {
         // this will update all children mesh matrixWorld.
         this.group.updateMatrixWorld();
 
-        this.walls.concat(...this.insideWalls, ...this.airWalls).forEach(w => {
+        const allWalls = this.walls.concat(...this.insideWalls, ...this.airWalls);
+
+        for (let i = 0, il = allWalls.length; i < il; i++) {
+
+            const w = allWalls[i];
 
             w.updateRay(false);
 
@@ -538,38 +530,75 @@ class Room {
 
             }
 
-        });
+        }
 
-        this.slopeSideOBBWalls.forEach(s => s.updateOBB(false));
+        for (let i = 0, il = this.slopeSideOBBWalls.length; i < il; i++) {
 
-        this.floors.forEach(f => f.updateOBB(false));
+            const s = this.slopeSideOBBWalls[i];
 
-        this.ceilings.forEach(c => c.updateOBB?.(false));
+            s.updateOBB(false);
 
-        this.topOBBs.forEach(t => t.updateOBB(false));
+        }
 
-        this.bottomOBBs.forEach(b => b.updateOBB(false));
+        for (let i = 0, il = this.floors.length; i < il; i++) {
 
-        this.obstacles.forEach(obs => {
+            const f = this.floors[i];
+
+            f.updateOBB(false);
+
+        }
+
+        for (let i = 0, il = this.ceilings.length; i < il; i++) {
+
+            const c = this.ceilings[i];
+
+            c.updateOBB?.(false);
+
+        }
+
+        for (let i = 0, il = this.topOBBs.length; i < il; i++) {
+
+            const t = this.topOBBs[i];
+
+            t.updateOBB(false);
+
+        }
+
+        for (let i = 0, il = this.bottomOBBs.length; i < il; i++) {
+
+            const b = this.bottomOBBs[i];
+
+            b.updateOBB(false);
+
+        }
+
+        for (let i = 0, il = this.obstacles.length; i < il; i++) {
+
+            const obs = this.obstacles[i];
 
             obs.updateOBBs(false, false, false);
             obs.updateRay?.(false);
 
-        });
+        }
 
-        this.slopes.forEach(slope => {
+        for (let i = 0, il = this.slopes.length; i < il; i++) {
+
+            const slope = this.slopes[i];
 
             slope.updateOBBs(false, false, false);
 
-        });
+        }
 
-        this.waterCubes.forEach(waterCube => {
+        for (let i = 0, il = this.waterCubes.length; i < il; i++) {
+
+            const waterCube = this.waterCubes[i];
 
             waterCube.updateOBBs(false, false, false);
 
-        });
+        }
 
     }
+
 }
 
 export { Room };

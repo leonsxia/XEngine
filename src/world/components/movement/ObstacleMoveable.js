@@ -150,12 +150,13 @@ class ObstacleMoveable {
 
         const intersects = [];
 
-        obstacle.rays.forEach(ray => {
+        for (let i = 0, il = obstacle.rays.length; i < il; i++) {
 
+            const ray = obstacle.rays[i];
             const intersect = ray.intersectObject(slope.mesh);
             if (intersect.length > 0) intersects.push(intersect[0]);
 
-        });
+        }
 
         if (intersects.length > 0) {
 

@@ -17,8 +17,9 @@ async function loadGLTFModels(sources) {
     const loader = worldGLTFLoader;
     const loaded = {};
 
-    sources.forEach(s => {
+    for (let i = 0, il = sources.length; i < il; i++) {
 
+        const s = sources[i];
         const { name, src } = s;
 
         if (src) {
@@ -28,13 +29,15 @@ async function loadGLTFModels(sources) {
 
         }
 
-    });
+    }
 
     const results = await Promise.all(loadPromises);
 
     let i = 0;
-    sources.forEach(s => {
 
+    for (let j = 0, jl = sources.length; j < jl; j++) {
+
+        const s = sources[j];
         const { name, src } = s;
 
         if (src) {
@@ -44,7 +47,7 @@ async function loadGLTFModels(sources) {
 
         }
 
-    });
+    }
 
     return loaded;
 

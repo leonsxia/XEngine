@@ -30,40 +30,53 @@ async function loadTextures(mapsArr) {
     const loadPromises = [];
     const loader = worldTextureLoader;
     const loaded = {};
-    mapsArr.forEach(m => {
 
+    for (let i = 0, il = mapsArr.length; i < il; i++) {
+
+        const m = mapsArr[i];
         const { name, map, normalMap } = m;
 
         if (map) {
+
             loaded[name] = null;
             loadPromises.push(loader.loadAsync(map));
+            
         }
 
         if (normalMap) {
+
             loaded[`${name}_NORMAL`] = null;
             loadPromises.push(loader.loadAsync(normalMap));
+
         }
 
-    });
+    }   
 
     const results = await Promise.all(loadPromises);
 
     let i = 0;
-    mapsArr.forEach(m => {
+    for (let j = 0, jl = mapsArr.length; j < jl; j++) {
+
+        const m = mapsArr[j];
 
         const { name, map, normalMap } = m;
 
         if (map) {
+
             results[i].colorSpace = SRGBColorSpace;
             loaded[name] = results[i];
             i++;
+
         }
 
         if (normalMap) {
+
             loaded[`${name}_NORMAL`] = results[i];
             i++;
+
         }
-    });
+        
+    }
 
     return loaded;
 

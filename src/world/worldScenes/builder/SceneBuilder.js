@@ -35,32 +35,32 @@ class SceneBuilder {
     gltfs;
     worldScene;
 
-    constructor() {}
+    constructor() { }
 
     loadAssets(_textures, _gltfs) {
 
         this.textures = _textures;
         this.gltfs = _gltfs;
-    
+
     }
-    
+
     async buildScene(specs) {
-    
+
         try {
-    
+
             const { src } = specs;
             const worldScene = this.worldScene;
-    
+
             const request = new Request(src);
-    
+
             const response = await fetch(request);
             const setup = await response.json();
-    
+
             worldScene.jsonFileName = src.slice(src.lastIndexOf('/') + 1);
             worldScene.sceneSetup = setup;
             worldScene.sceneSetupCopy = JSON.parse(JSON.stringify(setup));
             worldScene.sceneSavedSetup = JSON.parse(JSON.stringify(setup));
-    
+
             const { players, lights, objects } = setup;
             const sceneSpecs = objects.find(o => o.type === SCENE);
             const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);
@@ -72,19 +72,20 @@ class SceneBuilder {
                     this.buildRooms(roomSpecs)
                 ]
             );
-    
+
             worldScene.players = loadedPlayers;
 
-            sceneObjects.forEach(obj => {
-    
+            for (let i = 0, il = sceneObjects.length; i < il; i++) {
+
+                const obj = sceneObjects[i];
                 const { mesh, group } = obj;
-    
+
                 if (mesh) worldScene.scene.add(mesh);
                 else if (group) worldScene.scene.add(group);
                 else worldScene.scene.add(obj);
-    
-            });
-    
+
+            }
+
             let basicLightGuiSpecsArr = [];
             let pointLightGuiSpecsArr = [];
             let spotLightGuiSpecsArr = [];
@@ -99,23 +100,25 @@ class SceneBuilder {
             {
                 this.buildLights(lights, { name: 'scene', insideGroups: sceneObjects });
             }
-    
-            rooms.forEach(room => {
-    
+
+            for (let i = 0, il = rooms.length; i < il; i++) {
+
+                const room = rooms[i];
+
                 // build room lights
                 this.buildLights(lights, room);
-    
+
                 worldScene.rooms.push(room);
-    
+
                 worldScene.cPlanes = worldScene.cPlanes.concat(room.walls, room.insideWalls, room.airWalls, room.floors, room.tops, room.bottoms, room.topOBBs, room.bottomOBBs, room.slopeFaces, room.stairsSides, room.stairsStepFronts, room.stairsStepTops);
 
                 worldScene.airWalls.push(...room.airWalls);
 
                 worldScene.cObjects.push(...room.cObjects);
-    
+
                 worldScene.scene.add(room.group);
 
-            });
+            }
     
         } catch (ex) {
     
@@ -183,17 +186,25 @@ class SceneBuilder {
         }
 
         // attach lights to specific objects
-        pointLightsSpecsArr.filter(l => l.visible).forEach(l => {
+        const visiblePointLightSpecsArr = pointLightsSpecsArr.filter(l => l.visible);
+
+        for (let i = 0, il = visiblePointLightSpecsArr.length; i < il; i++) {
+
+            const l = visiblePointLightSpecsArr[i];
 
             this.attachLightToObject(l, roomLightObjects, room);
 
-        });
+        }
 
-        spotLightsSpecsArr.filter(l => l.visible).forEach(l => {
+        const visibleSpotLightSpecsArr = spotLightsSpecsArr.filter(l => l.visible);
+
+        for (let i = 0, il = visibleSpotLightSpecsArr.length; i < il; i++) {
+
+            const l = visibleSpotLightSpecsArr[i];
 
             this.attachLightToObject(l, roomLightObjects, room);
 
-        });
+        }
 
     }
 
@@ -220,17 +231,16 @@ class SceneBuilder {
     }
     
     async buildPlayers(playerSpecs) {
-    
+
         const players = [];
         const loadPromises = [];
-    
-        playerSpecs.forEach(specs => {
-    
-            players.push(this.buildObject(specs));
-    
-        });
 
-        players.forEach(player => {
+        for (let i = 0, il = playerSpecs.length; i < il; i++) {
+
+            const specs = playerSpecs[i];
+            const player = this.buildObject(specs);
+
+            players.push(player);
 
             if (player.init) {
 
@@ -238,52 +248,53 @@ class SceneBuilder {
 
             }
 
-        });
+        }
 
         await Promise.all(loadPromises);
-    
+
         return players;
-    
+
     }
-    
+
     async buildSceneObjects(sceneSpecs) {
-    
+
         const loadPromises = [];
         const sceneObjects = [];
-    
-        sceneSpecs.children.forEach(specs => {
-    
-            sceneObjects.push(this.buildObject(specs));
-    
-        });
-    
-        sceneObjects.forEach(obj => {
-    
+
+        for (let i = 0, il = sceneSpecs.children.length; i < il; i++) {
+
+            const specs = sceneSpecs.children[i];
+            const obj = this.buildObject(specs);
+
+            sceneObjects.push(obj);
+
             if (obj.init) {
-                
+
                 loadPromises.push(obj.init());
-    
+
             }
-    
-        });
-    
+
+        }
+
         await Promise.all(loadPromises);
-    
+
         return sceneObjects;
-    
+
     }
     
     async buildRooms(roomSpecs) {
-    
+
         const loadPromises = [];
         const rooms = []
-    
-        roomSpecs.forEach(roomSpec => {
-    
+
+        for (let i = 0, il = roomSpecs.length; i < il; i++) {
+
+            const roomSpec = roomSpecs[i];
+
             roomSpec.updateOBBnRay = false;
             const room = this.buildObject(roomSpec);
             rooms.push(room);
-    
+
             const groups = [];
             const floors = [];
             const ceilings = [];
@@ -291,89 +302,118 @@ class SceneBuilder {
             const insideWalls = [];
             const airWalls = [];
             const waters = [];
-    
-            roomSpec.groups.forEach(spec => {
-    
+
+            for (let j = 0, jl = roomSpec.groups.length; j < jl; j++) {
+
+                const spec = roomSpec.groups[j];
+
                 spec.updateOBBs = false;
                 const group = this.buildObject(spec);
                 groups.push(group);
-    
-            });
+
+            }
+
             room.addGroups(groups);
-    
-            roomSpec.floors.forEach(spec => {
-    
+
+            for (let j = 0, jl = roomSpec.floors.length; j < jl; j++) {
+
+                const spec = roomSpec.floors[j];
+
                 spec.updateOBB = false;
                 const floor = this.buildObject(spec);
                 floors.push(floor);
-    
-            });
+
+            }
+
             room.addFloors(floors);
 
-            roomSpec.ceilings.forEach(spec => {
+            for (let j = 0, jl = roomSpec.ceilings.length; j < jl; j++) {
+
+                const spec = roomSpec.ceilings[j];
 
                 spec.updateOBB = false;
                 const ceiling = this.buildObject(spec);
                 ceilings.push(ceiling);
 
-            });
+            }
+
             room.addCeilings(ceilings);
 
-            roomSpec.waters?.forEach(spec => {
+            if (roomSpec.waters) {
 
-                if (spec.type === WATER_CUBE) {
+                for (let j = 0, jl = roomSpec.waters.length; j < jl; j++) {
 
-                    spec.updateOBBs = false;
+                    const spec = roomSpec.waters[j];
+
+                    if (spec.type === WATER_CUBE) {
+
+                        spec.updateOBBs = false;
+
+                    }
+
+                    const water = this.buildObject(spec);
+                    waters.push(water);
 
                 }
 
-                const water = this.buildObject(spec);
-                waters.push(water);
+                room.addWaters(waters);
 
-            });
-            room.addWaters(waters);
-    
-            roomSpec.walls.forEach(spec => {
-    
+            }
+
+            for (let j = 0, jl = roomSpec.walls.length; j < jl; j++) {
+
+                const spec = roomSpec.walls[j];
+
                 spec.updateOBB = false;
                 spec.updateRay = false;
                 const wall = this.buildObject(spec);
                 walls.push(wall);
-    
-            });
+
+            }
+
             room.addWalls(walls);
-    
-            roomSpec.insideWalls.forEach(spec => {
-    
+
+            for (let j = 0, jl = roomSpec.insideWalls.length; j < jl; j++) {
+
+                const spec = roomSpec.insideWalls[j];
+
                 spec.updateOBB = false;
                 spec.updateRay = false;
                 const insideWall = this.buildObject(spec);
                 insideWalls.push(insideWall);
-    
-            });
+
+            }
+
             room.addInsideWalls(insideWalls);
 
-            roomSpec.airWalls?.forEach(spec => {
+            if (roomSpec.airWalls) {
 
-                spec.updateOBB = false;
-                spec.updateRay = false;
-                const airWall = this.buildObject(spec);
-                airWalls.push(airWall);
+                for (let j = 0, jl = roomSpec.airWalls.length; j < jl; j++) {
 
-            });
+                    const spec = roomSpec.airWalls[j];
+
+                    spec.updateOBB = false;
+                    spec.updateRay = false;
+                    const airWall = this.buildObject(spec);
+                    airWalls.push(airWall);
+
+                }
+
+            }
+
             room.addAirWalls(airWalls);
-    
+
             room.updateOBBnRay();
             room.updateAreasOBBBox?.(false);
-    
+
             loadPromises.push(room.init());
-    
-        });
-    
+
+        }
+
         await Promise.all(loadPromises);
-    
+
         return rooms;
-    
+
     }
 
     saveScene() {
@@ -432,7 +472,9 @@ class SceneBuilder {
         const sceneSpecs = objects.find(o => o.type === SCENE);
         const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);
 
-        players.forEach(p => {
+        for (let i = 0, il = players.length; i < il; i++) {
+
+            const p = players[i];
 
             const _targetPlayerSetup = updateSetupOnly ? null : _targetSetup.players.find (f => f.type === p.type && f.name === p.name);
 
@@ -440,37 +482,45 @@ class SceneBuilder {
 
             if (needResetPlayers) this.worldScene.resetCharacterPosition();
 
-        });
+        }
 
-        lights.forEach(room => {
+        for (let i = 0, il = lights.length; i < il; i++) {
+
+            const room = lights[i];
 
             const basicLightsSpecsArr = room['basicLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
             const pointLightsSpecsArr = room['pointLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
             const spotLightsSpecsArr = room['spotLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
 
-            basicLightsSpecsArr.forEach(l => {
+            for (let j = 0, jl = basicLightsSpecsArr.length; j < jl; j++) {
 
+                const l = basicLightsSpecsArr[j];
                 const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['basicLightSpecs'].find(f => f.type === l.type && f.name === l.name);
                 this.updateLight(l, _targetLightSetup, updateSetupOnly);
 
-            });
+            }
 
-            pointLightsSpecsArr.forEach(l => {
+            for (let j = 0, jl = pointLightsSpecsArr.length; j < jl; j++) {
 
+                const l = pointLightsSpecsArr[j];
                 const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['pointLightSpecs'].find(f => f.type === l.type && f.name === l.name);
                 this.updateLight(l, _targetLightSetup, updateSetupOnly);
 
-            });
+            }
 
-            spotLightsSpecsArr.forEach(l => {
+            for (let j = 0, jl = spotLightsSpecsArr.length; j < jl; j++) {
 
+                const l = spotLightsSpecsArr[j];
                 const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['spotLightSpecs'].find(f => f => f.type === l.type && f.name === l.name);
                 this.updateLight(l, _targetLightSetup, updateSetupOnly);
                 
-            });
-        });
+            }
 
-        sceneSpecs.children.forEach(o => {
+        }
+
+        for (let i = 0, il = sceneSpecs.children.length; i < il; i++) {
+
+            const o = sceneSpecs.children[i];
 
             if (o.type !== AXES && o.type !== GRID) {
 
@@ -478,72 +528,92 @@ class SceneBuilder {
                 this.updateObject(o, _target, updateSetupOnly);
 
             }
-        });
 
-        roomSpecs.forEach(room => {
+        }
+
+        for (let i = 0, il = roomSpecs.length; i < il; i++) {
+
+            const room = roomSpecs[i];
 
             this.worldScene.rooms.find(r => r.name === room.name).resetDefaultWalls();
 
             if (room.type === INSPECTOR_ROOM) {
                 
-                room.areas.forEach(area => {
+                for (let j = 0, jl = room.areas.length; j < jl; j++) {
 
+                    const area = room.areas[j];
                     const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).areas.find(f => f.name === area.name);
                     this.updateObject(area, _target, updateSetupOnly);
                     
-                });
+                }
+
             }
 
-            room.groups.forEach(group => {
-                
+            for (let j = 0, jl = room.groups.length; j < jl; j++) {
+
+                const group = room.groups[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).groups.find(f => f.type === group.type && f.name === group.name);
                 this.updateObject(group, _target, updateSetupOnly);
-            
-            });
-            room.floors.forEach(floor => {
-                
+
+            }
+
+            for (let j = 0, jl = room.floors.length; j < jl; j++) {
+
+                const floor = room.floors[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).floors.find(f => f.type === floor.type && f.name === floor.name);
                 this.updateObject(floor, _target, updateSetupOnly);
 
-            });
+            }
 
-            room.ceilings.forEach(ceiling => {
-                
+            for (let j = 0, jl = room.ceilings.length; j < jl; j++) {
+
+                const ceiling = room.ceilings[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).ceilings.find(f => f.type === ceiling.type && f.name === ceiling.name);
                 this.updateObject(ceiling, _target, updateSetupOnly);
-            
-            });
 
-            room.walls.forEach(wall => {
-                
+            }
+
+            for (let j = 0, jl = room.walls.length; j < jl; j++) {
+
+                const wall = room.walls[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).walls.find(f => f.type === wall.type && f.name === wall.name);
                 this.updateObject(wall, _target, updateSetupOnly);
-            
-            });
 
+            }
 
-            room.insideWalls.forEach(inwall => {
-                
+            for (let j = 0, jl = room.insideWalls.length; j < jl; j++) {
+
+                const inwall = room.insideWalls[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).insideWalls.find(f => f.type === inwall.type && f.name === inwall.name);
                 this.updateObject(inwall, _target, updateSetupOnly);
-            
-            });
 
-            room.airWalls?.forEach(airwall => {
-                
-                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).airWalls.find(f => f.type === airwall.type && f.name === airwall.name);
-                this.updateObject(airwall, _target, updateSetupOnly);
-            
-            });
+            }
 
-            room.waters?.forEach(water => {
+            if (room.airWalls) {
 
-                const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).waters.find(f => f.type === water.type && f.name === water.name);
-                this.updateObject(water, _target, updateSetupOnly);
+                for (let j = 0, jl = room.airWalls.length; j < jl; j++) {
 
-            });
+                    const airwall = room.airWalls[j];
+                    const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).airWalls.find(f => f.type === airwall.type && f.name === airwall.name);
+                    this.updateObject(airwall, _target, updateSetupOnly);
 
-        });
+                }
+
+            }
+
+            if (room.waters) {
+
+                for (let j = 0, jl = room.waters.length; j < jl; j++) {
+
+                    const water = room.waters[j];
+                    const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).waters.find(f => f.type === water.type && f.name === water.name);
+                    this.updateObject(water, _target, updateSetupOnly);
+
+                }
+
+            }
+
+        }
 
     }
 
@@ -805,7 +875,7 @@ class SceneBuilder {
 
             if (rooms?.length) {
 
-                for (let i = 0; i < rooms.length; i++) {
+                for (let i = 0, il = rooms.length; i < il; i++) {
 
                     const roomFind = rooms[i].children.filter(o => o.isGroup || o.isMesh).find(f => f.name === name);
 
@@ -1575,20 +1645,22 @@ class SceneBuilder {
     }
     
     setupObjectTextures(_textures, specs) {
-    
-        _textures.forEach(t => {
-    
+
+        for (let i = 0, il = _textures.length; i < il; i++) {
+
+            const t = _textures[i];
+
             for (const map in t) {
-                
+
                 if (t[map] && TEXTURE_NAMES[t[map]]) {
-    
+
                     specs[map] = this.textures[t[map]];
-    
+
                 }
             }
-    
-        });
-    
+
+        }
+
     }
     
     setupObjectGLTF(_gltfSrc, specs) {

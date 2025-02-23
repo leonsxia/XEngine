@@ -32,24 +32,29 @@ class EventDispatcher {
 
     init() {
 
-        this.#types.forEach(type => {
+        for (let i = 0, il = this.#types.length; i < il; i++) {
+
+            const type = this.#types[i];
 
             this.#messages[type] = {};
 
-            this.#actions.forEach(act => {
+            for (let j = 0, jl = this.#actions.length; j < jl; j++) {
+
+                const act = this.#actions[j];
 
                 if (act.category === type) {
 
-                    act.types.forEach(action => {
+                    for (let k = 0, kl = act.types.length; k < kl; k++) {
 
+                        const action = act.types[k];
                         this.#messages[type][action] = [];
 
-                    });
+                    }
 
                 }
 
-            });
-        });
+            }
+        }
     }
 
     subscribe(type, action, subscriber) {
@@ -104,9 +109,15 @@ class EventDispatcher {
 
             if (subscribers && subscribers.length > 0) {
 
-                subscribers.forEach(subscriber => {
+                for (let i = 0, il = subscribers.length; i < il; i++) {
 
-                    if (subscriber.scene !== current) return;
+                    const subscriber = subscribers[i];
+
+                    if (subscriber.scene !== current) {
+
+                        continue;
+                        
+                    }
 
                     const args = [];
                     for (let i = 3; i < arguments.length; i++) {
@@ -118,7 +129,7 @@ class EventDispatcher {
                     // console.log(`subscriber: '${subscriber.subscriber.name}' scene: ${subscriber.scene}`);
                     subscriber.callback.apply(subscriber.subscriber, args);
 
-                });
+                }
 
             }
 

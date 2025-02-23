@@ -17,10 +17,16 @@ const MAX_RADIUS = 3.14;
 
 function combineGuiConfigs(...details) {
     let specs = [];
-    details.forEach(detail => 
-        specs = specs.concat(detail)
-    );
+
+    for (let i = 0, il = details.length; i < il; i++) {
+
+        const detail = details[i];
+        specs = specs.concat(detail);
+
+    }
+
     return specs;
+
 }
 
 function makeGuiPanel() {
@@ -321,8 +327,15 @@ function addHemisphereLight(light, specs) {
 }
 
 function makeBasicLightGuiConfig(basicLightSpecsArr) {
+
     const specs = [];
-    basicLightSpecsArr.filter(l => l.visible).forEach(basic => {
+
+    const visibleBasicLightSpecsArr = basicLightSpecsArr.filter(l => l.visible);
+
+    for (let i = 0, il = visibleBasicLightSpecsArr.length; i < il; i++) {
+
+        const basic = visibleBasicLightSpecsArr[i];
+
         switch (basic.light.type) {
             case DIRECTIONAL_LIGHT:
                 addDirectionalLight(basic, specs);
@@ -334,14 +347,23 @@ function makeBasicLightGuiConfig(basicLightSpecsArr) {
                 addHemisphereLight(basic, specs);
                 break;
         }
-    });
+
+    }
 
     return specs;
+
 }
 
 function makePointLightGuiConfig(pointLightSpecsArr) {
+
     const specs = [];
-    pointLightSpecsArr.filter(l => l.visible).forEach(point => {
+
+    const visiblePointLightSpecsArr = pointLightSpecsArr.filter(l => l.visible);
+
+    for (let i = 0, il = visiblePointLightSpecsArr.length; i < il; i++) {
+
+        const point = visiblePointLightSpecsArr[i];
+
         specs.push({
             room: point.room,
             folder: point.display,
@@ -374,6 +396,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                 changeFn: null
             }]
         });
+
         if (point.debug) {
             const find = specs.find(s => s.parent === point.name).specs;
             find.push({
@@ -483,13 +506,22 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                 });
             }
         }
-    });
+    }
+
     return specs;
+
 }
 
 function makeSpotLightGuiConfig(spotLightSpecsArr) {
+
     const specs = [];
-    spotLightSpecsArr.filter(l => l.visible).forEach(spot => {
+
+    const visibleSpotLightSpecsArr = spotLightSpecsArr.filter(l => l.visible);
+
+    for (let i = 0, il = visibleSpotLightSpecsArr.length; i < il; i++) {
+
+        const spot = visibleSpotLightSpecsArr[i];
+
         specs.push({
             room: spot.room,
             folder: spot.display,
@@ -535,6 +567,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 changeFn: null
             }]
         });
+
         if (spot.debug) {
             const find = specs.find(s => s.parent === spot.name).specs;
             find.push({
@@ -672,8 +705,10 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                 });
             }
         }
-    });
+    }
+
     return specs;
+
 }
 
 function makeSceneRightGuiConfig(lightSpecs) {
@@ -695,8 +730,10 @@ function setupFunctionPanel(panelSpecs, functions) {
 function makeObjectsGuiConfig(objects) {
 
     const objectPanel = makeGuiPanel();
-    
-    objects.forEach(object => {
+
+    for (let i = 0, il = objects.length; i < il; i++) {
+
+        const object = objects[i];
 
         // set parent to null, so gui will use prop to set identifier
         const folder = makeFolderGuiConfig({ folder: object.name, parent: null, close: false });
@@ -1002,9 +1039,10 @@ function makeObjectsGuiConfig(objects) {
 
         objectPanel.details.push(folder);
 
-    });
+    }
 
     return objectPanel;
+
 }
 
 

@@ -1,6 +1,10 @@
 import { Group, MathUtils } from 'three';
 import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
+import { Logger } from '../../../systems/Logger';
+import { BasicObject } from '../../basic/BasicObject';
+
+const DEBUG = false;
 
 class InWallObjectBase {
 
@@ -20,6 +24,8 @@ class InWallObjectBase {
     climbable = false;
 
     specs;
+
+    #logger = new Logger(DEBUG, 'InWallObjectBase');
 
     constructor(specs) {
 
@@ -56,16 +62,43 @@ class InWallObjectBase {
 
     }
 
+    bindBasicObjectEvents(obj) {
+        
+        const listener = (event) => {
+
+            this.#logger.func = 'bindBasicObjectEvents';
+            this.#logger.log(`${obj.name}: ${event.message}`);
+            obj.setLayers(CAMERA_RAY_LAYER);
+            obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
+
+        }
+        const type = 'visibleChanged';
+
+        if (!obj.hasEventListener(type, listener)) {
+
+            obj.addEventListener(type, listener);
+
+        }
+
+    }
+
     setPickLayers() {
 
         const meshes = getVisibleMeshes(this.group);
 
-        meshes.forEach(m => {
-            
-            m.layers.enable(CAMERA_RAY_LAYER);
-            m.layers.enable(PLAYER_CAMERA_RAY_LAYER);
-        
-        });
+        for (let i = 0, il = meshes.length; i < il; i++) {
+
+            const m = meshes[i];
+
+            if (m.father instanceof BasicObject) {
+
+                this.bindBasicObjectEvents(m.father);
+
+                m.father.visible = true;
+
+            }
+
+        }
         
     }
 
@@ -84,7 +117,13 @@ class InWallObjectBase {
         this.group.rotation.y = y;
         this.rotationY = y;
 
-        this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y);
+        for (let i = 0, il = this.walls.length; i < il; i++) {
+
+            const w = this.walls[i];
+
+            w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y;
+            
+        }
 
         return this;
 
@@ -106,7 +145,9 @@ class InWallObjectBase {
 
         if (needUpdateWalls) {
 
-            this.walls.forEach(w => {
+            for (let i = 0, il = this.walls.length; i < il; i++) {
+
+                const w = this.walls[i];
 
                 w.updateRay(needUpdateMatrixWorld);
 
@@ -116,12 +157,21 @@ class InWallObjectBase {
 
                 }
 
-            });
+            }
+
         }
 
         if (needUpdateTopBottom) {
 
-            this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+            const topBottoms = this.topOBBs.concat(this.bottomOBBs);
+
+            for (let i = 0, il = topBottoms.length; i < il; i++) {
+
+                const obb = topBottoms[i];
+
+                obb.updateOBB(needUpdateMatrixWorld);
+
+            }
 
         }
 

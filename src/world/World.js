@@ -187,52 +187,56 @@ class World {
 
         let objects = 0, vertices = 0, triangles = 0;
 
-        scene.children.forEach(object => {
+        for (let i = 0, il = scene.children.length; i < il; i++) {
 
-            object.traverseVisible( function ( object ) {
-                objects ++;
-    
-                if ( object.isMesh ) {
-    
+            const object = scene.children[i];
+
+            object.traverseVisible(function (object) {
+                objects++;
+
+                if (object.isMesh) {
+
                     const geometry = object.geometry;
-    
-                    vertices += geometry.attributes.position.count;
-    
-                    if ( geometry.index !== null ) {
-    
-                        triangles += geometry.index.count / 3;
-    
-                    } else {
-    
-                        triangles += geometry.attributes.position.count / 3;
-    
-                    }
-    
-                }
-    
-            } );
 
-        });
-        
+                    vertices += geometry.attributes.position.count;
+
+                    if (geometry.index !== null) {
+
+                        triangles += geometry.index.count / 3;
+
+                    } else {
+
+                        triangles += geometry.attributes.position.count / 3;
+
+                    }
+
+                }
+
+            });
+
+        }
+
         return { objects, vertices, triangles };
+
     } 
 
     bindResizer() {
 
         window.addEventListener('resize', () => {
 
-            this.worldScenes.forEach(scene => {
+            for (let i = 0, il = this.worldScenes.length; i < il; i++) {
 
+                const scene = this.worldScenes[i];
                 const { resizer } = scene;
 
                 if (this.#currentScene === scene) {
-                    
+
                     resizer.setSize();
                     resizer.onResize();
 
                 }
 
-            });
+            }
 
         });
 

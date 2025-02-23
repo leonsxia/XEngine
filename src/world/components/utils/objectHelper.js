@@ -53,7 +53,9 @@ function getVisibleMeshes(object, meshes = []) {
 
     if (object.isGroup && object.visible) {
 
-        object.children.forEach(child => {
+        for (let i = 0, il = object.children.length; i < il; i++) {
+
+            const child = object.children[i];
 
             if (child.isGroup && child.visible) {
 
@@ -65,7 +67,7 @@ function getVisibleMeshes(object, meshes = []) {
 
             }
 
-        });
+        }
 
     } else if (object.isMesh && object.visible) {
 

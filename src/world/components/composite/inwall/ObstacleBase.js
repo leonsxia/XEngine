@@ -209,7 +209,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         let walls = [];
 
-        this.cObjects.forEach(obj => walls = walls.concat(obj.walls));
+        this.cObjects.forEach(obj => walls.push(...obj.walls));
 
         return walls;
 
@@ -219,7 +219,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         let tops = [];
 
-        this.cObjects.forEach(obj => tops = tops.concat(obj.topOBBs));
+        this.cObjects.forEach(obj => tops.push(...obj.topOBBs));
 
         return tops;
 
@@ -229,7 +229,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         let bottoms = [];
 
-        this.cObjects.forEach(obj => bottoms = bottoms.concat(obj.bottomOBBs));
+        this.cObjects.forEach(obj => bottoms.push(...obj.bottomOBBs));
 
         return bottoms;
     }
@@ -315,7 +315,9 @@ class ObstacleBase extends ObstacleMoveable {
 
         const meshes = getVisibleMeshes(this.group);
 
-        meshes.forEach(m => {
+        for (let i = 0, il = meshes.length; i < il; i++) {
+
+            const m = meshes[i];
 
             if (m.father instanceof BasicObject) {
 
@@ -325,7 +327,7 @@ class ObstacleBase extends ObstacleMoveable {
 
             }
 
-        });
+        }
 
         this.bindGLTFEvents();
 
@@ -497,7 +499,13 @@ class ObstacleBase extends ObstacleMoveable {
         this.group.rotation.y = y;
         this.rotationY = y;
 
-        this.walls.forEach(w => w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y);
+        for (let i = 0, il = this.walls.length; i < il; i++) {
+
+            const w = this.walls[i];
+
+            w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y;
+            
+        }
 
         return this;
 
@@ -696,7 +704,9 @@ class ObstacleBase extends ObstacleMoveable {
 
         if (needUpdateWalls) {
 
-            this.walls.forEach(w => {
+            for (let i = 0, il = this.walls.length; i < il; i++) {
+            
+                const w = this.walls[i];
 
                 w.updateRay(needUpdateMatrixWorld);
 
@@ -706,20 +716,40 @@ class ObstacleBase extends ObstacleMoveable {
 
                 }
 
-            });
+            }
         }
 
         if (needUpdateTopBottom) {
 
-            this.topOBBs.concat(this.bottomOBBs).forEach(obb => obb.updateOBB(needUpdateMatrixWorld));
+            const topBottoms = this.topOBBs.concat(this.bottomOBBs);
+
+            for (let i = 0, il = topBottoms.length; i < il; i++) {
+
+                const obb = topBottoms[i];
+
+                obb.updateOBB(needUpdateMatrixWorld);
+
+            }
 
         }
 
-        this.triggers.forEach(tri => tri.updateOBB(needUpdateMatrixWorld));
+        for (let i = 0, il = this.triggers.length; i < il; i++) {
+
+            const tri = this.triggers[i];
+
+            tri.updateOBB(needUpdateMatrixWorld);
+
+        }
 
         this.box?.updateOBB(needUpdateMatrixWorld);
 
-        this.boundingFaces.forEach(bf => bf.updateOBB(needUpdateMatrixWorld));
+        for (let i = 0, il = this.boundingFaces.length; i < il; i++) {
+
+            const bf = this.boundingFaces[i];
+
+            bf.updateOBB(needUpdateMatrixWorld);
+
+        }
 
     }
 
@@ -747,6 +777,8 @@ class ObstacleBase extends ObstacleMoveable {
         }
 
         return result;
+
+        // return this.box.obb.intersectsOBB(obb);
 
     }
 

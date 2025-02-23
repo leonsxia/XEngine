@@ -99,11 +99,13 @@ class WaterCube extends ObstacleBase {
         this._color = color;
         this.waterFace.mesh.material.uniforms['color'].value.setStyle(colorStr(...color));
 
-        this.faces.forEach(face => {
+        for (let i = 0, il = this.faces.length; i < il; i++) {
+
+            const face = this.faces[i];
 
             face.material.color.setStyle(colorStr(...color));
 
-        });
+        }
 
     }
 

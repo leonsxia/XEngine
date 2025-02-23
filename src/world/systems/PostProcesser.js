@@ -301,7 +301,13 @@ class PostProcessor {
 
     disableAllEffects() {
 
-        this.effects.forEach(e => e.enabled = false);
+        for (let i = 0, il = this.effects.length; i < il; i++) {
+
+            const e = this.effects[i];
+
+            e.enabled = false;
+
+        }
 
     }
 

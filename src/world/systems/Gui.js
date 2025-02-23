@@ -23,7 +23,13 @@ class Gui {
         this.#guis.push(new GUI({ title: GUI_CONFIG.CONTROL_TITLES.LIGHT_CONTROL }));
         this.#guis.push(new GUI({ title: GUI_CONFIG.CONTROL_TITLES.OBJECTS_CONTROL }));
 
-        this.#guis.forEach(gui => gui.hide());
+        for (let i = 0, il = this.#guis.length; i < il; i++) {
+
+            const gui = this.#guis[i];
+
+            gui.hide();
+
+        }
 
     }
 
@@ -150,11 +156,23 @@ class Gui {
 
         if (needRoom) {
 
-            rooms.forEach(room => { if (room) gui.addFolder(room); });
+            for (let i = 0, il = rooms.length; i < il; i++) {
+
+                const room = rooms[i];
+
+                if (room) {
+                    
+                    gui.addFolder(room);
+
+                }
+
+            }
 
         }
 
-        specs.details.forEach(detail => {
+        for (let i = 0, il = specs.details.length; i < il; i++) {
+
+            const detail = specs.details[i];
 
             let folder;
             const target = detail.parent;
@@ -192,7 +210,9 @@ class Gui {
 
             }
 
-            detail.specs.forEach(spec => {
+            for (let j = 0, jl = detail.specs.length; j < jl; j++) {
+
+                const spec = detail.specs[j];
 
                 if (spec.value || spec.changeFn || spec.type === 'function') {
 
@@ -265,28 +285,34 @@ class Gui {
                         break;
                 }
 
-            });
+            }
 
             if ((!detail.subFolder && detail.close) || detail.closeSub) {
 
                 folder.close();
 
             }
-        });
+
+        }
+
     }
 
     bindFunctions(parent, functions) {
 
         const fnames = Object.getOwnPropertyNames(functions);
 
-        fnames.forEach(f => {
+        for (let i = 0, il = fnames.length; i < il; i++) {
+
+            const f = fnames[i];
 
             if (f !== GUI_CONFIG.INACTIVES) parent.add(functions, f);
 
-        });
+        }
 
-        parent.controllers.forEach(ctl => {
-            
+        for (let i = 0, il = parent.controllers.length; i < il; i++) {
+
+            const ctl = parent.controllers[i];
+
             this.bindControllerProperties(ctl);
 
             if (functions[GUI_CONFIG.INACTIVES]?.find(item => item === ctl._name)) {
@@ -294,8 +320,8 @@ class Gui {
                 ctl.domElement.classList.add(GUI_CONFIG.CLASS_INACTIVE);
 
             }
-        
-        });
+
+        }
 
         return parent;
 
@@ -531,7 +557,13 @@ class Gui {
 
     show() {
 
-        this.#guis.forEach(gui => gui.show());
+        for (let i = 0, il = this.#guis.length; i < il; i++) {
+
+            const gui = this.#guis[i];
+
+            gui.show();
+
+        }
 
     }
 
@@ -558,19 +590,27 @@ class Gui {
 
         }
 
-        rightCtlNames.forEach(c => {
+        for (let i = 0, il = rightCtlNames.length; i < il; i++) {
+
+            const c = rightCtlNames[i];
 
             if (c === title) this.showAt(title);
 
             else this.hideAt(c);
 
-        });
+        }
 
     }
 
     hide() {
 
-        this.#guis.forEach(gui => gui.hide());
+        for (let i = 0, il = this.#guis.length; i < il; i++) {
+
+            const gui = this.#guis[i];
+
+            gui.hide();
+
+        }
 
     }
 
@@ -584,7 +624,13 @@ class Gui {
 
     reset() {
 
-        this.#guis.forEach(gui => gui.reset());
+        for (let i = 0, il = this.#guis.length; i < il; i++) {
+
+            const gui = this.#guis[i];
+
+            gui.reset();
+
+        }
 
         this.#sceneChanged = false;
 
@@ -684,25 +730,36 @@ class Gui {
 
         }
 
-        this.panels.forEach(panel => {
+        for (let i = 0, il = this.panels.length; i < il; i++) {
 
-            panel.controllersRecursive().forEach((ctl) => {
+            const panel = this.panels[i];
 
+            const controllersRecursive = panel.controllersRecursive();
+
+            for (let j = 0, jl = controllersRecursive.length; j < jl; j++) {
+
+                const ctl = controllersRecursive[j];
                 ctlAction(ctl);
 
-            });
+            }
 
-            panel.foldersRecursive().forEach(folder => {
+            const folderRecursive = panel.foldersRecursive();
 
-                folder.controllers.forEach(ctl => {
+            for (let k = 0, kl = folderRecursive.length; k < kl; k++) {
+
+                const folder = folderRecursive[k];
+
+                for (let ii = 0, iil = folder.controllers.length; ii < iil; ii++) {
+
+                    const ctl = folder.controllers[ii];
 
                     ctlAction(ctl);
 
-                });
+                }
 
-            });
+            }
 
-        });
+        }
 
     }
     

@@ -17,7 +17,7 @@ class CombatPlayerBase extends Tofu {
 
     AWS;
 
-    weapons = {};
+    weapons = [];
     weaponActionMapping = {};
 
     _clips = {};
@@ -66,7 +66,10 @@ class CombatPlayerBase extends Tofu {
 
     async init() {
 
-        await this.gltf.init();
+        await Promise.all([
+            this.gltf.init(),
+            ...this.initPromises()
+        ]);
 
         this.showSkeleton(false);
 
@@ -82,6 +85,30 @@ class CombatPlayerBase extends Tofu {
 
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
+
+    }
+
+    initPromises() {
+
+        const loadPromises = [];
+
+        for (let i = 0, il = this.weapons.length; i < il; i++) {
+
+            loadPromises.push(this.weapons[i].init());
+
+        }
+
+        return loadPromises;
+
+    }
+
+    attachWeapons(hand) {
+
+        for (let i = 0, il = this.weapons.length; i < il; i++) {
+
+            hand.attach(this.weapons[i].group);
+
+        }
 
     }
 
@@ -115,25 +142,11 @@ class CombatPlayerBase extends Tofu {
 
     }
 
-    get weaponArray() {
-
-        const arr = [];
-
-        for (const item in this.weapons) {
-
-            arr.push(this.weapons[item]);
-
-        }
-
-        return arr;
-
-    }
-
     setupWeaponScale() {
 
         const { scale = [1, 1, 1] } = this.specs;
 
-        this.weaponArray.forEach(weaponItem => {
+        this.weapons.forEach(weaponItem => {
 
             weaponItem.group.scale.x *= scale[0];
             weaponItem.group.scale.y *= scale[1];
@@ -185,7 +198,7 @@ class CombatPlayerBase extends Tofu {
 
             this.armedWeapon = null;
 
-            this.weaponArray.forEach(weaponItem => {
+            this.weapons.forEach(weaponItem => {
 
                 weaponItem.visible = false;
 
@@ -195,7 +208,7 @@ class CombatPlayerBase extends Tofu {
 
         }
 
-        this.weaponArray.forEach(weaponItem => {
+        this.weapons.forEach(weaponItem => {
 
             if (weaponItem === weapon) {
 
@@ -936,6 +949,12 @@ class CombatPlayerBase extends Tofu {
 
         this.#logger.func = this.shoot.name;
 
+        if (!this.armedWeapon) {
+
+            return;
+
+        }
+
         if (this.gunPointing) {
 
             if (val) {
@@ -972,7 +991,7 @@ class CombatPlayerBase extends Tofu {
     
                 this.#logger.log(`gun shoot!`);
                 this.#logger.log(`active: ${this.AWS.activeAction.nick}`)
-                this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.armedWeaponAction.shoot.nick], this._animationSettings.SHOOT, 1);                
+                this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.armedWeaponAction.shoot.nick], this._animationSettings.SHOOT, 1);
 
                 this.armedWeapon.shoot();
 
@@ -1062,11 +1081,9 @@ class CombatPlayerBase extends Tofu {
 
         this.#weaponLogger.func = this.reloadAllWeapons.name;
 
-        const weapons = this.weaponArray;
+        for (let i = 0, il = this.weapons.length; i < il; i++) {
 
-        for (let i = 0; i < weapons.length; i++) {
-
-            const weaponItem = weapons[i];
+            const weaponItem = this.weapons[i];
 
             if (!weaponItem.ammoCount) continue;
 
@@ -1155,11 +1172,15 @@ class CombatPlayerBase extends Tofu {
 
         this.AWS.mixer.update(delta);
 
-        this.weaponArray.forEach(weapon => {
+        for (let i = 0, il = this.weapons.length; i < il; i++) {
 
+            const weapon = this.weapons[i];
+
+            if (!weapon.visible) continue;
+            
             weapon.AWS?.mixer.update(delta);
 
-        });
+        }
 
     }
 

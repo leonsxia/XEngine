@@ -373,12 +373,14 @@ class Moveable2D {
 
         const intersects = [];
 
-        player.rays.forEach(ray => {
+        for (let i = 0, il = player.rays.length; i < il; i++) {
 
+            const ray = player.rays[i];
             const intersect = ray.intersectObject(slope);
+
             if (intersect.length > 0) intersects.push(intersect[0]);
 
-        });
+        }
 
         if (intersects.length > 0) {
 
@@ -575,6 +577,7 @@ class Moveable2D {
             object.localToWorld(pos);
 
         });
+
     }
 
     resetDeltaV3() {

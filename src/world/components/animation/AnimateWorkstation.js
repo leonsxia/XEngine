@@ -36,7 +36,7 @@ class AnimateWorkstation {
 
     setupAnimationClips() {
 
-        for (let i = 0; i < this.animations.length; i++) {
+        for (let i = 0, il = this.animations.length; i < il; i++) {
 
             const animate = this.animations[i];
 

@@ -6,7 +6,11 @@ function createBasicLights(basicLightSpecsArr) {
 
     const lights = {};
 
-    basicLightSpecsArr.filter(l => l.visible).forEach(spec => {
+    const visibleBasicLightSpecsArr = basicLightSpecsArr.filter(l => l.visible);
+
+    for (let i = 0, il = visibleBasicLightSpecsArr.length; i < il; i++) {
+
+        const spec = visibleBasicLightSpecsArr[i];
 
         switch (spec.type) {
 
@@ -39,8 +43,10 @@ function createBasicLights(basicLightSpecsArr) {
                 }
                 
                 break;
+
         }
-    });
+
+    }
 
     return lights;
 
@@ -50,13 +56,17 @@ function createPointLights(pointLightSpecsArr) {
 
     const pointLights = {};
 
-    pointLightSpecsArr.filter(l => l.visible).forEach(point => {
+    const visiblePointLightSpecsArr = pointLightSpecsArr.filter(l => l.visible);
+
+    for (let i = 0, il = visiblePointLightSpecsArr.length; i < il; i++) {
+
+        const point = visiblePointLightSpecsArr[i];
 
         const { name } = point;
 
         point.light = pointLights[name] = new createPointLight(point);
 
-    });
+    }
 
     return pointLights;
 
@@ -66,13 +76,17 @@ function createSpotLights(spotLihgtSpecsArr) {
 
     const spotLights = {};
 
-    spotLihgtSpecsArr.filter(l => l.visible).forEach(spot => {
+    const visibleSpotLightSpecsArr = spotLihgtSpecsArr.filter(l => l.visible);
+
+    for (let i = 0, il = visibleSpotLightSpecsArr.length; i < il; i++) {
+
+        const spot = visibleSpotLightSpecsArr[i];
 
         const { name } = spot;
 
         spot.light = spotLights[name] = new createSpotLight(spot);
 
-    });
+    }
 
     return spotLights;
 

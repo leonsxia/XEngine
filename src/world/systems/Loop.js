@@ -66,11 +66,13 @@ class Loop {
         //     `The last frame rendered in ${delta * 1000} milliseconds`,
         // );
 
-        this.updatables.forEach(obj => {
+        for (let i = 0, il = this.updatables.length; i < il; i++) {
+
+            const obj = this.updatables[i];
 
             obj.tick(delta);
 
-        });
+        }
 
     }
 

@@ -108,7 +108,15 @@ class GuiMaker {
 
         if ($scene.showRoleSelector) {
             const roles = [];
-            $scene.players.forEach(p => roles.push(p.name));
+
+            for (let i = 0, il = $scene.players.length; i < il; i++) {
+
+                const p = $scene.players[i];
+
+                roles.push(p.name);
+
+            }
+
             this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
                 folder: 'Select Role',
                 parent: 'selectRole',
@@ -412,17 +420,18 @@ class GuiMaker {
 
         const objectsConfig = makeObjectsGuiConfig(objects);
 
-        objectsConfig.details.forEach(detail => {
+        for (let i = 0, il = objectsConfig.length; i < il; i++) {
+
+            const detail = objectsConfig[i];
 
             const parent = `${detail.folder}_object_actions`;
             const objectActions = {};
             objectActions[parent] = { 'lock': $scene.lockObjects.bind($scene) };
-    
+
             this.gui.addPanelParentObjects(objectActions);
             objectsConfig.details.push(makeFunctionGuiConfig(detail.folder, parent));
 
-        });
-        
+        }
 
         this.gui.addObjects(objectsConfig);
 
@@ -444,13 +453,17 @@ class GuiMaker {
     bindLightShadowHelperGuiCallback() {
 
         // bind callback to light helper and shadow cam helper
-        this.scene.shadowLightObjects.forEach(lightObj => {
+        for (let i = 0, il = this.scene.shadowLightObjects.length; i < il; i++) {
+
+            const lightObj = this.scene.shadowLightObjects[i];
 
             const { specs } = this.guiRightLightsSpecs.details.find(d => d.parent === lightObj.name);
 
             const changeObjs = specs.filter(s => s.hasOwnProperty('changeFn') && (s.type === 'light-num' || s.type === 'color' || s.type === 'groundColor' || s.type === 'angle'));
 
-            changeObjs.forEach(o => {
+            for (let j = 0, jl = changeObjs.length; j < jl; j++) {
+
+                const o = changeObjs[j];
 
                 o['changeFn'] = () => {
                     
@@ -460,9 +473,9 @@ class GuiMaker {
                 
                 };
 
-            });
+            }
 
-        });
+        }
 
     }
 

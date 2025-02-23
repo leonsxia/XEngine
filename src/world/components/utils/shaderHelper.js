@@ -5,8 +5,9 @@ async function loadShaders(sources) {
     const loadPromises = [];
     const textPromises = [];
 
-    sources.forEach(s => {
+    for (let i = 0, il = sources.length; i < il; i++) {
 
+        const s = sources[i];
         const { name, src } = s;
 
         if (src) {
@@ -18,22 +19,26 @@ async function loadShaders(sources) {
 
         }
 
-    });
+    }
 
     const shaderFiles = await Promise.all(loadPromises);
 
-    shaderFiles.forEach(file => {
+    for (let i = 0, il = shaderFiles.length; i < il; i++) {
+
+        const file = shaderFiles[i];
 
         textPromises.push(file.text());
 
-    });
+    }
 
     const shaderTexts = await Promise.all(textPromises);
 
     let i = 0;
     const reg = /\n|\t/gi;
-    sources.forEach(s => {
 
+    for (let j = 0, jl = sources.length; j < jl; j++) {
+
+        const s = sources[j];
         const { name, src } = s;
 
         if (src) {
@@ -43,7 +48,7 @@ async function loadShaders(sources) {
 
         }
 
-    });
+    }
 
     return shaders;
 

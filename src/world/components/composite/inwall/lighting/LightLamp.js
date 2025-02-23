@@ -24,7 +24,9 @@ class LightLamp extends ObstacleBase {
 
     addBloomObjects() {
 
-        this.bloomObjects.forEach(bloom => {
+        for (let i = 0, il = this.bloomObjects.length; i < il; i++) {
+
+            const bloom = this.bloomObjects[i];
 
             if (bloom.isMesh) {
 
@@ -36,14 +38,17 @@ class LightLamp extends ObstacleBase {
 
             }
 
-        });
+        }
 
         return this;
+
     }
 
     setBloomObjectsTransparent(opacity = .1) {
 
-        this.bloomObjects.forEach(bloom => {
+        for (let i = 0, il = this.bloomObjects.length; i < il; i++) {
+
+            const bloom = this.bloomObjects[i];
 
             if (bloom.isMesh) {
 
@@ -56,12 +61,15 @@ class LightLamp extends ObstacleBase {
 
             }
 
-        });
+        }
+
     }
 
     setBloomObjectsFather() {
 
-        this.bloomObjects.forEach(bloom => {
+        for (let i = 0, il = this.bloomObjects.length; i < il; i++) {
+
+            const bloom = this.bloomObjects[i];
 
             if (bloom.isMesh) {
 
@@ -73,13 +81,15 @@ class LightLamp extends ObstacleBase {
 
             }
 
-        });
+        }
 
     }
 
     setBloomObjectsLayers() {
 
-        this.bloomObjects.forEach(bloom => {
+        for (let i = 0, il = this.bloomObjects.length; i < il; i++) {
+
+            const bloom = this.bloomObjects[i];
 
             if (bloom.isMesh) {
 
@@ -91,13 +101,15 @@ class LightLamp extends ObstacleBase {
 
             }
 
-        });
+        }
 
     }
 
     setBloomObjectsVisible(show) {
 
-        this.bloomObjects.forEach(bloom => {
+        for (let i = 0, il = this.bloomObjects.length; i < il; i++) {
+
+            const bloom = this.bloomObjects[i];
 
             if (bloom.isMesh) {
 
@@ -109,17 +121,23 @@ class LightLamp extends ObstacleBase {
 
             }
 
-        });
+        }
 
     }
 
     updateLightObjects() {
 
-        this.lightObjs?.forEach(l => {
+        if (this.lightObjs) {
 
-            updateSingleLightCamera.call(null, l, false);
+            for (let i = 0, il = this.lightObjs.length; i < il; i++) {
 
-        });
+                const l = this.lightObjs[i];
+
+                updateSingleLightCamera.call(null, l, false);
+
+            }
+
+        }
 
     }
 

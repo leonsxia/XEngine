@@ -14,7 +14,11 @@ function setupShadowLight(scene, room, ...lights) {
 
     if (!lights || lights.length === 0) return;
 
-    lights.filter(l => l.visible).forEach(l => {
+    const visibleLights = lights.filter(l => l.visible);
+
+    for (let i = 0, il = visibleLights.length; i < il; i++) {
+
+        const l = visibleLights[i];
 
         const { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show, room = 'scene' } = l;
 
@@ -80,17 +84,18 @@ function setupShadowLight(scene, room, ...lights) {
             default: // ambient
 
                 lightObj = { light, name, debug, shadow, room };
-                
+
                 break;
 
         }
 
         shadowLightObjects.push(lightObj);
-        
-    });
 
-    shadowLightObjects.forEach(lightObj => {
+    }
 
+    for (let i = 0, il = shadowLightObjects.length; i < il; i++) {
+
+        const lightObj = shadowLightObjects[i];
         const { light } = lightObj;
 
         if (light.type === HEMISPHERE_LIGHT) {
@@ -133,7 +138,7 @@ function setupShadowLight(scene, room, ...lights) {
 
         }
 
-    });
+    }
 
     // fix when change light position or target, 
     // the shadow camera won't update at first static frame.
@@ -358,12 +363,14 @@ function updateSingleLightCamera(lightObj, needRender = false) {
 
 function updateLightCamera(lights) {
 
-    lights.forEach(lightObj => {
+    for (let i = 0, il = lights.length; i < il; i++) {
+
+        const lightObj = lights[i];
 
         updateSingleLightCamera.call(this, lightObj);
 
-    });
-    
+    }
+
 }
 
 export { setupShadowLight, updateSingleLightCamera };
