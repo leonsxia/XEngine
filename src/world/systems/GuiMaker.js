@@ -420,9 +420,9 @@ class GuiMaker {
 
         const objectsConfig = makeObjectsGuiConfig(objects);
 
-        for (let i = 0, il = objectsConfig.length; i < il; i++) {
+        for (let i = 0, il = objectsConfig.details.length; i < il; i++) {
 
-            const detail = objectsConfig[i];
+            const detail = objectsConfig.details[i];
 
             const parent = `${detail.folder}_object_actions`;
             const objectActions = {};
