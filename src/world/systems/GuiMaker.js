@@ -459,7 +459,7 @@ class GuiMaker {
 
             const { specs } = this.guiRightLightsSpecs.details.find(d => d.parent === lightObj.name);
 
-            const changeObjs = specs.filter(s => s.hasOwnProperty('changeFn') && (s.type === 'light-num' || s.type === 'color' || s.type === 'groundColor' || s.type === 'angle'));
+            const changeObjs = specs.filter(s => Object.prototype.hasOwnProperty.call(s, 'changeFn') && (s.type === 'light-num' || s.type === 'color' || s.type === 'groundColor' || s.type === 'angle'));
 
             for (let j = 0, jl = changeObjs.length; j < jl; j++) {
 

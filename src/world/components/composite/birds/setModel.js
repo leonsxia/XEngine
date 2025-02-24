@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { AnimationClip, NumberKeyframeTrack, VectorKeyframeTrack, AnimationMixer, LoopOnce } from 'three';
 
 function setupModel(data, position) {
@@ -20,6 +21,7 @@ function setupModel(data, position) {
         [0, 0.3, 0.6, 0.9, 1.2],
         [1, 1, 1, 1.5, 1.5, 1.5, 1, 1, 1, 0.8, 0.8, 0.8, 1, 1, 1]
     );
+    // eslint-disable-next-line no-unused-vars
     const moveScaleClip = new AnimationClip('move-n-scale', -1, [positionKF, scaleKF]);
 
     const mixer = new AnimationMixer(model);

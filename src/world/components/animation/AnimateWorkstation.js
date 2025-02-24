@@ -184,7 +184,7 @@ class AnimateWorkstation {
         this.fadeToAction(endAction, duration);
         this.isLooping = true;
 
-        const onLoopFinished = (event) => {
+        const onLoopFinished = () => {
 
             this.mixer.removeEventListener('finished', onLoopFinished);
             this.isLooping = false;

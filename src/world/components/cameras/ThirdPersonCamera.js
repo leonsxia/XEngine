@@ -322,7 +322,7 @@ class ThirdPersonCamera {
 
     }
 
-    tick(delta) {
+    tick() {
 
         this.setPositionFromPlayer();
         this.#control.target.copy(this.target);

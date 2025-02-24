@@ -511,7 +511,7 @@ class SceneBuilder {
             for (let j = 0, jl = spotLightsSpecsArr.length; j < jl; j++) {
 
                 const l = spotLightsSpecsArr[j];
-                const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['spotLightSpecs'].find(f => f => f.type === l.type && f.name === l.name);
+                const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['spotLightSpecs'].find(f => f.type === l.type && f.name === l.name);
                 this.updateLight(l, _targetLightSetup, updateSetupOnly);
                 
             }
@@ -1086,7 +1086,7 @@ class SceneBuilder {
                 break;
             case SOLDIER_FEMALE:
                 {
-                    const { position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
+                    const { position = [0, 0, 0] } = specs;
                     const { src } = specs;
     
                     this.setupObjectGLTF({ src }, specs);

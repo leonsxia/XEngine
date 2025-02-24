@@ -259,6 +259,7 @@ class Train extends Moveable2D {
         this.updateOBB();
     }
 
+    // eslint-disable-next-line no-unused-vars
     tickOnSlope(slope) {
         // to do
     }

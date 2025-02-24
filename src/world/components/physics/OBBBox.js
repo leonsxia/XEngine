@@ -1,4 +1,4 @@
-import { EdgesGeometry, LineSegments, LineBasicMaterial, Vector3, MathUtils } from 'three';
+import { EdgesGeometry, LineSegments, LineBasicMaterial, Vector3 } from 'three';
 import { OBB } from 'three/addons/math/OBB.js';
 import { Box } from '../Models';
 import { white } from '../basic/colorBase';

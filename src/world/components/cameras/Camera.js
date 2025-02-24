@@ -18,7 +18,7 @@ class Camera {
 
     get position() {
 
-        this.camera.position;
+        return this.camera.position;
 
     }
 

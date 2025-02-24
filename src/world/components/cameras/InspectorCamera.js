@@ -7,7 +7,6 @@ class InspectorCamera {
 
     #player;
     #control;
-    #scene;
     #roomAreas = [];
 
     isInspectorCamera = true;
@@ -24,11 +23,10 @@ class InspectorCamera {
 
     setup(specs) {
 
-        const { player, control, scene, rooms } = specs;
+        const { player, control, rooms } = specs;
 
         this.#player = player;
         this.#control = control;
-        this.#scene = scene;
 
         const inspectorRooms = rooms.filter(r => r.isInspectorRoom);
 
@@ -82,7 +80,7 @@ class InspectorCamera {
 
     }
 
-    tick(delta) {
+    tick() {
 
         this.checkIntersection();
 

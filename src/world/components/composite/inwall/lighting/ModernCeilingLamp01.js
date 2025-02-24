@@ -19,7 +19,7 @@ class ModernCeilingLamp01 extends LightLamp {
 
         super(specs);
 
-        const { name, scale = [1, 1], lines = true } = specs;
+        const { name, scale = [1, 1] } = specs;
         const { offsetY = this.height * .5 - this.topHeight } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs; 
 

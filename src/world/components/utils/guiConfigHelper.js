@@ -805,7 +805,7 @@ function makeObjectsGuiConfig(objects) {
                 value: object.father,
                 params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                 type: 'object-angle',
-                changeFn: (val) => {
+                changeFn: () => {
 
                     if (object.isGroup) {
 

@@ -1,5 +1,5 @@
 import { Color, Scene } from 'three';
-import { basicMateraials } from './basic/basicMaterial';
+// import { basicMateraials } from './basic/basicMaterial';
 
 function createScene(color) {
     const scene = new Scene();

@@ -87,7 +87,7 @@ class WorldControls {
     
     resetTick() {
 
-        this.#controls.tick = (delta) => {
+        this.#controls.tick = () => {
 
             this.#length = 0;
             this.#controls.enabled = true;
@@ -135,13 +135,14 @@ class WorldControls {
 
             if (this.#length < dist) {
 
-                this.#length += vel;
-                this.#thisCamera.position.x += vel;
-                this.#thisCamera.position.y += vel;
-                this.#thisCamera.position.z += vel;
-                this.#controls.target.x += vel;
-                this.#controls.target.y += vel;
-                this.#controls.target.z += vel;
+                const dist = velPerSecond * delta;
+                this.#length += dist;
+                this.#thisCamera.position.x += dist;
+                this.#thisCamera.position.y += dist;
+                this.#thisCamera.position.z += dist;
+                this.#controls.target.x += dist;
+                this.#controls.target.y += dist;
+                this.#controls.target.z += dist;
 
                 this.#controls.update();
 
@@ -169,11 +170,11 @@ class WorldControls {
     
     focusNext(target0, target1, position0, position1) {
         
-        const tar0Vec3 = new Vector3(target0.x, target0.y, target0.z);
+        // const tar0Vec3 = new Vector3(target0.x, target0.y, target0.z);
         const tar1Vec3 = new Vector3(target1.x, target1.y, target1.z);
         const pos0Vec3 = new Vector3(position0.x, position0.y, position0.z);
         const pos1Vec3 = new Vector3(position1.x, position1.y, position1.z);
-        const tarDirVec3 = tar1Vec3.clone().sub(tar0Vec3);
+        // const tarDirVec3 = tar1Vec3.clone().sub(tar0Vec3);
         // const tarDirNormal = tarDirVec3.clone().normalize();
         // const tarDist = tarDirVec3.length();
         const posDirVec3 = pos1Vec3.clone().sub(pos0Vec3);

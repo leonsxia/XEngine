@@ -893,6 +893,7 @@ class Tofu extends Moveable2D {
 
     }
 
+    // eslint-disable-next-line no-unused-vars
     finalTick(delta) {}
 
 }

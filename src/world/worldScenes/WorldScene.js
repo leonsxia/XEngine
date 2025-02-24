@@ -9,7 +9,7 @@ import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
 import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
 
-let renderTimes = 0;
+// let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
 
 class WorldScene {
@@ -250,7 +250,7 @@ class WorldScene {
 
     reset() {
 
-        renderTimes = 0;
+        // renderTimes = 0;
         this.stop();
 
         this.renderer.shadowMap.enabled = false;
@@ -534,7 +534,7 @@ class WorldScene {
             if (!find) {
 
                 this.scene.add(this.player.boundingBoxHelper);
-                if (this.player.hasOwnProperty('_showBBHelper')) this.player._showBBHelper = s;
+                if (Object.prototype.hasOwnProperty.call(this.player, '_showBBHelper')) this.player._showBBHelper = s;
 
             }
 
@@ -543,7 +543,7 @@ class WorldScene {
             if (find) {
 
                 this.scene.remove(this.player.boundingBoxHelper);
-                if (this.player.hasOwnProperty('_showBBHelper')) this.player._showBBHelper = s;
+                if (Object.prototype.hasOwnProperty.call(this.player, '_showBBHelper')) this.player._showBBHelper = s;
 
             }
 

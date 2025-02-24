@@ -28,6 +28,7 @@ const DEBUG = true;
 
 class SoldierFemale extends CombatPlayerBase {
 
+    // eslint-disable-next-line no-unused-private-class-members
     #logger = new Logger(DEBUG, 'SoldierFemale');
 
     constructor(specs) {

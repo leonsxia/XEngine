@@ -17,7 +17,7 @@ class SecurityLight extends LightLamp {
 
         super(specs);
 
-        const { name, scale = [1, 1, 1], lines = true } = specs;
+        const { name, scale = [1, 1, 1] } = specs;
         const { offsetY = .1, offsetZ = - this.depth * .5 } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs; 
 

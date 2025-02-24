@@ -13,7 +13,7 @@ class ObstacleMoveable {
     rightBlock = false;
     
     #fallingTime = 0;
-    #isFalling = false;
+    // #isFalling = false;
     #g = 9.8;
     #verticalForceSpeed = 0;
 
@@ -62,7 +62,7 @@ class ObstacleMoveable {
 
     resetFallingState() {
 
-        this.#isFalling = false;
+        // this.#isFalling = false;
         this.#fallingTime = 0;
 
     }
@@ -127,7 +127,7 @@ class ObstacleMoveable {
         const deltaY = .5 * this.verticalAcceleratedSpeed * (now * now - this.#fallingTime * this.#fallingTime);
         obstacle.group.position.y -= deltaY;
 
-        this.#isFalling = true;
+        // this.#isFalling = true;
         this.#fallingTime = now;
 
     }

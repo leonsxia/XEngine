@@ -101,7 +101,7 @@ class World {
 
         const start = Date.now();
             
-        const [textures, gltfs, shaders] = await Promise.all([
+        const [textures, gltfs] = await Promise.all([
             loadTextures(TEXTURES),
             loadGLTFModels(GLTFS),
             loadShaders(SHADERS)
@@ -255,7 +255,7 @@ class World {
         const eventDispatcher = this.#movementEventDispatcher;
         const messageType = movementTypes[0];
         const actions = moveActions.find(f => f.category === 'tankmove').types;
-        const { A, D, W, S, V, J, K, L, F, Shift, Space } = this.keys;
+        const { A, D, W, S, J, K, L, F, Shift, Space } = this.keys;
 
         window.addEventListener('keydown', e => {
 

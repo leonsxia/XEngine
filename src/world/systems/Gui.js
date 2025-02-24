@@ -371,7 +371,8 @@ class Gui {
                         break;
 
                     case 'control-dropdown':
-                        // if (this.#sceneChanged) return;
+                        // if (this.#sceneChanged) return;                        
+                    // eslint-disable-next-line no-fallthrough
                     case 'dropdown':
 
                         find.changeFn(val);
@@ -380,25 +381,29 @@ class Gui {
 
                     case 'role-dropdown':
 
-                        const gui = this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU);
+                        {
 
-                        find.changeFn(val, false);
+                            const gui = this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU);
 
-                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BBHelper').setValue('hide');
-          
-                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BB').setValue('hide');
+                            find.changeFn(val, false);
 
-                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BBW').setValue('hide');
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BBHelper').setValue('hide');
 
-                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BF').setValue('hide');
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BB').setValue('hide');
 
-                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'PushingBox').setValue('hide');
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BBW').setValue('hide');
 
-                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Arrows').setValue('hide');
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BF').setValue('hide');
 
-                        this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Skeleton').setValue('hide');
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'PushingBox').setValue('hide');
 
-                        break;
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Arrows').setValue('hide');
+
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Skeleton').setValue('hide');
+
+                            break;
+
+                        }
 
                     case 'camera-dropdown':
 
@@ -436,26 +441,44 @@ class Gui {
 
                     case 'function':
 
-                        const ctl = event.controller;
-                        const isActive = this.controlIsActive(ctl);
+                        {
 
-                        if (!this._lockWeapons && find.parent === GUI_CONFIG.WEAPONS_OPTIONS_PARENT) {
+                            const ctl = event.controller;
+                            const isActive = this.controlIsActive(ctl);
 
-                            if (isActive) {
+                            if (!this._lockWeapons && find.parent === GUI_CONFIG.WEAPONS_OPTIONS_PARENT) {
 
-                                ctl.setInactive();
+                                if (isActive) {
 
-                            } else {
+                                    ctl.setInactive();
 
-                                ctl.setActive();
-                                this.findOtherControllers(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.SELECT_WEAPONS, event.controller._name)
-                                    .forEach(ctl => ctl.setInactive());
+                                } else {
 
-                            }
+                                    ctl.setActive();
+                                    this.findOtherControllers(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.SELECT_WEAPONS, event.controller._name)
+                                        .forEach(ctl => ctl.setInactive());
 
-                        } else if (find.parent.search(/_object_actions/) >= 0) {
+                                }
 
-                            if (ctl._name.search(/(L|l)ock/) >= 0) {
+                            } else if (find.parent.search(/_object_actions/) >= 0) {
+
+                                if (ctl._name.search(/(L|l)ock/) >= 0) {
+
+                                    if (isActive) {
+
+                                        ctl.setInactive();
+
+                                    } else {
+
+                                        ctl.setActive();
+
+                                    }
+
+                                    ctl.name(`${ctl._name === 'lock' ? 'unl' : 'l'}ock`);
+
+                                }
+
+                            } else if (find.parent === GUI_CONFIG.PICKER_ACTIONS_PARENT) {
 
                                 if (isActive) {
 
@@ -467,41 +490,27 @@ class Gui {
 
                                 }
 
-                                ctl.name(`${ctl._name === 'lock' ? 'unl' : 'l'}ock`);
+                                ctl.name(`${ctl._name === 'enable' ? 'disable' : 'enable'}`);
+
+                            } else if (find.parent.search(/tpc_actions|ic_actions/) >= 0) {
+
+                                if (isActive) {
+
+                                    ctl.setInactive();
+                                    this.findOtherControllers(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.CAMERA_CONTROL, event.controller._name)
+                                        .forEach(ctl => ctl.setActive());
+
+                                } else {
+
+                                    ctl.setActive();
+
+                                }
 
                             }
 
-                        } else if (find.parent === GUI_CONFIG.PICKER_ACTIONS_PARENT) {
+                            break;
 
-                            if (isActive) {
-
-                                ctl.setInactive();
-
-                            } else {
-
-                                ctl.setActive();
-
-                            }
-
-                            ctl.name(`${ctl._name === 'enable' ? 'disable' : 'enable'}`);
-
-                        } else if (find.parent.search(/tpc_actions|ic_actions/) >= 0) {
-
-                            if (isActive) {
-
-                                ctl.setInactive();
-                                this.findOtherControllers(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.CAMERA_CONTROL, event.controller._name)
-                                    .forEach(ctl => ctl.setActive());
-
-                            } else {
-
-                                ctl.setActive();
-                                
-                            }
-                            
-                        }
-
-                        break;
+                    }
 
                 }
             }
