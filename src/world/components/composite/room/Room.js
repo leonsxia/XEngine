@@ -182,13 +182,13 @@ class Room {
 
             this.walls.push(w);
 
-            this.bindWallEvents(w);
+            // this.bindWallEvents(w);  // no need, ObstacleBase and InWallObjectBase will do this
 
             w.isWall = true;
 
             w.mesh.rotationY += this.rotationY;     // update wall mesh world rotation y
 
-            w.visible = true;
+            // w.visible = true;
 
         }
 

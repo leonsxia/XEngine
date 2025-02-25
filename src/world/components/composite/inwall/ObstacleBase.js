@@ -936,7 +936,7 @@ class ObstacleBase extends ObstacleMoveable {
         this.fallingTick({ delta, obstacle: this });
 
         this.updateOBBs();
-        this.updateRay();
+        this.updateRay(false);
 
     }
 
@@ -945,7 +945,7 @@ class ObstacleBase extends ObstacleMoveable {
         this.onGroundTick({ floor: this.hittingGround, obstacle: this });
         
         this.updateOBBs();
-        this.updateRay();
+        this.updateRay(false);
         
     }
 
@@ -954,7 +954,7 @@ class ObstacleBase extends ObstacleMoveable {
         this.onSlopeTick({ slope: this.hittingGround, obstacle: this });
 
         this.updateOBBs();
-        this.updateRay();
+        this.updateRay(false);
 
     }
 
@@ -963,7 +963,7 @@ class ObstacleBase extends ObstacleMoveable {
         this.onWaterTick({ waterCube: this.hittingWater, obstacle: this });
 
         this.updateOBBs();
-        this.updateRay();
+        this.updateRay(false);
 
     }
 
@@ -975,7 +975,7 @@ class ObstacleBase extends ObstacleMoveable {
         this.movingTick({ dist, obstacle: this });
 
         this.updateOBBs();
-        this.updateRay();
+        this.updateRay(false);
 
     }
 
