@@ -6,6 +6,8 @@ class CollisionHexCylinder extends CollisionBase {
     radius;
     height;
 
+    cboxArr = [];
+
     constructor(specs) {
 
         super(specs);
@@ -53,6 +55,8 @@ class CollisionHexCylinder extends CollisionBase {
         cbox7.father = this;
         cbox8.father = this;
 
+        this.cboxArr.push(cbox1, cbox2, cbox3, cbox4, cbox5, cbox6, cbox7, cbox8);
+
         cbox2.setRotationY(Math.PI * .125);
         cbox3.setRotationY(2 * Math.PI * .125);
         cbox4.setRotationY(3 * Math.PI * .125);
@@ -90,6 +94,22 @@ class CollisionHexCylinder extends CollisionBase {
 
         return config;
         
+    }
+
+    setScale(scale) {
+
+        this.scale = scale;
+
+        for (let i = 0, il = this.cboxArr.length; i < il; i++) {
+
+            const cbox = this.cboxArr[i];
+
+            cbox.setScale(scale);
+
+        }
+
+        return this;
+
     }
 
 }

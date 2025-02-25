@@ -131,6 +131,52 @@ class CollisionBox extends CollisionBase {
 
     }
 
+    setScale(scale) {
+
+        this.scale = scale;
+
+        const width = this.width * scale[0];
+        const height = this.height * scale[1];
+        const depth = this.depth * scale[2];
+
+        if (this.front) {
+
+            this.front.setScale([scale[0], scale[1], 1])
+                .setPosition([0, 0, depth * .5]);            
+
+        }
+
+        if (this.back) {
+
+            this.back.setScale([scale[0], scale[1], 1])
+                .setPosition([0, 0, - depth * .5]);
+
+        }
+
+        if (this.left) {
+
+            this.left.setScale([scale[2], scale[1], 1])
+                .setPosition([width * .5, 0, 0]);
+
+        }
+
+        if (this.right) {
+
+            this.right.setScale([scale[2], scale[1], 1])
+                .setPosition([- width * .5, 0, 0]);
+
+        }
+
+        this.top.setScale([scale[0], scale[2], 1])
+            .setPosition([0, height * .5, 0]);
+            
+        this.bottom.setScale([scale[0], scale[2], 1])
+            .setPosition([0, - height * .5, 0]);
+
+        return this;
+
+    }
+
 }
 
 export { CollisionBox };

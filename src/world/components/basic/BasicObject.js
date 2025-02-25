@@ -1,4 +1,5 @@
 import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher } from 'three';
+// eslint-disable-next-line no-unused-vars
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
@@ -21,7 +22,7 @@ class BasicObject extends EventDispatcher {
 
         super();
 
-        const { name, color, empty } = specs;
+        const { name, empty } = specs;
 
         if (name) this.name = name;
 
@@ -85,31 +86,7 @@ class BasicObject extends EventDispatcher {
                 break;
         }
 
-        const { needMaterial = true, transparent = false } = specs;
-
-        if (needMaterial) {
-
-            if (color) {
-
-                const { useBasicMaterial = false } = specs;
-    
-                if (useBasicMaterial) {
-    
-                    this.material = new MeshBasicMaterial({ color: color });
-    
-                } else {
-    
-                    this.material = new MeshPhongMaterial({ color: color });
-    
-                }
-                
-            }
-            else
-                this.material = basicMateraials.basic.clone();
-    
-            this.material.transparent = transparent;
-            
-        }
+        this.setupMaterials('material');
 
     }
 
@@ -169,6 +146,40 @@ class BasicObject extends EventDispatcher {
             this.resetTextureColor();
             this.setTexture(normal, true);
             this.material.normalMap = normal;
+
+        }
+
+    }
+
+    setupMaterials(...materials) {
+
+        const { needMaterial = true, transparent = false, useBasicMaterial = false, color } = this.specs;
+
+        for (let i = 0, il = materials.length; i < il; i++) {
+
+            if (needMaterial) {
+
+                if (color) {
+
+                    if (useBasicMaterial) {
+
+                        this[materials[i]] = new MeshBasicMaterial({ color: color });
+
+                    } else {
+
+                        this[materials[i]] = new MeshPhongMaterial({ color: color });
+
+                    }
+
+                } else {
+
+                    this[materials[i]] = basicMateraials.basic.clone();
+
+                }
+
+                this[materials[i]].transparent = transparent;
+
+            }
 
         }
 
@@ -278,6 +289,31 @@ class BasicObject extends EventDispatcher {
 
     }
 
+    setConfig(specs) {
+
+        Object.assign(this.specs, specs);
+
+    }
+
+    updateTextures() {
+
+        const map = this.material?.map;
+        const mapNorm = this.material?.normalMap;
+
+        if (map) {
+
+            this.setTexture(map);
+
+        }
+
+        if (mapNorm) {
+
+            this.setTexture(mapNorm);
+
+        }
+
+    }
+
     setTexture(texture, isNormal = false) {
 
         const { 
@@ -337,7 +373,13 @@ class BasicObject extends EventDispatcher {
                     case STAIRS_TOP:
 
                         {
-                            let { width, height, baseSize = height } = this.specs;
+                            const { texScale = [1, 1] } = this.specs;
+                            let { width, height } = this.specs;
+                            width *= texScale[0];
+                            height *= texScale[1];
+
+                            const { baseSize = height } = this.specs;
+
                             w = width;
                             h = height;
                             basic = baseSize;
@@ -357,16 +399,27 @@ class BasicObject extends EventDispatcher {
 
                     case CYLINDER:
 
-                        if (!texture.isCap) { 
+                        if (!texture.isCap) {
 
-                            let { radius, height, baseSize = height} = this.specs;
+                            const { texScale = [1, 1] } = this.specs;
+                            let { radius, height } = this.specs;
+                            radius *= texScale[0];
+                            height *= texScale[1];
+
+                            const { baseSize = height } = this.specs;
+
                             w = 2 * Math.PI * radius;
                             h = height;
                             basic = baseSize;
 
                         } else {
 
-                            let { radius, baseSize = radius * 2 } = this.specs;
+                            const { texScale = [1, 1] } = this.specs;
+                            let { radius } = this.specs;
+                            radius *= texScale[0];
+
+                            const { baseSize = radius * 2 } = this.specs;
+
                             w = h = radius * 2;
                             basic = baseSize;
                         }
@@ -382,6 +435,7 @@ class BasicObject extends EventDispatcher {
                 texture.repeat.set(xRepeat, yRepeat);
 
             }
+
         }
 
     }

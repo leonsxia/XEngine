@@ -10,6 +10,7 @@ class CollisionBase extends EventDispatcher {
     bottomOBBs = [];
 
     rotationY = 0;
+    scale = [1, 1, 1];
 
     specs;
 
@@ -82,6 +83,34 @@ class CollisionBase extends EventDispatcher {
 
         return this;
 
+    }
+
+    updateOBBnRay(needUpdateMatrixWorld = true) {
+
+        for (let i = 0, il = this.walls.length; i < il; i++) {
+
+            const wall = this.walls[i];
+
+            wall.updateRay(needUpdateMatrixWorld);
+
+            if (wall.isOBB) {
+
+                wall.updateOBB(false);
+
+
+            }
+        }
+
+        const topBottoms = this.topOBBs.concat(this.bottomOBBs);
+
+        for (let i = 0, il = topBottoms.length; i < il; i++) {
+
+            const obb = topBottoms[i];
+
+            obb.updateOBB(needUpdateMatrixWorld);
+
+        }
+        
     }
 
 }

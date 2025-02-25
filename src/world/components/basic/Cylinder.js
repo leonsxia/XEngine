@@ -1,7 +1,6 @@
-import { Mesh, MeshPhongMaterial } from 'three';
+import { Mesh } from 'three';
 import { BasicObject } from './BasicObject';
 import { CYLINDER } from '../utils/constants';
-import { basicMateraials } from './basicMaterial';
 import { white } from './colorBase';
 
 class Cylinder extends BasicObject {
@@ -13,22 +12,7 @@ class Cylinder extends BasicObject {
 
         super(CYLINDER, specs);
 
-        const { color } = specs;
-
-        if (color) {
-
-            this.topMaterial = new MeshPhongMaterial({ color: color });
-            this.bottomMaterial = new MeshPhongMaterial({ color: color });
-
-        } else {
-
-            this.topMaterial = basicMateraials.basic.clone();
-            this.bottomMaterial = basicMateraials.basic.clone();
-
-        }
-
-        this.topMaterial.transparent = true;
-        this.bottomMaterial.transparent = true;
+        this.setupMaterials('topMaterial', 'bottomMaterial');
 
         this.mesh = new Mesh(this.geometry, [this.material, this.topMaterial, this.bottomMaterial]);
         this.mesh.name = specs.name;
@@ -137,6 +121,41 @@ class Cylinder extends BasicObject {
 
             texture.rotation = rotationC;
             
+        }
+
+    }
+
+    updateTextures() {
+
+        super.updateTextures();
+
+        const topMap = this.topMaterial?.map;
+        const topMapNorm = this.topMaterial?.normalMap;
+        const bottomMap = this.bottomMaterial?.map;
+        const bottomMapNorm = this.bottomMaterial?.normalMap;
+        
+        if (topMap) {
+
+            this.setTexture(topMap);
+
+        }
+
+        if (topMapNorm) {
+
+            this.setTexture(topMapNorm);
+
+        }
+
+        if (bottomMap) {
+
+            this.setTexture(bottomMap);
+
+        }
+
+        if (bottomMapNorm) {
+
+            this.setTexture(bottomMapNorm);
+
         }
 
     }

@@ -1,7 +1,7 @@
 import { Group, MathUtils, Vector3, Layers, Raycaster, ArrowHelper } from 'three';
 import { createOBBBox, createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
-import { violetBlue, orange, BF } from '../../basic/colorBase';
+import { violetBlue, BF, red } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER, HEX_CYLINDER_PILLAR } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 import { Logger } from '../../../systems/Logger';
@@ -27,6 +27,9 @@ backFaceLayer.set(BACK_FACE_LAYER);
 leftFaceLayer.set(LEFT_FACE_LAYER);
 rightFaceLayer.set(RIGHT_FACE_LAYER);
 
+const HEAD_LENGTH = .3;
+const HEAD_WIDTH = .08;
+
 const DEBUG = false;
 
 class ObstacleBase extends ObstacleMoveable {
@@ -38,9 +41,12 @@ class ObstacleBase extends ObstacleMoveable {
     group;
     gltf;
 
-    #w;
-    #h;
-    #d;
+    _scale = [1, 1, 1];
+
+    #bbfThickness = .1;
+    #gap = .1;
+    #triWidthPercentage = .6;
+    #triHeightPercentage = .85;
     #rayPadding = .2;
     hasRays = false;
 
@@ -51,6 +57,16 @@ class ObstacleBase extends ObstacleMoveable {
     boundingFaces = [];
 
     cObjects = [];
+    
+    _frontTrigger;
+    _backTrigger;
+    _leftTrigger;
+    _rightTrigger;
+
+    _frontBF;
+    _backBF;
+    _leftBF;
+    _rightBF;
 
     // set to false, will not add to room obstacles, so the physics engine will ignore this object.
     isObstacle = false;
@@ -69,8 +85,6 @@ class ObstacleBase extends ObstacleMoveable {
     draggable = false;
 
     density = .5;
-    #volume = undefined;
-    #weight = undefined;
 
     specs;
 
@@ -111,61 +125,31 @@ class ObstacleBase extends ObstacleMoveable {
 
     get width() {
 
-        if (!this.#w) {
-
-            this.#w = this.box.width;
-
-        }
-
-        return this.#w;
+        return this.box.width;
 
     }
 
     get height() {
 
-        if (!this.#h) {
-
-            this.#h = this.box.height;
-
-        }
-
-        return this.#h;
+        return this.box.height;
 
     }
 
     get depth() {
 
-        if (!this.#d) {
-
-            this.#d = this.box.depth;
-
-        }
-
-        return this.#d;
+        return this.box.depth;
 
     }
 
     get volume() {
 
-        if (!this.#volume) {
-
-            this.#volume = this.width * this.height * this.depth;
-
-        }
-
-        return this.#volume;
+        return this.width * this.height * this.depth;
 
     }
 
     get weight() {
 
-        if (!this.#weight) {
-
-            this.#weight = this.volume * this.density;
-
-        }
-
-        return this.#weight;
+        return this.volume * this.density;
 
     }
 
@@ -204,6 +188,65 @@ class ObstacleBase extends ObstacleMoveable {
         return [this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay];
 
     }
+
+    get scaleX() {
+
+        return this._scale[0];
+
+    }
+
+    set scaleX(x) {
+
+        this._scale[0] = x;
+
+        this.update();
+
+    }
+
+    get scaleY() {
+
+        return this._scale[1];
+
+    }
+
+    set scaleY(y) {
+
+        this._scale[1] = y;
+
+        this.update();
+
+    }
+
+    get scaleZ() {
+
+        return this._scale[2];
+
+    }
+
+    set scaleZ(z) {
+
+        this._scale[2] = z;
+
+        this.update();
+
+    }
+
+    get scale() {
+
+        return this._scale;
+
+    }
+
+    set scale(val) {
+
+        this._scale = val;
+
+        this.update();
+
+    }
+
+    // this should be inherited and implemented by child class
+    update() { }
 
     getWalls() {
 
@@ -353,12 +396,16 @@ class ObstacleBase extends ObstacleMoveable {
 
         if (movable && (pushable || draggable)) {
 
-            const triggerSpecs = { width: this.width * .6, height: this.height * .85, color: violetBlue };
+            const width = this.box.geometry.parameters.width;
+            const height = this.box.geometry.parameters.height;
+            const depth = this.box.geometry.parameters.depth;
 
-            const frontTrigger = createOBBPlane(triggerSpecs, `${name}_front_trigger`, [0, 0, this.depth * .5], [0, 0, 0], false, false );
-            const backTrigger = createOBBPlane(triggerSpecs, `${name}_back_trigger`, [0, 0, - this.depth * .5], [0, Math.PI, 0], false, false);
-            const leftTrigger = createOBBPlane(triggerSpecs, `${name}_left_trigger`, [this.width * .5, 0, 0], [0, Math.PI * .5, 0], false, false);
-            const rightTrigger = createOBBPlane(triggerSpecs, `${name}_right_trigger`, [- this.width * .5, 0, 0], [0, - Math.PI * .5, 0], false, false);
+            const triggerSpecs = { width: width * this.#triWidthPercentage, height: height * this.#triHeightPercentage, color: violetBlue };
+
+            const frontTrigger = this._frontTrigger = createOBBPlane(triggerSpecs, `${name}_front_trigger`, [0, 0, depth * .5], [0, 0, 0], false, false );
+            const backTrigger = this._backTrigger = createOBBPlane(triggerSpecs, `${name}_back_trigger`, [0, 0, - depth * .5], [0, Math.PI, 0], false, false);
+            const leftTrigger = this._leftTrigger = createOBBPlane(triggerSpecs, `${name}_left_trigger`, [width * .5, 0, 0], [0, Math.PI * .5, 0], false, false);
+            const rightTrigger = this._rightTrigger = createOBBPlane(triggerSpecs, `${name}_right_trigger`, [- width * .5, 0, 0], [0, - Math.PI * .5, 0], false, false);
 
             frontTrigger.setLayer(FRONT_TRIGGER_LAYER);
             backTrigger.setLayer(BACK_TRIGGER_LAYER);
@@ -378,6 +425,22 @@ class ObstacleBase extends ObstacleMoveable {
 
         }
 
+    }
+
+    updateTriggers() {
+
+        const { movable = false, pushable = false, draggable = false } = this.specs;
+
+        if (!movable || !(pushable || draggable)) return;
+
+        const ZOffset = this.depth / 2;
+        const XOffset = this.width / 2;
+
+        this._frontTrigger.setScale([this.scale[0], this.scale[1], 1]).setPosition([0, 0, ZOffset]);
+        this._backTrigger.setScale([this.scale[0], this.scale[1], 1]).setPosition([0, 0, - ZOffset]);
+        this._leftTrigger.setScale([this.scale[2], this.scale[1], 1]).setPosition([XOffset, 0, 0]);
+        this._rightTrigger.setScale([this.scale[2], this.scale[1], 1]).setPosition([- XOffset, 0, 0]);
+        
     }
 
     testFrontTrigger(trigger) {
@@ -578,17 +641,18 @@ class ObstacleBase extends ObstacleMoveable {
 
         if (!movable) return;
 
-        const bbfThickness = .1;
-        const gap = .1;
-        const BBFDepthOffset = this.depth / 2 - bbfThickness / 2;
-        const BBFWidthOffset = this.width / 2 - bbfThickness / 2;
-        const FBFaceSpecs = { size: { width: this.width - gap, depth: bbfThickness, height: this.height }, color: BF };
-        const LRFaceSpecs = { size: { width: this.depth - gap, depth: bbfThickness, height: this.height }, color: BF };
+        const width = this.box.geometry.parameters.width;
+        const height = this.box.geometry.parameters.height;
+        const depth = this.box.geometry.parameters.depth;
+        const BBFDepthOffset = depth / 2 - this.#bbfThickness / 2;
+        const BBFWidthOffset = width / 2 - this.#bbfThickness / 2;
+        const FBFaceSpecs = { size: { width: width - this.#gap, depth: this.#bbfThickness, height }, color: BF };
+        const LRFaceSpecs = { size: { width: depth - this.#gap, depth: this.#bbfThickness, height }, color: BF };
 
-        const frontFace = createOBBBox(FBFaceSpecs, `${name}_front_face`, [0, 0, BBFDepthOffset], [0, 0, 0], false, false);
-        const backFace = createOBBBox(FBFaceSpecs, `${name}_back_face`, [0, 0, - BBFDepthOffset], [0, 0, 0], false, false);
-        const leftFace = createOBBBox(LRFaceSpecs, `${name}_left_face`, [BBFWidthOffset, 0, 0], [0, Math.PI * .5, 0], false, false);
-        const rightFace = createOBBBox(LRFaceSpecs, `${name}_right_face`, [- BBFWidthOffset, 0, 0], [0, Math.PI * .5, 0], false, false);
+        const frontFace = this._frontBF = createOBBBox(FBFaceSpecs, `${name}_front_face`, [0, 0, BBFDepthOffset], [0, 0, 0], false, false);
+        const backFace = this._backBF = createOBBBox(FBFaceSpecs, `${name}_back_face`, [0, 0, - BBFDepthOffset], [0, 0, 0], false, false);
+        const leftFace = this._leftBF = createOBBBox(LRFaceSpecs, `${name}_left_face`, [BBFWidthOffset, 0, 0], [0, Math.PI * .5, 0], false, false);
+        const rightFace = this._rightBF = createOBBBox(LRFaceSpecs, `${name}_right_face`, [- BBFWidthOffset, 0, 0], [0, Math.PI * .5, 0], false, false);        
 
         frontFace.setLayer(FRONT_FACE_LAYER);
         backFace.setLayer(BACK_FACE_LAYER);
@@ -608,6 +672,29 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    updateBoundFaces() {
+
+        const { movable } = this.specs;
+
+        if (!movable) return;
+
+        const width = this.box.geometry.parameters.width;
+        const depth = this.box.geometry.parameters.depth;
+
+        const BBFDepthOffset = this.depth / 2 - this.#bbfThickness / 2;
+        const BBFWidthOffset = this.width / 2 - this.#bbfThickness / 2;
+
+        const scaleX = (this.width - this.#gap) / (width - this.#gap);
+        const scaleY = this.scale[1];
+        const scaleZ = (this.depth - this.#gap) / (depth - this.#gap);
+
+        this._frontBF.setScale([scaleX, scaleY, 1]).setPosition([0, 0, BBFDepthOffset]);
+        this._backBF.setScale([scaleX, scaleY, 1]).setPosition([0, 0, - BBFDepthOffset]);
+        this._leftBF.setScale([scaleZ, scaleY, 1]).setPosition([BBFWidthOffset, 0, 0]);
+        this._rightBF.setScale([scaleZ, scaleY, 1]).setPosition([- BBFWidthOffset, 0, 0]);
+
+    }
+
     createRay() {
 
         const { movable } = this.specs;
@@ -616,38 +703,36 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.hasRays = true;
  
-        const length = this.height;
+        const length = this.box.geometry.parameters.height;
         const dir = new Vector3(0, - 1, 0);
-        const posY = this.height * .5;
-        const posX = this.width * .5 - this.#rayPadding;
-        const posZ = this.depth * .5 - this.#rayPadding;
-        const headLength = .5;
-        const headWidth = .1;
+        const posY = this.box.geometry.parameters.height * .5;
+        const posX = this.box.geometry.parameters.width * .5 - this.#rayPadding;
+        const posZ = this.box.geometry.parameters.depth * .5 - this.#rayPadding;
         let fromVec3;
 
         // left
         fromVec3 = new Vector3(posX, posY, posZ);
         this.leftRay = new Raycaster(fromVec3, dir, 0, length);
         this.leftRay.layers.set(OBSTACLE_RAY_LAYER);
-        this.leftArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+        this.leftArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
         this.rightRay = new Raycaster(fromVec3, dir, 0, length);
         this.rightRay.layers.set(OBSTACLE_RAY_LAYER);
-        this.rightArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+        this.rightArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
         this.backLeftRay = new Raycaster(fromVec3, dir, 0, length);
         this.backLeftRay.layers.set(OBSTACLE_RAY_LAYER);
-        this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+        this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
         this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
         this.backRightRay.layers.set(OBSTACLE_RAY_LAYER);
-        this.backRightArrow = new ArrowHelper(dir, fromVec3, length, orange, headLength, headWidth);
+        this.backRightArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
     }
@@ -662,6 +747,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         }
 
+        const length = this.height;
         const posY = this.height * .5;
         const posX = this.width * .5 - this.#rayPadding;
         const posZ = this.depth * .5 - this.#rayPadding;
@@ -672,29 +758,41 @@ class ObstacleBase extends ObstacleMoveable {
         fromVec3 = new Vector3(posX, posY, posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
         this.leftRay.set(fromVec3, dir);
+        this.leftRay.far = length;
+
         this.leftArrow.position.copy(fromVec3);
         this.leftArrow.setDirection(dir);
+        this.leftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
         this.rightRay.set(fromVec3, dir);
+        this.rightRay.far = length;
+
         this.rightArrow.position.copy(fromVec3);
         this.rightArrow.setDirection(dir);
+        this.rightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
         this.backLeftRay.set(fromVec3, dir);
+        this.backLeftRay.far = length;
+
         this.backLeftArrow.position.copy(fromVec3);
         this.backLeftArrow.setDirection(dir);
+        this.backLeftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
         fromVec3.applyMatrix4(this.group.matrixWorld);
         this.backRightRay.set(fromVec3, dir);
+        this.backRightRay.far = length;
+
         this.backRightArrow.position.copy(fromVec3);
         this.backRightArrow.setDirection(dir);
+        this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
 

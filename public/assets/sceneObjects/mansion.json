@@ -985,8 +985,7 @@
                 },
                 {
                     "type": "HexCylinderPillar",
-                    "radius": 0.5,
-                    "height": 4.35,
+                    "scale": [0.5, 4.35],
                     "baseSize": 4.6,
                     "map": "METAL_272",
                     "normalMap": "METAL_272_NORMAL",
@@ -1001,8 +1000,7 @@
                 },
                 {
                     "type": "HexCylinderPillar",
-                    "radius": 0.5,
-                    "height": 4.35,
+                    "scale": [0.5, 4.35],
                     "baseSize": 4.6,
                     "map": "METAL_272",
                     "normalMap": "METAL_272_NORMAL",
@@ -1018,8 +1016,7 @@
                 },
                 {
                     "type": "HexCylinderPillar",
-                    "radius": 0.5,
-                    "height": 4.35,
+                    "scale": [0.5, 4.35],
                     "baseSize": 4.6,
                     "map": "METAL_272",
                     "normalMap": "METAL_272_NORMAL",
@@ -1035,8 +1032,7 @@
                 },
                 {
                     "type": "HexCylinderPillar",
-                    "radius": 0.5,
-                    "height": 4.35,
+                    "scale": [0.5, 4.35],
                     "baseSize": 4.6,
                     "map": "METAL_272",
                     "normalMap": "METAL_272_NORMAL",
@@ -1302,9 +1298,7 @@
                 },
                 {
                     "type": "BoxCube",
-                    "width": 1.5,
-                    "height": 1.5,
-                    "depth": 1.5,
+                    "scale": [1.5, 1.5, 1.5],
                     "baseSize": 1,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
@@ -1322,9 +1316,7 @@
                 },
                 {
                     "type": "BoxCube",
-                    "width": 1.5,
-                    "height": 1.5,
-                    "depth": 1.5,
+                    "scale": [1.5, 1.5, 1.5],
                     "baseSize": 1,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",

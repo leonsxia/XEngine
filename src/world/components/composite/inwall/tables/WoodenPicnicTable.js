@@ -6,13 +6,17 @@ const GLTF_SRC = 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gl
 
 class WoodenPicnicTable extends ObstacleBase {
 
-    width = 2.24;
-    height = .742;
-    depth = 3.03;
-    bottomHeight = .35;
-    topWidth = 1.246;
+    _width = 2.24;
+    _height = .742;
+    _depth = 3.03;
+    _bottomHeight = .35;
+    _topWidth = 1.246;
 
     gltf;
+
+    _cBoxTop;
+    _cBoxSideLeft;
+    _cBoxSideRight;
 
     constructor(specs) {
 
@@ -23,41 +27,32 @@ class WoodenPicnicTable extends ObstacleBase {
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
-        this.width *= scale[0];
-        this.height *= scale[1];
-        this.depth *= scale[2];
-        this.bottomHeight *= scale[1];
-        this.topWidth *= scale[0];
+        this._scale = scale;
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow };
 
-        const boxSpecs = { size: { width: this.width, depth: this.depth, height: this.height }, lines };
+        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 
-        const topHeight = this.height - this.bottomHeight;
-        const sideWidth = (this.width - this.topWidth) * .5;
-        const cBoxTopSpecs = { name: `${name}_top`, width: this.topWidth, depth: this.depth, height: topHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
-        const cBoxLeftSideSpecs = { name: `${name}_left_side`, width: sideWidth, depth: this.depth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
-        const cBoxRightSideSpecs = { name: `${name}_right_side`, width: sideWidth, depth: this.depth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const topHeight = this._height - this._bottomHeight;
+        const sideWidth = (this._width - this._topWidth) * .5;
+        const cBoxTopSpecs = { name: `${name}_top`, width: this._topWidth, depth: this._depth, height: topHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxLeftSideSpecs = { name: `${name}_left_side`, width: sideWidth, depth: this._depth, height: this._bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxRightSideSpecs = { name: `${name}_right_side`, width: sideWidth, depth: this._depth, height: this._bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
-        this.gltf = new GLTFModel(gltfSpecs);
-        this.gltf.setScale(scale);
+        this.gltf = new GLTFModel(gltfSpecs);        
 
         // obb box
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.box.visible = false;
 
         // collision box
-        const cBoxTop = new CollisionBox(cBoxTopSpecs);
-        const cBoxSideLeft = new CollisionBox(cBoxLeftSideSpecs);
-        const cBoxSideRight = new CollisionBox(cBoxRightSideSpecs);
-        const sideX = (this.topWidth + sideWidth) * .5;
-        const topY = (this.height - topHeight) * .5; 
-        const bottomY = (this.bottomHeight - this.height) * .5;
-        cBoxTop.setPosition([0, topY, 0]);
-        cBoxSideLeft.setPosition([sideX, bottomY, 0]);
-        cBoxSideRight.setPosition([- sideX, bottomY, 0]);
+        const cBoxTop = this._cBoxTop = new CollisionBox(cBoxTopSpecs);
+        const cBoxSideLeft = this._cBoxSideLeft = new CollisionBox(cBoxLeftSideSpecs);
+        const cBoxSideRight = this._cBoxSideRight = new CollisionBox(cBoxRightSideSpecs);
+
+        this.update(false);
 
         this.cObjects = [cBoxTop, cBoxSideLeft, cBoxSideRight];
         this.walls = this.getWalls();
@@ -81,6 +76,38 @@ class WoodenPicnicTable extends ObstacleBase {
         await this.gltf.init();
 
         this.setPickLayers();
+
+    }
+
+    update(needToUpdateOBBnRay = true) {
+
+        // update cBox position and scale
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const bottomHeight = this._bottomHeight * this.scale[1];
+        const topWidth = this._topWidth * this.scale[0];
+
+        const topHeight = height - bottomHeight;
+        const sideWidth = (width - topWidth) * .5;
+        const sideX = (topWidth + sideWidth) * .5;
+        const topY = (height - topHeight) * .5; 
+        const bottomY = (bottomHeight - height) * .5;
+
+        this._cBoxTop.setPosition([0, topY, 0]).setScale(this.scale);
+        this._cBoxSideLeft.setPosition([sideX, bottomY, 0]).setScale(this.scale);
+        this._cBoxSideRight.setPosition([- sideX, bottomY, 0]).setScale(this.scale);
+
+        // update gltf scale
+        this.gltf.setScale(this.scale);
+
+        // update box scale
+        this.box.setScale(this.scale);
+
+        if (needToUpdateOBBnRay) {
+
+            this.updateOBBs();
+
+        }
 
     }
 

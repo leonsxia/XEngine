@@ -2,7 +2,11 @@ import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createOB
 import { ObstacleBase } from './ObstacleBase';
 import { yankeesBlue, green, basic } from '../../basic/colorBase';
 
-class BoxCube extends ObstacleBase  {
+class BoxCube extends ObstacleBase {
+
+    _width = 1;
+    _height = 1;
+    _depth = 1;
 
     frontFace;
     backFace;
@@ -16,40 +20,46 @@ class BoxCube extends ObstacleBase  {
         super(specs);
 
         this.specs = specs;
-        const { name, width, depth, height, lines = true } = specs;
+        const { name, lines = true } = specs;
         const { showArrow = false, freeTexture = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
+        const { scale = [1, 1, 1] } = specs;
 
-        const boxSpecs = { size: { width, depth, height }, color: yankeesBlue, map, normalMap, lines, transparent: true };
+        this._scale = scale;
 
-        const frontSpecs = this.makePlaneConfig({ width, height, color: basic, map: frontMap, normalMap: frontNormal })
-        const backSpecs = this.makePlaneConfig({ width, height, color: basic, map: backMap, normalMap: backNormal });
+        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap, lines, transparent: true };
 
-        const leftSpecs = this.makePlaneConfig({ width: depth, height, color: basic, map: leftMap, normalMap: leftNormal });
-        const rightSpecs = this.makePlaneConfig({ width: depth, height, color: basic, map: rightMap, normalMap: rightNormal });
+        const fbTexScale = [scale[0], scale[1]];
+        const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: frontMap, normalMap: frontNormal, texScale: fbTexScale })
+        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal, texScale: fbTexScale });
 
-        const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
-        const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
+        const lrTexScale = [scale[2], scale[1]];
+        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: leftMap, normalMap: leftNormal, texScale: lrTexScale });
+        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: rightMap, normalMap: rightNormal, texScale: lrTexScale });
+
+        const tbTexScale = [scale[0], scale[2]];
+        const topSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal, texScale: tbTexScale });
+        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, texScale: tbTexScale });
 
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
 
         const createPlaneFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
-        this.backFace = createPlaneFunction(backSpecs, `${name}_back`, [0, 0, - depth * .5], Math.PI, receiveShadow, castShadow, showArrow);
-        this.rightFace = createPlaneFunction(rightSpecs, `${name}_right`, [- width * .5, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
-        this.leftFace = createPlaneFunction(leftSpecs, `${name}_left`, [width * .5, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
+        this.backFace = createPlaneFunction(backSpecs, `${name}_back`, [0, 0, - this._depth * .5], Math.PI, receiveShadow, castShadow, showArrow);
+        this.rightFace = createPlaneFunction(rightSpecs, `${name}_right`, [- this._width * .5, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
+        this.leftFace = createPlaneFunction(leftSpecs, `${name}_left`, [this._width * .5, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
 
         {
-            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);
-            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, castShadow);
+            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, this._height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);
+            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - this._height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, castShadow);
             this.topOBBs = [this.topFace];
             this.bottomOBBs = [this.bottomFace];
         }
 
         // create last for changing line color
-        this.frontFace = createPlaneFunction(frontSpecs, `${name}_front`, [0, 0, depth * .5], 0, receiveShadow, castShadow, showArrow);
+        this.frontFace = createPlaneFunction(frontSpecs, `${name}_front`, [0, 0, this._depth * .5], 0, receiveShadow, castShadow, showArrow);
         this.frontFace.line?.material.color.setHex(green);
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
@@ -65,12 +75,15 @@ class BoxCube extends ObstacleBase  {
             this.box.visible = false;
 
         }
+        // this.setPlaneVisible(false); // for debug only
+        // this.box.visible = false; // for debug only
 
         this.setTriggers();
         this.createBoundingFaces();
-
         this.createRay();
         this.showArrows(false);
+
+        this.update(false, false, true);
 
         this.group.add(
             this.box.mesh,
@@ -109,6 +122,73 @@ class BoxCube extends ObstacleBase  {
         promises.push(this.bottomFace.init());
 
         return promises;
+
+    }
+
+    update(needToUpdateOBBnRay = true, needToUpdateTexture = true, needToUpdateFaceTrigger = true) {
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+
+        this.frontFace.setScale([this.scale[0], this.scale[1], 1])
+            .setPosition([0, 0, depth * .5]);
+
+        this.backFace.setScale([this.scale[0], this.scale[1], 1])
+            .setPosition([0, 0, - depth * .5]);
+
+        this.leftFace.setScale([this.scale[2], this.scale[1], 1])
+            .setPosition([width * .5, 0, 0]);
+
+        this.rightFace.setScale([this.scale[2], this.scale[1], 1])
+            .setPosition([- width * .5, 0, 0]);
+
+        this.topFace.setScale([this.scale[0], this.scale[2], 1])
+            .setPosition([0, height * .5, 0]);
+
+        this.bottomFace.setScale([this.scale[0], this.scale[2], 1])
+            .setPosition([0, - height * .5, 0]);
+
+        // update box scale
+        this.box.setScale(this.scale);
+
+        if (needToUpdateTexture) {
+
+            const { freeTexture } = this.specs;
+
+            if (freeTexture) {
+
+                this.frontFace.setConfig({ texScale: [this.scale[0], this.scale[1]] });
+                this.backFace.setConfig({ texScale: [this.scale[0], this.scale[1]] });
+                this.leftFace.setConfig({ texScale: [this.scale[2], this.scale[1]] });
+                this.rightFace.setConfig({ texScale: [this.scale[2], this.scale[1]] });
+                this.topFace.setConfig({ texScale: [this.scale[0], this.scale[2]] });
+                this.bottomFace.setConfig({ texScale: [this.scale[0], this.scale[2]] });
+
+                this.frontFace.updateTextures();
+                this.backFace.updateTextures();
+                this.leftFace.updateTextures();
+                this.rightFace.updateTextures();
+                this.topFace.updateTextures();
+                this.bottomFace.updateTextures();
+
+            }
+
+        }
+
+        if (needToUpdateFaceTrigger) {
+
+            this.updateBoundFaces();
+            this.updateTriggers();
+
+        }
+
+        if (needToUpdateOBBnRay) {
+            
+            this.updateOBBs();
+            this.updateRay();
+
+        }
 
     }
 

@@ -1,3 +1,4 @@
+import { BoxCube, HexCylinderPillar, WoodenPicnicTable } from '../Models';
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './constants';
 
 const DEFALUT_GRID_WIDTH = 50;
@@ -738,7 +739,7 @@ function makeObjectsGuiConfig(objects) {
         // set parent to null, so gui will use prop to set identifier
         const folder = makeFolderGuiConfig({ folder: object.name, parent: null, close: false });
 
-        const posChangeFn = () => {
+        const postChangeFn = () => {
                 
             if (object.isPlayer) {
     
@@ -772,7 +773,7 @@ function makeObjectsGuiConfig(objects) {
             value: object.position,
             params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
             type: 'number',
-            changeFn: posChangeFn
+            changeFn: postChangeFn
         }));
 
         folder.specs.push(makeFolderSpecGuiConfig({
@@ -781,7 +782,7 @@ function makeObjectsGuiConfig(objects) {
             value: object.position,
             params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
             type: 'number',
-            changeFn: posChangeFn
+            changeFn: postChangeFn
         }));
 
         folder.specs.push(makeFolderSpecGuiConfig({
@@ -790,7 +791,7 @@ function makeObjectsGuiConfig(objects) {
             value: object.position,
             params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
             type: 'number',
-            changeFn: posChangeFn
+            changeFn: postChangeFn
         }));
 
         if (!object.isPlayer && !object.isWeapon &&
@@ -810,6 +811,7 @@ function makeObjectsGuiConfig(objects) {
                     if (object.isGroup) {
 
                         object.father.updateOBBs();
+                        object.father.updateRay?.();
 
                         object.father.updateLightObjects?.();
 
@@ -821,6 +823,54 @@ function makeObjectsGuiConfig(objects) {
                     }
 
                 }
+            }));
+
+        }
+
+        if (object.father instanceof BoxCube || 
+            object.father instanceof WoodenPicnicTable
+        ) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleX',
+                prop: 'scale.x',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleY',
+                prop: 'scale.y',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleZ',
+                prop: 'scale.z',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+        } else if (object.father instanceof HexCylinderPillar) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleR',
+                prop: 'scale.r',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleY',
+                prop: 'scale.y',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
             }));
 
         }
@@ -1014,7 +1064,7 @@ function makeObjectsGuiConfig(objects) {
                 value: object.rotation,
                 params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
                 type: 'number',
-                changeFn: posChangeFn
+                changeFn: postChangeFn
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -1023,7 +1073,7 @@ function makeObjectsGuiConfig(objects) {
                 value: object.rotation,
                 params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
                 type: 'number',
-                changeFn: posChangeFn
+                changeFn: postChangeFn
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -1032,7 +1082,7 @@ function makeObjectsGuiConfig(objects) {
                 value: object.rotation,
                 params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
                 type: 'number',
-                changeFn: posChangeFn
+                changeFn: postChangeFn
             }));
 
         }

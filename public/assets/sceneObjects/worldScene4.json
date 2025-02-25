@@ -493,9 +493,7 @@
                 },
                 {
                     "type": "BoxCube",
-                    "width": 1.5,
-                    "height": 1.5,
-                    "depth": 1.5,
+                    "scale": [1.5, 1.5, 1.5],
                     "baseSize": 1.5,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
@@ -524,9 +522,7 @@
                 },
                 {
                     "type": "BoxCube",
-                    "width": 1,
-                    "height": 1,
-                    "depth": 1,
+                    "scale": [1, 1, 1],
                     "baseSize": 1,
                     "density": 1.5,
                     "map": "CRATE",
@@ -701,8 +697,7 @@
                 },
                 {
                     "type": "HexCylinderPillar",
-                    "radius": 1,
-                    "height": 3.6,
+                    "scale": [1, 3.6],
                     "baseSize": 4.6,
                     "map": "BRICK_159",
                     "normalMap": "BRICK_159_NORMAL",

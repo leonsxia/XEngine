@@ -311,6 +311,17 @@ class SceneBuilder {
                 const group = this.buildObject(spec);
                 groups.push(group);
 
+                // for debug BoxCube rays and arrows
+                // if (group instanceof BoxCube) {
+
+                //     if (group.hasRays) {
+
+                //         this.worldScene.scene.add(group.leftArrow, group.rightArrow, group.backLeftArrow, group.backRightArrow);
+
+                //     }
+
+                // }
+
             }
 
             room.addGroups(groups);
@@ -942,6 +953,38 @@ class SceneBuilder {
 
                             find.father.setRotationY(rotationY);
                             find.father.updateOBBs();
+
+                        }
+
+                        if (find.father instanceof BoxCube ||
+                            find.father instanceof WoodenPicnicTable
+                        ) {
+
+                            if (updateSetupOnly) {
+
+                                _origin.scale = find.father.scale;
+
+                            } else {
+
+                                const { scale = [1, 1, 1] } = _target;
+
+                                find.father.scale = scale;
+
+                            }
+
+                        } else if (find.father instanceof HexCylinderPillar) {
+
+                            if (updateSetupOnly) {
+
+                                _origin.scale = find.father.scale;
+
+                            } else {
+
+                                const { scale = [1, 1] } = _target;
+
+                                find.father.scale = scale;
+
+                            }
 
                         }
 
