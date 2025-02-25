@@ -631,7 +631,7 @@
             "groups": [
                 {
                     "type": "SquarePillar",
-                    "size": [1, 4.6, 2],
+                    "scale": [1, 4.6, 2],
                     "baseSize": 4.6,
                     "enableOBBs": false,
                     "frontMap": "BRICK_159",
@@ -651,7 +651,7 @@
                 },
                 {
                     "type": "SquarePillar",
-                    "size": [1, 4.6, 2],
+                    "scale": [1, 4.6, 2],
                     "baseSize": 4.6,
                     "enableOBBs": false,
                     "frontMap": "BRICK_159",
