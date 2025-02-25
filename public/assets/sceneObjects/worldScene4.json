@@ -414,9 +414,7 @@
             "groups": [
                 {
                     "type": "SquarePillar",
-                    "width": 3,
-                    "height": 0.6,
-                    "depth": 3,
+                    "scale": [3, 0.6, 3],
                     "baseSize": 4.6,
                     "enableOBBs": true,
                     "frontMap": "BRICK_159",
@@ -440,9 +438,7 @@
                 },
                 {
                     "type": "SquarePillar",
-                    "width": 2.5,
-                    "height": 2.3,
-                    "depth": 2.75,
+                    "scale": [2.5, 2.3, 2.75],
                     "baseSize": 4.6,
                     "enableOBBs": true,
                     "frontMap": "BRICK_159",
@@ -635,9 +631,7 @@
             "groups": [
                 {
                     "type": "SquarePillar",
-                    "width": 1,
-                    "height": 4.6,
-                    "depth": 2,
+                    "size": [1, 4.6, 2],
                     "baseSize": 4.6,
                     "enableOBBs": false,
                     "frontMap": "BRICK_159",
@@ -657,9 +651,7 @@
                 },
                 {
                     "type": "SquarePillar",
-                    "width": 1,
-                    "height": 4.6,
-                    "depth": 2,
+                    "size": [1, 4.6, 2],
                     "baseSize": 4.6,
                     "enableOBBs": false,
                     "frontMap": "BRICK_159",

@@ -28,6 +28,7 @@ import {
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
 import { colorStr, colorArr } from "../../components/basic/colorBase.js";
+import { objectFilter, objectFilter2 } from "../../components/utils/objectHelper.js";
 
 class SceneBuilder {
 
@@ -956,9 +957,7 @@ class SceneBuilder {
 
                         }
 
-                        if (find.father instanceof BoxCube ||
-                            find.father instanceof WoodenPicnicTable
-                        ) {
+                        if (objectFilter(find.father)) {
 
                             if (updateSetupOnly) {
 
@@ -972,7 +971,7 @@ class SceneBuilder {
 
                             }
 
-                        } else if (find.father instanceof HexCylinderPillar) {
+                        } else if (objectFilter2(find.father)) {
 
                             if (updateSetupOnly) {
 

@@ -1,5 +1,5 @@
-import { BoxCube, HexCylinderPillar, WoodenPicnicTable } from '../Models';
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './constants';
+import { objectFilter, objectFilter2 } from './objectHelper';
 
 const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
@@ -827,9 +827,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (object.father instanceof BoxCube || 
-            object.father instanceof WoodenPicnicTable
-        ) {
+        if (objectFilter(object.father)) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'scaleX',
@@ -855,7 +853,7 @@ function makeObjectsGuiConfig(objects) {
                 type: 'number'
             }));
 
-        } else if (object.father instanceof HexCylinderPillar) {
+        } else if (objectFilter2(object.father)) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'scaleR',

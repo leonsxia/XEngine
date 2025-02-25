@@ -293,6 +293,8 @@ class BasicObject extends EventDispatcher {
 
         Object.assign(this.specs, specs);
 
+        return this;
+
     }
 
     updateTextures() {
@@ -311,6 +313,8 @@ class BasicObject extends EventDispatcher {
             this.setTexture(mapNorm);
 
         }
+
+        return this;
 
     }
 

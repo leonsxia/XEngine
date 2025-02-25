@@ -4,6 +4,10 @@ import { yankeesBlue, green } from '../../basic/colorBase';
 
 class SquarePillar extends InWallObjectBase {
     
+    _width = 1;
+    _height = 1;
+    _depth = 1;
+
     frontFace;
     backFace;
     leftFace;
@@ -20,15 +24,21 @@ class SquarePillar extends InWallObjectBase {
         const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
+        const { scale = [1, 1, 1] } = specs;
 
-        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap, normalMap: frontNormal })
-        const backSpecs = this.makePlaneConfig({ width, height, map: backMap, normalMap: backNormal });
+        this._scale = scale;
 
-        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap, normalMap: leftNormal });
-        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap, normalMap: rightNormal });
+        const fbTexScale = [scale[0], scale[1]];
+        const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: frontMap, normalMap: frontNormal, texScale: fbTexScale })
+        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: backMap, normalMap: backNormal, texScale: fbTexScale });
 
-        const topSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
-        const bottomSpecs = this.makePlaneConfig({ width: width, height: depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
+        const lrTexScale = [scale[2], scale[1]];
+        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, map: leftMap, normalMap: leftNormal, texScale: lrTexScale });
+        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, map: rightMap, normalMap: rightNormal, texScale: lrTexScale });
+
+        const tbTexScale = [scale[0], scale[2]];
+        const topSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal, texScale: tbTexScale });
+        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, texScale: tbTexScale });
 
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
@@ -62,6 +72,8 @@ class SquarePillar extends InWallObjectBase {
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
         
+        this.update();
+
         this.group.add(
             this.frontFace.mesh,
             this.backFace.mesh,
@@ -128,6 +140,55 @@ class SquarePillar extends InWallObjectBase {
             }
 
         });
+
+    }
+
+    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+
+        this.frontFace.setScale([this.scale[0], this.scale[1], 1])
+            .setPosition([0, 0, depth * .5]);
+
+        this.backFace.setScale([this.scale[0], this.scale[1], 1])
+            .setPosition([0, 0, - depth * .5]);
+
+        this.leftFace.setScale([this.scale[2], this.scale[1], 1])
+            .setPosition([width * .5, 0, 0]);
+
+        this.rightFace.setScale([this.scale[2], this.scale[1], 1])
+            .setPosition([- width * .5, 0, 0]);
+
+        this.topFace.setScale([this.scale[0], this.scale[2], 1])
+            .setPosition([0, height * .5, 0]);
+
+        this.bottomFace.setScale([this.scale[0], this.scale[2], 1])
+            .setPosition([0, - height * .5, 0]);
+
+        if (needToUpdateTexture) {
+
+            this.frontFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
+                .updateTextures();
+            this.backFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
+                .updateTextures();
+            this.leftFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
+                .updateTextures();
+            this.rightFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
+                .updateTextures();
+            this.topFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
+                .updateTextures();
+            this.bottomFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
+                .updateTextures();
+
+        }
+
+        if (needToUpdateOBBnRay) {
+
+            this.updateOBBs();
+
+        }
 
     }
 

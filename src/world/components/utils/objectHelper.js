@@ -1,3 +1,4 @@
+import { BoxCube, HexCylinderPillar, SquarePillar, WoodenPicnicTable } from "../Models";
 
 function clone(target, source, ignore = []) {
 
@@ -127,4 +128,35 @@ function getTopParent(object, out, level = '') {
 
 }
 
-export { clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent };
+function objectFilter(object) {
+
+    if (object instanceof BoxCube ||
+        object instanceof WoodenPicnicTable ||
+        object instanceof SquarePillar
+    ) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+}
+
+function objectFilter2(object) {
+
+    if (object instanceof HexCylinderPillar) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+}
+
+export { clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, objectFilter, objectFilter2 };

@@ -158,19 +158,18 @@ class BoxCube extends ObstacleBase {
 
             if (freeTexture) {
 
-                this.frontFace.setConfig({ texScale: [this.scale[0], this.scale[1]] });
-                this.backFace.setConfig({ texScale: [this.scale[0], this.scale[1]] });
-                this.leftFace.setConfig({ texScale: [this.scale[2], this.scale[1]] });
-                this.rightFace.setConfig({ texScale: [this.scale[2], this.scale[1]] });
-                this.topFace.setConfig({ texScale: [this.scale[0], this.scale[2]] });
-                this.bottomFace.setConfig({ texScale: [this.scale[0], this.scale[2]] });
-
-                this.frontFace.updateTextures();
-                this.backFace.updateTextures();
-                this.leftFace.updateTextures();
-                this.rightFace.updateTextures();
-                this.topFace.updateTextures();
-                this.bottomFace.updateTextures();
+                this.frontFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
+                    .updateTextures();
+                this.backFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
+                    .updateTextures();
+                this.leftFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
+                    .updateTextures();
+                this.rightFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
+                    .updateTextures();
+                this.topFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
+                    .updateTextures();
+                this.bottomFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
+                    .updateTextures();
 
             }
 
