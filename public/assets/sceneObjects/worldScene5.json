@@ -230,6 +230,23 @@
                     "climbable": true,
                     "position": [-1.8, -2.2, -5],
                     "rotationY": 2.618
+                },
+                {
+                    "type": "CylinderPillar",
+                    "scale": [1, 1],
+                    "baseSize": 4.6,
+                    "enableOBBs": true,
+                    "map": "BRICK_159",
+                    "normalMap": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room2_cylinder_pillar1",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [0, -2, 5]
                 }
             ],
             "floors": [

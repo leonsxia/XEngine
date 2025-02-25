@@ -394,7 +394,12 @@ class BasicObject extends EventDispatcher {
                     case CIRCLE:
 
                         {
-                            let { radius, baseSize = radius * 2 } = this.specs;
+                            const {texScale = [1]} = this.specs;
+                            let { radius } = this.specs;
+                            radius *= texScale[0];
+
+                            const { baseSize = radius * 2 } = this.specs;
+
                             w = h = radius * 2;
                             basic = baseSize;
                         }

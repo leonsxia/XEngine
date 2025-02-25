@@ -671,8 +671,7 @@
                 },
                 {
                     "type": "CylinderPillar",
-                    "width": 1,
-                    "height": 4.6,
+                    "scale": [1, 4.6],
                     "baseSize": 4.6,
                     "enableOBBs": true,
                     "map": "BRICK_159",
