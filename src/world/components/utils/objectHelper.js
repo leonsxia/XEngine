@@ -53,21 +53,15 @@ function getVisibleMeshes(object, meshes = []) {
 
     if (object.isGroup && object.visible) {
 
-        for (let i = 0, il = object.children.length; i < il; i++) {
+        object.traverseVisible((obj) => {
 
-            const child = object.children[i];
+            if (obj.isMesh) {
 
-            if (child.isGroup && child.visible) {
-
-                getVisibleMeshes(child, meshes);
-
-            } else if (child.isMesh && child.visible) {
-
-                meshes.push(child);
+                meshes.push(obj);
 
             }
 
-        }
+        });
 
     } else if (object.isMesh && object.visible) {
 
@@ -80,6 +74,12 @@ function getVisibleMeshes(object, meshes = []) {
 }
 
 function getInwallParent(object) {
+
+    if (!object.parent) {
+
+        return null;
+
+    }
 
     let target = null;
     
@@ -103,6 +103,12 @@ function getInwallParent(object) {
 @param level - isPlayer, isWeapon and so on
 */
 function getTopParent(object, out, level = '') {
+
+    if (!object.parent) {
+
+        return null;
+
+    }
 
     let target = null;
     

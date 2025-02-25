@@ -25,6 +25,8 @@ class InWallObjectBase {
 
     specs;
 
+    _scale = [1, 1, 1];
+
     #logger = new Logger(DEBUG, 'InWallObjectBase');
 
     constructor(specs) {
@@ -47,6 +49,65 @@ class InWallObjectBase {
         this.rotationY = 0;     // local rotation y
 
     }
+
+    get scaleX() {
+
+        return this._scale[0];
+
+    }
+
+    set scaleX(x) {
+
+        this._scale[0] = x;
+
+        this.update();
+
+    }
+
+    get scaleY() {
+
+        return this._scale[1];
+
+    }
+
+    set scaleY(y) {
+
+        this._scale[1] = y;
+
+        this.update();
+
+    }
+
+    get scaleZ() {
+
+        return this._scale[2];
+
+    }
+
+    set scaleZ(z) {
+
+        this._scale[2] = z;
+
+        this.update();
+
+    }
+
+    get scale() {
+
+        return this._scale;
+
+    }
+
+    set scale(val) {
+
+        this._scale = val;
+
+        this.update();
+
+    }
+
+    // this should be inherited and implemented by child class
+    update() { }
 
     makePlaneConfig(specs) {
 
@@ -84,19 +145,15 @@ class InWallObjectBase {
 
     setPickLayers() {
 
-        const meshes = getVisibleMeshes(this.group);
+        const meshes = getVisibleMeshes(this.group).filter(m => m.father instanceof BasicObject);
 
         for (let i = 0, il = meshes.length; i < il; i++) {
 
             const m = meshes[i];
 
-            if (m.father instanceof BasicObject) {
+            this.bindBasicObjectEvents(m.father);
 
-                this.bindBasicObjectEvents(m.father);
-
-                m.father.visible = true;
-
-            }
+            m.father.visible = true;
 
         }
         

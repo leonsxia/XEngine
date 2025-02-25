@@ -356,19 +356,15 @@ class ObstacleBase extends ObstacleMoveable {
 
     setPickLayers() {
 
-        const meshes = getVisibleMeshes(this.group);
+        const meshes = getVisibleMeshes(this.group).filter(m => m.father instanceof BasicObject);
 
         for (let i = 0, il = meshes.length; i < il; i++) {
 
             const m = meshes[i];
 
-            if (m.father instanceof BasicObject) {
+            this.bindBasicObjectEvents(m.father);
 
-                this.bindBasicObjectEvents(m.father);
-
-                m.father.visible = true;
-
-            }
+            m.father.visible = true;
 
         }
 
