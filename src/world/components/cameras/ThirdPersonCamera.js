@@ -353,7 +353,7 @@ class ThirdPersonCamera {
             object.updateWorldMatrix(true, false);
             dummy.applyMatrix4(object.matrixWorld);
             dummy.scale.set(1, 1, 1);
-            dummy.updateMatrixWorld();
+            // dummy.updateMatrixWorld();  // worldToLocal will do this
 
             const pointToObject = dummy.worldToLocal(point.clone());
 
