@@ -99,7 +99,7 @@ const PLAYER_CAMERA_RAY_LAYER = 4;
 const PLAYER_CAMERA_TRANSPARENT_LAYER = 5;
 
 // post processing layers
-const BLOOM_SCENE_LAYER = 5;
+const BLOOM_SCENE_LAYER = 6;
 
 // obstacle layers
 const OBSTACLE_RAY_LAYER = 10;
