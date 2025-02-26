@@ -1,6 +1,6 @@
 import { Vector3, Raycaster, ArrowHelper, Object3D } from 'three';
-import { green, red, yellow } from '../basic/colorBase';
-import { PLAYER_CAMERA_RAY_LAYER } from '../utils/constants';
+import { blue, green, red, yellow } from '../basic/colorBase';
+import { PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../utils/constants';
 
 const PADDING = .1;
 const HEADLENGTH = .5;
@@ -14,12 +14,18 @@ class ThirdPersonCamera {
     #player;
     #control;
     #scene;
-    
-    #camPosLocal = new Vector3(0, 3, - 5);
-    #camTarLocal = new Vector3(0, 0, 3);
+
+    _v1 = new Vector3(- 1, 0.8, - 1.5);
+    _v2 = new Vector3(0, 0.3, 3);
+    _v3 = new Vector3(- 1.1, 0.5, - 1.5);
+    #camPosLocal = new Vector3();
+    #camTarLocal = new Vector3();
+    #collisionCamPosLocal = new Vector3();
 
     rayArrowTop;
     rayArrowBottom;
+
+    #collisionRay;
 
     #rayTopFrontLeft;
     #rayTopFrontRight;
@@ -28,6 +34,8 @@ class ThirdPersonCamera {
     #rayCenter;
     #rayBottomBackLeft;
     #rayBottomBackRight;
+
+    #rayArrowCollisionRay;
 
     #rayArrowTopFrontLeft;
     #rayArrowTopFrontRight;
@@ -51,6 +59,12 @@ class ThirdPersonCamera {
 
         this.camera = defaultCamera.camera;
         this.target = defaultCamera.target;
+
+    }
+
+    get playerTop() {
+
+        return new Vector3(0, this.#collisionCamPosLocal.y, 0);
 
     }
 
@@ -90,6 +104,14 @@ class ThirdPersonCamera {
 
     }
 
+    updateCameraParams() {
+
+        this.#camPosLocal.copy(this._v1.clone().multiply(this.#player.group.scale));
+        this.#camTarLocal.copy(this._v2.clone().multiply(this.#player.group.scale));
+        this.#collisionCamPosLocal.copy(this._v3.clone().multiply(this.#player.group.scale));
+
+    }
+
     setup(specs) {
 
         const { player, control, scene } = specs;
@@ -98,6 +120,7 @@ class ThirdPersonCamera {
         this.#control = control;
         this.#scene = scene;
 
+        this.updateCameraParams();
         this.setupRays();
 
     }
@@ -106,6 +129,9 @@ class ThirdPersonCamera {
 
         this.#player = player;
 
+        this.updateCameraParams();
+
+        const dirTopLength = this.#collisionCamPosLocal.clone().sub(this.playerTop).length();
         const dirTopFrontLeftLength = this.playerTopFrontLeft.sub(this.#camPosLocal).length();
         const dirTopFrontRightLength = this.playerTopFrontRight.sub(this.#camPosLocal).length();
         const dirTopBackLeftLength = this.playerTopBackLeft.sub(this.#camPosLocal).length();
@@ -113,6 +139,7 @@ class ThirdPersonCamera {
         const dirBottomBackLeftLength = this.playerBottomBackLeft.sub(this.#camPosLocal).length();
         const dirBottomBackRightLength = this.playerBottomBackRight.sub(this.#camPosLocal).length();
 
+        this.#collisionRay.far = dirTopLength;
         this.#rayTopFrontLeft.far = dirTopFrontLeftLength;
         this.#rayTopFrontRight.far = dirTopFrontRightLength;
         this.#rayTopBackLeft.far = dirTopBackLeftLength;
@@ -120,6 +147,7 @@ class ThirdPersonCamera {
         this.#rayBottomBackLeft.far = dirBottomBackLeftLength;
         this.#rayBottomBackRight.far = dirBottomBackRightLength;
 
+        this.#rayArrowCollisionRay.setLength(dirTopLength, HEADLENGTH, HEADWIDTH);
         this.#rayArrowTopFrontLeft.setLength(dirTopFrontLeftLength, HEADLENGTH, HEADWIDTH);
         this.#rayArrowTopFrontRight.setLength(dirTopFrontRightLength, HEADLENGTH, HEADWIDTH);
         this.#rayArrowTopBackLeft.setLength(dirTopBackLeftLength, HEADLENGTH, HEADWIDTH);
@@ -132,13 +160,15 @@ class ThirdPersonCamera {
         dummyObject.rotation.copy(this.#player.group.rotation);
 
         const camPosWorld = dummyObject.localToWorld(this.#camPosLocal.clone());
+        const collisionCamPosWorld = dummyObject.localToWorld(this.#collisionCamPosLocal.clone());
 
-        this.updateRays(dummyObject, camPosWorld);
-        
+        this.updateRays(dummyObject, camPosWorld, collisionCamPosWorld);
+
     }
 
     setupRays() {
 
+        const dirTop = this.#collisionCamPosLocal.clone().sub(this.playerTop);
         const dirTopFrontLeft = this.playerTopFrontLeft.sub(this.#camPosLocal);
         const dirTopFrontRight = this.playerTopFrontRight.sub(this.#camPosLocal);
         const dirTopBackLeft = this.playerTopBackLeft.sub(this.#camPosLocal);
@@ -147,6 +177,7 @@ class ThirdPersonCamera {
         const dirBottomBackLeft = this.playerBottomBackLeft.sub(this.#camPosLocal);
         const dirBottomBackRight = this.playerBottomBackRight.sub(this.#camPosLocal);
 
+        this.#collisionRay = new Raycaster(this.playerTop, dirTop.clone().normalize(), 0, dirTop.length());
         this.#rayTopFrontLeft = new Raycaster(this.#camPosLocal.clone(), dirTopFrontLeft.clone().normalize(), 0, dirTopFrontLeft.length());
         this.#rayTopFrontRight = new Raycaster(this.#camPosLocal.clone(), dirTopFrontRight.clone().normalize(), 0, dirTopFrontRight.length());
         this.#rayTopBackLeft = new Raycaster(this.#camPosLocal.clone(), dirTopBackLeft.clone().normalize(), 0, dirTopBackLeft.length());
@@ -155,6 +186,7 @@ class ThirdPersonCamera {
         this.#rayBottomBackLeft = new Raycaster(this.#camPosLocal.clone(), dirBottomBackLeft.clone().normalize(), 0, dirBottomBackLeft.length());
         this.#rayBottomBackRight = new Raycaster(this.#camPosLocal.clone(), dirBottomBackRight.clone().normalize(), 0, dirBottomBackRight.length());
 
+        this.#rayArrowCollisionRay = new ArrowHelper(dirTop.clone().normalize(), this.playerTop, dirTop.length(), blue, HEADLENGTH, HEADWIDTH);
         this.#rayArrowTopFrontLeft = new ArrowHelper(dirTopFrontLeft.clone().normalize(), this.#camPosLocal, dirTopFrontLeft.length(), green, HEADLENGTH, HEADWIDTH);
         this.#rayArrowTopFrontRight = new ArrowHelper(dirTopFrontRight.clone().normalize(), this.#camPosLocal, dirTopFrontRight.length(), red, HEADLENGTH, HEADWIDTH);
         this.#rayArrowTopBackLeft = new ArrowHelper(dirTopBackLeft.clone().normalize(), this.#camPosLocal, dirTopBackLeft.length(), green, HEADLENGTH, HEADWIDTH);
@@ -173,14 +205,17 @@ class ThirdPersonCamera {
 
             const r = this.rays[i];
 
-            r.layers.set(PLAYER_CAMERA_RAY_LAYER);
+            r.layers.set(PLAYER_CAMERA_TRANSPARENT_LAYER);
 
         }
+
+        this.#collisionRay.layers.set(PLAYER_CAMERA_RAY_LAYER);
 
         this.rayArrows = [
             this.#rayArrowTopFrontLeft, this.#rayArrowTopFrontRight, this.#rayArrowTopBackLeft, this.#rayArrowTopBackRight,
             this.#rayArrowCenter,
-            this.#rayArrowBottomBackLeft, this.#rayArrowBottomBackRight
+            this.#rayArrowBottomBackLeft, this.#rayArrowBottomBackRight,
+            this.#rayArrowCollisionRay
         ];
 
 
@@ -194,7 +229,10 @@ class ThirdPersonCamera {
 
     }
 
-    updateRays(dummyObject, camPosWorld) {
+    updateRays(dummyObject, camPosWorld, collisionCamPosWorld) {
+
+        const collisionRayOrigin = dummyObject.localToWorld(this.playerTop);
+        const dirTop = collisionCamPosWorld.clone().sub(collisionRayOrigin).normalize();
 
         const dirTopFrontLeft = dummyObject.localToWorld(this.playerTopFrontLeft).sub(camPosWorld).normalize();
         const dirTopFrontRight = dummyObject.localToWorld(this.playerTopFrontRight).sub(camPosWorld).normalize();
@@ -203,6 +241,8 @@ class ThirdPersonCamera {
         const dirCenter = dummyObject.localToWorld(new Vector3()).sub(camPosWorld).normalize();
         const dirBottomBackLeft = dummyObject.localToWorld(this.playerBottomBackLeft).sub(camPosWorld).normalize();
         const dirBottomBackRight = dummyObject.localToWorld(this.playerBottomBackRight).sub(camPosWorld).normalize();
+
+        this.#collisionRay.set(collisionRayOrigin, dirTop);
 
         this.#rayTopFrontLeft.set(camPosWorld, dirTopFrontLeft);
         this.#rayTopFrontRight.set(camPosWorld, dirTopFrontRight);
@@ -220,6 +260,8 @@ class ThirdPersonCamera {
 
         }
 
+        this.#rayArrowCollisionRay.position.copy(collisionRayOrigin);
+        this.#rayArrowCollisionRay.setDirection(dirTop);
         this.#rayArrowTopFrontLeft.setDirection(dirTopFrontLeft);
         this.#rayArrowTopFrontRight.setDirection(dirTopFrontRight);
         this.#rayArrowTopBackLeft.setDirection(dirTopBackLeft);
@@ -239,18 +281,26 @@ class ThirdPersonCamera {
 
         const camPosWorld = dummyObject.localToWorld(this.#camPosLocal.clone());
         const camTarWorld = dummyObject.localToWorld(this.#camTarLocal.clone());
+        const collisionCamPosWorld = dummyObject.localToWorld(this.#collisionCamPosLocal.clone());
 
         this.camera.position.copy(camPosWorld);
         this.camera.lookAt(camTarWorld);
         this.target = camTarWorld;
 
-        this.updateRays(dummyObject, camPosWorld);
+        this.updateRays(dummyObject, camPosWorld, collisionCamPosWorld);
+
+    }
+
+    sortIntersections(a, b) {
+
+        return a.distance - b.distance; // return > 0 => [b, a]; return < 0 => [a, b]
 
     }
 
     checkRayIntersection() {
 
         let intersects = [];
+        let collisionRayIntersects = [];
 
         for (let i = 0, il = this.rays.length; i < il; i++) {
 
@@ -260,10 +310,12 @@ class ThirdPersonCamera {
 
         }
 
+        collisionRayIntersects.push(...this.#collisionRay.intersectObjects(this.#scene.children));
+
         this.resetInterectObjects();
 
         if (intersects.length > 0) {
-            
+
             for (let i = 0, il = intersects.length; i < il; i++) {
 
                 const { object } = intersects[i];
@@ -289,6 +341,29 @@ class ThirdPersonCamera {
                 }
 
             }
+
+        }
+
+        if (collisionRayIntersects.length > 0) {
+
+            const { point, object } = collisionRayIntersects[0];
+
+            const dummy = new Object3D();
+
+            object.updateWorldMatrix(true, false);
+            dummy.applyMatrix4(object.matrixWorld);
+            dummy.scale.set(1, 1, 1);
+            dummy.updateMatrixWorld();
+
+            const pointToObject = dummy.worldToLocal(point.clone());
+
+            pointToObject.z += 0.1;
+            pointToObject.x += 0.05;
+            pointToObject.y += this.#camPosLocal.y - this.#collisionCamPosLocal.y;
+
+            const updatedPos = dummy.localToWorld(pointToObject);
+
+            this.camera.position.copy(updatedPos);
 
         }
 
@@ -325,9 +400,9 @@ class ThirdPersonCamera {
     tick() {
 
         this.setPositionFromPlayer();
-        this.#control.target.copy(this.target);
-
         this.checkRayIntersection();
+
+        this.#control.target.copy(this.target);
 
     }
 }

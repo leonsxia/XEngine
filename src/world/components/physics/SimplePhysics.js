@@ -378,6 +378,7 @@ class SimplePhysics {
 
     sortFloorTops() {
 
+        // from top to the bottom
         this.obstacleTops.sort((a, b) => {
 
             return b.worldPosition.y - a.worldPosition.y;
@@ -410,11 +411,11 @@ class SimplePhysics {
 
     tick(delta) {
         
-        if (delta > 0.056) { // lost frame when fps lower than 18fps
+        // if (delta > 0.056) { // lost frame when fps lower than 18fps
 
-            return;
+        //     return;
 
-        }
+        // }
 
         this.obstacleTick(delta);
 

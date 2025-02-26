@@ -1,7 +1,7 @@
 import { Object3D, Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
-import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER } from '../../utils/constants';
+import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 
 const DEBUG = false;
@@ -74,6 +74,7 @@ class Room {
             this.group.add(this.backWall.mesh);
             this.bindWallEvents(this.backWall);
             this.backWall.visible = true;
+            this.backWall.setLayers(PLAYER_CAMERA_RAY_LAYER);
 
         }
 
@@ -85,6 +86,7 @@ class Room {
             this.group.add(this.leftWall.mesh);
             this.bindWallEvents(this.leftWall);
             this.leftWall.visible = true;
+            this.leftWall.setLayers(PLAYER_CAMERA_RAY_LAYER);
 
         }
 
@@ -96,6 +98,7 @@ class Room {
             this.group.add(this.rightWall.mesh);
             this.bindWallEvents(this.rightWall);
             this.rightWall.visible = true;
+            this.rightWall.setLayers(PLAYER_CAMERA_RAY_LAYER);
 
         }
         
@@ -108,6 +111,7 @@ class Room {
             this.group.add(this.frontWall.mesh);
             this.bindWallEvents(this.frontWall);
             this.frontWall.visible = true;
+            this.frontWall.setLayers(PLAYER_CAMERA_RAY_LAYER);
 
         }
 
@@ -161,6 +165,7 @@ class Room {
 
             this.#logger.log(`${wall.name}: ${event.message}`);
             wall.setLayers(CAMERA_RAY_LAYER);
+            wall.setLayers(PLAYER_CAMERA_RAY_LAYER);
 
         };
 
@@ -172,6 +177,7 @@ class Room {
 
     }
 
+    // this is for adding additional walls from SceneBuilder
     addWalls(walls) {
 
         for (let i = 0, il = walls.length; i < il; i++) {
@@ -182,13 +188,13 @@ class Room {
 
             this.walls.push(w);
 
-            // this.bindWallEvents(w);  // no need, ObstacleBase and InWallObjectBase will do this
+            this.bindWallEvents(w);
 
             w.isWall = true;
 
             w.mesh.rotationY += this.rotationY;     // update wall mesh world rotation y
 
-            // w.visible = true;
+            w.visible = true;
 
         }
 
