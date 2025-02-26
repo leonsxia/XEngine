@@ -47,19 +47,19 @@ class BoxCube extends ObstacleBase {
 
         const createPlaneFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
-        this.backFace = createPlaneFunction(backSpecs, `${name}_back`, [0, 0, - this._depth * .5], Math.PI, receiveShadow, castShadow, showArrow);
-        this.rightFace = createPlaneFunction(rightSpecs, `${name}_right`, [- this._width * .5, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
-        this.leftFace = createPlaneFunction(leftSpecs, `${name}_left`, [this._width * .5, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
+        this.backFace = createPlaneFunction(backSpecs, `${name}_back`, [0, 0, 0], Math.PI, receiveShadow, castShadow, showArrow);
+        this.rightFace = createPlaneFunction(rightSpecs, `${name}_right`, [0, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
+        this.leftFace = createPlaneFunction(leftSpecs, `${name}_left`, [0, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
 
         {
-            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, this._height * .5, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);
-            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, - this._height * .5, 0], [Math.PI * .5, 0, 0], receiveShadow, castShadow);
+            this.topFace = createOBBPlane(topSpecs, `${name}_topOBB`, [0, 0, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);
+            this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, 0, 0], [Math.PI * .5, 0, 0], receiveShadow, castShadow);
             this.topOBBs = [this.topFace];
             this.bottomOBBs = [this.bottomFace];
         }
 
         // create last for changing line color
-        this.frontFace = createPlaneFunction(frontSpecs, `${name}_front`, [0, 0, this._depth * .5], 0, receiveShadow, castShadow, showArrow);
+        this.frontFace = createPlaneFunction(frontSpecs, `${name}_front`, [0, 0, 0], 0, receiveShadow, castShadow, showArrow);
         this.frontFace.line?.material.color.setHex(green);
 
         this.walls = [this.frontFace, this.backFace, this.leftFace, this.rightFace];
