@@ -1,5 +1,5 @@
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './constants';
-import { objectFilter, objectFilter2 } from './objectHelper';
+import { objectFilter, objectFilter2, objectFilter3 } from './objectHelper';
 
 const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
@@ -823,6 +823,26 @@ function makeObjectsGuiConfig(objects) {
                     }
 
                 }
+            }));
+
+        }
+
+        if (objectFilter3(object.father)) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'thickSPercentage',
+                prop: 'thickness_S %',
+                value: object.father,
+                params: [0, 100, 0.1],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'thickTPercentage',
+                prop: 'thickness_T %',
+                value: object.father,
+                params: [0, 100, 0.1],
+                type: 'number'
             }));
 
         }

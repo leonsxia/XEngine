@@ -1,4 +1,4 @@
-import { BoxCube, CylinderPillar, HexCylinderPillar, SquarePillar, WoodenPicnicTable } from "../Models";
+import { BoxCube, CylinderPillar, HexCylinderPillar, LWall, SquarePillar, WoodenPicnicTable } from "../Models";
 
 function clone(target, source, ignore = []) {
 
@@ -132,7 +132,8 @@ function objectFilter(object) {
 
     if (object instanceof BoxCube ||
         object instanceof WoodenPicnicTable ||
-        object instanceof SquarePillar
+        object instanceof SquarePillar ||
+        object instanceof LWall
     ) {
 
         return true;
@@ -161,4 +162,19 @@ function objectFilter2(object) {
 
 }
 
-export { clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, objectFilter, objectFilter2 };
+function objectFilter3(object) {
+
+    if (object instanceof LWall
+    ) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+}
+
+export { clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, objectFilter, objectFilter2, objectFilter3 };

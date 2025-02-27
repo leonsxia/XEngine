@@ -28,7 +28,7 @@ import {
     TEXTURE_NAMES, GLTF_NAMES
 } from '../../components/utils/constants.js';
 import { colorStr, colorArr } from "../../components/basic/colorBase.js";
-import { objectFilter, objectFilter2 } from "../../components/utils/objectHelper.js";
+import { objectFilter, objectFilter2, objectFilter3 } from "../../components/utils/objectHelper.js";
 
 class SceneBuilder {
 
@@ -954,6 +954,24 @@ class SceneBuilder {
 
                             find.father.setRotationY(rotationY);
                             find.father.updateOBBs();
+
+                        }
+
+                        if (objectFilter3(find.father)) {
+
+                            if (updateSetupOnly) {
+
+                                _origin.thicknessS = find.father.thicknessS;
+                                _origin.thicknessT = find.father.thicknessT;
+
+                            } else {
+
+                                const { thicknessS = 0.5, thicknessT = 0.5 } = _target;
+
+                                find.father.thicknessS = thicknessS;
+                                find.father.thicknessT = thicknessT;
+
+                            }
 
                         }
 
