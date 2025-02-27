@@ -7,7 +7,7 @@ const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
 const FACE_DEF = ['frontFace', 'backFace', 'leftFace', 'rightFace'];
 const STAIR_OFFSET_MAX = .3;
 const STAIR_OFFSET_MIN = .1;
-const OBSTACLE_BLOCK_OFFSET_MAX = .2;
+const OBSTACLE_BLOCK_OFFSET_MAX = .1;
 const OBSTACLE_BLOCK_OFFSET_MIN = .05;
 
 class SimplePhysics {
@@ -333,7 +333,7 @@ class SimplePhysics {
 
         let block = false;
 
-        if (obs.bottomY < top.worldPosition.y - OBSTACLE_BLOCK_OFFSET_MAX) {
+        if (obs.bottomY < top.worldPosition.y - obs.lastFrameFallingDistance - OBSTACLE_BLOCK_OFFSET_MAX) {
 
             block = true;
 
@@ -411,11 +411,11 @@ class SimplePhysics {
 
     tick(delta) {
         
-        // if (delta > 0.056) { // lost frame when fps lower than 18fps
+        if (delta > 0.077) { // lost frame when fps lower than 13fps
 
-        //     return;
+            return;
 
-        // }
+        }
 
         this.obstacleTick(delta);
 
@@ -526,7 +526,10 @@ class SimplePhysics {
 
                 const top = this.obstacleTops[j];
 
-                if ((!groupHasChild(obs.group, top.mesh)) && obs.intersectsOBB(top.obb) && !this.checkObstacleBlockByTop(obs, top)) {
+                if ((!groupHasChild(obs.group, top.mesh)) &&
+                    obs.intersectsOBB(top.obb) &&
+                    !this.checkObstacleBlockByTop(obs, top)
+                ) {
 
                     onTopsObs.push(obs);
                     obs.hittingGround = top;

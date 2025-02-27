@@ -16,8 +16,15 @@ class ObstacleMoveable {
     // #isFalling = false;
     #g = 9.8;
     #verticalForceSpeed = 0;
+    #lastFrameFallingDist = 0;
 
     frictionCoefficient = 1;
+    density = .5;
+
+    // falling ground
+    hittingGround;
+    // falling water
+    hittingWater;
 
     constructor() {}
 
@@ -60,10 +67,17 @@ class ObstacleMoveable {
 
     }
 
+    get lastFrameFallingDistance() {
+
+        return this.#lastFrameFallingDist;
+
+    }
+
     resetFallingState() {
 
         // this.#isFalling = false;
         this.#fallingTime = 0;
+        this.#lastFrameFallingDist = 0;
 
     }
 
@@ -127,6 +141,8 @@ class ObstacleMoveable {
         const deltaY = .5 * this.verticalAcceleratedSpeed * (now * now - this.#fallingTime * this.#fallingTime);
         obstacle.group.position.y -= deltaY;
 
+        this.#lastFrameFallingDist = deltaY;
+
         // this.#isFalling = true;
         this.#fallingTime = now;
 
@@ -136,8 +152,10 @@ class ObstacleMoveable {
 
         const { floor, obstacle } = params;
 
+        const onGroundPadding = 0.001;
+
         const dir = floor.worldPosition.clone();
-        dir.y += obstacle.box.height * .5;
+        dir.y += obstacle.box.height * .5 - onGroundPadding;
         obstacle.group.position.y = obstacle.group.parent ? obstacle.group.parent.worldToLocal(dir).y : dir.y;
 
         this.resetFallingState();
@@ -175,12 +193,6 @@ class ObstacleMoveable {
     }
 
     onWaterTick(params) {
-
-        if (this.verticalAcceleratedSpeed === 0) {
-
-            return;
-
-        }
 
         const { waterCube, obstacle } = params;
         const dropHeight = waterCube.topY - obstacle.bottomY;

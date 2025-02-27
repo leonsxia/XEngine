@@ -75,16 +75,10 @@ class ObstacleBase extends ObstacleMoveable {
     // set this obstacle is climable by player
     climbable = false;
     // set this obstacle can be pushed by player
-    movable = false;
-    // falling ground
-    hittingGround;
-    // falling water
-    hittingWater;
+    movable = false;    
 
     pushable = false;
-    draggable = false;
-
-    density = .5;
+    draggable = false;    
 
     specs;
 
