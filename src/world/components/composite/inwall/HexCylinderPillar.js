@@ -4,6 +4,8 @@ import { CollisionHexCylinder, CollisionCylinder } from '../../Models';
 
 class HexCylinderPillar extends ObstacleBase {
 
+    isHexCylinderPillar = true;
+
     _radius = 1;
     _height = 1;
 

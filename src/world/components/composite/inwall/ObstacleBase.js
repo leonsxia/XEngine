@@ -2,7 +2,7 @@ import { Group, MathUtils, Vector3, Layers, Raycaster, ArrowHelper } from 'three
 import { createOBBBox, createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue, BF, red } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER, HEX_CYLINDER_PILLAR, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 import { Logger } from '../../../systems/Logger';
 import { BasicObject } from '../../basic/BasicObject';
@@ -915,7 +915,7 @@ class ObstacleBase extends ObstacleMoveable {
 
             this.gltf.visible = show;
 
-        } else if (this.constructor.name === HEX_CYLINDER_PILLAR) {
+        } else if (this.isHexCylinderPillar) {
 
             this.cylinder.visible = show;
             
