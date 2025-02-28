@@ -312,6 +312,7 @@ class ObstacleBase extends ObstacleMoveable {
             this.#logger.log(`${obj.name}: ${event.message}`);
             obj.setLayers(CAMERA_RAY_LAYER);
             obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
+            obj.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
 
         }
         const type = 'visibleChanged';

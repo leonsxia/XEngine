@@ -1,5 +1,5 @@
 import { Group, MathUtils } from 'three';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 import { Logger } from '../../../systems/Logger';
 import { BasicObject } from '../../basic/BasicObject';
@@ -131,6 +131,7 @@ class InWallObjectBase {
             this.#logger.log(`${obj.name}: ${event.message}`);
             obj.setLayers(CAMERA_RAY_LAYER);
             obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
+            obj.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
 
         }
         const type = 'visibleChanged';
