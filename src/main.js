@@ -11,7 +11,7 @@ const world = new World(container, { header, msg, manual });
 
 // create the main function
 async function main() {
-    await world.initScene('Animated Characters');
+    await world.initScene('Matrix');
 }
 
 main().catch((err) => {

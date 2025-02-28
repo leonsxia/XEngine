@@ -5,6 +5,7 @@ import { WorldScene4 } from "./worldScenes/WorldScene4";
 import { WaterRoom } from "./worldScenes/WaterRoom";
 import { Mansion } from "./worldScenes/Mansion";
 import { WorldScene5 } from "./worldScenes/WorldScene5";
+import { WorldMatrix } from "./worldScenes/Matrix";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
@@ -18,7 +19,7 @@ import { TEXTURES, GLTFS, SHADERS } from "./components/utils/constants";
 import { Logger } from "./systems/Logger";
 
 const config = { 
-    scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters'],  // scene list for scene selector
+    scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix'],  // scene list for scene selector
 };
 const movementTypes = ['tankmove'];
 const moveActions = [
@@ -93,6 +94,7 @@ class World {
         this.worldScenes.push(new WorldScene5(container, this.#renderer, config, this.#movementEventDispatcher));
         this.worldScenes.push(new WaterRoom(container, this.#renderer, config, this.#movementEventDispatcher));
         this.worldScenes.push(new Mansion(container, this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WorldMatrix(container, this.#renderer, config, this.#movementEventDispatcher));
         // this.bindAllMoves();
 
     }

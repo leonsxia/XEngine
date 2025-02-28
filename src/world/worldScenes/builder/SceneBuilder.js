@@ -642,7 +642,9 @@ class SceneBuilder {
 
             const { position } = _target;
 
-            findPlayer.setPosition(position);
+            findPlayer.setPosition(position)
+                .updateOBB()
+                .updateRay?.();
             _origin.position = new Array(...position);
 
         }

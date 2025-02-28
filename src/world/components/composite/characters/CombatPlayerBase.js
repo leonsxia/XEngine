@@ -1,3 +1,4 @@
+import { Matrix4, Quaternion, Vector3 } from 'three';
 import { GLTFModel, Tofu } from '../../Models';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
@@ -104,11 +105,20 @@ class CombatPlayerBase extends Tofu {
 
     attachWeapons(hand) {
 
+        // must revert group to zero position and quaternion but keep scale infomation so weapon position could be right
+        this.group.updateWorldMatrix(true, false);
+
+        const _m1 = new Matrix4().compose(this.group.getWorldPosition(new Vector3()), this.group.getWorldQuaternion(new Quaternion()), new Vector3(1, 1, 1));
+        this.group.applyMatrix4(_m1.clone().invert());
+
         for (let i = 0, il = this.weapons.length; i < il; i++) {
 
-            hand.attach(this.weapons[i].group);
+            hand.attach(this.weapons[i].group);            
 
         }
+
+        // transform back
+        this.group.applyMatrix4(_m1);
 
     }
 

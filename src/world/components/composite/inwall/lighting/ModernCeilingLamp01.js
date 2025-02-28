@@ -7,24 +7,28 @@ const GLTF_SRC = 'inRoom/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_
 
 class ModernCeilingLamp01 extends LightLamp {
 
-    radius = .2157;
-    ropeHeight = .583;
-    height = this.radius * 2 + this.ropeHeight;
-    topHeight = 1.168;
+    _radius = .2157;
+    _ropeHeight = .583;
+    _height = this._radius * 2 + this._ropeHeight;
+    _topHeight = 1.168;
+
+    _lampRadius = .23;
+    _lamp;
 
     gltf;
-    lightPosition = new Vector3(0, - .3, 0);
+
+    _lightY = - .3;
+    lightPosition = new Vector3(0, this._lightY, 0);
 
     constructor(specs) {
 
         super(specs);
 
         const { name, scale = [1, 1] } = specs;
-        const { offsetY = this.height * .5 - this.topHeight } = specs;
-        const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs; 
+        const { offsetY = this._height * .5 - this._topHeight } = specs;
+        const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
-        this.radius *= scale[0];
-        this.height *= scale[1];
+        this._scale = [scale[0], scale[1], scale[0]];
 
         // gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow }
@@ -34,17 +38,17 @@ class ModernCeilingLamp01 extends LightLamp {
         this.gltf.setScale([scale[0], scale[1], scale[0]]);
 
         // bloom object
-        const lampSpecs = { name: `${name}_lamp`, size: { radius: .3, widthSegments: 16, heightSegments: 16 }, color: khaki, useBasicMaterial: true, transparent: true }
-        const lamp = new Sphere(lampSpecs);
-        const lampY = this.radius - this.height * .5;
-        lamp.setPosition([0, lampY, 0]);
-        
+        const lampSpecs = { name: `${name}_lamp`, size: { radius: this._lampRadius, widthSegments: 32, heightSegments: 32 }, color: khaki, useBasicMaterial: true, transparent: true }
+        const lamp = this._lamp = new Sphere(lampSpecs);
+
         this.bloomObjects = [lamp];
         this.setBloomObjectsFather();
         this.setBloomObjectsTransparent();
         this.setBloomObjectsLayers();
         this.setBloomObjectsVisible(false);
         this.addBloomObjects();
+
+        this.update(false);
 
         this.group.add(
             this.gltf.group
@@ -57,6 +61,64 @@ class ModernCeilingLamp01 extends LightLamp {
         await this.gltf.init();
 
         this.setPickLayers();
+
+    }
+
+    get scaleR() {
+
+        return this._scale[0];
+
+    }
+
+    set scaleR(r) {
+
+        this._scale[0] = this._scale[2] = r;
+
+        this.update();
+
+    }
+
+    get scale() {
+
+        return [this._scale[0], this._scale[1]];
+
+    }
+
+    set scale(val = [1, 1]) {
+
+        this._scale = [val[0], val[1], val[0]];
+
+        this.update();
+
+    }
+
+    update(needToUpdateLight = true) {
+
+        // update bloom lamp
+        const ropeHeight = this._ropeHeight * this.scale[1];
+        // const height = this._height * this.scale[1];
+        // const lampY = (height - ropeHeight) * .5 - height * .5;
+        const lampY = - ropeHeight * .5;
+
+        this._lamp.setScale(this._scale).setPosition([0, lampY, 0]);
+
+        // update bloom lamp linked point light position
+        const lightY = this._lightY * this.scale[1];
+        const lampLightPosition = new Vector3(0, lightY, 0);
+
+        if (needToUpdateLight) {
+
+            const lightObj = this._lamp.linked;
+            const { light } = lightObj;
+
+            light.position.sub(this.lightPosition).add(lampLightPosition);
+
+        }
+
+        this.lightPosition.copy(lampLightPosition);
+
+        // update gltf scale
+        this.gltf.setScale(this._scale);
 
     }
 

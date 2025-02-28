@@ -951,7 +951,11 @@ class WorldScene {
 
         const e = enable === 'enable' ? true : false;
 
-        this.setEffect(BLOOM, { enabled: e });
+        this.setEffect(BLOOM, {
+            enabled: e, 
+            strength: this.guiMaker.bloomSetting.BloomStrength, 
+            radius: this.guiMaker.bloomSetting.BloomRadius
+        });
 
     }
 

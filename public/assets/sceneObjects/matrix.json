@@ -1,5 +1,5 @@
 {
-    "scene": "Animated Characters",
+    "scene": "Matrix",
     "settings": {
         "postProcessing": {
             "bloomStrength": 1.68,
@@ -13,8 +13,16 @@
             "src": "SOLDIER_FEMALE",
             "castShadow": true,
             "receiveShadow": true,
-            "scale": [1, 1, 1],
-            "position": [0, 0, 0]
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "position": [
+                4.854937594621083,
+                0.889,
+                4.989589895161226
+            ]
         }
     ],
     "lights": [
@@ -25,10 +33,22 @@
                     "name": "room1_mainLight",
                     "display": "Directional Light",
                     "detail": {
-                        "color": [255, 255, 255],
-                        "intensity": 2.62,
-                        "position": [0, 20, 28],
-                        "target": [0, 0, 0]
+                        "color": [
+                            255,
+                            255,
+                            255
+                        ],
+                        "intensity": 0,
+                        "position": [
+                            0,
+                            20,
+                            28
+                        ],
+                        "target": [
+                            0,
+                            0,
+                            0
+                        ]
                     },
                     "type": "DirectionalLight",
                     "debug": true,
@@ -36,32 +56,51 @@
                     "shadow_debug": true,
                     "helper_show": false,
                     "shadow_cam_show": false,
-                    "visible": true
+                    "visible": true,
+                    "room": "room1"
                 },
                 {
                     "name": "room1_ambientLight",
                     "display": "Ambient Light",
                     "detail": {
-                        "color": [255, 219, 204],
-                        "intensity": 0.72
+                        "color": [
+                            88,
+                            249,
+                            187
+                        ],
+                        "intensity": 0.13
                     },
                     "type": "AmbientLight",
                     "debug": true,
-                    "visible": true
+                    "visible": true,
+                    "room": "room1"
                 },
                 {
                     "name": "room1_hemisphereLight",
                     "display": "Hemisphere Light",
                     "detail": {
-                        "groundColor": [210, 130, 96],
-                        "skyColor": [255, 255, 255],
-                        "intensity": 1.12,
-                        "position": [0, 4.6, 0]
+                        "groundColor": [
+                            210,
+                            130,
+                            96
+                        ],
+                        "skyColor": [
+                            255,
+                            255,
+                            255
+                        ],
+                        "intensity": 0,
+                        "position": [
+                            0,
+                            4.6,
+                            0
+                        ]
                     },
                     "type": "HemisphereLight",
                     "debug": true,
                     "helper_show": false,
-                    "visible": true
+                    "visible": true,
+                    "room": "room1"
                 }
             ],
             "pointLightSpecs": [
@@ -69,11 +108,20 @@
                     "name": "room1_pointLight1",
                     "display": "Ceiling Lamp Main",
                     "detail": {
-                        "color": [255, 255, 255],
-                        "position": [0, 0, 0],
-                        "intensity": 120,
+                        "color": [
+                            195,
+                            244,
+                            225
+                        ],
+                        "position": [
+                            0,
+                            -0.480000000000001,
+                            0
+                        ],
+                        "intensity": 99.49,
                         "distance": 0,
-                        "decay": 2
+                        "decay": 2,
+                        "shadowCameraAspect": 1
                     },
                     "debug": true,
                     "shadow": true,
@@ -82,7 +130,38 @@
                     "shadow_cam_show": false,
                     "visible": true,
                     "attachTo": "room1_modern_ceiling_lamp_01_1",
-                    "turnOn": true
+                    "turnOn": true,
+                    "room": "room1"
+                },
+                {
+                    "name": "room1_pointLight2",
+                    "display": "Security Light 1",
+                    "detail": {
+                        "color": [
+                            251,
+                            163,
+                            80
+                        ],
+                        "position": [
+                            0,
+                            0.2699999999999999,
+                            0.18
+                        ],
+                        "intensity": 12.5,
+                        "distance": 18,
+                        "decay": 2,
+                        "shadowCameraAspect": 1
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "room1_security_light_1",
+                    "turnOn": true,
+                    "alwaysOn": true,
+                    "room": "room1"
                 }
             ],
             "spotLightSpecs": [
@@ -91,12 +170,20 @@
                     "display": "TV Spot Light",
                     "detail": {
                         "color": [
-                            106,
-                            251,
-                            183
+                            133,
+                            255,
+                            180
                         ],
-                        "position": [0, 0, 0],
-                        "target": [0, 0, 0],
+                        "position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "target": [
+                            0,
+                            0,
+                            0
+                        ],
                         "intensity": 26,
                         "distance": 10,
                         "decay": 0.33,
@@ -112,7 +199,8 @@
                     "attachTo": "room1_television_01_1",
                     "attachToType": "screen",
                     "turnOn": false,
-                    "alwaysOn": false
+                    "alwaysOn": false,
+                    "room": "room1"
                 }
             ]
         }
@@ -124,13 +212,21 @@
                 {
                     "type": "Axes",
                     "size": 3,
-                    "position": [-50.5, 0, -50.5]
+                    "position": [
+                        -50.5,
+                        0,
+                        -50.5
+                    ]
                 },
                 {
                     "type": "Grid",
                     "size": 100,
                     "divisions": 100,
-                    "position": [0, 0.01, 0]
+                    "position": [
+                        0,
+                        0.01,
+                        0
+                    ]
                 }
             ]
         },
@@ -152,12 +248,20 @@
             "name": "room1",
             "showArrow": false,
             "enableWallOBBs": true,
-            "position": [0, 2.5, 0],
+            "position": [
+                0,
+                2.5,
+                0
+            ],
             "rotationY": 0,
             "groups": [
                 {
                     "type": "BoxCube",
-                    "scale": [1.2, 1.2, 1.2],
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
                     "baseSize": 1.2,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
@@ -182,12 +286,20 @@
                     "climbable": true,
                     "pushable": true,
                     "name": "room1_CubeBox1",
-                    "position": [-2.7, 1, 1.2],
+                    "position": [
+                        -1.5649305555348594,
+                        -1.901,
+                        0.17749999997930394
+                    ],
                     "rotationY": 0
                 },
                 {
                     "type": "BoxCube",
-                    "scale": [1.2, 1.2, 1.2],
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
                     "baseSize": 1.2,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
@@ -212,35 +324,59 @@
                     "climbable": true,
                     "pushable": true,
                     "name": "room1_CubeBox2",
-                    "position": [-1.5, 1, 0],
+                    "position": [
+                        -1.9528935184633294,
+                        -1.901,
+                        -1.0240740740878715
+                    ],
                     "rotationY": 0
                 },
                 {
                     "type": "WoodenPicnicTable",
                     "src": "WOODEN_PICNIC_TABLE",
                     "name": "room3_wooden_picnic_table_1",
-                    "scale": [1.2, 1, 0.8],
+                    "scale": [
+                        1.2,
+                        1,
+                        0.8
+                    ],
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [3, 1, 0]
+                    "position": [
+                        3,
+                        -2.13,
+                        0
+                    ],
+                    "rotationY": 0
                 },
                 {
                     "type": "Television01",
                     "src": "TELEVISION_01",
                     "name": "room1_television_01_1",
-                    "scale": [1.2, 1.3, 1.1],
+                    "scale": [
+                        2,
+                        2,
+                        2
+                    ],
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [3, 2, 0],
+                    "position": [
+                        3,
+                        -1.3039999999999998,
+                        0
+                    ],
                     "rotationY": 3.8397
                 },
                 {
                     "type": "HexCylinderPillar",
-                    "scale": [1, 3.6],
+                    "scale": [
+                        1,
+                        3.6
+                    ],
                     "baseSize": 4.6,
                     "map": "BRICK_159",
                     "normalMap": "BRICK_159_NORMAL",
@@ -255,11 +391,20 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "position": [2.5, 0.5, -3.5]
+                    "position": [
+                        2.5,
+                        -0.7009999999999998,
+                        -3.5
+                    ],
+                    "rotationY": 0
                 },
                 {
                     "type": "SquarePillar",
-                    "scale": [3, 0.6, 3],
+                    "scale": [
+                        3,
+                        0.6,
+                        3
+                    ],
                     "baseSize": 4.6,
                     "enableOBBs": true,
                     "frontMap": "BRICK_159",
@@ -280,12 +425,19 @@
                     "enableWallOBBs": true,
                     "isObstacle": true,
                     "climbable": true,
-                    "position": [-1.8, -2.2, -5],
+                    "position": [
+                        -1.8,
+                        -2.2,
+                        -5
+                    ],
                     "rotationY": 2.618
                 },
                 {
                     "type": "CylinderPillar",
-                    "scale": [1, 1],
+                    "scale": [
+                        1,
+                        1
+                    ],
                     "baseSize": 4.6,
                     "enableOBBs": true,
                     "map": "BRICK_159",
@@ -300,13 +452,22 @@
                     "enableWallOBBs": true,
                     "isObstacle": true,
                     "climbable": true,
-                    "position": [0, -2, 5]
+                    "position": [
+                        0,
+                        -2,
+                        5
+                    ],
+                    "rotationY": 0
                 },
                 {
                     "type": "LWall",
                     "thicknessS": 0.8,
                     "thicknessT": 0.3,
-                    "scale": [3, 2.6, 5],
+                    "scale": [
+                        3,
+                        3.58,
+                        5
+                    ],
                     "baseSize": 4.6,
                     "outTMap": "BRICK_159",
                     "outTNormal": "BRICK_159_NORMAL",
@@ -331,16 +492,43 @@
                     "enableOBBs": true,
                     "isObstacle": true,
                     "climbable": true,
-                    "position": [5, -1.2, 8],
+                    "position": [
+                        5,
+                        -0.710000000000001,
+                        8
+                    ],
                     "rotationY": 0
                 },
                 {
                     "type": "ModernCeilingLamp01",
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_1",
-                    "scale": [1.2, 1.3],
-                    "position": [0, 4.5, 0],
+                    "scale": [
+                        2.45,
+                        1.3
+                    ],
+                    "position": [
+                        0,
+                        2.35,
+                        0
+                    ],
                     "rotationY": 0
+                },
+                {
+                    "type": "SecurityLight",
+                    "src": "SECURITY_LIGHT",
+                    "name": "room1_security_light_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "position": [
+                        5,
+                        0.829999999999998,
+                        5.31
+                    ],
+                    "rotationY": 3.141592653589793
                 }
             ],
             "floors": [
@@ -357,8 +545,16 @@
                     "repeatModeV": 1002,
                     "rotationT": 1.5708,
                     "receiveShadow": true,
-                    "position": [0, -2.5, 0],
-                    "rotation": [-1.5708, 0, 0]
+                    "position": [
+                        0,
+                        -2.5,
+                        0
+                    ],
+                    "rotation": [
+                        -1.5708,
+                        0,
+                        0
+                    ]
                 }
             ],
             "ceilings": [],

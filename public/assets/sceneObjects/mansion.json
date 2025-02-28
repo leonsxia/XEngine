@@ -1264,12 +1264,12 @@
                     "type": "WoodenPicnicTable",
                     "src": "WOODEN_PICNIC_TABLE",
                     "name": "room1_wooden_picnic_table_1",
-                    "scale": [1, 1, 1],
+                    "scale": [1.3, 1.3, 1.3],
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": false,
                     "climbable": false,
-                    "position": [9.5, 0.621, -10],
+                    "position": [9.5, 0.73, -10],
                     "rotationY": 1.5708
                 },
                 {

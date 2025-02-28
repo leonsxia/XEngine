@@ -23,6 +23,11 @@ class GuiMaker {
 
     leftActions;
 
+    bloomSetting = {
+        BloomStrength : DEFAULT_BLOOM.strength,
+        BloomRadius: DEFAULT_BLOOM.radius
+    };
+
     constructor(scene) {
 
         this.scene = scene;
@@ -205,17 +210,23 @@ class GuiMaker {
                 changeFn: $scene.enableBloom.bind($scene)
             }));
 
+            const bloomStrength = $scene.sceneSetup.settings?.postProcessing?.bloomStrength;
+            this.bloomSetting.BloomStrength = bloomStrength ? bloomStrength : DEFAULT_BLOOM.strength;
+
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BloomStrength',
-                value: { BloomStrength: DEFAULT_BLOOM.strength },
+                value: this.bloomSetting,
                 params: [0, 10],
                 type: 'number',
                 changeFn: $scene.changeBloomStrength.bind($scene)
             }));
 
+            const bloomRadius = $scene.sceneSetup.settings?.postProcessing?.bloomRadius;
+            this.bloomSetting.BloomRadius = bloomRadius ? bloomRadius : DEFAULT_BLOOM.radius;
+
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BloomRadius',
-                value: { BloomRadius: DEFAULT_BLOOM.radius },
+                value: this.bloomSetting,
                 params: [0, 1],
                 type: 'number',
                 changeFn: $scene.changeBloomRadius.bind($scene)

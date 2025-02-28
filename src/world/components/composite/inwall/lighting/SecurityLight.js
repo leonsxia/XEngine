@@ -6,31 +6,33 @@ const GLTF_SRC = 'inRoom/lighting/security_light_1k/security_light_1k.gltf';
 
 class SecurityLight extends LightLamp {
 
-    width = .33;
-    height = .52;
-    depth = .389;
+    _width = .33;
+    _height = .52;
+    _depth = .389;
 
     gltf;
-    lightPosition = new Vector3(0, - 1.2, .07);
+
+    _bloomLight;
+
+    _lightY = -1.2;
+    _lightZ = .07;
+    lightPosition = new Vector3(0, this._lightY, this._lightZ);
 
     constructor(specs) {
 
         super(specs);
 
         const { name, scale = [1, 1, 1] } = specs;
-        const { offsetY = .1, offsetZ = - this.depth * .5 } = specs;
-        const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs; 
+        const { offsetY = .1, offsetZ = - this._depth * .5 } = specs;
+        const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
-        this.width *= scale[0];
-        this.height *= scale[1];
-        this.depth *= scale[2];
+        this._scale = scale;
 
         // gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, offsetZ, receiveShadow, castShadow }
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
-        this.gltf.setScale([scale[0], scale[1], scale[2]]);
 
         this.group.add(
             this.gltf.group
@@ -44,7 +46,7 @@ class SecurityLight extends LightLamp {
 
         // bloom object
         this.gltf.getMeshes(this.gltf.group);
-        const lightGlass = this.gltf.meshes.find(m => m.name === 'security_light_glass');
+        const lightGlass = this._bloomLight = this.gltf.meshes.find(m => m.name === 'security_light_glass');
         lightGlass.material = lightGlass.material.clone();
         lightGlass.alwaysVisible = true;
 
@@ -52,7 +54,32 @@ class SecurityLight extends LightLamp {
         this.setBloomObjectsFather();
         this.setBloomObjectsLayers();
 
+        this.update(false);
+
         this.setPickLayers();
+
+    }
+
+    update(needToUpdateLight = true) {
+
+        // update bloom object linked point light position
+        const lightY = this._lightY * this.scale[1];
+        const lightZ = this._lightZ * this.scale[2];
+        const bloomLightPosition = new Vector3(0, lightY, lightZ);
+
+        if (needToUpdateLight) {
+
+            const lightObj = this._bloomLight.linked;
+            const { light } = lightObj;
+
+            light.position.sub(this.lightPosition).add(bloomLightPosition);
+
+        }
+
+        this.lightPosition.copy(bloomLightPosition);
+
+        // update gltf scale
+        this.gltf.setScale(this._scale);
 
     }
 

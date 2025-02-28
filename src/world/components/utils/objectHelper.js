@@ -1,4 +1,4 @@
-import { BoxCube, CylinderPillar, HexCylinderPillar, LWall, SquarePillar, Television01, WoodenPicnicTable } from "../Models";
+import { BoxCube, CylinderPillar, HexCylinderPillar, LWall, ModernCeilingLamp01, SecurityLight, SquarePillar, Television01, WoodenPicnicTable } from "../Models";
 
 function clone(target, source, ignore = []) {
 
@@ -134,7 +134,8 @@ function objectFilter(object) {
         object instanceof WoodenPicnicTable ||
         object instanceof SquarePillar ||
         object instanceof LWall ||
-        object instanceof Television01
+        object instanceof Television01 ||
+        object instanceof SecurityLight
     ) {
 
         return true;
@@ -150,7 +151,8 @@ function objectFilter(object) {
 function objectFilter2(object) {
 
     if (object instanceof HexCylinderPillar ||
-        object instanceof CylinderPillar
+        object instanceof CylinderPillar ||
+        object instanceof ModernCeilingLamp01
     ) {
 
         return true;
