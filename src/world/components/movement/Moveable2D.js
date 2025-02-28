@@ -822,14 +822,14 @@ class Moveable2D {
 
                         // dummyObject.position.x += recoverCoefficient;
                         // this.#logger.log(`left face reach`);
-                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, 0));
+                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, recoverCoefficient));
 
 
                     } else {
 
                         // dummyObject.position.x -= recoverCoefficient;
                         // this.#logger.log(`right face reach`);
-                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, 0));
+                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, recoverCoefficient));
 
                     }
 
@@ -865,12 +865,12 @@ class Moveable2D {
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
                         // dummyObject.position.x += recoverCoefficient;
-                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, 0));
+                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, recoverCoefficient));
 
                     } else {
 
                         // dummyObject.position.x -= recoverCoefficient;
-                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, 0));
+                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, recoverCoefficient));
 
                     }
 
