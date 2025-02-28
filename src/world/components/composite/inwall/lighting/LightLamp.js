@@ -147,7 +147,7 @@ class LightLamp extends ObstacleBase {
 
         lightObj.updateAttachedObject = () => {
 
-            const bloomObj = this.bloomObjects.find(f => f.linked === light);
+            const bloomObj = this.bloomObjects.find(f => f.linked.light === light);
 
             if (bloomObj) {
 

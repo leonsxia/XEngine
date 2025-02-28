@@ -78,7 +78,36 @@
                     "turnOn": true
                 }
             ],
-            "spotLightSpecs": []
+            "spotLightSpecs": [
+                {
+                    "name": "room1_spotLight1",
+                    "display": "TV Spot Light",
+                    "detail": {
+                        "color": [
+                            106,
+                            251,
+                            183
+                        ],
+                        "position": [0, 0, 0],
+                        "target": [0, 0, 0],
+                        "intensity": 26,
+                        "distance": 10,
+                        "decay": 0.33,
+                        "penumbra": 0.35,
+                        "angle": 0.4618
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "room1_television_01_1",
+                    "attachToType": "screen",
+                    "turnOn": false,
+                    "alwaysOn": false
+                }
+            ]
         }
     ],
     "objects": [
@@ -189,6 +218,18 @@
                     "movable": true,
                     "climbable": true,
                     "position": [3, 1, 0]
+                },
+                {
+                    "type": "Television01",
+                    "src": "TELEVISION_01",
+                    "name": "room1_television_01_1",
+                    "scale": [1.2, 1.3, 1.1],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "position": [3, 2, 0],
+                    "rotationY": 3.8397
                 },
                 {
                     "type": "HexCylinderPillar",

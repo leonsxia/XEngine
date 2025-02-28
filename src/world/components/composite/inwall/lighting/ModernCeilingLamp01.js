@@ -69,7 +69,7 @@ class ModernCeilingLamp01 extends LightLamp {
         this.lightObjs.push(lightObj);
         this.lightIntensities.push(light.intensity);
 
-        this.bloomObjects[0].linked = light;
+        this.bloomObjects[0].linked = lightObj;
         this.bloomObjects[0].material.color.copy(light.color);
         this.bindBloomEvents(lightObj);
 
