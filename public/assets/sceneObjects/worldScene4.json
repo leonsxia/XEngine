@@ -548,9 +548,7 @@
                 },
                 {
                     "type": "Slope",
-                    "width": 2,
-                    "height": 2.3,
-                    "depth": 3.5,
+                    "scale": [2, 2.3, 3.5],
                     "baseSize": 4.6,
                     "frontMap": "BRICK_159",
                     "frontNormal": "BRICK_159_NORMAL",
@@ -570,9 +568,7 @@
                 },
                 {
                     "type": "Stairs",
-                    "width": 2,
-                    "height": 2.6,
-                    "depth": 3.5,
+                    "scale": [2, 2.6, 3.5],
                     "baseSize": 4.6,
                     "frontMap": "BRICK_159",
                     "frontNormal": "BRICK_159_NORMAL",

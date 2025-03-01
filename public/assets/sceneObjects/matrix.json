@@ -500,6 +500,67 @@
                     "rotationY": 0
                 },
                 {
+                    "type": "Slope",
+                    "scale": [
+                        3.43,
+                        1.48,
+                        6.11
+                    ],
+                    "baseSize": 4.6,
+                    "frontMap": "BRICK_159",
+                    "frontNormal": "BRICK_159_NORMAL",
+                    "backMap": "BRICK_159",
+                    "backNormal": "BRICK_159_NORMAL",
+                    "leftMap": "BRICK_159",
+                    "leftNormal": "BRICK_159_NORMAL",
+                    "rightMap": "BRICK_159",
+                    "rightNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "slopeMap": "BRICK_159",
+                    "slopeNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "enableOBBs": false,
+                    "enableWallOBBs": true,
+                    "name": "room1_Slope1",
+                    "position": [
+                        11.94,
+                        -1.76,
+                        0
+                    ],
+                    "rotationY": -1.5708
+                },
+                {
+                    "type": "Stairs",
+                    "scale": [
+                        4.52,
+                        2.7,
+                        7.44
+                    ],
+                    "stepHeight": 0.17,
+                    "baseSize": 4.6,
+                    "frontMap": "BRICK_159",
+                    "frontNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "sideMap": "BRICK_159",
+                    "sideNormal": "BRICK_159_NORMAL",
+                    "backMap": "BRICK_159",
+                    "backNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "enableOBBs": false,
+                    "enableWallOBBs": true,
+                    "name": "room1_Stairs1",
+                    "position": [
+                        -11.28,
+                        -1.14,
+                        0.83
+                    ],
+                    "rotationY": 1.5708
+                },
+                {
                     "type": "ModernCeilingLamp01",
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_1",

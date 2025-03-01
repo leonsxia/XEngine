@@ -953,9 +953,7 @@
                 },
                 {
                     "type": "Stairs",
-                    "width": 4,
-                    "height": 4.85,
-                    "depth": 7,
+                    "scale": [4, 4.85, 7],
                     "stepHeight": 0.25,
                     "baseSize": 4.85,
                     "frontMap": "FABRIC_197",

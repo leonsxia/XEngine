@@ -1,4 +1,4 @@
-import { BoxCube, CylinderPillar, FancyPictureFrame01, HexCylinderPillar, LWall, ModernCeilingLamp01, RoundWoodenTable, SecurityLight, SquarePillar, Television01, WoodenPicnicTable } from "../Models";
+import { BoxCube, CylinderPillar, FancyPictureFrame01, HexCylinderPillar, LWall, ModernCeilingLamp01, RoundWoodenTable, SecurityLight, Slope, SquarePillar, Television01, WoodenPicnicTable } from "../Models";
 
 function clone(target, source, ignore = []) {
 
@@ -131,9 +131,10 @@ function getTopParent(object, out, level = '') {
 function objectFilter(object) {
 
     if (object instanceof BoxCube ||
-        object instanceof WoodenPicnicTable ||
         object instanceof SquarePillar ||
         object instanceof LWall ||
+        object instanceof Slope ||
+        object instanceof WoodenPicnicTable ||
         object instanceof Television01 ||
         object instanceof SecurityLight ||
         object instanceof FancyPictureFrame01
