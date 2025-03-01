@@ -133,7 +133,7 @@ class CollisionBox extends CollisionBase {
 
     setScale(scale) {
 
-        this.scale = scale;
+        this.scale = new Array(...scale);
 
         const width = this.width * scale[0];
         const height = this.height * scale[1];

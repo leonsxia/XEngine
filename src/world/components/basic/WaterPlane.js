@@ -62,7 +62,7 @@ class WaterPlane extends BasicObject {
 
     set waterColor(color) {
 
-        this._color = color;
+        this._color = new Array(...color);
         this.mesh.material.uniforms['color'].value.setStyle(colorStr(...color));
 
     }

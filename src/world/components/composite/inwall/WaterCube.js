@@ -96,7 +96,7 @@ class WaterCube extends ObstacleBase {
 
     set waterColor(color) {
 
-        this._color = color;
+        this._color = new Array(...color);
         this.waterFace.mesh.material.uniforms['color'].value.setStyle(colorStr(...color));
 
         for (let i = 0, il = this.faces.length; i < il; i++) {

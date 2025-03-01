@@ -936,7 +936,7 @@ class SceneBuilder {
                             const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
 
                             find.father.setRotation(rotation);
-                            find.father.waterColor = new Array(...color);
+                            find.father.waterColor = color;
                             find.father.waterScale = waterScale;
                             find.father.waterFlowX = flowX;
                             find.father.waterFlowY = flowY;
@@ -988,7 +988,7 @@ class SceneBuilder {
 
                                 const { scale = [1, 1, 1] } = _target;
 
-                                find.father.scale = new Array(...scale);
+                                find.father.scale = scale;
 
                             }
 
@@ -1002,7 +1002,7 @@ class SceneBuilder {
 
                                 const { scale = [1, 1] } = _target;
 
-                                find.father.scale = new Array(...scale);
+                                find.father.scale = scale;
 
                             }
 
@@ -1043,7 +1043,7 @@ class SceneBuilder {
                             const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
 
                             find.father.setRotation(rotation);
-                            find.father.waterColor = new Array(...color);
+                            find.father.waterColor = color;
                             find.father.waterScale = waterScale;
                             find.father.waterFlowX = flowX;
                             find.father.waterFlowY = flowY;

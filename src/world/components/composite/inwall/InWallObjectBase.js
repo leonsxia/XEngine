@@ -100,7 +100,7 @@ class InWallObjectBase {
 
     set scale(val) {
 
-        this._scale = val;
+        this._scale = new Array(...val);
 
         this.update();
 

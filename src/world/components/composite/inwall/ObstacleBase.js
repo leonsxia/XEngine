@@ -233,7 +233,7 @@ class ObstacleBase extends ObstacleMoveable {
 
     set scale(val) {
 
-        this._scale = val;
+        this._scale = new Array(...val);
 
         this.update();
 

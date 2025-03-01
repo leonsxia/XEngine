@@ -98,7 +98,7 @@ class CollisionHexCylinder extends CollisionBase {
 
     setScale(scale) {
 
-        this.scale = scale;
+        this.scale = new Array(...scale);
 
         for (let i = 0, il = this.cboxArr.length; i < il; i++) {
 
