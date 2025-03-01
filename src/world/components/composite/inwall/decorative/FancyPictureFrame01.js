@@ -5,14 +5,17 @@ const GLTF_SRC = 'inRoom/decorative/fancy_picture_frame_01_1k/fancy_picture_fram
 
 class FancyPictureFrame01 extends ObstacleBase {
 
-    width = .6;
-    height = .466;
-    depth = .021;
-    imgWidth = .523;
-    imgHeight = .385;
+    _width = .6;
+    _height = .466;
+    _depth = .021;
+    _imgWidth = .523;
+    _imgHeight = .385;
 
     gltf;
-    image;
+
+    _cBox;
+    _image;
+    _imgPosZ = 0;
 
     constructor(specs) {
 
@@ -23,46 +26,39 @@ class FancyPictureFrame01 extends ObstacleBase {
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, img, mapRatio, receiveShadow = true, castShadow = true } = specs;
 
-        this.width *= scale[0];
-        this.height *= scale[1];
-        this.depth *= scale[2];
-        this.imgWidth *= scale[0];
-        this.imgHeight *= scale[1];
+        this._scale = scale;
 
         if (mapRatio) {
 
-            const newHeight = this.width / mapRatio;
-            scale[1] = newHeight / (this.height / scale[1]);
-            this.height = newHeight;
-            this.imgHeight = this.imgWidth / mapRatio;
+            this._scale[1] = scale[0] * this._width / mapRatio / this._height;
 
         }
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetZ, receiveShadow, castShadow };
 
-        const cBoxSpecs = { name: `${name}_cbox`, width: this.width, depth: this.depth, height: this.height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxSpecs = { name: `${name}_cbox`, width: this._width, depth: this._depth, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
         this.gltf.setScale(scale);
 
         // collision box
-        const cBox = new CollisionBox(cBoxSpecs);
+        const cBox = this._cBox = new CollisionBox(cBoxSpecs);
 
         if (img) {
 
             const { imgNormal } = specs;
 
-            const imageSpecs = { name: `${name}_image`, width: this.imgWidth, height: this.imgHeight, map: img, normalMap: imgNormal, transparent: true };
+            const imageSpecs = { name: `${name}_image`, width: this._imgWidth, height: this._imgHeight, map: img, normalMap: imgNormal, transparent: true };
 
-            this.image = new Plane(imageSpecs);
-            const imgPosZ = 0 * scale[2];
-            this.image.setPosition([0, 0, imgPosZ]);
+            this._image = new Plane(imageSpecs);
 
-            this.group.add(this.image.mesh);
+            this.group.add(this._image.mesh);
 
         }
+
+        this.update(false, true);
 
         this.cObjects = [cBox];
         this.walls = this.getWalls();
@@ -80,10 +76,10 @@ class FancyPictureFrame01 extends ObstacleBase {
     async init() {
 
         const loadPromises = [this.gltf.init()];
-        
-        if (this.image) {
 
-            loadPromises.push(this.image.init());
+        if (this._image) {
+
+            loadPromises.push(this._image.init());
 
         }
 
@@ -91,10 +87,89 @@ class FancyPictureFrame01 extends ObstacleBase {
 
         this.setPickLayers();
 
-        if (this.image) {
+        if (this._image) {
 
             const canvas = this.gltf.meshes.find(m => m.name === 'fancy_picture_frame_01_canvas');
             canvas.visible = false;
+
+        }
+
+    }
+
+    get scaleX() {
+
+        return this._scale[0];
+
+    }
+
+    set scaleX(x) {
+
+        this._scale[0] = x;
+
+        const { mapRatio } = this.specs;
+
+        if (mapRatio) {
+
+            this._scale[1] = x * this._width / mapRatio / this._height;
+
+        }
+
+        this.update();
+
+    }
+
+    get scaleY() {
+
+        return this._scale[1];
+
+    }
+
+    set scaleY(y) {
+
+        this._scale[1] = y;
+
+        const { mapRatio } = this.specs;
+
+        if (mapRatio) {
+
+            this._scale[0] = y * this._height * mapRatio / this._width;
+
+        }
+
+        this.update();
+
+    }
+
+    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+
+        // update image
+        const { img } = this.specs;
+
+        if (img) {
+
+            const imgPosZ = this._imgPosZ * this.scale[2];
+
+            this._image.setScale([this.scale[0], this.scale[1], 1])
+                .setPosition([0, 0, imgPosZ]);
+
+            if (needToUpdateTexture) {
+
+                this._image.setConfig({ texScale: [this.scale[0], this.scale[1]] })
+                    .updateTextures();
+
+            }
+
+        }
+
+        // update gltf scale
+        this.gltf.setScale(this.scale);
+
+        // update cbox scale
+        this._cBox.setScale(this.scale);
+
+        if (needToUpdateOBBnRay) {
+
+            this.updateOBBs();
 
         }
 

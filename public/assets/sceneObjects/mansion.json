@@ -1335,7 +1335,7 @@
                     "imgNormal": "WES_BEETHOVEN_NORMAL",
                     "mapRatio": 0.741,
                     "name": "room1_picture_frame_wes_beethoven",
-                    "scale": [3, 3, 1.5],
+                    "scale": [3, 5.212767805946029, 1.5],
                     "position": [0, 3, 14.98],
                     "rotationY": 3.1416
                 },
@@ -1346,7 +1346,7 @@
                     "imgNormal": "WES_CLAW_NORMAL",
                     "mapRatio": 1.67,
                     "name": "room1_picture_frame_wes_claw",
-                    "scale": [4, 4, 1.5],
+                    "scale": [4, 3.083960833697412, 1.5],
                     "position": [2.37, 2.5, 14.98],
                     "rotationY": 3.1416
                 },
@@ -1357,7 +1357,7 @@
                     "imgNormal": "WES_ALIEN_NORMAL",
                     "mapRatio": 0.743,
                     "name": "room1_picture_frame_wes_alien",
-                    "scale": [2.5, 2.5, 1.5],
+                    "scale": [2.5, 4.3322801079026565, 1.5],
                     "position": [4.63, 2.79, 14.98],
                     "rotationY": 3.1416
                 },
@@ -1368,7 +1368,7 @@
                     "imgNormal": "WES_CRUEL_MELODY_NORMAL",
                     "mapRatio": 1,
                     "name": "room1_picture_frame_wes_cruel_melody",
-                    "scale": [2.5, 2.5, 1.5],
+                    "scale": [2.5, 3.2188841201716736, 1.5],
                     "position": [-1.94, 2.56, 14.98],
                     "rotationY": 3.1416
                 },
@@ -1379,7 +1379,7 @@
                     "imgNormal": "WES_NUT_NORMAL",
                     "mapRatio": 0.731,
                     "name": "room1_picture_frame_wes_nut",
-                    "scale": [2.3, 2.3, 1.5],
+                    "scale": [2.3, 4.051126389272147, 1.5],
                     "position": [-3.65, 2.75, 14.98],
                     "rotationY": 3.1416
                 },
@@ -1390,7 +1390,7 @@
                     "imgNormal": "WES_BLACK_LIGHT_BURNS_2_NORMAL",
                     "mapRatio": 1,
                     "name": "room1_picture_frame_wes_black_light_burns_2",
-                    "scale": [2, 2, 1.5],
+                    "scale": [2, 2.5751072961373387, 1.5],
                     "position": [-6.54, 3, -14.98],
                     "rotationY": 0
                 },
@@ -1400,8 +1400,8 @@
                     "img": "WES_EAT_THE_DAY",
                     "imgNormal": "WES_EAT_THE_DAY_NORMAL",
                     "mapRatio": 1,
-                    "name": "room1_picture_frame_wes_black_light_burns_2",
-                    "scale": [2, 2, 1.5],
+                    "name": "room1_picture_frame_wes_eat_the_day",
+                    "scale": [2, 2.5751072961373387, 1.5],
                     "position": [-14.98, 2.5, -13],
                     "rotationY": 1.5708
                 },
@@ -1412,7 +1412,7 @@
                     "imgNormal": "WES_HEAD_OFF_NORMAL",
                     "mapRatio": 0.59,
                     "name": "room1_picture_frame_wes_head_off",
-                    "scale": [2.5, 2.5, 1.5],
+                    "scale": [2.5, 5.455735796901142, 1.5],
                     "position": [14.98, 2.5, -10],
                     "rotationY": -1.5708
                 },
@@ -1424,7 +1424,7 @@
                     "imgNormal": "WES_NAKED_WOMAN_NORMAL",
                     "mapRatio": 0.652,
                     "name": "room1_picture_frame_wes_naked_woman",
-                    "scale": [3, 3, 1.5],
+                    "scale": [3, 5.9243266015429565, 1.5],
                     "position": [2.3, -2.175, -5.02],
                     "rotationY": 3.1416
                 },
@@ -1435,7 +1435,7 @@
                     "imgNormal": "WES_LONG_HAIR_NORMAL",
                     "mapRatio": 0.855,
                     "name": "room1_picture_frame_wes_long_hair",
-                    "scale": [3, 3, 1.5],
+                    "scale": [3, 4.517732098486559, 1.5],
                     "position": [-2.3, -2.175, -5.02],
                     "rotationY": 3.1416
                 }

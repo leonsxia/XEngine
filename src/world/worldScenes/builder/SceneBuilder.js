@@ -636,7 +636,7 @@ class SceneBuilder {
 
         if (updateSetupOnly) {
 
-            _origin.position = new Array(...this.positionArr(findPlayer.position));
+            _origin.position = this.positionArr(findPlayer.position);
 
         } else {
 
@@ -664,10 +664,10 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
-                        _origin.detail.color = new Array(...colorArr(light.color));
+                        _origin.detail.color = colorArr(light.color);
                         _origin.detail.intensity = light.intensity;
-                        _origin.detail.position = new Array(...this.positionArr(light.position));
-                        _origin.detail.target = new Array(...this.positionArr(light.target.position));
+                        _origin.detail.position = this.positionArr(light.position);
+                        _origin.detail.target = this.positionArr(light.target.position);
 
                     } else {
 
@@ -693,7 +693,7 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
-                        _origin.detail.color = new Array(...colorArr(light.color));
+                        _origin.detail.color = colorArr(light.color);
                         _origin.detail.intensity = light.intensity;
 
                     } else {
@@ -717,10 +717,10 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
-                        _origin.detail.skyColor = new Array(...colorArr(light.color));
-                        _origin.detail.groundColor = new Array(...colorArr(light.groundColor));
+                        _origin.detail.skyColor = colorArr(light.color);
+                        _origin.detail.groundColor = colorArr(light.groundColor);
                         _origin.detail.intensity = light.intensity;
-                        _origin.detail.position = new Array(...this.positionArr(light.position));
+                        _origin.detail.position = this.positionArr(light.position);
 
                     } else {
 
@@ -748,7 +748,7 @@ class SceneBuilder {
 
                         const { attachTo, attachToType } = _origin;
 
-                        _origin.detail.color = new Array(...colorArr(light.color));
+                        _origin.detail.color = colorArr(light.color);
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.distance = light.distance;
                         _origin.detail.decay = light.decay;
@@ -758,11 +758,11 @@ class SceneBuilder {
 
                             const pos = light.parent.father.getLightPosition(light, attachToType);
 
-                            _origin.detail.position = new Array(...this.positionArr(pos));
+                            _origin.detail.position = this.positionArr(pos);
 
                         } else {
 
-                            _origin.detail.position = new Array(...this.positionArr(light.position));
+                            _origin.detail.position = this.positionArr(light.position);
 
                         }
 
@@ -806,7 +806,7 @@ class SceneBuilder {
 
                         const { attachTo, attachToType } = _origin;
 
-                        _origin.detail.color = new Array(...colorArr(light.color));
+                        _origin.detail.color = colorArr(light.color);
                         _origin.detail.intensity = light.intensity;
                         _origin.detail.distance = light.distance;
                         _origin.detail.angle = light.angle;
@@ -817,13 +817,13 @@ class SceneBuilder {
 
                             const pos_tar = light.parent.father.getLightPositionNTarget(light, attachToType);
 
-                            _origin.detail.position = new Array(...this.positionArr(pos_tar.position));
-                            _origin.detail.target = new Array(...this.positionArr(pos_tar.target));
+                            _origin.detail.position = this.positionArr(pos_tar.position);
+                            _origin.detail.target = this.positionArr(pos_tar.target);
 
                         } else {
 
-                            _origin.detail.position = new Array(...this.positionArr(light.position));
-                            _origin.detail.target = new Array(...this.positionArr(light.target.position));
+                            _origin.detail.position = this.positionArr(light.position);
+                            _origin.detail.target = this.positionArr(light.target.position);
 
                         }
 
@@ -907,7 +907,7 @@ class SceneBuilder {
 
             if (updateSetupOnly) {
 
-                _origin.position = new Array(...this.positionArr(find.position));
+                _origin.position = this.positionArr(find.position);
 
             } else {
 
@@ -925,7 +925,7 @@ class SceneBuilder {
 
                         if (updateSetupOnly) {
 
-                            _origin.rotation = new Array(...this.rotationArr(find.rotation));
+                            _origin.rotation = this.rotationArr(find.rotation);
                             _origin.color = new Array(...find.father.waterColor);
                             _origin.waterScale = find.father.waterScale;
                             _origin.flowX = find.father.waterFlowX;
@@ -970,6 +970,7 @@ class SceneBuilder {
 
                                 const { thicknessS = 0.5, thicknessT = 0.5 } = _target;
 
+                                // this will not call update, LWall scale update will call update below
                                 find.father.thicknessS = thicknessS;
                                 find.father.thicknessT = thicknessT;
 
@@ -981,13 +982,13 @@ class SceneBuilder {
 
                             if (updateSetupOnly) {
 
-                                _origin.scale = find.father.scale;
+                                _origin.scale = new Array(...find.father.scale);
 
                             } else {
 
                                 const { scale = [1, 1, 1] } = _target;
 
-                                find.father.scale = scale;
+                                find.father.scale = new Array(...scale);
 
                             }
 
@@ -995,13 +996,13 @@ class SceneBuilder {
 
                             if (updateSetupOnly) {
 
-                                _origin.scale = find.father.scale;
+                                _origin.scale = new Array(...find.father.scale);
 
                             } else {
 
                                 const { scale = [1, 1] } = _target;
 
-                                find.father.scale = scale;
+                                find.father.scale = new Array(...scale);
 
                             }
 
@@ -1031,7 +1032,7 @@ class SceneBuilder {
 
                         if (updateSetupOnly) {
 
-                            _origin.rotation = new Array(...this.rotationArr(find.rotation));
+                            _origin.rotation = this.rotationArr(find.rotation);
                             _origin.color = new Array(...find.father.waterColor);
                             _origin.waterScale = find.father.waterScale;
                             _origin.flowX = find.father.waterFlowX;
@@ -1053,7 +1054,7 @@ class SceneBuilder {
 
                         if (updateSetupOnly) {
 
-                            _origin.rotation = new Array(...this.rotationArr(find.rotation));
+                            _origin.rotation = this.rotationArr(find.rotation);
 
                         } else {
 
@@ -1091,7 +1092,7 @@ class SceneBuilder {
 
                 if (updateSetupOnly) {
 
-                    _origin.rotation = new Array(...this.rotationArr(find.rotation));
+                    _origin.rotation = this.rotationArr(find.rotation);
 
                 } else {
 

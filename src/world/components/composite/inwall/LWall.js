@@ -131,8 +131,6 @@ class LWall extends InWallObjectBase {
 
         this._thicknessS = val;
 
-        this.update();
-
     }
 
     get thicknessT() {
@@ -144,8 +142,6 @@ class LWall extends InWallObjectBase {
     set thicknessT(val) {
 
         this._thicknessT = val;
-
-        this.update();
 
     }
 
