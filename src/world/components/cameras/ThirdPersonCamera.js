@@ -328,14 +328,24 @@ class ThirdPersonCamera {
 
                         const m = object.material[j];
 
-                        m.transparent = true;
+                        if (!m.transparent) {
+
+                            m.transparent = true;
+
+                        }
+
                         m.opacity = this.#invisibleOpacity;
 
                     }
 
                 } else {
 
-                    object.material.transparent = true;
+                    if (!object.material.transparent) {
+
+                        object.material.transparent = true;
+
+                    }
+
                     object.material.opacity = this.#invisibleOpacity;
 
                 }

@@ -64,7 +64,11 @@
                     "display": "Ceiling Lamp Main Hall",
                     "detail": {
                         "color": [244, 200, 122],
-                        "position": [0, 0, 0],
+                        "position": [
+                            0,
+                            -0.969,
+                            0
+                        ],
                         "intensity": 180,
                         "distance": 0,
                         "decay": 2,
@@ -84,7 +88,11 @@
                     "display": "Ceiling Lamp 2nd Left",
                     "detail": {
                         "color": [171, 238, 242],
-                        "position": [0, 0, 0],
+                        "position": [
+                            0,
+                            -0.25,
+                            0
+                        ],
                         "intensity": 120,
                         "distance": 0,
                         "decay": 2
@@ -103,7 +111,11 @@
                     "display": "Ceiling Lamp 2nd Right",
                     "detail": {
                         "color": [251, 197, 80],
-                        "position": [0, 0, 0],
+                        "position": [
+                            0,
+                            -0.25,
+                            0
+                        ],
                         "intensity": 80,
                         "distance": 0,
                         "decay": 2
@@ -1026,8 +1038,15 @@
                     "type": "ModernCeilingLamp01",
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_1",
-                    "scale": [1.2, 1.3],
-                    "position": [0, 3.93, 7.5],
+                    "scale": [
+                        3.58,
+                        1.77
+                    ],
+                    "position": [
+                        0,
+                        3.7,
+                        7.5
+                    ],
                     "rotationY": 0
                 },
                 {

@@ -123,6 +123,18 @@ class Room {
 
     }
 
+    get visible() {
+
+        return this.group.visible;
+
+    }
+
+    set visible(val) {
+
+        this.group.visible = val;
+
+    }
+
     async init() {
         
         const insideWallsInit = this.initObjects(this.insideWalls);

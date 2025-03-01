@@ -33,6 +33,8 @@ class Moveable2D {
     #climbDist = 0;
     #climbForwardDist = 0;
 
+    #lastFrameFallingDist = 0;
+
     #logger = new Logger(DEBUG, 'Moveable2D');
 
     _deltaV3 = new Vector3();
@@ -316,14 +318,22 @@ class Moveable2D {
 
     }
 
+    get lastFrameFallingDistance() {
+
+        return this.#lastFrameFallingDist;
+
+    }
+
     resetFallingState() {
 
         this.#isFalling = false;
         this.#fallingTime = 0;
+        this.#lastFrameFallingDist = 0;
 
     }
 
     fallingTick(params) {
+
         const { delta, player } = params;
 
         if (!this.#isClimbingUp && !this.#isClimbingForward) {
@@ -332,9 +342,13 @@ class Moveable2D {
             const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
             player.group.position.y -= deltaY;
 
+            this.#lastFrameFallingDist = deltaY;
+
             this.#isFalling = true;
             this.#fallingTime = now;
+
         }
+
     }
 
     onHittingBottomTick(params) {

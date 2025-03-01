@@ -280,7 +280,31 @@ class WorldScene {
 
     }
 
-    focusNext( /* forceStaticRender = true */ ) {}
+    focusNext(forceStaticRender = true) {
+
+        this.focusNextProcess(forceStaticRender);
+
+        this.physics.initPhysics(this.rooms[this.loadSequence]);
+
+        for (let i = 0, il = this.rooms.length; i < il; i++) {
+
+            const room = this.rooms[i];
+
+            if (i === this.loadSequence) {
+
+                room.setLightsVisible(true);
+                room.visible = true;    
+
+            } else {
+
+                room.setLightsVisible(false);
+                room.visible = false;
+
+            }
+
+        }
+
+    }
 
     focusNextProcess(forceStaticRender = true) {
 

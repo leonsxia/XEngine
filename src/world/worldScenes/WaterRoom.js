@@ -114,22 +114,6 @@ class WaterRoom extends WorldScene {
         this.#loaded = true;
     }
 
-    focusNext(forceStaticRender = true) {
-        
-        this.focusNextProcess(forceStaticRender);
-
-        this.physics.initPhysics(this.rooms[this.loadSequence]);
-
-        this.rooms.forEach((room, idx) => {
-            if (idx === this.loadSequence) {
-                room.setLightsVisible(true);
-            } else {
-                room.setLightsVisible(false);
-            }
-        });
-
-    }
-
 }
 
 export { WaterRoom };

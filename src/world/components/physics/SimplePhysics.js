@@ -304,7 +304,7 @@ class SimplePhysics {
         let block = false;
         const offset = Math.abs(top.worldPosition.y - player.bottomY);
 
-        if (player.bottomY < top.worldPosition.y && offset > STAIR_OFFSET_MAX) {
+        if (player.bottomY < top.worldPosition.y - player.lastFrameFallingDistance && offset > STAIR_OFFSET_MAX) {
             
             block = true;
 

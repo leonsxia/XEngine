@@ -116,19 +116,6 @@ class WorldMatrix extends WorldScene {
 
     }
 
-    focusNext(forceStaticRender = true) {
-        this.focusNextProcess(forceStaticRender);
-
-        this.physics.initPhysics(this.rooms[this.loadSequence]);
-
-        this.rooms.forEach((room, idx) => {
-            if (idx === this.loadSequence) {
-                room.setLightsVisible(true);
-            } else {
-                room.setLightsVisible(false);
-            }
-        });
-    }
 }
 
 export { WorldMatrix };
