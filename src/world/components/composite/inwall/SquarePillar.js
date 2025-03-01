@@ -26,7 +26,7 @@ class SquarePillar extends InWallObjectBase {
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1, 1] } = specs;
 
-        this._scale = scale;
+        this._scale = new Array(...scale);
 
         const fbTexScale = [scale[0], scale[1]];
         const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: frontMap, normalMap: frontNormal, texScale: fbTexScale })

@@ -26,7 +26,7 @@ class FancyPictureFrame01 extends ObstacleBase {
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, img, mapRatio, receiveShadow = true, castShadow = true } = specs;
 
-        this._scale = scale;
+        this._scale = new Array(...scale);
 
         if (mapRatio) {
 

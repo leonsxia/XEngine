@@ -9,6 +9,10 @@ class Slope extends InWallObjectBase {
 
     isSlope = true;
 
+    _width = 1;
+    _height = 1;
+    _depth = 1;
+
     box;
     bottomBoxBuffer;
     topBoxBuffer;
@@ -33,6 +37,9 @@ class Slope extends InWallObjectBase {
         const { backMap, leftMap, rightMap, slopeMap, bottomMap } = specs;
         const { backNormal, leftNormal, rightNormal, slopeNormal, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
+        const { scale = [1, 1, 1] } = specs;
+
+        this._scale = new Array(...scale);
 
         const boxSpecs = { size: { width, depth, height } };
         const bufferSpecs = { size: { width, depth: .2, height: .1 }, color: yankeesBlue };
@@ -174,6 +181,7 @@ class Slope extends InWallObjectBase {
         this.topBoxBuffer.updateOBB(needUpdateMatrixWorld);
         
     }
+
 }
 
 export { Slope };

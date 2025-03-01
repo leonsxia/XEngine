@@ -31,7 +31,7 @@ class WaterPlane extends BasicObject {
 
         }
 
-        this._color = color;
+        this._color = new Array(...color);
         this._scale = waterScale;
         this._flowX = flowX;
         this._flowY = flowY;
@@ -75,7 +75,7 @@ class WaterPlane extends BasicObject {
 
     set waterScale(scale) {
 
-        this._scale = scale;
+        this._scale = new Array(...scale);
         this.mesh.material.uniforms[ 'config' ].value.w = scale;
 
     }

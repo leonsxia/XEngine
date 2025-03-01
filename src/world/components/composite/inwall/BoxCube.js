@@ -27,7 +27,7 @@ class BoxCube extends ObstacleBase {
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1, 1] } = specs;
 
-        this._scale = scale;
+        this._scale = new Array(...scale);
 
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap, lines, transparent: true };
 

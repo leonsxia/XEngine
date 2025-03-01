@@ -43,7 +43,7 @@ class Television01 extends LightLamp {
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
-        this._scale = scale;
+        this._scale = new Array(...scale);
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, offsetZ, receiveShadow, castShadow };

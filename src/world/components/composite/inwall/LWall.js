@@ -35,7 +35,7 @@ class LWall extends InWallObjectBase {
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1, 1] } = specs;
 
-        this._scale = scale;
+        this._scale = new Array(...scale);
         this._thicknessS = thicknessS;
         this._thicknessT = thicknessT;
 
