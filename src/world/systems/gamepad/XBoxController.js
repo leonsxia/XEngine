@@ -63,16 +63,16 @@ class XBoxController {
 
             const gp = navigator.getGamepads()[e.gamepad.index];
 
-            this.#logger.log(`Gamepad connected at index${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
+            this.#logger.log(`Gamepad connected at index ${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
 
 
         });
 
         window.addEventListener("gamepaddisconnected", (e) => {
 
-            const gp = navigator.getGamepads()[e.gamepad.index];
+            const gp = e.gamepad;
 
-            this.#logger.log(`Gamepad disconnected at index${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
+            this.#logger.log(`Gamepad disconnected at index ${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
 
         });
 
