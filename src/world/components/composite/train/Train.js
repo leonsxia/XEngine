@@ -16,6 +16,7 @@ class Train extends Moveable2D {
     #rl;
     #rs;
     #rotateR = 3;
+    #stoodTurningVel = 1.5;
     boundingBox;
     boundingBoxHelper;
 
@@ -230,11 +231,12 @@ class Train extends Moveable2D {
     setTickParams(delta) {
         const R = this.isAccelerating ? this.#rotateR * 2.5 : this.#rotateR;
         const rotateVel = this.velocity / R;
+        const stoodRotateVel = this.#stoodTurningVel / R;
         const smallWheelRotateVel = this.velocity / this.#rs;
         const largeWheelRotateVel = this.velocity / this.#rl;
         const dist = this.velocity * delta;
         const params = {
-            group: this.group, R, rotateVel, dist, delta, 
+            group: this.group, R, rotateVel, stoodRotateVel, dist, delta, 
             smallWheelRotateVel, largeWheelRotateVel,
             player: this
         };

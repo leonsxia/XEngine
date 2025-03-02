@@ -33,8 +33,6 @@ const worldSceneSpecs = {
 
 class Mansion extends WorldScene {
 
-    #loaded = false;
-
     constructor(container, renderer, globalConfig, eventDispatcher) {
         Object.assign(worldSceneSpecs, globalConfig);
         super(container, renderer, worldSceneSpecs, eventDispatcher);
@@ -52,6 +50,7 @@ class Mansion extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
+            suspend: this.suspend.bind(this),
             dispose: this.dispose.bind(this),
             setup: this.setup,
             paused: this.isScenePaused.bind(this)
@@ -62,10 +61,7 @@ class Mansion extends WorldScene {
 
         this.initBasic();
 
-        if (this.#loaded) {
-            this.initContainer();
-            return;
-        }
+        if (this.loaded) return;
 
         await this.postProcessor.init();
         await this.sceneBuilder.buildScene({ src: 'assets/sceneObjects/mansion.json' });
@@ -112,7 +108,9 @@ class Mansion extends WorldScene {
         this.showCPlaneArrows(false);
 
         this.initContainer();
-        this.#loaded = true;
+
+        this.loaded = true;
+
     }
 
 }

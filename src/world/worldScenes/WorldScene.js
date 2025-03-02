@@ -62,6 +62,8 @@ class WorldScene {
     sceneSavedSetup;
     jsonFileName;
 
+    loaded = false;
+
     #paused = true;
 
     constructor(container, renderer, specs, eventDispatcher) {
@@ -136,8 +138,6 @@ class WorldScene {
 
     initContainer() {
 
-        this.controls.defControl.enabled = true;
-
         if (this.guiMaker?.enabled) {
 
             this.guiMaker.initGuiControl();
@@ -152,14 +152,31 @@ class WorldScene {
 
         this.renderer.shadowMap.enabled = enableShadow;
 
-        if (enablePicker) { 
-            
-            this.picker.setup(this); 
-        
+        const { updatables } = this.loop;
+        const tpcIdx = updatables.findIndex(f => f === this.thirdPersonCamera);
+        const icIdx = updatables.findIndex(f => f === this.inspectorCamera);
+
+        if (tpcIdx == -1 && icIdx == -1) {
+
+            this.controls.enableDefControl();
+
+        }
+
+        if (enablePicker) {
+
+            this.picker.setup(this);
+
         }
 
         this.sceneBuilder.worldScene = this;
-        
+
+        if (this.loaded) {
+
+            this.initContainer();
+            return;
+
+        }
+
         if (devicePixelRatio > 1) {
 
             // set default scene resolution
@@ -276,7 +293,32 @@ class WorldScene {
 
         // must disable default orbit control after gui reest, 
         // the gui will disable all cameras which will enable default camera again
-        this.controls.defControl.enabled = false;
+        this.controls.enableDefControl(false);
+
+    }
+
+    suspend() {
+
+        this.stop();
+
+        this.renderer.shadowMap.enabled = false;
+
+        // clear picker object
+        if (this.enablePick) {
+
+            this.enablePicking();
+            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, 'disable', 'enable');
+
+        }
+
+        if (this.guiMaker?.enabled) {
+
+            this.guiMaker.suspendGui();
+
+        }
+
+        // must disable current scene default control, otherwise it will jump backward to last scene
+        this.controls.enableDefControl(false);
 
     }
 

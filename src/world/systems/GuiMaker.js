@@ -45,8 +45,8 @@ class GuiMaker {
         this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
             folder: 'Select World',
             parent: 'selectWorld',
-            name: 'scene',
-            value: { scene: this.setup.name },
+            name: 'Scene',
+            value: { Scene: this.setup.name },
             params: this.setup.scenes,
             type: 'scene-dropdown',
             changeFn: this.setup.changeCallback
@@ -68,6 +68,13 @@ class GuiMaker {
     resetGui() {
 
         this.gui.reset();
+        this.gui.hide();
+
+    }
+
+    suspendGui() {        
+
+        this.gui.suspend();
         this.gui.hide();
 
     }

@@ -39,8 +39,6 @@ const worldSceneSpecs = {
 
 class WorldScene4 extends WorldScene {
 
-    #loaded = false;
-
     constructor(container, renderer, globalConfig, eventDispatcher) {
         Object.assign(worldSceneSpecs, globalConfig);
         super(container, renderer, worldSceneSpecs, eventDispatcher);
@@ -58,6 +56,7 @@ class WorldScene4 extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
+            suspend: this.suspend.bind(this),
             dispose: this.dispose.bind(this),
             setup: this.setup,
             paused: this.isScenePaused.bind(this)
@@ -68,10 +67,7 @@ class WorldScene4 extends WorldScene {
 
         this.initBasic();
 
-        if (this.#loaded) {
-            this.initContainer();
-            return;
-        }
+        if (this.loaded) return;
 
         await this.postProcessor.init();
         await this.sceneBuilder.buildScene({ src: 'assets/sceneObjects/worldScene4.json' });
@@ -119,7 +115,9 @@ class WorldScene4 extends WorldScene {
         this.showCPlaneArrows(false);
 
         this.initContainer();
-        this.#loaded = true;
+
+        this.loaded = true;
+
     }
 
 }

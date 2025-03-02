@@ -62,7 +62,7 @@ const pointLightSpecsArr = [];
 const spotLightSpecsArr = [];
 
 class WorldScene1 extends WorldScene  {
-    #loaded = false;
+
     #basicLights = { mainLight: null, ambientLight: null, hemisphereLight: null };
     #pointLights = {};
 
@@ -99,6 +99,7 @@ class WorldScene1 extends WorldScene  {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
+            suspend: this.suspend.bind(this),
             dispose: this.dispose.bind(this),
             paused: this.isScenePaused.bind(this)
         };
@@ -108,10 +109,8 @@ class WorldScene1 extends WorldScene  {
 
         this.initBasic();
 
-        if (this.#loaded) {
-            this.initContainer();
-            return;
-        }
+        if (this.loaded) return;
+
         // sphere
         const sphereSpecs = {
             map: 'assets/textures/crate.gif',
@@ -210,7 +209,9 @@ class WorldScene1 extends WorldScene  {
         }
         
         this.initContainer();
-        this.#loaded = true;
+
+        this.loaded = true;
+
     }
 
 }

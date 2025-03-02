@@ -128,7 +128,8 @@ class World {
 
     async changeScene(name) {
 
-        this.#currentScene?.reset(); // reset camera, gui, controls, stop animation
+        // this.#currentScene?.reset(); // reset camera, gui, controls, stop animation
+        this.#currentScene?.suspend(); // stop looping, hide gui but not reset, disable controls
         
         this.#container.innerHTML = '';
 

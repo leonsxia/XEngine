@@ -73,7 +73,7 @@ const gridSpecs = {
 }
 
 class WorldScene2 extends WorldScene {
-    #loaded = false;
+
     #basicLights = {};
     #pointLights = {};
 
@@ -110,6 +110,7 @@ class WorldScene2 extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
+            suspend: this.suspend.bind(this),
             dispose: this.dispose.bind(this),
             paused: this.isScenePaused.bind(this)
         };
@@ -119,10 +120,8 @@ class WorldScene2 extends WorldScene {
 
         this.initBasic();
 
-        if (this.#loaded) {
-            this.initContainer();
-            return;
-        }
+        if (this.loaded) return;
+
         const train = new Train('red train');
         train.setPosition([0, 1.25, 0]);
         this.subscribeEvents(train, worldSceneSpecs.moveType);
@@ -150,7 +149,9 @@ class WorldScene2 extends WorldScene {
         }
         
         this.initContainer();
-        this.#loaded = true;
+
+        this.loaded = true;
+
     }
 
 }

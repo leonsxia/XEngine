@@ -72,8 +72,8 @@ const gridSpecs = {
 }
 
 class WorldScene3 extends WorldScene {
+
     #objects = [];
-    #loaded = false;
     #basicLights = {};
     #pointLights = {};
 
@@ -110,6 +110,7 @@ class WorldScene3 extends WorldScene {
             resetCamera: this.resetCamera.bind(this),
             focusNext: this.focusNext.bind(this),
             reset: this.reset.bind(this),
+            suspend: this.suspend.bind(this),
             dispose: this.dispose.bind(this),
             paused: this.isScenePaused.bind(this)
         };
@@ -119,10 +120,8 @@ class WorldScene3 extends WorldScene {
 
         this.initBasic();
 
-        if (this.#loaded) {
-            this.initContainer();
-            return
-        }
+        if (this.loaded) return;
+
         const birdsSpecs = {
             models: [{
                 src: 'assets/models/Parrot.glb',
@@ -176,7 +175,7 @@ class WorldScene3 extends WorldScene {
 
         this.initContainer();
 
-        this.#loaded = true;
+        this.loaded = true;
 
     }
 

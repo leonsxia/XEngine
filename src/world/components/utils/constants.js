@@ -354,6 +354,8 @@ const GUI_CONFIG = {
         LIGHT_CONTROL: 'Lights Control', 
         OBJECTS_CONTROL: 'Objects Control'
     },
+    SELECT_WORLD_CONTROL: 'Select World',
+    RIGHT_PANEL_SELECTOR_CONTROL: "Select Control",
     PLAYER_CONTROL: 'Player Control',
     POST_PROCESS_CONTROL: 'Post Processing',
     TPC_CONTROL: 'Third Person Camera',

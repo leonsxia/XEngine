@@ -647,6 +647,20 @@ class Gui {
 
     }
 
+    suspend() {
+
+        const selWorldCtl = this.findController(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.SELECT_WORLD_CONTROL, 'Scene');
+        const selRightCtl = this.findController(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.RIGHT_PANEL_SELECTOR_CONTROL, 'Control');
+
+        selWorldCtl.reset();
+        selRightCtl.reset();
+
+        this.#sceneChanged = false;
+
+        document.body.removeChild(this.#stats.dom);
+
+    }
+
     selectControl(title) {
 
         this.hideAt(this.#currentRightPanel);
