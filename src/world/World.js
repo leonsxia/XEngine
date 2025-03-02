@@ -17,6 +17,7 @@ import { loadShaders } from "./components/utils/shaderHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS, SHADERS } from "./components/utils/constants";
 import { Logger } from "./systems/Logger";
+import { XBoxController } from "./systems/gamepad/XBoxController";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix'],  // scene list for scene selector
@@ -85,6 +86,14 @@ class World {
         config.worldPicker = worldPicker;
         this.#sceneBuilder = new SceneBuilder();
         config.sceneBuilder = this.#sceneBuilder;
+
+        const xboxController = new XBoxController({
+            dispatcher: this.#movementEventDispatcher,
+            controlType: movementTypes[0],
+            attachTo: this
+        });
+        xboxController.bindGamepadEvents();
+        config.xboxController = xboxController;
 
         this.worldScenes = [];
         this.worldScenes.push(new WorldScene1(container, this.#renderer, config, this.#movementEventDispatcher));

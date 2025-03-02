@@ -100,7 +100,7 @@ class WorldScene {
 
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 
-        this.loop.updatables = [this.controls.defControl];
+        this.loop.updatables = [this.controls.defControl, specs.xboxController];
         // this.controls.defControl.listenToKeyEvents(window);
 
         this.resizer = new Resizer(container, this.camera, this.renderer, this.postProcessor);
