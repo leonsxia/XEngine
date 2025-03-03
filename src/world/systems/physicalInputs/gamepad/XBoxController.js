@@ -1,36 +1,12 @@
-import { Logger } from "../Logger";
-
-const MOVEMENT_TYPE = {
-    TANKMOVE: 'tankmove'
-};
-
-const MOVE_ACTIONS = [
-    {
-        CATEGORY: 'tankmove',
-        TYPES: {
-            MOVE_LEFT: 'movingLeft',
-            MOVE_RIGHT: 'movingRight',
-            MOVE_FORWARD: 'movingForward',
-            MOVE_BACKWARD: 'movingBackward',
-            ACCELERATE: 'accelerate',
-            JUMP: 'jump',
-            MELEE: 'melee',
-            INTERACT: 'interact',
-            GUN_POINT: 'gunPoint',
-            SHOOT: 'shoot'
-        }
-    }
-];
+import { InputBase } from "../InputBase";
+import { Logger } from "../../Logger";
 
 const DEBUG = false;
 
-class XBoxController {
+class XBoxController extends InputBase {
 
     connected = false;
     gamepad = null;
-    eventDispatcher;
-    controlType;
-    attachTo;
 
     #LStickMoveLeft = false;
     #LStickMoveRight = false;
@@ -47,11 +23,7 @@ class XBoxController {
 
     constructor(specs) {
 
-        const { dispatcher, controlType, attachTo } = specs;
-
-        this.eventDispatcher = dispatcher;
-        this.controlType = controlType;
-        this.attachTo = attachTo;
+        super(specs);
 
     }
 
@@ -80,7 +52,7 @@ class XBoxController {
 
     tick() {
 
-        if (this.controlType === MOVEMENT_TYPE.TANKMOVE) {
+        if (this.controlType === InputBase.MOVEMENT_TYPE.TANKMOVE) {
 
             this.tankmoveTick();
 
@@ -106,8 +78,8 @@ class XBoxController {
         this.#logger.func = 'processTankmoveStickEvents';
 
         const eventDispatcher = this.eventDispatcher;
-        const messageType = MOVEMENT_TYPE.TANKMOVE;
-        const actions = MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const messageType = InputBase.MOVEMENT_TYPE.TANKMOVE;
+        const actions = InputBase.MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
         const world = this.attachTo;
 
         const leftStickH = this.gamepad.axes[0];
@@ -115,7 +87,7 @@ class XBoxController {
         
         const validMin = 0.4;
         const forwardValidMin = 0.1;
-        const backwardValidMin = 0.5;
+        const backwardValidMin = 0.35;
 
         if (leftStickH <= - validMin) {
 
@@ -236,8 +208,8 @@ class XBoxController {
         this.#logger.func = 'processTankmoveButtonEvents';
 
         const eventDispatcher = this.eventDispatcher;
-        const messageType = MOVEMENT_TYPE.TANKMOVE;
-        const actions = MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const messageType = InputBase.MOVEMENT_TYPE.TANKMOVE;
+        const actions = InputBase.MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
         const world = this.attachTo;
 
         const btnA = this.gamepad.buttons[0];
