@@ -671,6 +671,13 @@ class Gui {
 
     }
 
+    recover() {
+
+        this.showAt(GUI_CONFIG.CONTROL_TITLES.MENU);
+        this.showAt(this.#currentRightPanel);
+
+    }
+
     removeObjects() {
 
         const objCtl = this.findGui(GUI_CONFIG.CONTROL_TITLES.OBJECTS_CONTROL)

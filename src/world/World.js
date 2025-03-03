@@ -84,7 +84,8 @@ class World {
         this.worldScenes.push(new WaterRoom(container, this.#renderer, config, this.#movementEventDispatcher));
         this.worldScenes.push(new Mansion(container, this.#renderer, config, this.#movementEventDispatcher));
         this.worldScenes.push(new WorldMatrix(container, this.#renderer, config, this.#movementEventDispatcher));
-        // this.bindAllMoves();
+        
+        this.bindMouseEvent();
 
     }
 
@@ -160,7 +161,15 @@ class World {
                 
                 this.#infosDomElements.msg.textContent = 'render complete!';
 
-                this.#infosDomElements.manual.style.display = loadScene.setup?.showManual ? 'block' : 'none';
+                if (loadScene.setup?.showManual) {
+
+                    this.#infosDomElements.manual.classList.remove('hide');
+
+                } else {
+
+                    this.#infosDomElements.manual.classList.add('hide');
+
+                }
                 
             }
 
@@ -234,6 +243,76 @@ class World {
                 }
 
             }
+
+        });
+
+    }
+
+    setInfo(show) {
+
+        for (const i in this.#infosDomElements) {
+
+            const info = this.#infosDomElements[i];
+
+            if (show) {
+
+                if (info === this.#infosDomElements.manual && !this.#currentScene.setup?.showManual) {
+
+                    continue;
+
+                }
+
+                if (info.classList.contains('hide')) {
+
+                    info.classList.remove('hide');
+
+                }
+
+            } else {
+
+                if (!info.classList.contains('hide')) {
+
+                    info.classList.add('hide');
+
+                }
+
+            }
+
+        }
+
+    }
+
+    setCursorAndGui(show) {
+
+        if (show) {
+
+            if (this.#container.classList.contains('nocursor')) {
+
+                this.#container.classList.remove('nocursor');
+                this.#currentScene?.guiMaker.gui.recover();
+                this.setInfo(true);
+
+            }
+
+        } else {
+
+            if (!this.#container.classList.contains('nocursor')) {
+
+                this.#container.classList.add('nocursor');
+                this.#currentScene?.guiMaker.gui.hide();
+                this.setInfo(false);
+
+            }
+
+        }
+
+    }
+
+    bindMouseEvent() {
+
+        window.addEventListener('mousemove', () => {
+
+            this.setCursorAndGui(true);
 
         });
 

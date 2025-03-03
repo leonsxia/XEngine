@@ -91,6 +91,7 @@ class WorldScene1 extends WorldScene  {
             renderer: this.renderer,
             scene: this.scene,
             resizer: this.resizer,
+            guiMaker: this.guiMaker,
             init: this.init.bind(this), 
             render: this.render.bind(this),
             start: this.start.bind(this),

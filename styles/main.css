@@ -32,7 +32,19 @@ h1 {
       Set the container's background color to the same as the scene's
       background to prevent flashing on load
     */
-    background-color: #5D76A9;
+    background-color: #000;
+}
+
+.nocursor {
+    cursor: none;
+}
+
+.hide {
+    display: none;
+}
+
+#scene-container canvas {
+    position: absolute;
 }
 
 #leftPanel {
@@ -69,7 +81,6 @@ h1 {
     padding: 0 10px 0 10px;
     color: #fff;
     background-color: #111;
-    display: none;
 }
 
 .control-inactive button {

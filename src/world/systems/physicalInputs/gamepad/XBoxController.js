@@ -7,6 +7,7 @@ class XBoxController extends InputBase {
 
     connected = false;
     gamepad = null;
+    triggered = false;
 
     #LStickMoveLeft = false;
     #LStickMoveRight = false;
@@ -37,6 +38,7 @@ class XBoxController extends InputBase {
 
             this.#logger.log(`Gamepad connected at index ${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
 
+            this.attachTo.setCursorAndGui(false);
 
         });
 
@@ -45,6 +47,8 @@ class XBoxController extends InputBase {
             const gp = e.gamepad;
 
             this.#logger.log(`Gamepad disconnected at index ${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
+
+            this.attachTo.setCursorAndGui(true);
 
         });
 
@@ -69,6 +73,12 @@ class XBoxController extends InputBase {
             this.processTankmoveButtonEvents();
             this.processTankmoveStickEvents();
 
+            if (this.triggered) {
+
+                this.attachTo.setCursorAndGui(false);
+
+            }
+
         }
 
     }
@@ -90,6 +100,8 @@ class XBoxController extends InputBase {
         const backwardValidMin = 0.45;
 
         if (leftStickH <= - validMin) {
+
+            this.triggered = true;
 
             if (!this.#LStickMoveLeft) {
 
@@ -119,6 +131,8 @@ class XBoxController extends InputBase {
 
         if (leftStickH >= validMin) {
 
+            this.triggered = true;
+
             if (!this.#LStickMoveRight) {
 
                 this.#logger.log(`gamepad L stick moving right: ${leftStickH}`);
@@ -147,6 +161,8 @@ class XBoxController extends InputBase {
 
         if (leftStickV <= - forwardValidMin) {
 
+            this.triggered = true;
+
             if (!this.#LStickMoveUp) {
 
                 this.#logger.log(`gamepad L stick moving forward: ${leftStickH}`);
@@ -174,6 +190,8 @@ class XBoxController extends InputBase {
         }
 
         if (leftStickV >= backwardValidMin) {
+
+            this.triggered = true;
 
             if (!this.#LStickMoveDown) {
 
@@ -220,6 +238,8 @@ class XBoxController extends InputBase {
         const btnRB = this.gamepad.buttons[5];
         const btnLT = this.gamepad.buttons[6];
         const btnRT = this.gamepad.buttons[7];
+
+        this.triggered = this.gamepad.buttons.find(btn => btn.pressed) ? true : false;
 
         if (btnA.pressed) {
 
