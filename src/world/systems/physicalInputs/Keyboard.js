@@ -1,7 +1,7 @@
 import { Logger } from "../Logger";
 import { InputBase } from "./InputBase";
 
-const DEBUG = true;
+const DEBUG = false;
 
 class Keyboard extends InputBase {
 
@@ -15,7 +15,6 @@ class Keyboard extends InputBase {
     #interact = false;
     #gunPointing = false;
     #shoot = false;
-
 
     #logger = new Logger(DEBUG, 'Keyboard');
 
@@ -35,7 +34,6 @@ class Keyboard extends InputBase {
 
     }
 
-    // left 0, right 1, forward 2, backward 3
     bindKeysToTankMove() {
 
         const eventDispatcher = this.eventDispatcher;

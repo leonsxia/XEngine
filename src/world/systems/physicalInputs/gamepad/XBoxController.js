@@ -87,7 +87,7 @@ class XBoxController extends InputBase {
         
         const validMin = 0.4;
         const forwardValidMin = 0.1;
-        const backwardValidMin = 0.35;
+        const backwardValidMin = 0.45;
 
         if (leftStickH <= - validMin) {
 
