@@ -73,10 +73,28 @@ class Picker {
         ) 
             return;
 
-        this.#mouse.x = (event.clientX / this.clientWidth) * 2 - 1;
-        this.#mouse.y = - (event.clientY / this.clientHeight) * 2 + 1;
+        const canvas = this.#container.querySelector('canvas');
+        const canvasRatioH = canvas.clientWidth / this.clientWidth;
+        const canvasRatioV = canvas.clientHeight / this.clientHeight;
+        this.#mouse.x = ((event.clientX / this.clientWidth) * 2 - 1) / canvasRatioH;
+        this.#mouse.y = (- (event.clientY / this.clientHeight) * 2 + 1) / canvasRatioV;
+
+        if (Math.abs(this.#mouse.x) > 1 || Math.abs(this.#mouse.y) > 1) {
+
+            this.clearPicked();
+            return;
+
+        }
 
         this.checkIntersection();
+
+    }
+
+    clearPicked() {
+
+        this.#postProcessor.clearOutlineObjects();
+        this.#worldScene.pickedObject = null;
+        this.#worldScene.guiMaker.clearObjectsPanel();
 
     }
 
@@ -86,9 +104,7 @@ class Picker {
 
         const intersects = this.#raycaster.intersectObjects(this.#scene.children);
 
-        this.#postProcessor.clearOutlineObjects();
-        this.#worldScene.pickedObject = null;
-        this.#worldScene.guiMaker.clearObjectsPanel();
+        this.clearPicked();
 
         if (intersects.length > 0) {
 
@@ -127,7 +143,9 @@ class Picker {
         }
 
         if (this.#worldScene.staticRendering && this.#worldScene.forceStaticRender) this.#worldScene.render();
+
     }
+
 }
 
 export { Picker };
