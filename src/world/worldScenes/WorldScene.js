@@ -8,17 +8,37 @@ import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
 import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
+import { SimplePhysics } from '../components/physics/SimplePhysics.js';
+import { independence } from '../components/basic/colorBase.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
 
 class WorldScene {
     
-    setup = {};
+    setup = {
+        enableTPC: false,
+        enableIC: false,
+        scene: {
+            backgroundColor: independence
+        },
+        enableGui: false,
+        actions: [
+            "start",
+            "stop",
+            "resetCamera",
+            "focusNext",
+            "resetPlayer",
+            "resetScene",
+            "saveScene",
+            "loadScene"
+        ]
+    };
     name = 'default scene';
 
     thirdPersonCamera = null;
     inspectorCamera = null;
+    defaultCamera;
     camera = null;
     scene = null;
     renderer = null;
@@ -68,39 +88,29 @@ class WorldScene {
 
     constructor(container, renderer, specs, eventDispatcher) {
 
-        this.setup = specs;
-        this.name = specs.name;
+        Object.assign(this.setup, specs);
+
+        const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, xboxController, enableGui = false } = this.setup;
+
+        this.name = name;
 
         this.container = container;
         this.renderer = renderer;
 
-        const { enableTPC = false, enableIC = false } = specs;
-        const defaultCamera = new Camera(specs.camera);
-        this.camera = defaultCamera.camera;
-
-        if (enableTPC) {
-
-            this.thirdPersonCamera = new ThirdPersonCamera({ defaultCamera });
-
-        }
-
-        if (enableIC) {
-
-            this.inspectorCamera = new InspectorCamera({ defaultCamera });
-
-        }
+        this.defaultCamera = new Camera();
+        this.camera = this.defaultCamera.camera;
         
-        this.scene = createScene(specs.scene.backgroundColor);
+        this.scene = createScene(backgroundColor);
         this.postProcessor = new PostProcessor(renderer, this.scene, this.camera, container);
         this.loop = new Loop(this.camera, this.scene, this.renderer, this.postProcessor);
         this.eventDispatcher = eventDispatcher;
 
-        this.picker = specs.worldPicker;
-        this.sceneBuilder = specs.sceneBuilder;
+        this.picker = worldPicker;
+        this.sceneBuilder = sceneBuilder;
 
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 
-        this.loop.updatables = [this.controls.defControl, specs.xboxController];
+        this.loop.updatables = [this.controls.defControl, xboxController];
         // this.controls.defControl.listenToKeyEvents(window);
 
         this.resizer = new Resizer(container, this.camera, this.renderer, this.postProcessor);
@@ -125,7 +135,7 @@ class WorldScene {
 
         });
 
-        if (specs.enableGui) {
+        if (enableGui) {
 
             this.guiMaker = new GuiMaker(this);
             this.guiMaker.init();
@@ -133,6 +143,128 @@ class WorldScene {
             this.controls.initPanels(this.guiMaker.gui);
 
         }
+
+    }
+
+    async init() {
+
+        this.initBasic();
+
+        if (this.loaded) return;
+
+        // first time loading
+        const { src } = this.setup;
+
+        await this.postProcessor.init();
+        await this.sceneBuilder.buildScene({ src });
+
+        // settings from json file
+        const { 
+            camera: { position = [0, 0, 0] }, defaultPlayer, resolution = 1,
+            enableGui = false, enablePicker = false, enableShadow = false,
+            enableTPC = false, enableIC = false
+        } = this.setup;
+
+        // set camera initial position and save the state
+        this.defaultCamera.position = position;
+
+        this.forceStaticRender = false;
+        this.controls.defControl.update();
+        this.forceStaticRender = true;
+
+        this.controls.defControl.saveState();
+
+        // only set pixel ratio at first time
+        if (devicePixelRatio > 1) {
+
+            // set default scene resolution
+            this.resizer.changeResolution(resolution);
+
+        }
+
+        // renderer shadow enable
+        this.renderer.shadowMap.enabled = enableShadow;
+
+        // picker
+        if (enablePicker) {
+
+            this.picker.setup(this);
+
+        }
+
+        // physics
+        this.physics = new SimplePhysics(this.players);
+        this.loop.updatables.push(this.physics);
+
+        // initialize player
+        // no need to render at this time, so the change event of control won't do the rendering.
+        this.changeCharacter(defaultPlayer, false);
+
+        // setup cameras, must after player setup complete
+        if (enableTPC) {
+
+            this.thirdPersonCamera = new ThirdPersonCamera({ defaultCamera: this.defaultCamera });
+            this.thirdPersonCamera.setup({ player: this.player, control: this.controls.defControl, scene: this.scene });
+
+        }
+
+        if (enableIC) {
+
+            this.inspectorCamera = new InspectorCamera({ defaultCamera: this.defaultCamera });
+            this.inspectorCamera.setup({ player: this.player, control: this.controls.defControl, scene: this.scene, rooms: this.rooms });
+
+        }        
+
+        // role selector
+        this.showRoleSelector = true;
+
+        // post processor
+        this.enablePostProcessing(false);
+
+        // Gui setup
+        if (enableGui) {
+
+            const leftActions = { actions: {} };
+            const { actions } = this.setup;
+
+            actions.forEach(act => {
+
+                if (act === 'resetPlayer') {
+
+                    leftActions.actions[act] = this.resetCharacterPosition.bind(this);
+
+                } else if (act === 'resetCamera') {
+
+                    leftActions.actions[act] = this.resetCamera.bind(this, false);
+
+                } else if (act === 'focusNext') {
+
+                    leftActions.actions[act] = this.focusNext.bind(this, false);
+
+                } else if (act === 'moveCamera') {
+
+                    leftActions.actions[act] = this.moveCamera.bind(this, false);
+
+                } else {
+
+                    leftActions.actions[act] = this[act].bind(this);
+
+                }
+
+            });
+
+            this.guiMaker.leftActions = leftActions;
+
+            this.guiMaker.setupGuiConfig();
+
+        }
+
+        this.showCPlaneLines(false);
+        this.showCPlaneArrows(false);
+
+        this.initContainer();
+
+        this.loaded = true;
 
     }
 
@@ -148,9 +280,7 @@ class WorldScene {
 
     initBasic() {
 
-        const { enablePicker = false, enableShadow = false, resolution = 1 } = this.setup;
-
-        this.renderer.shadowMap.enabled = enableShadow;
+        const { enablePicker = false, enableShadow = false } = this.setup;        
 
         const { updatables } = this.loop;
         const tpcIdx = updatables.findIndex(f => f === this.thirdPersonCamera);
@@ -162,25 +292,21 @@ class WorldScene {
 
         }
 
-        if (enablePicker) {
-
-            this.picker.setup(this);
-
-        }
-
         this.sceneBuilder.worldScene = this;
 
+        // set shadow and picker everytime load this scene, but not first time loading
         if (this.loaded) {
+
+            this.renderer.shadowMap.enabled = enableShadow;
+
+            if (enablePicker) {
+
+                this.picker.setup(this);
+
+            }
 
             this.initContainer();
             return;
-
-        }
-
-        if (devicePixelRatio > 1) {
-
-            // set default scene resolution
-            this.resizer.changeResolution(resolution);
 
         }
 

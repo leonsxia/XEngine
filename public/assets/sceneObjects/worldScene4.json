@@ -1,5 +1,89 @@
 {
-    "scene": "Simple Physics",
+    "settings": {
+        "name": "Simple Physics",
+        "camera": {
+            "position": [
+                10,
+                10,
+                10
+            ]
+        },
+        "moveType": "tankmove",
+        "enableTPC": true,
+        "enableIC": true,
+        "enableGui": true,
+        "enableShadow": true,
+        "enablePicker": true,
+        "allTargets": [
+            {
+                "x": 0,
+                "y": 0,
+                "z": 10
+            },
+            {
+                "x": 0,
+                "y": 0,
+                "z": -14
+            },
+            {
+                "x": 28,
+                "y": 0,
+                "z": 4
+            }
+        ],
+        "allCameraPos": [
+            {
+                "x": 10,
+                "y": 10,
+                "z": 25
+            },
+            {
+                "x": 7,
+                "y": 17,
+                "z": -5
+            },
+            {
+                "x": 30,
+                "y": 10,
+                "z": 20
+            }
+        ],
+        "allPlayerPos": [
+            [
+                1,
+                5,
+                15
+            ],
+            [
+                0,
+                6,
+                -13
+            ],
+            [
+                25,
+                3,
+                4
+            ]
+        ],
+        "resolution": 0.8,
+        "showManual": true,
+        "defaultPlayer": "jill",
+        "actions": [
+            "start",
+            "stop",
+            "moveCamera",
+            "resetCamera",
+            "focusNext",
+            "resetPlayer",
+            "resetScene",
+            "saveScene",
+            "loadScene"
+        ],
+        "postProcessing": {
+            "bloomStrength": 1.68,
+            "bloomRadius": 0.74
+        }
+    },
     "players": [
         {
             "name": "jill",

@@ -1,6 +1,42 @@
 {
-    "scene": "Matrix",
     "settings": {
+        "name": "Matrix",
+        "camera": {
+            "position": [
+                -1.5,
+                4.5,
+                6.5
+            ]
+        },
+        "moveType": "tankmove",
+        "enableTPC": true,
+        "enableIC": true,
+        "enableGui": true,
+        "enableShadow": true,
+        "enablePicker": true,
+        "allTargets": [
+            {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        ],
+        "allCameraPos": [
+            {
+                "x": 3,
+                "y": 7,
+                "z": 8
+            }
+        ],
+        "allPlayerPos": [
+            [
+                0,
+                1.8,
+                0
+            ]
+        ],
+        "showManual": true,
+        "defaultPlayer": "jill",
         "postProcessing": {
             "bloomStrength": 1.68,
             "bloomRadius": 0.74
@@ -109,9 +145,9 @@
                     "display": "Ceiling Lamp Main",
                     "detail": {
                         "color": [
-                            195,
+                            209,
                             244,
-                            225
+                            195
                         ],
                         "position": [
                             0,
@@ -170,9 +206,9 @@
                     "display": "TV Spot Light",
                     "detail": {
                         "color": [
-                            133,
+                            117,
                             255,
-                            180
+                            170
                         ],
                         "position": [
                             0,
@@ -384,7 +420,7 @@
                     "topNormal": "BRICK_159_NORMAL",
                     "bottomMap": "BRICK_159",
                     "bottomNormal": "BRICK_159_NORMAL",
-                    "name": "room2_hexCylinder1",
+                    "name": "room1_hexCylinder1",
                     "mapRatio": 1.5,
                     "showArrow": false,
                     "isObstacle": true,
@@ -447,7 +483,7 @@
                     "bottomMap": "BRICK_159",
                     "bottomNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "room2_cylinder_pillar1",
+                    "name": "room1_cylinder_pillar1",
                     "showArrow": false,
                     "enableWallOBBs": true,
                     "isObstacle": true,

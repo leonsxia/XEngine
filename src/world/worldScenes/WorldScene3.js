@@ -97,24 +97,6 @@ class WorldScene3 extends WorldScene {
             this.scene, null, ...basicLightSpecsArr, ...pointLightSpecsArr
         );
 
-        return {
-            name: this.name,
-            renderer: this.renderer,
-            scene: this.scene,
-            resizer: this.resizer,
-            guiMaker: this.guiMaker,
-            init: this.init.bind(this), 
-            render: this.render.bind(this),
-            start: this.start.bind(this),
-            stop: this.stop.bind(this),
-            moveCamera: this.moveCamera.bind(this),
-            resetCamera: this.resetCamera.bind(this),
-            focusNext: this.focusNext.bind(this),
-            reset: this.reset.bind(this),
-            suspend: this.suspend.bind(this),
-            dispose: this.dispose.bind(this),
-            paused: this.isScenePaused.bind(this)
-        };
     }
 
     async init() {
@@ -122,6 +104,17 @@ class WorldScene3 extends WorldScene {
         this.initBasic();
 
         if (this.loaded) return;
+
+        const { 
+            camera: { position = [0, 0, 0] },
+            enableShadow = false
+        } = this.setup;
+
+        // renderer shadow enable
+        this.renderer.shadowMap.enabled = enableShadow;
+
+        // setup cameras
+        this.defaultCamera.position = position;
 
         const birdsSpecs = {
             models: [{
@@ -191,7 +184,7 @@ class WorldScene3 extends WorldScene {
             allCameraPos
         }
 
-        Object.assign(worldSceneSpecs, pos);
+        Object.assign(this.setup, pos);
         this.focusNextProcess(forceStaticRender);
     }
 }

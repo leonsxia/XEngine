@@ -1,5 +1,43 @@
 {
-    "scene": "Water Room",
+    "settings": {
+        "name": "Water Room",
+        "camera": {
+            "position": [
+                10,
+                10,
+                10
+            ]
+        },
+        "moveType": "tankmove",
+        "enableTPC": true,
+        "enableIC": true,
+        "enableGui": true,
+        "enableShadow": true,
+        "enablePicker": true,
+        "allTargets": [
+            {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        ],
+        "allCameraPos": [
+            {
+                "x": 5,
+                "y": 15,
+                "z": 15
+            }
+        ],
+        "allPlayerPos": [
+            [
+                0,
+                6,
+                6.25
+            ]
+        ],
+        "showManual": true,
+        "defaultPlayer": "tofu1"
+    },
     "players": [
         {
             "name": "tofu1",

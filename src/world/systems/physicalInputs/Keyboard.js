@@ -44,7 +44,7 @@ class Keyboard extends InputBase {
 
         window.addEventListener('keydown', e => {
 
-            if (!world.currentScene || world.currentScene.paused()) return;
+            if (!world.currentScene || world.currentScene.isScenePaused()) return;
 
             switch (e.key) {
                 case A.lower:
@@ -259,7 +259,7 @@ class Keyboard extends InputBase {
 
         window.addEventListener('keyup', e => {
 
-            if (!world.currentScene || world.currentScene.paused()) return;
+            if (!world.currentScene || world.currentScene.isScenePaused()) return;
 
             switch (e.key) {
                 case A.lower:

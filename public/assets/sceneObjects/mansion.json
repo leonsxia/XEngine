@@ -1,5 +1,44 @@
 {
-    "scene": "Mansion",
+    "settings": {
+        "name": "Mansion",
+        "camera": {
+            "position": [
+                10,
+                10,
+                10
+            ]
+        },
+        "moveType": "tankmove",
+        "enableTPC": true,
+        "enableIC": true,
+        "enableGui": true,
+        "enableShadow": true,
+        "enablePicker": true,
+        "allTargets": [
+            {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        ],
+        "allCameraPos": [
+            {
+                "x": 5,
+                "y": 15,
+                "z": 15
+            }
+        ],
+        "allPlayerPos": [
+            [
+                0,
+                5,
+                0
+            ]
+        ],
+        "resolution": 0.5,
+        "showManual": true,
+        "defaultPlayer": "jill"
+    },
     "players": [
         {
             "name": "jill",

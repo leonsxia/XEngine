@@ -1,6 +1,42 @@
 {
-    "scene": "Animated Characters",
     "settings": {
+        "name": "Animated Characters",
+        "camera": {
+            "position": [
+                -1.5,
+                4.5,
+                6.5
+            ]
+        },
+        "moveType": "tankmove",
+        "enableTPC": true,
+        "enableIC": true,
+        "enableGui": true,
+        "enableShadow": true,
+        "enablePicker": true,
+        "allTargets": [
+            {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        ],
+        "allCameraPos": [
+            {
+                "x": 3,
+                "y": 7,
+                "z": 8
+            }
+        ],
+        "allPlayerPos": [
+            [
+                0,
+                3,
+                0
+            ]
+        ],
+        "showManual": true,
+        "defaultPlayer": "jill",
         "postProcessing": {
             "bloomStrength": 1.68,
             "bloomRadius": 0.74

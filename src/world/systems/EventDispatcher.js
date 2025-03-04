@@ -126,7 +126,7 @@ class EventDispatcher {
 
                     }
 
-                    // console.log(`subscriber: '${subscriber.subscriber.name}' scene: ${subscriber.scene}`);
+                    console.log(`subscriber: '${subscriber.subscriber.name}' scene: ${subscriber.scene}`);
                     subscriber.callback.apply(subscriber.subscriber, args);
 
                 }
