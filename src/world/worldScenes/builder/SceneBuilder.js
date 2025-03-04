@@ -62,6 +62,8 @@ class SceneBuilder {
             worldScene.sceneSetupCopy = JSON.parse(JSON.stringify(setup));
             worldScene.sceneSavedSetup = JSON.parse(JSON.stringify(setup));
 
+            Object.assign(worldScene.setup, setup.settings);
+
             const { players, lights, objects } = setup;
             const sceneSpecs = objects.find(o => o.type === SCENE);
             const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);

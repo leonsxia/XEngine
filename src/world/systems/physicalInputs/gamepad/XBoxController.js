@@ -50,6 +50,8 @@ class XBoxController extends InputBase {
 
             this.attachTo.setCursorAndGui(true);
 
+            this.triggered = false;
+
         });
 
     }

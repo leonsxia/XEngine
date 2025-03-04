@@ -464,9 +464,15 @@ class WorldScene {
         
     }
     
-    changeResolution (ratio) {
+    changeResolution(ratio) {
 
         this.resizer.changeResolution(ratio);
+
+    }
+
+    changeScreenAspect(size) {
+
+        this.resizer.changeScreenAspect(size);
 
     }
 

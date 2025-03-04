@@ -3,10 +3,12 @@ import { WEAPONS, GUI_CONFIG, CAMERAS } from "../components/utils/constants";
 import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, setupFunctionPanel } from "../components/utils/guiConfigHelper";
 import { Gui } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcesser";
+import { Resizer } from "./Resizer";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
 const RESOLUTION_RATIO = { '0.5x': 0.5, '0.8x': 0.8, '1x': 1, '2x': 2 };
+const SCREEN_ASPECT = { '16:9': Resizer.SIZE.WIDE, '4:3': Resizer.SIZE.NORMAL, 'Full': Resizer.SIZE.FULL };
 const devicePixelRatio = window.devicePixelRatio;
 
 class GuiMaker {
@@ -83,7 +85,7 @@ class GuiMaker {
 
         const $scene = this.scene;
 
-        let { resolution = 1 } = this.setup;
+        let { resolution = 1, screenSize = Resizer.SIZE.WIDE } = this.setup;
         
         if (devicePixelRatio === 1) resolution = 1;
 
@@ -96,16 +98,30 @@ class GuiMaker {
         this.setupLeftFunctionPanel();
 
         this.guiLeftSpecs.details.push(makeFunctionGuiConfig('Actions', 'actions'));
-        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
-            folder: 'Change Resolution',
-            parent: 'changeResolution',
-            name: 'Ratio',
-            value: { Ratio: resolution },
-            params: RESOLUTION_RATIO,
-            type: 'dropdown',
-            changeFn: $scene.changeResolution.bind($scene),
-            close: true
-        }));
+
+        {
+
+            const folder = makeFolderGuiConfig({ folder: 'Screen', parent: 'screen', close: true });
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Ratio',
+                value: { Ratio: resolution },
+                params: RESOLUTION_RATIO,
+                type: 'dropdown',
+                changeFn: $scene.changeResolution.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Aspect',
+                value: { Aspect: screenSize },
+                params: SCREEN_ASPECT,
+                type: 'dropdown',
+                changeFn: $scene.changeScreenAspect.bind($scene)
+            }));
+
+            this.guiLeftSpecs.details.push(folder);
+
+        }
 
         this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
             folder: 'Select Control',
@@ -217,7 +233,7 @@ class GuiMaker {
                 changeFn: $scene.enableBloom.bind($scene)
             }));
 
-            const bloomStrength = $scene.sceneSetup.settings?.postProcessing?.bloomStrength;
+            const bloomStrength = $scene.setup.postProcessing?.bloomStrength;
             this.bloomSetting.BloomStrength = bloomStrength ? bloomStrength : DEFAULT_BLOOM.strength;
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -228,7 +244,7 @@ class GuiMaker {
                 changeFn: $scene.changeBloomStrength.bind($scene)
             }));
 
-            const bloomRadius = $scene.sceneSetup.settings?.postProcessing?.bloomRadius;
+            const bloomRadius = $scene.setup.postProcessing?.bloomRadius;
             this.bloomSetting.BloomRadius = bloomRadius ? bloomRadius : DEFAULT_BLOOM.radius;
 
             folder.specs.push(makeFolderSpecGuiConfig({

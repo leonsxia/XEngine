@@ -31,27 +31,44 @@ class Resizer {
         
     }
 
+    changeScreenAspect(size) {
+
+        this.#size = size;
+
+        this.setSize();
+
+    }
+
     setSize() {
 
         const width = this.#container.clientWidth;
         const height = this.#container.clientHeight;
         const containerSize = parseFloat(width / height).toFixed(2);
-        const targetSize = parseFloat(this.#size.toFixed(2));
+        const targetSize = this.#size === Resizer.SIZE.FULL ? containerSize : parseFloat(this.#size.toFixed(2));
         let targetWidth = width;
         let targetHeight = height;
 
-        if (containerSize > targetSize) {
+        if (this.#size !== Resizer.SIZE.FULL) {
 
-            targetWidth = targetHeight * this.#size;
+            if (containerSize > targetSize) {
 
-            this.#renderer.domElement.style.setProperty('top', `0px`);
-            this.#renderer.domElement.style.setProperty('left', `${(width - targetWidth) / 2}px`);
+                targetWidth = targetHeight * this.#size;
+
+                this.#renderer.domElement.style.setProperty('top', `0px`);
+                this.#renderer.domElement.style.setProperty('left', `${(width - targetWidth) / 2}px`);
+
+            } else {
+
+                targetHeight = targetWidth / this.#size;
+
+                this.#renderer.domElement.style.setProperty('top', `${(height - targetHeight) / 2}px`);
+                this.#renderer.domElement.style.setProperty('left', `0px`);
+
+            }
 
         } else {
 
-            targetHeight = targetWidth / this.#size;
-
-            this.#renderer.domElement.style.setProperty('top', `${(height - targetHeight) / 2}px`);
+            this.#renderer.domElement.style.setProperty('top', `0px`);
             this.#renderer.domElement.style.setProperty('left', `0px`);
 
         }
@@ -84,7 +101,8 @@ class Resizer {
 
 Resizer.SIZE = {
     WIDE: 16 / 9,
-    NORMAL: 4 / 3
+    NORMAL: 4 / 3,
+    FULL: 1
 }
 
 export { Resizer };
