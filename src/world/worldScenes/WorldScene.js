@@ -306,10 +306,13 @@ class WorldScene {
         // clear picker object
         if (this.enablePick) {
 
+            this.pickedObject = null;            
             this.enablePicking();
             this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, 'disable', 'enable');
 
         }
+
+        this.picker.reset();
 
         if (this.guiMaker?.enabled) {
 
@@ -790,7 +793,7 @@ class WorldScene {
 
         if (this.pickedObject?.isWeapon) {
             
-            this.guiMaker.gui.removeObjects();
+            this.guiMaker.clearObjectsPanel();
             this.objectLocked = false;
         
         };
