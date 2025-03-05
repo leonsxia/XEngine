@@ -22,8 +22,8 @@ function createCollisionPlane(specs, name, position, rotationY, receiveShadow = 
         .setRotationY(rotationY)
         .createRay();
 
-    cPlane.leftArrow.visible = showArrow;
-    cPlane.rightArrow.visible = showArrow;
+    if (cPlane.leftArrow) cPlane.leftArrow.visible = showArrow;
+    if (cPlane.rightArrow) cPlane.rightArrow.visible = showArrow;
 
     return cPlane;
 
@@ -60,8 +60,8 @@ function createCollisionOBBPlane(specs, name, position, rotationY, receiveShadow
         .setRotationY(rotationY)
         .createRay();
 
-    cObbPlane.leftArrow.visible = showArrow;
-    cObbPlane.rightArrow.visible = showArrow;
+    if (cObbPlane.leftArrow) cObbPlane.leftArrow.visible = showArrow;
+    if (cObbPlane.rightArrow) cObbPlane.rightArrow.visible = showArrow;
     
     return cObbPlane;
 
@@ -82,8 +82,10 @@ function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow
     if (createRay) cPlane.createRay();
     
     if (createRay) {
-        cPlane.leftArrow.visible = showArrow;
-        cPlane.rightArrow.visible = showArrow;
+
+        if (cPlane.leftArrow) cPlane.leftArrow.visible = showArrow;
+        if (cPlane.rightArrow) cPlane.rightArrow.visible = showArrow;
+
     }
 
     return cPlane;
