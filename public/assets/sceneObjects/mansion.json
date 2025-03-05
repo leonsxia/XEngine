@@ -884,7 +884,8 @@
                     "isObstacle": true,
                     "climbable": false,
                     "position": [0, -2.425, -4],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "LWall",
@@ -1021,7 +1022,8 @@
                     "enableWallOBBs": true,
                     "movable": false,
                     "climbable": false,
-                    "position": [-12.5, -2.425, 12.5]
+                    "position": [-12.5, -2.425, 12.5],
+                    "transparent": false
                 },
                 {
                     "type": "HexCylinderPillar",
@@ -1037,7 +1039,8 @@
                     "movable": false,
                     "climbable": false,
                     "position": [-12.5, -2.425, -12.5],
-                    "rotationY": 3.1416
+                    "rotationY": 3.1416,
+                    "transparent": false
                 },
                 {
                     "type": "HexCylinderPillar",
@@ -1053,7 +1056,8 @@
                     "movable": false,
                     "climbable": false,
                     "position": [12.5, -2.425, -12.5],
-                    "rotationY": 3.1416
+                    "rotationY": 3.1416,
+                    "transparent": false
                 },
                 {
                     "type": "HexCylinderPillar",
@@ -1069,7 +1073,8 @@
                     "movable": false,
                     "climbable": false,
                     "position": [12.5, -2.425, 12.5],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "ModernCeilingLamp01",

@@ -327,7 +327,8 @@
                         -1.901,
                         0.17749999997930394
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "BoxCube",
@@ -365,7 +366,8 @@
                         -1.901,
                         -1.0240740740878715
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "WoodenPicnicTable",
@@ -493,7 +495,8 @@
                         -2,
                         5
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "LWall",
@@ -533,7 +536,8 @@
                         -0.710000000000001,
                         8
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "Slope",
@@ -564,7 +568,8 @@
                         -1.76,
                         0
                     ],
-                    "rotationY": -1.5708
+                    "rotationY": -1.5708,
+                    "transparent": false
                 },
                 {
                     "type": "Stairs",
@@ -594,7 +599,8 @@
                         -1.14,
                         0.83
                     ],
-                    "rotationY": 1.5708
+                    "rotationY": 1.5708,
+                    "transparent": false
                 },
                 {
                     "type": "ModernCeilingLamp01",

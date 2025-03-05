@@ -26,10 +26,11 @@ class BoxCube extends ObstacleBase {
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1, 1] } = specs;
+        const { transparent = true } = specs;
 
         this._scale = new Array(...scale);
 
-        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap, lines, transparent: true };
+        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap, lines, transparent };
 
         const fbTexScale = [scale[0], scale[1]];
         const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: frontMap, normalMap: frontNormal, texScale: fbTexScale })

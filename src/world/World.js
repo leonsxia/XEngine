@@ -86,6 +86,7 @@ class World {
         this.worldScenes.push(new WorldMatrix(container, this.#renderer, config, this.#movementEventDispatcher));
         
         this.bindMouseEvent();
+        this.bindTouchEvent();
 
     }
 
@@ -311,6 +312,16 @@ class World {
     bindMouseEvent() {
 
         window.addEventListener('mousemove', () => {
+
+            this.setCursorAndGui(true);
+
+        });
+
+    }
+
+    bindTouchEvent() {
+
+        window.addEventListener('touchstart', () => {
 
             this.setCursorAndGui(true);
 

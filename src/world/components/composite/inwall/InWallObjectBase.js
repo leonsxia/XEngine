@@ -112,12 +112,12 @@ class InWallObjectBase {
     makePlaneConfig(specs) {
 
         const { height } = specs;
-        const { baseSize = height, mapRatio, lines = true } = this.specs;
+        const { baseSize = height, mapRatio, lines = true, transparent = true } = this.specs;
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;
         specs.baseSize = baseSize;
-        specs.transparent = true;
+        specs.transparent = transparent;
 
         return specs;
 
@@ -131,7 +131,14 @@ class InWallObjectBase {
             this.#logger.log(`${obj.name}: ${event.message}`);
             obj.setLayers(CAMERA_RAY_LAYER);
             obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
-            obj.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
+
+            const { transparent = true } = obj.specs;
+
+            if (transparent) {
+
+                obj.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
+
+            }
 
         }
         const type = 'visibleChanged';

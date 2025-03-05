@@ -21,6 +21,7 @@ class HexCylinderPillar extends ObstacleBase {
         const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1] } = specs;
+        const { transparent = true } = specs;
 
         this._scale = [scale[0], scale[1], scale[0]];
 
@@ -28,7 +29,7 @@ class HexCylinderPillar extends ObstacleBase {
         const cylinderSpecs = {
             name: `${name}_cylinder`, radius: this._radius, height: this._height, texScale: [this.scale[0], this.scale[1]], segments, baseSize,
             map, normalMap, topMap, topNormal, bottomMap, bottomNormal,
-            mapRatio, rotationC, lines, transparent: true
+            mapRatio, rotationC, lines, transparent
         };
         const chCylinderSpecs = { name: `${name}_collision_hex_cylinder`, radius: this._radius, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
