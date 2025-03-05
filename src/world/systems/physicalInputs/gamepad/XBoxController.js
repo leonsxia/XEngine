@@ -13,6 +13,8 @@ class XBoxController extends InputBase {
     #LStickMoveRight = false;
     #LStickMoveUp = false;
     #LStickMoveDown = false;
+    #RStickMoveLeft = false;
+    #RStickMoveRight = false;
     #APressed = false;
     #XPressed = false;
     #YPressed = false;
@@ -96,12 +98,113 @@ class XBoxController extends InputBase {
 
         const leftStickH = this.gamepad.axes[0];
         const leftStickV = this.gamepad.axes[1];
+        const rightStickH = this.gamepad.axes[2];
+        // const rightStickV = this.gamepad.axes[3];
         
-        const validMin = 0.4;
-        const forwardValidMin = 0.1;
-        const backwardValidMin = 0.45;
+        const LStickHValidMin = 0.4;
+        const LStickForwardValidMin = 0.1;
+        const LStickBackwardValidMin = 0.45;
+        const RStickHValidMin = 0.4;
 
-        if (leftStickH <= - validMin) {
+        if (Math.abs(rightStickH) >= RStickHValidMin) {
+
+            if (this.#LStickMoveUp) {
+
+                this.#LStickMoveUp = false;
+                eventDispatcher.publish(messageType, actions.MOVE_FORWARD, world.current, this.#LStickMoveUp);
+
+            }
+
+            if (this.#LStickMoveDown) {
+
+                this.#LStickMoveDown = false;
+                eventDispatcher.publish(messageType, actions.MOVE_BACKWARD, world.current, this.#LStickMoveDown);
+
+            }
+
+            if (this.#LStickMoveLeft) {
+
+                this.#LStickMoveLeft = false;
+                eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#LStickMoveLeft);
+
+            }
+
+            if (this.#LStickMoveRight) {
+
+                this.#LStickMoveRight = false;
+                eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#LStickMoveRight);
+
+            }
+
+        }
+
+        if (rightStickH <= - RStickHValidMin) {
+
+            this.triggered = true;
+
+            if (!this.#RStickMoveLeft) {
+
+                this.#logger.log(`gamepad R stick moving left: ${rightStickH}`);
+
+                this.#RStickMoveLeft = true;
+                eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#RStickMoveLeft);
+
+                this.#logger.log(`move left: ${this.#RStickMoveLeft}`);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveLeft) {
+
+                this.#logger.log(`gamepad R stick moving left: ${rightStickH}`);
+
+                this.#RStickMoveLeft = false;
+                eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#RStickMoveLeft);
+
+                this.#logger.log(`move left: ${this.#RStickMoveLeft}`);
+
+            }
+
+        }
+
+        if (rightStickH >= RStickHValidMin) {
+
+            this.triggered = true;
+
+            if (!this.#RStickMoveRight) {
+
+                this.#logger.log(`gamepad R stick moving right: ${rightStickH}`);
+
+                this.#RStickMoveRight = true;
+                eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#RStickMoveRight);
+
+                this.#logger.log(`move right: ${this.#RStickMoveRight}`);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveRight) {
+
+                this.#logger.log(`gamepad R stick moving right: ${rightStickH}`);
+
+                this.#RStickMoveRight = false;
+                eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#RStickMoveRight);
+
+                this.#logger.log(`move right: ${this.#RStickMoveRight}`);
+
+            }
+
+        }
+
+        if (Math.abs(rightStickH) >= RStickHValidMin) {            
+                        
+            return;
+
+        }
+
+        if (leftStickH <= - LStickHValidMin) {
 
             this.triggered = true;
 
@@ -131,7 +234,7 @@ class XBoxController extends InputBase {
 
         }
 
-        if (leftStickH >= validMin) {
+        if (leftStickH >= LStickHValidMin) {
 
             this.triggered = true;
 
@@ -161,11 +264,11 @@ class XBoxController extends InputBase {
 
         }
 
-        if (leftStickV <= - forwardValidMin) {
+        if (leftStickV <= - LStickForwardValidMin) {
 
             this.triggered = true;
 
-            if (!this.#LStickMoveUp) {
+            if (!this.#LStickMoveUp && !this.#LStickMoveDown) {
 
                 this.#logger.log(`gamepad L stick moving forward: ${leftStickH}`);
 
@@ -191,11 +294,11 @@ class XBoxController extends InputBase {
 
         }
 
-        if (leftStickV >= backwardValidMin) {
+        if (leftStickV >= LStickBackwardValidMin) {
 
             this.triggered = true;
 
-            if (!this.#LStickMoveDown) {
+            if (!this.#LStickMoveDown && !this.#LStickMoveUp) {
 
                 this.#logger.log(`gamepad L stick moving backward: ${leftStickH}`);
 
