@@ -106,6 +106,7 @@ class XBoxController extends InputBase {
         const LStickBackwardValidMin = 0.45;
         const RStickHValidMin = 0.4;
 
+        // if right stick valid, clear left stick events first
         if (Math.abs(rightStickH) >= RStickHValidMin) {
 
             if (this.#LStickMoveUp) {
@@ -138,6 +139,7 @@ class XBoxController extends InputBase {
 
         }
 
+        // process right stick events
         if (rightStickH <= - RStickHValidMin) {
 
             this.triggered = true;
@@ -198,12 +200,14 @@ class XBoxController extends InputBase {
 
         }
 
+        // if right stick activated, disable left stick, other wise recover left stick events
         if (Math.abs(rightStickH) >= RStickHValidMin) {            
                         
             return;
 
         }
 
+        // if right stick not activated, process left stick events
         if (leftStickH <= - LStickHValidMin) {
 
             this.triggered = true;
