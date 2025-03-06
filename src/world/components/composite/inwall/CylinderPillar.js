@@ -67,8 +67,8 @@ class CylinderPillar extends InWallObjectBase {
         this.face3 = createWallFunction(pSpecs3, `${name}_face3`, [0, 0, 0], Math.PI / 2, receiveShadow, castShadow, showArrow);
         this.face2 = createWallFunction(pSpecs2, `${name}_face2`, [0, 0, 0],  Math.PI / 4, receiveShadow, castShadow, showArrow);
 
-        this.top = createCollisionOctagonFree(topSpecs, `${name}_top`, [0, 0, 0], [- Math.PI * .5, 0, - Math.PI * .125], receiveShadow, false);
-        this.bottom = createCollisionOctagonFree(bottomSpecs, `${name}_bottom`, [0, - 0, 0], [Math.PI * .5, 0, Math.PI * .125], receiveShadow, false);
+        this.top = createCollisionOctagonFree(topSpecs, `${name}_top`, [0, 0, 0], [- Math.PI * .5, 0, - Math.PI * .125], receiveShadow, castShadow);
+        this.bottom = createCollisionOctagonFree(bottomSpecs, `${name}_bottom`, [0, - 0, 0], [Math.PI * .5, 0, Math.PI * .125], receiveShadow, castShadow);
         this.tops = [this.top];
         this.bottoms = [this.bottom];
 
