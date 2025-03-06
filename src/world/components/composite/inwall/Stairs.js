@@ -110,14 +110,14 @@ class Stairs extends Slope {
         const width = this._width * this.scale[0];   
 
         // update sideFaces
-        this.stepLeftSide.setScale([this.scale[2], this.scale[1], 1])
+        this.stepLeftSide.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
             .setPosition([width * .5, 0, 0]);
-        this.stepRightSide.setScale([this.scale[2], this.scale[1], 1])
+        this.stepRightSide.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
             .setPosition([- width * .5, 0, 0]);
 
         // update step front/top
-        this.stepFront.setScale(this.scale);
-        this.stepTop.setScale([this.scale[0], this.scale[2], this.scale[1]]);
+        this.stepFront.setScaleWithTexUpdate(this.scale);
+        this.stepTop.setScaleWithTexUpdate([this.scale[0], this.scale[2], this.scale[1]]);
 
         super.update(needToUpdateOBBnRay);
 

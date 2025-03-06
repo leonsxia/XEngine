@@ -129,22 +129,22 @@ class BoxCube extends ObstacleBase {
         const height = this._height * this.scale[1];
         const depth = this._depth * this.scale[2];
 
-        this.frontFace.setScale([this.scale[0], this.scale[1], 1])
+        this.frontFace.setScaleWithTexUpdate([this.scale[0], this.scale[1], 1])
             .setPosition([0, 0, depth * .5]);
 
-        this.backFace.setScale([this.scale[0], this.scale[1], 1])
+        this.backFace.setScaleWithTexUpdate([this.scale[0], this.scale[1], 1])
             .setPosition([0, 0, - depth * .5]);
 
-        this.leftFace.setScale([this.scale[2], this.scale[1], 1])
+        this.leftFace.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
             .setPosition([width * .5, 0, 0]);
 
-        this.rightFace.setScale([this.scale[2], this.scale[1], 1])
+        this.rightFace.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
             .setPosition([- width * .5, 0, 0]);
 
-        this.topFace.setScale([this.scale[0], this.scale[2], 1])
+        this.topFace.setScaleWithTexUpdate([this.scale[0], this.scale[2], 1])
             .setPosition([0, height * .5, 0]);
 
-        this.bottomFace.setScale([this.scale[0], this.scale[2], 1])
+        this.bottomFace.setScaleWithTexUpdate([this.scale[0], this.scale[2], 1])
             .setPosition([0, - height * .5, 0]);
 
         // update box scale

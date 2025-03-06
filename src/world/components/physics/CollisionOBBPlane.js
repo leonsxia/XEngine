@@ -40,8 +40,7 @@ class CollisionOBBPlane extends CollisionPlane {
 
     update(needToUpdateOBBnRay = true) {
 
-        this.setConfig({ texScale: [this.scale.x, this.scale.y] })
-            .updateTextures();
+        super.updateTexScale();
 
         if (needToUpdateOBBnRay) {
 

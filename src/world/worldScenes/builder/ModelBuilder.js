@@ -169,7 +169,7 @@ class ModelBuilder {
         this.setupObjectTextures(maps, specs);
 
         object = new Plane(specs);
-        object.setScale(scale)
+        object.setScaleWithTexUpdate(scale)
             .setRotation(rotation)
             .setPosition(position)
             .receiveShadow(receiveShadow)
@@ -206,7 +206,7 @@ class ModelBuilder {
         this.setupObjectTextures(maps, specs);
 
         object = new OBBPlane(specs);
-        object.setScale(scale)
+        object.setScaleWithTexUpdate(scale)
             .setRotation(rotation)
             .setPosition(position)
             .receiveShadow(receiveShadow)
@@ -228,7 +228,7 @@ class ModelBuilder {
         this.setupObjectTextures(maps, specs);
 
         object = new CollisionPlane(specs);
-        object.setScale(scale)
+        object.setScaleWithTexUpdate(scale)
             .setRotationY(rotationY)
             .setPosition(position)
             .receiveShadow(receiveShadow)
@@ -251,7 +251,7 @@ class ModelBuilder {
         this.setupObjectTextures(maps, specs);
 
         object = new CollisionOBBPlane(specs);
-        object.setScale(scale)
+        object.setScaleWithTexUpdate(scale)
             .setRotationY(rotationY)
             .setPosition(position)
             .receiveShadow(receiveShadow)

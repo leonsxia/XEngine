@@ -21,7 +21,7 @@ class Circle extends BasicObject {
 
     }
 
-    update() {
+    updateTexScale() {
 
         this.setConfig({ texScale: [this.scale.x] }).updateTextures();
 

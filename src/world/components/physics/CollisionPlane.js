@@ -144,8 +144,7 @@ class CollisionPlane extends Plane {
 
     update(needToUpdateRay = true) {
 
-        this.setConfig({ texScale: [this.scale.x, this.scale.y] })
-            .updateTextures();
+        super.updateTexScale();
 
         if (needToUpdateRay) {
 

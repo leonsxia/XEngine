@@ -229,27 +229,27 @@ class CylinderPillar extends InWallObjectBase {
         this.radius = width * .5 / Math.cos(.375 * Math.PI);
 
         const faceScale = [...this.scale, 1];
-        this.face1.setScale(faceScale)
+        this.face1.setScaleWithTexUpdate(faceScale)
             .setPosition([0, 0, width / 2 + offset]);
-        this.face2.setScale(faceScale)
+        this.face2.setScaleWithTexUpdate(faceScale)
             .setPosition([width / 2 + offset / 2, 0, width / 2 + offset / 2]);
-        this.face3.setScale(faceScale)
+        this.face3.setScaleWithTexUpdate(faceScale)
             .setPosition([width / 2 + offset, 0, 0]);
-        this.face4.setScale(faceScale)
+        this.face4.setScaleWithTexUpdate(faceScale)
             .setPosition([width / 2 + offset / 2, 0, - width / 2 - offset / 2]);
-        this.face5.setScale(faceScale)
+        this.face5.setScaleWithTexUpdate(faceScale)
             .setPosition([0, 0, - width / 2 - offset]);
-        this.face6.setScale(faceScale)
+        this.face6.setScaleWithTexUpdate(faceScale)
             .setPosition([- width / 2 - offset / 2, 0, - width / 2 - offset / 2]);
-        this.face7.setScale(faceScale)
+        this.face7.setScaleWithTexUpdate(faceScale)
             .setPosition([- width / 2 - offset, 0, 0]);
-        this.face8.setScale(faceScale)
+        this.face8.setScaleWithTexUpdate(faceScale)
             .setPosition([- width / 2 - offset / 2, 0, width / 2 + offset / 2]);
 
         const tbScale = [this.scale[0], this.scale[0], 1]
-        this.top.setScale(tbScale)
+        this.top.setScaleWithTexUpdate(tbScale)
             .setPosition([0, height * .5, 0]);
-        this.bottom.setScale(tbScale)
+        this.bottom.setScaleWithTexUpdate(tbScale)
             .setPosition([0, - height * .5, 0]);
 
         if (this.enableOBBs) {

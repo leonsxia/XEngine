@@ -495,7 +495,7 @@ class Room {
             this.frontWall.setConfig({ rotationT, repeatU, repeatV })
                 .setPosition([0, 0, depth * .5])
                 .setRotationY(Math.PI)
-                .setScale(scale);
+                .setScaleFullUpdate(scale);
 
         }
 
@@ -504,7 +504,7 @@ class Room {
             this.backWall.setConfig({ rotationT, repeatU, repeatV })
                 .setPosition([0, 0, - depth * .5])
                 .setRotationY(0)
-                .setScale(scale);
+                .setScaleFullUpdate(scale);
 
         }
 
@@ -513,7 +513,7 @@ class Room {
             this.leftWall.setConfig({ rotationT, repeatU, repeatV })
                 .setPosition([width * .5, 0, 0])
                 .setRotationY(- Math.PI * .5)
-                .setScale(scale);
+                .setScaleFullUpdate(scale);
 
         }
 
@@ -522,7 +522,7 @@ class Room {
             this.rightWall.setConfig({ rotationT, repeatU, repeatV })
                 .setPosition([- width * .5, 0, 0])
                 .setRotationY(Math.PI * .5)
-                .setScale(scale);
+                .setScaleFullUpdate(scale);
 
         }
     }

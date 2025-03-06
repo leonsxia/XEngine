@@ -1069,7 +1069,7 @@ class SceneBuilder {
                         const { scale = [1, 1, 1], rotationT = undefined, repeatU = undefined, repeatV = undefined } = _target;
 
                         find.father.setConfig({ rotationT, repeatU, repeatV })
-                            .setScale(scale);
+                            .setScaleFullUpdate(scale);
 
                     }
 

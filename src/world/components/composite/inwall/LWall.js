@@ -181,25 +181,25 @@ class LWall extends InWallObjectBase {
         const height = this._height * this.scale[1];
         const depth = this._depth * this.scale[2];
 
-        this.outWallT.setScale([this.scale[2], this.scale[1], 1])
+        this.outWallT.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
             .setPosition([- width / 2, 0, 0]);
-        this.outWallS.setScale([this.scale[0], this.scale[1], 1])
+        this.outWallS.setScaleWithTexUpdate([this.scale[0], this.scale[1], 1])
             .setPosition([0, 0, - depth / 2]);
-        this.inWallT.setScale([(depth - thicknessT) / this.defaultThickT, this.scale[1], 1])
+        this.inWallT.setScaleWithTexUpdate([(depth - thicknessT) / this.defaultThickT, this.scale[1], 1])
             .setPosition([- width / 2 + thicknessS, 0, thicknessT / 2]);
-        this.inWallS.setScale([(width - thicknessS) / this.defaultThickS, this.scale[1], 1])
+        this.inWallS.setScaleWithTexUpdate([(width - thicknessS) / this.defaultThickS, this.scale[1], 1])
             .setPosition([thicknessS / 2, 0, - depth / 2 + thicknessT]);
-        this.sideWallT.setScale([thicknessT / this.defaultThickT, this.scale[1], 1])
+        this.sideWallT.setScaleWithTexUpdate([thicknessT / this.defaultThickT, this.scale[1], 1])
             .setPosition([width / 2, 0, - depth / 2 + thicknessT / 2]);
-        this.sideWallS.setScale([thicknessS / this.defaultThickS, this.scale[1], 1])
+        this.sideWallS.setScaleWithTexUpdate([thicknessS / this.defaultThickS, this.scale[1], 1])
             .setPosition([- width / 2 + thicknessS / 2, 0, depth / 2]);
-        this.topWallT.setScale([thicknessS / this.defaultThickS, this.scale[2], 1])
+        this.topWallT.setScaleWithTexUpdate([thicknessS / this.defaultThickS, this.scale[2], 1])
             .setPosition([- (width - thicknessS) * .5, height * .5, 0]);
-        this.topWallS.setScale([(width - thicknessS) / this.defaultThickS, thicknessT / this.defaultThickT, 1])
+        this.topWallS.setScaleWithTexUpdate([(width - thicknessS) / this.defaultThickS, thicknessT / this.defaultThickT, 1])
             .setPosition([thicknessS * .5, height * .5, - (depth - thicknessT) * .5]);
-        this.bottomWallT.setScale([thicknessS / this.defaultThickS, this.scale[2], 1])
+        this.bottomWallT.setScaleWithTexUpdate([thicknessS / this.defaultThickS, this.scale[2], 1])
             .setPosition([- (width - thicknessS) * .5, - height * .5, 0]);
-        this.bottomWallS.setScale([(width - thicknessS) / this.defaultThickS, thicknessT / this.defaultThickT, 1])
+        this.bottomWallS.setScaleWithTexUpdate([(width - thicknessS) / this.defaultThickS, thicknessT / this.defaultThickT, 1])
             .setPosition([thicknessS * .5, - height * .5, - (depth - thicknessT) * .5]);
 
         if (needToUpdateOBBnRay) {

@@ -32,7 +32,7 @@ class StairsStepPlane extends BasicObject {
 
     }
 
-    update() {
+    updateTexScale() {
 
         this.setConfig({ texScale: [this.scale.x, this.scale.y] })
             .updateTextures();

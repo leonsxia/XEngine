@@ -36,7 +36,7 @@ class Plane extends BasicObject {
 
     }
     
-    update() {
+    updateTexScale() {
 
         this.setConfig({ texScale: [this.scale.x, this.scale.y] })
             .updateTextures();

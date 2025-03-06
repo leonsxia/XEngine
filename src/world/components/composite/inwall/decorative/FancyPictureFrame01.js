@@ -41,7 +41,6 @@ class FancyPictureFrame01 extends ObstacleBase {
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
-        this.gltf.setScale(scale);
 
         // collision box
         const cBox = this._cBox = new CollisionBox(cBoxSpecs);
@@ -58,7 +57,7 @@ class FancyPictureFrame01 extends ObstacleBase {
 
         }
 
-        this.update(false, true);
+        this.update(false);
 
         this.cObjects = [cBox];
         this.walls = this.getWalls();
@@ -140,7 +139,7 @@ class FancyPictureFrame01 extends ObstacleBase {
 
     }
 
-    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+    update(needToUpdateOBBnRay = true) {
 
         // update image
         const { img } = this.specs;
@@ -149,15 +148,8 @@ class FancyPictureFrame01 extends ObstacleBase {
 
             const imgPosZ = this._imgPosZ * this.scale[2];
 
-            this._image.setScale([this.scale[0], this.scale[1], 1])
+            this._image.setScaleWithTexUpdate([this.scale[0], this.scale[1], 1])
                 .setPosition([0, 0, imgPosZ]);
-
-            if (needToUpdateTexture) {
-
-                this._image.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                    .updateTextures();
-
-            }
 
         }
 

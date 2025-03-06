@@ -188,6 +188,9 @@ class BasicObject extends EventDispatcher {
     // inherited by child class
     update() {}
 
+    // inherited by child class
+    updateTexScale() {}
+
     get rotationXDegree() {
 
         return MathUtils.radToDeg(this.mesh.rotation.x);
@@ -508,8 +511,8 @@ class BasicObject extends EventDispatcher {
                         break;
                 }
 
-                const xRepeat = this.specs.repeatU = w / (mapRatio * basic);
-                const yRepeat = this.specs.repeatV = h / basic;
+                const xRepeat = w / (mapRatio * basic);
+                const yRepeat = h / basic;
 
                 texture.wrapS = REPEAT_WRAPPING;
                 texture.wrapT = REPEAT_WRAPPING;
@@ -547,7 +550,25 @@ class BasicObject extends EventDispatcher {
 
         this.mesh.scale.set(...scale);
 
+        return this;
+
+    }
+
+    setScaleFullUpdate(scale) {
+
+        this.mesh.scale.set(...scale);
+
         this.update();
+
+        return this;
+
+    }
+
+    setScaleWithTexUpdate(scale) {
+
+        this.mesh.scale.set(...scale);
+
+        this.updateTexScale();
 
         return this;
 
@@ -594,6 +615,7 @@ class BasicObject extends EventDispatcher {
         return this;
 
     }
+
 }
 
 export { BasicObject };

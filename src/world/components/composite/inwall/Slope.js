@@ -219,17 +219,17 @@ class Slope extends InWallObjectBase {
         // update slope
         const slopeHeight = Math.sqrt(depth * depth + height * height);
 
-        this.slope.setScale([this.scale[0], slopeHeight / this._slopeHeight, 1])
+        this.slope.setScaleWithTexUpdate([this.scale[0], slopeHeight / this._slopeHeight, 1])
             .setRotation([- Math.atan(depth / height), 0, 0]);
 
         // update faces
-        this.leftFace.setScale([this.scale[2], this.scale[1], 1])
+        this.leftFace.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
             .setPosition([width * .5, 0, 0]);
-        this.rightFace.setScale([this.scale[2], this.scale[1], 1])
+        this.rightFace.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
             .setPosition([- width * .5, 0, 0]);
-        this.backFace.setScale([this.scale[0], this.scale[1], 1])
+        this.backFace.setScaleWithTexUpdate([this.scale[0], this.scale[1], 1])
             .setPosition([0, 0, - depth * .5]);
-        this.bottomFace.setScale([this.scale[0], this.scale[2], 1])
+        this.bottomFace.setScaleWithTexUpdate([this.scale[0], this.scale[2], 1])
             .setPosition([0, - height * .5, 0]);
 
         // update side obbs

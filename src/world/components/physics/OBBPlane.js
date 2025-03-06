@@ -67,8 +67,7 @@ class OBBPlane extends Plane {
 
     update(needToUpdateOBB = true) {
 
-        this.setConfig({ texScale: [this.scale.x, this.scale.y] })
-            .updateTextures();
+        super.updateTexScale();
 
         if (needToUpdateOBB) {
 

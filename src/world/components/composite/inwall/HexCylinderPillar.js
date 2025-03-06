@@ -102,7 +102,7 @@ class HexCylinderPillar extends ObstacleBase {
 
         this._chCylinder.setScale(this._scale);
 
-        this.cylinder.setScale(this._scale);        
+        this.cylinder.setScaleWithTexUpdate(this._scale);        
 
         this.box.setScale(this._scale);
 
