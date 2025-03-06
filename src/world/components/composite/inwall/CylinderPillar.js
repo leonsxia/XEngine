@@ -152,8 +152,7 @@ class CylinderPillar extends InWallObjectBase {
 
     makePlaneConfig(specs, idx) {
 
-        const { height } = specs;
-        const { baseSize = height, mapRatio, lines = true } = this.specs;
+        const { baseSize = this._height, mapRatio, lines = true } = this.specs;
         const { separatedFace = false } = this.specs;
         const { scale = [1, 1] } = this.specs;
         const { transparent = true } = this.specs;
@@ -221,7 +220,7 @@ class CylinderPillar extends InWallObjectBase {
 
     }
 
-    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+    update(needToUpdateOBBnRay = true) {
 
         const width = this._width * this.scale[0];
         const height = this._height * this.scale[1];
@@ -272,22 +271,6 @@ class CylinderPillar extends InWallObjectBase {
                 .setPosition([0, - height * .5, 0]);
             this.bottomRF2LB.setScale(tbScale)
                 .setPosition([0, - height * .5, 0]);
-
-        }
-
-        if (needToUpdateTexture) {
-
-            this.face1.setConfig({ texScale: this.scale }).updateTextures();
-            this.face2.setConfig({ texScale: this.scale }).updateTextures();
-            this.face3.setConfig({ texScale: this.scale }).updateTextures();
-            this.face4.setConfig({ texScale: this.scale }).updateTextures();
-            this.face5.setConfig({ texScale: this.scale }).updateTextures();
-            this.face6.setConfig({ texScale: this.scale }).updateTextures();
-            this.face7.setConfig({ texScale: this.scale }).updateTextures();
-            this.face8.setConfig({ texScale: this.scale }).updateTextures();
-
-            this.top.setConfig({ texScale: [this.scale[0]] }).updateTextures();
-            this.bottom.setConfig({ texScale: [this.scale[0]] }).updateTextures();
 
         }
 

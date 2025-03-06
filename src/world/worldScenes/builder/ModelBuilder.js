@@ -162,14 +162,15 @@ class ModelBuilder {
     createPlane(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotation = [0, 0, 0], receiveShadow = false, castShadow = false } = specs;
+        const { position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
         const { map, normalMap } = specs;
 
         const maps = [{ map }, { normalMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new Plane(specs);
-        object.setRotation(rotation)
+        object.setScale(scale)
+            .setRotation(rotation)
             .setPosition(position)
             .receiveShadow(receiveShadow)
             .castShadow(castShadow);
@@ -198,14 +199,15 @@ class ModelBuilder {
     createOBBPlane(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotation = [0, 0, 0], receiveShadow = false, castShadow = false, updateOBB = true } = specs;
+        const { position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false, updateOBB = true } = specs;
         const { map, normalMap } = specs;
 
         const maps = [{ map }, { normalMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new OBBPlane(specs);
-        object.setRotation(rotation)
+        object.setScale(scale)
+            .setRotation(rotation)
             .setPosition(position)
             .receiveShadow(receiveShadow)
             .castShadow(castShadow);
@@ -219,14 +221,15 @@ class ModelBuilder {
     createCollisionPlane(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, receiveShadow = false, castShadow = false, updateRay = true } = specs;
+        const { position = [0, 0, 0], rotationY = 0, scale = [1, 1, 1], receiveShadow = false, castShadow = false, updateRay = true } = specs;
         const { map, normalMap } = specs;
 
         const maps = [{ map }, { normalMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new CollisionPlane(specs);
-        object.setRotationY(rotationY)
+        object.setScale(scale)
+            .setRotationY(rotationY)
             .setPosition(position)
             .receiveShadow(receiveShadow)
             .castShadow(castShadow)
@@ -241,14 +244,15 @@ class ModelBuilder {
     createCollisionOBBPlane(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, receiveShadow = false, castShadow = false, updateOBB = true, updateRay = true } = specs;
+        const { position = [0, 0, 0], rotationY = 0, scale = [1, 1, 1], receiveShadow = false, castShadow = false, updateOBB = true, updateRay = true } = specs;
         const { map, normalMap } = specs;
 
         const maps = [{ map }, { normalMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new CollisionOBBPlane(specs);
-        object.setRotationY(rotationY)
+        object.setScale(scale)
+            .setRotationY(rotationY)
             .setPosition(position)
             .receiveShadow(receiveShadow)
             .castShadow(castShadow)

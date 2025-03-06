@@ -78,7 +78,9 @@ class ObstacleBase extends ObstacleMoveable {
     movable = false;    
 
     pushable = false;
-    draggable = false;    
+    draggable = false;
+
+    rays = [];
 
     specs;
 
@@ -174,12 +176,6 @@ class ObstacleBase extends ObstacleMoveable {
         this.group.getWorldPosition(target);
 
         return target.y + this.height * .5;
-
-    }
-
-    get rays() {
-        
-        return [this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay];
 
     }
 
@@ -733,6 +729,8 @@ class ObstacleBase extends ObstacleMoveable {
         this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
         this.backRightRay.layers.set(OBSTACLE_RAY_LAYER);
         this.backRightArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
+
+        this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
 
         return this;
     }

@@ -32,17 +32,14 @@ class BoxCube extends ObstacleBase {
 
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap, lines, transparent };
 
-        const fbTexScale = [scale[0], scale[1]];
-        const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: frontMap, normalMap: frontNormal, texScale: fbTexScale })
-        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal, texScale: fbTexScale });
+        const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: frontMap, normalMap: frontNormal })
+        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal });
 
-        const lrTexScale = [scale[2], scale[1]];
-        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: leftMap, normalMap: leftNormal, texScale: lrTexScale });
-        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: rightMap, normalMap: rightNormal, texScale: lrTexScale });
+        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: leftMap, normalMap: leftNormal });
+        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: rightMap, normalMap: rightNormal });
 
-        const tbTexScale = [scale[0], scale[2]];
-        const topSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal, texScale: tbTexScale });
-        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, texScale: tbTexScale });
+        const topSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
+        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
 
@@ -84,7 +81,7 @@ class BoxCube extends ObstacleBase {
         this.createRay();
         this.showArrows(false);
 
-        this.update(false, false, true);
+        this.update(false, true);
 
         this.group.add(
             this.box.mesh,
@@ -126,7 +123,7 @@ class BoxCube extends ObstacleBase {
 
     }
 
-    update(needToUpdateOBBnRay = true, needToUpdateTexture = true, needToUpdateFaceTrigger = true) {
+    update(needToUpdateOBBnRay = true, needToUpdateFaceTrigger = true) {
 
         const width = this._width * this.scale[0];
         const height = this._height * this.scale[1];
@@ -152,29 +149,6 @@ class BoxCube extends ObstacleBase {
 
         // update box scale
         this.box.setScale(this.scale);
-
-        if (needToUpdateTexture) {
-
-            const { freeTexture } = this.specs;
-
-            if (freeTexture) {
-
-                this.frontFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                    .updateTextures();
-                this.backFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                    .updateTextures();
-                this.leftFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                    .updateTextures();
-                this.rightFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                    .updateTextures();
-                this.topFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
-                    .updateTextures();
-                this.bottomFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
-                    .updateTextures();
-
-            }
-
-        }
 
         if (needToUpdateFaceTrigger) {
 

@@ -428,8 +428,8 @@ class Room {
 
         } else if (mapRatio) {
 
-            specs.repeatU = width / (mapRatio * baseSize);
-            specs.repeatV = height / baseSize;
+            specs.repeatU = this.specs.repeatU = width / (mapRatio * baseSize);
+            specs.repeatV = this.specs.repeatV = height / baseSize;
 
         }
 
@@ -487,41 +487,42 @@ class Room {
 
     resetDefaultWalls() {
 
-        const { width, depth } = this.specs;
+        const { width, depth, rotationT = undefined, repeatU = undefined, repeatV = undefined } = this.specs;
+        const scale = [1, 1, 1];
 
         if (!this.ignoreWall('front')) {
 
-            this.frontWall.setPosition([0, 0, depth * .5])
+            this.frontWall.setConfig({ rotationT, repeatU, repeatV })
+                .setPosition([0, 0, depth * .5])
                 .setRotationY(Math.PI)
-                .updateRay()
-                .updateOBB?.();
+                .setScale(scale);
 
         }
 
         if (!this.ignoreWall('back')) {
 
-            this.backWall.setPosition([0, 0, - depth * .5])
+            this.backWall.setConfig({ rotationT, repeatU, repeatV })
+                .setPosition([0, 0, - depth * .5])
                 .setRotationY(0)
-                .updateRay()
-                .updateOBB?.();
+                .setScale(scale);
 
         }
 
         if (!this.ignoreWall('left')) {
 
-            this.leftWall.setPosition([width * .5, 0, 0])
+            this.leftWall.setConfig({ rotationT, repeatU, repeatV })
+                .setPosition([width * .5, 0, 0])
                 .setRotationY(- Math.PI * .5)
-                .updateRay()
-                .updateOBB?.();
+                .setScale(scale);
 
         }
 
         if (!this.ignoreWall('right')) {
 
-            this.rightWall.setPosition([- width * .5, 0, 0])
+            this.rightWall.setConfig({ rotationT, repeatU, repeatV })
+                .setPosition([- width * .5, 0, 0])
                 .setRotationY(Math.PI * .5)
-                .updateRay()
-                .updateOBB?.();
+                .setScale(scale);
 
         }
     }

@@ -35,6 +35,13 @@ class Plane extends BasicObject {
         return this.geometry.parameters.height * this.mesh.scale.y;
 
     }
+    
+    update() {
+
+        this.setConfig({ texScale: [this.scale.x, this.scale.y] })
+            .updateTextures();
+
+    }
 
     setDoubleSide() {
 

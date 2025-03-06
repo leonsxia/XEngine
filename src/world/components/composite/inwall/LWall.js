@@ -86,7 +86,7 @@ class LWall extends InWallObjectBase {
 
         this.walls = [this.outWallT, this.outWallS, this.inWallT, this.inWallS, this.sideWallT, this.sideWallS];
 
-        this.update(false, true);
+        this.update(false);
 
         this.group.add(
             this.outWallT.mesh,
@@ -173,7 +173,7 @@ class LWall extends InWallObjectBase {
 
     }
 
-    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+    update(needToUpdateOBBnRay = true) {
 
         const thicknessS = this._thicknessS;
         const thicknessT = this._thicknessT;
@@ -201,30 +201,6 @@ class LWall extends InWallObjectBase {
             .setPosition([- (width - thicknessS) * .5, - height * .5, 0]);
         this.bottomWallS.setScale([(width - thicknessS) / this.defaultThickS, thicknessT / this.defaultThickT, 1])
             .setPosition([thicknessS * .5, - height * .5, - (depth - thicknessT) * .5]);
-
-        if (needToUpdateTexture) {
-
-            this.outWallT.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                .updateTextures();
-            this.outWallS.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                .updateTextures();
-            this.inWallT.setConfig({ texScale: [(this.scale[2] - thicknessT) / this.defaultThickT, this.scale[1]] })
-                .updateTextures();
-            this.inWallS.setConfig({ texScale: [(this.scale[0] - thicknessS) / this.defaultThickS, this.scale[1]] })
-                .updateTextures();
-            this.sideWallT.setConfig({ texScale: [thicknessT / this.defaultThickT, this.scale[1]] })
-                .updateTextures();
-            this.sideWallS.setConfig({ texScale: [thicknessS / this.defaultThickS, this.scale[1]] })
-                .updateTextures();
-            this.topWallT.setConfig({ texScale: [thicknessS / this.defaultThickS, this.scale[2]] })
-                .updateTextures();
-            this.topWallS.setConfig({ texScale: [(this.scale[0] - thicknessS) / this.defaultThickS, thicknessT / this.defaultThickT] })
-                .updateTextures();
-            this.bottomWallT.setConfig({ texScale: [thicknessS / this.defaultThickS, this.scale[2]] })
-                .updateTextures();
-            this.bottomWallS.setConfig({ texScale: [(this.scale[0] - thicknessS) / this.defaultThickS, thicknessT / this.defaultThickT] })
-                .updateTextures();
-        }
 
         if (needToUpdateOBBnRay) {
 

@@ -28,17 +28,14 @@ class SquarePillar extends InWallObjectBase {
 
         this._scale = new Array(...scale);
 
-        const fbTexScale = [scale[0], scale[1]];
-        const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: frontMap, normalMap: frontNormal, texScale: fbTexScale })
-        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: backMap, normalMap: backNormal, texScale: fbTexScale });
+        const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: frontMap, normalMap: frontNormal })
+        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: backMap, normalMap: backNormal });
 
-        const lrTexScale = [scale[2], scale[1]];
-        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, map: leftMap, normalMap: leftNormal, texScale: lrTexScale });
-        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, map: rightMap, normalMap: rightNormal, texScale: lrTexScale });
+        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, map: leftMap, normalMap: leftNormal });
+        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, map: rightMap, normalMap: rightNormal });
 
-        const tbTexScale = [scale[0], scale[2]];
-        const topSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal, texScale: tbTexScale });
-        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, texScale: tbTexScale });
+        const topSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
+        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
@@ -143,7 +140,7 @@ class SquarePillar extends InWallObjectBase {
 
     }
 
-    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+    update(needToUpdateOBBnRay = true) {
 
         const width = this._width * this.scale[0];
         const height = this._height * this.scale[1];
@@ -166,23 +163,6 @@ class SquarePillar extends InWallObjectBase {
 
         this.bottomFace.setScale([this.scale[0], this.scale[2], 1])
             .setPosition([0, - height * .5, 0]);
-
-        if (needToUpdateTexture) {
-
-            this.frontFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                .updateTextures();
-            this.backFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                .updateTextures();
-            this.leftFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                .updateTextures();
-            this.rightFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                .updateTextures();
-            this.topFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
-                .updateTextures();
-            this.bottomFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
-                .updateTextures();
-
-        }
 
         if (needToUpdateOBBnRay) {
 

@@ -27,7 +27,7 @@ class HexCylinderPillar extends ObstacleBase {
 
         const boxSpecs = { size: { width: this._radius * 2, depth: this._radius * 2, height: this._height }, lines };
         const cylinderSpecs = {
-            name: `${name}_cylinder`, radius: this._radius, height: this._height, texScale: [this.scale[0], this.scale[1]], segments, baseSize,
+            name: `${name}_cylinder`, radius: this._radius, height: this._height, segments, baseSize,
             map, normalMap, topMap, topNormal, bottomMap, bottomNormal,
             mapRatio, rotationC, lines, transparent
         };
@@ -46,7 +46,7 @@ class HexCylinderPillar extends ObstacleBase {
         const chCylinder = this._chCylinder = new CollisionHexCylinder(chCylinderSpecs);
         chCylinder.setRotationY(Math.PI / 16);
 
-        this.update(false, false);
+        this.update(false);
 
         this.cObjects = [chCylinder];
         this.walls = this.getWalls();
@@ -98,17 +98,10 @@ class HexCylinderPillar extends ObstacleBase {
 
     }
 
-    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+    update(needToUpdateOBBnRay = true) {
 
         this._chCylinder.setScale(this._scale);
 
-        if (needToUpdateTexture) {
-
-            const cylinderConfig = { texScale: [this.scale[0], this.scale[1]] };
-            this.cylinder.setConfig(cylinderConfig);
-            this.cylinder.updateTextures();
-
-        }
         this.cylinder.setScale(this._scale);        
 
         this.box.setScale(this._scale);

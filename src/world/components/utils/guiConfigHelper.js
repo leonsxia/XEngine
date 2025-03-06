@@ -1,5 +1,5 @@
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './constants';
-import { objectFilter, objectFilter2, objectFilter3 } from './objectHelper';
+import { objectFilter, objectFilter2, objectFilter3, objectFilter4 } from './objectHelper';
 
 const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
@@ -893,20 +893,42 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (object.father.isAirWall) {
+        if (objectFilter4(object.father)) {
+
+            if (object.father.material) {
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'rotationTDegree',
+                    prop: 'rotationT',
+                    value: object.father,
+                    params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                    type: 'number'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'repeatU',
+                    prop: 'repeatU',
+                    value: object.father,
+                    params: [- SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                    type: 'number'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'repeatV',
+                    prop: 'repeatV',
+                    value: object.father,
+                    params: [- SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                    type: 'number'
+                }));
+
+            }
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'scaleX',
                 prop: 'scale.x',
                 value: object.father,
                 params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
-                type: 'number',
-                changeFn: () => {
-
-                    object.father.updateRay();
-                    object.father.updateOBB();
-
-                }
+                type: 'number'
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -914,13 +936,7 @@ function makeObjectsGuiConfig(objects) {
                 prop: 'scale.y',
                 value: object.father,
                 params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
-                type: 'number',
-                changeFn: () => {
-
-                    object.father.updateRay();
-                    object.father.updateOBB();
-
-                }
+                type: 'number'
             }));
 
         }

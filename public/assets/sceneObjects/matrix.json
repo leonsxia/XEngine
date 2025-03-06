@@ -638,7 +638,8 @@
                 {
                     "type": "OBBPlane",
                     "width": 30,
-                    "height": 30,
+                    "height": 15,
+                    "scale": [1, 2, 1],
                     "map": "STONE_165",
                     "normalMap": "STONE_165_NORMAL",
                     "name": "room1_floor1",

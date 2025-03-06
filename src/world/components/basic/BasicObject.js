@@ -185,6 +185,9 @@ class BasicObject extends EventDispatcher {
 
     }
 
+    // inherited by child class
+    update() {}
+
     get rotationXDegree() {
 
         return MathUtils.radToDeg(this.mesh.rotation.x);
@@ -221,6 +224,66 @@ class BasicObject extends EventDispatcher {
 
     }
 
+    get rotationTDegree() {
+
+        const { rotationT = 0 } = this.specs;
+        return MathUtils.radToDeg(rotationT);
+
+    }
+
+    set rotationTDegree(val) {
+
+        this.specs.rotationT =  MathUtils.degToRad(val);
+
+        this.updateTextures();
+
+    }
+
+    get rotationT() {
+
+        const { rotationT = 0 } = this.specs;
+        return rotationT;
+
+    }
+
+    set rotationT(val) {
+
+        this.specs.rotationT = val;
+
+        this.updateTextures();
+
+    }
+
+    get repeatU() {
+
+        const { repeatU = 1 } = this.specs;
+        return repeatU;
+
+    }
+
+    set repeatU(val) {
+
+        this.specs.repeatU = val;
+
+        this.updateTextures();
+
+    }
+
+    get repeatV() {
+
+        const { repeatV = 1 } = this.specs;
+        return repeatV;
+
+    }
+
+    set repeatV(val) {
+
+        this.specs.repeatV = val;
+
+        this.updateTextures();
+
+    }
+
     get worldPosition() {
 
         const target = new Vector3();
@@ -247,6 +310,8 @@ class BasicObject extends EventDispatcher {
 
         this.mesh.scale.x = val;
 
+        this.update();
+
     }
 
     get scaleY() {
@@ -259,7 +324,9 @@ class BasicObject extends EventDispatcher {
 
         this.mesh.scale.y = val;
 
-    }
+        this.update();
+
+    }    
 
     get visible() {
 
@@ -333,10 +400,15 @@ class BasicObject extends EventDispatcher {
             
         }
 
-        if (rotationT) {
+        if (rotationT !== null && rotationT !== undefined) {
 
             texture.center.set(.5, .5);
             texture.rotation = rotationT;
+
+        } else {
+
+            texture.center.set(0, 0);
+            texture.rotation = 0;
 
         }
 
@@ -436,8 +508,8 @@ class BasicObject extends EventDispatcher {
                         break;
                 }
 
-                const xRepeat = w / (mapRatio * basic);
-                const yRepeat = h / basic;
+                const xRepeat = this.specs.repeatU = w / (mapRatio * basic);
+                const yRepeat = this.specs.repeatV = h / basic;
 
                 texture.wrapS = REPEAT_WRAPPING;
                 texture.wrapT = REPEAT_WRAPPING;
@@ -474,6 +546,8 @@ class BasicObject extends EventDispatcher {
     setScale(scale) {
 
         this.mesh.scale.set(...scale);
+
+        this.update();
 
         return this;
 

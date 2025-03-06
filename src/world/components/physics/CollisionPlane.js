@@ -141,6 +141,20 @@ class CollisionPlane extends Plane {
         return this;
 
     }
+
+    update(needToUpdateRay = true) {
+
+        this.setConfig({ texScale: [this.scale.x, this.scale.y] })
+            .updateTextures();
+
+        if (needToUpdateRay) {
+
+            this.updateRay();
+
+        }
+
+    }
+
 }
 
 export { CollisionPlane };

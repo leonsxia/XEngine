@@ -1,4 +1,4 @@
-import { BoxCube, CylinderPillar, FancyPictureFrame01, HexCylinderPillar, LWall, ModernCeilingLamp01, RoundWoodenTable, SecurityLight, Slope, SquarePillar, Television01, WoodenPicnicTable } from "../Models";
+import { BoxCube, CylinderPillar, FancyPictureFrame01, HexCylinderPillar, LWall, ModernCeilingLamp01, Plane, RoundWoodenTable, SecurityLight, Slope, SquarePillar, Television01, WoodenPicnicTable } from "../Models";
 
 function clone(target, source, ignore = []) {
 
@@ -170,8 +170,7 @@ function objectFilter2(object) {
 
 function objectFilter3(object) {
 
-    if (object instanceof LWall
-    ) {
+    if (object instanceof LWall) {
 
         return true;
 
@@ -183,4 +182,18 @@ function objectFilter3(object) {
 
 }
 
-export { clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, objectFilter, objectFilter2, objectFilter3 };
+function objectFilter4(object) {
+
+    if (object instanceof Plane) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+}
+
+export { clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, objectFilter, objectFilter2, objectFilter3, objectFilter4 };

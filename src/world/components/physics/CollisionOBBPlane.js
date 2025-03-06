@@ -37,6 +37,21 @@ class CollisionOBBPlane extends CollisionPlane {
 
         return this;
     }
+
+    update(needToUpdateOBBnRay = true) {
+
+        this.setConfig({ texScale: [this.scale.x, this.scale.y] })
+            .updateTextures();
+
+        if (needToUpdateOBBnRay) {
+
+            this.updateRay();
+            this.updateOBB();
+
+        }
+
+    }
+
 }
 
 export { CollisionOBBPlane };

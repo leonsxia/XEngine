@@ -160,6 +160,12 @@ class Cylinder extends BasicObject {
 
     }
 
+    update() {
+
+        this.setConfig({ texScale: [this.scale.x, this.scale.y] }).updateTextures();
+
+    }
+
 }
 
 export { Cylinder };

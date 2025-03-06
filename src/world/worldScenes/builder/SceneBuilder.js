@@ -6,7 +6,7 @@ import {
     ROOM, INSPECTOR_ROOM, SCENE, WATER_CUBE,
 } from '../../components/utils/constants.js';
 import { colorStr, colorArr } from "../../components/basic/colorBase.js";
-import { objectFilter, objectFilter2, objectFilter3 } from "../../components/utils/objectHelper.js";
+import { objectFilter, objectFilter2, objectFilter3, objectFilter4 } from "../../components/utils/objectHelper.js";
 import { ModelBuilder } from "./ModelBuilder.js";
 
 class SceneBuilder {
@@ -896,192 +896,184 @@ class SceneBuilder {
 
             }
 
-            if (!find.father.isFloor && !find.father.isCeiling) {
+            if (find.isGroup) {
 
-                if (find.isGroup) {
+                if (find.father.isWaterCube) {
 
-                    if (find.father.isWaterCube) {
+                    if (updateSetupOnly) {
 
-                        if (updateSetupOnly) {
-
-                            _origin.rotation = this.rotationArr(find.rotation);
-                            _origin.color = new Array(...find.father.waterColor);
-                            _origin.waterScale = find.father.waterScale;
-                            _origin.flowX = find.father.waterFlowX;
-                            _origin.flowY = find.father.waterFlowY;
-
-                        } else {
-
-                            const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
-
-                            find.father.setRotation(rotation);
-                            find.father.waterColor = color;
-                            find.father.waterScale = waterScale;
-                            find.father.waterFlowX = flowX;
-                            find.father.waterFlowY = flowY;
-                            find.father.updateOBBs();
-
-                        }
+                        _origin.rotation = this.rotationArr(find.rotation);
+                        _origin.color = new Array(...find.father.waterColor);
+                        _origin.waterScale = find.father.waterScale;
+                        _origin.flowX = find.father.waterFlowX;
+                        _origin.flowY = find.father.waterFlowY;
 
                     } else {
 
+                        const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
+
+                        find.father.setRotation(rotation);
+                        find.father.waterColor = color;
+                        find.father.waterScale = waterScale;
+                        find.father.waterFlowX = flowX;
+                        find.father.waterFlowY = flowY;
+                        find.father.updateOBBs();
+
+                    }
+
+                } else {
+
+                    if (updateSetupOnly) {
+
+                        _origin.rotationY = find.father.rotationY;
+
+                    } else {
+
+                        const { rotationY = 0 } = _target;
+
+                        find.father.setRotationY(rotationY);
+                        find.father.updateOBBs();
+
+                    }
+
+                    if (objectFilter3(find.father)) {
+
                         if (updateSetupOnly) {
 
-                            _origin.rotationY = find.father.rotationY;
+                            _origin.thicknessS = find.father.thicknessS;
+                            _origin.thicknessT = find.father.thicknessT;
 
                         } else {
 
-                            const { rotationY = 0 } = _target;
+                            const { thicknessS = 0.5, thicknessT = 0.5 } = _target;
 
-                            find.father.setRotationY(rotationY);
-                            find.father.updateOBBs();
-
-                        }
-
-                        if (objectFilter3(find.father)) {
-
-                            if (updateSetupOnly) {
-
-                                _origin.thicknessS = find.father.thicknessS;
-                                _origin.thicknessT = find.father.thicknessT;
-
-                            } else {
-
-                                const { thicknessS = 0.5, thicknessT = 0.5 } = _target;
-
-                                // this will not call update, LWall scale update will call update below
-                                find.father.thicknessS = thicknessS;
-                                find.father.thicknessT = thicknessT;
-
-                            }
-
-                        }
-
-                        if (objectFilter(find.father)) {
-
-                            if (updateSetupOnly) {
-
-                                _origin.scale = new Array(...find.father.scale);
-
-                            } else {
-
-                                const { scale = [1, 1, 1] } = _target;
-
-                                find.father.scale = scale;
-
-                            }
-
-                        } else if (objectFilter2(find.father)) {
-
-                            if (updateSetupOnly) {
-
-                                _origin.scale = new Array(...find.father.scale);
-
-                            } else {
-
-                                const { scale = [1, 1] } = _target;
-
-                                find.father.scale = scale;
-
-                            }
+                            // this will not call update, LWall scale update will call update below
+                            find.father.thicknessS = thicknessS;
+                            find.father.thicknessT = thicknessT;
 
                         }
 
                     }
 
-                } else if (find.isMesh) {
-
-                    if (find.father.isCollision) {
+                    if (objectFilter(find.father)) {
 
                         if (updateSetupOnly) {
 
-                            _origin.rotationY = find.father.rotationY;
-
-                        } else {
-
-                            const { rotationY = 0 } = _target;
-
-                            find.father.setRotationY(rotationY);
-                            find.father.updateRay();
-                            find.father.updateOBB?.();
-                        
-                        }
-
-                    } else if (find.father.isWater) {
-
-                        if (updateSetupOnly) {
-
-                            _origin.rotation = this.rotationArr(find.rotation);
-                            _origin.color = new Array(...find.father.waterColor);
-                            _origin.waterScale = find.father.waterScale;
-                            _origin.flowX = find.father.waterFlowX;
-                            _origin.flowY = find.father.waterFlowY;
-
-                        } else {
-
-                            const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
-
-                            find.father.setRotation(rotation);
-                            find.father.waterColor = color;
-                            find.father.waterScale = waterScale;
-                            find.father.waterFlowX = flowX;
-                            find.father.waterFlowY = flowY;
-
-                        }
-
-                    } else {
-
-                        if (updateSetupOnly) {
-
-                            _origin.rotation = this.rotationArr(find.rotation);
-
-                        } else {
-
-                            const { rotation = [0, 0, 0] } = _target;
-
-                            find.father.setRotation(rotation);
-                            find.father.updateOBB?.();
-
-                        }
-                        
-                    }
-
-                    if (find.father.isAirWall) {
-
-                        if (updateSetupOnly) {
-
-                            _origin.scale = this.scaleArr(find.father.scale);
+                            _origin.scale = new Array(...find.father.scale);
 
                         } else {
 
                             const { scale = [1, 1, 1] } = _target;
 
-                            find.father.setScale(scale);
-                            find.father.updateRay();
-                            find.father.updateOBB?.();
-                        
+                            find.father.scale = scale;
+
+                        }
+
+                    } else if (objectFilter2(find.father)) {
+
+                        if (updateSetupOnly) {
+
+                            _origin.scale = new Array(...find.father.scale);
+
+                        } else {
+
+                            const { scale = [1, 1] } = _target;
+
+                            find.father.scale = scale;
+
                         }
 
                     }
+
                 }
-                
-            }
 
-            if (find.father.isFloor || find.father.isCeiling) {
+            } else if (find.isMesh) {
 
-                if (updateSetupOnly) {
+                if (find.father.isFloor || find.father.isCeiling) {
 
-                    _origin.rotation = this.rotationArr(find.rotation);
+                    if (updateSetupOnly) {
+
+                        _origin.rotation = this.rotationArr(find.rotation);
+
+                    } else {
+
+                        const { rotation = [0, 0, 0] } = _target;
+                        find.father.setRotation(rotation);
+
+                    }
+                        
+                } else if (find.father.isCollision) {
+                    
+                    if (updateSetupOnly) {
+
+                        _origin.rotationY = find.father.rotationY;
+
+                    } else {
+
+                        const { rotationY = 0 } = _target;
+
+                        find.father.setRotationY(rotationY);
+
+                    }
+
+                } else if (find.father.isWater) {
+
+                    if (updateSetupOnly) {
+
+                        _origin.rotation = this.rotationArr(find.rotation);
+                        _origin.color = new Array(...find.father.waterColor);
+                        _origin.waterScale = find.father.waterScale;
+                        _origin.flowX = find.father.waterFlowX;
+                        _origin.flowY = find.father.waterFlowY;
+
+                    } else {
+
+                        const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
+
+                        find.father.setRotation(rotation);
+                        find.father.waterColor = color;
+                        find.father.waterScale = waterScale;
+                        find.father.waterFlowX = flowX;
+                        find.father.waterFlowY = flowY;
+
+                    }
 
                 } else {
 
-                    const { rotation = [0, 0, 0] } = _target;
+                    if (updateSetupOnly) {
 
-                    find.father.setRotation(rotation);
-                    find.father.updateOBB?.();
+                        _origin.rotation = this.rotationArr(find.rotation);
+
+                    } else {
+
+                        const { rotation = [0, 0, 0] } = _target;
+
+                        find.father.setRotation(rotation);
+                        find.father.updateOBB?.();
+
+                    }
 
                 }
 
+                if (objectFilter4(find.father)) {
+
+                    if (updateSetupOnly) {
+
+                        _origin.scale = this.scaleArr(find.father.scale);
+                        _origin.rotationT = find.father.specs.rotationT;
+                        _origin.repeatU = find.father.specs.repeatU;
+                        _origin.repeatV = find.father.specs.repeatV;
+
+                    } else {
+
+                        const { scale = [1, 1, 1], rotationT = undefined, repeatU = undefined, repeatV = undefined } = _target;
+
+                        find.father.setConfig({ rotationT, repeatU, repeatV })
+                            .setScale(scale);
+
+                    }
+
+                }
             }
 
             if (!updateSetupOnly) {

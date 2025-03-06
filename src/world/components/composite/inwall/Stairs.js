@@ -42,7 +42,7 @@ class Stairs extends Slope {
 
         this.setPickLayers();
 
-        this.update(false, true);
+        this.update(false);
 
     }
 
@@ -105,7 +105,7 @@ class Stairs extends Slope {
 
     }
 
-    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+    update(needToUpdateOBBnRay = true) {
 
         const width = this._width * this.scale[0];   
 
@@ -119,24 +119,7 @@ class Stairs extends Slope {
         this.stepFront.setScale(this.scale);
         this.stepTop.setScale([this.scale[0], this.scale[2], this.scale[1]]);
 
-        if (needToUpdateTexture) {
-
-            this.stepLeftSide.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                .updateTextures();
-            this.stepRightSide.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                .updateTextures();
-            this.backFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                .updateTextures();
-            this.bottomFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
-                .updateTextures();
-            this.stepFront.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                .updateTextures();
-            this.stepTop.setConfig({ texScale: [this.scale[0], this.scale[2]] })
-                .updateTextures();
-
-        }
-
-        super.update(needToUpdateOBBnRay, false);
+        super.update(needToUpdateOBBnRay);
 
     }
 

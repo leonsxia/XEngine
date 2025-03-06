@@ -88,7 +88,7 @@ class Slope extends InWallObjectBase {
 
         if (needUpdate) {
 
-            this.update(false, true);
+            this.update(false);
 
         }
 
@@ -200,7 +200,7 @@ class Slope extends InWallObjectBase {
 
     }
 
-    update(needToUpdateOBBnRay = true, needToUpdateTexture = true) {
+    update(needToUpdateOBBnRay = true) {
 
         const width = this._width * this.scale[0];
         const height = this._height * this.scale[1];
@@ -239,21 +239,6 @@ class Slope extends InWallObjectBase {
             .setPosition([width * .5, bottomY, 0]);
         this.rightOBBFace.setScale([this.scale[2], 1, 1])
             .setPosition([- width * .5, bottomY, 0]);
-
-        if (needToUpdateTexture) {
-
-            this.slope.setConfig({ texScale: [this.scale[0], slopeHeight / this._slopeHeight] })
-                .updateTextures();
-            this.leftFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                .updateTextures();
-            this.rightFace.setConfig({ texScale: [this.scale[2], this.scale[1]] })
-                .updateTextures();
-            this.backFace.setConfig({ texScale: [this.scale[0], this.scale[1]] })
-                .updateTextures();
-            this.bottomFace.setConfig({ texScale: [this.scale[0], this.scale[2]] })
-                .updateTextures();
-
-        }
 
         if (needToUpdateOBBnRay) {
 

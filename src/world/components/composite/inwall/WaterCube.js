@@ -11,7 +11,7 @@ class WaterCube extends ObstacleBase {
     _color;
     _flowX;
     _flowY;
-    _scale;
+    _waterScale;
     waterFace;
     faces = [];
 
@@ -28,7 +28,7 @@ class WaterCube extends ObstacleBase {
 
         this._waterDensity = waterDensity;
         this._color = new Array(...color);
-        this._scale = waterScale;
+        this._waterScale = waterScale;
         this._flowX = flowX;
         this._flowY = flowY;
         
@@ -123,13 +123,13 @@ class WaterCube extends ObstacleBase {
 
     get waterScale() {
 
-        return this._scale;
+        return this._waterScale;
 
     }
 
     set waterScale(scale) {
 
-        this._scale = new Array(...scale);
+        this._waterScale = scale;
         this.waterFace.mesh.material.uniforms[ 'config' ].value.w = scale;
 
     }

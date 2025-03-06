@@ -28,6 +28,7 @@ class Tofu extends Moveable2D {
     rightRay;
     backLeftRay;
     backRightRay;
+    rays = [];
     
     leftArrow;
     rightArrow;
@@ -346,12 +347,6 @@ class Tofu extends Moveable2D {
 
     }
 
-    get rays() {
-        
-        return [this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay];
-
-    }
-
     get leftCorVec3() {
 
         return new Vector3(this.#w * .5, 0, this.#d * .5);
@@ -565,6 +560,8 @@ class Tofu extends Moveable2D {
         this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
         this.backRightRay.layers.set(PLAYER_RAY_LAYER);
         this.backRightArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
+
+        this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
 
         return this;
     }
