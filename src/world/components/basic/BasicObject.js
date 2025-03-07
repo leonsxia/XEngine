@@ -432,12 +432,17 @@ class BasicObject extends EventDispatcher {
 
         if (!noRepeat) {
 
-            if (repeatU && repeatV) {
+            if (repeatU || repeatV) {
 
                 texture.wrapS = repeatModeU;   // horizontal
                 texture.wrapT = repeatModeV;   // vertical
 
-                texture.repeat.set(repeatU, repeatV);
+                const u = repeatU ?? 1;
+                const v = repeatV ?? 1;
+                this.specs.repeatU = u;
+                this.specs.repeatV = v;
+
+                texture.repeat.set(u, v);
 
             } else if (mapRatio) {
 
