@@ -509,6 +509,9 @@ class SceneBuilder {
 
         }
 
+        // clear picked object first
+        this.worldScene.clearPickedObject();
+
         for (let i = 0, il = sceneSpecs.children.length; i < il; i++) {
 
             const o = sceneSpecs.children[i];

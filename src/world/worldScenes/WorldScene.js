@@ -1061,6 +1061,14 @@ class WorldScene {
 
     }
 
+    clearPickedObject() {
+
+        this.pickedObject = null;
+        this.postProcessor.clearOutlineObjects();
+        this.guiMaker.clearObjectsPanel();
+
+    }
+
     enableFXAA(enable) {
 
         const e = enable === 'enable' ? true : false;
