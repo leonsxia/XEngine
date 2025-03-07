@@ -1049,21 +1049,37 @@ function makeObjectsGuiConfig(objects) {
                 }
             }));
 
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'scaleX',
-                prop: 'scale.x',
-                value: object.father,
-                params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
-                type: 'number'
-            }));
+            if (object.father.isWater || object.father.isWaterCube) {
 
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'scaleY',
-                prop: 'scale.y',
-                value: object.father,
-                params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
-                type: 'number'
-            }));
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'scaleX',
+                    prop: 'scale.x',
+                    value: object.father,
+                    params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
+                    type: 'number'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'scaleY',
+                    prop: 'scale.y',
+                    value: object.father,
+                    params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
+                    type: 'number'
+                }));
+
+            }
+
+            if (object.father.isWaterCube) {
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'scaleZ',
+                    prop: 'scale.z',
+                    value: object.father,
+                    params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
+                    type: 'number'
+                }));
+
+            }
 
         }
 

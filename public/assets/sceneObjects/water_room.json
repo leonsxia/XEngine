@@ -380,9 +380,7 @@
                 {
                     "type": "WaterCube",
                     "name": "drowning_pool",
-                    "width": 15,
-                    "height": 4,
-                    "depth": 6,
+                    "scale": [15, 4, 6],
                     "color": [139, 216, 248],
                     "position": [0, -2.5, 0],
                     "rotation": [0, 0, 0],

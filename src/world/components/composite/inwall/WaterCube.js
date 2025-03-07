@@ -8,12 +8,22 @@ class WaterCube extends ObstacleBase {
 
     isWaterCube = true;
 
+    _width = 1;
+    _height = 1;
+    _depth = 1;
+
     _color;
     _flowX;
     _flowY;
     _waterScale;
     waterFace;
     faces = [];
+
+    frontFace;
+    backFace;
+    leftFace;
+    rightFace;
+    bottomFace;
 
     _waterDensity = 1;
     
@@ -22,9 +32,13 @@ class WaterCube extends ObstacleBase {
         super(specs);
 
         this.specs = specs;
-        const { name, width, depth, height, waterDensity = 1 } = specs;
+
+        const { name, waterDensity = 1 } = specs;
         const { color = [255, 255, 255], flowX = 1, flowY = 0, waterScale = 1, flowSpeed = 0.03, normalMap0, normalMap1 } = specs;
         const waterColor = colorHex(...color);
+        const { scale = [1, 1, 1] } = specs;
+
+        this._scale = new Array(...scale);
 
         this._waterDensity = waterDensity;
         this._color = new Array(...color);
@@ -32,33 +46,35 @@ class WaterCube extends ObstacleBase {
         this._flowX = flowX;
         this._flowY = flowY;
         
-        const boxSpecs = { size: { width, depth, height } };
+        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height } };
 
-        const FBSpecs = { width, height, color: waterColor, transparent: true };
-        const LRSpecs = { width: depth, height, color: waterColor, transparent: true };
-        const TBSpecs = { width, height: depth, color: waterColor, transparent: true };
-        const waterSpecs = { width, height: depth, color, flowX, flowY, waterScale, flowSpeed, normalMap0, normalMap1 };
+        const FBSpecs = { width: this._width, height: this._height, color: waterColor, transparent: true };
+        const LRSpecs = { width: this._depth, height: this._height, color: waterColor, transparent: true };
+        const TBSpecs = { width: this._width, height: this._depth, color: waterColor, transparent: true };
+        const waterSpecs = { width: this._width, height: this._depth, color, flowX, flowY, waterScale, flowSpeed, normalMap0, normalMap1 };
 
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], false, false);
 
-        const frontFace = new Plane(FBSpecs);
-        const backFace = new Plane(FBSpecs);
-        const leftFace = new Plane(LRSpecs);
-        const rightFace = new Plane(LRSpecs);
-        const bottomFace = new Plane(TBSpecs);
+        const frontFace = this.frontFace = new Plane(FBSpecs);
+        const backFace = this.backFace = new Plane(FBSpecs);
+        const leftFace = this.leftFace = new Plane(LRSpecs);
+        const rightFace = this.rightFace = new Plane(LRSpecs);
+        const bottomFace = this.bottomFace = new Plane(TBSpecs);
 
         this.waterFace = new WaterPlane(waterSpecs);
 
-        this.setFace(frontFace, `${name}_front`, [0, 0, depth * .5], [0, 0, 0]);
-        this.setFace(backFace, `${name}_back`, [0, 0, - depth * .5], [0, Math.PI, 0]);
-        this.setFace(leftFace, `${name}_left`, [width * .5, 0, 0], [0, Math.PI * .5, 0]);
-        this.setFace(rightFace, `${name}_right`, [- width * .5, 0, 0], [0, - Math.PI * .5, 0]);
-        this.setFace(bottomFace, `${name}_bottom`, [0, - height * .5, 0], [Math.PI * .5, 0, 0]);
-        this.setFace(this.waterFace, `${name}_water`, [0, height * .5, 0], [- Math.PI * .5, 0, 0], false);
+        this.setFace(frontFace, `${name}_front`, [0, 0, 0], [0, 0, 0]);
+        this.setFace(backFace, `${name}_back`, [0, 0, 0], [0, Math.PI, 0]);
+        this.setFace(leftFace, `${name}_left`, [0, 0, 0], [0, Math.PI * .5, 0]);
+        this.setFace(rightFace, `${name}_right`, [0, 0, 0], [0, - Math.PI * .5, 0]);
+        this.setFace(bottomFace, `${name}_bottom`, [0, 0, 0], [Math.PI * .5, 0, 0]);
+        this.setFace(this.waterFace, `${name}_water`, [0, 0, 0], [- Math.PI * .5, 0, 0], false);
 
         this.faces = [frontFace, backFace, leftFace, rightFace, bottomFace];
 
         this.box.visible = false;
+
+        this.update();
 
         this.group.add(
             this.box.mesh,
@@ -197,6 +213,42 @@ class WaterCube extends ObstacleBase {
         this.group.rotation.z = MathUtils.degToRad(value);
 
     }
+
+    update(needToUpdateOBBnRay = true) {
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+
+        this.frontFace.setScaleWithTexUpdate([this.scale[0], this.scale[1], 1])
+            .setPosition([0, 0, depth * .5]);
+
+        this.backFace.setScaleWithTexUpdate([this.scale[0], this.scale[1], 1])
+            .setPosition([0, 0, - depth * .5]);
+
+        this.leftFace.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
+            .setPosition([width * .5, 0, 0]);
+
+        this.rightFace.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
+            .setPosition([- width * .5, 0, 0]);        
+
+        this.bottomFace.setScaleWithTexUpdate([this.scale[0], this.scale[2], 1])
+            .setPosition([0, - height * .5, 0]);
+
+        this.waterFace.setScaleWithTexUpdate([this.scale[0], this.scale[2], 1])
+            .setPosition([0, height * .5, 0]);
+
+        // update box scale
+        this.box.setScale(this.scale);
+
+        if (needToUpdateOBBnRay) {
+            
+            this.updateOBBs();
+
+        }
+
+    }
+
 }
 
 export { WaterCube };
