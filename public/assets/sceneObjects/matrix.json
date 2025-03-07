@@ -260,7 +260,7 @@
                     "divisions": 100,
                     "position": [
                         0,
-                        0.01,
+                        -0.01,
                         0
                     ]
                 }
@@ -491,7 +491,7 @@
                     "isObstacle": true,
                     "climbable": true,
                     "position": [
-                        0,
+                        -5.32,
                         -2,
                         5
                     ],
@@ -537,6 +537,88 @@
                         8
                     ],
                     "rotationY": 0,
+                    "transparent": false
+                },
+                {
+                    "type": "LWall",
+                    "thicknessS": 0.3,
+                    "thicknessT": 0.3,
+                    "scale": [
+                        4,
+                        1,
+                        3
+                    ],
+                    "baseSize": 4.6,
+                    "outTMap": "BRICK_159",
+                    "outTNormal": "BRICK_159_NORMAL",
+                    "outSMap": "BRICK_159",
+                    "outSNormal": "BRICK_159_NORMAL",
+                    "inTMap": "BRICK_159",
+                    "inTNormal": "BRICK_159_NORMAL",
+                    "inSMap": "BRICK_159",
+                    "inSNormal": "BRICK_159_NORMAL",
+                    "sideTMap": "BRICK_159",
+                    "sideTNormal": "BRICK_159_NORMAL",
+                    "sideSMap": "BRICK_159",
+                    "sideSNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room1_pool_LWall1",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "enableOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [
+                        0,
+                        -2,
+                        5
+                    ],
+                    "rotationY": 0,
+                    "transparent": false
+                },
+                {
+                    "type": "LWall",
+                    "thicknessS": 0.3,
+                    "thicknessT": 0.3,
+                    "scale": [
+                        4,
+                        1,
+                        3
+                    ],
+                    "baseSize": 4.6,
+                    "outTMap": "BRICK_159",
+                    "outTNormal": "BRICK_159_NORMAL",
+                    "outSMap": "BRICK_159",
+                    "outSNormal": "BRICK_159_NORMAL",
+                    "inTMap": "BRICK_159",
+                    "inTNormal": "BRICK_159_NORMAL",
+                    "inSMap": "BRICK_159",
+                    "inSNormal": "BRICK_159_NORMAL",
+                    "sideTMap": "BRICK_159",
+                    "sideTNormal": "BRICK_159_NORMAL",
+                    "sideSMap": "BRICK_159",
+                    "sideSNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room1_pool_LWall2",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "enableOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [
+                        0,
+                        -2,
+                        5.3
+                    ],
+                    "rotationY": 3.1416,
                     "transparent": false
                 },
                 {
@@ -664,7 +746,35 @@
             "ceilings": [],
             "walls": [],
             "insideWalls": [],
-            "waters": []
+            "waters": [
+                {
+                    "type": "WaterPlane",
+                    "name": "drowning_pool",
+                    "width": 1,
+                    "height": 1,
+                    "scale": [
+                        3.4,
+                        2.7,
+                        1
+                    ],
+                    "color": [
+                        219,
+                        255,
+                        249
+                    ],
+                    "position": [
+                        0,
+                        -1.78,
+                        5.15
+                    ],
+                    "rotation": [
+                        -1.5708,
+                        0,
+                        0
+                    ],
+                    "flowSpeed": 0.01
+                }
+            ]
         }
     ]
 }

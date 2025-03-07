@@ -1023,6 +1023,7 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
+                        _origin.scale = this.scaleArr(find.father.scale);
                         _origin.rotation = this.rotationArr(find.rotation);
                         _origin.color = new Array(...find.father.waterColor);
                         _origin.waterScale = find.father.waterScale;
@@ -1031,9 +1032,10 @@ class SceneBuilder {
 
                     } else {
 
-                        const { rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
+                        const { scale = [1, 1, 1], rotation = [0, 0, 0], color = [255, 255, 255], waterScale = 1, flowX = 1, flowY = 0 } = _target;
 
-                        find.father.setRotation(rotation);
+                        find.father.setScale(scale)
+                            .setRotation(rotation);
                         find.father.waterColor = color;
                         find.father.waterScale = waterScale;
                         find.father.waterFlowX = flowX;

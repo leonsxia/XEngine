@@ -12,7 +12,10 @@ class WaterPlane extends BasicObject {
     _color;
     _flowX;
     _flowY;
-    _scale;  // waterScale
+    _waterScale;  // waterScale
+
+    _normalMap0;
+    _normalMap1;
 
     constructor(specs) {
 
@@ -24,15 +27,11 @@ class WaterPlane extends BasicObject {
         const waterColor = colorStr(...color);
         const flowDirection = new Vector2(flowX, flowY);
 
-        if (!normalMap0 && !normalMap1) {
-
-            normalMap0 = loadedTextures[TEXTURE_NAMES.WATER_1_M_NORMAL];
-            normalMap1 = loadedTextures[TEXTURE_NAMES.WATER_2_M_NORMAL];
-
-        }
+        this._normalMap0 = normalMap0 ?? loadedTextures[TEXTURE_NAMES.WATER_1_M_NORMAL];
+        this._normalMap1 = normalMap1 ?? loadedTextures[TEXTURE_NAMES.WATER_2_M_NORMAL];
 
         this._color = new Array(...color);
-        this._scale = waterScale;
+        this._waterScale = waterScale;
         this._flowX = flowX;
         this._flowY = flowY;
         
@@ -43,8 +42,8 @@ class WaterPlane extends BasicObject {
             flowSpeed,
             textureWidth,
             textureHeight,
-            normalMap0,
-            normalMap1
+            normalMap0: this._normalMap0,
+            normalMap1: this._normalMap1
         };
         this.mesh = new Water(this.geometry, waterConfig);
 
@@ -69,13 +68,13 @@ class WaterPlane extends BasicObject {
 
     get waterScale() {
 
-        return this._scale;
+        return this._waterScale;
 
     }
 
     set waterScale(scale) {
 
-        this._scale = new Array(...scale);
+        this._waterScale = scale;
         this.mesh.material.uniforms[ 'config' ].value.w = scale;
 
     }
@@ -117,6 +116,33 @@ class WaterPlane extends BasicObject {
     get height() {
 
         return this.geometry.parameters.height * this.mesh.scale.y;
+
+    }
+
+    updateTexScale() {
+
+        this.setConfig({ 
+            texScale: [this.scale.x, this.scale.y], 
+            mapRatio: this.geometry.parameters.width / this.geometry.parameters.height
+        });
+
+        if (this._normalMap0) {
+
+            this.setTexture(this._normalMap0, true);
+
+        }
+
+        if (this._normalMap1) {
+
+            this.setTexture(this._normalMap1, true);
+
+        }
+
+    }
+
+    update() {
+
+        this.updateTexScale();
 
     }
 

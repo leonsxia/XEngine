@@ -7,6 +7,7 @@ const DEFALUT_GRID_DEPTH = 50;
 const NUMBER_STEPS = .01;
 const SCALE_MIN = .1;
 const SCALE_MAX = 10;
+const WATER_SCALE_MAX = 30;
 const PICKED_NUMBER_STEPS = .01;
 const PICKED_ANGLE_STEPS = .1;
 
@@ -1047,6 +1048,23 @@ function makeObjectsGuiConfig(objects) {
 
                 }
             }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleX',
+                prop: 'scale.x',
+                value: object.father,
+                params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'scaleY',
+                prop: 'scale.y',
+                value: object.father,
+                params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
         }
 
         if (object.father.isWater || object.father.isWaterCube) {
@@ -1066,7 +1084,7 @@ function makeObjectsGuiConfig(objects) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'waterScale',
-                prop: 'scale',
+                prop: 'waterScale',
                 value: object.father,
                 params: [1, 10, PICKED_NUMBER_STEPS],
                 type: 'number'

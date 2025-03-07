@@ -450,6 +450,7 @@ class BasicObject extends EventDispatcher {
 
                 switch(this.type) {
                     case PLANE:
+                    case WATER_PLANE:
                     case BOX:
                     case TRIANGLE:
                     case STAIRS_SIDE:

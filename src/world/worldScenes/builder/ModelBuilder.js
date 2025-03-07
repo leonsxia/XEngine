@@ -182,14 +182,15 @@ class ModelBuilder {
     createWaterPlane(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
+        const { position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1] } = specs;
         const { normalMap0, normalMap1 } = specs;
 
         const maps = [{ normalMap0 }, { normalMap1 }];
         this.setupObjectTextures(maps, specs);
 
         object = new WaterPlane(specs);
-        object.setRotation(rotation)
+        object.setScaleWithTexUpdate(scale)
+            .setRotation(rotation)
             .setPosition(position);
 
         return object;
