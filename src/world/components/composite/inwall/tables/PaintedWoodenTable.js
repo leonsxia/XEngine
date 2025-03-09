@@ -6,11 +6,13 @@ const GLTF_SRC = 'inRoom/tables/painted_wooden_table_1k/painted_wooden_table_1k.
 
 class PaintedWoodenTable extends ObstacleBase {
 
-    width = 2.4;
-    height = .963845;
-    depth = 1.14177;
+    _width = 2.4;
+    _height = .963845;
+    _depth = 1.14177;
 
     gltf;
+
+    _cBox;
 
     constructor(specs) {
         super(specs);
@@ -20,27 +22,26 @@ class PaintedWoodenTable extends ObstacleBase {
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
-        this.width *= scale[0];
-        this.height *= scale[1];
-        this.depth *= scale[2];
+        this._scale = new Array(...scale);
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow };
 
-        const boxSpecs = { size: { width: this.width, depth: this.depth, height: this.height }, lines };
+        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 
-        const cBoxSpecs = { name, width: this.width, depth: this.depth, height: this.height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxSpecs = { name, width: this._width, depth: this._depth, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
-        this.gltf.setScale(scale);
 
         // obb box
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.box.visible = false;
 
         // collision box
-        const cBox = new CollisionBox(cBoxSpecs);
+        const cBox = this._cBox = new CollisionBox(cBoxSpecs);
+
+        this.update(false);
 
         this.cObjects = [cBox];
         this.walls = this.getWalls();
@@ -56,7 +57,7 @@ class PaintedWoodenTable extends ObstacleBase {
             this.gltf.group,
             this.box.mesh
         );
-        
+
     }
 
     async init() {
@@ -64,6 +65,25 @@ class PaintedWoodenTable extends ObstacleBase {
         await this.gltf.init();
 
         this.setPickLayers();
+
+    }
+
+    update(needToUpdateOBBnRay = true) {
+
+        // update cBox scale
+        this._cBox.setScale(this.scale);
+
+        // update gltf scale
+        this.gltf.setScale(this.scale);
+
+        // update box scale
+        this.box.setScale(this.scale);
+
+        if (needToUpdateOBBnRay) {
+
+            this.updateOBBs();
+
+        }
 
     }
 

@@ -1,4 +1,19 @@
-import { BoxCube, CylinderPillar, FancyPictureFrame01, HexCylinderPillar, LWall, ModernCeilingLamp01, Plane, RoundWoodenTable, SecurityLight, Slope, SquarePillar, Television01, WoodenPicnicTable } from "../Models";
+import { 
+    BoxCube, CylinderPillar, HexCylinderPillar, LWall, Plane, Slope, SquarePillar, 
+    ModernCeilingLamp01, SecurityLight, Television01, 
+    FancyPictureFrame01, 
+    RoundWoodenTable,  VintageGrandfatherClock, WoodenPicnicTable, 
+    PaintedWoodenBlueChair,
+    PaintedWoodenStool,
+    PaintedWoodenWhiteChair,
+    Sofa03,
+    PaintedWoodenBlueCabinet,
+    PaintedWoodenWhiteCabinet,
+    Shelf01,
+    PaintedWoodenNightstand,
+    PaintedWoodenTable,
+    WoodenSmallTable
+} from "../Models";
 
 function clone(target, source, ignore = []) {
 
@@ -137,7 +152,18 @@ function objectFilter(object) {
         object instanceof WoodenPicnicTable ||
         object instanceof Television01 ||
         object instanceof SecurityLight ||
-        object instanceof FancyPictureFrame01
+        object instanceof FancyPictureFrame01 ||
+        object instanceof VintageGrandfatherClock ||
+        object instanceof PaintedWoodenBlueChair ||
+        object instanceof PaintedWoodenStool ||
+        object instanceof PaintedWoodenWhiteChair ||
+        object instanceof Sofa03 ||
+        object instanceof PaintedWoodenBlueCabinet ||
+        object instanceof PaintedWoodenWhiteCabinet ||
+        object instanceof Shelf01 ||
+        object instanceof PaintedWoodenNightstand ||
+        object instanceof PaintedWoodenTable ||
+        object instanceof WoodenSmallTable
     ) {
 
         return true;

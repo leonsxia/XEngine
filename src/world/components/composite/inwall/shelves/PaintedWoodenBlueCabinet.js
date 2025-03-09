@@ -6,13 +6,18 @@ const GLTF_SRC = 'inRoom/shelves/painted_wooden_cabinet_02_1k/painted_wooden_cab
 
 class PaintedWoodenBlueCabinet extends ObstacleBase {
 
-    width = 1;
-    height = 2.6;
-    depth = .665;
-    frontHeight = 1.169;
-    backDepth = .388;
+    _width = 1;
+    _height = 2.6;
+    _depth = .665;
+    _frontHeight = 1.169;
+    _backDepth = .388;
+
+    _frontDepth = this._depth - this._backDepth;
 
     gltf;
+
+    _cBoxFront;
+    _cBoxBack;
 
     constructor(specs) {
 
@@ -23,20 +28,15 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
-        this.width *= scale[0];
-        this.height *= scale[1];
-        this.depth *= scale[2];
-        this.frontHeight *= scale[1];
-        this.backDepth *= scale[2];
+        this._scale = new Array(...scale);
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow };
 
-        const boxSpecs = { size: { width: this.width, depth: this.depth, height: this.height }, lines };
+        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 
-        const frontDepth = this.depth - this.backDepth;
-        const cBoxFrontSpecs = { name: `${name}_front`, width: this.width, depth: frontDepth, height: this.frontHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
-        const cBoxBackSpecs = { name: `${name}_back`, width: this.width, depth: this.backDepth, height: this.height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxFrontSpecs = { name: `${name}_front`, width: this._width, depth: this._frontDepth, height: this._frontHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxBackSpecs = { name: `${name}_back`, width: this._width, depth: this._backDepth, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
@@ -47,13 +47,10 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
         this.box.visible = false;
 
         // collision box
-        const cBoxFront = new CollisionBox(cBoxFrontSpecs);
-        const cBoxBack = new CollisionBox(cBoxBackSpecs);
-        const frontY = (this.frontHeight - this.height) * .5;
-        const frontZ = (this.depth - frontDepth) * .5;
-        const backZ = (this.backDepth - this.depth) * .5;
-        cBoxFront.setPosition([0, frontY, frontZ]);
-        cBoxBack.setPosition([0, 0, backZ]);
+        const cBoxFront = this._cBoxFront = new CollisionBox(cBoxFrontSpecs);
+        const cBoxBack = this._cBoxBack = new CollisionBox(cBoxBackSpecs);
+
+        this.update(false);
 
         this.cObjects = [cBoxFront, cBoxBack];
         this.walls = this.getWalls();
@@ -61,7 +58,7 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
         this.bottomOBBs = this.getBottomOBBs();
         this.addCObjects();
         this.setCObjectsVisible(false);
-       
+
         // set triggers if needed
         this.setTriggers();
 
@@ -69,7 +66,7 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
             this.gltf.group,
             this.box.mesh
         );
-        
+
     }
 
     async init() {
@@ -77,6 +74,36 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
         await this.gltf.init();
 
         this.setPickLayers();
+
+    }
+
+    update(needToUpdateOBBnRay = true) {
+
+        // update cBox position and scale
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        const frontHeight = this._frontHeight * this.scale[1];
+        const backDepth = this._backDepth * this.scale[2];
+        const frontDepth = this._frontDepth * this.scale[2];
+
+        const frontY = (frontHeight - height) * .5;
+        const frontZ = (depth - frontDepth) * .5;
+        const backZ = (backDepth - depth) * .5;
+
+        this._cBoxFront.setPosition([0, frontY, frontZ]).setScale(this.scale);
+        this._cBoxBack.setPosition([0, 0, backZ]).setScale(this.scale);
+
+        // update gltf scale
+        this.gltf.setScale(this.scale);
+
+        // update box scale
+        this.box.setScale(this.scale);
+
+        if (needToUpdateOBBnRay) {
+
+            this.updateOBBs();
+
+        }
 
     }
 

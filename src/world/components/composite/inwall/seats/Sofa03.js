@@ -6,15 +6,24 @@ const GLTF_SRC = 'inRoom/seats/sofa_03_1k/sofa_03_1k.gltf';
 
 class Sofa03 extends ObstacleBase {
 
-    width = 2.735;
-    height = 1.115;
-    depth = .916;
-    bottomWidth = 1.865;
-    bottomHeight = .573;
-    sideHeight = .857;
-    backDepth = .484;
+    _width = 2.735;
+    _height = 1.115;
+    _depth = .916;
+    _bottomWidth = 1.865;
+    _bottomHeight = .573;
+    _sideHeight = .857;
+    _backDepth = .484;
+
+    _bottomDepth = this._depth - this._backDepth;
+    _sideWidth = (this._width - this._bottomWidth) * .5;
+    _backHeight = this._height - this._bottomHeight;
 
     gltf;
+
+    _cBoxBottom;
+    _cBoxLeftSide;
+    _cBoxRightSide;
+    _cBoxBack;
 
     constructor(specs) {
 
@@ -25,50 +34,32 @@ class Sofa03 extends ObstacleBase {
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
-        this.width *= scale[0];
-        this.height *= scale[1];
-        this.depth *= scale[2];
-        this.bottomWidth *= scale[0];
-        this.bottomHeight *= scale[1];
-        this.sideHeight *= scale[1];
-        this.backDepth *= scale[2];
+        this._scale = new Array(...scale);
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow };
 
-        const boxSpecs = { size: { width: this.width, depth: this.depth, height: this.height }, lines };
+        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 
-        const bottomDepth = this.depth - this.backDepth;
-        const sideWidth = (this.width - this.bottomWidth) * .5;
-        const backHeight = this.height - this.bottomHeight;
-        const cBoxBottomSpecs = { name: `${name}_bottom`, width: this.bottomWidth, depth: bottomDepth, height: this.bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
-        const cBoxLeftSideSpecs = { name: `${name}_left_side`, width: sideWidth, depth: this.depth, height: this.sideHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
-        const cBoxRightSideSpecs = { name: `${name}_right_side`, width: sideWidth, depth: this.depth, height: this.sideHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
-        const cBoxBackSpecs = { name: `${name}_back`, width: this.bottomWidth, depth: this.backDepth, height: backHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxBottomSpecs = { name: `${name}_bottom`, width: this._bottomWidth, depth: this._bottomDepth, height: this._bottomHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxLeftSideSpecs = { name: `${name}_left_side`, width: this._sideWidth, depth: this._depth, height: this._sideHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxRightSideSpecs = { name: `${name}_right_side`, width: this._sideWidth, depth: this._depth, height: this._sideHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
+        const cBoxBackSpecs = { name: `${name}_back`, width: this._bottomWidth, depth: this._backDepth, height: this._backHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
-        this.gltf.setScale(scale);
 
         // obb box
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.box.visible = false;
 
         // collision box
-        const cBoxBottom = new CollisionBox(cBoxBottomSpecs);
-        const cBoxSideLeft = new CollisionBox(cBoxLeftSideSpecs);
-        const cBoxSideRight = new CollisionBox(cBoxRightSideSpecs);
-        const cBoxBack = new CollisionBox(cBoxBackSpecs);
-        const sideX = (this.bottomWidth + sideWidth) * .5;
-        const sideY = (this.sideHeight - this.height) * .5;
-        const bottomY = (this.bottomHeight - this.height) * .5;
-        const bottomZ = (this.depth - bottomDepth) * .5;
-        const backY = (this.height - backHeight) * .5;
-        const backZ = (this.backDepth - this.depth) * .5;
-        cBoxBottom.setPosition([0, bottomY, bottomZ]);
-        cBoxSideLeft.setPosition([sideX, sideY, 0]);
-        cBoxSideRight.setPosition([- sideX, sideY, 0]);
-        cBoxBack.setPosition([0, backY, backZ]);
+        const cBoxBottom = this._cBoxBottom = new CollisionBox(cBoxBottomSpecs);
+        const cBoxSideLeft = this._cBoxLeftSide = new CollisionBox(cBoxLeftSideSpecs);
+        const cBoxSideRight = this._cBoxRightSide = new CollisionBox(cBoxRightSideSpecs);
+        const cBoxBack = this._cBoxBack = new CollisionBox(cBoxBackSpecs);
+
+        this.update(false);
 
         this.cObjects = [cBoxBottom, cBoxSideLeft, cBoxSideRight, cBoxBack];
         this.walls = this.getWalls();
@@ -76,7 +67,7 @@ class Sofa03 extends ObstacleBase {
         this.bottomOBBs = this.getBottomOBBs();
         this.addCObjects();
         this.setCObjectsVisible(false);
-       
+
         // set triggers if needed
         this.setTriggers();
 
@@ -92,6 +83,46 @@ class Sofa03 extends ObstacleBase {
         await this.gltf.init();
 
         this.setPickLayers();
+
+    }
+
+    update(needToUpdateOBBnRay = true) {
+
+        // update cBox position and scale
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        const bottomWidth = this._bottomWidth * this.scale[0];
+        const bottomHeight = this._bottomHeight * this.scale[1];
+        const sideHeight = this._sideHeight * this.scale[1];
+        const backDepth = this._backDepth * this.scale[2];
+
+        const bottomDepth = this._bottomDepth * this.scale[2];
+        const sideWidth = this._sideWidth * this.scale[0];
+        const backHeight = this._backHeight * this.scale[1];
+
+        const sideX = (bottomWidth + sideWidth) * .5;
+        const sideY = (sideHeight - height) * .5;
+        const bottomY = (bottomHeight - height) * .5;
+        const bottomZ = (depth - bottomDepth) * .5;
+        const backY = (height - backHeight) * .5;
+        const backZ = (backDepth - depth) * .5;
+
+        this._cBoxBottom.setPosition([0, bottomY, bottomZ]).setScale(this.scale);
+        this._cBoxLeftSide.setPosition([sideX, sideY, 0]).setScale(this.scale);
+        this._cBoxRightSide.setPosition([- sideX, sideY, 0]).setScale(this.scale);
+        this._cBoxBack.setPosition([0, backY, backZ]).setScale(this.scale);
+
+        // update gltf scale
+        this.gltf.setScale(this.scale);
+
+        // update box scale
+        this.box.setScale(this.scale);
+
+        if (needToUpdateOBBnRay) {
+
+            this.updateOBBs();
+
+        }
 
     }
 
