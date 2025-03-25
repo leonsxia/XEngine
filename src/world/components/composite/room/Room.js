@@ -178,11 +178,8 @@ class Room {
 
         };
 
-        if (!wall.hasEventListener(type, listener)) {
-
-            wall.addEventListener(type, listener);
-
-        }
+        wall.addEventListener(type, listener);
+        wall.eventList.set(type, listener);
 
     }
 

@@ -12,6 +12,8 @@ class GLTFModel extends EventDispatcher {
     skeleton;
     specs;
 
+    eventList = new Map();
+
     constructor(specs) {
 
         super();

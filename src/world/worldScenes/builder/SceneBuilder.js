@@ -433,22 +433,34 @@ class SceneBuilder {
 
         tempInput.click();
 
-        tempInput.addEventListener('change', event => {
+        const $this = this;
+
+        function onChange(event) {
 
             const file = event.target.files[0];
 
             file.text().then(text => {
 
                 const loadJson = JSON.parse(text);
-                
-                this.updateScene(this.worldScene.sceneSetup, loadJson, false, false);
 
-                if (this.worldScene.staticRendering) 
-                    this.worldScene.render();
+                $this.updateScene($this.worldScene.sceneSetup, loadJson, false, false);
+
+                if ($this.worldScene.staticRendering) {
+
+                    $this.worldScene.render();
+
+                }
+
+            }).finally(() => {
+
+                tempInput.removeEventListener('change', onChange);
 
             });
 
-        });
+        }
+
+        tempInput.addEventListener('change', onChange);
+
     }
 
     resetScene() {

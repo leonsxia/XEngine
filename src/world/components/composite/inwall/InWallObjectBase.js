@@ -143,11 +143,8 @@ class InWallObjectBase {
         }
         const type = 'visibleChanged';
 
-        if (!obj.hasEventListener(type, listener)) {
-
-            obj.addEventListener(type, listener);
-
-        }
+        obj.addEventListener(type, listener);
+        obj.eventList.set(type, listener);
 
     }
 

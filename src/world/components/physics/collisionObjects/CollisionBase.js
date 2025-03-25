@@ -14,6 +14,8 @@ class CollisionBase extends EventDispatcher {
 
     specs;
 
+    eventList = new Map();
+
     constructor(specs) {
 
         super();

@@ -293,11 +293,8 @@ class ObstacleBase extends ObstacleMoveable {
         }
         const type = 'visibleChanged';
 
-        if (!obj.hasEventListener(type, listener)) {
-
-            obj.addEventListener(type, listener);
-
-        }
+        obj.addEventListener(type, listener);
+        obj.eventList.set(type, listener);
         
     }
 
@@ -321,11 +318,8 @@ class ObstacleBase extends ObstacleMoveable {
         }
         const type = 'visibleChanged';
 
-        if (!obj.hasEventListener(type, listener)) {
-
-            obj.addEventListener(type, listener);
-
-        }
+        obj.addEventListener(type, listener);
+        obj.eventList.set(type, listener);
 
     }
 
@@ -344,13 +338,9 @@ class ObstacleBase extends ObstacleMoveable {
 
         };
 
-        if (!this.gltf.hasEventListener(type, listener)) {
-
-            this.gltf.addEventListener(type, listener);
-
-        }
-
+        this.gltf.addEventListener(type, listener);
         this.gltf.visible = true;
+        this.gltf.eventList.set(type, listener);
 
     }
 
