@@ -121,8 +121,9 @@ class CollisionTrianglePlane extends TrianglePlane {
 
         if (!leftHanded) {
             // udpate left ray and arrow
-            const leftfrom = new Vector3(- width * .5, originY, 0);
+            const leftfrom = new Vector3(- width * .5, 0, 0);
             leftfrom.applyMatrix4(this.mesh.matrixWorld);
+            leftfrom.y += originY;
 
             this.leftRay.set(leftfrom, dir);
 
@@ -132,8 +133,9 @@ class CollisionTrianglePlane extends TrianglePlane {
          
         if (leftHanded) {
             // udpate right ray and arrow
-            const rightfrom = new Vector3(width * .5, originY, 0);
+            const rightfrom = new Vector3(width * .5, 0, 0);
             rightfrom.applyMatrix4(this.mesh.matrixWorld);
+            rightfrom.y += originY;
 
             this.rightRay.set(rightfrom, dir);
 
