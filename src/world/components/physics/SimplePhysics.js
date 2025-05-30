@@ -13,6 +13,7 @@ const OBSTACLE_BLOCK_OFFSET_MIN = .05;
 class SimplePhysics {
 
     players = [];
+    enemies = [];
     floors = [];
     ceilings = [];
     walls = [];
@@ -25,15 +26,17 @@ class SimplePhysics {
     obstacleCollisionOBBWalls = [];
     interactiveObs = [];
     activePlayers = [];
+    activeEnemies = [];
 
-    locked = false;
+    // locked = false;
 
-    constructor(players, floors = [], walls = [], obstacles = []) {
+    constructor(players = [], floors = [], walls = [], obstacles = [], enemies = []) {
 
         this.players = players;
         this.walls = walls;
         this.floors = floors;
         this.obstacles = obstacles;
+        this.enemies = enemies;
 
     }
 
@@ -56,6 +59,30 @@ class SimplePhysics {
             const idx = this.activePlayers.findIndex(active => active.name === name);
 
             if (idx > -1) this.activePlayers.splice(find, 1);
+
+        });
+
+    }
+
+    addActiveEnemies(...names) {
+
+        names.forEach(name => {
+
+            const find = this.enemies.find(e => e.name === name);
+
+            if (find) this.activeEnemies.push(find);
+
+        });
+
+    }
+
+    removeActiveEnemies(...names) {
+
+        names.forEach((name) => {
+
+            const idx = this.activeEnemies.findIndex(active => active.name === name);
+
+            if (idx > -1) this.activeEnemies.splice(idx, 1);
 
         });
 
@@ -421,6 +448,8 @@ class SimplePhysics {
 
         this.playerTick(delta);
 
+        this.enemyTick(delta);
+
     }
 
     // obstacle collision check
@@ -659,121 +688,129 @@ class SimplePhysics {
 
     playerTick(delta) {
 
-        const activePlayers = this.activePlayers.filter(p => !p.group.isPicked);
+        this.avatarTick(this.activePlayers, delta);
 
-        for (let i = 0, il = activePlayers.length; i < il; i++) {
+    }
 
-            const player = activePlayers[i];
+    enemyTick(delta) {
 
-            // console.log(`is in air: ${player.isInAir}`);
+        this.avatarTick(this.activeEnemies, delta);
 
-            if (DEBUG && player._showBBHelper) {
+    }
 
-                player?.setBoundingBoxHelperColor(Color.BBW);
+    avatarTick(avatars = [], delta) {
+
+        const activeAvatars = avatars.filter(a => !a.group.isPicked);
+
+        for (let i = 0, il = activeAvatars.length; i < il; i++) {
+
+            const avatar = activeAvatars[i];
+
+            // console.log(`is in air: ${avatar.isInAir}`);
+
+            if (DEBUG && avatar._showBBHelper) {
+
+                avatar?.setBoundingBoxHelperColor(Color.BBW);
 
             }
 
-            if (DEBUG && player._showBBW) {
+            if (DEBUG && avatar._showBBW) {
 
-                player?.setBoundingBoxWireColor(Color.BBW);
-
-            }
-
-            if (DEBUG && player._showBF) {
-
-                player?.resetBFColor();
+                avatar?.setBoundingBoxWireColor(Color.BBW);
 
             }
 
-            player.resetIntersectStatus();
+            if (DEBUG && avatar._showBF) {
+
+                avatar?.resetBFColor();
+
+            }
+
+            avatar.resetIntersectStatus();
 
             const collisionedWalls = [];
 
-            const wallsInScope = this.walls.filter(w => this.getObject2WallDistance(player, w) <= player.playerDetectScopeMin);
+            const wallsInScope = this.walls.filter(w => this.getObject2WallDistance(avatar, w) <= avatar.detectScopeMin);
 
-            player.resetWorldDeltaV3();
+            avatar.resetWorldDeltaV3();
 
-            let playerTicked = true;
+            let avatarTicked = true;
 
-            if (!this.locked) {
+            if (!avatar.locked) {
 
-                player.tick(delta);
+                avatar.tick(delta);
 
             }
 
-            this.locked = false;
+            avatar.locked = false;
 
             for (let i = 0, il = wallsInScope.length; i < il; i++) {
 
                 const wall = wallsInScope[i];
-                const checkResult = this.checkIntersection(player, wall, delta);
+                const checkResult = this.checkIntersection(avatar, wall, delta);
 
                 if (checkResult.intersect) {
 
-                    if (DEBUG && player._showBBHelper) {
+                    if (DEBUG && avatar._showBBHelper) {
 
-                        player?.setBoundingBoxHelperColor(Color.intersect);
+                        avatar?.setBoundingBoxHelperColor(Color.intersect);
 
                     }
 
-                    if (DEBUG && player._showBBW) {
+                    if (DEBUG && avatar._showBBW) {
 
-                        player?.setBoundingBoxWireColor(Color.intersect);
+                        avatar?.setBoundingBoxWireColor(Color.intersect);
 
                     }
 
                     wall.checkResult = checkResult;
                     collisionedWalls.push(wall);
 
-                    if (checkResult.borderReach) this.locked = true;
-
-                } else {
-
-                    wall.checkResult = { intersect: false, borderReach: false };
+                    if (checkResult.borderReach) avatar.locked = true;
 
                 }
 
             }
 
-            if (DEBUG && player._showBF) {
+            if (DEBUG && avatar._showBF) {
 
-                if (player.frontFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[0])
-                if (player.backFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[1])
-                if (player.leftFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[2])
-                if (player.rightFaceIntersects) player.setBFColor(Color.intersect, FACE_DEF[3])
+                if (avatar.frontFaceIntersects) avatar.setBFColor(Color.intersect, FACE_DEF[0])
+                if (avatar.backFaceIntersects) avatar.setBFColor(Color.intersect, FACE_DEF[1])
+                if (avatar.leftFaceIntersects) avatar.setBFColor(Color.intersect, FACE_DEF[2])
+                if (avatar.rightFaceIntersects) avatar.setBFColor(Color.intersect, FACE_DEF[3])
 
             }
             
             if (collisionedWalls.length > 0) {
 
-                if (player.isForwardBlock || player.isBackwardBlock) this.locked = true;
+                if (avatar.isForwardBlock || avatar.isBackwardBlock) avatar.locked = true;
 
-                player.intersectNum = collisionedWalls.length;
+                avatar.intersectNum = collisionedWalls.length;
                 
                 for (let i = 0, il = collisionedWalls.length; i < il; i++) {
 
                     const wall = collisionedWalls[i];
 
-                    player.tickWithWall(delta, wall, playerTicked);
+                    avatar.tickWithWall(delta, wall, avatarTicked);
 
                 }
 
-                player.applyPositionAdjustment();
+                avatar.applyPositionAdjustment();
 
             }
 
-            player.resetCollisionInfo();
+            avatar.resetCollisionInfo();
 
-            // console.log(`player world deltaV3:${player._worldDeltaV3.x}, ${player._worldDeltaV3.y}, ${player._worldDeltaV3.z}`);
+            // console.log(`avatar world deltaV3:${avatar._worldDeltaV3.x}, ${avatar._worldDeltaV3.y}, ${avatar._worldDeltaV3.z}`);
 
-            // for player falling down check
+            // for avatar falling down check
             const collisionTops = [];
 
             for (let i = 0; i < this.obstacleTops.length; i++) {
 
                 const top = this.obstacleTops[i];
 
-                if (player.obb.intersectsOBB(top.obb) && !this.checkBlockByTopT(player, top)) {
+                if (avatar.obb.intersectsOBB(top.obb) && !this.checkBlockByTopT(avatar, top)) {
 
                     collisionTops.push(top);
 
@@ -783,16 +820,16 @@ class SimplePhysics {
 
             }
 
-            // for player hitting bottoms check
+            // for avatar hitting bottoms check
             const collisionBottoms = [];
 
             for (let i = 0, il = this.obstacleBottoms.length; i < il; i++) {
 
                 const bottom = this.obstacleBottoms[i];
 
-                if (player.obb.intersectsOBB(bottom.obb) && !this.checkBlockByBottomT(player, bottom)) {
+                if (avatar.obb.intersectsOBB(bottom.obb) && !this.checkBlockByBottomT(avatar, bottom)) {
 
-                    // console.log(`player hitting bottom: ${bottom.name}`);
+                    // console.log(`avatar hitting bottom: ${bottom.name}`);
                     collisionBottoms.push(bottom);
 
                     break;
@@ -807,9 +844,9 @@ class SimplePhysics {
 
                     const ceiling = this.ceilings[i];
 
-                    if (ceiling.isOBB && player.obb.intersectsOBB(ceiling.obb) && !this.checkBlockByBottomT(player, ceiling)) {
+                    if (ceiling.isOBB && avatar.obb.intersectsOBB(ceiling.obb) && !this.checkBlockByBottomT(avatar, ceiling)) {
 
-                        // console.log(`player hitting ceiling: ${ceiling.name}`);
+                        // console.log(`avatar hitting ceiling: ${ceiling.name}`);
                         collisionBottoms.push(ceiling);
 
                         break;
@@ -826,25 +863,25 @@ class SimplePhysics {
 
                 const s = this.slopes[i];
 
-                // check if player is on slope, and slow it down
-                const playerIntersectSlopeBox = player.obb.intersectsOBB(s.box.obb);
-                const playerIntersectSlope = player.obb.intersectsOBB(s.slope.obb);
+                // check if avatar is on slope, and slow it down
+                const avatarIntersectSlopeBox = avatar.obb.intersectsOBB(s.box.obb);
+                const avatarIntersectSlope = avatar.obb.intersectsOBB(s.slope.obb);
 
-                if (!playerIntersectSlopeBox && (player.intersectSlope === s || !player.intersectSlope)) {
+                if (!avatarIntersectSlopeBox && (avatar.intersectSlope === s || !avatar.intersectSlope)) {
 
-                    player.setSlopeIntersection?.();
+                    avatar.setSlopeIntersection?.();
 
-                } else if (player.isInAir && playerIntersectSlope) {
+                } else if (avatar.isInAir && avatarIntersectSlope) {
 
-                    player.setSlopeIntersection?.(s);
+                    avatar.setSlopeIntersection?.(s);
 
-                } else if (playerIntersectSlope && (player.obb.intersectsOBB(s.topBoxBuffer.obb) || player.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
+                } else if (avatarIntersectSlope && (avatar.obb.intersectsOBB(s.topBoxBuffer.obb) || avatar.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
 
-                    player.setSlopeIntersection?.(s);
+                    avatar.setSlopeIntersection?.(s);
 
                 }
 
-                if (playerIntersectSlope) {
+                if (avatarIntersectSlope) {
 
                     collisionSlopes.push(s.slope.mesh);
 
@@ -856,24 +893,24 @@ class SimplePhysics {
 
             if (collisionBottoms.length > 0) {
 
-                player.tickOnHittingBottom(collisionBottoms[0]);
+                avatar.tickOnHittingBottom(collisionBottoms[0]);
 
             } else if (collisionTops.length > 0 && collisionSlopes.length === 0) {
 
-                player.onGround(collisionTops[0]);
+                avatar.onGround(collisionTops[0]);
 
             } else if (collisionSlopes.length > 0) {
 
-                player.tickOnSlope(collisionSlopes[0]);
+                avatar.tickOnSlope(collisionSlopes[0]);
 
             } else {
 
-                player.isInAir = true;
+                avatar.isInAir = true;
                 // console.log(`is in air`);
 
             }
 
-            if (collisionTops.length === 0 && player.isInAir) {
+            if (collisionTops.length === 0 && avatar.isInAir) {
 
                 const collisionFloors = [];
 
@@ -881,9 +918,9 @@ class SimplePhysics {
 
                     const floor = this.floors[i];
 
-                    if (!player.isClimbingUp && !this.checkBlockByTopT(player, floor)) {
+                    if (!avatar.isClimbingUp && !this.checkBlockByTopT(avatar, floor)) {
 
-                        if (player.obb.intersectsOBB(floor.obb)) {
+                        if (avatar.obb.intersectsOBB(floor.obb)) {
 
                             collisionFloors.push(floor);
 
@@ -895,17 +932,17 @@ class SimplePhysics {
 
                 if (collisionFloors.length === 0) {
 
-                    player.tickFall(delta);
+                    avatar.tickFall(delta);
 
                 } else {
 
-                    player.onGround(collisionFloors[0]);
+                    avatar.onGround(collisionFloors[0]);
 
                 }
             }
             
-            // check player push or climb an obstacle
-            if (player.pushingObb) {
+            // check avatar push or climb an obstacle
+            if (avatar.pushingObb) {
 
                 const climbWalls = [];
 
@@ -915,7 +952,7 @@ class SimplePhysics {
 
                     if (obs.movable && (obs.pushable || obs.draggable)) {
 
-                        player.stopPushing();
+                        avatar.stopPushing();
                         obs.stopMoving();
 
                         if (obs.triggers) {
@@ -924,10 +961,10 @@ class SimplePhysics {
 
                                 const tri = obs.triggers[j];
 
-                                if (player.pushingObb.intersectsOBB(tri.obb) && !player.isClimbingUp && player.isMovingForward) {
+                                if (avatar.pushingObb.intersectsOBB(tri.obb) && !avatar.isClimbingUp && avatar.isMovingForward) {
                                     // console.log(`${tri.name} is pushed`);
 
-                                    player.startPushing();
+                                    avatar.startPushing();
 
                                     if (obs.testFrontTrigger(tri)) {
 
@@ -959,7 +996,7 @@ class SimplePhysics {
 
                     }
 
-                    if (obs.climbable && !player.isClimbingUp) {
+                    if (obs.climbable && !avatar.isClimbingUp) {
 
                         for (let k = 0, kl = obs.walls.length; k < kl; k++) {
 
@@ -967,7 +1004,7 @@ class SimplePhysics {
 
                             if (w.isOBB) {
 
-                                if (player.pushingObb.intersectsOBB(w.obb) && this.checkWallClimbable(player, w)) {
+                                if (avatar.pushingObb.intersectsOBB(w.obb) && this.checkWallClimbable(avatar, w)) {
                                     
                                     // console.log(`${w.name} is climbed`);
                                     climbWalls.push(w);
@@ -987,19 +1024,19 @@ class SimplePhysics {
                     const wall = climbWalls[0];
 
                     // console.log(`${climbWalls[0].name} is climbed`);
-                    player.tickClimb(delta, wall);
+                    avatar.tickClimb(delta, wall);
 
-                } else if (player.isClimbingUp) {
+                } else if (avatar.isClimbingUp) {
 
-                    player.tickClimb(delta);
+                    avatar.tickClimb(delta);
 
                 }
 
             }
 
-            player.tickWeaponAttack?.(delta);
+            avatar.tickWeaponAttack?.(delta);
 
-            player.finalTick?.(delta);
+            avatar.finalTick?.(delta);
             
         }
 

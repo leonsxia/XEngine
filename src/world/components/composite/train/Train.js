@@ -4,7 +4,7 @@ import { Moveable2D } from '../../movement/Moveable2D';
 
 const ENABLE_QUICK_TURN = false;
 const ENABLE_CLIMBING = false;
-const PLAYER_DETECT_SCOPE_MIN = 5.5;
+const DETECT_SCOPE_MIN = 5.5;
 
 class Train extends Moveable2D {
     name = '';
@@ -163,9 +163,9 @@ class Train extends Moveable2D {
         return ENABLE_CLIMBING;
     }
 
-    get playerDetectScopeMin() {
+    get detectScopeMin() {
 
-        return PLAYER_DETECT_SCOPE_MIN;
+        return DETECT_SCOPE_MIN;
         
     }
 

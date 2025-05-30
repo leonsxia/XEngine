@@ -23,6 +23,7 @@ const GRID = 'Grid';
 const TOFU = 'Tofu';
 const TRAIN = 'Train';
 const SOLDIER_FEMALE = 'SoldierFemale';
+const ENEMY_BASE = 'EnemyBase';
 
 // weapons
 const WEAPONS = {
@@ -393,6 +394,7 @@ export {
     TOFU,
     TRAIN,
     SOLDIER_FEMALE,
+    ENEMY_BASE,
 
     WEAPONS,
 

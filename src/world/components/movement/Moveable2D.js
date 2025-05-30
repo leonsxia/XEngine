@@ -44,6 +44,9 @@ class Moveable2D {
     _rotated = false;
     _intersectNum = 0;
 
+    // for SimplePhysics, use to check border reach
+    locked = false;
+
     constructor() {
         this.leftCorIntersects = false;
         this.rightCorIntersects = false;

@@ -1,5 +1,5 @@
 import {
-    Train, Tofu, SoldierFemale,
+    Train, Tofu, SoldierFemale, EnemyBase,
     Plane, WaterPlane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
     Room, InspectorRoom, 
     SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, WaterCube, Slope, Stairs,
@@ -11,7 +11,7 @@ import {
     ModernCeilingLamp01, SecurityLight
 } from '../../components/Models.js';
 import {
-    AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE,
+    AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, ENEMY_BASE,
     PLANE, WATER_PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
     ROOM, INSPECTOR_ROOM,
     SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, WATER_CUBE, SLOPE, STAIRS,
@@ -53,6 +53,7 @@ class ModelBuilder {
         this.objectCreationMapping[TOFU] = this.createTofu;
         this.objectCreationMapping[TRAIN] = this.createTrain;
         this.objectCreationMapping[SOLDIER_FEMALE] = this.createSoldierFemale;
+        this.objectCreationMapping[ENEMY_BASE] = this.createEnemyBase;
         this.objectCreationMapping[AXES] = this.createAxes;
         this.objectCreationMapping[GRID] = this.createGrid;
         this.objectCreationMapping[PLANE] = this.createPlane;
@@ -118,6 +119,21 @@ class ModelBuilder {
             .receiveShadow(receiveShadow)
             .castShadow(castShadow)
             .updateOBB();
+
+        return object;
+
+    }
+
+    createEnemyBase(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
+
+        object = new EnemyBase(specs);
+        object.setPosition(position)
+            .setRotation(rotation)
+            .updateOBB()
+            .updateRay();
 
         return object;
 

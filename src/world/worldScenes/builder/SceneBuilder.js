@@ -41,19 +41,21 @@ class SceneBuilder {
 
             Object.assign(worldScene.setup, setup.settings);
 
-            const { players, lights, objects } = setup;
+            const { players = [], enemies = [], lights = [], objects = [] } = setup;
             const sceneSpecs = objects.find(o => o.type === SCENE);
             const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);
 
-            const [loadedPlayers, sceneObjects, rooms] = await Promise.all(
+            const [loadedPlayers, loadedEnemies, sceneObjects, rooms] = await Promise.all(
                 [
                     this.buildPlayers(players),
+                    this.buildEnemies(enemies),
                     this.buildSceneObjects(sceneSpecs),
                     this.buildRooms(roomSpecs)
                 ]
             );
 
             worldScene.players = loadedPlayers;
+            worldScene.enemies = loadedEnemies;
 
             for (let i = 0, il = sceneObjects.length; i < il; i++) {
 
@@ -122,9 +124,9 @@ class SceneBuilder {
 
         if (!roomLights) return;
 
-        const basicLightsSpecsArr = roomLights['basicLightSpecs'].map(l => { l.room = roomName; return l; });
-        const pointLightsSpecsArr = roomLights['pointLightSpecs'].map(l => { l.room = roomName; return l; });
-        const spotLightsSpecsArr = roomLights['spotLightSpecs'].map(l => { l.room = roomName; return l; });
+        const basicLightsSpecsArr = roomLights['basicLightSpecs']?.map(l => { l.room = roomName; return l; }) ?? [];
+        const pointLightsSpecsArr = roomLights['pointLightSpecs']?.map(l => { l.room = roomName; return l; }) ?? [];
+        const spotLightsSpecsArr = roomLights['spotLightSpecs']?.map(l => { l.room = roomName; return l; }) ?? [];
 
         // read light objects
         const _basicLights = createBasicLights(basicLightsSpecsArr);
@@ -236,6 +238,32 @@ class SceneBuilder {
 
     }
 
+    async buildEnemies(enemySpecs) {
+
+        const enemies = [];
+        const loadPromises = [];
+
+        for (let i = 0, il = enemySpecs.length; i < il; i++) {
+
+            const specs = enemySpecs[i];
+            const enemy = this.buildObject(specs);
+
+            enemies.push(enemy);
+
+            if (enemy.init) {
+
+                loadPromises.push(enemy.init());
+
+            }
+
+        }
+
+        await Promise.all(loadPromises);
+
+        return enemies;
+
+    }
+
     async buildSceneObjects(sceneSpecs) {
 
         const loadPromises = [];
@@ -265,7 +293,7 @@ class SceneBuilder {
     async buildRooms(roomSpecs) {
 
         const loadPromises = [];
-        const rooms = []
+        const rooms = [];
 
         for (let i = 0, il = roomSpecs.length; i < il; i++) {
 

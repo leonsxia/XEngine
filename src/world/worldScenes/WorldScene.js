@@ -58,6 +58,7 @@ class WorldScene {
     
     physics = null;
     players = [];
+    enemies = [];
     rooms = [];
     cPlanes = [];
     cObjects = [];
@@ -193,12 +194,34 @@ class WorldScene {
         }
 
         // physics
-        this.physics = new SimplePhysics(this.players);
+        this.physics = new SimplePhysics(this.players, null, null, null, this.enemies);
         this.loop.updatables.push(this.physics);
 
         // initialize player
         // no need to render at this time, so the change event of control won't do the rendering.
         this.changeCharacter(defaultPlayer, false);
+
+        // initialize enemies
+        {
+            for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+                const enemy = this.enemies[i];
+
+                if (enemy.isActive) {
+
+                    this.scene.add(enemy.group);
+                    enemy.showTofu(false);
+                    // this.scene.add(enemy.boundingBoxHelper);
+                    // enemy.showBB(true);
+                    // enemy.showBBW(true);
+                    enemy.showBF(true);
+                    this.physics.addActiveEnemies(enemy.name);
+                    this.subscribeEvents(enemy, this.setup.moveType);
+
+                }
+
+            }
+        }
 
         // setup cameras, must after player setup complete
         if (enableTPC) {
