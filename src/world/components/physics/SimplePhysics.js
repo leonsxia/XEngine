@@ -28,14 +28,11 @@ class SimplePhysics {
     activePlayers = [];
     activeEnemies = [];
 
-    // locked = false;
+    isActive = true;
 
-    constructor(players = [], floors = [], walls = [], obstacles = [], enemies = []) {
+    constructor(players = [], enemies = []) {
 
         this.players = players;
-        this.walls = walls;
-        this.floors = floors;
-        this.obstacles = obstacles;
         this.enemies = enemies;
 
     }
@@ -1033,10 +1030,6 @@ class SimplePhysics {
                 }
 
             }
-
-            avatar.tickWeaponAttack?.(delta);
-
-            avatar.finalTick?.(delta);
             
         }
 

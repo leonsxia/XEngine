@@ -8,7 +8,11 @@ import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
 import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
+import { UpdatableQueue } from '../components/updatables/UpdatableQueue.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
+import { Combat } from '../components/updatables/Combat.js';
+import { AI } from '../components/updatables/AI.js';
+import { AnimeMixer } from '../components/updatables/AnimeMixer.js';
 import { independence } from '../components/basic/colorBase.js';
 
 // let renderTimes = 0;
@@ -56,6 +60,9 @@ class WorldScene {
 
     eventDispatcher;
     
+    // updatable modules
+    updatableQueue;
+
     physics = null;
     players = [];
     enemies = [];
@@ -66,6 +73,11 @@ class WorldScene {
     player;
     loadSequence = 0;
     showRoleSelector = false;
+
+    combat = null;
+    ai = null;
+    animeMixer = null;
+    // updatable modules
     
     postProcessor;
     triTexture;
@@ -111,7 +123,7 @@ class WorldScene {
 
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 
-        this.loop.updatables = [this.controls.defControl, xboxController];
+        this.loop.updatables.push(this.controls.defControl, xboxController);
         // this.controls.defControl.listenToKeyEvents(window);
 
         this.resizer = new Resizer(container, this.camera, this.renderer, this.postProcessor);
@@ -144,6 +156,8 @@ class WorldScene {
             this.controls.initPanels(this.guiMaker.gui);
 
         }
+
+        this.updatableQueue = new UpdatableQueue();
 
     }
 
@@ -194,8 +208,22 @@ class WorldScene {
         }
 
         // physics
-        this.physics = new SimplePhysics(this.players, null, null, null, this.enemies);
-        this.loop.updatables.push(this.physics);
+        this.physics = new SimplePhysics(this.players, this.enemies);
+        this.updatableQueue.add(this.physics);
+
+        // combat
+        this.combat = new Combat(this.players, this.enemies);
+        this.updatableQueue.add(this.combat);
+
+        // ai
+        this.ai = new AI(this.players, this.enemies);
+        this.updatableQueue.add(this.ai);
+
+        // anime mixer
+        this.animeMixer = new AnimeMixer(this.players, this.enemies);
+        this.updatableQueue.add(this.animeMixer);
+        
+        this.loop.updatables.push(this.updatableQueue);
 
         // initialize player
         // no need to render at this time, so the change event of control won't do the rendering.
@@ -210,11 +238,21 @@ class WorldScene {
                 if (enemy.isActive) {
 
                     this.scene.add(enemy.group);
-                    enemy.showTofu(false);
+                    // enemy.showTofu(false);
                     // this.scene.add(enemy.boundingBoxHelper);
                     // enemy.showBB(true);
                     // enemy.showBBW(true);
-                    enemy.showBF(true);
+                    // if (enemy.hasRays) {
+
+                    //     this.scene.add(enemy.leftArrow);
+                    //     this.scene.add(enemy.rightArrow);
+                    //     this.scene.add(enemy.backLeftArrow);
+                    //     this.scene.add(enemy.backRightArrow);
+                    //     enemy.showArrows(true);
+
+                    // }
+                    
+                    // enemy.showBF(true);
                     this.physics.addActiveEnemies(enemy.name);
                     this.subscribeEvents(enemy, this.setup.moveType);
 

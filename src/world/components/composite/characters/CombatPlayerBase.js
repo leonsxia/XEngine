@@ -1109,9 +1109,9 @@ class CombatPlayerBase extends Tofu {
 
     }
 
-    tickWeaponAttack(delta) {        
+    attackTick(delta) {        
 
-        this.#weaponLogger.func = this.tickWeaponAttack.name;        
+        this.#weaponLogger.func = this.attackTick.name;        
 
         if (this.shooting || this.meleeing || this.armedWeapon?.isFiring) {
 
@@ -1175,7 +1175,7 @@ class CombatPlayerBase extends Tofu {
 
     }
 
-    finalTick(delta) {
+    mixerTick(delta) {
 
         this.AWS.mixer.update(delta);
 

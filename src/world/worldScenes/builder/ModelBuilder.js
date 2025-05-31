@@ -127,11 +127,13 @@ class ModelBuilder {
     createEnemyBase(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
+        const { position = [0, 0, 0], rotation = [0, 0, 0], receiveShadow = false, castShadow = false } = specs;
 
         object = new EnemyBase(specs);
         object.setPosition(position)
             .setRotation(rotation)
+            .receiveShadow(receiveShadow)
+            .castShadow(castShadow)
             .updateOBB()
             .updateRay();
 
