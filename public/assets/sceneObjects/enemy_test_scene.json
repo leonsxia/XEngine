@@ -62,7 +62,8 @@
             "scale": [1, 1, 1],
             "position": [0, 3, 5],
             "rotation": [0, 3.1416, 0],
-            "isActive": true
+            "isActive": true,
+            "sovRadius": 5
         }
     ],
     "lights": [

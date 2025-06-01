@@ -254,7 +254,7 @@ class WorldScene {
                     
                     // enemy.showBF(true);
                     this.physics.addActiveEnemies(enemy.name);
-                    this.subscribeEvents(enemy, this.setup.moveType);
+                    // this.subscribeEvents(enemy, this.setup.moveType);
 
                 }
 

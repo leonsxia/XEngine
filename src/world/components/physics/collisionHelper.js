@@ -1,4 +1,4 @@
-import { BoxGeometry, EdgesGeometry, Mesh, LineSegments, Vector3 } from 'three';
+import { BoxGeometry, EdgesGeometry, Mesh, LineSegments, Vector3, SphereGeometry } from 'three';
 import { OBB } from 'three/addons/math/OBB.js';
 import { basicMateraials } from '../basic/basicMaterial';
 import { CollisionPlane } from './CollisionPlane';
@@ -138,9 +138,11 @@ function createOBBBox(specs, name, position, rotation, receiveShadow = false, ca
 
 function createCollisionGeometries(specs) {
 
-    const { width, width2, height, depth, bbfThickness, gap } = specs;
+    const { width, width2, height, depth, bbfThickness, gap, sovRadius } = specs;
 
     const boundingBox = new BoxGeometry(width, height, depth * 2 / 3);
+
+    const boundingSphere = new SphereGeometry(sovRadius, 16, 16);
 
     const boundingBoxEdges = new EdgesGeometry(boundingBox);
 
@@ -152,13 +154,13 @@ function createCollisionGeometries(specs) {
     boundingBox.userData.obb = new OBB();
     boundingBox.userData.obb.halfSize.copy( new Vector3(width, height, depth * 2 / 3) ).multiplyScalar( 0.5 );
 
-    return { boundingBox, boundingBoxEdges, boundingFace, boundingFace2 };
+    return { boundingBox, boundingBoxEdges, boundingFace, boundingFace2, boundingSphere };
 
 }
 
 function createBoundingBoxFaces(specs) {
     
-    const { width, width2, depth, depth2, bbfThickness, showBB, showBBW, showBF, gap } = specs;
+    const { width, width2, depth, depth2, bbfThickness, showBB, showBS, showBBW, showBF, gap } = specs;
 
     const collisionGeometries = createCollisionGeometries(specs);
 
@@ -173,6 +175,14 @@ function createBoundingBoxFaces(specs) {
     boundingBox.position.set(0, 0, 0);
     boundingBox.visible = showBB;
     boundingBox.geometry.computeBoundingBox();
+
+    const boundingSphere = new Mesh(collisionGeometries.boundingSphere, basicMateraials.boundingSphere.clone());
+    boundingSphere.material.transparent = true;
+    boundingSphere.material.opacity = 0.5;
+    boundingSphere.name = 'boundingSphere-helper';
+    boundingSphere.position.set(0, 0, 0);
+    boundingSphere.visible = showBS;
+    boundingSphere.geometry.computeBoundingSphere();
 
     // bounding volume on object level (this will reflect the current world transform)
     boundingBox.userData.obb = new OBB();
@@ -243,7 +253,7 @@ function createBoundingBoxFaces(specs) {
 
 
     return { 
-        boundingBox, boundingBoxWire, 
+        boundingBox, boundingBoxWire, boundingSphere,
         frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
         frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
     };

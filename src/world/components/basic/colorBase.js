@@ -14,11 +14,17 @@ const yellow = 0xffff00;
 const orange = 0xffa500;
 const khaki = 0xF0E68C;
 const BB = 0xffffff;
+const BS = 0xFFC72C;
 const BF = 0xFFD700;
 const BF2 = 0xFF6347;
 const BBW = 0x00ff00;
 const intersect = 0xFF2400;
 const specular = 0x111111;
+
+// AI color codes
+const AI = {
+    playerInRange: 0xFF2400
+};
 
 function colorStr(r, g, b) {
 
@@ -66,11 +72,13 @@ export {
     orange,
     khaki,
     BB,
+    BS,
     BF,
     BF2,
     BBW,
     intersect,
     specular,
+    AI,
     colorStr,
     colorHex,
     colorArr

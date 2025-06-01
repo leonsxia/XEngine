@@ -1,4 +1,4 @@
-import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three';
+import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper, Sphere } from 'three';
 import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2 } from '../../basic/colorBase';
@@ -22,6 +22,7 @@ class Tofu extends Moveable2D {
 
     boundingBox;
     boundingBoxHelper;
+    boundingSphere;
 
     hasRays = false;
     leftRay;
@@ -46,6 +47,7 @@ class Tofu extends Moveable2D {
     #w;
     #d;
     #h;
+    #sightOfView;
     #rotateR = .9;
     #vel = 1.34;
     #stoodTurningVel = 1.5;
@@ -67,14 +69,18 @@ class Tofu extends Moveable2D {
         super();
         this._fastRotVel = 2;
 
-        const { name, size = { width: .9, width2: .9, depth: .9, depth2: .9, height: 1.8 } } = specs;
+        const { name, size: {
+            width: width = .9, width2: width2 = .9, depth: depth = .9, depth2: depth2 = .9, height: height = 1.8,
+            sovRadius: sovRadius = Math.max(width, width2, depth, depth2, height)
+        }} = specs;
         const { 
             rotateR = .9, vel = 1.34, stoodTurningVel = 1.5, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = .2, 
             recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7 
         } = specs;
 
-        this._size = size;
+        this._size = { width, width2, depth, depth2, height, sovRadius };
 
+        this.#sightOfView = sovRadius;
         this.#rotateR = rotateR;
         this.#vel = vel;
         this.#stoodTurningVel = stoodTurningVel;
@@ -94,13 +100,13 @@ class Tofu extends Moveable2D {
         this.group = new Group();
         this.group.isPlayer = true;
         this.group.father = this;
-        this.meshes = createMeshes(size);
+        this.meshes = createMeshes(this._size);
 
         const { 
 
             body, slotLeft, slotRight, 
             bbObjects: {
-                boundingBox, boundingBoxWire, 
+                boundingBox, boundingBoxWire, boundingSphere,
                 frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
                 frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
             },
@@ -113,20 +119,22 @@ class Tofu extends Moveable2D {
         this.group.add(
 
             body, slotLeft, slotRight, 
-            boundingBox, boundingBoxWire, 
+            boundingBox, boundingBoxWire, boundingSphere,
             frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
             frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2,
             pushingOBBBox
 
         ).name = name;
 
-        this.#w = size.width;
-        this.#d = size.depth;
-        this.#h = size.height;
+        this.#w = width;
+        this.#d = depth;
+        this.#h = height;
 
         this.boundingBox = new Box3();
         this.boundingBoxHelper = new Box3Helper(this.boundingBox, 0x00ff00);
         this.boundingBoxHelper.name = `${name}-box-helper`;
+
+        this.boundingSphere = new Sphere();
 
         this.createRay();
         this.showArrows(false);
@@ -156,6 +164,12 @@ class Tofu extends Moveable2D {
     get boundingBoxMesh() {
 
         return this.group.getObjectByName('boundingBox');
+
+    }
+
+    get boundingSphereMesh() {
+
+        return this.group.getObjectByName('boundingSphere-helper');
 
     }
 
@@ -443,7 +457,13 @@ class Tofu extends Moveable2D {
     get detectScopeMin() {
 
         return DETECT_SCOPE_MIN;
-        
+
+    }
+
+    get sightOfView() {
+
+        return this.#sightOfView;
+
     }
 
     enablePickLayers(...meshes) {
@@ -484,6 +504,12 @@ class Tofu extends Moveable2D {
     showBB(show) {
 
         this.boundingBoxMesh.visible = show;
+
+    }
+
+    showBS(show) {
+
+        this.boundingSphereMesh.visible = show;
 
     }
 
@@ -627,7 +653,9 @@ class Tofu extends Moveable2D {
 
         {
             const { matrixWorld, geometry: { boundingBox, userData } } = this.boundingBoxMesh;
+            const { matrixWorld: bsMatrixWorld, geometry: { boundingSphere } } = this.boundingSphereMesh;
             this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
+            this.boundingSphere.copy(boundingSphere).applyMatrix4(bsMatrixWorld);
             // this.boundingBoxHelper.updateMatrixWorld();
 
             // update OBB

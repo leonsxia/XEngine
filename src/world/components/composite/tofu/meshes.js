@@ -5,7 +5,7 @@ import { createBoundingBoxFaces, createPlayerPushingOBBBox } from '../../physics
 
 function createMeshes(size) {
 
-    const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8 } = size;
+    const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = size;
     const geometires = createGeometries(size);
     const materials = createMaterials();
 
@@ -26,10 +26,10 @@ function createMeshes(size) {
 
     const bbSpecs = {
 
-        width, width2, depth, depth2, height, 
+        width, width2, depth, depth2, height, sovRadius,
         bbfThickness: .18,  // calculated by faster speed = 10 m/s, 30fps needs at least 1/30 * 10 = 0.333 m to cover.
         gap: .1,
-        showBB: false, showBBW: false, showBF: false
+        showBB: false, showBS: false, showBBW: false, showBF: false
 
     };
 
