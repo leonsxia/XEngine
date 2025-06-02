@@ -1,8 +1,9 @@
-import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper, Sphere } from 'three';
+import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three';
 import { createMeshes } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2 } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, PLAYER_RAY_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
+import { polarity } from '../../utils/enums';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -22,7 +23,6 @@ class Tofu extends Moveable2D {
 
     boundingBox;
     boundingBoxHelper;
-    boundingSphere;
 
     hasRays = false;
     leftRay;
@@ -43,6 +43,9 @@ class Tofu extends Moveable2D {
     _showBF = false;
     _showBBHelper = false;
     _showBBW = false;
+
+    _target = null;
+    _inSightTargets = [];
 
     #w;
     #d;
@@ -69,8 +72,9 @@ class Tofu extends Moveable2D {
         super();
         this._fastRotVel = 2;
 
+        specs.size = specs.size || {};
         const { name, size: {
-            width: width = .9, width2: width2 = .9, depth: depth = .9, depth2: depth2 = .9, height: height = 1.8,
+            width = .9, width2 = .9, depth = .9, depth2 = .9, height: height = 1.8,
             sovRadius: sovRadius = Math.max(width, width2, depth, depth2, height)
         }} = specs;
         const { 
@@ -98,7 +102,7 @@ class Tofu extends Moveable2D {
 
         this.name = name;
         this.group = new Group();
-        this.group.isPlayer = true;
+        this.group.isTofu = true;
         this.group.father = this;
         this.meshes = createMeshes(this._size);
 
@@ -106,7 +110,7 @@ class Tofu extends Moveable2D {
 
             body, slotLeft, slotRight, 
             bbObjects: {
-                boundingBox, boundingBoxWire, boundingSphere,
+                boundingBox, boundingBoxWire, sovBoundingSphere,
                 frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
                 frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
             },
@@ -119,7 +123,7 @@ class Tofu extends Moveable2D {
         this.group.add(
 
             body, slotLeft, slotRight, 
-            boundingBox, boundingBoxWire, boundingSphere,
+            boundingBox, boundingBoxWire, sovBoundingSphere,
             frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
             frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2,
             pushingOBBBox
@@ -133,8 +137,6 @@ class Tofu extends Moveable2D {
         this.boundingBox = new Box3();
         this.boundingBoxHelper = new Box3Helper(this.boundingBox, 0x00ff00);
         this.boundingBoxHelper.name = `${name}-box-helper`;
-
-        this.boundingSphere = new Sphere();
 
         this.createRay();
         this.showArrows(false);
@@ -167,9 +169,9 @@ class Tofu extends Moveable2D {
 
     }
 
-    get boundingSphereMesh() {
+    get sovBoundingSphereMesh() {
 
-        return this.group.getObjectByName('boundingSphere-helper');
+        return this.group.getObjectByName('sovBoundingSphere-helper');
 
     }
 
@@ -509,7 +511,7 @@ class Tofu extends Moveable2D {
 
     showBS(show) {
 
-        this.boundingSphereMesh.visible = show;
+        this.sovBoundingSphereMesh.visible = show;
 
     }
 
@@ -566,25 +568,25 @@ class Tofu extends Moveable2D {
         // left
         fromVec3 = new Vector3(posX, posY, posZ);
         this.leftRay = new Raycaster(fromVec3, dir, 0, length);
-        this.leftRay.layers.set(PLAYER_RAY_LAYER);
+        this.leftRay.layers.set(TOFU_RAY_LAYER);
         this.leftArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
         this.rightRay = new Raycaster(fromVec3, dir, 0, length);
-        this.rightRay.layers.set(PLAYER_RAY_LAYER);
+        this.rightRay.layers.set(TOFU_RAY_LAYER);
         this.rightArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
         this.backLeftRay = new Raycaster(fromVec3, dir, 0, length);
-        this.backLeftRay.layers.set(PLAYER_RAY_LAYER);
+        this.backLeftRay.layers.set(TOFU_RAY_LAYER);
         this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
         this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
-        this.backRightRay.layers.set(PLAYER_RAY_LAYER);
+        this.backRightRay.layers.set(TOFU_RAY_LAYER);
         this.backRightArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
@@ -653,9 +655,7 @@ class Tofu extends Moveable2D {
 
         {
             const { matrixWorld, geometry: { boundingBox, userData } } = this.boundingBoxMesh;
-            const { matrixWorld: bsMatrixWorld, geometry: { boundingSphere } } = this.boundingSphereMesh;
             this.boundingBox.copy(boundingBox).applyMatrix4(matrixWorld);
-            this.boundingSphere.copy(boundingSphere).applyMatrix4(bsMatrixWorld);
             // this.boundingBoxHelper.updateMatrixWorld();
 
             // update OBB
@@ -805,6 +805,128 @@ class Tofu extends Moveable2D {
 
     }
 
+    checkSightOfView(target) {
+
+        let isInSight = false;
+        const distance = this.worldPosition.distanceTo(target.worldPosition);
+
+        if (distance < this.sightOfView) {
+
+            isInSight = true;
+
+        } else {
+
+            isInSight = false;
+
+        }
+
+        return { isInSight, distance, instance: target };
+
+    }
+
+    getNearestInSightTarget(targets, wrappedTargets, force = true) {
+        
+        let nearestTarget = null;
+        const targetsInSight = [];
+
+        if (force) {
+
+            for (let i = 0, il = targets.length; i < il; i++) {
+
+                const target = targets[i];
+                const targetCheck = this.checkSightOfView(target);
+
+                if (targetCheck.isInSight) {
+
+                    targetsInSight.push(targetCheck);
+
+                }
+
+            }
+
+        } else {
+
+            targetsInSight.push(...wrappedTargets);
+
+        }
+
+        if (targetsInSight.length > 0) {
+
+            targetsInSight.sort((a, b) => {
+
+                return a.distance - b.distance;
+
+            });
+
+            nearestTarget = targetsInSight[0].instance;
+
+        }
+
+        return nearestTarget;
+
+    }
+
+    checkTargetInSight(target) {
+
+        const checkResult = this.checkSightOfView(target);
+
+        if (checkResult.isInSight) {
+
+            if (!this._inSightTargets.find(t => t.instance === checkResult.instance)) {
+
+                this._inSightTargets.push(checkResult);
+                this.onSovSphereTriggerEnter.call(this, checkResult.instance);                
+                
+            } else {
+
+                this.onSovSphereTriggerStay.call(this, checkResult.instance);
+                
+            }
+
+        } else {
+
+            const findIdx = this._inSightTargets.findIndex(t => t.instance === checkResult.instance);
+
+            if (findIdx > -1) {
+
+                this._inSightTargets.splice(findIdx, 1);
+                this.onSovSphereTriggerExit.call(this, checkResult.instance);
+                
+            }
+
+        }
+
+    }
+
+    // inherited by children
+    onSovSphereTriggerEnter() {}
+
+    // inherited by children
+    onSovSphereTriggerStay() {}
+
+    // inherited by children
+    onSovSphereTriggerExit() {}
+
+    getTargetDirectionAngle(target) {
+
+        const selfDir = this.boundingBoxMesh.getWorldDirection(new Vector3());
+        const tarPos = target.worldPosition;
+        const selfPos = this.worldPosition;
+        const tarDir = new Vector3(tarPos.x, 0, tarPos.z).sub(new Vector3(selfPos.x, 0, selfPos.z));
+        const angle = selfDir.angleTo(tarDir);
+
+        // in right-handed system, y > 0 means counter-clockwise, y < 0 means clockwise
+        const direction = selfDir.clone().cross(tarDir).y > 0 ? polarity.left : polarity.right;
+
+        return {
+            angle: angle,
+            direction: direction,
+            targetPosition: tarPos,
+            selfPosition: selfPos
+        };
+
+    }
+
     setTickParams(delta) {
 
         const R = this.isAccelerating && this.isForward ?
@@ -819,7 +941,7 @@ class Tofu extends Moveable2D {
         const params = {
 
             group: this.group, R, rotateVel, stoodRotateVel, dist, delta,
-            player: this
+            $self: this
 
         };
 
@@ -843,7 +965,7 @@ class Tofu extends Moveable2D {
 
     tickClimb(delta, wall) {
 
-        this.climbWallTick({ delta, wall, player: this });
+        this.climbWallTick({ delta, wall, $self: this });
 
         this.updateOBB();
 
@@ -853,7 +975,7 @@ class Tofu extends Moveable2D {
 
     tickFall(delta) {
 
-        this.fallingTick({ delta, player: this });
+        this.fallingTick({ delta, $self: this });
 
         this.updateOBB();
 
@@ -863,7 +985,7 @@ class Tofu extends Moveable2D {
 
     onGround(floor) {
 
-        this.onGroundTick({ floor, player: this });
+        this.onGroundTick({ floor, $self: this });
 
         this.updateOBB();
 
@@ -873,7 +995,7 @@ class Tofu extends Moveable2D {
 
     tickOnHittingBottom(bottomWall) {
 
-        this.onHittingBottomTick({ bottomWall, player: this });
+        this.onHittingBottomTick({ bottomWall, $self: this });
 
         this.updateOBB();
 
@@ -883,7 +1005,7 @@ class Tofu extends Moveable2D {
 
     tickOnSlope(slope) {
 
-        this.onSlopeTick({ slope, player: this });
+        this.onSlopeTick({ slope, $self: this });
 
         this.updateOBB();
 
@@ -891,12 +1013,12 @@ class Tofu extends Moveable2D {
 
     }
 
-    tickWithWall(delta, wall, playerTicked = false) {
+    tickWithWall(delta, wall, selfTicked = false) {
 
         const params = this.setTickParams(delta);
 
         params.wall = wall;
-        params.playerTicked = playerTicked;
+        params.selfTicked = selfTicked;
 
         this.#slowDownCoefficient = SLOWDOWN_COEFFICIENT;
 
@@ -917,9 +1039,6 @@ class Tofu extends Moveable2D {
         this.updateRay(false);
 
     }
-
-    // eslint-disable-next-line no-unused-vars
-    finalTick(delta) {}
 
 }
 

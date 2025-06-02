@@ -23,7 +23,7 @@ const specular = 0x111111;
 
 // AI color codes
 const AI = {
-    playerInRange: 0xFF2400
+    targetInRange: 0xFF2400
 };
 
 function colorStr(r, g, b) {

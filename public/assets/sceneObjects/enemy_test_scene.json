@@ -50,7 +50,9 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1, 1, 1],
-            "position": [0, 0, 0]
+            "position": [0, 0, 0],
+            "sovRadius": 9,
+            "showBS": false
         }
     ],
     "enemies": [
@@ -63,7 +65,8 @@
             "position": [0, 3, 5],
             "rotation": [0, 3.1416, 0],
             "isActive": true,
-            "sovRadius": 5
+            "sovRadius": 6.5,
+            "showBS": true
         }
     ],
     "lights": [

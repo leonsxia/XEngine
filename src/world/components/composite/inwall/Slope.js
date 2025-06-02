@@ -1,7 +1,7 @@
 import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree, createOBBBox } from '../../physics/collisionHelper';
 import { InWallObjectBase } from './InWallObjectBase';
 import { yankeesBlue, basic, green, red } from '../../basic/colorBase';
-import { PLAYER_RAY_LAYER, OBSTACLE_RAY_LAYER } from '../../utils/constants';
+import { TOFU_RAY_LAYER, OBSTACLE_RAY_LAYER } from '../../utils/constants';
 
 const DEFAULT_STEP_HEIGHT = .25;
 
@@ -64,7 +64,7 @@ class Slope extends InWallObjectBase {
 
         this.createSideOBBs();
 
-        this.slope.mesh.layers.enable(PLAYER_RAY_LAYER);
+        this.slope.mesh.layers.enable(TOFU_RAY_LAYER);
         this.slope.mesh.layers.enable(OBSTACLE_RAY_LAYER);
         this.box.visible = false;
         this.bottomBoxBuffer.visible = false;

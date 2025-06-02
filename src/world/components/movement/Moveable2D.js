@@ -335,13 +335,13 @@ class Moveable2D {
 
     fallingTick(params) {
 
-        const { delta, player } = params;
+        const { delta, $self } = params;
 
         if (!this.#isClimbingUp && !this.#isClimbingForward) {
             
             const now = this.#fallingTime + delta;
             const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
-            player.group.position.y -= deltaY;
+            $self.group.position.y -= deltaY;
 
             this.#lastFrameFallingDist = deltaY;
 
@@ -354,7 +354,7 @@ class Moveable2D {
 
     onHittingBottomTick(params) {
 
-        const {bottomWall, player} = params;
+        const { bottomWall, $self } = params;
 
         // when climbing up, need to stop climbing
         if (this.#isClimbingUp) {
@@ -364,19 +364,19 @@ class Moveable2D {
         }
 
         const dir = bottomWall.worldPosition.clone();
-        dir.y -= player.height * .5;
-        player.group.position.y = player.group.parent ? player.group.parent.worldToLocal(dir).y : dir.y;
+        dir.y -= $self.height * .5;
+        $self.group.position.y = $self.group.parent ? $self.group.parent.worldToLocal(dir).y : dir.y;
 
     }
 
     onGroundTick(params) {
 
-        const { floor, player } = params;
+        const { floor, $self } = params;
 
         const dir = floor.worldPosition.clone();
         const onGroundPadding = .001;
-        dir.y += player.height * .5 - onGroundPadding;
-        player.group.position.y = player.group.parent ? player.group.parent.worldToLocal(dir).y : dir.y;
+        dir.y += $self.height * .5 - onGroundPadding;
+        $self.group.position.y = $self.group.parent ? $self.group.parent.worldToLocal(dir).y : dir.y;
 
         this.resetFallingState();
 
@@ -384,13 +384,13 @@ class Moveable2D {
 
     onSlopeTick(params) {
 
-        const { slope, player } = params;
+        const { slope, $self } = params;
 
         const intersects = [];
 
-        for (let i = 0, il = player.rays.length; i < il; i++) {
+        for (let i = 0, il = $self.rays.length; i < il; i++) {
 
-            const ray = player.rays[i];
+            const ray = $self.rays[i];
             const intersect = ray.intersectObject(slope);
 
             if (intersect.length > 0) intersects.push(intersect[0]);
@@ -404,8 +404,8 @@ class Moveable2D {
             });
 
             const dir = intersects[0].point.clone();
-            dir.y += player.height * .5;
-            player.group.position.y = player.group.parent ? player.group.parent.worldToLocal(dir).y : dir.y;
+            dir.y += $self.height * .5;
+            $self.group.position.y = $self.group.parent ? $self.group.parent.worldToLocal(dir).y : dir.y;
 
             this.resetFallingState();
 
@@ -413,12 +413,20 @@ class Moveable2D {
 
     }
 
-    quickTurnTick(params) {
-        let result = false;
-        const { group, delta, player } = params;
-        const worldY = player.worldYDirection;
+    // aimTick(params) {
 
-        if (player.enableQuickTurn && !this.#isClimbingUp && !this.#isClimbingForward) {
+    //     const { group, delta, $self } = params;
+
+
+    // }
+
+    quickTurnTick(params) {
+
+        let result = false;
+        const { group, delta, $self } = params;
+        const worldY = $self.worldYDirection;
+
+        if ($self.enableQuickTurn && !this.#isClimbingUp && !this.#isClimbingForward) {
 
             if (!this.#isQuickTuring && this.isQuickTuring) {
 
@@ -430,7 +438,7 @@ class Moveable2D {
 
                 if (this.#turingRad < Math.PI) {
 
-                    const ang = player.turnBackVel * delta;
+                    const ang = $self.turnBackVel * delta;
 
                     // group.rotation.y -= ang;
                     group.rotateOnWorldAxis(worldY, - ang);
@@ -468,17 +476,17 @@ class Moveable2D {
 
     climbWallTick(params) {
         
-        const { delta, wall, player } = params;
+        const { delta, wall, $self } = params;
 
-        if (player.enableClimbing) {
+        if ($self.enableClimbing) {
 
             if (wall && !this.#isClimbingUp && !this.#isClimbingForward && this.isClimbing && !this.#isFalling) {
 
-                this.#logger.log(`${player.name} is climbing ${wall.name}`);
+                this.#logger.log(`${$self.name} is climbing ${wall.name}`);
 
                 const marginTop = .01;           
                 this.#climbHeight = wall.worldPosition.y + wall.height * .5 + marginTop;
-                this.#climbDist = player.boundingBoxMesh.geometry.parameters.depth;
+                this.#climbDist = $self.boundingBoxMesh.geometry.parameters.depth;
 
                 this.#isClimbingUp = true;
 
@@ -489,19 +497,19 @@ class Moveable2D {
 
             if (this.#isClimbingUp || this.#isClimbingForward) {
 
-                if (player.bottomY < this.#climbHeight) {
+                if ($self.bottomY < this.#climbHeight) {
 
-                    player.group.position.y += delta * player.climbingVel;
+                    $self.group.position.y += delta * $self.climbingVel;
 
                 } else if (this.#climbForwardDist < this.#climbDist) {
 
                     this.#isClimbingUp = false;
                     this.#isClimbingForward = true;
 
-                    const dist = delta * player.climbingVel;
+                    const dist = delta * $self.climbingVel;
                     const dir = new Vector3(0, 0, dist);
 
-                    player.group.position.copy(player.group.localToWorld(dir));
+                    $self.group.position.copy($self.group.localToWorld(dir));
 
                     this.#climbForwardDist += dist;
 
@@ -515,11 +523,12 @@ class Moveable2D {
     }
 
     tankmoveTick(params) {
-        const { group, R, rotateVel, stoodRotateVel, dist, delta, player } = params;
+
+        const { group, R, rotateVel, stoodRotateVel, dist, delta, $self } = params;
         let deltaVec3, deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
         const stoodRotateRad = stoodRotateVel * delta;
-        const worldY = player.worldYDirection;
+        const worldY = $self.worldYDirection;
 
         if(this.quickTurnTick(params) || this.#isClimbingUp || this.#isClimbingForward) {
 
@@ -581,6 +590,7 @@ class Moveable2D {
                 group.rotateOnWorldAxis(worldY, rotateRad);
 
             }
+
         }
 
     }
@@ -621,9 +631,9 @@ class Moveable2D {
 
     }
 
-    rotateOffsetCorrection2(clockWise = true, player) {
+    rotateOffsetCorrection2(clockWise = true, target) {
 
-        const quickRecoverCoefficient = player.quickRecoverCoefficient;
+        const quickRecoverCoefficient = target.quickRecoverCoefficient;
 
         if (clockWise) {
 
@@ -650,23 +660,9 @@ class Moveable2D {
         }
     }
 
-    checkPlayerTowardsWall(player, wall) {
-
-        const wallDir = new Vector3();
-        const playerDir = new Vector3();
-
-        wall.getWorldDirection(wallDir);
-        player.getWorldDirection(playerDir);
-
-        const isTowards = playerDir.dot(wallDir) > 0 ? false : true;
-
-        return isTowards;
-
-    }
-
     tankmoveTickWithWall(params) {
 
-        const { group, R, rotateVel, stoodRotateVel, dist, delta, wall, player, playerTicked = false } = params;
+        const { group, R, rotateVel, stoodRotateVel, dist, delta, wall, $self, selfTicked = false } = params;
         const {
             wallMesh,
             borderReach, leftCorIntersectFace, rightCorIntersectFace, intersectCor,
@@ -687,21 +683,21 @@ class Moveable2D {
 
         const wallTransformMtx4 = wallMesh.matrixWorld;
         const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();
-        // get player position towards wall local space
+        // get moving object position towards wall local space
         const dummy2WallMtx4 = group.matrixWorld.clone().premultiply(wallWorldMatrixInverted);
         const dummyMatrixInverted = dummyObject.matrix.clone().invert();
         dummyObject.applyMatrix4(dummy2WallMtx4.multiply(dummyMatrixInverted));
 
         // const posY = dummyObject.position.y;
 
-        const recoverCoefficient = player.recoverCoefficient;
-        const quickRecoverCoefficient = player.quickRecoverCoefficient;
-        const backwardCoefficient = player.backwardCoefficient;
+        const recoverCoefficient = $self.recoverCoefficient;
+        const quickRecoverCoefficient = $self.quickRecoverCoefficient;
+        const backwardCoefficient = $self.backwardCoefficient;
         let deltaVec3, deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
         const stoodRotateRad = stoodRotateVel * delta;
 
-        const worldY = player.worldYDirection;
+        const worldY = $self.worldYDirection;
 
         const transformBack = () => {
 
@@ -716,11 +712,11 @@ class Moveable2D {
             wallMesh.getWorldQuaternion(wallWorldQuat);
             this._worldDeltaV3.add(this._deltaV3.applyQuaternion(wallWorldQuat));
 
-            const playerMatrixInverted = group.matrix.invert();
-            const playerWorldMatrixInvterted = group.parent.matrixWorld.invert();
+            const movingObjMatrixInverted = group.matrix.invert();
+            const movingObjWorldMatrixInvterted = group.parent.matrixWorld.invert();
             // follow the euquition:
             // parentWorldMatirx * localMatrix = recoverMtx4 => localMatrix = parentWorldMatrix.invert() * recoverMtx4
-            group.applyMatrix4(playerWorldMatrixInvterted.multiply(recoverMtx4.multiply(playerMatrixInverted)));
+            group.applyMatrix4(movingObjWorldMatrixInvterted.multiply(recoverMtx4.multiply(movingObjMatrixInverted)));
 
         }
 
@@ -812,7 +808,7 @@ class Moveable2D {
 
             deltaVec3 = new Vector3(0, 0, dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
-            offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
+            offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!borderReach) {
 
@@ -856,7 +852,7 @@ class Moveable2D {
 
             deltaVec3 = new Vector3(0, 0, - dist);
             const offsetVec3 = dummyObject.localToWorld(deltaVec3);
-            offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
+            offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!borderReach) {
 
@@ -899,7 +895,7 @@ class Moveable2D {
 
                 this.rotateOffsetCorrection(wall.checkResult.cornors);
 
-                this.rotateOffsetCorrection2(true, player);
+                this.rotateOffsetCorrection2(true, $self);
 
             }
 
@@ -912,7 +908,7 @@ class Moveable2D {
 
                 this.rotateOffsetCorrection(wall.checkResult.cornors);
 
-                this.rotateOffsetCorrection2(false, player);
+                this.rotateOffsetCorrection2(false, $self);
 
             }
 
@@ -929,7 +925,7 @@ class Moveable2D {
                 deltaVec3 = this.isMovingForwardLeft ? new Vector3(deltaX, 0, deltaZ) : new Vector3(deltaX, 0, - deltaZ);
 
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
-                offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
+                offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
                 if (!this._rotated) {
 
@@ -965,11 +961,11 @@ class Moveable2D {
 
                     if (this.isMovingBackwardLeft) {
                         
-                        this.rotateOffsetCorrection2(true, player);
+                        this.rotateOffsetCorrection2(true, $self);
     
                     } else if (this.isMovingForwardLeft) {
                         
-                        this.rotateOffsetCorrection2(false, player);
+                        this.rotateOffsetCorrection2(false, $self);
     
                     }
                     
@@ -980,7 +976,7 @@ class Moveable2D {
                 deltaVec3 = this.isMovingForwardRight ? new Vector3(- deltaX, 0, deltaZ) : new Vector3(- deltaX, 0, - deltaZ);
 
                 const offsetVec3 = dummyObject.localToWorld(deltaVec3);
-                offsetVec3.x = playerTicked ? dummyObject.position.x : offsetVec3.x;
+                offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
                 if (!this._rotated) {
 
@@ -1016,11 +1012,11 @@ class Moveable2D {
 
                     if (this.isMovingForwardRight) {
 
-                        this.rotateOffsetCorrection2(true, player);
+                        this.rotateOffsetCorrection2(true, $self);
     
                     } else if (this.isMovingBackwardRight) {
     
-                        this.rotateOffsetCorrection2(false, player);
+                        this.rotateOffsetCorrection2(false, $self);
     
                     }
                     

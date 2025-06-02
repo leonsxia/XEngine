@@ -110,7 +110,7 @@ class SimplePhysics {
 
     }
 
-    checkOutOfWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
+    checkOutOfWallRangeLocal(avatar, wall, halfAvatarWidth, halfAvatarHeight) {
 
         let result = false;
         const paddingX = .1
@@ -122,10 +122,10 @@ class SimplePhysics {
         const topBorderY = wall.height * .5 - paddingTopY;
         const bottomBorderY = - wall.height * .5 + paddingBottomY;
 
-        if (player.position.x < leftBorderX - halfPlayerWidth ||
-            player.position.x > rightBorderX + halfPlayerWidth ||
-            player.position.y > topBorderY + halfPlayerHeight ||
-            player.position.y < bottomBorderY - halfPlayerHeight
+        if (avatar.position.x < leftBorderX - halfAvatarWidth ||
+            avatar.position.x > rightBorderX + halfAvatarWidth ||
+            avatar.position.y > topBorderY + halfAvatarHeight ||
+            avatar.position.y < bottomBorderY - halfAvatarHeight
         ) {
 
             result = true;
@@ -136,28 +136,28 @@ class SimplePhysics {
 
     }
 
-    checkOutOfTriangleWallRangeLocal(player, wall, halfPlayerWidth, halfPlayerHeight) {
+    checkOutOfTriangleWallRangeLocal(avatar, wall, halfAvatarWidth, halfAvatarHeight) {
 
         let result = false;
         const paddingX = .1;
         const paddingTopY = .1;
         const paddingBottomY = .1;
-        const { x, y } = player.position;
+        const { x, y } = avatar.position;
         const { width, height, geometry: { parameters: { leftHanded } } } = wall;
         const tanTheta = height / width;
         const deltaX = leftHanded ? x + width * .5 : width * .5 - x;
         const deltaY = deltaX * tanTheta;
-        const offsetY = halfPlayerWidth * tanTheta;
+        const offsetY = halfAvatarWidth * tanTheta;
 
         const leftBorderX = - width * .5 + paddingX ;
         const rightBorderX = width * .5 - paddingX;
         const topBorderY = deltaY <= height * .5 ? - height * .5 + deltaY + offsetY - paddingTopY : deltaY - height * .5 + offsetY - paddingTopY;
         const bottomBorderY = - height * .5 + paddingBottomY;
 
-        if (x < leftBorderX - halfPlayerWidth ||
-            x > rightBorderX + halfPlayerWidth ||
-            y > topBorderY + halfPlayerHeight ||
-            y < bottomBorderY - halfPlayerHeight
+        if (x < leftBorderX - halfAvatarWidth ||
+            x > rightBorderX + halfAvatarWidth ||
+            y > topBorderY + halfAvatarHeight ||
+            y < bottomBorderY - halfAvatarHeight
         ) {
 
             result = true;
@@ -168,13 +168,13 @@ class SimplePhysics {
 
     }
 
-    checkIntersection(player, plane, delta) {
+    checkIntersection(avatar, plane, delta) {
 
         let intersect = false;
         let intersectCor = null;
 
         // set dummy object related to zero position.
-        const dummyObject = player.dummyObject;
+        const dummyObject = avatar.dummyObject;
         const wallMesh = new Object3D();
 
         plane.mesh.updateWorldMatrix(true, false);
@@ -183,15 +183,15 @@ class SimplePhysics {
         wallMesh.updateMatrixWorld();
 
         const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();
-        // get player position towards wall local space
-        const dummy2WallMtx4 = player.group.matrixWorld.clone().premultiply(wallWorldMatrixInverted);
+        // get avatar position towards wall local space
+        const dummy2WallMtx4 = avatar.group.matrixWorld.clone().premultiply(wallWorldMatrixInverted);
         const dummyMatrixInverted = dummyObject.matrix.clone().invert();
         dummyObject.applyMatrix4(dummy2WallMtx4.multiply(dummyMatrixInverted));
         
-        const leftCorVec3 = player.leftCorVec3;
-        const rightCorVec3 = player.rightCorVec3;
-        const leftBackCorVec3 = player.leftBackCorVec3;
-        const rightBackCorVec3 = player.rightBackCorVec3;
+        const leftCorVec3 = avatar.leftCorVec3;
+        const rightCorVec3 = avatar.rightCorVec3;
+        const leftBackCorVec3 = avatar.leftBackCorVec3;
+        const rightBackCorVec3 = avatar.rightBackCorVec3;
 
         dummyObject.localToWorld(leftCorVec3);
         dummyObject.localToWorld(rightCorVec3);
@@ -200,17 +200,17 @@ class SimplePhysics {
 
         const cornors = { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 };
 
-        const halfPlayerDepth = Math.max(Math.abs(leftCorVec3.z - rightBackCorVec3.z), Math.abs(rightCorVec3.z - leftBackCorVec3.z)) * .5;
-        const halfPlayerWidth = Math.max(Math.abs(leftCorVec3.x - rightBackCorVec3.x), Math.abs(rightCorVec3.x - leftBackCorVec3.x)) * .5;
-        const halfPlayerHeight = player.height * .5;
+        const halfAvatarDepth = Math.max(Math.abs(leftCorVec3.z - rightBackCorVec3.z), Math.abs(rightCorVec3.z - leftBackCorVec3.z)) * .5;
+        const halfAvatarWidth = Math.max(Math.abs(leftCorVec3.x - rightBackCorVec3.x), Math.abs(rightCorVec3.x - leftBackCorVec3.x)) * .5;
+        const halfAvatarHeight = avatar.height * .5;
 
-        if (this.checkOutOfWallRangeLocal(dummyObject, plane, halfPlayerWidth, halfPlayerHeight)) {
+        if (this.checkOutOfWallRangeLocal(dummyObject, plane, halfAvatarWidth, halfAvatarHeight)) {
             
             return { intersect, borderReach: false };
 
         }
 
-        if (plane.isTriangle && this.checkOutOfTriangleWallRangeLocal(dummyObject, plane, halfPlayerWidth, halfPlayerHeight)) {
+        if (plane.isTriangle && this.checkOutOfTriangleWallRangeLocal(dummyObject, plane, halfAvatarWidth, halfAvatarHeight)) {
 
             return { intersect, borderReach: false};
 
@@ -219,13 +219,13 @@ class SimplePhysics {
         const halfEdgeLength = plane.width / 2;
 
         if ((leftCorVec3.z <=0 || rightCorVec3.z <= 0 || leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) 
-            && Math.abs(dummyObject.position.z) - halfPlayerDepth <= 0
+            && Math.abs(dummyObject.position.z) - halfAvatarDepth <= 0
         ) {
             
-            const padding = player.velocity * delta + player.paddingCoefficient;
+            const padding = avatar.velocity * delta + avatar.paddingCoefficient;
 
             if (
-                (Math.abs(dummyObject.position.z - halfPlayerDepth) <=  padding) && 
+                (Math.abs(dummyObject.position.z - halfAvatarDepth) <=  padding) && 
                 (
                     (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) ||
                     (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) ||
@@ -236,35 +236,35 @@ class SimplePhysics {
 
                 if (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) {
                     
-                    player.leftCorIntersects = true;
+                    avatar.leftCorIntersects = true;
                     intersectCor = COR_DEF[0]; // left cornor
 
                 }
                 if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
                     
-                    player.rightCorIntersects = true;
+                    avatar.rightCorIntersects = true;
                     intersectCor = COR_DEF[1]; // right cornor
 
                 }
                 if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
                     
-                    player.backLeftCorIntersects = true;
+                    avatar.backLeftCorIntersects = true;
                     intersectCor = COR_DEF[2]; // left back cornor
 
                 }
                 if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
                     
-                    player.backRightCorIntersects = true;
+                    avatar.backRightCorIntersects = true;
                     intersectCor = COR_DEF[3]; // right back cornor
 
                 }
 
                 intersect = true;
 
-            } else if (Math.abs(dummyObject.position.z - halfPlayerDepth) >  player.velocity * delta) {
+            } else if (Math.abs(dummyObject.position.z - halfAvatarDepth) >  avatar.velocity * delta) {
                 
-                const leftBorderIntersects = plane.leftRay ? plane.leftRay.intersectObject(player.group) : [];
-                const rightBorderIntersects = plane.rightRay ? plane.rightRay.intersectObject(player.group) : [];
+                const leftBorderIntersects = plane.leftRay ? plane.leftRay.intersectObject(avatar.group) : [];
+                const rightBorderIntersects = plane.rightRay ? plane.rightRay.intersectObject(avatar.group) : [];
                 
                 if (
                     rightBorderIntersects.length > 0 ||
@@ -277,19 +277,19 @@ class SimplePhysics {
                     
                     if (leftCorIntersectFace?.includes(FACE_DEF[0]) || rightCorIntersectFace?.includes(FACE_DEF[0])) 
                         
-                        player.frontFaceIntersects = true;
+                        avatar.frontFaceIntersects = true;
 
                     if (leftCorIntersectFace?.includes(FACE_DEF[1]) || rightCorIntersectFace?.includes(FACE_DEF[1])) 
                         
-                        player.backFaceIntersects = true;
+                        avatar.backFaceIntersects = true;
 
                     if (leftCorIntersectFace?.includes(FACE_DEF[2]) || rightCorIntersectFace?.includes(FACE_DEF[2])) 
                         
-                        player.leftFaceIntersects = true;
+                        avatar.leftFaceIntersects = true;
 
                     if (leftCorIntersectFace?.includes(FACE_DEF[3]) || rightCorIntersectFace?.includes(FACE_DEF[3]))
                         
-                        player.rightFaceIntersects = true;
+                        avatar.rightFaceIntersects = true;
 
                     intersect = true;
                     
@@ -308,12 +308,12 @@ class SimplePhysics {
 
     }
 
-    checkStair(player, top) {
+    checkStair(avatar, top) {
 
         let isStair = false;
-        const offset = Math.abs(top.worldPosition.y - player.bottomY);
+        const offset = Math.abs(top.worldPosition.y - avatar.bottomY);
 
-        if (player.bottomY < top.worldPosition.y && offset <= STAIR_OFFSET_MAX && offset >= STAIR_OFFSET_MIN) {
+        if (avatar.bottomY < top.worldPosition.y && offset <= STAIR_OFFSET_MAX && offset >= STAIR_OFFSET_MIN) {
             
             isStair = true;
 
@@ -323,12 +323,12 @@ class SimplePhysics {
         
     }
 
-    checkBlockByTopT(player, top) {
+    checkBlockByTopT(avatar, top) {
 
         let block = false;
-        const offset = Math.abs(top.worldPosition.y - player.bottomY);
+        const offset = Math.abs(top.worldPosition.y - avatar.bottomY);
 
-        if (player.bottomY < top.worldPosition.y - player.lastFrameFallingDistance && offset > STAIR_OFFSET_MAX) {
+        if (avatar.bottomY < top.worldPosition.y - avatar.lastFrameFallingDistance && offset > STAIR_OFFSET_MAX) {
             
             block = true;
 
@@ -338,12 +338,12 @@ class SimplePhysics {
 
     }
 
-    checkBlockByBottomT(player, bottom) {
+    checkBlockByBottomT(avatar, bottom) {
 
         let block = false;
-        const offset = Math.abs(bottom.worldPosition.y - player.topY);
+        const offset = Math.abs(bottom.worldPosition.y - avatar.topY);
 
-        if (player.topY > bottom.worldPosition.y && offset > .1) {
+        if (avatar.topY > bottom.worldPosition.y && offset > .1) {
             
             block = true;
 
@@ -383,14 +383,14 @@ class SimplePhysics {
         
     }
 
-    checkWallClimbable(player, wall) {
+    checkWallClimbable(avatar, wall) {
 
         let climbable = false;
         const wallBottom = wall.worldPosition.y - wall.height * .5;
         const wallTop = wall.worldPosition.y + wall.height * .5;
 
-        // if wall is lower than half player height, and not below player, it will be climbable
-        if (player.bottomY >= wallBottom - player.height * .5 && player.bottomY < wallTop) {
+        // if wall is lower than half avatar height, and not below avatar, it will be climbable
+        if (avatar.bottomY >= wallBottom - avatar.height * .5 && avatar.bottomY < wallTop) {
 
             climbable = true;
 

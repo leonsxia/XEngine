@@ -142,7 +142,7 @@ function createCollisionGeometries(specs) {
 
     const boundingBox = new BoxGeometry(width, height, depth * 2 / 3);
 
-    const boundingSphere = new SphereGeometry(sovRadius, 16, 16);
+    const sovBoundingSphere = new SphereGeometry(sovRadius, 16, 16);
 
     const boundingBoxEdges = new EdgesGeometry(boundingBox);
 
@@ -154,7 +154,7 @@ function createCollisionGeometries(specs) {
     boundingBox.userData.obb = new OBB();
     boundingBox.userData.obb.halfSize.copy( new Vector3(width, height, depth * 2 / 3) ).multiplyScalar( 0.5 );
 
-    return { boundingBox, boundingBoxEdges, boundingFace, boundingFace2, boundingSphere };
+    return { boundingBox, boundingBoxEdges, boundingFace, boundingFace2, sovBoundingSphere };
 
 }
 
@@ -176,13 +176,13 @@ function createBoundingBoxFaces(specs) {
     boundingBox.visible = showBB;
     boundingBox.geometry.computeBoundingBox();
 
-    const boundingSphere = new Mesh(collisionGeometries.boundingSphere, basicMateraials.boundingSphere.clone());
-    boundingSphere.material.transparent = true;
-    boundingSphere.material.opacity = 0.5;
-    boundingSphere.name = 'boundingSphere-helper';
-    boundingSphere.position.set(0, 0, 0);
-    boundingSphere.visible = showBS;
-    boundingSphere.geometry.computeBoundingSphere();
+    const sovBoundingSphere = new Mesh(collisionGeometries.sovBoundingSphere, basicMateraials.sovBoundingSphere.clone());
+    sovBoundingSphere.material.transparent = true;
+    sovBoundingSphere.material.opacity = 0.2;
+    sovBoundingSphere.name = 'sovBoundingSphere-helper';
+    sovBoundingSphere.position.set(0, 0, 0);
+    sovBoundingSphere.visible = showBS;
+    // sovBoundingSphere.geometry.computeBoundingSphere();
 
     // bounding volume on object level (this will reflect the current world transform)
     boundingBox.userData.obb = new OBB();
@@ -253,7 +253,7 @@ function createBoundingBoxFaces(specs) {
 
 
     return { 
-        boundingBox, boundingBoxWire, boundingSphere,
+        boundingBox, boundingBoxWire, sovBoundingSphere,
         frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
         frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
     };

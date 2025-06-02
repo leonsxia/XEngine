@@ -116,7 +116,7 @@ function getInwallParent(object) {
 }
 
 /**
-@param level - isPlayer, isWeapon and so on
+@param level - isTofu, isWeapon and so on
 */
 function getTopParent(object, out, level = '') {
 

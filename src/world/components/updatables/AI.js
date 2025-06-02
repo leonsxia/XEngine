@@ -1,5 +1,4 @@
 import { Logger } from "../../systems/Logger";
-import { BS, AI as AICodes } from "../basic/colorBase";
 
 class AI {
 
@@ -7,6 +6,7 @@ class AI {
     enemies = [];
     isActive = true;
 
+    // eslint-disable-next-line no-unused-private-class-members
     #logger = new Logger(true, 'AI');
 
     constructor(players = [], enemies = []) {
@@ -28,41 +28,13 @@ class AI {
 
                 if (enemy.isActive) {
                     
-                    const distance = enemy.worldPosition.distanceTo(player.worldPosition);
-
-                    if (distance < enemy.sightOfView) {
-
-                        if (!enemy.isAttacking) {
-
-                            enemy.isAttacking = true;
-                            enemy.target = player;
-
-                            enemy.boundingSphereMesh.material.color.setHex(AICodes.playerInRange);
-
-                            this.#logger.log(`Enemy ${enemy.name} is attacking player ${player.name} at distance ${distance.toFixed(2)}`);
-
-                        }
-
-                    } else {
-
-                        if (enemy.isAttacking) {
-
-                            enemy.isAttacking = false;
-                            enemy.target = null;
-                            
-                            enemy.boundingSphereMesh.material.color.setHex(BS);
-
-                            this.#logger.log(`player ${player.name} is out of Enemy ${enemy.name}'s sov at distance ${distance.toFixed(2)}`);
-
-                        }
-
-                    }
+                    enemy.checkTargetInSight(player);
 
                 }
 
             }
 
-            enemy.aiTick?.(delta);
+            enemy.movingTick(delta);
 
         }
 

@@ -109,7 +109,7 @@ class Picker {
         if (intersects.length > 0) {
 
             const intersectObj = intersects[0].object;
-            let player = {};
+            let tofu = {};
             let weapon = {};
             let selectedObject = null;
             
@@ -121,9 +121,9 @@ class Picker {
 
                 selectedObject = weapon.value;
 
-            } else if (getTopParent(intersectObj, player).isPlayer) {
+            } else if (getTopParent(intersectObj, tofu).isTofu) {
 
-                selectedObject = player.value;
+                selectedObject = tofu.value;
 
             } else {
 

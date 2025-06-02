@@ -742,7 +742,7 @@ function makeObjectsGuiConfig(objects) {
 
         const postChangeFn = () => {
                 
-            if (object.isPlayer) {
+            if (object.isTofu) {
     
                 object.father.updateRay?.();
                 object.father.updateOBB?.();
@@ -795,7 +795,7 @@ function makeObjectsGuiConfig(objects) {
             changeFn: postChangeFn
         }));
 
-        if (!object.isPlayer && !object.isWeapon &&
+        if (!object.isTofu && !object.isWeapon &&
             !object.father.isFloor && !object.father.isCeiling && 
             !object.father.isArea &&
             !object.father.isWater && !object.father.isWaterCube

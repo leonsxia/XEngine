@@ -38,13 +38,15 @@ class SoldierFemale extends CombatPlayerBase {
         const { width = .6, width2 = .6, depth = .8, depth2 = .7, height = 1.78 } = specs;
         const { vel = 1.2, rotateR = 1, velEnlarge = 2.8 } = specs;
         const { scale = [1, 1, 1] } = specs;
+        const { sovRadius = 10, showBS = false } = specs;
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
             offsetY, offsetZ, width, width2, depth, depth2, height, 
             vel, velEnlarge, rotateR,
             scale,
-            clips: CLIPS,  animationSetting: ANIMATION_SETTINGS
+            clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,
+            sovRadius, showBS
         };
 
         super(setup);
