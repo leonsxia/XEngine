@@ -165,13 +165,14 @@ class ModelBuilder {
     createZombieMale(specs) {
 
         let object;
-        const { position = [0, 0, 0] } = specs;
+        const { position = [0, 0, 0], rotation = [0, 0, 0], } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new ZombieMale(specs);
         object.setPosition(position)
+            .setRotation(rotation)
             .updateOBB()
             .updateRay();
 
