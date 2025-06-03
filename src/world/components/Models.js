@@ -17,7 +17,7 @@ export { Train } from './composite/train/Train.js';
 export { Tofu } from './composite/tofu/Tofu.js';
 export { CombatPlayerBase } from './composite/characters/CombatPlayerBase.js';
 export { SoldierFemale } from './composite/characters/SoldierFemale.js';
-export { CreatureBase } from './composite/creatures/EnemyBase.js';
+export { CreatureBase } from './composite/creatures/CreatureBase.js';
 
 // Weapons
 export { WeaponBase } from './composite/weapons/WeaponBase.js';
