@@ -53,6 +53,8 @@ class FancyPictureFrame01 extends ObstacleBase {
 
             this._image = new Plane(imageSpecs);
 
+            this._image.receiveShadow(receiveShadow);
+
             this.group.add(this._image.mesh);
 
         }
