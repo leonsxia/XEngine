@@ -5,7 +5,7 @@ import { polarity } from "../../utils/enums";
 
 const DEBUG = true;
 
-class EnemyBase extends Tofu {
+class CreatureBase extends Tofu {
 
     specs;
 
@@ -15,7 +15,7 @@ class EnemyBase extends Tofu {
 
     gltf;
 
-    #logger = new Logger(DEBUG, 'EnemyBase');
+    #logger = new Logger(DEBUG, 'CreatureBase');
 
     constructor(specs) {
 
@@ -129,7 +129,7 @@ class EnemyBase extends Tofu {
     onSovSphereTriggerEnter(target) {
 
         this.#logger.func = this.onSovSphereTriggerEnter.name;
-        this.#logger.log(`Enemy ${this.name} sov sphere trigger entered by ${target.name}`);
+        this.#logger.log(`${this.name} sov sphere trigger entered by ${target.name}`);
 
         if (this._inSightTargets.length === 1) {
 
@@ -143,7 +143,7 @@ class EnemyBase extends Tofu {
     onSovSphereTriggerExit(target) {
 
         this.#logger.func = this.onSovSphereTriggerExit.name;
-        this.#logger.log(`${target.name} exited Enemy ${this.name}'s sov sphere trigger`);
+        this.#logger.log(`${target.name} exited ${this.name}'s sov sphere trigger`);
 
         if (this._inSightTargets.length === 0) {
 
@@ -192,4 +192,4 @@ class EnemyBase extends Tofu {
 
 }
 
-export { EnemyBase };
+export { CreatureBase };
