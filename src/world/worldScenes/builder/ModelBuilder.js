@@ -1,5 +1,5 @@
 import {
-    Train, Tofu, SoldierFemale, CreatureBase,
+    Train, Tofu, SoldierFemale, CreatureBase, ZombieMale,
     Plane, WaterPlane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
     Room, InspectorRoom, 
     SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, WaterCube, Slope, Stairs,
@@ -11,7 +11,7 @@ import {
     ModernCeilingLamp01, SecurityLight
 } from '../../components/Models.js';
 import {
-    AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, CREATURE_BASE,
+    AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, CREATURE_BASE, ZOMBIE_MALE,
     PLANE, WATER_PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
     ROOM, INSPECTOR_ROOM,
     SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, WATER_CUBE, SLOPE, STAIRS,
@@ -54,6 +54,7 @@ class ModelBuilder {
         this.objectCreationMapping[TRAIN] = this.createTrain;
         this.objectCreationMapping[SOLDIER_FEMALE] = this.createSoldierFemale;
         this.objectCreationMapping[CREATURE_BASE] = this.createCreatureBase;
+        this.objectCreationMapping[ZOMBIE_MALE] = this.createZombieMale;
         this.objectCreationMapping[AXES] = this.createAxes;
         this.objectCreationMapping[GRID] = this.createGrid;
         this.objectCreationMapping[PLANE] = this.createPlane;
@@ -154,6 +155,23 @@ class ModelBuilder {
             // .setScale(scale)
             // .receiveShadow(receiveShadow)
             // .castShadow(castShadow)
+            .updateOBB()
+            .updateRay();
+
+        return object;
+
+    }
+
+    createZombieMale(specs) {
+
+        let object;
+        const { position = [0, 0, 0] } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new ZombieMale(specs);
+        object.setPosition(position)
             .updateOBB()
             .updateRay();
 

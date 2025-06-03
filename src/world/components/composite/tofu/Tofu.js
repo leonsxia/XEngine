@@ -464,7 +464,7 @@ class Tofu extends Moveable2D {
 
     get sightOfView() {
 
-        return this.#sightOfView;
+        return this.#sightOfView * Math.max(this.group.scale.x, this.group.scale.y, this.group.scale.z);
 
     }
 

@@ -18,6 +18,7 @@ export { Tofu } from './composite/tofu/Tofu.js';
 export { CombatPlayerBase } from './composite/characters/CombatPlayerBase.js';
 export { SoldierFemale } from './composite/characters/SoldierFemale.js';
 export { CreatureBase } from './composite/creatures/CreatureBase.js';
+export { ZombieMale } from './composite/creatures/ZombieMale.js';
 
 // Weapons
 export { WeaponBase } from './composite/weapons/WeaponBase.js';

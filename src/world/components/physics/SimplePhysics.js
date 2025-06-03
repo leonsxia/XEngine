@@ -520,6 +520,8 @@ class SimplePhysics {
             }
 
             obs.tickMoving(delta);
+            // stop moving for next avatar checks
+            obs.stopMoving();
 
         }
 
@@ -950,7 +952,7 @@ class SimplePhysics {
                     if (obs.movable && (obs.pushable || obs.draggable)) {
 
                         avatar.stopPushing();
-                        obs.stopMoving();
+                        // obs.stopMoving();
 
                         if (obs.triggers) {
 

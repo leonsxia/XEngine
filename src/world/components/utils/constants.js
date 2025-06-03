@@ -24,6 +24,7 @@ const TOFU = 'Tofu';
 const TRAIN = 'Train';
 const SOLDIER_FEMALE = 'SoldierFemale';
 const CREATURE_BASE = 'CreatureBase';
+const ZOMBIE_MALE = 'ZombieMale';
 
 // weapons
 const WEAPONS = {
@@ -242,6 +243,8 @@ const TEXTURES = [{
 const GLTF_NAMES = {
     // characters
     SOLDIER_FEMALE: 'SOLDIER_FEMALE',
+    // creatures
+    ZOMBIE_MALE: 'ZOMBIE_MALE',
     // tables
     WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
     WOODEN_TABLE: 'WOODEN_TABLE',
@@ -269,6 +272,8 @@ const GLTF_NAMES = {
 
 const GLTFS = [{
     name: GLTF_NAMES.SOLDIER_FEMALE, src: 'characters/soldier_female.glb'
+}, {
+    name: GLTF_NAMES.ZOMBIE_MALE, src: 'creatures/zombie_male.glb'
 }, {
     name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
 }, {
@@ -344,6 +349,14 @@ const SOLDIER_FEMALE_CLIPS = {
     WAVE: { nick: 'wave', name: 'CharacterArmature|Wave', idx: 23, enable: false }
 };
 
+const ZOMBIE_MALE_CLIPS = {
+    DEATH: { nick: 'death', name: 'Armature|Die', idx: 0, enable: true, loopOnce: true },
+    HIT_RECEIVE: { nick: 'hit_receive', name: 'Armature|Hit_reaction', idx: 1, enable: true, loopOnce: true },
+    IDLE: { nick: 'idle', name: 'Armature|Idle', idx: 2, enable: true, isDefault: true },
+    WALK: { nick: 'walk', name: 'Armature|Walk', idx: 3, startImmediately: false, enable: true },
+    WALK2: { nick: 'walk2', name: 'Armature|Walk2', idx: 4, startImmediately: false, enable: true }
+}
+
 const GLOCK_CLIPS = {
     SHOOT: { nick: 'shoot', name: 'glock_19|Shoot', idx: 0, enable: true, isDefault: true, startImmediately: false, weight: 0, loopOnce: true }
 }
@@ -395,6 +408,7 @@ export {
     TRAIN,
     SOLDIER_FEMALE,
     CREATURE_BASE,
+    ZOMBIE_MALE,
 
     WEAPONS,
 
@@ -475,6 +489,7 @@ export {
     SHADERS,
 
     SOLDIER_FEMALE_CLIPS,
+    ZOMBIE_MALE_CLIPS,
     GLOCK_CLIPS,
 
     GUI_CONFIG
