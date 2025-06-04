@@ -28,7 +28,7 @@ class ZombieMale extends CreatureBase {
 
         const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true } = specs;
         const { offsetY = - 2.225, offsetZ = - .3 } = specs;
-        const { width = .68, width2 = .68, depth = .9, depth2 = .7, height = 1.8 } = specs;
+        const { width = .63, width2 = .63, depth = .9, depth2 = .7, height = 1.8 } = specs;
         const { vel = .37, rotateR = 1.1 } = specs;
         const { scale = [1, 1, 1], gltfScale = [.4, .4, .4] } = specs;
         const { sovRadius = 6.5, showBS = false, enableCollision = true } = specs;
