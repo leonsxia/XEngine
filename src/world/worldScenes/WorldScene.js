@@ -254,12 +254,12 @@ class WorldScene {
                     
                     // enemy.showBF(true);
 
-                    if (enemy?.gltf?.skeleton) {
+                    if (enemy.gltf?.skeleton) {
 
                         this.scene.add(enemy.gltf.skeleton);
 
                     }
-                    
+
                     this.physics.addActiveEnemies(enemy.name);
                     // this.subscribeEvents(enemy, this.setup.moveType);
 

@@ -196,7 +196,7 @@ class CreatureBase extends Tofu {
 
                 if (!this.forward) {
 
-                    if (this.attacking) {
+                    if (this._isAttacking) {
 
                         this.#logger.log(`left turn in queue`);
                         this.AWS.previousAction = this.AWS.actions[this._walkNick];
@@ -223,7 +223,7 @@ class CreatureBase extends Tofu {
 
                 if (!this.forward) {
 
-                    if (this.attacking) {
+                    if (this._isAttacking) {
 
                         this.#logger.log(`idle in queue 3`);
                         this.AWS.previousAction = this.AWS.actions[this._idleNick];
@@ -262,9 +262,9 @@ class CreatureBase extends Tofu {
 
             if (!this.turningRight) {
 
-                if (!this.forward && !this.backward) {
+                if (!this.forward) {
 
-                    if (this.attacking) {
+                    if (this._isAttacking) {
 
                         this.#logger.log(`right turn in queue`);
                         this.AWS.previousAction = this.AWS.actions[this._walkNick];
@@ -290,9 +290,9 @@ class CreatureBase extends Tofu {
 
             if (this.turningRight) {
 
-                if (!this.forward && !this.backward) {
+                if (!this.forward) {
 
-                    if (this.attacking) {
+                    if (this._isAttacking) {
 
                         this.#logger.log(`idle in queue 3`);
                         this.AWS.previousAction = this.AWS.actions[this._idleNick];
@@ -361,7 +361,7 @@ class CreatureBase extends Tofu {
                 this.movingLeft(false);
                 this.movingRight(false);
 
-            } else if (dirAngle.angle > 0.2) {
+            } else if (dirAngle.angle > 0.26) {
                 
                 if (dirAngle.direction === polarity.left) {
 
