@@ -666,7 +666,8 @@ class SceneBuilder {
 
             findPlayer.setPosition(position)
                 .updateOBB()
-                .updateRay?.();
+                .updateRay?.()
+                .updateWalls?.();
             _origin.position = new Array(...position);
 
         }

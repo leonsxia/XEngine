@@ -46,7 +46,7 @@ class CombatPlayerBase extends Tofu {
         const { rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5 } = specs;
         const { clips, animationSetting } = specs;
         const { scale = [1, 1, 1] } = specs;
-        const { showBS = false } = specs;
+        const { showBS = false, enableCollision = true } = specs;
 
         super({ name, size: { width, width2, depth, depth2, height, sovRadius }, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge });
 
@@ -60,7 +60,15 @@ class CombatPlayerBase extends Tofu {
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
-        super.setScale(scale);
+
+        this.setScale(scale);
+
+        if (enableCollision) {
+
+            this.createCollisionBox();
+            this.showCollisionBox(false);
+
+        }
 
         // show bounding sphere
         this.showBS(showBS);

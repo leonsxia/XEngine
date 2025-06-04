@@ -97,14 +97,29 @@ class SimplePhysics {
         this.obstacles = obstacles;
         this.slopes = slopes;
         this.slopeSideOBBWalls = slopeSideOBBWalls;
-        this.waterCubes = waterCubes;
-        this.obstacleCollisionOBBWalls = this.walls.filter(w => w.isOBB).concat(...this.slopeSideOBBWalls);
+        this.waterCubes = waterCubes;        
 
         this.interactiveObs = this.obstacles.filter(obs => 
                     
             obs.movable && (obs.pushable || obs.draggable) || obs.climbable
         
         );
+
+        for (let i = 0, il = this.players.length; i < il; i++) {
+
+            const player = this.players[i];
+            this.walls.push(...player.walls);
+
+        }
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            this.walls.push(...enemy.walls);
+
+        }
+
+        this.obstacleCollisionOBBWalls = this.walls.filter(w => w.isOBB).concat(...this.slopeSideOBBWalls);
 
         this.sortFloorTops();
 

@@ -31,7 +31,7 @@ class ZombieMale extends CreatureBase {
         const { width = .68, width2 = .68, depth = .9, depth2 = .7, height = 1.8 } = specs;
         const { vel = .37, rotateR = 1.1 } = specs;
         const { scale = [1, 1, 1], gltfScale = [.4, .4, .4] } = specs;
-        const { sovRadius = 6.5, showBS = false } = specs;
+        const { sovRadius = 6.5, showBS = false, enableCollision = true } = specs;
         const { walknick = CLIPS.WALK.nick } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
@@ -49,7 +49,7 @@ class ZombieMale extends CreatureBase {
             vel, rotateR,
             scale, gltfScale,
             clips: CLIPS,  animationSetting: animationSetting,
-            sovRadius, showBS
+            sovRadius, showBS, enableCollision
         };
 
         super(setup);

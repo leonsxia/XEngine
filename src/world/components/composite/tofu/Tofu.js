@@ -4,6 +4,7 @@ import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2 } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
 import { polarity } from '../../utils/enums';
+import { CollisionBox } from '../../Models';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -37,6 +38,9 @@ class Tofu extends Moveable2D {
     backRightArrow;
 
     intersectSlope;
+
+    collisionBox;
+    walls = [];
     
     _size;
     _useBF2 = false;
@@ -554,6 +558,12 @@ class Tofu extends Moveable2D {
 
     }
 
+    showCollisionBox(show) {
+
+        this.collisionBox.group.visible = show;
+        
+    }
+
     createRay() {
 
         this.hasRays = true;
@@ -671,6 +681,48 @@ class Tofu extends Moveable2D {
         }
 
         return this;
+
+    }
+
+    createCollisionBox() {
+
+        const cBoxSpecs = {
+            name: `${this.name}-cBox`, 
+            width: this._size.width, depth: this._size.depth, height: this._size.height, 
+            enableWallOBBs: true, showArrow: false, lines: false,
+            ignoreFaces: [4, 5]
+        };
+
+        this.collisionBox = new CollisionBox(cBoxSpecs);
+
+        this.walls.push(...this.collisionBox.walls);
+        this.group.add(this.collisionBox.group);
+
+    }
+
+    updateWalls(needUpdateMatrixWorld = true) {
+
+        for (let i = 0, il = this.walls.length; i < il; i++) {
+
+            const w = this.walls[i];
+
+            w.updateRay(needUpdateMatrixWorld);
+
+            if (w.isOBB) {
+
+                w.updateOBB(false);
+
+            }
+
+        }
+
+    }
+
+    updateAccessories(needUpdateMatrixWorld = true) {
+        
+        this.updateOBB(needUpdateMatrixWorld);
+        this.updateRay(false);
+        this.updateWalls(false);
 
     }
 
@@ -957,9 +1009,7 @@ class Tofu extends Moveable2D {
 
         this.tankmoveTick(params);
 
-        this.updateOBB();
-
-        this.updateRay(false);
+        this.updateAccessories();
 
     }
 
@@ -967,9 +1017,7 @@ class Tofu extends Moveable2D {
 
         this.climbWallTick({ delta, wall, $self: this });
 
-        this.updateOBB();
-
-        this.updateRay(false);
+        this.updateAccessories();
 
     }
 
@@ -977,9 +1025,7 @@ class Tofu extends Moveable2D {
 
         this.fallingTick({ delta, $self: this });
 
-        this.updateOBB();
-
-        this.updateRay(false);
+        this.updateAccessories();
 
     }
 
@@ -987,9 +1033,7 @@ class Tofu extends Moveable2D {
 
         this.onGroundTick({ floor, $self: this });
 
-        this.updateOBB();
-
-        this.updateRay(false);
+        this.updateAccessories();
 
     }
 
@@ -997,9 +1041,7 @@ class Tofu extends Moveable2D {
 
         this.onHittingBottomTick({ bottomWall, $self: this });
 
-        this.updateOBB();
-
-        this.updateRay(false);
+        this.updateAccessories();
         
     }
 
@@ -1007,9 +1049,7 @@ class Tofu extends Moveable2D {
 
         this.onSlopeTick({ slope, $self: this });
 
-        this.updateOBB();
-
-        this.updateRay(false);
+        this.updateAccessories();
 
     }
 
@@ -1024,9 +1064,7 @@ class Tofu extends Moveable2D {
 
         this.tankmoveTickWithWall(params);
 
-        this.updateOBB();
-
-        this.updateRay(false);
+        this.updateAccessories();
 
     }
 
@@ -1034,9 +1072,7 @@ class Tofu extends Moveable2D {
 
         this.applyWorldDeltaV3({ group: this.group });
 
-        this.updateOBB();
-
-        this.updateRay(false);
+        this.updateAccessories();
 
     }
 

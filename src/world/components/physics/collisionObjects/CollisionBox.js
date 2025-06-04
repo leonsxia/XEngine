@@ -42,14 +42,23 @@ class CollisionBox extends CollisionBase {
         this.right = this.ignoreFace('right') ? null : createPlaneFunction(leftRightSpecs, `${this.name}_right`, [- this.width * .5, 0, 0], - Math.PI * .5, false, false, showArrow);
 
         {
-            this.top = createOBBPlane(bottomTopSpecs, `${this.name}_top`, [0, this.height * .5, 0], [- Math.PI * .5, 0 ,0], false, false);
-            this.bottom = createOBBPlane(bottomTopSpecs, `${this.name}_bottom`, [0, - this.height * .5, 0], [Math.PI * .5, 0, 0], false, false);
+            if (!this.ignoreFace('top')) {
 
-            this.top.father = this;
-            this.bottom.father = this;
+                this.top = createOBBPlane(bottomTopSpecs, `${this.name}_top`, [0, this.height * .5, 0], [- Math.PI * .5, 0 ,0], false, false);
+                this.top.father = this;
+                this.topOBBs = [this.top];
+                this.group.add(this.top.mesh);
+
+            }
             
-            this.topOBBs = [this.top];
-            this.bottomOBBs = [this.bottom];
+            if (!this.ignoreFace('bottom')) {
+
+                this.bottom = createOBBPlane(bottomTopSpecs, `${this.name}_bottom`, [0, - this.height * .5, 0], [Math.PI * .5, 0, 0], false, false);
+                this.bottom.father = this;
+                this.bottomOBBs = [this.bottom];
+                this.group.add(this.bottom.mesh);
+
+            }
 
         }
 
@@ -57,11 +66,6 @@ class CollisionBox extends CollisionBase {
         this.front?.line?.material.color.setHex(green);
 
         this.addWalls();
-
-        this.group.add(
-            this.top.mesh,
-            this.bottom.mesh
-        );
 
     }
 
@@ -87,6 +91,14 @@ class CollisionBox extends CollisionBase {
             
             case 'right':
                 ignore = ignoreFaces.findIndex(i => i === 3) > - 1;
+                break;
+
+            case 'top':
+                ignore = ignoreFaces.findIndex(i => i === 4) > - 1;
+                break;
+
+            case 'bottom':
+                ignore = ignoreFaces.findIndex(i => i === 5) > - 1;
                 break;
 
         }
@@ -167,11 +179,19 @@ class CollisionBox extends CollisionBase {
 
         }
 
-        this.top.setScale([scale[0], scale[2], 1])
-            .setPosition([0, height * .5, 0]);
-            
-        this.bottom.setScale([scale[0], scale[2], 1])
-            .setPosition([0, - height * .5, 0]);
+        if (this.top) {
+
+            this.top.setScale([scale[0], scale[2], 1])
+                .setPosition([0, height * .5, 0]);
+
+        }
+
+        if (this.bottom) {
+
+            this.bottom.setScale([scale[0], scale[2], 1])
+                .setPosition([0, - height * .5, 0]);
+
+        }
 
         return this;
 

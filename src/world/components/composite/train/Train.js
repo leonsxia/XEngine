@@ -238,7 +238,7 @@ class Train extends Moveable2D {
         const params = {
             group: this.group, R, rotateVel, stoodRotateVel, dist, delta, 
             smallWheelRotateVel, largeWheelRotateVel,
-            player: this
+            $self: this
         };
 
         return params;
@@ -252,12 +252,12 @@ class Train extends Moveable2D {
     }
 
     tickFall(delta) {
-        this.fallingTick({ delta, player: this });
+        this.fallingTick({ delta, $self: this });
         this.updateOBB();
     }
 
     onGround(floor) {
-        this.onGroundTick({ floor, player: this });
+        this.onGroundTick({ floor, $self: this });
         this.updateOBB();
     }
 
@@ -268,7 +268,7 @@ class Train extends Moveable2D {
 
     tickOnHittingBottom(bottomWall) {
 
-        this.onHittingBottomTick({ bottomWall, player: this });
+        this.onHittingBottomTick({ bottomWall, $self: this });
 
         this.updateOBB();
         

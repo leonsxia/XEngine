@@ -744,8 +744,7 @@ function makeObjectsGuiConfig(objects) {
                 
             if (object.isTofu) {
     
-                object.father.updateRay?.();
-                object.father.updateOBB?.();
+                object.father.updateAccessories();
     
             } else if (object.isWeapon) {
 

@@ -260,6 +260,17 @@ class WorldScene {
 
                     }
 
+                    // enemy.walls.forEach(w => {
+                        
+                    //     w.leftArrow.visible = true;
+                    //     w.rightArrow.visible = true;
+                    //     this.scene.add(w.leftArrow);
+                    //     this.scene.add(w.rightArrow);
+
+                    // });
+
+                    enemy.updateAccessories();
+
                     this.physics.addActiveEnemies(enemy.name);
                     // this.subscribeEvents(enemy, this.setup.moveType);
 
@@ -563,6 +574,8 @@ class WorldScene {
 
             }
 
+            this.player.updateWalls?.();
+
             this.player.setSlopeIntersection?.();
 
             this.player.resetFallingState?.();
@@ -752,6 +765,15 @@ class WorldScene {
                 this.scene.add(this.player.gltf.skeleton);
 
             }
+
+            // this.player.walls.forEach(w => {
+
+            //     w.leftArrow.visible = true;
+            //     w.rightArrow.visible = true;
+            //     this.scene.add(w.leftArrow);
+            //     this.scene.add(w.rightArrow);
+
+            // });
 
             this.subscribeEvents(this.player, this.setup.moveType);
 
