@@ -39,6 +39,7 @@ class Tofu extends Moveable2D {
 
     intersectSlope;
 
+    _collisionSize;
     collisionBox;
     walls = [];
     
@@ -78,15 +79,17 @@ class Tofu extends Moveable2D {
 
         specs.size = specs.size || {};
         const { name, size: {
-            width = .9, width2 = .9, depth = .9, depth2 = .9, height: height = 1.8,
+            width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8,
             sovRadius: sovRadius = Math.max(width, width2, depth, depth2, height)
         }} = specs;
         const { 
             rotateR = .9, vel = 1.34, stoodTurningVel = 1.5, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = .2, 
             recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7 
         } = specs;
+        const { collisionSize = { width, depth, height } } = specs;
 
         this._size = { width, width2, depth, depth2, height, sovRadius };
+        this._collisionSize = collisionSize;
 
         this.#sightOfView = sovRadius;
         this.#rotateR = rotateR;
@@ -688,12 +691,13 @@ class Tofu extends Moveable2D {
 
         const cBoxSpecs = {
             name: `${this.name}-cBox`, 
-            width: this._size.width, depth: this._size.depth, height: this._size.height, 
+            width: this._collisionSize.width, depth: this._collisionSize.depth, height: this._collisionSize.height, 
             enableWallOBBs: true, showArrow: false, lines: false,
             ignoreFaces: [4, 5]
         };
 
         this.collisionBox = new CollisionBox(cBoxSpecs);
+        this.collisionBox.father = this;
 
         this.walls.push(...this.collisionBox.walls);
         this.group.add(this.collisionBox.group);

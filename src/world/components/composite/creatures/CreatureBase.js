@@ -1,5 +1,5 @@
 import { Logger } from "../../../systems/Logger";
-import { GLTFModel, Tofu } from "../../Models";
+import { CollisionBox, GLTFModel, Tofu } from "../../Models";
 import { AnimateWorkstation } from "../../animation/AnimateWorkstation";
 import { BS, AI as AICodes } from "../../basic/colorBase";
 import { CAMERA_RAY_LAYER } from "../../utils/constants";
@@ -24,13 +24,17 @@ class CreatureBase extends Tofu {
     _clips = {};
     _animationSettings = {};
 
-    _idleNick;  // current idle
-    _walkNick;   // current walk
+    typeMapping;
+
+    collisionBoxes = new Map();
 
     isCreature = true;
 
     _delta = 0;
     _i = 0;
+
+    onBeforeCollisionBoxChanged = () => {};
+    onCollisionBoxChanged = () => {};
 
     constructor(specs) {
 
@@ -38,15 +42,17 @@ class CreatureBase extends Tofu {
         const { src, receiveShadow = true, castShadow = true, hasBones = true } = specs;
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = specs;
+        const { collisionSize = { width, depth, height } } = specs;
         const { rotateR = .9, vel = 0.7, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5 } = specs;
         const { clips, animationSetting } = specs;
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
-        const { isActive = true, showBS = false, enableCollision = true } = specs;
+        const { isActive = true, showBS = false, enableCollision = true, typeMapping } = specs;
 
-        super({ name, size: { width, width2, depth, depth2, height, sovRadius }, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge });
+        super({ name, size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge });
 
         this.specs = specs;
         this.isActive = isActive;
+        this.typeMapping = typeMapping;
 
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
@@ -62,7 +68,9 @@ class CreatureBase extends Tofu {
 
         if (enableCollision) {
 
-            this.createCollisionBox();
+            // this.createCollisionBox();
+            this.createCollisionBoxes();
+            this.switchCollisionBox(this.typeMapping.idle.nick, false);
             this.showCollisionBox(false);
 
         }
@@ -118,6 +126,54 @@ class CreatureBase extends Tofu {
 
     }
 
+    createCollisionBoxes() {
+
+        const { name, idleCollisionSize, walkCollisionSize } = this.typeMapping;
+        const idleCBoxSpecs = {
+            name: `${this.name}-${name}-idle-cBox`, 
+            width: idleCollisionSize.width, depth: idleCollisionSize.depth, height: idleCollisionSize.height, 
+            enableWallOBBs: true, showArrow: false, lines: false,
+            ignoreFaces: [4, 5]
+        };
+        const walkCBoxSpecs = {
+            name: `${this.name}-${name}-walk-cBox`, 
+            width: walkCollisionSize.width, depth: walkCollisionSize.depth, height: walkCollisionSize.height, 
+            enableWallOBBs: true, showArrow: false, lines: false,
+            ignoreFaces: [4, 5]
+        };
+
+        this.collisionBoxes.clear();
+        this.collisionBoxes.set(this.typeMapping.idle.nick, new CollisionBox(idleCBoxSpecs));
+        this.collisionBoxes.set(this.typeMapping.walk.nick, new CollisionBox(walkCBoxSpecs));
+
+        this.collisionBoxes.get(this.typeMapping.idle.nick).father = this;
+        this.collisionBoxes.get(this.typeMapping.walk.nick).father = this;
+        
+    }
+
+    switchCollisionBox(action, forceEvent = true) {
+
+        if (forceEvent) this.onBeforeCollisionBoxChanged(this);
+
+        const cbox = this.collisionBoxes.get(action);
+
+        this.walls = [];
+        this.walls.push(...cbox.walls);
+
+        if (this.collisionBox) {
+
+            this.group.remove(this.collisionBox.group);
+
+        }
+
+        this.group.add(cbox.group);
+        this.collisionBox = cbox;
+        this.showCollisionBox(false);
+
+        if (forceEvent) this.onCollisionBoxChanged(this);
+
+    }
+
     movingForward(val) {
 
         if (val) {
@@ -127,18 +183,19 @@ class CreatureBase extends Tofu {
                 if (this._isAttacking) {
 
                     this.#logger.log(`walk in queue`);
-                    this.AWS.previousAction = this.AWS.actions[this._walkNick];
-                    this.AWS.setActionWeightTimeScaleInCallback(this._walkNick, 1, this._animationSettings.WALK_TIMESCALE);
+                    this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
+                    this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.walk.nick, 1, this._animationSettings.WALK_TIMESCALE);
 
                 } else if (!this.rotating) {
 
                     this.#logger.log('idle to walk');
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._walkNick], this._animationSettings.IDLE_TO_WALK);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_WALK);
+                    this.switchCollisionBox(this.typeMapping.walk.nick);
 
                 } else if (this.rotating) {
 
                     this.#logger.log(`zero turn to walk turn`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._walkNick], this.AWS.actions[this._walkNick], this._animationSettings.WALK_TURN_TO_ZERO_TURN, 1);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.WALK_TURN_TO_ZERO_TURN, 1);
 
                 }
 
@@ -155,29 +212,30 @@ class CreatureBase extends Tofu {
                     if (this.rotating) {
 
                         this.#logger.log(`walk turn in queue 2`);
-                        this.AWS.setActionWeightTimeScaleInCallback(this._walkNick, this._animationSettings.TURN_WEIGHT, this._animationSettings.WALK_TIMESCALE);
+                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.walk.nick, this._animationSettings.TURN_WEIGHT, this._animationSettings.WALK_TIMESCALE);
 
                     } else {
 
                         this.#logger.log(`idle in queue 2`);
-                        this.AWS.previousAction = this.AWS.actions[this._idleNick];
+                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
 
                         // TEST: gun fire -> press and release w once while gun firing
-                        this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
                         // TEST: gun fire -> press and release w once -> walk backward
-                        this.AWS.clearActionCallback(this._walkNick);
+                        this.AWS.clearActionCallback(this.typeMapping.walk.nick);
 
                     }
 
                 } else if (!this.rotating) {
 
                     this.#logger.log(`walk to idle`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._walkNick], this.AWS.actions[this._idleNick], this._animationSettings.WALK_TO_IDLE);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.WALK_TO_IDLE);
+                    this.switchCollisionBox(this.typeMapping.idle.nick);
 
                 } else {
 
                     this.#logger.log(`walk turn to zero turn`);
-                    this.AWS.setActionEffectiveWeight(this._walkNick, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.setActionEffectiveWeight(this.typeMapping.walk.nick, this._animationSettings.TURN_WEIGHT);
 
                 }
 
@@ -206,17 +264,18 @@ class CreatureBase extends Tofu {
                     if (this._isAttacking) {
 
                         this.#logger.log(`left turn in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this._walkNick];
-                        this.AWS.setActionWeightTimeScaleInCallback(this._walkNick, this._animationSettings.TURN_WEIGHT, this._animationSettings.WALK_TIMESCALE);
+                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
+                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.walk.nick, this._animationSettings.TURN_WEIGHT, this._animationSettings.WALK_TIMESCALE);
 
                     } else {
 
                         this.#logger.log(`idle to left turn`);
-                        this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._walkNick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
+                        this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
+                        this.switchCollisionBox(this.typeMapping.walk.nick);
 
                     }
 
-                    this.AWS.setActionEffectiveTimeScale(this._walkNick, this._animationSettings.WALK_TIMESCALE);
+                    this.AWS.setActionEffectiveTimeScale(this.typeMapping.walk.nick, this._animationSettings.WALK_TIMESCALE);
 
                 }
 
@@ -233,17 +292,18 @@ class CreatureBase extends Tofu {
                     if (this._isAttacking) {
 
                         this.#logger.log(`idle in queue 3`);
-                        this.AWS.previousAction = this.AWS.actions[this._idleNick];
+                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
 
                         // TEST: gun fire -> press and release a once while gun firing
-                        this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
                         // TEST: gun fire -> press and releas a once -> walk forward
-                        this.AWS.clearActionCallback(this._walkNick);
+                        this.AWS.clearActionCallback(this.typeMapping.walk.nick);
 
                     } else {
 
                         this.#logger.log(`left turn to idle`);
-                        this.AWS.prepareCrossFade(this.AWS.actions[this._walkNick], this.AWS.actions[this._idleNick], this._animationSettings.TURN_TO_IDLE);
+                        this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.TURN_TO_IDLE);
+                        this.switchCollisionBox(this.typeMapping.walk.nick);
 
                     }
 
@@ -274,18 +334,19 @@ class CreatureBase extends Tofu {
                     if (this._isAttacking) {
 
                         this.#logger.log(`right turn in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this._walkNick];
+                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
 
-                        this.AWS.setActionWeightTimeScaleInCallback(this._walkNick, this._animationSettings.TURN_WEIGHT);
+                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.walk.nick, this._animationSettings.TURN_WEIGHT);
 
                     } else {
 
                         this.#logger.log(`idle to right turn`);
-                        this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._walkNick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
+                        this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
+                        this.switchCollisionBox(this.typeMapping.walk.nick);
 
                     }
 
-                    this.AWS.setActionEffectiveTimeScale(this._walkNick, this._animationSettings.WALK_TIMESCALE);
+                    this.AWS.setActionEffectiveTimeScale(this.typeMapping.walk.nick, this._animationSettings.WALK_TIMESCALE);
 
                 }
 
@@ -302,17 +363,18 @@ class CreatureBase extends Tofu {
                     if (this._isAttacking) {
 
                         this.#logger.log(`idle in queue 3`);
-                        this.AWS.previousAction = this.AWS.actions[this._idleNick];
+                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
 
                         // TEST: gun fire -> press and release a once while gun firing
-                        this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
                         // TEST: gun fire -> press and releas d once -> walk forward
-                        this.AWS.clearActionCallback(this._walkNick);
+                        this.AWS.clearActionCallback(this.typeMapping.walk.nick);
 
                     } else {
 
                         this.#logger.log(`right turn to idle`);
-                        this.AWS.prepareCrossFade(this.AWS.actions[this._walkNick], this.AWS.actions[this._idleNick], this._animationSettings.TURN_TO_IDLE);
+                        this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.TURN_TO_IDLE);
+                        this.switchCollisionBox(this.typeMapping.walk.nick);
 
                     }
 

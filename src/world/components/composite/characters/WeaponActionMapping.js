@@ -5,7 +5,7 @@ class WeaponActionMapping {
     shoot;
     attack;
     attackInterval;
-    prepareInterval
+    prepareInterval;
     fireRate;
 
     constructor(specs) {

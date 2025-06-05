@@ -1,22 +1,47 @@
 import { CreatureBase } from "../../Models";
 import { ZOMBIE_MALE_CLIPS as CLIPS } from "../../utils/constants";
 import { Logger } from '../../../systems/Logger';
+import { CreatureTypeMapping } from "./CreatureTypeMapping";
 
 const GLTF_SRC = 'creatures/zombie_male.glb';
 
 const DEBUG = true;
 const ANIMATION_SETTINGS = {
     IDLE_TO_WALK: 0.1,
-    IDLE_TO_WALK2: 0.1,
     WALK_TO_IDLE: 0.3,
-    WALK2_TO_IDLE: 0.3,
     IDLE_TO_TURN: 0.1,
     TURN_TO_IDLE: 0.1,
     WALK_TURN_TO_ZERO_TURN: 0.3,
     WALK_TIMESCALE: 2.1,
-    WALK2_TIMESCALE: 1.5,
     TURN_WEIGHT: 0.7,
     ATTACK: 0.2
+};
+
+const ZOMBIE_TYPES_MAPPING = {
+    STANDARD: new CreatureTypeMapping({
+        name: 'standard',
+        idle: CLIPS.IDLE, walk: CLIPS.WALK, attack: CLIPS.ATTACK, walkTimeScale: 2.1, idleToWalk: 0.1, walkToIdle: 0.3,
+        idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
+        walkCollisionSize: { width: .63, depth: .75, height: 1.8 }
+    }),
+    VARIANT1: new CreatureTypeMapping({
+        name: 'variant1',
+        idle: CLIPS.IDLE, walk: CLIPS.WALK2, attack: CLIPS.ATTACK, walkTimeScale: 1.5, idleToWalk: 0.1, walkToIdle: 0.3,
+        idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
+        walkCollisionSize: { width: .63, depth: .85, height: 1.8 }
+    }),
+    VARIANT2: new CreatureTypeMapping({
+        name: 'variant2',
+        idle: CLIPS.IDLE, walk: CLIPS.WLAK3, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.2, walkToIdle: 0.3,
+        idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
+        walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 }
+    }),
+    VARIANT3: new CreatureTypeMapping({
+        name: 'variant3',
+        idle: CLIPS.IDLE, walk: CLIPS.CRAWL, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.3, walkToIdle: 0.3,
+        idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
+        walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 }
+    })
 };
 
 class ZombieMale extends CreatureBase {
@@ -27,35 +52,36 @@ class ZombieMale extends CreatureBase {
     constructor(specs) {
 
         const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true } = specs;
-        const { offsetY = - 2.225, offsetZ = - .3 } = specs;
+        const { offsetY = - 2.225, offsetZ = 0 } = specs;
         const { width = .63, width2 = .63, depth = .9, depth2 = .7, height = 1.8 } = specs;
+        const { collisionSize = { width, depth: .7, height } } = specs;
         const { vel = .37, rotateR = 1.1 } = specs;
         const { scale = [1, 1, 1], gltfScale = [.4, .4, .4] } = specs;
         const { sovRadius = 6.5, showBS = false, enableCollision = true } = specs;
-        const { walknick = CLIPS.WALK.nick } = specs;
+        const { variant = 'standard' } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
-        if (walknick !== CLIPS.WALK.nick) {
-            
-            animationSetting.IDLE_TO_WALK = ANIMATION_SETTINGS.IDLE_TO_WALK2;
-            animationSetting.WALK_TO_IDLE = ANIMATION_SETTINGS.WALK2_TO_IDLE;
-            animationSetting.WALK_TIMESCALE = ANIMATION_SETTINGS.WALK2_TIMESCALE;
+
+        const typeMapping = ZOMBIE_TYPES_MAPPING[variant.toUpperCase()] ?? ZOMBIE_TYPES_MAPPING.STANDARD;
+        if (typeMapping) {
+
+            animationSetting.IDLE_TO_WALK = typeMapping.idleToWalk;
+            animationSetting.WALK_TO_IDLE = typeMapping.walkToIdle;
+            animationSetting.WALK_TIMESCALE = typeMapping.walkTimeScale;
 
         }
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
-            offsetY, offsetZ, width, width2, depth, depth2, height, 
+            offsetY, offsetZ, width, width2, depth, depth2, height, collisionSize,
             vel, rotateR,
             scale, gltfScale,
             clips: CLIPS,  animationSetting: animationSetting,
-            sovRadius, showBS, enableCollision
+            sovRadius, showBS, enableCollision,
+            typeMapping
         };
 
         super(setup);
-
-        this._idleNick = CLIPS.IDLE.nick;
-        this._walkNick = walknick === CLIPS.WALK.nick ? CLIPS.WALK.nick : CLIPS.WALK2.nick;
 
         this.showTofu(false);
 
@@ -65,7 +91,7 @@ class ZombieMale extends CreatureBase {
 
         await super.init();
 
-        this.AWS.setActionEffectiveTimeScale(this._walkNick, this._animationSettings.WALK_TIMESCALE);
+        this.AWS.setActionEffectiveTimeScale(this.typeMapping.walk.nick, this._animationSettings.WALK_TIMESCALE);
    
     }
 

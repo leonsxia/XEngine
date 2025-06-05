@@ -354,7 +354,10 @@ const ZOMBIE_MALE_CLIPS = {
     HIT_RECEIVE: { nick: 'hit_receive', name: 'Armature|Hit_reaction', idx: 1, enable: true, loopOnce: true },
     IDLE: { nick: 'idle', name: 'Armature|Idle', idx: 2, enable: true, isDefault: true },
     WALK: { nick: 'walk', name: 'Armature|Walk', idx: 3, startImmediately: false, enable: true },
-    WALK2: { nick: 'walk2', name: 'Armature|Walk2', idx: 4, startImmediately: false, enable: true }
+    WALK2: { nick: 'walk2', name: 'Armature|Walk2', idx: 4, startImmediately: false, enable: true },
+    WLAK3: { nick: 'walk3', name: 'Armature|Running_Crawl', idx: 5, startImmediately: false, enable: true },
+    CRAWL: { nick: 'crawl', name: 'Armature|Crawl', idx: 6, startImmediately: false, enable: true },
+    ATTACK: { nick: 'attack', name: 'Armature|Attack', idx: 7, enable: true }
 }
 
 const GLOCK_CLIPS = {

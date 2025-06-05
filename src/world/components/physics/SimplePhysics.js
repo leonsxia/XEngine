@@ -35,6 +35,15 @@ class SimplePhysics {
         this.players = players;
         this.enemies = enemies;
 
+        // bind event
+        for (let i = 0, il = enemies.length; i < il; i++) {
+
+            const enemy = enemies[i];
+            enemy.onBeforeCollisionBoxChanged = this.onBeforeEnemyCollisionBoxChanged.bind(this);
+            enemy.onCollisionBoxChanged = this.onEnemyCollisionBoxChanged.bind(this);
+
+        }
+
     }
 
     addActivePlayers(...names) {
@@ -122,6 +131,37 @@ class SimplePhysics {
         this.obstacleCollisionOBBWalls = this.walls.filter(w => w.isOBB).concat(...this.slopeSideOBBWalls);
 
         this.sortFloorTops();
+
+    }
+
+    onBeforeEnemyCollisionBoxChanged(enemy) {        
+
+        for (let j = 0, jl = enemy.walls.length; j < jl; j++) {
+
+            const wall = enemy.walls[j];
+            const idx = this.walls.findIndex(w => w === wall);
+            const oidx = this.obstacleCollisionOBBWalls.findIndex(w => w === wall);
+
+            if (idx > - 1) {
+
+                this.walls.splice(idx, 1);
+
+            }
+
+            if (oidx > -1) {
+
+                this.obstacleCollisionOBBWalls.splice(oidx, 1);
+
+            }
+
+        }
+
+    }
+
+    onEnemyCollisionBoxChanged(enemy) {
+
+        this.walls.push(...enemy.walls);
+        this.obstacleCollisionOBBWalls.push(...enemy.walls);
 
     }
 
@@ -744,7 +784,13 @@ class SimplePhysics {
 
             const collisionedWalls = [];
 
-            const wallsInScope = this.walls.filter(w => this.getObject2WallDistance(avatar, w) <= avatar.detectScopeMin);
+            const wallsInScope = this.walls.filter(w => {
+
+                // get in scope walls and get rid of walls inside itself
+                return this.getObject2WallDistance(avatar, w) <= avatar.detectScopeMin &&
+                    w.father?.father !== avatar
+
+            });
 
             avatar.resetWorldDeltaV3();
 
