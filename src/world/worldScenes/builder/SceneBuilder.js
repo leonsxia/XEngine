@@ -437,7 +437,8 @@ class SceneBuilder {
 
     saveScene() {
 
-        this.updateScene(this.worldScene.sceneSavedSetup, null, false, true);
+        this.worldScene.stop();
+        this.updateScene(this.worldScene.sceneSavedSetup, null, false, false, true);
         const savedJson = JSON.stringify(this.worldScene.sceneSavedSetup);
         const savedBlob = new Blob([savedJson], {type: 'application/json'});
 
@@ -453,6 +454,8 @@ class SceneBuilder {
     }
 
     loadScene() {
+
+        this.worldScene.stop();
 
         const tempInput = document.createElement('input');
 
@@ -471,7 +474,7 @@ class SceneBuilder {
 
                 const loadJson = JSON.parse(text);
 
-                $this.updateScene($this.worldScene.sceneSetup, loadJson, false, false);
+                $this.updateScene($this.worldScene.sceneSetup, loadJson, false, false, false);
 
                 if ($this.worldScene.staticRendering) {
 
@@ -482,6 +485,7 @@ class SceneBuilder {
             }).finally(() => {
 
                 tempInput.removeEventListener('change', onChange);
+                $this.worldScene.start();
 
             });
 
@@ -493,13 +497,13 @@ class SceneBuilder {
 
     resetScene() {
 
-        this.updateScene(this.worldScene.sceneSetup, this.worldScene.sceneSetupCopy, true);
+        this.updateScene(this.worldScene.sceneSetup, this.worldScene.sceneSetupCopy, true, true);
 
     }
 
-    updateScene(_setup, _targetSetup, needResetPlayers = false, updateSetupOnly = false) {
+    updateScene(_setup, _targetSetup, needResetPlayers = false, needResetEnemies = false, updateSetupOnly = false) {
 
-        const { players, lights, objects } = _setup;
+        const { players = [], enemies = [], lights, objects } = _setup;
         const sceneSpecs = objects.find(o => o.type === SCENE);
         const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);
 
@@ -513,6 +517,17 @@ class SceneBuilder {
 
             if (needResetPlayers) this.worldScene.resetCharacterPosition();
 
+        }
+
+        for (let i = 0, il = enemies.length; i < il; i++) {
+
+            const e = enemies[i];
+
+            const _targetEnemySetup = updateSetupOnly ? null : _targetSetup.enemies.find (f => f.type === e.type && f.name === e.name);
+
+            this.updateEnemies(e, _targetEnemySetup, updateSetupOnly);
+            
+            if (needResetEnemies) this.worldScene.resetEnemies();
         }
 
         for (let i = 0, il = lights.length; i < il; i++) {
@@ -665,6 +680,30 @@ class SceneBuilder {
             const { position } = _target;
 
             findPlayer.setPosition(position)
+                .updateOBB()
+                .updateRay?.()
+                .updateWalls?.();
+            _origin.position = new Array(...position);
+
+        }
+
+    }
+
+    updateEnemies(_origin, _target, updateSetupOnly = false) {
+
+        const { name } = _origin;
+        const findPlayer = this.worldScene.enemies.find(p => p.name === name);
+
+        if (updateSetupOnly) {
+
+            _origin.position = this.positionArr(findPlayer.position);
+
+        } else {
+
+            const { position, rotation } = _target;
+
+            findPlayer.setPosition(position)
+                .setRotation(rotation)
                 .updateOBB()
                 .updateRay?.()
                 .updateWalls?.();

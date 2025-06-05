@@ -812,6 +812,17 @@ class WorldScene {
 
     }
 
+    resetEnemies() {
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            enemy.resetFallingState();
+
+        }
+        
+    }
+
     resetScene() {
 
         this.sceneBuilder.resetScene();
