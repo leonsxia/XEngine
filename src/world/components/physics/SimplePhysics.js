@@ -39,8 +39,8 @@ class SimplePhysics {
         for (let i = 0, il = enemies.length; i < il; i++) {
 
             const enemy = enemies[i];
-            enemy.onBeforeCollisionBoxChanged = this.onBeforeEnemyCollisionBoxChanged.bind(this);
-            enemy.onCollisionBoxChanged = this.onEnemyCollisionBoxChanged.bind(this);
+            enemy.onBeforeCollisionBoxChanged.push(this.onBeforeEnemyCollisionBoxChanged.bind(this));
+            enemy.onCollisionBoxChanged.push(this.onEnemyCollisionBoxChanged.bind(this));
 
         }
 

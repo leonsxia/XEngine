@@ -260,14 +260,32 @@ class WorldScene {
 
                     }
 
-                    // enemy.walls.forEach(w => {
-                        
-                    //     w.leftArrow.visible = true;
-                    //     w.rightArrow.visible = true;
-                    //     this.scene.add(w.leftArrow);
-                    //     this.scene.add(w.rightArrow);
+                    enemy.onBeforeCollisionBoxChanged.push((enemy) => {
 
-                    // });
+                        for (let i = 0, il = enemy.walls.length; i < il; i++) {
+
+                            const wall = enemy.walls[i];
+                            this.scene.remove(wall.leftArrow);
+                            this.scene.remove(wall.rightArrow)
+
+                        }
+
+                    });
+
+                    const onCollisionBoxChanged = (enemy) => {
+
+                        for (let i = 0, il = enemy.walls.length; i < il; i++) {
+
+                            const wall = enemy.walls[i];
+                            // wall.leftArrow.visible = true;
+                            // wall.rightArrow.visible = true;
+                            this.scene.add(wall.leftArrow);
+                            this.scene.add(wall.rightArrow)
+
+                        }
+                    };
+                    onCollisionBoxChanged(enemy);
+                    enemy.onCollisionBoxChanged.push(onCollisionBoxChanged);
 
                     enemy.updateAccessories();
 

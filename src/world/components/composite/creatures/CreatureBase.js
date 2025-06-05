@@ -33,8 +33,8 @@ class CreatureBase extends Tofu {
     _delta = 0;
     _i = 0;
 
-    onBeforeCollisionBoxChanged = () => {};
-    onCollisionBoxChanged = () => {};
+    onBeforeCollisionBoxChanged = [];
+    onCollisionBoxChanged = [];
 
     constructor(specs) {
 
@@ -68,10 +68,8 @@ class CreatureBase extends Tofu {
 
         if (enableCollision) {
 
-            // this.createCollisionBox();
             this.createCollisionBoxes();
             this.switchCollisionBox(this.typeMapping.idle.nick, false);
-            this.showCollisionBox(false);
 
         }
 
@@ -153,7 +151,7 @@ class CreatureBase extends Tofu {
 
     switchCollisionBox(action, forceEvent = true) {
 
-        if (forceEvent) this.onBeforeCollisionBoxChanged(this);
+        if (forceEvent) this.doBeforeCollisionBoxChangedEvents();
 
         const cbox = this.collisionBoxes.get(action);
 
@@ -170,7 +168,29 @@ class CreatureBase extends Tofu {
         this.collisionBox = cbox;
         this.showCollisionBox(false);
 
-        if (forceEvent) this.onCollisionBoxChanged(this);
+        if (forceEvent) this.doCollisionBoxChangedEvents();
+
+    }
+
+    doBeforeCollisionBoxChangedEvents() {
+
+        for (let i = 0, il = this.onBeforeCollisionBoxChanged.length; i < il; i++) {
+
+            const event = this.onBeforeCollisionBoxChanged[i];
+            event(this);
+
+        }
+
+    }
+
+    doCollisionBoxChangedEvents() {
+
+        for (let i = 0, il = this.onCollisionBoxChanged.length; i < il; i++) {
+
+            const event = this.onCollisionBoxChanged[i];
+            event(this);
+
+        }
 
     }
 

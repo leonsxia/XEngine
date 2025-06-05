@@ -28,7 +28,7 @@ const ZOMBIE_TYPES_MAPPING = {
         name: 'variant1',
         idle: CLIPS.IDLE, walk: CLIPS.WALK2, attack: CLIPS.ATTACK, walkTimeScale: 1.5, idleToWalk: 0.1, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
-        walkCollisionSize: { width: .63, depth: .85, height: 1.8 }
+        walkCollisionSize: { width: .63, depth: .8, height: 1.8 }
     }),
     VARIANT2: new CreatureTypeMapping({
         name: 'variant2',
