@@ -28,6 +28,7 @@ const ZOMBIE_MALE = 'ZombieMale';
 
 // weapons
 const WEAPONS = {
+    NONE: 'NONE',
     PISTOL1: 'PISTOL1',
     GLOCK: 'GLOCK',
     BAYONET: 'BAYONET',

@@ -46,7 +46,7 @@ class CreatureBase extends Tofu {
         const { rotateR = .9, vel = 0.7, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5 } = specs;
         const { clips, animationSetting } = specs;
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
-        const { isActive = true, showBS = false, enableCollision = true, typeMapping } = specs;
+        const { isActive = true, showBS = false, enableCollision = true, typeMapping = [] } = specs;
 
         super({ name, size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge });
 

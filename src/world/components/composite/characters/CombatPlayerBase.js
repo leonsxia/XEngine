@@ -2,7 +2,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { GLTFModel, Tofu } from '../../Models';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
-import { CAMERA_RAY_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
 
 const DEBUG = false;
 const DEBUG_WEAPON = true;
@@ -27,7 +27,6 @@ class CombatPlayerBase extends Tofu {
     _tempAction;
 
     _idleNick;  // current idle
-    idleNick;   // default idle
     armedWeapon;
     _meleeWeapon;
 
@@ -190,7 +189,7 @@ class CombatPlayerBase extends Tofu {
         } else {
 
             this.switchWeapon();
-            this.switchIdleAction(this.idleNick);
+            this.switchIdleAction(this.weaponActionMapping[WEAPONS.NONE].idle.nick);
 
         }
 
