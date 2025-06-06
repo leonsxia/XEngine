@@ -1,5 +1,5 @@
 import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three';
-import { createMeshes } from './meshes';
+import { createMeshes, createOtherBoundingObjects } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2 } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
@@ -22,6 +22,7 @@ class Tofu extends Moveable2D {
     name = '';
     group;
     meshes;
+    boundingObjects;
 
     boundingBox;
     boundingBoxHelper;
@@ -93,6 +94,7 @@ class Tofu extends Moveable2D {
             recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7 
         } = specs;
         const { collisionSize = { width, depth, height } } = specs;
+        const { createDefaultBoundingObjects = true } = specs;
 
         this._size = { width, width2, depth, depth2, height, sovRadius };
         this._collisionSize = collisionSize;
@@ -119,29 +121,36 @@ class Tofu extends Moveable2D {
         this.group.father = this;
         this.meshes = createMeshes(this._size);
 
-        const { 
-
-            body, slotLeft, slotRight, 
-            bbObjects: {
-                boundingBox, boundingBoxWire, sovBoundingSphere,
-                frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
-                frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
-            },
-            pushingOBBBox
-
+        const {
+            body, slotLeft, slotRight
         } = this.meshes;
 
         this.enablePickLayers(body, slotLeft, slotRight);
 
         this.group.add(
-
-            body, slotLeft, slotRight, 
-            boundingBox, boundingBoxWire, sovBoundingSphere,
-            frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
-            frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2,
-            pushingOBBBox
-
+            body, slotLeft, slotRight
         ).name = name;
+
+        if (createDefaultBoundingObjects) {
+
+            this.boundingObjects = createOtherBoundingObjects(this._size);
+            const {
+                bbObjects: {
+                boundingBox, boundingBoxWire, sovBoundingSphere,
+                frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
+                frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
+            },
+            pushingOBBBox
+            } = this.boundingObjects;
+
+            this.group.add(
+                boundingBox, boundingBoxWire, sovBoundingSphere,
+                frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
+                frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2,
+                pushingOBBBox
+            );
+            
+        }
 
         this.#w = width;
         this.#d = depth;

@@ -39,8 +39,8 @@ class SimplePhysics {
         for (let i = 0, il = enemies.length; i < il; i++) {
 
             const enemy = enemies[i];
-            enemy.onBeforeCollisionBoxChanged.push(this.onBeforeEnemyCollisionBoxChanged.bind(this));
-            enemy.onCollisionBoxChanged.push(this.onEnemyCollisionBoxChanged.bind(this));
+            enemy.onBeforeCollisionBoxChanged.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
+            enemy.onCollisionBoxChanged.push(this.onTofuCollisionBoxChanged.bind(this));
 
         }
 
@@ -52,7 +52,11 @@ class SimplePhysics {
 
             const find = this.players.find(p => p.name === name);
 
-            if (find) this.activePlayers.push(find);
+            if (find) {
+
+                this.activePlayers.push(find);
+                this.onTofuCollisionBoxChanged(find);
+            }
 
         });
 
@@ -64,7 +68,13 @@ class SimplePhysics {
 
             const idx = this.activePlayers.findIndex(active => active.name === name);
 
-            if (idx > -1) this.activePlayers.splice(find, 1);
+            if (idx > -1) {
+                
+                const player = this.activePlayers[idx];
+                this.onBeforeTofuCollisionBoxChanged(player);
+                this.activePlayers.splice(find, 1);
+            
+            }
 
         });
 
@@ -76,7 +86,12 @@ class SimplePhysics {
 
             const find = this.enemies.find(e => e.name === name);
 
-            if (find) this.activeEnemies.push(find);
+            if (find) {
+                
+                this.activeEnemies.push(find);
+                this.onTofuCollisionBoxChanged(find);
+            
+            }
 
         });
 
@@ -88,7 +103,13 @@ class SimplePhysics {
 
             const idx = this.activeEnemies.findIndex(active => active.name === name);
 
-            if (idx > -1) this.activeEnemies.splice(idx, 1);
+            if (idx > -1) {
+                
+                const enemy = this.activePlayers[idx];
+                this.onBeforeTofuCollisionBoxChanged(enemy);
+                this.activeEnemies.splice(idx, 1);
+            
+            }
 
         });
 
@@ -114,31 +135,17 @@ class SimplePhysics {
         
         );
 
-        for (let i = 0, il = this.players.length; i < il; i++) {
-
-            const player = this.players[i];
-            this.walls.push(...player.walls);
-
-        }
-
-        for (let i = 0, il = this.enemies.length; i < il; i++) {
-
-            const enemy = this.enemies[i];
-            this.walls.push(...enemy.walls);
-
-        }
-
         this.obstacleCollisionOBBWalls = this.walls.filter(w => w.isOBB).concat(...this.slopeSideOBBWalls);
 
         this.sortFloorTops();
 
     }
 
-    onBeforeEnemyCollisionBoxChanged(enemy) {        
+    onBeforeTofuCollisionBoxChanged(tofu) {        
 
-        for (let j = 0, jl = enemy.walls.length; j < jl; j++) {
+        for (let i = 0, il = tofu.walls.length; i < il; i++) {
 
-            const wall = enemy.walls[j];
+            const wall = tofu.walls[i];
             const idx = this.walls.findIndex(w => w === wall);
             const oidx = this.obstacleCollisionOBBWalls.findIndex(w => w === wall);
 
@@ -158,10 +165,27 @@ class SimplePhysics {
 
     }
 
-    onEnemyCollisionBoxChanged(enemy) {
+    onTofuCollisionBoxChanged(tofu) {
 
-        this.walls.push(...enemy.walls);
-        this.obstacleCollisionOBBWalls.push(...enemy.walls);
+        for (let i = 0, il = tofu.walls.length; i < il; i++) {
+
+            const wall = tofu.walls[i];
+            const idx = this.walls.findIndex(w => w === wall);
+            const oidx = this.obstacleCollisionOBBWalls.findIndex(w => w === wall);
+
+            if (idx === - 1) {
+
+                this.walls.push(wall);
+
+            }
+
+            if (oidx === -1) {
+
+                this.obstacleCollisionOBBWalls.push(wall);
+
+            }
+
+        }
 
     }
 

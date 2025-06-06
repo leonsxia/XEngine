@@ -5,7 +5,7 @@ import { createBoundingBoxFaces, createPlayerPushingOBBBox } from '../../physics
 
 function createMeshes(size) {
 
-    const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = size;
+    const { width = .9, depth = .9 } = size;
     const geometires = createGeometries(size);
     const materials = createMaterials();
 
@@ -24,6 +24,16 @@ function createMeshes(size) {
     slotRight.position.set(- width / 3, 0, depth / 3);
     slotRight.visible = true;
 
+    return { 
+        body, slotLeft, slotRight
+    };
+
+}
+
+function createOtherBoundingObjects(size) {
+
+    const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = size;
+
     const bbSpecs = {
 
         width, width2, depth, depth2, height, sovRadius,
@@ -38,12 +48,11 @@ function createMeshes(size) {
     const pushingObbSpecs = { height, depth, show: false };
     const pushingOBBBox = createPlayerPushingOBBBox(pushingObbSpecs);
 
-    return { 
-        body, slotLeft, slotRight,
+    return {
         bbObjects,
         pushingOBBBox
     };
 
 }
 
-export { createMeshes };
+export { createMeshes, createOtherBoundingObjects };

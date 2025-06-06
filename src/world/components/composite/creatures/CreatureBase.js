@@ -497,6 +497,14 @@ class CreatureBase extends Tofu {
 
     }
 
+    destroy() {
+
+        super.destroy();
+
+        this.doBeforeCollisionBoxChangedEvents();
+
+    }
+
 }
 
 export { CreatureBase };
