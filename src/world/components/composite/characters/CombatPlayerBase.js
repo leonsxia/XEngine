@@ -99,6 +99,8 @@ class CombatPlayerBase extends Tofu {
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
 
+        this.trackResources();
+
     }
 
     initPromises() {
@@ -112,6 +114,12 @@ class CombatPlayerBase extends Tofu {
         }
 
         return loadPromises;
+
+    }
+
+    trackResources() {
+
+        this.track(this.group);
 
     }
 

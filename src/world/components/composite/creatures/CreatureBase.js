@@ -11,7 +11,6 @@ class CreatureBase extends Tofu {
 
     specs;
 
-    isActive = true;
     _isNoticed = false;
     _isAttacking = false;
 
@@ -97,6 +96,21 @@ class CreatureBase extends Tofu {
 
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
+
+        this.trackResources();
+        
+    }
+
+    trackResources() {
+
+        this.track(this.group);
+        
+        for (const cbox of this.collisionBoxes.values()) {
+
+            this.track(cbox.group);
+
+        }
+
     }
 
     bindEvents() {
@@ -144,6 +158,7 @@ class CreatureBase extends Tofu {
         this.collisionBoxes.set(this.typeMapping.idle.nick, new CollisionBox(idleCBoxSpecs));
         this.collisionBoxes.set(this.typeMapping.walk.nick, new CollisionBox(walkCBoxSpecs));
 
+        // for SimplyPhysics self-check
         this.collisionBoxes.get(this.typeMapping.idle.nick).father = this;
         this.collisionBoxes.get(this.typeMapping.walk.nick).father = this;
         

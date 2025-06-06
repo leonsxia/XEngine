@@ -5,6 +5,7 @@ import { orange, BF, BF2 } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
 import { polarity } from '../../utils/enums';
 import { CollisionBox } from '../../Models';
+import { ResourceTracker } from '../../../systems/ResourceTracker';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -71,6 +72,11 @@ class Tofu extends Moveable2D {
     #backwardSlowdownCoefficient = .7;
     #backwardRotatingRadiusCoefficient = .7;
     #isPushing = false;
+
+    resTracker = new ResourceTracker();
+    track = this.resTracker.track.bind(this.resTracker);
+    dispose = this.resTracker.dispose.bind(this.resTracker);
+    isActive = true;
 
     constructor(specs) {
 
@@ -1077,6 +1083,13 @@ class Tofu extends Moveable2D {
         this.applyWorldDeltaV3({ group: this.group });
 
         this.updateAccessories();
+
+    }
+
+    destroy() {
+
+        this.dispose();
+        this.isActive = false;
 
     }
 
