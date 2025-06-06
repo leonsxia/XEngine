@@ -17,7 +17,7 @@ class AnimeMixer {
 
             const player = this.players[i];
 
-            player.mixerTick?.(delta);
+            if (player.isActive) player.mixerTick?.(delta);
 
         }
 
@@ -25,7 +25,7 @@ class AnimeMixer {
 
             const enemy = this.enemies[i];
 
-            enemy.mixerTick?.(delta);
+            if (enemy.isActive) enemy.mixerTick?.(delta);
 
         }
 

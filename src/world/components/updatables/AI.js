@@ -22,15 +22,15 @@ class AI {
 
             const enemy = this.enemies[i];
 
-            for (let j = 0, jl = this.players.length; j < jl; j++) {
+            if (!enemy.isActive) continue;
 
+            for (let j = 0, jl = this.players.length; j < jl; j++) {
+                
                 const player = this.players[j];
 
-                if (enemy.isActive) {
-                    
-                    enemy.checkTargetInSight(player);
+                if (!player.isActive) continue;
 
-                }
+                enemy.checkTargetInSight(player);
 
             }
 

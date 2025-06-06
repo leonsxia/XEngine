@@ -274,13 +274,15 @@ class WorldScene {
 
                     const onCollisionBoxChanged = (enemy) => {
 
+                        enemy.updateWalls();
+
                         for (let i = 0, il = enemy.walls.length; i < il; i++) {
 
                             const wall = enemy.walls[i];
                             // wall.leftArrow.visible = true;
                             // wall.rightArrow.visible = true;
                             this.scene.add(wall.leftArrow);
-                            this.scene.add(wall.rightArrow)
+                            this.scene.add(wall.rightArrow);
 
                         }
                     };
@@ -718,6 +720,8 @@ class WorldScene {
 
                 firstLoad = false;
 
+                this.player.isActive = false;
+
                 // remove old player.
                 const cmdHide = 'hide';
                 this.showPlayerBBHelper(cmdHide)
@@ -754,6 +758,8 @@ class WorldScene {
             }
 
             this.player = find;
+
+            this.player.isActive = true;
 
             --this.loadSequence;
             this.focusNext(forceStaticRender);

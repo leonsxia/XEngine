@@ -1095,6 +1095,12 @@ class Tofu extends Moveable2D {
 
     }
 
+    trackResources() {
+
+        this.track(this.group);
+
+    }
+
     destroy() {
 
         this.dispose();

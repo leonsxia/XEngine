@@ -103,13 +103,28 @@ class CreatureBase extends Tofu {
 
     trackResources() {
 
-        this.track(this.group);
+        super.trackResources();
         
         for (const cbox of this.collisionBoxes.values()) {
 
             this.track(cbox.group);
+            
+            for (let i = 0, il = cbox.walls.length; i < il; i++) {
+
+                const wall = cbox.walls[i];
+                this.track(wall.leftArrow);
+                this.track(wall.rightArrow);
+
+            }
 
         }
+
+        this.track(this.leftArrow);
+        this.track(this.rightArrow);
+        this.track(this.backLeftArrow);
+        this.track(this.backRightArrow);
+
+        this.track(this.boundingBoxHelper);
 
     }
 
@@ -499,9 +514,8 @@ class CreatureBase extends Tofu {
 
     destroy() {
 
-        super.destroy();
-
         this.doBeforeCollisionBoxChangedEvents();
+        super.destroy();        
 
     }
 

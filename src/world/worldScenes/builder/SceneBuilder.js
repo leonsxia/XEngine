@@ -669,7 +669,9 @@ class SceneBuilder {
     updatePlayer(_origin, _target, updateSetupOnly = false) {
 
         const { name } = _origin;
-        const findPlayer = this.worldScene.players.find(p => p.name === name);
+        const findPlayer = this.worldScene.players.find(p => p.name === name && p.isActive);
+
+        if (!findPlayer) return;
 
         if (updateSetupOnly) {
 
@@ -692,17 +694,19 @@ class SceneBuilder {
     updateEnemies(_origin, _target, updateSetupOnly = false) {
 
         const { name } = _origin;
-        const findPlayer = this.worldScene.enemies.find(p => p.name === name);
+        const findEnemy = this.worldScene.enemies.find(e => e.name === name && e.isActive);
+        
+        if (!findEnemy) return;
 
         if (updateSetupOnly) {
 
-            _origin.position = this.positionArr(findPlayer.position);
+            _origin.position = this.positionArr(findEnemy.position);
 
         } else {
 
             const { position, rotation } = _target;
 
-            findPlayer.setPosition(position)
+            findEnemy.setPosition(position)
                 .setRotation(rotation)
                 .updateOBB()
                 .updateRay?.()
