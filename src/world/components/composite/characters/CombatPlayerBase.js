@@ -1069,7 +1069,7 @@ class CombatPlayerBase extends Tofu {
 
         this.#logger.func = this.interact.name;
 
-        if (this.attacking) {
+        if (this.attacking || this.interacting) {
 
             return;
 

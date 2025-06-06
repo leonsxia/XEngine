@@ -194,6 +194,15 @@ class AnimateWorkstation {
             this.fadeToAction(fadeToAction, restoreDuration);
 
             if (endCallback) endCallback();
+
+            if (fadeToAction.callback) {
+
+                this.logger.log(`end ${fadeToAction.name} callback`);
+                fadeToAction.callback();
+                this.logger.log(`end ${fadeToAction.name} weight: ${fadeToAction.weight}, timeScale: ${fadeToAction.timeScale}`);
+                fadeToAction.callback = null;
+
+            }
             
         }
 
@@ -267,6 +276,7 @@ class AnimateWorkstation {
         if (this.isLooping && endAction !== this.activeAction) {
             
             this.cachedAction = endAction;
+            this.setActionWeightTimeScaleInCallback(endAction.nick, endWeight);
             return;
             
         };

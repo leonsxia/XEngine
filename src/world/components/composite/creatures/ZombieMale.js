@@ -57,7 +57,7 @@ class ZombieMale extends CreatureBase {
         const { collisionSize = { width, depth: .7, height } } = specs;
         const { vel = .37, rotateR = 1.1 } = specs;
         const { scale = [1, 1, 1], gltfScale = [.4, .4, .4] } = specs;
-        const { sovRadius = 6.5, showBS = false, enableCollision = true } = specs;
+        const { isActive = true, sovRadius = 6.5, showBS = false, enableCollision = true } = specs;
         const { variant = 'standard' } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
@@ -77,7 +77,7 @@ class ZombieMale extends CreatureBase {
             vel, rotateR,
             scale, gltfScale,
             clips: CLIPS,  animationSetting: animationSetting,
-            sovRadius, showBS, enableCollision,
+            isActive, sovRadius, showBS, enableCollision,
             typeMapping
         };
 

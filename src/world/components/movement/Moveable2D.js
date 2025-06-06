@@ -193,11 +193,13 @@ class Moveable2D {
     }
 
     get isTurnCounterClockwise() {
-        return (this.#movingLeft && !this.#movingForward && !this.#movingBackward) || (this.#movingLeft && (this.#melee || this.#gunPoint)) && !this.#interact;
+        return !this.#interact &&
+            (this.#movingLeft && !this.#movingForward && !this.#movingBackward) || (this.#movingLeft && (this.#melee || this.#gunPoint));
     }
 
     get isTurnClockwise() {
-        return (this.#movingRight && !this.#movingForward && !this.#movingBackward) || (this.#movingRight && (this.#melee || this.#gunPoint)) && !this.#interact;
+        return !this.#interact &&
+            (this.#movingRight && !this.#movingForward && !this.#movingBackward) || (this.#movingRight && (this.#melee || this.#gunPoint));
     }
 
     get isMovingForward() {
