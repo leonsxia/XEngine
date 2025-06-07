@@ -311,6 +311,22 @@ class Tofu extends Moveable2D {
 
     }
 
+    gunPoint(val) {
+
+        super.gunPoint(val);
+
+        this.switchBoundingFace();
+
+    }
+
+    melee(val) {
+
+        super.melee(val);
+
+        this.switchBoundingFace();
+        
+    }
+
     get obb() {
 
         return this.boundingBoxMesh.userData.obb;
