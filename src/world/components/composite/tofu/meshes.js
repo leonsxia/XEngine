@@ -30,13 +30,13 @@ function createMeshes(size) {
 
 }
 
-function createOtherBoundingObjectMeshes(size) {
+function createDefaultBoundingObjectMeshes(size) {
 
-    const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = size;
+    const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8 } = size;
 
     const bbSpecs = {
 
-        width, width2, depth, depth2, height, sovRadius,
+        width, width2, depth, depth2, height,
         bbfThickness: .18,  // calculated by faster speed = 10 m/s, 30fps needs at least 1/30 * 10 = 0.333 m to cover.
         gap: .1,
         showBB: false, showBS: false, showBBW: false, showBF: false
@@ -69,4 +69,4 @@ function createSovBoundingSphereMesh(size) {
 
 }
 
-export { createMeshes, createOtherBoundingObjectMeshes, createSovBoundingSphereMesh };
+export { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSphereMesh };

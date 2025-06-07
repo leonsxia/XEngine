@@ -1,5 +1,5 @@
 import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three';
-import { createMeshes, createOtherBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
+import { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2 } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
@@ -133,7 +133,7 @@ class Tofu extends Moveable2D {
 
         if (createDefaultBoundingObjects) {
 
-            this.boundingObjects = createOtherBoundingObjectMeshes(this._size);
+            this.boundingObjects = createDefaultBoundingObjectMeshes(this._size);
             const {
                 bbObjects: {
                 boundingBox, boundingBoxWire,
