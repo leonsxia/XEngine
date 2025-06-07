@@ -2,7 +2,7 @@ import { Mesh } from 'three';
 
 import { createGeometries } from './geometires';
 import { createMaterials } from './materials';
-import { createBoundingBoxFaces } from '../../physics/collisionHelper';
+import { createBoundingBox, createBoundingFaces } from '../../physics/collisionHelper';
 
 function createMeshes() {
     const geometires = createGeometries();
@@ -44,13 +44,18 @@ function createMeshes() {
 
     const specs = { width, depth, height, Rl, Rs };
 
-    const bbSpecs = {
-        width, depth, height, 
+    const bbSpecs = { 
         bbfThickness: .35,  // calculated by Train faster speed = 10 m/s, 30fps needs at least 1/30 * 10 = 0.333 m to cover.
         gap: .2,
         showBB: false, showBBW: false, showBF: false
     }
-    const bbObjects = createBoundingBoxFaces(bbSpecs);
+    const bbObjects = Object.assign({}, 
+        createBoundingBox({
+            width, height, depth: depth * 2 / 3, showBB: bbSpecs.showBB, showBBW: bbSpecs.showBBW
+        }), createBoundingFaces({
+            width, height, depth, bbfThickness: bbSpecs.bbfThickness, gap: bbSpecs.gap, showBF: bbSpecs.showBF
+        })
+    );
 
     return { cabin, chimney, nose, smallWheelFront, smallWheelCenter, smallWheelRear, bigWheel,
         bbObjects,
