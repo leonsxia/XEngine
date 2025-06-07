@@ -134,7 +134,7 @@
                     "display": "Directional Light",
                     "detail": {
                         "color": [255, 255, 255],
-                        "intensity": 2.62,
+                        "intensity": 0,
                         "position": [0, 20, 28],
                         "target": [0, 0, 0]
                     },
@@ -151,7 +151,7 @@
                     "display": "Ambient Light",
                     "detail": {
                         "color": [255, 219, 204],
-                        "intensity": 0.72
+                        "intensity": 0.05
                     },
                     "type": "AmbientLight",
                     "debug": true,
@@ -163,7 +163,7 @@
                     "detail": {
                         "groundColor": [210, 130, 96],
                         "skyColor": [255, 255, 255],
-                        "intensity": 1.12,
+                        "intensity": 0,
                         "position": [0, 4.6, 0]
                     },
                     "type": "HemisphereLight",

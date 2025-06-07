@@ -1,5 +1,5 @@
 import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three';
-import { createMeshes, createOtherBoundingObjects } from './meshes';
+import { createMeshes, createOtherBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2 } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
@@ -133,10 +133,10 @@ class Tofu extends Moveable2D {
 
         if (createDefaultBoundingObjects) {
 
-            this.boundingObjects = createOtherBoundingObjects(this._size);
+            this.boundingObjects = createOtherBoundingObjectMeshes(this._size);
             const {
                 bbObjects: {
-                boundingBox, boundingBoxWire, sovBoundingSphere,
+                boundingBox, boundingBoxWire,
                 frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
                 frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2
             },
@@ -144,13 +144,16 @@ class Tofu extends Moveable2D {
             } = this.boundingObjects;
 
             this.group.add(
-                boundingBox, boundingBoxWire, sovBoundingSphere,
+                boundingBox, boundingBoxWire,
                 frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
                 frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2,
                 pushingOBBBox
             );
             
         }
+
+        const { sovSphere } = createSovBoundingSphereMesh(this._size);
+        this.group.add(sovSphere);
 
         this.#w = width;
         this.#d = depth;

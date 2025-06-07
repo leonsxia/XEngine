@@ -26,6 +26,7 @@ class CreatureBase extends Tofu {
     typeMapping;
 
     collisionBoxes = new Map();
+    #lastAction;
 
     isCreature = true;
 
@@ -68,7 +69,7 @@ class CreatureBase extends Tofu {
         if (enableCollision) {
 
             this.createCollisionBoxes();
-            this.switchCollisionBox(this.typeMapping.idle.nick, false);
+            this.switchCollisionBox(false);
 
         }
 
@@ -91,8 +92,6 @@ class CreatureBase extends Tofu {
         });
 
         this.bindEvents();
-
-        this.gltf.visible = true;
 
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
@@ -179,10 +178,30 @@ class CreatureBase extends Tofu {
         
     }
 
-    switchCollisionBox(action, forceEvent = true) {
+    switchCollisionBox(forceEvent = true) {
+
+        let action;
+
+        if (this.isForward || this.isRotating) {
+
+            action = this.typeMapping.walk.nick;
+
+        } else if (this._isAttacking) { 
+
+            // todo
+
+        } else {
+
+            action = this.typeMapping.idle.nick;
+
+        }
+
+        if (this.#lastAction === action) return;
 
         if (forceEvent) this.doBeforeCollisionBoxChangedEvents();
 
+        this.#lastAction = action;
+        
         const cbox = this.collisionBoxes.get(action);
 
         this.walls = [];
@@ -240,7 +259,6 @@ class CreatureBase extends Tofu {
 
                     this.#logger.log('idle to walk');
                     this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_WALK);
-                    this.switchCollisionBox(this.typeMapping.walk.nick);
 
                 } else if (this.rotating) {
 
@@ -250,6 +268,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingForward(true);
+                this.switchCollisionBox();
 
             }
 
@@ -268,10 +287,7 @@ class CreatureBase extends Tofu {
 
                         this.#logger.log(`idle in queue 2`);
                         this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
-
-                        // TEST: gun fire -> press and release w once while gun firing
                         this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
-                        // TEST: gun fire -> press and release w once -> walk backward
                         this.AWS.clearActionCallback(this.typeMapping.walk.nick);
 
                     }
@@ -280,7 +296,6 @@ class CreatureBase extends Tofu {
 
                     this.#logger.log(`walk to idle`);
                     this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.WALK_TO_IDLE);
-                    this.switchCollisionBox(this.typeMapping.idle.nick);
 
                 } else {
 
@@ -290,6 +305,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingForward(false);
+                this.switchCollisionBox();
 
             }
 
@@ -321,7 +337,6 @@ class CreatureBase extends Tofu {
 
                         this.#logger.log(`idle to left turn`);
                         this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
-                        this.switchCollisionBox(this.typeMapping.walk.nick);
 
                     }
 
@@ -330,6 +345,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingLeft(true);
+                this.switchCollisionBox();
 
             }
 
@@ -343,23 +359,20 @@ class CreatureBase extends Tofu {
 
                         this.#logger.log(`idle in queue 3`);
                         this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
-
-                        // TEST: gun fire -> press and release a once while gun firing
                         this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
-                        // TEST: gun fire -> press and releas a once -> walk forward
                         this.AWS.clearActionCallback(this.typeMapping.walk.nick);
 
                     } else {
 
                         this.#logger.log(`left turn to idle`);
                         this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.TURN_TO_IDLE);
-                        this.switchCollisionBox(this.typeMapping.walk.nick);
 
                     }
 
                 }
 
                 super.movingLeft(false);
+                this.switchCollisionBox();
 
             }
 
@@ -392,7 +405,6 @@ class CreatureBase extends Tofu {
 
                         this.#logger.log(`idle to right turn`);
                         this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
-                        this.switchCollisionBox(this.typeMapping.walk.nick);
 
                     }
 
@@ -401,6 +413,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingRight(true);
+                this.switchCollisionBox();
 
             }
             
@@ -414,23 +427,20 @@ class CreatureBase extends Tofu {
 
                         this.#logger.log(`idle in queue 3`);
                         this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
-
-                        // TEST: gun fire -> press and release a once while gun firing
                         this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
-                        // TEST: gun fire -> press and releas d once -> walk forward
                         this.AWS.clearActionCallback(this.typeMapping.walk.nick);
 
                     } else {
 
                         this.#logger.log(`right turn to idle`);
                         this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.TURN_TO_IDLE);
-                        this.switchCollisionBox(this.typeMapping.walk.nick);
 
                     }
 
                 }
 
                 super.movingRight(false);
+                this.switchCollisionBox();
 
             }
 

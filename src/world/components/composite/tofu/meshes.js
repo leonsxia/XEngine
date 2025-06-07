@@ -1,7 +1,7 @@
 import { Mesh } from 'three';
 import { createGeometries } from './geometires';
 import { createMaterials } from './materials';
-import { createBoundingBoxFaces, createPlayerPushingOBBBox } from '../../physics/collisionHelper';
+import { createBoundingBoxFaces, createPlayerPushingOBBBox, createSovBoundingSphere } from '../../physics/collisionHelper';
 
 function createMeshes(size) {
 
@@ -30,7 +30,7 @@ function createMeshes(size) {
 
 }
 
-function createOtherBoundingObjects(size) {
+function createOtherBoundingObjectMeshes(size) {
 
     const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = size;
 
@@ -55,4 +55,18 @@ function createOtherBoundingObjects(size) {
 
 }
 
-export { createMeshes, createOtherBoundingObjects };
+function createSovBoundingSphereMesh(size) {
+
+    const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = size;
+
+    const sovSphereSpecs = {
+        sovRadius, showBS: false
+    }
+
+    const sovSphere = createSovBoundingSphere(sovSphereSpecs);
+
+    return { sovSphere };
+
+}
+
+export { createMeshes, createOtherBoundingObjectMeshes, createSovBoundingSphereMesh };
