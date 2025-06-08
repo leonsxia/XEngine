@@ -1,13 +1,13 @@
 import { BoxGeometry, EdgesGeometry, Mesh, LineSegments, Vector3, SphereGeometry } from 'three';
 import { OBB } from 'three/addons/math/OBB.js';
-import { basicMateraials } from '../basic/basicMaterial';
+import { basicMateraials, createBasicMaterial } from '../basic/basicMaterial';
 import { CollisionPlane } from './CollisionPlane';
 import { CollisionOctagon } from './CollisionOctagon';
 import { CollisionOBBPlane } from './CollisionOBBPlane';
 import { CollisionTrianglePlane } from './CollisionTrianglePlane';
 import { OBBPlane } from './OBBPlane';
 import { OBBBox } from './OBBBox';
-import { violetBlue } from '../basic/colorBase';
+import { BF2, violetBlue } from '../basic/colorBase';
 import { CORNOR_RAY_LAYER } from '../utils/constants';
 
 // create plane with line and rays, only support rotationY for collision for now.
@@ -184,12 +184,12 @@ function createBoundingBox(specs) {
 
 function createBoundingFaces(specs) {
 
-    const { suffix = '', width, height, depth, bbfThickness, gap, showBF } = specs;
+    const { suffix = '', width, height, depth, bbfThickness, gap, showBF, color = null } = specs;
     const boundingFaceGeometry = new BoxGeometry(width - gap, height, bbfThickness);
 
     const BBFDepthOffset = depth / 2 - bbfThickness / 2;
     const BBFWidthOffset = width / 2 - bbfThickness / 2;
-    const boundingFaceMaterial = basicMateraials.boundingFace;
+    const boundingFaceMaterial = color ? createBasicMaterial(color) : basicMateraials.boundingFace;
     const frontBoundingFace = new Mesh(boundingFaceGeometry, boundingFaceMaterial.clone());
     frontBoundingFace.name = `frontFace${suffix}`;
     frontBoundingFace.position.set(0, 0, BBFDepthOffset);
@@ -242,7 +242,7 @@ function createDefaultBoundingBoxFaces(specs) {
         leftBoundingFace: leftBoundingFace2, 
         rightBoundingFace: rightBoundingFace2
     } = createBoundingFaces({
-        width: width2, height, depth: depth2, bbfThickness, gap, showBF, suffix: '2'
+        width: width2, height, depth: depth2, bbfThickness, gap, showBF, suffix: '2', color: BF2
     });
 
     return {
@@ -253,7 +253,7 @@ function createDefaultBoundingBoxFaces(specs) {
 
 }
 
-function createPlayerPushingOBBBox(specs) {
+function createTofuPushingOBBBox(specs) {
 
     const { height, depth, show } = specs;
 
@@ -279,6 +279,6 @@ export {
     createBoundingBox,
     createBoundingFaces,
     createDefaultBoundingBoxFaces,
-    createPlayerPushingOBBBox,
+    createTofuPushingOBBBox,
     createSovBoundingSphere
 };

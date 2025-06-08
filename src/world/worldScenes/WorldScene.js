@@ -253,6 +253,7 @@ class WorldScene {
                     // }
                     
                     // enemy.showBF(true);
+                    // enemy.showPushingBox(true);
 
                     if (enemy.gltf?.skeleton) {
 

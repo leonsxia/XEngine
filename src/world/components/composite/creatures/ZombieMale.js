@@ -20,27 +20,51 @@ const ANIMATION_SETTINGS = {
 const ZOMBIE_TYPES_MAPPING = {
     STANDARD: new CreatureTypeMapping({
         name: 'standard',
-        idle: CLIPS.IDLE, walk: CLIPS.WALK, attack: CLIPS.ATTACK, walkTimeScale: 2.1, idleToWalk: 0.1, walkToIdle: 0.3,
+        idle: CLIPS.IDLE, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 2.1, idleToWalk: 0.1, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
-        walkCollisionSize: { width: .63, depth: .75, height: 1.8 }
+        walkCollisionSize: { width: .63, depth: .75, height: 1.8 },
+        idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .63, depth: .9, height: 1.8, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
+        walkBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        pushingBoxSize: { height: 1.8, depth: .9 }
     }),
     VARIANT1: new CreatureTypeMapping({
         name: 'variant1',
-        idle: CLIPS.IDLE, walk: CLIPS.WALK2, attack: CLIPS.ATTACK, walkTimeScale: 1.5, idleToWalk: 0.1, walkToIdle: 0.3,
+        idle: CLIPS.IDLE, walk: CLIPS.WALK2, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1.5, idleToWalk: 0.1, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
-        walkCollisionSize: { width: .63, depth: .8, height: 1.8 }
+        walkCollisionSize: { width: .63, depth: .8, height: 1.8 },
+        idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .63, depth: .9, height: 1.8, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
+        walkBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        pushingBoxSize: { height: 1.8, depth: .9 }
     }),
     VARIANT2: new CreatureTypeMapping({
         name: 'variant2',
-        idle: CLIPS.IDLE, walk: CLIPS.WLAK3, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.2, walkToIdle: 0.3,
+        idle: CLIPS.IDLE, walk: CLIPS.WLAK3, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.2, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
-        walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 }
+        walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 },
+        idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .63, depth: 1.5, height: 1.8, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .63, depth: 1.3, height: 1.8, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
+        walkBoundingBoxSize: { width: .63, depth: 1.5, height: 1.8},
+        pushingBoxSize: { height: 1.8, depth: 1.5 }
     }),
     VARIANT3: new CreatureTypeMapping({
         name: 'variant3',
-        idle: CLIPS.IDLE, walk: CLIPS.CRAWL, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.3, walkToIdle: 0.3,
+        idle: CLIPS.IDLE, walk: CLIPS.CRAWL, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.3, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
-        walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 }
+        walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 },
+        idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .63, depth: 1.5, height: 1.8, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .63, depth: 1.3, height: 1.8, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
+        walkBoundingBoxSize: { width: .63, depth: 1.5, height: 1.8},
+        pushingBoxSize: { height: 1.8, depth: 1.5 }
     })
 };
 
@@ -59,6 +83,7 @@ class ZombieMale extends CreatureBase {
         const { scale = [1, 1, 1], gltfScale = [.4, .4, .4] } = specs;
         const { isActive = true, sovRadius = 6.5, showBS = false, enableCollision = true } = specs;
         const { variant = 'standard' } = specs;
+        const { createDefaultBoundingObjects = false } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
 
@@ -78,7 +103,8 @@ class ZombieMale extends CreatureBase {
             scale, gltfScale,
             clips: CLIPS,  animationSetting: animationSetting,
             isActive, sovRadius, showBS, enableCollision,
-            typeMapping
+            typeMapping,
+            createDefaultBoundingObjects
         };
 
         super(setup);

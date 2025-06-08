@@ -108,9 +108,7 @@
             "showBS": false,
             "variant": "variant2",
             "vel": 1.15,
-            "rotateR": 0.8,
-            "depth": 1.5,
-            "depth2": 1.5
+            "rotateR": 0.8
         },
         {
             "name": "zombie4",
@@ -126,9 +124,7 @@
             "showBS": false,
             "variant": "variant3",
             "vel": 0.25,
-            "rotateR": 1.3,
-            "depth": 1.5,
-            "depth2": 1.5
+            "rotateR": 1.3
         }
     ],
     "lights": [

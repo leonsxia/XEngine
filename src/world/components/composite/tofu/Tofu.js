@@ -44,6 +44,7 @@ class Tofu extends Moveable2D {
     _collisionSize;
     collisionBox;
     walls = [];
+    _useCustomBoundingFaces = false;
     
     _size;
     _useBF2 = false;
@@ -98,6 +99,7 @@ class Tofu extends Moveable2D {
 
         this._size = { width, width2, depth, depth2, height, sovRadius };
         this._collisionSize = collisionSize;
+        this._useCustomBoundingFaces = !createDefaultBoundingObjects;
 
         this.#sightOfView = sovRadius;
         this.#rotateR = rotateR;
@@ -353,6 +355,24 @@ class Tofu extends Moveable2D {
     get scale() {
 
         return this.group.scale;
+
+    }
+
+    /**
+     * @param {number} val
+     */
+    set w(val) {
+
+        this.#w = val;
+
+    }
+
+    /**
+     * @param {number} val
+     */
+    set d(val) {
+
+        this.#d = val;
 
     }
 
@@ -777,7 +797,11 @@ class Tofu extends Moveable2D {
     resetBFColor() {
 
         this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(BF));
-        this.boundingFace2Mesh.forEach(bf2 => bf2.material.color.setHex(BF2));
+        if (!this._useCustomBoundingFaces) {
+
+            this.boundingFace2Mesh.forEach(bf2 => bf2.material.color.setHex(BF2));
+
+        }
 
         return this;
 

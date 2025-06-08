@@ -1,11 +1,13 @@
 import { Logger } from "../../../systems/Logger";
 import { CollisionBox, GLTFModel, Tofu } from "../../Models";
 import { AnimateWorkstation } from "../../animation/AnimateWorkstation";
-import { BS, AI as AICodes } from "../../basic/colorBase";
+import { BS, AI as AICodes, BF2 } from "../../basic/colorBase";
+import { createBoundingBox, createBoundingFaces as createBoudingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
 import { CAMERA_RAY_LAYER } from "../../utils/constants";
 import { polarity } from "../../utils/enums";
 
-const DEBUG = true;
+const DEBUG = false;
+const DEBUG_EVENTS = true;
 
 class CreatureBase extends Tofu {
 
@@ -17,6 +19,7 @@ class CreatureBase extends Tofu {
     gltf;
 
     #logger = new Logger(DEBUG, 'CreatureBase');
+    #eventsLogger = new Logger(DEBUG_EVENTS, 'CreatureBase');
 
     AWS;
 
@@ -26,6 +29,8 @@ class CreatureBase extends Tofu {
     typeMapping;
 
     collisionBoxes = new Map();
+    boundingBoxes = new Map();
+    boundingFaces = new Map();
     #lastAction;
 
     isCreature = true;
@@ -47,8 +52,9 @@ class CreatureBase extends Tofu {
         const { clips, animationSetting } = specs;
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
         const { isActive = true, showBS = false, enableCollision = true, typeMapping = [] } = specs;
+        const { createDefaultBoundingObjects = true } = specs;
 
-        super({ name, size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge });
+        super({ name, size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, createDefaultBoundingObjects});
 
         this.specs = specs;
         this.isActive = isActive;
@@ -69,7 +75,19 @@ class CreatureBase extends Tofu {
         if (enableCollision) {
 
             this.createCollisionBoxes();
-            this.switchCollisionBox(false);
+            this.switchCollisionBox(this.typeMapping.idle.nick, false);
+
+        }
+        
+        if (!createDefaultBoundingObjects) {
+
+            this.createBoundingBoxes();
+            this.switchBoundingBox(this.typeMapping.idle.nick);
+
+            this.createBoundingFaces();
+            this.switchBoundingFace();
+
+            this.createPushingBox();
 
         }
 
@@ -118,6 +136,24 @@ class CreatureBase extends Tofu {
 
         }
 
+        for (const bb of this.boundingBoxes.values()) {
+
+            const { boundingBox, boundingBoxWire } = bb;
+            this.track(boundingBox);
+            this.track(boundingBoxWire);
+
+        }
+
+        for (const bf of this.boundingFaces.values()) {
+
+            const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
+            this.track(frontBoundingFace);
+            this.track(backBoundingFace);
+            this.track(leftBoundingFace);
+            this.track(rightBoundingFace);
+
+        }
+
         this.track(this.leftArrow);
         this.track(this.rightArrow);
         this.track(this.backLeftArrow);
@@ -152,6 +188,174 @@ class CreatureBase extends Tofu {
 
     }
 
+    showBF(show) {
+
+        if (this._useCustomBoundingFaces) {
+
+            const currentFaces = this.boundingFaceMesh;
+            for (let i = 0, il = currentFaces.length; i < il; i++) {
+
+                const face = currentFaces[i];
+                face.visible = show;
+
+            }
+
+            this._showBF = show;
+
+        } else {
+
+            super.showBF(show);
+
+        }
+
+    }
+
+    get activeBoundingFace() {
+
+        if (this._useCustomBoundingFaces) {
+
+            return this.boundingFaceMesh;
+
+        } else {
+
+            return super.activeBoundingFace;
+
+        }
+        
+    }
+
+    get currentAction() {
+
+        let action;
+
+        if (this.isForward || this.isRotating) {
+
+            action = this.typeMapping.walk.nick;
+
+        } else if (this._isAttacking) { 
+
+            // todo
+
+        } else {
+
+            action = this.typeMapping.idle.nick;
+
+        }
+
+        return action;
+
+    }
+
+    createPushingBox() {
+
+        const { pushingBoxSize } = this.typeMapping;
+        const pushingBoxSpecs = { 
+            height: pushingBoxSize.height, depth: pushingBoxSize.depth, show: false
+        }
+
+        this.group.add(createTofuPushingOBBBox(pushingBoxSpecs));
+
+    }
+
+    createBoundingBoxes() {
+
+        const { idleBoundingBoxSize, walkBoundingBoxSize } = this.typeMapping;
+        const idleBBSpecs = { 
+            width: idleBoundingBoxSize.width, depth: idleBoundingBoxSize.depth, height: idleBoundingBoxSize.height, 
+            showBB: false, showBBW: false
+        }
+        const walkBBSpecs = {
+            width: walkBoundingBoxSize.width, depth: walkBoundingBoxSize.depth, height: walkBoundingBoxSize.height, 
+            showBB: false, showBBW: false
+        }
+
+        this.boundingBoxes.clear();
+        this.boundingBoxes.set(this.typeMapping.idle.nick, createBoundingBox(idleBBSpecs));
+        this.boundingBoxes.set(this.typeMapping.walk.nick, createBoundingBox(walkBBSpecs));
+
+    }
+
+    switchBoundingBox(action) {
+
+        if (this.boundingBoxes.size === 0) return;
+
+        const { boundingBox, boundingBoxWire } = this.boundingBoxes.get(action);
+
+        this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);        
+        this.group.add(boundingBox, boundingBoxWire);
+        // this.showBB(true);
+        // this.showBBW(true);
+
+    }
+
+    createBoundingFaces() {
+
+        const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize } = this.typeMapping;
+        const idleBFSpecs = {
+            width: idleBoundingFaceSize.width, depth: idleBoundingFaceSize.depth, height: idleBoundingFaceSize.height, 
+            bbfThickness: idleBoundingFaceSize.bbfThickness, gap: idleBoundingFaceSize.gap, 
+            showBF: false
+        };
+        const walkBFSpecs = {
+            width: walkBoundingFaceSize.width, depth: walkBoundingFaceSize.depth, height: walkBoundingFaceSize.height, 
+            bbfThickness: walkBoundingFaceSize.bbfThickness, gap: walkBoundingFaceSize.gap, 
+            showBF: false
+        };
+        const rotateBFSpecs = {
+            width: rotateBoundingFaceSize.width, depth: rotateBoundingFaceSize.depth, height: rotateBoundingFaceSize.height, 
+            bbfThickness: rotateBoundingFaceSize.bbfThickness, gap: rotateBoundingFaceSize.gap, 
+            showBF: false, color: BF2
+        };
+
+        this.boundingFaces.clear();
+        this.boundingFaces.set(this.typeMapping.idle.nick, createBoudingFacesMesh(idleBFSpecs));
+        this.boundingFaces.set(this.typeMapping.walk.nick, createBoudingFacesMesh(walkBFSpecs));
+        this.boundingFaces.set(this.typeMapping.rotate.nick, createBoudingFacesMesh(rotateBFSpecs));
+
+    }
+
+    switchBoundingFace() {
+
+        if (this.boundingFaces.size === 0) return;
+
+        const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize } = this.typeMapping;
+        let bf;
+
+        if (this.isRotating) {
+            
+            bf = this.boundingFaces.get(this.typeMapping.rotate.nick)
+            this.w = rotateBoundingFaceSize.width;
+            this.d = rotateBoundingFaceSize.depth;
+
+        } else if (this.isForward) {
+
+            bf = this.boundingFaces.get(this.typeMapping.walk.nick)
+            this.w = walkBoundingFaceSize.width;
+            this.d = walkBoundingFaceSize.depth;
+
+        } else {
+
+            bf = this.boundingFaces.get(this.typeMapping.idle.nick)
+            this.w = idleBoundingFaceSize.width;
+            this.d = idleBoundingFaceSize.depth;
+
+        }
+
+        const currentFaces = this.boundingFaceMesh;
+        for (let i = 0, il = currentFaces.length; i < il; i++) {
+
+            const face = currentFaces[i];
+            this.group.remove(face);
+
+        }
+
+        const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
+        this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
+
+        // this.showBF(true);
+
+    }
+
     createCollisionBoxes() {
 
         const { name, idleCollisionSize, walkCollisionSize } = this.typeMapping;
@@ -178,29 +382,9 @@ class CreatureBase extends Tofu {
         
     }
 
-    switchCollisionBox(forceEvent = true) {
+    switchCollisionBox(action, forceEvent = true) {
 
-        let action;
-
-        if (this.isForward || this.isRotating) {
-
-            action = this.typeMapping.walk.nick;
-
-        } else if (this._isAttacking) { 
-
-            // todo
-
-        } else {
-
-            action = this.typeMapping.idle.nick;
-
-        }
-
-        if (this.#lastAction === action) return;
-
-        if (forceEvent) this.doBeforeCollisionBoxChangedEvents();
-
-        this.#lastAction = action;
+        if (forceEvent) this.doBeforeCollisionBoxChangedEvents();        
         
         const cbox = this.collisionBoxes.get(action);
 
@@ -243,6 +427,20 @@ class CreatureBase extends Tofu {
 
     }
 
+    switchHelperComponents(forceEvent = true) {
+
+        const action = this.currentAction;
+
+        if (this.#lastAction === action) return;
+
+        this.#lastAction = action;
+
+        this.switchCollisionBox(action, forceEvent);
+        this.switchBoundingBox(action);
+        this.switchBoundingFace();
+
+    }
+
     movingForward(val) {
 
         if (val) {
@@ -268,7 +466,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingForward(true);
-                this.switchCollisionBox();
+                this.switchHelperComponents();
 
             }
 
@@ -305,7 +503,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingForward(false);
-                this.switchCollisionBox();
+                this.switchHelperComponents();
 
             }
 
@@ -345,7 +543,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingLeft(true);
-                this.switchCollisionBox();
+                this.switchHelperComponents();
 
             }
 
@@ -372,7 +570,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingLeft(false);
-                this.switchCollisionBox();
+                this.switchHelperComponents();
 
             }
 
@@ -413,7 +611,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingRight(true);
-                this.switchCollisionBox();
+                this.switchHelperComponents();
 
             }
             
@@ -440,7 +638,7 @@ class CreatureBase extends Tofu {
                 }
 
                 super.movingRight(false);
-                this.switchCollisionBox();
+                this.switchHelperComponents();
 
             }
 
@@ -450,8 +648,8 @@ class CreatureBase extends Tofu {
 
     onSovSphereTriggerEnter(target) {
 
-        this.#logger.func = this.onSovSphereTriggerEnter.name;
-        this.#logger.log(`${this.name} sov sphere trigger entered by ${target.name}`);
+        this.#eventsLogger.func = this.onSovSphereTriggerEnter.name;
+        this.#eventsLogger.log(`${this.name} sov sphere trigger entered by ${target.name}`);
 
         if (this._inSightTargets.length === 1) {
 
@@ -464,8 +662,8 @@ class CreatureBase extends Tofu {
 
     onSovSphereTriggerExit(target) {
 
-        this.#logger.func = this.onSovSphereTriggerExit.name;
-        this.#logger.log(`${target.name} exited ${this.name}'s sov sphere trigger`);
+        this.#eventsLogger.func = this.onSovSphereTriggerExit.name;
+        this.#eventsLogger.log(`${target.name} exited ${this.name}'s sov sphere trigger`);
 
         if (this._inSightTargets.length === 0) {
 
