@@ -62,7 +62,9 @@ class SoldierFemale extends CombatPlayerBase {
         const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true } = specs;
         const { offsetY = - .89, offsetZ = - .1 } = specs;
         const { width = .6, width2 = .6, depth = .8, depth2 = .7, height = 1.78 } = specs;
-        const { collisionSize = { width, depth: .5, height } } = specs;
+        // if collision box's depth is less than bounding face's depth,
+        // it will let player harder to push against enemies
+        const { collisionSize = { width, depth, height } } = specs;
         const { vel = 1.2, rotateR = 1, velEnlarge = 2.8 } = specs;
         const { scale = [1, 1, 1] } = specs;
         const { sovRadius = 10, showBS = false, enableCollision = true } = specs;
