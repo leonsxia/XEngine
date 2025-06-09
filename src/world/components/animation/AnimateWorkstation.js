@@ -341,6 +341,19 @@ class AnimateWorkstation {
 
     }
 
+    copyActionEffectiveWeight(target, source) {
+
+        const targetAction = this.actions[target];
+        const sourceAction = this.actions[source];
+
+        targetAction.action.setEffectiveWeight(sourceAction.weight)
+            .enabled = sourceAction.action.enabled;
+        targetAction.weight = sourceAction.weight;
+
+        return this;
+        
+    }
+
     clearActionCallback(action) {
 
         const findAction = this.actions[action];

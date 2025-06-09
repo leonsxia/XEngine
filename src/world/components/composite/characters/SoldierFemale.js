@@ -25,23 +25,23 @@ const ANIMATION_SETTINGS = {
 }
 
 const WEAPON_ACTION_MAPPING = {
-    NONE: new WeaponActionMapping({ 
-        idle: CLIPS.IDLE 
+    [WEAPONS.NONE]: new WeaponActionMapping({ 
+        idle: CLIPS.IDLE, walk: CLIPS.WALK, run: CLIPS.RUN
     }),
     [WEAPONS.PISTOL1]: new WeaponActionMapping({ 
-        idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
         attackInterval: 0.7, fireRate: 1.2 
     }),
     [WEAPONS.GLOCK]: new WeaponActionMapping({ 
-        idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
         attackInterval: 0.4667, fireRate: 1.8 
     }),
     [WEAPONS.REVOLVER]: new WeaponActionMapping({ 
-        idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
         attackInterval: 1.05, fireRate: 0.8 
     }),
     [WEAPONS.SMG_SHORT]: new WeaponActionMapping({ 
-        idle: CLIPS.IDLE_GUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
         attackInterval: 0.08, fireRate: 10.2 
     }),
     [WEAPONS.BAYONET]: new WeaponActionMapping({ 
@@ -68,6 +68,7 @@ class SoldierFemale extends CombatPlayerBase {
         const { vel = 1.2, rotateR = 1, velEnlarge = 2.8 } = specs;
         const { scale = [1, 1, 1] } = specs;
         const { sovRadius = 10, showBS = false, enableCollision = true } = specs;
+        const { createDefaultBoundingObjects = true } = specs;
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
@@ -75,12 +76,10 @@ class SoldierFemale extends CombatPlayerBase {
             vel, velEnlarge, rotateR,
             scale,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,
-            sovRadius, showBS, enableCollision
+            sovRadius, showBS, enableCollision, createDefaultBoundingObjects
         };
 
         super(setup);
-
-        this._idleNick = CLIPS.IDLE.nick;
 
         this.weapons.push(new Pistol({
             name: `${name}_pistol`,
@@ -140,7 +139,8 @@ class SoldierFemale extends CombatPlayerBase {
 
         this.setupWeaponScale();
         
-        this.armWeapon(this.weapons.find(w => w.weaponType === WEAPONS.GLOCK));
+        const initialWeapon = this.weapons.find(w => w.weaponType === WEAPONS.GLOCK);
+        this.armWeapon(initialWeapon);        
         
     }
 

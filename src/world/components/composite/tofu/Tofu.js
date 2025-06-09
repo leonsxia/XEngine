@@ -50,7 +50,9 @@ class Tofu extends Moveable2D {
     _useBF2 = false;
     _showBF = false;
     _showBBHelper = false;
+    _showBB = false;
     _showBBW = false;
+    _showPushingBox = false;
 
     _target = null;
     _inSightTargets = [];
@@ -566,6 +568,8 @@ class Tofu extends Moveable2D {
  
     showBB(show) {
 
+        this._showBB = show;
+
         this.boundingBoxMesh.visible = show;
 
     }
@@ -599,6 +603,8 @@ class Tofu extends Moveable2D {
     }
 
     showPushingBox(show) {
+
+        this._showPushingBox = show;
 
         this.pushingOBBBoxMesh.visible = show;
 

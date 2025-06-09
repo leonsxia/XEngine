@@ -20,13 +20,13 @@ class CombatPlayerBase extends Tofu {
 
     weapons = [];
     weaponActionMapping = {};
+    currentActionType;
 
     _clips = {};
     _animationSettings = {};
 
     _tempAction;
 
-    _idleNick;  // current idle
     armedWeapon;
     _meleeWeapon;
 
@@ -47,8 +47,9 @@ class CombatPlayerBase extends Tofu {
         const { clips, animationSetting } = specs;
         const { scale = [1, 1, 1] } = specs;
         const { showBS = false, enableCollision = true } = specs;
+        const { createDefaultBoundingObjects = true } = specs;
 
-        super({ name, size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge });
+        super({ name, size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, createDefaultBoundingObjects });
 
         this.specs = specs;
         
@@ -103,6 +104,19 @@ class CombatPlayerBase extends Tofu {
 
     }
 
+    trackResources() {
+
+        super.trackResources();
+
+        this.track(this.leftArrow);
+        this.track(this.rightArrow);
+        this.track(this.backLeftArrow);
+        this.track(this.backRightArrow);
+
+        this.track(this.boundingBoxHelper);
+
+    }
+
     initPromises() {
 
         const loadPromises = [];
@@ -114,12 +128,6 @@ class CombatPlayerBase extends Tofu {
         }
 
         return loadPromises;
-
-    }
-
-    trackResources() {
-
-        this.track(this.group);
 
     }
 
@@ -188,7 +196,7 @@ class CombatPlayerBase extends Tofu {
         if (weapon) {
 
             this.switchWeapon(weapon);
-            this.switchIdleAction(this.weaponActionMapping[weapon.weaponType].idle.nick);
+            this.switchWeaponAction(this.weaponActionMapping[weapon.weaponType]);
             this.armedWeapon = weapon;
 
             const { shoot: { nick }, fireRate } = this.weaponActionMapping[weapon.weaponType];
@@ -197,25 +205,49 @@ class CombatPlayerBase extends Tofu {
         } else {
 
             this.switchWeapon();
-            this.switchIdleAction(this.weaponActionMapping[WEAPONS.NONE].idle.nick);
+            this.switchWeaponAction(this.weaponActionMapping[WEAPONS.NONE]);
 
         }
 
     }
 
-    switchIdleAction(idleName, needToSetState = true) {
+    switchWeaponAction(weaponAction) {
 
-        this.AWS.setActionEffectiveWeight(this._idleNick, 0);
-        this.AWS.setActionEffectiveWeight(idleName, 1);
-        this.AWS.actions[idleName].play();
+        const { idle, walk, run } = weaponAction;
+        
+        // replace initial action with current idle action
+        if (!this.currentActionType) {
 
-        if (needToSetState) {
+            this.AWS.setActionEffectiveWeight(this.AWS.activeAction.nick, 0);
+            this.AWS.previousAction = this.AWS.activeAction = this.AWS.actions[idle.nick];
+            this.AWS.setWeight(this.AWS.actions[idle.nick], 1);
 
-            this.AWS.previousAction = this.AWS.activeAction = this.AWS.actions[idleName];
+        } else {
+
+            if (idle.nick !== this.currentActionType.idle.nick) {
+                
+                this.AWS.copyActionEffectiveWeight(idle.nick, this.currentActionType.idle.nick);
+                this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 0);
+
+            }
+
+            if (walk.nick !== this.currentActionType.walk.nick) {
+
+                this.AWS.copyActionEffectiveWeight(walk.nick, this.currentActionType.walk.nick);
+                this.AWS.setActionEffectiveWeight(this.currentActionType.walk.nick, 0);
+
+            }
+
+            if (run.nick !== this.currentActionType.run.nick) {
+
+                this.AWS.copyActionEffectiveWeight(run.nick, this.currentActionType.run.nick);
+                this.AWS.setActionEffectiveWeight(this.currentActionType.run.nick, 0);
+
+            }
 
         }
 
-        this._idleNick = idleName;
+        this.currentActionType = weaponAction;
         
     }
 
@@ -285,7 +317,7 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache run for cancel gun pointing -- gun shoot up`);
-                        this._tempAction = this.AWS.actions[this._clips.RUN.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.run.nick];
 
                     } else {
 
@@ -300,21 +332,21 @@ class CombatPlayerBase extends Tofu {
                         }
 
                         this.#logger.log(`run in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this._clips.RUN.nick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.run.nick];
 
                     }
 
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.RUN.nick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.run.nick, 1);
 
                 } else if (this.rotating) {
 
                     this.#logger.log(`walk turn to run`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._clips.WALK.nick], this.AWS.actions[this._clips.RUN.nick], this._animationSettings.WALK_TO_RUN);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.walk.nick], this.AWS.actions[this.currentActionType.run.nick], this._animationSettings.WALK_TO_RUN);
 
                 } else {
 
                     this.#logger.log(`idle to run`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._clips.RUN.nick], this._animationSettings.IDLE_TO_RUN);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.idle.nick], this.AWS.actions[this.currentActionType.run.nick], this._animationSettings.IDLE_TO_RUN);
 
                 }
 
@@ -323,7 +355,7 @@ class CombatPlayerBase extends Tofu {
                 if (this.shooting) {
 
                     this.#logger.log(`cache walk for cancel gun pointing -- gun shoot up`);
-                    this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                    this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                 } else {
 
@@ -338,21 +370,21 @@ class CombatPlayerBase extends Tofu {
                     }
                     
                     this.#logger.log(`walk in queue`);
-                    this.AWS.previousAction = this.AWS.actions[this._clips.WALK.nick];
+                    this.AWS.previousAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                 }
 
-                this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, 1);
+                this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, 1);
 
             } else if (!this.rotating) {
 
                 this.#logger.log('idle to walk');
-                this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.IDLE_TO_WALK);
+                this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.idle.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.IDLE_TO_WALK);
 
             } else if (this.rotating) {
 
                 this.#logger.log(`zero turn to walk turn`);
-                this.AWS.prepareCrossFade(this.AWS.actions[this._clips.WALK.nick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.WALK_TURN_TO_ZERO_TURN, 1);
+                this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.walk.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.WALK_TURN_TO_ZERO_TURN, 1);
 
             }
 
@@ -367,48 +399,48 @@ class CombatPlayerBase extends Tofu {
                         if (this.shooting) {
 
                             this.#logger.log(`cache walk turn for gun pointing`);
-                            this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                            this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
     
                         } else {
 
                             this.#logger.log(`walk turn in queue`);
-                            this.AWS.previousAction = this.AWS.actions[this._clips.WALK.nick];
+                            this.AWS.previousAction = this.AWS.actions[this.currentActionType.walk.nick];
                             
                         }
 
                         // TEST: turing and press shift -> gun fire -> press and release w while gun firing
-                        this.AWS.setActionWeightTimeScaleInCallback (this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                        this.AWS.setActionWeightTimeScaleInCallback (this.currentActionType.walk.nick, this._animationSettings.TURN_WEIGHT);
 
                     } else {
 
                         if (this.shooting) {
 
                             this.#logger.log(`cache idle for gun pointing`);
-                            this._tempAction = this.AWS.actions[this._idleNick];
+                            this._tempAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                         } else {
 
                             this.#logger.log(`idle in queue`);
-                            this.AWS.previousAction = this.AWS.actions[this._idleNick];
+                            this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                         }
 
                         // TEST: gun fire -> run and release w while gun firing
-                        this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                        this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.idle.nick, 1);
                         // TEST: gun fire -> press and hold w, then press hold shift, then release w -> walk backward
-                        this.AWS.clearActionCallback(this._clips.WALK.nick);
+                        this.AWS.clearActionCallback(this.currentActionType.walk.nick);
                         
                     }
 
                 } else if (this.rotating) {
 
                     this.#logger.log(`run to zero turn`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._clips.RUN.nick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.RUN_TO_WALK, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.run.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.RUN_TO_WALK, this._animationSettings.TURN_WEIGHT);
 
                 } else {
 
                     this.#logger.log(`run to idle`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._clips.RUN.nick], this.AWS.actions[this._idleNick], this._animationSettings.RUN_TO_IDLE);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.run.nick], this.AWS.actions[this.currentActionType.idle.nick], this._animationSettings.RUN_TO_IDLE);
 
                 }
 
@@ -419,12 +451,12 @@ class CombatPlayerBase extends Tofu {
                     this.#logger.log(`walk turn in queue 2`);
 
                     // TEST: turning -> gun fire -> press and release w once while gun firing
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, this._animationSettings.TURN_WEIGHT);
 
                     if (this.shooting) {
 
                         this.#logger.log(`cache walk turn for gun pointing 2`);
-                        this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     }
 
@@ -433,31 +465,31 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache idle for gun pointing 2`);
-                        this._tempAction = this.AWS.actions[this._idleNick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.idle.nick];
                         
                     } else {
 
                         this.#logger.log(`idle in queue 2`);
-                        this.AWS.previousAction = this.AWS.actions[this._idleNick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                     }
 
                     // TEST: gun fire -> press and release w once while gun firing
-                    this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.idle.nick, 1);
                     // TEST: gun fire -> press and release w once -> walk backward
-                    this.AWS.clearActionCallback(this._clips.WALK.nick);
+                    this.AWS.clearActionCallback(this.currentActionType.walk.nick);
 
                 }
 
             } else if (!this.rotating) {
 
                 this.#logger.log(`walk to idle`);
-                this.AWS.prepareCrossFade(this.AWS.actions[this._clips.WALK.nick], this.AWS.actions[this._idleNick], this._animationSettings.WALK_TO_IDLE);
+                this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.walk.nick], this.AWS.actions[this.currentActionType.idle.nick], this._animationSettings.WALK_TO_IDLE);
 
             } else {
 
                 this.#logger.log(`walk turn to zero turn`);
-                this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                this.AWS.setActionEffectiveWeight(this.currentActionType.walk.nick, this._animationSettings.TURN_WEIGHT);
 
             }
             
@@ -480,7 +512,7 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache quick turn for cancel gun pointing -- gun shoot down`);
-                        this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     } else {
 
@@ -495,22 +527,22 @@ class CombatPlayerBase extends Tofu {
                         }
 
                         this.#logger.log(`quick turn in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this._clips.WALK.nick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     }
 
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.QUICK_TURN_WEIGHT, -1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, this._animationSettings.QUICK_TURN_WEIGHT, -1);
                     
                 } else if (!this.rotating) {
 
                     this.#logger.log(`quick turn 1`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.IDLE_TO_WALK, this._animationSettings.QUICK_TURN_WEIGHT);
-                    this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.idle.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.IDLE_TO_WALK, this._animationSettings.QUICK_TURN_WEIGHT);
+                    this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, -1);
 
                 } else {
 
                     this.#logger.log(`back walk turn`);
-                    this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                    this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, -1);
 
                 }
 
@@ -521,7 +553,7 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache walk backward for cancel gun pointing -- gun shoot down`);
-                        this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     } else {
 
@@ -536,23 +568,23 @@ class CombatPlayerBase extends Tofu {
                         }
 
                         this.#logger.log(`walk backward in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this._clips.WALK.nick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     }
 
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.BACK_WALK_WEIGHT, -1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, this._animationSettings.BACK_WALK_WEIGHT, -1);
 
                 } else if (this.rotating) {
 
                     this.#logger.log(`walk turn to walk backward`);
-                    this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.BACK_WALK_WEIGHT)
-                        .setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                    this.AWS.setActionEffectiveWeight(this.currentActionType.walk.nick, this._animationSettings.BACK_WALK_WEIGHT)
+                        .setActionEffectiveTimeScale(this.currentActionType.walk.nick, -1);
 
                 } else {
 
                     this.#logger.log(`idle to walk backward`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.IDLE_TO_WALK, this._animationSettings.BACK_WALK_WEIGHT);
-                    this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.idle.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.IDLE_TO_WALK, this._animationSettings.BACK_WALK_WEIGHT);
+                    this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, -1);
 
                 }
                 
@@ -567,56 +599,56 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache walk turn for cancel gun pointing`);
-                        this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     } else {
 
                         this.#logger.log(`walk turn in queue 3`);
-                        this.AWS.previousAction = this.AWS.actions[this._clips.WALK.nick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     }
 
                     // TEST: turning -> gun fire -> press and release s once while gun firing
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, this._animationSettings.TURN_WEIGHT);
 
                 } else {
 
                     if (this.shooting) {
 
                         this.#logger.log(`cache idle for cancel gun pointing`);
-                        this._tempAction = this.AWS.actions[this._idleNick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                     } else {
 
                         this.#logger.log(`idle in queue 3`);
-                        this.AWS.previousAction = this.AWS.actions[this._idleNick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                     }
 
                     // TEST: gun fire -> press and release s once while gun firing
-                    this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.idle.nick, 1);
                     // TEST: gun point or gun fire -> press w twice quickly while gun firing
-                    this.AWS.clearActionCallback(this._clips.WALK.nick);
+                    this.AWS.clearActionCallback(this.currentActionType.walk.nick);
 
                 }
 
             } else if (!this.rotating) {
 
                 this.#logger.log(`walk back to idle`);
-                this.AWS.prepareCrossFade(this.AWS.actions[this._clips.WALK.nick], this.AWS.actions[this._idleNick], this._animationSettings.WALK_TO_IDLE);
+                this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.walk.nick], this.AWS.actions[this.currentActionType.idle.nick], this._animationSettings.WALK_TO_IDLE);
                 // TEST: quick turn -> release shift and walk backward -> walk forward
-                this.AWS.clearActionCallback(this._clips.WALK.nick);
+                this.AWS.clearActionCallback(this.currentActionType.walk.nick);
 
             } else {
 
                 this.#logger.log(`walk back to turning`);
-                this.AWS.setActionEffectiveWeight(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                this.AWS.setActionEffectiveWeight(this.currentActionType.walk.nick, this._animationSettings.TURN_WEIGHT);
                 // TEST: walk back turning -> press shift -> release shift and walk back and turning -> release s and turning -> walk forward
-                this.AWS.clearActionCallback(this._clips.WALK.nick);
+                this.AWS.clearActionCallback(this.currentActionType.walk.nick);
 
             }
 
-            this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, 1);
+            this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, 1);
 
         }
 
@@ -637,30 +669,30 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
                         
                         this.#logger.log(`cache left walk turn for cancel gun pointing`);
-                        this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     } else {
                         
                         this.#logger.log(`left turn in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this._clips.WALK.nick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     }
 
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, this._animationSettings.TURN_WEIGHT);
                     
                 } else {
 
                     this.#logger.log(`idle to left turn`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.idle.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
 
                 }
 
-                this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, 1);
+                this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, 1);
 
             } else if (this.backward) {
 
                 this.#logger.log(`left back walk turn`);
-                this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, -1);
 
             }
 
@@ -673,24 +705,24 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache idle for cancel gun pointing`);
-                        this._tempAction = this.AWS.actions[this._idleNick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                     } else {
 
                         this.#logger.log(`idle in queue 3`);
-                        this.AWS.previousAction = this.AWS.actions[this._idleNick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                     }
 
                     // TEST: gun fire -> press and release a once while gun firing
-                    this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.idle.nick, 1);
                     // TEST: gun fire -> press and releas a once -> walk forward
-                    this.AWS.clearActionCallback(this._clips.WALK.nick);
+                    this.AWS.clearActionCallback(this.currentActionType.walk.nick);
 
                 } else {
 
                     this.#logger.log(`left turn to idle`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._clips.WALK.nick], this.AWS.actions[this._idleNick], this._animationSettings.TURN_TO_IDLE);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.walk.nick], this.AWS.actions[this.currentActionType.idle.nick], this._animationSettings.TURN_TO_IDLE);
 
                 }
 
@@ -714,30 +746,30 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache right walk turn for cancel gun pointing`);
-                        this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     } else {
 
                         this.#logger.log(`right turn in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this._clips.WALK.nick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     }
 
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, this._animationSettings.TURN_WEIGHT);
 
                 } else {
 
                     this.#logger.log(`idle to right turn`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._idleNick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.idle.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
 
                 }
 
-                this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, 1);
+                this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, 1);
 
             } else if (this.backward) {
 
                 this.#logger.log(`right back walk turn`);
-                this.AWS.setActionEffectiveTimeScale(this._clips.WALK.nick, -1);
+                this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, -1);
 
             }
 
@@ -750,24 +782,24 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache idle for cancel gun pointing`);
-                        this._tempAction = this.AWS.actions[this._idleNick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                     } else {
 
                         this.#logger.log(`idle in queue 3`);
-                        this.AWS.previousAction = this.AWS.actions[this._idleNick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
 
                     }
 
                     // TEST: gun fire -> press and release a once while gun firing
-                    this.AWS.setActionWeightTimeScaleInCallback(this._idleNick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.idle.nick, 1);
                     // TEST: gun fire -> press and releas d once -> walk forward
-                    this.AWS.clearActionCallback(this._clips.WALK.nick);
+                    this.AWS.clearActionCallback(this.currentActionType.walk.nick);
 
                 } else {
 
                     this.#logger.log(`right turn to idle`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._clips.WALK.nick], this.AWS.actions[this._idleNick], this._animationSettings.TURN_TO_IDLE);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.walk.nick], this.AWS.actions[this.currentActionType.idle.nick], this._animationSettings.TURN_TO_IDLE);
 
                 }
 
@@ -791,21 +823,21 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache run for gun point after cancel shooting`);
-                        this._tempAction = this.AWS.actions[this._clips.RUN.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.run.nick];
 
                     } else if (this.gunPointing || this.meleeing) {
 
                         this.#logger.log(`run in queue 2`);
-                        this.AWS.previousAction = this.AWS.actions[this._clips.RUN.nick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.run.nick];
 
                     }
 
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.RUN.nick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.run.nick, 1);
 
                 } else {
 
                     this.#logger.log(`walk to run`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._clips.WALK.nick], this.AWS.actions[this._clips.RUN.nick], this._animationSettings.WALK_TO_RUN);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.walk.nick], this.AWS.actions[this.currentActionType.run.nick], this._animationSettings.WALK_TO_RUN);
 
                 }
 
@@ -824,24 +856,24 @@ class CombatPlayerBase extends Tofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cache walk for gun point after cancel shooting`);
-                        this._tempAction = this.AWS.actions[this._clips.WALK.nick];
+                        this._tempAction = this.AWS.actions[this.currentActionType.walk.nick];
                         
 
                     } else if (this.gunPointing || this.meleeing) {
 
                         this.#logger.log(`walk in queue 2`);
-                        this.AWS.previousAction = this.AWS.actions[this._clips.WALK.nick];
+                        this.AWS.previousAction = this.AWS.actions[this.currentActionType.walk.nick];
 
                     }
 
                     // TEST: walk or run -> gun firing -> accelerate (shift -> w) -> relese shift while gun firing
-                    this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, 1);
+                    this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, 1);
 
                     
                 } else {
 
                     this.#logger.log(`run to walk`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this._clips.RUN.nick], this.AWS.actions[this._clips.WALK.nick], this._animationSettings.RUN_TO_WALK);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.run.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.RUN_TO_WALK);
 
                 }
 
@@ -849,7 +881,7 @@ class CombatPlayerBase extends Tofu {
 
                 this.#logger.log(`quick turn to walk back`);
                 // TEST: quick turn -> gun firing -> release shift while gun firing
-                this.AWS.setActionWeightTimeScaleInCallback(this._clips.WALK.nick, this._animationSettings.BACK_WALK_WEIGHT, -1);
+                this.AWS.setActionWeightTimeScaleInCallback(this.currentActionType.walk.nick, this._animationSettings.BACK_WALK_WEIGHT, -1);
 
             }
 
@@ -924,7 +956,7 @@ class CombatPlayerBase extends Tofu {
             this.isQuickTuring = false;
 
             this.#logger.log(`gun point!`);
-            this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.armedWeaponAction.aim.nick], this._animationSettings.GUN_POINT, 1);
+            this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.currentActionType.aim.nick], this._animationSettings.GUN_POINT, 1);
 
             super.gunPoint(val);
 
@@ -1018,7 +1050,7 @@ class CombatPlayerBase extends Tofu {
     
                 this.#logger.log(`gun shoot!`);
                 this.#logger.log(`active: ${this.AWS.activeAction.nick}`)
-                this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.armedWeaponAction.shoot.nick], this._animationSettings.SHOOT, 1);
+                this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.currentActionType.shoot.nick], this._animationSettings.SHOOT, 1);
 
                 this.armedWeapon.shoot();
 
@@ -1051,7 +1083,7 @@ class CombatPlayerBase extends Tofu {
         this.#logger.func = this.cancelGunShoot.name;
 
         this.#logger.log(`cancel gun shoot!`);
-        this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.armedWeaponAction.aim.nick], this._animationSettings.SHOOT, this.AWS.previousAction.weight);
+        this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.currentActionType.aim.nick], this._animationSettings.SHOOT, this.AWS.previousAction.weight);
         this.#logger.log(`restore cached previous action for gun pointing`);
         this.AWS.previousAction = this._tempAction;
 
@@ -1141,7 +1173,7 @@ class CombatPlayerBase extends Tofu {
 
             if (this.armedWeapon && (this.armedWeapon.isFiring || this.shooting) && this._i <= this.armedWeapon.ammoCount) {
 
-                attackInterval = this.armedWeaponAction.attackInterval * this._i;
+                attackInterval = this.currentActionType.attackInterval * this._i;
 
                 if (this._i === 0 || this._delta >= attackInterval) {
 
