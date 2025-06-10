@@ -14,6 +14,7 @@ import { Combat } from '../components/updatables/Combat.js';
 import { AI } from '../components/updatables/AI.js';
 import { AnimeMixer } from '../components/updatables/AnimeMixer.js';
 import { independence } from '../components/basic/colorBase.js';
+// import { CombatPlayerBase } from '../components/Models.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -261,34 +262,34 @@ class WorldScene {
 
                     }
 
-                    enemy.onBeforeCollisionBoxChanged.push((enemy) => {
+                    // enemy.onBeforeCollisionBoxChanged.push((enemy) => {
 
-                        for (let i = 0, il = enemy.walls.length; i < il; i++) {
+                    //     for (let i = 0, il = enemy.walls.length; i < il; i++) {
 
-                            const wall = enemy.walls[i];
-                            this.scene.remove(wall.leftArrow);
-                            this.scene.remove(wall.rightArrow)
+                    //         const wall = enemy.walls[i];
+                    //         this.scene.remove(wall.leftArrow);
+                    //         this.scene.remove(wall.rightArrow)
 
-                        }
+                    //     }
 
-                    });
+                    // });
 
-                    const onCollisionBoxChanged = (enemy) => {
+                    // const onCollisionBoxChanged = (enemy) => {
 
-                        enemy.updateWalls();
+                    //     enemy.updateWalls();
 
-                        for (let i = 0, il = enemy.walls.length; i < il; i++) {
+                    //     for (let i = 0, il = enemy.walls.length; i < il; i++) {
 
-                            const wall = enemy.walls[i];
-                            // wall.leftArrow.visible = true;
-                            // wall.rightArrow.visible = true;
-                            this.scene.add(wall.leftArrow);
-                            this.scene.add(wall.rightArrow);
+                    //         const wall = enemy.walls[i];
+                    //         wall.leftArrow.visible = true;
+                    //         wall.rightArrow.visible = true;
+                    //         this.scene.add(wall.leftArrow);
+                    //         this.scene.add(wall.rightArrow);
 
-                        }
-                    };
-                    onCollisionBoxChanged(enemy);
-                    enemy.onCollisionBoxChanged.push(onCollisionBoxChanged);
+                    //     }
+                    // };
+                    // onCollisionBoxChanged(enemy);
+                    // enemy.onCollisionBoxChanged.push(onCollisionBoxChanged);
 
                     enemy.updateAccessories();
 
@@ -752,6 +753,18 @@ class WorldScene {
     
                 }
 
+                // if (this.player instanceof CombatPlayerBase) {
+
+                //     for (let i = 0, il = this.player.walls.length; i < il; i++) {
+
+                //         const wall = this.player.walls[i];
+                //         this.scene.remove(wall.leftArrow);
+                //         this.scene.remove(wall.rightArrow)
+
+                //     }
+
+                // }
+
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
@@ -790,6 +803,39 @@ class WorldScene {
                 this.scene.add(this.player.gltf.skeleton);
 
             }
+            
+            // if (this.player instanceof CombatPlayerBase) {
+
+            //     this.player.onBeforeCollisionBoxChanged.push((player) => {
+
+            //         for (let i = 0, il = player.walls.length; i < il; i++) {
+
+            //             const wall = player.walls[i];
+            //             this.scene.remove(wall.leftArrow);
+            //             this.scene.remove(wall.rightArrow)
+
+            //         }
+
+            //     });
+
+            //     const onCollisionBoxChanged = (player) => {
+
+            //         player.updateWalls();
+
+            //         for (let i = 0, il = player.walls.length; i < il; i++) {
+
+            //             const wall = player.walls[i];
+            //             wall.leftArrow.visible = true;
+            //             wall.rightArrow.visible = true;
+            //             this.scene.add(wall.leftArrow);
+            //             this.scene.add(wall.rightArrow);
+
+            //         }
+            //     };
+            //     onCollisionBoxChanged(this.player);
+            //     this.player.onCollisionBoxChanged.push(onCollisionBoxChanged);
+
+            // }
 
             // this.player.walls.forEach(w => {
 
