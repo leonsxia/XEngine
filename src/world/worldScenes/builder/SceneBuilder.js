@@ -534,9 +534,9 @@ class SceneBuilder {
 
             const room = lights[i];
 
-            const basicLightsSpecsArr = room['basicLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
-            const pointLightsSpecsArr = room['pointLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
-            const spotLightsSpecsArr = room['spotLightSpecs'].filter(l => l.visible).map(l => { l.room = room.room; return l; });
+            const basicLightsSpecsArr = room['basicLightSpecs']?.filter(l => l.visible).map(l => { l.room = room.room; return l; }) ?? [];
+            const pointLightsSpecsArr = room['pointLightSpecs']?.filter(l => l.visible).map(l => { l.room = room.room; return l; }) ?? [];
+            const spotLightsSpecsArr = room['spotLightSpecs']?.filter(l => l.visible).map(l => { l.room = room.room; return l; }) ?? [];
 
             for (let j = 0, jl = basicLightsSpecsArr.length; j < jl; j++) {
 
