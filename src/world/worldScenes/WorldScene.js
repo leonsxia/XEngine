@@ -916,6 +916,18 @@ class WorldScene {
 
     }
 
+    showPlayerCBox(show) {
+
+        if (!this.player) return this;
+
+        const s = show === 'show' ? true : false;
+
+        this.player.showCollisionBox(s);
+
+        return this;
+
+    }
+
     showPlayerPushingBox(show) {
 
         if (!this.player || !this.player.showPushingBox) return this;

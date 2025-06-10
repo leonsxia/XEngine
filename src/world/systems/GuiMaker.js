@@ -321,6 +321,14 @@ class GuiMaker {
                 changeFn: $scene.showPlayerBF.bind($scene)
             }));
 
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'CBox',
+                value: { CBox: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showPlayerCBox.bind($scene)
+            }));
+
             if ($scene.player.showPushingBox) {
 
                 folder.specs.push(makeFolderSpecGuiConfig({

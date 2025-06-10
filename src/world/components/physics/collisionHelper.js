@@ -195,12 +195,16 @@ function createBoundingFaces(specs) {
     frontBoundingFace.position.set(0, 0, BBFDepthOffset);
     frontBoundingFace.visible = showBF;
     frontBoundingFace.layers.enable(CORNOR_RAY_LAYER);
+    frontBoundingFace.material.transparent = true;
+    frontBoundingFace.material.opacity = 0.5;
 
     const backBoundingFace = new Mesh(boundingFaceGeometry, boundingFaceMaterial.clone());
     backBoundingFace.name = `backFace${suffix}`;
     backBoundingFace.position.set(0, 0, - BBFDepthOffset);
     backBoundingFace.visible = showBF;
     backBoundingFace.layers.enable(CORNOR_RAY_LAYER);
+    backBoundingFace.material.transparent = true;
+    backBoundingFace.material.opacity = 0.5;
 
     const leftBoundingFace = new Mesh(boundingFaceGeometry, boundingFaceMaterial.clone());
     leftBoundingFace.name = `leftFace${suffix}`;
@@ -209,6 +213,8 @@ function createBoundingFaces(specs) {
     leftBoundingFace.rotation.y += Math.PI / 2;
     leftBoundingFace.visible = showBF;
     leftBoundingFace.layers.enable(CORNOR_RAY_LAYER);
+    leftBoundingFace.material.transparent = true;
+    leftBoundingFace.material.opacity = 0.5;
      
     const rightBoundingFace = new Mesh(boundingFaceGeometry, boundingFaceMaterial.clone());
     rightBoundingFace.name = `rightFace${suffix}`;
@@ -217,6 +223,8 @@ function createBoundingFaces(specs) {
     rightBoundingFace.rotation.y += Math.PI / 2;
     rightBoundingFace.visible = showBF;
     rightBoundingFace.layers.enable(CORNOR_RAY_LAYER);
+    rightBoundingFace.material.transparent = true;
+    rightBoundingFace.material.opacity = 0.5;
 
     return { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace };
 

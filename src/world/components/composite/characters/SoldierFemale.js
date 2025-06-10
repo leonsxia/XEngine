@@ -25,28 +25,55 @@ const ANIMATION_SETTINGS = {
 }
 
 const WEAPON_ACTION_MAPPING = {
-    [WEAPONS.NONE]: new WeaponActionMapping({ 
-        idle: CLIPS.IDLE, walk: CLIPS.WALK, run: CLIPS.RUN
+    [WEAPONS.NONE]: new WeaponActionMapping({
+        name: 'emptyhand',
+        idle: CLIPS.IDLE, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING,
+        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
+        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
+        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
+        attackCollisionSize: { width: .6, depth: .82, height: 1.78 }
     }),
     [WEAPONS.PISTOL1]: new WeaponActionMapping({ 
+        name: 'pistol1',
         idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
-        attackInterval: 0.7, fireRate: 1.2 
+        attackInterval: 0.7, fireRate: 1.2,
+        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
+        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
+        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
+        attackCollisionSize: { width: .6, depth: .82, height: 1.78 }
     }),
-    [WEAPONS.GLOCK]: new WeaponActionMapping({ 
+    [WEAPONS.GLOCK]: new WeaponActionMapping({
+        name: 'glock',
         idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
-        attackInterval: 0.4667, fireRate: 1.8 
+        attackInterval: 0.4667, fireRate: 1.8,
+        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
+        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
+        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
+        attackCollisionSize: { width: .6, depth: .82, height: 1.78 }
     }),
-    [WEAPONS.REVOLVER]: new WeaponActionMapping({ 
+    [WEAPONS.REVOLVER]: new WeaponActionMapping({
+        name: 'revolver',
         idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
-        attackInterval: 1.05, fireRate: 0.8 
+        attackInterval: 1.05, fireRate: 0.8,
+        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
+        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
+        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
+        attackCollisionSize: { width: .6, depth: .82, height: 1.78 } 
     }),
-    [WEAPONS.SMG_SHORT]: new WeaponActionMapping({ 
+    [WEAPONS.SMG_SHORT]: new WeaponActionMapping({
+        name: 'smg_short',
         idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
-        attackInterval: 0.08, fireRate: 10.2 
+        attackInterval: 0.08, fireRate: 10.2,
+        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
+        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
+        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
+        attackCollisionSize: { width: .6, depth: .82, height: 1.78 } 
     }),
-    [WEAPONS.BAYONET]: new WeaponActionMapping({ 
+    [WEAPONS.BAYONET]: new WeaponActionMapping({
+        name: 'bayonet',
         idle: CLIPS.IDLE, attack: CLIPS.SWORD_SLASH, attackInterval: 1.03, 
-        prepareInterval: 0.5, fireRate: 1.25 
+        prepareInterval: 0.5, fireRate: 1.25,
+        ignoreCollisionBox: true
     })
 }
 
@@ -68,7 +95,49 @@ class SoldierFemale extends CombatPlayerBase {
         const { vel = 1.2, rotateR = 1, velEnlarge = 2.8 } = specs;
         const { scale = [1, 1, 1] } = specs;
         const { sovRadius = 10, showBS = false, enableCollision = true } = specs;
-        const { createDefaultBoundingObjects = true } = specs;
+        const { createDefaultBoundingObjects = true } = specs;        
+
+        const weapons = [
+            new Pistol({
+                name: `${name}_pistol`,
+                position: [- .18, - .028, .065],
+                rotation: [- 0.35, - 1.3, - 1.6],
+                fireRate: 1,
+                ammo: 12
+            }),
+            new Glock({
+                name: `${name}_glock19`,
+                position: [- .18, - .08, .096],
+                rotation: [1.2, 0, - .2],
+                fireRate: 1.5,
+                ammo: 19
+            }),
+            new Revolver({
+                name: `${name}_magnum357`,
+                position: [- .168, - .005, .075],
+                rotation: [- 0.35, - 1.3, - 1.6],
+                fireRate: 1,
+                ammo: 6
+            }),
+            new SMGShort({
+                name: `${name}_smg_short`,
+                position: [- .18, - .028, .065],
+                rotation: [- 0.35, - 1.3, - 1.6],
+                fireRate: 1,
+                ammo: 35,
+                isSemiAutomatic: false
+            }),
+            new Bayonet({
+                name: `${name}_bayonet`,
+                scale: [.35, .3, .25],
+                position: [- .18, .01, .046],
+                rotation: [- .5, - 1, - .3],
+                fireRate: 1.25
+            })
+        ];
+
+        const weaponActionMapping = WEAPON_ACTION_MAPPING;
+        const initialWeapon = weapons.find(w => w.weaponType === WEAPONS.GLOCK);
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
@@ -76,53 +145,12 @@ class SoldierFemale extends CombatPlayerBase {
             vel, velEnlarge, rotateR,
             scale,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,
-            sovRadius, showBS, enableCollision, createDefaultBoundingObjects
+            sovRadius, showBS, enableCollision, createDefaultBoundingObjects,
+            weaponActionMapping, initialWeapon, weapons
         };
 
         super(setup);
-
-        this.weapons.push(new Pistol({
-            name: `${name}_pistol`,
-            position: [- .18, - .028 , .065],
-            rotation: [- 0.35, - 1.3, - 1.6],
-            fireRate: 1,
-            ammo: 12
-        }));
-
-        this.weapons.push(new Glock({
-            name: `${name}_glock19`,
-            position: [- .18, - .08, .096],
-            rotation: [1.2, 0, - .2],
-            fireRate: 1.5,
-            ammo: 19
-        }));
-
-        this.weapons.push(new Revolver({
-            name: `${name}_magnum357`,
-            position: [- .168, - .005 , .075],
-            rotation:[- 0.35, - 1.3, - 1.6],
-            fireRate: 1,
-            ammo: 6
-        }));
-
-        this.weapons.push(new SMGShort({
-            name: `${name}_smg_short`,
-            position: [- .18, - .028 , .065],
-            rotation: [- 0.35, - 1.3, - 1.6],
-            fireRate: 1,
-            ammo: 35,
-            isSemiAutomatic: false
-        }));
-
-        this.weapons.push(new Bayonet({
-            name: `${name}_bayonet`,
-            scale: [.35, .3, .25],
-            position: [- .18, .01 , .046],
-            rotation: [- .5, - 1, - .3],
-            fireRate: 1.25
-        }));
-
-        this.weaponActionMapping = WEAPON_ACTION_MAPPING;
+        
         this.showTofu(false);
 
     }
@@ -139,8 +167,7 @@ class SoldierFemale extends CombatPlayerBase {
 
         this.setupWeaponScale();
         
-        const initialWeapon = this.weapons.find(w => w.weaponType === WEAPONS.GLOCK);
-        this.armWeapon(initialWeapon);        
+        this.armWeapon(this.initialWeapon);        
         
     }
 

@@ -36,11 +36,19 @@ class SimplePhysics {
         this.enemies = enemies;
 
         // bind event
+        for (let i = 0, il = players.length; i < il; i++) {
+
+            const player = players[i];
+            player.onBeforeCollisionBoxChanged?.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
+            player.onCollisionBoxChanged?.push(this.onTofuCollisionBoxChanged.bind(this));
+
+        }
+
         for (let i = 0, il = enemies.length; i < il; i++) {
 
             const enemy = enemies[i];
-            enemy.onBeforeCollisionBoxChanged.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
-            enemy.onCollisionBoxChanged.push(this.onTofuCollisionBoxChanged.bind(this));
+            enemy.onBeforeCollisionBoxChanged?.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
+            enemy.onCollisionBoxChanged?.push(this.onTofuCollisionBoxChanged.bind(this));
 
         }
 

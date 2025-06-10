@@ -623,7 +623,11 @@ class Tofu extends Moveable2D {
 
     showCollisionBox(show) {
 
-        this.collisionBox.group.visible = show;
+        if (this.collisionBox) {
+
+            this.collisionBox.group.visible = show;
+
+        }
         
     }
 
