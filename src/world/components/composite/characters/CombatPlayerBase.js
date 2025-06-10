@@ -173,7 +173,11 @@ class CombatPlayerBase extends Tofu {
 
         let action;
 
-        if (this.isForward || this.isBackward || this.isRotating) {
+        if (this.attacking) {
+
+            action = this.currentActionType.aim.nick;
+
+        } else if (this.isForward || this.isBackward || this.isRotating) {
 
             if (this.isAccelerating && !this.isRotating) {
 
@@ -184,10 +188,6 @@ class CombatPlayerBase extends Tofu {
                 action = this.currentActionType.walk.nick;
 
             }
-
-        } else if (this.attacking) {
-
-            action = this.currentActionType.aim.nick;
 
         } else {
 
