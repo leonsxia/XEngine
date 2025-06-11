@@ -234,13 +234,21 @@ class Tofu extends Moveable2D {
 
     get activeBoundingFace() {
 
-        if (this._useBF2) {
+        if (this._useCustomBoundingFaces) {
 
-            return this.boundingFace2Mesh;
+            return this.boundingFaceMesh;
 
         } else {
 
-            return this.boundingFaceMesh;
+            if (this._useBF2) {
+
+                return this.boundingFace2Mesh;
+
+            } else {
+
+                return this.boundingFaceMesh;
+
+            }
 
         }
 
@@ -287,7 +295,11 @@ class Tofu extends Moveable2D {
 
         super.movingLeft(val);
 
-        this.switchBoundingFace();
+        if (!this._useCustomBoundingFaces) {
+
+            this.switchBoundingFace();
+
+        }
 
     }
 
@@ -295,7 +307,11 @@ class Tofu extends Moveable2D {
 
         super.movingRight(val);
 
-        this.switchBoundingFace();
+        if (!this._useCustomBoundingFaces) {
+
+            this.switchBoundingFace();
+
+        }
 
     }
 
@@ -303,7 +319,11 @@ class Tofu extends Moveable2D {
 
         super.movingForward(val);
 
-        this.switchBoundingFace();
+        if (!this._useCustomBoundingFaces) {
+
+            this.switchBoundingFace();
+
+        }
 
     }
 
@@ -311,7 +331,11 @@ class Tofu extends Moveable2D {
 
         super.movingBackward(val);
 
-        this.switchBoundingFace();
+        if (!this._useCustomBoundingFaces) {
+
+            this.switchBoundingFace();
+
+        }
 
     }
 
@@ -319,7 +343,11 @@ class Tofu extends Moveable2D {
 
         super.gunPoint(val);
 
-        this.switchBoundingFace();
+        if (!this._useCustomBoundingFaces) {
+
+            this.switchBoundingFace();
+
+        }
 
     }
 
@@ -327,7 +355,11 @@ class Tofu extends Moveable2D {
 
         super.melee(val);
 
-        this.switchBoundingFace();
+        if (!this._useCustomBoundingFaces) {
+
+            this.switchBoundingFace();
+
+        }
         
     }
 
@@ -357,6 +389,18 @@ class Tofu extends Moveable2D {
     get scale() {
 
         return this.group.scale;
+
+    }
+
+    get w() {
+
+        return this.#w;
+
+    }
+
+    get d() {
+
+        return this.#d;
 
     }
 
@@ -568,9 +612,9 @@ class Tofu extends Moveable2D {
  
     showBB(show) {
 
-        this._showBB = show;
+        this._showBB = show ?? this._showBB;
 
-        this.boundingBoxMesh.visible = show;
+        this.boundingBoxMesh.visible = this._showBB;
 
     }
 
@@ -582,21 +626,34 @@ class Tofu extends Moveable2D {
 
     showBBW(show) {
 
-        this._showBBW = show;
+        this._showBBW = show ?? this._showBBW;
 
-        this.boundingBoxWireMesh.visible = show;
+        this.boundingBoxWireMesh.visible = this._showBBW;
 
         return this;
 
     }
 
     showBF(show) {
-        
-        this._showBF = show;
 
-        this.setBoundingFaceVisibility();
+        this._showBF = show ?? this._showBF;
 
-        this.enablePickLayers(...this.boundingFaceMesh, ...this.boundingFace2Mesh);
+        if (this._useCustomBoundingFaces) {
+
+            const currentFaces = this.boundingFaceMesh;
+            for (let i = 0, il = currentFaces.length; i < il; i++) {
+
+                const face = currentFaces[i];
+                face.visible = this._showBF;
+
+            }
+
+        } else {
+
+            this.setBoundingFaceVisibility();
+            this.enablePickLayers(...this.boundingFaceMesh, ...this.boundingFace2Mesh);
+
+        }
 
         return this;
 
@@ -604,9 +661,9 @@ class Tofu extends Moveable2D {
 
     showPushingBox(show) {
 
-        this._showPushingBox = show;
+        this._showPushingBox = show ?? this._showPushingBox;
 
-        this.pushingOBBBoxMesh.visible = show;
+        this.pushingOBBBoxMesh.visible = this._showPushingBox;
 
         return this;
 
@@ -806,9 +863,21 @@ class Tofu extends Moveable2D {
 
     resetBFColor() {
 
-        this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(BF));
-        if (!this._useCustomBoundingFaces) {
+        if (this._useCustomBoundingFaces) {
 
+            if (this.isRotating && !this.attacking) {
+
+                this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(BF2));
+
+            } else {
+
+                this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(BF));
+
+            }
+
+        } else {
+
+            this.boundingFaceMesh.forEach(bf => bf.material.color.setHex(BF));
             this.boundingFace2Mesh.forEach(bf2 => bf2.material.color.setHex(BF2));
 
         }

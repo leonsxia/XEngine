@@ -1,4 +1,6 @@
+import { BF, BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
+import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
 import { WEAPONS } from "../../utils/constants";
 
 class CustomizedCombatTofu extends Tofu {
@@ -9,7 +11,9 @@ class CustomizedCombatTofu extends Tofu {
     weapons = [];
 
     collisionBoxMap = new Map();
-    #lastAction;
+    boundingFaceMap = new Map();
+    boundingBoxMap = new Map();
+    pushingBoxMap = new Map();
 
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
@@ -20,17 +24,31 @@ class CustomizedCombatTofu extends Tofu {
 
         const { enableCollision = true } = specs;
         const { weaponActionMapping = {}, initialWeapon, weapons = [] } = specs;
+        const { createDefaultBoundingObjects = true } = specs;
+
         this.weaponActionMapping = weaponActionMapping;
         this.initialWeapon = initialWeapon;
         this.weapons = weapons;
 
+        const initialWeaponType = this.initialWeapon.weaponType;
         if (enableCollision) {
-
-            const initialWeaponType = this.initialWeapon.weaponType;
-
+            
             this.createCollisionBoxes();
             this.switchCollisionBox(initialWeaponType, this.weaponActionMapping[initialWeaponType].idle.nick, false);
             this.showCollisionBox(false);
+
+        }
+
+        if (!createDefaultBoundingObjects) {
+
+            this.createBoundingFaces();
+            this.switchBoundingFace(initialWeaponType);
+
+            this.createBoundingBoxes();
+            this.switchBoundingBox(initialWeaponType, this.weaponActionMapping[initialWeaponType].idle.nick);
+
+            this.createPushingBoxes();
+            this.switchPushingBox(initialWeaponType);
 
         }
 
@@ -40,12 +58,9 @@ class CustomizedCombatTofu extends Tofu {
 
         super.trackResources();
 
-        const weaponTypes = Object.keys(this.weaponActionMapping);
-        
-        for (let i = 0, il = weaponTypes.length; i < il; i++) {
+        for (const mapping of this.collisionBoxMap.values()) {
 
-            const weaponType = weaponTypes[i];
-            const cboxes = this.collisionBoxMap.get(weaponType).values();
+            const cboxes = mapping.values();
 
             for (const cbox of cboxes) {
 
@@ -61,7 +76,43 @@ class CustomizedCombatTofu extends Tofu {
 
             }
 
-        }        
+        }
+
+        for (const mapping of this.boundingFaceMap.values()) {
+
+            const bfaces = mapping.values();
+
+            for (const bf of bfaces) {
+
+                const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
+                this.track(frontBoundingFace);
+                this.track(backBoundingFace);
+                this.track(leftBoundingFace);
+                this.track(rightBoundingFace);
+
+            }
+
+        }
+
+        for (const mapping of this.boundingBoxMap.values()) {
+
+            const bboxes = mapping.values();
+
+            for (const bbox of bboxes) {
+
+                const { boundingBox, boundingBoxWire } = bbox;
+                this.track(boundingBox);
+                this.track(boundingBoxWire);
+
+            }
+
+        }
+
+        for (const pushingBox of this.pushingBoxMap.values()) {
+
+            this.track(pushingBox);
+
+        }
 
     }
 
@@ -95,6 +146,188 @@ class CustomizedCombatTofu extends Tofu {
 
     }
 
+    createPushingBoxes() {
+
+        const weaponTypes = Object.keys(this.weaponActionMapping);
+
+        for (let i = 0, il = weaponTypes.length; i < il; i++) {
+
+            const weaponType = weaponTypes[i];
+            const typeMapping = this.weaponActionMapping[weaponType];
+            const { ignorePushingBox, pushingBoxSize } = typeMapping;
+
+            if (ignorePushingBox) continue;
+
+            const pushingBoxSpecs = {
+                height: pushingBoxSize.height, depth: pushingBoxSize.depth, show: false
+            }
+
+            this.pushingBoxMap.set(weaponType, createTofuPushingOBBBox(pushingBoxSpecs));
+
+        }
+
+    }
+
+    switchPushingBox(weaponType) {
+
+        if (this.pushingBoxMap.size === 0) return;
+
+        const pushingBox = this.pushingBoxMap.get(weaponType);
+
+        this.group.remove(this.pushingOBBBoxMesh);
+        this.group.add(pushingBox);        
+
+    }
+
+    createBoundingBoxes() {
+
+        const weaponTypes = Object.keys(this.weaponActionMapping);
+        
+        for (let i = 0, il = weaponTypes.length; i < il; i++) {
+
+            const weaponType = weaponTypes[i];
+            const typeMapping = this.weaponActionMapping[weaponType];
+            const {
+                ignoreBoundingBox,
+                idleBoundingBoxSize, walkBoundingBoxSize, runBoundingBoxSize, attackBoundingBoxSize
+            } = typeMapping;
+
+            if (ignoreBoundingBox) continue;
+
+            const bboxes = new Map();
+
+            const setBBox = (size, nick) => {
+
+                if (!size) return;
+
+                const { width, depth, height } = size;
+                const specs = { width, depth, height, showBB: false, showBBW: false };
+                bboxes.set(nick, createBoundingBox(specs));
+
+            };
+
+            setBBox(idleBoundingBoxSize, typeMapping.idle.nick);
+            setBBox(walkBoundingBoxSize, typeMapping.walk.nick);
+            setBBox(runBoundingBoxSize, typeMapping.run.nick);
+            setBBox(attackBoundingBoxSize, typeMapping.aim.nick);
+
+            this.boundingBoxMap.set(weaponType, bboxes);
+
+        }
+
+    }
+
+    switchBoundingBox(weaponType, action) {
+
+        if (this.boundingBoxMap.size === 0) return;
+
+        const { boundingBox, boundingBoxWire } = this.boundingBoxMap.get(weaponType).get(action);
+
+        this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
+        this.group.add(boundingBox, boundingBoxWire);
+        this.showBB();
+        this.showBBW();
+
+    }
+
+    createBoundingFaces() {
+
+        const weaponTypes = Object.keys(this.weaponActionMapping);
+        
+        for (let i = 0, il = weaponTypes.length; i < il; i++) {
+
+            const weaponType = weaponTypes[i];
+            const typeMapping = this.weaponActionMapping[weaponType];
+            const {
+                ignoreBoundingFace,
+                idleBoundingFaceSize, walkBoundingFaceSize, runBoundingFaceSize, rotateBoundingFaceSize, attackBoundingFaceSize
+            } = typeMapping;
+
+            if (ignoreBoundingFace) continue;
+
+            const boundingFaces = new Map();
+
+            const setBoundingFace = (size, nick, color) => {
+
+                if (!size) return;
+
+                const { width, depth, height, bbfThickness, gap } = size;
+                const specs = { width, depth, height, bbfThickness, gap, showBF: false, color: color ?? BF };
+                boundingFaces.set(nick, createBoundingFacesMesh(specs));
+
+            };
+
+            setBoundingFace(idleBoundingFaceSize, typeMapping.idle.nick);
+            setBoundingFace(walkBoundingFaceSize, typeMapping.walk.nick);
+            setBoundingFace(runBoundingFaceSize, typeMapping.run.nick);
+            setBoundingFace(rotateBoundingFaceSize, typeMapping.rotate.nick, BF2);
+            setBoundingFace(attackBoundingFaceSize, typeMapping.aim.nick);
+
+            this.boundingFaceMap.set(weaponType, boundingFaces);
+
+        }
+        
+    }
+
+    switchBoundingFace(weaponType) {
+
+        if (this.boundingFaceMap.size === 0) return;
+
+        const typeMapping = this.weaponActionMapping[weaponType];
+        const boundingFaces = this.boundingFaceMap.get(weaponType);
+        const { idleBoundingFaceSize, walkBoundingFaceSize, runBoundingFaceSize, rotateBoundingFaceSize, attackBoundingFaceSize } = typeMapping;
+        let bf;
+
+        if (this.attacking) {
+
+            bf = boundingFaces.get(typeMapping.aim.nick);
+            this.w = attackBoundingFaceSize.width;
+            this.d = attackBoundingFaceSize.depth;
+
+        } else if (this.isRotating) {
+
+            bf = boundingFaces.get(typeMapping.rotate.nick);
+            this.w = rotateBoundingFaceSize.width;
+            this.d = rotateBoundingFaceSize.depth;
+
+        } else if (this.isForward || this.isBackward) {
+
+            if (this.isAccelerating) {
+
+                bf = boundingFaces.get(typeMapping.run.nick);
+                this.w = runBoundingFaceSize.width;
+                this.d = runBoundingFaceSize.depth;
+
+            } else {
+
+                bf = boundingFaces.get(typeMapping.walk.nick);
+                this.w = walkBoundingFaceSize.width;
+                this.d = walkBoundingFaceSize.depth;
+
+            }
+        } else {
+
+            bf = boundingFaces.get(typeMapping.idle.nick);
+            this.w = idleBoundingFaceSize.width;
+            this.d = idleBoundingFaceSize.depth;
+
+        }
+
+        const currentFaces = this.boundingFaceMesh;
+        for (let i = 0, il = currentFaces.length; i < il; i++) {
+
+            const face = currentFaces[i];
+            this.group.remove(face);
+
+        }
+
+        const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
+        this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
+
+        this.showBF();
+        
+    }
+
     doBeforeCollisionBoxChangedEvents() {
 
         for (let i = 0, il = this.onBeforeCollisionBoxChanged.length; i < il; i++) {
@@ -119,12 +352,9 @@ class CustomizedCombatTofu extends Tofu {
 
     showCollisionBox(show) {
 
-        const weaponTypes = Object.keys(this.weaponActionMapping);
-        
-        for (let i = 0, il = weaponTypes.length; i < il; i++) {
+        for (const mapping of this.collisionBoxMap.values()) {
 
-            const weaponType = weaponTypes[i];
-            const cboxes = this.collisionBoxMap.get(weaponType).values();
+            const cboxes = mapping.values();
 
             for (const cbox of cboxes) {
 
@@ -153,61 +383,27 @@ class CustomizedCombatTofu extends Tofu {
 
             const cboxes = new Map();
 
-            if (idleCollisionSize) {
+            const setCBox = (size, nick) => {
 
+                if (!size) return;
+
+                const { width, depth, height } = size;
                 const specs = {
-                    name: `${this.name}-${name}-idle-cBox`,
-                    width: idleCollisionSize.width, depth: idleCollisionSize.depth, height: idleCollisionSize.height,
+                    name: `${this.name}-${name}-${nick}-cBox`,
+                    width, depth, height,
                     enableWallOBBs: true, showArrow: false, lines: false,
                     ignoreFaces: [4, 5]
                 }
-                cboxes.set(typeMapping.idle.nick, new CollisionBox(specs));
+                cboxes.set(nick, new CollisionBox(specs));
                 // for SimplyPhysics self-check
-                cboxes.get(typeMapping.idle.nick).father = this;
-            
-            }
-
-            if (walkCollisionSize) {
-
-                const specs = {
-                    name: `${this.name}-${name}-walk-cBox`,
-                    width: walkCollisionSize.width, depth: walkCollisionSize.depth, height: walkCollisionSize.height,
-                    enableWallOBBs: true, showArrow: false, lines: false,
-                    ignoreFaces: [4, 5]
-                }
-                cboxes.set(typeMapping.walk.nick, new CollisionBox(specs));
-                // for SimplyPhysics self-check
-                cboxes.get(typeMapping.walk.nick).father = this;
-
-            }
-
-            if (runCollisionSize) {
-
-                const specs = {
-                    name: `${this.name}-${name}-run-cBox`,
-                    width: runCollisionSize.width, depth: runCollisionSize.depth, height: runCollisionSize.height,
-                    enableWallOBBs: true, showArrow: false, lines: false,
-                    ignoreFaces: [4, 5]
-                }
-                cboxes.set(typeMapping.run.nick, new CollisionBox(specs));
-                // for SimplyPhysics self-check
-                cboxes.get(typeMapping.run.nick).father = this;
+                cboxes.get(nick).father = this;
                 
             }
 
-            if (attackCollisionSize) {
-
-                const specs = {
-                    name: `${this.name}-${name}-attack-cBox`,
-                    width: attackCollisionSize.width, depth: attackCollisionSize.depth, height: attackCollisionSize.height,
-                    enableWallOBBs: true, showArrow: false, lines: false,
-                    ignoreFaces: [4, 5]
-                }
-                cboxes.set(typeMapping.aim.nick, new CollisionBox(specs));
-                // for SimplyPhysics self-check
-                cboxes.get(typeMapping.aim.nick).father = this;
-                
-            }
+            setCBox(idleCollisionSize, typeMapping.idle.nick);
+            setCBox(walkCollisionSize, typeMapping.walk.nick);
+            setCBox(runCollisionSize, typeMapping.run.nick);
+            setCBox(attackCollisionSize, typeMapping.aim.nick);
 
             this.collisionBoxMap.set(weaponType, cboxes);
 
@@ -240,12 +436,12 @@ class CustomizedCombatTofu extends Tofu {
     switchHelperComponents(forceEvent = true) {
 
         const action = this.currentAction;
+        const weaponType = this.armedWeapon ? this.armedWeapon.weaponType : WEAPONS.NONE;
 
-        if (this.#lastAction === action) return;
-
-        this.#lastAction = action;
-
-        this.switchCollisionBox(this.armedWeapon ? this.armedWeapon.weaponType : WEAPONS.NONE, action, forceEvent);
+        this.switchCollisionBox(weaponType, action, forceEvent);
+        this.switchBoundingBox(weaponType, action);
+        this.switchPushingBox(weaponType);
+        this.switchBoundingFace(weaponType);
 
     }
 

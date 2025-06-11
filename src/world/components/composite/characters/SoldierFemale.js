@@ -27,53 +27,106 @@ const ANIMATION_SETTINGS = {
 const WEAPON_ACTION_MAPPING = {
     [WEAPONS.NONE]: new WeaponActionMapping({
         name: 'emptyhand',
-        idle: CLIPS.IDLE, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING,
-        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
-        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
-        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
-        attackCollisionSize: { width: .6, depth: .82, height: 1.78 }
+        idle: CLIPS.IDLE, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING,
+        idleCollisionSize: { width: .65, depth: .55, height: 1.78 },
+        walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
+        runCollisionSize: { width: .65, depth: .9, height: 1.78 },
+        attackCollisionSize: { width: .65, depth: .95, height: 1.78 },
+        idleBoundingFaceSize: { width: .6, depth: .6, height: 1.78, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .6, depth: .8, height: 1.78, bbfThickness: .18, gap: .1 },
+        runBoundingFaceSize: { width: .6, depth: .85, height: 1.78, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .6, depth: .7, height: 1.78, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .6, depth: .9, height: 1.78, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .6, depth: .6, height: 1.78 },
+        walkBoundingBoxSize: { width: .63, depth: .7, height: 1.78 },
+        runBoundingBoxSize: { width: .63, depth: .75, height: 1.78 },
+        attackBoundingBoxSize: {width: .63, depth: .72, height: 1.78 },
+        pushingBoxSize: { height: 1.78, depth: .85 }
     }),
     [WEAPONS.PISTOL1]: new WeaponActionMapping({ 
         name: 'pistol1',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
         attackInterval: 0.7, fireRate: 1.2,
-        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
-        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
-        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
-        attackCollisionSize: { width: .6, depth: .82, height: 1.78 }
+        idleCollisionSize: { width: .65, depth: .55, height: 1.78 },
+        walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
+        runCollisionSize: { width: .65, depth: .9, height: 1.78 },
+        attackCollisionSize: { width: .65, depth: .95, height: 1.78 },
+        idleBoundingFaceSize: { width: .6, depth: .6, height: 1.78, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .6, depth: .8, height: 1.78, bbfThickness: .18, gap: .1 },
+        runBoundingFaceSize: { width: .6, depth: .85, height: 1.78, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .6, depth: .7, height: 1.78, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .6, depth: .9, height: 1.78, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .6, depth: .6, height: 1.78 },
+        walkBoundingBoxSize: { width: .6, depth: .7, height: 1.78 },
+        runBoundingBoxSize: { width: .6, depth: .75, height: 1.78 },
+        attackBoundingBoxSize: {width: .6, depth: .72, height: 1.78 },
+        pushingBoxSize: { height: 1.78, depth: .85 }
     }),
     [WEAPONS.GLOCK]: new WeaponActionMapping({
         name: 'glock',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
         attackInterval: 0.4667, fireRate: 1.8,
-        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
-        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
-        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
-        attackCollisionSize: { width: .6, depth: .82, height: 1.78 }
+        idleCollisionSize: { width: .65, depth: .55, height: 1.78 },
+        walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
+        runCollisionSize: { width: .65, depth: .9, height: 1.78 },
+        attackCollisionSize: { width: .65, depth: .95, height: 1.78 },
+        idleBoundingFaceSize: { width: .6, depth: .6, height: 1.78, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .6, depth: .8, height: 1.78, bbfThickness: .18, gap: .1 },
+        runBoundingFaceSize: { width: .6, depth: .85, height: 1.78, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .6, depth: .7, height: 1.78, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .6, depth: .9, height: 1.78, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .6, depth: .6, height: 1.78 },
+        walkBoundingBoxSize: { width: .6, depth: .7, height: 1.78 },
+        runBoundingBoxSize: { width: .6, depth: .75, height: 1.78 },
+        attackBoundingBoxSize: {width: .6, depth: .72, height: 1.78 },
+        pushingBoxSize: { height: 1.78, depth: .85 }
     }),
     [WEAPONS.REVOLVER]: new WeaponActionMapping({
         name: 'revolver',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
         attackInterval: 1.05, fireRate: 0.8,
-        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
-        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
-        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
-        attackCollisionSize: { width: .6, depth: .82, height: 1.78 } 
+        idleCollisionSize: { width: .65, depth: .55, height: 1.78 },
+        walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
+        runCollisionSize: { width: .65, depth: .9, height: 1.78 },
+        attackCollisionSize: { width: .65, depth: .95, height: 1.78 },
+        idleBoundingFaceSize: { width: .6, depth: .6, height: 1.78, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .6, depth: .8, height: 1.78, bbfThickness: .18, gap: .1 },
+        runBoundingFaceSize: { width: .6, depth: .85, height: 1.78, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .6, depth: .7, height: 1.78, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .6, depth: .9, height: 1.78, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .6, depth: .6, height: 1.78 },
+        walkBoundingBoxSize: { width: .6, depth: .7, height: 1.78 },
+        runBoundingBoxSize: { width: .6, depth: .75, height: 1.78 },
+        attackBoundingBoxSize: {width: .6, depth: .72, height: 1.78 },
+        pushingBoxSize: { height: 1.78, depth: .85 }
     }),
     [WEAPONS.SMG_SHORT]: new WeaponActionMapping({
         name: 'smg_short',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
         attackInterval: 0.08, fireRate: 10.2,
-        idleCollisionSize: { width: .6, depth: .5, height: 1.78 },
-        walkCollisionSize: { width: .6, depth: .8, height: 1.78 },
-        runCollisionSize: { width: .6, depth: .85, height: 1.78 },
-        attackCollisionSize: { width: .6, depth: .82, height: 1.78 } 
+        idleCollisionSize: { width: .65, depth: .55, height: 1.78 },
+        walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
+        runCollisionSize: { width: .65, depth: .9, height: 1.78 },
+        attackCollisionSize: { width: .65, depth: .95, height: 1.78 },
+        idleBoundingFaceSize: { width: .6, depth: .6, height: 1.78, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .6, depth: .8, height: 1.78, bbfThickness: .18, gap: .1 },
+        runBoundingFaceSize: { width: .6, depth: .85, height: 1.78, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .6, depth: .7, height: 1.78, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .6, depth: .9, height: 1.78, bbfThickness: .18, gap: .1 },
+        idleBoundingBoxSize: { width: .6, depth: .6, height: 1.78 },
+        walkBoundingBoxSize: { width: .6, depth: .7, height: 1.78 },
+        runBoundingBoxSize: { width: .6, depth: .75, height: 1.78 },
+        attackBoundingBoxSize: {width: .6, depth: .72, height: 1.78 },
+        pushingBoxSize: { height: 1.78, depth: .85 }
     }),
     [WEAPONS.BAYONET]: new WeaponActionMapping({
         name: 'bayonet',
         idle: CLIPS.IDLE, attack: CLIPS.SWORD_SLASH, attackInterval: 1.03, 
         prepareInterval: 0.5, fireRate: 1.25,
-        ignoreCollisionBox: true
+        ignoreCollisionBox: true,
+        ignoreBoundingFace: true,
+        ignoreBoundingBox: true,
+        ignorePushingBox: true
     })
 }
 
@@ -95,7 +148,7 @@ class SoldierFemale extends CombatPlayerBase {
         const { vel = 1.2, rotateR = 1, velEnlarge = 2.8 } = specs;
         const { scale = [1, 1, 1] } = specs;
         const { sovRadius = 10, showBS = false, enableCollision = true } = specs;
-        const { createDefaultBoundingObjects = true } = specs;        
+        const { createDefaultBoundingObjects = false } = specs;        
 
         const weapons = [
             new Pistol({

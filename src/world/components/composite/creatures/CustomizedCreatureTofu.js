@@ -9,7 +9,6 @@ class CustomizedCreatureTofu extends Tofu {
     collisionBoxes = new Map();
     boundingBoxes = new Map();
     boundingFaces = new Map();
-    #lastAction;
 
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
@@ -77,42 +76,6 @@ class CustomizedCreatureTofu extends Tofu {
             this.track(backBoundingFace);
             this.track(leftBoundingFace);
             this.track(rightBoundingFace);
-
-        }
-
-    }
-
-    showBF(show) {
-
-        if (this._useCustomBoundingFaces) {
-
-            const currentFaces = this.boundingFaceMesh;
-            for (let i = 0, il = currentFaces.length; i < il; i++) {
-
-                const face = currentFaces[i];
-                face.visible = show;
-
-            }
-
-            this._showBF = show;
-
-        } else {
-
-            super.showBF(show);
-
-        }
-
-    }
-
-    get activeBoundingFace() {
-
-        if (this._useCustomBoundingFaces) {
-
-            return this.boundingFaceMesh;
-
-        } else {
-
-            return super.activeBoundingFace;
 
         }
 
@@ -217,19 +180,19 @@ class CustomizedCreatureTofu extends Tofu {
 
         if (this.isRotating) {
 
-            bf = this.boundingFaces.get(this.typeMapping.rotate.nick)
+            bf = this.boundingFaces.get(this.typeMapping.rotate.nick);
             this.w = rotateBoundingFaceSize.width;
             this.d = rotateBoundingFaceSize.depth;
 
         } else if (this.isForward) {
 
-            bf = this.boundingFaces.get(this.typeMapping.walk.nick)
+            bf = this.boundingFaces.get(this.typeMapping.walk.nick);
             this.w = walkBoundingFaceSize.width;
             this.d = walkBoundingFaceSize.depth;
 
         } else {
 
-            bf = this.boundingFaces.get(this.typeMapping.idle.nick)
+            bf = this.boundingFaces.get(this.typeMapping.idle.nick);
             this.w = idleBoundingFaceSize.width;
             this.d = idleBoundingFaceSize.depth;
 
@@ -324,10 +287,6 @@ class CustomizedCreatureTofu extends Tofu {
     switchHelperComponents(forceEvent = true) {
 
         const action = this.currentAction;
-
-        if (this.#lastAction === action) return;
-
-        this.#lastAction = action;
 
         this.switchCollisionBox(action, forceEvent);
         this.switchBoundingBox(action);

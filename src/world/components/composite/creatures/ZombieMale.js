@@ -46,7 +46,7 @@ const ZOMBIE_TYPES_MAPPING = {
         name: 'variant2',
         idle: CLIPS.IDLE, walk: CLIPS.WLAK3, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.2, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
-        walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 },
+        walkCollisionSize: { width: .63, depth: 1.55, height: 0.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
         walkBoundingFaceSize: { width: .63, depth: 1.5, height: 1.8, bbfThickness: .18, gap: .1 },
         rotateBoundingFaceSize: { width: .63, depth: 1.3, height: 1.8, bbfThickness: .18, gap: .1 },
