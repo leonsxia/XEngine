@@ -1,3 +1,4 @@
+import { Vector3 } from "three";
 import { BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
 import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
@@ -230,12 +231,41 @@ class CustomizedCreatureTofu extends Tofu {
         };
 
         this.collisionBoxes.clear();
-        this.collisionBoxes.set(this.typeMapping.idle.nick, new CollisionBox(idleCBoxSpecs));
-        this.collisionBoxes.set(this.typeMapping.walk.nick, new CollisionBox(walkCBoxSpecs));
 
-        // for SimplyPhysics self-check
-        this.collisionBoxes.get(this.typeMapping.idle.nick).father = this;
-        this.collisionBoxes.get(this.typeMapping.walk.nick).father = this;
+        const setCBox = (specs, nick) => {
+
+            const box = new CollisionBox(specs);
+            this.collisionBoxes.set(nick, box);
+
+            // for SimplyPhysics self-check
+            box.father = this;
+
+            // redefine wall's get width property, cause its scale will be changed at topper level
+            for (let i = 0, il = box.walls.length; i < il; i++) {
+
+                const wall = box.walls[i];
+                Object.defineProperty(wall, 'width', {
+
+                    get() {
+
+                        if (!this._cachedWidth) {
+
+                            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
+
+                        }
+
+                        return this._cachedWidth;
+
+                    }
+
+                });
+
+            }
+
+        }
+
+        setCBox(idleCBoxSpecs, this.typeMapping.idle.nick);
+        setCBox(walkCBoxSpecs, this.typeMapping.walk.nick);
 
     }
 
