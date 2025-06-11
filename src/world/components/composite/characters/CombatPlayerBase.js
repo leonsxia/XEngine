@@ -1,5 +1,5 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
-import { CollisionBox, GLTFModel, Tofu } from '../../Models';
+import { CustomizedCombatTofu, GLTFModel } from '../../Models';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
 import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
@@ -7,7 +7,7 @@ import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
 const DEBUG = false;
 const DEBUG_WEAPON = true;
 
-class CombatPlayerBase extends Tofu {
+class CombatPlayerBase extends CustomizedCombatTofu {
 
     specs;
 
@@ -16,15 +16,7 @@ class CombatPlayerBase extends Tofu {
     #logger = new Logger(DEBUG, 'CombatPlayerBase');
     #weaponLogger = new Logger(DEBUG_WEAPON, 'CombatPlayerBase');
 
-    AWS;
-
-    weapons = [];
-    weaponActionMapping = {};
-    currentActionType;
-    initialWeapon;
-
-    collisionBoxMap = new Map();
-    #lastAction;
+    AWS;    
 
     _clips = {};
     _animationSettings = {};
@@ -40,10 +32,7 @@ class CombatPlayerBase extends Tofu {
     _i = 0;
     _cancelGunPoint = false;
     _cancelShoot = false;
-
-    onBeforeCollisionBoxChanged = [];
-    onCollisionBoxChanged = [];
-
+    
     constructor(specs) {
 
         const { name, src, receiveShadow = true, castShadow = true, hasBones = true } = specs;
@@ -53,17 +42,19 @@ class CombatPlayerBase extends Tofu {
         const { rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5 } = specs;
         const { clips, animationSetting } = specs;
         const { scale = [1, 1, 1] } = specs;
-        const { showBS = false, enableCollision = true } = specs;
-        const { createDefaultBoundingObjects = true } = specs;
+        const { showBS = false } = specs;
+        const { createDefaultBoundingObjects = true, enableCollision = true } = specs;
         const { weaponActionMapping = {}, initialWeapon, weapons = [] } = specs;
 
-        super({ name, size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, createDefaultBoundingObjects });
+        super({ 
+            name, 
+            size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, 
+            rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, 
+            createDefaultBoundingObjects, enableCollision,
+            weaponActionMapping, initialWeapon, weapons
+        });
 
         this.specs = specs;
-
-        this.weaponActionMapping = weaponActionMapping;
-        this.initialWeapon = initialWeapon;
-        this.weapons = weapons;
         
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
@@ -75,16 +66,6 @@ class CombatPlayerBase extends Tofu {
         this.gltf = new GLTFModel(gltfSpecs);
 
         this.setScale(scale);
-
-        if (enableCollision) {
-
-            const initialWeaponType = this.initialWeapon.weaponType;
-
-            this.createCollisionBoxes();            
-            this.switchCollisionBox(initialWeaponType, this.weaponActionMapping[initialWeaponType].idle.nick, false);
-            this.showCollisionBox(false);
-
-        }
 
         // show bounding sphere
         this.showBS(showBS);
@@ -119,42 +100,6 @@ class CombatPlayerBase extends Tofu {
 
     }
 
-    trackResources() {
-
-        super.trackResources();
-
-        const weaponTypes = Object.keys(this.weaponActionMapping);
-        
-        for (let i = 0, il = weaponTypes.length; i < il; i++) {
-
-            const weaponType = weaponTypes[i];
-            const cboxes = this.collisionBoxMap.get(weaponType).values();
-
-            for (const cbox of cboxes) {
-
-                this.track(cbox.group);
-
-                for (let j = 0, jl = cbox.walls.length; j < jl; j++) {
-
-                    const wall = cbox.walls[j];
-                    this.track(wall.leftArrow);
-                    this.track(wall.rightArrow);
-
-                }
-
-            }
-
-        }
-
-        this.track(this.leftArrow);
-        this.track(this.rightArrow);
-        this.track(this.backLeftArrow);
-        this.track(this.backRightArrow);
-
-        this.track(this.boundingBoxHelper);
-
-    }
-
     initPromises() {
 
         const loadPromises = [];
@@ -166,190 +111,6 @@ class CombatPlayerBase extends Tofu {
         }
 
         return loadPromises;
-
-    }
-
-    get currentAction() {
-
-        let action;
-
-        if (this.attacking) {
-
-            action = this.currentActionType.aim.nick;
-
-        } else if (this.isForward || this.isBackward || this.isRotating) {
-
-            if (this.isAccelerating && !this.isRotating) {
-
-                action = this.currentActionType.run.nick;
-
-            } else {
-
-                action = this.currentActionType.walk.nick;
-
-            }
-
-        } else {
-
-            action = this.currentActionType.idle.nick;
-
-        }
-
-        return action;
-
-    }
-
-    doBeforeCollisionBoxChangedEvents() {
-
-        for (let i = 0, il = this.onBeforeCollisionBoxChanged.length; i < il; i++) {
-
-            const event = this.onBeforeCollisionBoxChanged[i];
-            event(this);
-
-        }
-
-    }
-
-    doCollisionBoxChangedEvents() {
-
-        for (let i = 0, il = this.onCollisionBoxChanged.length; i < il; i++) {
-
-            const event = this.onCollisionBoxChanged[i];
-            event(this);
-
-        }
-
-    }
-
-    showCollisionBox(show) {
-
-        const weaponTypes = Object.keys(this.weaponActionMapping);
-        
-        for (let i = 0, il = weaponTypes.length; i < il; i++) {
-
-            const weaponType = weaponTypes[i];
-            const cboxes = this.collisionBoxMap.get(weaponType).values();
-
-            for (const cbox of cboxes) {
-
-                cbox.group.visible = show;
-
-            }
-
-        }
-
-    }
-
-    createCollisionBoxes() {
-
-        const weaponTypes = Object.keys(this.weaponActionMapping);
-        
-        for (let i = 0, il = weaponTypes.length; i < il; i++) {
-
-            const weaponType = weaponTypes[i];
-            const typeMapping = this.weaponActionMapping[weaponType];
-            const {
-                name, ignoreCollisionBox,
-                idleCollisionSize, walkCollisionSize, runCollisionSize, attackCollisionSize
-            } = typeMapping;
-
-            if (ignoreCollisionBox) continue;
-
-            const cboxes = new Map();
-
-            if (idleCollisionSize) {
-
-                const specs = {
-                    name: `${this.name}-${name}-idle-cBox`,
-                    width: idleCollisionSize.width, depth: idleCollisionSize.depth, height: idleCollisionSize.height,
-                    enableWallOBBs: true, showArrow: false, lines: false,
-                    ignoreFaces: [4, 5]
-                }
-                cboxes.set(typeMapping.idle.nick, new CollisionBox(specs));
-                // for SimplyPhysics self-check
-                cboxes.get(typeMapping.idle.nick).father = this;
-            
-            }
-
-            if (walkCollisionSize) {
-
-                const specs = {
-                    name: `${this.name}-${name}-walk-cBox`,
-                    width: walkCollisionSize.width, depth: walkCollisionSize.depth, height: walkCollisionSize.height,
-                    enableWallOBBs: true, showArrow: false, lines: false,
-                    ignoreFaces: [4, 5]
-                }
-                cboxes.set(typeMapping.walk.nick, new CollisionBox(specs));
-                // for SimplyPhysics self-check
-                cboxes.get(typeMapping.walk.nick).father = this;
-
-            }
-
-            if (runCollisionSize) {
-
-                const specs = {
-                    name: `${this.name}-${name}-run-cBox`,
-                    width: runCollisionSize.width, depth: runCollisionSize.depth, height: runCollisionSize.height,
-                    enableWallOBBs: true, showArrow: false, lines: false,
-                    ignoreFaces: [4, 5]
-                }
-                cboxes.set(typeMapping.run.nick, new CollisionBox(specs));
-                // for SimplyPhysics self-check
-                cboxes.get(typeMapping.run.nick).father = this;
-                
-            }
-
-            if (attackCollisionSize) {
-
-                const specs = {
-                    name: `${this.name}-${name}-attack-cBox`,
-                    width: attackCollisionSize.width, depth: attackCollisionSize.depth, height: attackCollisionSize.height,
-                    enableWallOBBs: true, showArrow: false, lines: false,
-                    ignoreFaces: [4, 5]
-                }
-                cboxes.set(typeMapping.aim.nick, new CollisionBox(specs));
-                // for SimplyPhysics self-check
-                cboxes.get(typeMapping.aim.nick).father = this;
-                
-            }
-
-            this.collisionBoxMap.set(weaponType, cboxes);
-
-        }
-        
-    }
-
-    switchCollisionBox(weaponType, action, forceEvent = true) {
-
-        if (forceEvent) this.doBeforeCollisionBoxChangedEvents();
-
-        const cbox = this.collisionBoxMap.get(weaponType).get(action);
-
-        this.walls = [];
-        this.walls.push(...cbox.walls);
-
-        if (this.collisionBox) {
-
-            this.group.remove(this.collisionBox.group);
-
-        }
-
-        this.group.add(cbox.group);
-        this.collisionBox = cbox;        
-
-        if (forceEvent) this.doCollisionBoxChangedEvents();
-
-    }
-
-    switchHelperComponents(forceEvent = true) {
-
-        const action = this.currentAction;
-
-        if (this.#lastAction === action) return;
-
-        this.#lastAction = action;
-
-        this.switchCollisionBox(this.armedWeapon ? this.armedWeapon.weaponType : WEAPONS.NONE, action, forceEvent);
 
     }
 
@@ -1474,13 +1235,6 @@ class CombatPlayerBase extends Tofu {
             weapon.AWS?.mixer.update(delta);
 
         }
-
-    }
-
-    destroy() {
-
-        this.doBeforeCollisionBoxChangedEvents();
-        super.destroy();
 
     }
 
