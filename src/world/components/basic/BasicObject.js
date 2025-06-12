@@ -315,6 +315,8 @@ class BasicObject extends EventDispatcher {
 
         this.mesh.scale.x = val;
 
+        this.dispatchEvent({ type: 'scaleChanged', message: 'basic object scale x changed' });
+
         this.update();
 
     }
@@ -328,6 +330,8 @@ class BasicObject extends EventDispatcher {
     set scaleY(val) {
 
         this.mesh.scale.y = val;
+
+        this.dispatchEvent({ type: 'scaleChanged', message: 'basic object scale y changed' });
 
         this.update();
 
@@ -558,13 +562,15 @@ class BasicObject extends EventDispatcher {
 
         this.mesh.scale.set(...scale);
 
+        this.dispatchEvent({ type: 'scaleChanged', message: 'basic object scale changed' });
+
         return this;
 
     }
 
     setScaleFullUpdate(scale) {
 
-        this.mesh.scale.set(...scale);
+        this.setScale(scale);
 
         this.update();
 
@@ -574,7 +580,7 @@ class BasicObject extends EventDispatcher {
 
     setScaleWithTexUpdate(scale) {
 
-        this.mesh.scale.set(...scale);
+        this.setScale(scale);
 
         this.updateTexScale();
 

@@ -1,7 +1,15 @@
-import { Mesh } from 'three';
+import { Mesh, Vector3 } from 'three';
 import { BasicObject } from './BasicObject';
+import { Logger } from '../../systems/Logger';
+
+const DEBUG = false;
 
 class StairsStepPlane extends BasicObject {
+
+    _cachedWidth;
+    _cachedHeight;
+
+    #logger = new Logger(DEBUG, 'StairsStepPlane');
 
     constructor(specs) {
 
@@ -11,6 +19,8 @@ class StairsStepPlane extends BasicObject {
         this.mesh.name = specs.name;
 
         this.mesh.father = this;
+
+        this.bindEvents();
         
     }
 
@@ -20,15 +30,43 @@ class StairsStepPlane extends BasicObject {
 
     }
 
+    bindEvents() {
+
+        const listener = (event) => {
+
+            this.#logger.log(`${event.message}`);
+            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
+            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(new Vector3()).y;
+
+        }
+        const type = 'scaleChanged';
+
+        this.addEventListener(type, listener);
+        this.eventList.set(type, listener);
+
+    }
+
     get width() {
 
-        return this.geometry.parameters.width * this.mesh.scale.x;
+        if (!this._cachedWidth) {
+
+            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
+
+        }
+
+        return this._cachedWidth;
 
     }
 
     get height() {
 
-        return this.geometry.parameters.height * this.mesh.scale.y;
+        if (!this._cachedHeight) {
+
+            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(new Vector3()).y;
+
+        }
+
+        return this._cachedHeight;
 
     }
 

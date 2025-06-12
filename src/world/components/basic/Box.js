@@ -1,8 +1,17 @@
-import { Mesh } from 'three'
+import { Mesh, Vector3 } from 'three'
 import { BasicObject } from './BasicObject';
 import { BOX } from '../utils/constants';
+import { Logger } from '../../systems/Logger';
+
+const DEBUG = false;
 
 class Box extends BasicObject {
+
+    _cachedWidth;
+    _cachedHeight;
+    _cachedDepth;
+
+    #logger = new Logger(DEBUG, 'Box');
 
     constructor(specs) {
 
@@ -12,6 +21,8 @@ class Box extends BasicObject {
         this.mesh.name = specs.name;
 
         this.mesh.father = this;
+
+        this.bindEvents();
         
     }
 
@@ -21,23 +32,59 @@ class Box extends BasicObject {
 
     }
 
+    bindEvents() {
+
+        const listener = (event) => {
+
+            this.#logger.log(`${event.message}`);
+            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
+            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(new Vector3()).y;
+            this._cachedDepth = this.geometry.parameters.depth * this.mesh.getWorldScale(new Vector3()).z;
+
+        }
+        const type = 'scaleChanged';
+
+        this.addEventListener(type, listener);
+        this.eventList.set(type, listener);
+
+    }
+
     get width() {
 
-        return this.geometry.parameters.width * this.mesh.scale.x;
+        if (!this._cachedWidth) {
+
+            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
+
+        }
+
+        return this._cachedWidth;
 
     }
 
     get height() {
 
-        return this.geometry.parameters.height * this.mesh.scale.y;
+        if (!this._cachedHeight) {
+
+            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(new Vector3()).y;
+
+        }
+
+        return this._cachedHeight;
 
     }
 
     get depth() {
 
-        return this.geometry.parameters.depth * this.mesh.scale.z;
+        if (!this._cachedDepth) {
+
+            this._cachedDepth = this.geometry.parameters.depth * this.mesh.getWorldScale(new Vector3()).z;
+
+        }
+
+        return this._cachedDepth;
 
     }
+
 }
 
 export { Box };

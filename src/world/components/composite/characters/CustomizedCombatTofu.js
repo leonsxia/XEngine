@@ -1,4 +1,3 @@
-import { Vector3 } from "three";
 import { BF, BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
 import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
@@ -400,28 +399,6 @@ class CustomizedCombatTofu extends Tofu {
 
                 // for SimplyPhysics self-check
                 box.father = this;
-                
-                // redefine wall's get width property, cause its scale will be changed at topper level
-                for (let i = 0, il = box.walls.length; i < il; i++) {
-
-                    const wall = box.walls[i];
-                    Object.defineProperty(wall, 'width', {
-
-                        get() {
-
-                            if (!this._cachedWidth) {
-
-                                this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
-
-                            }
-
-                            return this._cachedWidth;
-
-                        }
-
-                    });
-
-                }
                 
             }
 
