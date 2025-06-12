@@ -681,13 +681,16 @@ class Moveable2D {
         // set dummy object related to zero position.
         const dummyObject = this.dummyObject;
 
-        group.updateWorldMatrix(true, false);
+        // group.updateWorldMatrix(true, false);
 
         const wallTransformMtx4 = wallMesh.matrixWorld;
         const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();
         // get moving object position towards wall local space
-        const dummy2WallMtx4 = group.matrixWorld.clone().premultiply(wallWorldMatrixInverted);
-        const dummyMatrixInverted = dummyObject.matrix.clone().invert();
+        // group.matrixWorld will no longer needed below, so no need to clone, it will be auto updated
+        const dummy2WallMtx4 = group.matrixWorld.premultiply(wallWorldMatrixInverted);
+        // dummyObject.matrix no need to clone, 
+        // due to applyMatrix4 will auto compose matrix from current position, quaternion and scale
+        const dummyMatrixInverted = dummyObject.matrix.invert();
         dummyObject.applyMatrix4(dummy2WallMtx4.multiply(dummyMatrixInverted));
 
         // const posY = dummyObject.position.y;
@@ -706,6 +709,7 @@ class Moveable2D {
             // transfer dummy to group world position.
             dummyObject.updateMatrix();
 
+            // ** this time dummyObject.matrix need to clone due to it will be used in SimplePhysics -> checkIntersection
             const recoverMtx4 = dummyObject.matrix.clone().premultiply(wallTransformMtx4);
 
             // add delta position transfer to worldDeltaV3
@@ -714,6 +718,9 @@ class Moveable2D {
             wallMesh.getWorldQuaternion(wallWorldQuat);
             this._worldDeltaV3.add(this._deltaV3.applyQuaternion(wallWorldQuat));
 
+            // group.matrix and group.parent.matrixWorld no need to clone, 
+            // due to applyMatrix4 will auto compose matrix from current position, quaternion and scale
+            // group matrixWorld will auto updated when call worldToLocal
             const movingObjMatrixInverted = group.matrix.invert();
             const movingObjWorldMatrixInvterted = group.parent.matrixWorld.invert();
             // follow the euquition:

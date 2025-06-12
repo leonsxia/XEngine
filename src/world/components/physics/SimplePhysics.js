@@ -271,8 +271,9 @@ class SimplePhysics {
 
         const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();
         // get avatar position towards wall local space
+        // avatar.group.matrixWorld must cloned due to it will be used as raycasting below
         const dummy2WallMtx4 = avatar.group.matrixWorld.clone().premultiply(wallWorldMatrixInverted);
-        const dummyMatrixInverted = dummyObject.matrix.clone().invert();
+        const dummyMatrixInverted = dummyObject.matrix.invert();
         dummyObject.applyMatrix4(dummy2WallMtx4.multiply(dummyMatrixInverted));
         
         const leftCorVec3 = avatar.leftCorVec3;
