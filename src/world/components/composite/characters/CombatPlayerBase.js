@@ -100,6 +100,14 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     }
 
+    trackResources() {
+
+        super.trackResources();
+
+        this.track(this.gltf?.skeleton);
+
+    }
+
     initPromises() {
 
         const loadPromises = [];

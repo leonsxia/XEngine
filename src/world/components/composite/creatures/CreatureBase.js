@@ -92,6 +92,14 @@ class CreatureBase extends CustomizedCreatureTofu {
         
     }
 
+    trackResources() {
+
+        super.trackResources();
+
+        this.track(this.gltf?.skeleton);
+
+    }
+
     bindEvents() {
     
         const type = 'visibleChanged';

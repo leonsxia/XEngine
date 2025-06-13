@@ -11,20 +11,50 @@ class Logger {
 
     }
 
-    log(message) {
+    log(message, prefix = true) {
 
         if (this.enable) {
 
-            if (this.func) {
+            if (arguments.length > 2) {
 
-                console.log(`[${this.module}] -> [${this.func}]: ${message}`);
+                if (this.func) {
+
+                    console.log(`[${this.module}] -> [${this.func}]: `);
+
+                } else {
+
+                    console.log(`[${this.module}]: `);
+
+                }
+
+                for (let i = 0; i < arguments.length; i++) {
+
+                    this.log(arguments[i], false);
+
+                }
+
+                return;
+
+            }
+
+            if (prefix) {
+
+                if (this.func) {
+
+                    console.log(`[${this.module}] -> [${this.func}]:`, message);
+
+                } else {
+
+                    console.log(`[${this.module}]:`, message);
+
+                }
 
             } else {
 
-                console.log(`[${this.module}] ${message}`);
+                console.log(message);
 
             }
-            
+
         }
 
     }

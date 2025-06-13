@@ -397,6 +397,8 @@ class Gui {
 
                             this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'CBox').setValue('hide');
 
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'CBoxArrows').setValue('hide');
+
                             this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'PushingBox').setValue('hide');
 
                             this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Arrows').setValue('hide');

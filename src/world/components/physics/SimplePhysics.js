@@ -39,16 +39,24 @@ class SimplePhysics {
         for (let i = 0, il = players.length; i < il; i++) {
 
             const player = players[i];
-            player.onBeforeCollisionBoxChanged?.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
-            player.onCollisionBoxChanged?.push(this.onTofuCollisionBoxChanged.bind(this));
+            if (player.isCustomizedCombatTofu) {
+
+                player.onBeforeCollisionBoxChanged.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
+                player.onCollisionBoxChanged.push(this.onTofuCollisionBoxChanged.bind(this));
+
+            }
 
         }
 
         for (let i = 0, il = enemies.length; i < il; i++) {
 
             const enemy = enemies[i];
-            enemy.onBeforeCollisionBoxChanged?.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
-            enemy.onCollisionBoxChanged?.push(this.onTofuCollisionBoxChanged.bind(this));
+            if (enemy.isCustomizedCreatureTofu) {
+
+                enemy.onBeforeCollisionBoxChanged.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
+                enemy.onCollisionBoxChanged.push(this.onTofuCollisionBoxChanged.bind(this));
+
+            }
 
         }
 
@@ -113,7 +121,7 @@ class SimplePhysics {
 
             if (idx > -1) {
                 
-                const enemy = this.activePlayers[idx];
+                const enemy = this.activeEnemies[idx];
                 this.onBeforeTofuCollisionBoxChanged(enemy);
                 this.activeEnemies.splice(idx, 1);
             

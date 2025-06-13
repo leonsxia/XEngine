@@ -4,6 +4,8 @@ import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, crea
 
 class CustomizedCreatureTofu extends Tofu {
 
+    isCustomizedCreatureTofu = true;
+
     typeMapping;
 
     collisionBoxes = new Map();
@@ -12,6 +14,7 @@ class CustomizedCreatureTofu extends Tofu {
 
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
+    onBoundingFaceChanged = [];
 
     constructor(specs) {
 
@@ -26,6 +29,7 @@ class CustomizedCreatureTofu extends Tofu {
 
             this.createCollisionBoxes();
             this.switchCollisionBox(this.typeMapping.idle.nick, false);
+            this.showCollisionBox(false);
 
         }
         
@@ -140,8 +144,6 @@ class CustomizedCreatureTofu extends Tofu {
 
         this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
         this.group.add(boundingBox, boundingBoxWire);
-        // this.showBB(true);
-        // this.showBBW(true);
 
     }
 
@@ -209,7 +211,7 @@ class CustomizedCreatureTofu extends Tofu {
         const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
         this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
 
-        // this.showBF(true);
+        this.doBoundingFaceChangedEvents();
 
     }
 
@@ -263,9 +265,76 @@ class CustomizedCreatureTofu extends Tofu {
 
         this.group.add(cbox.group);
         this.collisionBox = cbox;
-        this.showCollisionBox(false);
 
         if (forceEvent) this.doCollisionBoxChangedEvents();
+
+    }
+
+    showBB(show) {
+
+        this._showBB = show;
+
+        for (const bb of this.boundingBoxes.values()) {
+
+            bb.boundingBox.visible = show;
+
+        }
+
+    }
+
+    showBBW(show) {
+
+        this._showBBW = show;
+
+        for (const bb of this.boundingBoxes.values()) {
+
+            bb.boundingBoxWire.visible = show;
+
+        }
+
+    }
+
+    showCollisionBox(show) {
+
+        for (const cbox of this.collisionBoxes.values()) {
+
+            cbox.group.visible = show;
+
+        }
+
+    }
+
+    showCollisionBoxArrows(show) {
+
+        this._showCBoxArrows = show;
+
+        for (const cbox of this.collisionBoxes.values()) {
+
+            for (let i = 0, il = cbox.walls.length; i < il; i++) {
+
+                const wall = cbox.walls[i];
+                wall.leftArrow.visible = show;
+                wall.rightArrow.visible = show;
+
+            }
+
+        }
+
+    }
+
+    showBF(show) {
+
+        this._showBF = show;
+
+        for (const bf of this.boundingFaces.values()) {
+
+            const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
+            frontBoundingFace.visible = show;
+            backBoundingFace.visible = show;
+            leftBoundingFace.visible = show;
+            rightBoundingFace.visible = show;
+
+        }
 
     }
 
@@ -291,13 +360,24 @@ class CustomizedCreatureTofu extends Tofu {
 
     }
 
+    doBoundingFaceChangedEvents() {
+
+        for (let i = 0, il = this.onBoundingFaceChanged.length; i < il; i++) {
+
+            const event = this.onBoundingFaceChanged[i];
+            event(this);
+
+        }
+
+    }
+
     switchHelperComponents(forceEvent = true) {
 
         const action = this.currentAction;
 
+        this.switchBoundingFace();
         this.switchCollisionBox(action, forceEvent);
         this.switchBoundingBox(action);
-        this.switchBoundingFace();
 
     }
 

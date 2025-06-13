@@ -53,6 +53,8 @@ class Tofu extends Moveable2D {
     _showBB = false;
     _showBBW = false;
     _showPushingBox = false;
+    _showCBoxArrows = false;
+    _showArrows = false;
 
     _target = null;
     _inSightTargets = [];
@@ -168,7 +170,6 @@ class Tofu extends Moveable2D {
         this.boundingBoxHelper.name = `${name}-box-helper`;
 
         this.createRay();
-        this.showArrows(false);
 
         this.paddingCoefficient = .05 * ENLARGE;
 
@@ -638,22 +639,8 @@ class Tofu extends Moveable2D {
 
         this._showBF = show ?? this._showBF;
 
-        if (this._useCustomBoundingFaces) {
-
-            const currentFaces = this.boundingFaceMesh;
-            for (let i = 0, il = currentFaces.length; i < il; i++) {
-
-                const face = currentFaces[i];
-                face.visible = this._showBF;
-
-            }
-
-        } else {
-
-            this.setBoundingFaceVisibility();
-            this.enablePickLayers(...this.boundingFaceMesh, ...this.boundingFace2Mesh);
-
-        }
+        this.setBoundingFaceVisibility();
+        this.enablePickLayers(...this.boundingFaceMesh, ...this.boundingFace2Mesh);
 
         return this;
 
@@ -671,6 +658,7 @@ class Tofu extends Moveable2D {
 
     showArrows(show) {
 
+        this._showArrows = show;
         this.leftArrow.visible = show;
         this.rightArrow.visible = show;
         this.backLeftArrow.visible = show;

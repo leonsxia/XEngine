@@ -375,6 +375,7 @@ const GUI_CONFIG = {
     SELECT_WORLD_CONTROL: 'Select World',
     RIGHT_PANEL_SELECTOR_CONTROL: "Select Control",
     PLAYER_CONTROL: 'Player Control',
+    ENEMY_CONTROL: 'Enemy Control',
     POST_PROCESS_CONTROL: 'Post Processing',
     TPC_CONTROL: 'Third Person Camera',
     IC_CONTROL: 'Inspector Camera',

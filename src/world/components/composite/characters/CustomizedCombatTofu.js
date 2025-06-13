@@ -1,9 +1,14 @@
+import { Logger } from "../../../systems/Logger";
 import { BF, BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
 import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
 import { WEAPONS } from "../../utils/constants";
 
+const DEBUG = false;
+
 class CustomizedCombatTofu extends Tofu {
+
+    isCustomizedCombatTofu = true;
 
     weaponActionMapping = {};
     currentActionType;
@@ -17,6 +22,8 @@ class CustomizedCombatTofu extends Tofu {
 
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
+
+    #logger = new Logger(DEBUG, 'CustomizedCombatTofu');
 
     constructor(specs) {
 
@@ -225,8 +232,6 @@ class CustomizedCombatTofu extends Tofu {
 
         this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
         this.group.add(boundingBox, boundingBoxWire);
-        this.showBB();
-        this.showBBW();
 
     }
 
@@ -323,47 +328,7 @@ class CustomizedCombatTofu extends Tofu {
 
         const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
         this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
-
-        this.showBF();
         
-    }
-
-    doBeforeCollisionBoxChangedEvents() {
-
-        for (let i = 0, il = this.onBeforeCollisionBoxChanged.length; i < il; i++) {
-
-            const event = this.onBeforeCollisionBoxChanged[i];
-            event(this);
-
-        }
-
-    }
-
-    doCollisionBoxChangedEvents() {
-
-        for (let i = 0, il = this.onCollisionBoxChanged.length; i < il; i++) {
-
-            const event = this.onCollisionBoxChanged[i];
-            event(this);
-
-        }
-
-    }
-
-    showCollisionBox(show) {
-
-        for (const mapping of this.collisionBoxMap.values()) {
-
-            const cboxes = mapping.values();
-
-            for (const cbox of cboxes) {
-
-                cbox.group.visible = show;
-
-            }
-
-        }
-
     }
 
     createCollisionBoxes() {
@@ -435,7 +400,141 @@ class CustomizedCombatTofu extends Tofu {
 
     }
 
+    doBeforeCollisionBoxChangedEvents() {
+
+        for (let i = 0, il = this.onBeforeCollisionBoxChanged.length; i < il; i++) {
+
+            const event = this.onBeforeCollisionBoxChanged[i];
+            event(this);
+
+        }
+
+    }
+
+    doCollisionBoxChangedEvents() {
+
+        for (let i = 0, il = this.onCollisionBoxChanged.length; i < il; i++) {
+
+            const event = this.onCollisionBoxChanged[i];
+            event(this);
+
+        }
+
+    }    
+
+    showBB(show) {
+
+        this._showBB = show;
+
+        for (const mapping of this.boundingBoxMap.values()) {
+
+            const bboxes = mapping.values();
+
+            for (const bb of bboxes) {
+
+                bb.boundingBox.visible = show;
+
+            }
+
+        }
+
+    }
+
+    showBBW(show) {
+
+        this._showBBW = show;
+
+        for (const mapping of this.boundingBoxMap.values()) {
+
+            const bboxes = mapping.values();
+
+            for (const bb of bboxes) {
+
+                bb.boundingBoxWire.visible = show;
+
+            }
+
+        }
+
+    }
+
+    showBF(show) {
+
+        this._showBF = show;
+
+        for (const mapping of this.boundingFaceMap.values()) {
+
+            const bfaces = mapping.values();
+
+            for (const bf of bfaces) {
+
+                const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
+                frontBoundingFace.visible = show;
+                backBoundingFace.visible = show;
+                leftBoundingFace.visible = show;
+                rightBoundingFace.visible = show;
+
+            }
+
+        }
+
+    }
+
+    showPushingBox(show) {
+
+        this._showPushingBox = show;
+
+        for (const pushBox of this.pushingBoxMap.values()) {
+
+            pushBox.visible = show;
+
+        }
+
+    }
+
+    showCollisionBox(show) {
+
+        for (const mapping of this.collisionBoxMap.values()) {
+
+            const cboxes = mapping.values();
+
+            for (const cbox of cboxes) {
+
+                cbox.group.visible = show;
+
+            }
+
+        }
+
+    }
+
+    showCollisionBoxArrows(show) {
+
+        this._showCBoxArrows = show;
+
+        for (const mapping of this.collisionBoxMap.values()) {
+
+            const cboxes = mapping.values();
+
+            for (const cbox of cboxes) {
+
+                for (let i = 0, il = cbox.walls.length; i < il; i++) {
+
+                    const wall = cbox.walls[i];
+                    wall.leftArrow.visible = show;
+                    wall.rightArrow.visible = show;
+
+                }
+
+            }
+
+        }
+
+    }
+
     switchHelperComponents(forceEvent = true) {
+
+        this.#logger.func = 'switchHelperComponents';
 
         const action = this.currentAction;
         const weaponType = this.armedWeapon ? this.armedWeapon.weaponType : WEAPONS.NONE;
@@ -445,11 +544,26 @@ class CustomizedCombatTofu extends Tofu {
         this.switchPushingBox(weaponType);
         this.switchBoundingFace(weaponType);
 
+        this.#logger.log(
+            `current collision box map:`, this.collisionBoxMap.get(weaponType),
+            `current collision box: ${this.collisionBox.group.uuid}`,
+            `current walls:`, this.walls,
+            `current boudning faces map:`, this.boundingFaceMap.get(weaponType),
+            `current bounding faces`, this.boundingFaceMesh,
+            `current bounding box map:`, this.boundingBoxMap.get(weaponType),
+            `current bounding box: ${this.boundingBoxMesh.uuid}`,
+            `current bounding box wire: ${this.boundingBoxWireMesh.uuid}`,
+            `current pushing box map:`, this.pushingBoxMap.get(weaponType),
+            `current pushing box: ${this.pushingOBBBoxMesh.uuid}`,
+            `current action: ${action}`
+        );
+
     }
+
+    
 
     destroy() {
 
-        this.doBeforeCollisionBoxChangedEvents();
         super.destroy();
 
     }

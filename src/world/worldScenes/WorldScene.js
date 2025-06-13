@@ -228,10 +228,27 @@ class WorldScene {
 
         // initialize player
         // no need to render at this time, so the change event of control won't do the rendering.
-        this.changeCharacter(defaultPlayer, false);
+        {
+
+            this.changeCharacter(defaultPlayer, false);
+
+            for (let i = 0, il = this.players.length; i < il; i++) {
+
+                const player = this.players[i];
+                if (player.isCustomizedCombatTofu) {
+
+                    player.onBeforeCollisionBoxChanged.push(this.onBeforePlayerCBoxChanged.bind(this));
+                    player.onCollisionBoxChanged.push(this.onPlayerCBoxChanged.bind(this));
+
+                }
+
+            }
+
+        }
 
         // initialize enemies
         {
+
             for (let i = 0, il = this.enemies.length; i < il; i++) {
 
                 const enemy = this.enemies[i];
@@ -240,58 +257,10 @@ class WorldScene {
 
                     this.scene.add(enemy.group);
                     // enemy.showTofu(false);
-                    // this.scene.add(enemy.boundingBoxHelper);
-                    // enemy.showBB(true);
-                    // enemy.showBBW(true);
-                    // if (enemy.hasRays) {
 
-                    //     this.scene.add(enemy.leftArrow);
-                    //     this.scene.add(enemy.rightArrow);
-                    //     this.scene.add(enemy.backLeftArrow);
-                    //     this.scene.add(enemy.backRightArrow);
-                    //     enemy.showArrows(true);
-
-                    // }
-                    
-                    // enemy.showBF(true);
-                    // enemy.showPushingBox(true);
-
-                    if (enemy.gltf?.skeleton) {
-
-                        this.scene.add(enemy.gltf.skeleton);
-
-                    }
-
-                    // enemy.onBeforeCollisionBoxChanged.push((enemy) => {
-
-                    //     for (let i = 0, il = enemy.walls.length; i < il; i++) {
-
-                    //         const wall = enemy.walls[i];
-                    //         this.scene.remove(wall.leftArrow);
-                    //         this.scene.remove(wall.rightArrow)
-
-                    //     }
-
-                    // });
-
-                    // const onCollisionBoxChanged = (enemy) => {
-
-                    //     enemy.updateWalls();
-
-                    //     for (let i = 0, il = enemy.walls.length; i < il; i++) {
-
-                    //         const wall = enemy.walls[i];
-                    //         wall.leftArrow.visible = true;
-                    //         wall.rightArrow.visible = true;
-                    //         this.scene.add(wall.leftArrow);
-                    //         this.scene.add(wall.rightArrow);
-
-                    //     }
-                    // };
-                    // onCollisionBoxChanged(enemy);
-                    // enemy.onCollisionBoxChanged.push(onCollisionBoxChanged);
-
-                    enemy.updateAccessories();
+                    enemy.onBeforeCollisionBoxChanged.push(this.onBeforeEnemyCBoxChanged.bind(this));
+                    enemy.onCollisionBoxChanged.push(this.onEnemyCBoxChanged.bind(this));
+                    enemy.onBoundingFaceChanged.push(this.onEnemyBFChanged.bind(this));
 
                     this.physics.addActiveEnemies(enemy.name);
                     // this.subscribeEvents(enemy, this.setup.moveType);
@@ -299,6 +268,7 @@ class WorldScene {
                 }
 
             }
+
         }
 
         // setup cameras, must after player setup complete
@@ -730,6 +700,8 @@ class WorldScene {
                     .showPlayerBB(cmdHide)
                     .showPlayerBBW(cmdHide)
                     .showPlayerBF(cmdHide)
+                    .showPlayerCBox(cmdHide)
+                    .showPlayerCBoxArrows(cmdHide)
                     .showPlayerPushingBox(cmdHide)
                     .showPlayerArrows(cmdHide)
                     .showPlayerSkeleton(cmdHide);
@@ -737,33 +709,6 @@ class WorldScene {
                 this.physics.removeActivePlayers(this.player.name);
 
                 this.scene.remove(this.player.group);
-
-                if (this.player.hasRays) {
-
-                    this.scene.remove(this.player.leftArrow);
-                    this.scene.remove(this.player.rightArrow);
-                    this.scene.remove(this.player.backLeftArrow);
-                    this.scene.remove(this.player.backRightArrow);
-
-                }
-
-                if (this.player?.gltf?.skeleton) {
-
-                    this.scene.remove(this.player.gltf.skeleton);
-    
-                }
-
-                // if (this.player instanceof CombatPlayerBase) {
-
-                //     for (let i = 0, il = this.player.walls.length; i < il; i++) {
-
-                //         const wall = this.player.walls[i];
-                //         this.scene.remove(wall.leftArrow);
-                //         this.scene.remove(wall.rightArrow)
-
-                //     }
-
-                // }
 
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
@@ -788,63 +733,6 @@ class WorldScene {
                 this.inspectorCamera?.changePlayer(this.player);
                 
             }
-
-            if (this.player.hasRays) {
-
-                this.scene.add(this.player.leftArrow);
-                this.scene.add(this.player.rightArrow);
-                this.scene.add(this.player.backLeftArrow);
-                this.scene.add(this.player.backRightArrow);
-
-            }
-
-            if (this.player?.gltf?.skeleton) {
-
-                this.scene.add(this.player.gltf.skeleton);
-
-            }
-            
-            // if (this.player instanceof CombatPlayerBase) {
-
-            //     this.player.onBeforeCollisionBoxChanged.push((player) => {
-
-            //         for (let i = 0, il = player.walls.length; i < il; i++) {
-
-            //             const wall = player.walls[i];
-            //             this.scene.remove(wall.leftArrow);
-            //             this.scene.remove(wall.rightArrow)
-
-            //         }
-
-            //     });
-
-            //     const onCollisionBoxChanged = (player) => {
-
-            //         player.updateWalls();
-
-            //         for (let i = 0, il = player.walls.length; i < il; i++) {
-
-            //             const wall = player.walls[i];
-            //             wall.leftArrow.visible = true;
-            //             wall.rightArrow.visible = true;
-            //             this.scene.add(wall.leftArrow);
-            //             this.scene.add(wall.rightArrow);
-
-            //         }
-            //     };
-            //     onCollisionBoxChanged(this.player);
-            //     this.player.onCollisionBoxChanged.push(onCollisionBoxChanged);
-
-            // }
-
-            // this.player.walls.forEach(w => {
-
-            //     w.leftArrow.visible = true;
-            //     w.rightArrow.visible = true;
-            //     this.scene.add(w.leftArrow);
-            //     this.scene.add(w.rightArrow);
-
-            // });
 
             this.subscribeEvents(this.player, this.setup.moveType);
 
@@ -898,27 +786,18 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxHelper) return this;
 
-        const find = this.scene.getObjectByName(this.player.boundingBoxHelper.name);
-
         const s = show === 'show' ? true : false;
 
-        if (show === 'show') {
+        if (s) {
 
-            if (!find) {
+            this.scene.add(this.player.boundingBoxHelper);
+            if (Object.prototype.hasOwnProperty.call(this.player, '_showBBHelper')) this.player._showBBHelper = s;
 
-                this.scene.add(this.player.boundingBoxHelper);
-                if (Object.prototype.hasOwnProperty.call(this.player, '_showBBHelper')) this.player._showBBHelper = s;
-
-            }
 
         } else {
 
-            if (find) {
-
-                this.scene.remove(this.player.boundingBoxHelper);
-                if (Object.prototype.hasOwnProperty.call(this.player, '_showBBHelper')) this.player._showBBHelper = s;
-
-            }
+            this.scene.remove(this.player.boundingBoxHelper);
+            if (Object.prototype.hasOwnProperty.call(this.player, '_showBBHelper')) this.player._showBBHelper = s;
 
         }
 
@@ -974,6 +853,56 @@ class WorldScene {
 
     }
 
+    onBeforePlayerCBoxChanged(player) {
+
+        if (!player._showCBoxArrows) return;
+
+        for (let i = 0, il = player.walls.length; i < il; i++) {
+
+            const wall = player.walls[i];
+            this.scene.remove(wall.leftArrow);
+            this.scene.remove(wall.rightArrow);
+
+        }
+
+    }
+
+    onPlayerCBoxChanged(player) {
+
+        if (!player._showCBoxArrows) return;
+
+        for (let i = 0, il = player.walls.length; i < il; i++) {
+
+            const wall = player.walls[i];
+            this.scene.add(wall.leftArrow);
+            this.scene.add(wall.rightArrow);
+
+        }
+
+    }
+
+    showPlayerCBoxArrows(show) {
+
+        if (!this.player || !this.player.isCustomizedCombatTofu) return this;
+
+        const s = show === 'show' ? true : false;
+        
+        if (s) {
+
+            this.player.showCollisionBoxArrows(s);
+            this.onPlayerCBoxChanged(this.player);
+
+        } else {
+
+            this.onBeforePlayerCBoxChanged(this.player);
+            this.player.showCollisionBoxArrows(s);
+
+        }
+
+        return this;
+
+    }
+
     showPlayerPushingBox(show) {
 
         if (!this.player || !this.player.showPushingBox) return this;
@@ -988,9 +917,25 @@ class WorldScene {
 
     showPlayerArrows(show) {
 
-        if (!this.player || !this.player.showArrows) return this;
+        if (!this.player || !this.player.hasRays) return this;
 
         const s = show === 'show' ? true : false;
+
+        if (s) {
+
+            this.scene.add(this.player.leftArrow);
+            this.scene.add(this.player.rightArrow);
+            this.scene.add(this.player.backLeftArrow);
+            this.scene.add(this.player.backRightArrow);
+
+        } else {
+
+            this.scene.remove(this.player.leftArrow);
+            this.scene.remove(this.player.rightArrow);
+            this.scene.remove(this.player.backLeftArrow);
+            this.scene.remove(this.player.backRightArrow);
+
+        }
 
         this.player.showArrows(s);
 
@@ -1000,11 +945,267 @@ class WorldScene {
 
     showPlayerSkeleton(show) {
 
-        if (!this.player.showSkeleton) return this;
+        if (!this.player.gltf?.skeleton) return this;
 
         const s = show === 'show' ? true : false;
 
+        if (s) {
+
+            this.scene.add(this.player.gltf.skeleton);
+
+        } else {
+
+            this.scene.remove(this.player.gltf.skeleton);
+
+        }
+
         this.player.showSkeleton(s);
+
+        return this;
+
+    }
+
+    showEnemyBBHelper(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+
+            if (s) {
+
+                this.scene.add(enemy.boundingBoxHelper);                
+
+            } else {
+
+                this.scene.remove(enemy.boundingBoxHelper);
+
+            }
+
+            enemy._showBBHelper = s;
+
+        }
+
+        return this;
+
+    }
+
+    showEnemyBB(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+
+            enemy.showBB(s);
+
+        }
+
+        return this;
+
+    }
+
+    showEnemyBBW(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+
+            enemy.showBBW(s);
+
+        }
+
+        return this;
+
+    }
+
+    showEnemyBF(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+
+            enemy.showBF(s);
+
+        }
+
+        return this;
+
+    }
+
+    showEnemyCBox(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+
+            enemy.showCollisionBox(s);
+
+        }
+
+        return this;
+
+    }
+
+    onBeforeEnemyCBoxChanged(enemy) {
+
+        if (!enemy._showCBoxArrows) return;
+
+        for (let i = 0, il = enemy.walls.length; i < il; i++) {
+
+            const wall = enemy.walls[i];
+            this.scene.remove(wall.leftArrow);
+            this.scene.remove(wall.rightArrow)
+
+        }
+
+    }
+
+    onEnemyCBoxChanged(enemy) {            
+
+        if (!enemy._showCBoxArrows) return;
+
+        enemy.updateWalls();
+
+        for (let i = 0, il = enemy.walls.length; i < il; i++) {
+
+            const wall = enemy.walls[i];
+            this.scene.add(wall.leftArrow);
+            this.scene.add(wall.rightArrow);
+
+        }
+
+    }    
+
+    showEnemyCBoxArrows(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+            
+            if (s) {
+
+                enemy.showCollisionBoxArrows(s);
+                this.onEnemyCBoxChanged(enemy);
+
+            } else {
+
+                this.onBeforeEnemyCBoxChanged(enemy);
+                enemy.showCollisionBoxArrows(s);
+
+            }
+
+        }
+
+        return this;
+
+    }
+
+    showEnemyPushingBox(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+
+            enemy.showPushingBox(s);
+
+        }
+
+        return this;
+
+    }
+
+    onEnemyBFChanged(enemy) {
+
+        if (!enemy._showArrows) return;
+
+        enemy.updateRay();
+
+    }
+
+    showEnemyArrows(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+
+            if (s) {
+
+                this.scene.add(enemy.leftArrow);
+                this.scene.add(enemy.rightArrow);
+                this.scene.add(enemy.backLeftArrow);
+                this.scene.add(enemy.backRightArrow);
+
+            } else {
+
+                this.scene.remove(enemy.leftArrow);
+                this.scene.remove(enemy.rightArrow);
+                this.scene.remove(enemy.backLeftArrow);
+                this.scene.remove(enemy.backRightArrow);
+
+            }
+
+            enemy.showArrows(s);
+
+        }
+
+        return this;
+
+    }
+
+    showEnemySkeleton(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive || !enemy.gltf?.skeleton) continue;
+
+            if (s) {
+
+                this.scene.add(enemy.gltf.skeleton);
+
+            } else {
+
+                this.scene.remove(enemy.gltf.skeleton);
+
+            }
+
+            enemy.showSkeleton(s);
+
+        }
 
         return this;
 

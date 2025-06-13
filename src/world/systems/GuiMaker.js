@@ -329,29 +329,29 @@ class GuiMaker {
                 changeFn: $scene.showPlayerCBox.bind($scene)
             }));
 
-            if ($scene.player.showPushingBox) {
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'CBoxArrows',
+                value: { CBoxArrows: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showPlayerCBoxArrows.bind($scene)
+            }));
 
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'PushingBox',
-                    value: { PushingBox: 'hide' },
-                    params: ['show', 'hide'],
-                    type: 'dropdown',
-                    changeFn: $scene.showPlayerPushingBox.bind($scene)
-                }));
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'PushingBox',
+                value: { PushingBox: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showPlayerPushingBox.bind($scene)
+            }));
 
-            } 
-
-            if ($scene.player.showArrows) {
-
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'Arrows',
-                    value: { Arrows: 'hide' },
-                    params: ['show', 'hide'],
-                    type: 'dropdown',
-                    changeFn: $scene.showPlayerArrows.bind($scene)
-                }));
-
-            }
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Arrows',
+                value: { Arrows: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showPlayerArrows.bind($scene)
+            }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'Skeleton',
@@ -384,6 +384,86 @@ class GuiMaker {
             setupFunctionPanel(this.guiLeftSpecs, weaponActions);
             this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.WEAPON_CONTROL, GUI_CONFIG.WEAPONS_OPTIONS_PARENT, GUI_CONFIG.SELECT_WEAPONS, true));
             this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.WEAPON_CONTROL, GUI_CONFIG.WEAPONS_ACTIONS_PARENT, GUI_CONFIG.WEAPON_ACTIONS, true));
+
+        }
+
+        if ($scene.enemies.length > 0) {
+
+            const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.ENEMY_CONTROL, parent: 'enemyControl', close: true });
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'BBHelper',
+                value: { BBHelper: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyBBHelper.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'BB',
+                value: { BB: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyBB.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'BBW',
+                value: { BBW: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyBBW.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'BF',
+                value: { BF: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyBF.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'CBox',
+                value: { CBox: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyCBox.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'CBoxArrows',
+                value: { CBoxArrows: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyCBoxArrows.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'PushingBox',
+                value: { PushingBox: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyPushingBox.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Arrows',
+                value: { Arrows: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyArrows.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Skeleton',
+                value: { Skeleton: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemySkeleton.bind($scene)
+            }));
+
+            this.guiLeftSpecs.details.push(folder);
 
         }
 
