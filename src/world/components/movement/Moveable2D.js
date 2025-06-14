@@ -938,11 +938,6 @@ class Moveable2D {
 
             if (this.isMovingForwardLeft || this.isMovingBackwardLeft) {
 
-                deltaVec3 = this.isMovingForwardLeft ? new Vector3(deltaX, 0, deltaZ) : new Vector3(deltaX, 0, - deltaZ);
-
-                const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
-                offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
-
                 if (!this._rotated) {
 
                     const rot = borderReach ? 2 * rotateRad : rotateRad;
@@ -962,6 +957,11 @@ class Moveable2D {
                 }
 
                 if (!borderReach) {
+
+                    deltaVec3 = this.isMovingForwardLeft ? new Vector3(deltaX, 0, deltaZ) : new Vector3(deltaX, 0, - deltaZ);
+
+                    const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
+                    offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
                     if (this.isForwardBlock || this.isBackwardBlock) {
 
@@ -989,11 +989,6 @@ class Moveable2D {
 
             } else if (this.isMovingForwardRight || this.isMovingBackwardRight) {
 
-                deltaVec3 = this.isMovingForwardRight ? new Vector3(- deltaX, 0, deltaZ) : new Vector3(- deltaX, 0, - deltaZ);
-
-                const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
-                offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
-
                 if (!this._rotated) {
 
                     const rot = borderReach ? 2 * rotateRad : rotateRad;
@@ -1013,6 +1008,11 @@ class Moveable2D {
                 }
 
                 if (!borderReach) {
+
+                    deltaVec3 = this.isMovingForwardRight ? new Vector3(- deltaX, 0, deltaZ) : new Vector3(- deltaX, 0, - deltaZ);
+
+                    const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
+                    offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
                     if (this.isForwardBlock || this.isBackwardBlock) {
 
