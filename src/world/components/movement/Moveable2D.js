@@ -7,6 +7,7 @@ const DEBUG = true;
 
 const _m1 = new Matrix4();
 const _v1 = new Vector3();
+const _v2 = new Vector3();
 const _obj0 = new Object3D();
 const _g0 = new Group();
 
@@ -514,9 +515,8 @@ class Moveable2D {
                     this.#isClimbingForward = true;
 
                     const dist = delta * $self.climbingVel;
-                    const dir = new Vector3(0, 0, dist);
 
-                    $self.group.position.copy(dir.applyMatrix4($self.group.matrixWorld));
+                    $self.group.position.copy(_v1.set(0, 0, dist).applyMatrix4($self.group.matrixWorld));
 
                     this.#climbForwardDist += dist;
 
@@ -535,7 +535,7 @@ class Moveable2D {
     tankmoveTick(params) {
 
         const { group, R, rotateVel, stoodRotateVel, dist, delta, $self } = params;
-        let deltaVec3, deltaX, deltaZ;
+        let deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
         const stoodRotateRad = stoodRotateVel * delta;
         const worldY = $self.worldYDirection;
@@ -548,13 +548,11 @@ class Moveable2D {
 
         if (this.isMovingForward) {
 
-            deltaVec3 = new Vector3(0, 0, dist);
-            group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
+            group.position.copy(_v1.set(0, 0, dist).applyMatrix4(group.matrixWorld));
 
         } else if (this.isMovingBackward) {
 
-            deltaVec3 = new Vector3(0, 0, - dist);
-            group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
+            group.position.copy(_v1.set(0, 0, - dist).applyMatrix4(group.matrixWorld));
 
         } else if (this.isTurnClockwise) {
 
@@ -573,29 +571,25 @@ class Moveable2D {
 
             if (this.isMovingForwardLeft) {
 
-                deltaVec3 = new Vector3(deltaX, 0, deltaZ);
-                group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
+                group.position.copy(_v1.set(deltaX, 0, deltaZ).applyMatrix4(group.matrixWorld));
                 // group.rotation.y += rotateRad;
                 group.rotateOnWorldAxis(worldY, rotateRad);
 
             } else if (this.isMovingForwardRight) {
 
-                deltaVec3 = new Vector3(-deltaX, 0, deltaZ);
-                group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
+                group.position.copy(_v1.set(-deltaX, 0, deltaZ).applyMatrix4(group.matrixWorld));
                 // group.rotation.y -= rotateRad;
                 group.rotateOnWorldAxis(worldY, - rotateRad);
 
             } else if (this.isMovingBackwardLeft) {
 
-                deltaVec3 = new Vector3(deltaX, 0, -deltaZ);
-                group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
+                group.position.copy(_v1.set(deltaX, 0, -deltaZ).applyMatrix4(group.matrixWorld));
                 // group.rotation.y -= rotateRad;
                 group.rotateOnWorldAxis(worldY, - rotateRad);
 
             } else if (this.isMovingBackwardRight) {
 
-                deltaVec3 = new Vector3(-deltaX, 0, -deltaZ);
-                group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
+                group.position.copy(_v1.set(-deltaX, 0, -deltaZ).applyMatrix4(group.matrixWorld));
                 // group.rotation.y += rotateRad;
                 group.rotateOnWorldAxis(worldY, rotateRad);
 
@@ -630,7 +624,7 @@ class Moveable2D {
 
             const overlap = Math.min(leftCorVec3Z, rightCorVec3Z, leftBackCorVec3Z, rightBackCorVec3Z);
 
-            this._deltaV3.add(new Vector3(0, 0, - overlap));
+            this._deltaV3.add(_v1.set(0, 0, - overlap));
 
         }
 
@@ -647,7 +641,7 @@ class Moveable2D {
                 this.rightCorIntersects && this.leftFaceIntersects
             ) {
 
-                this._deltaV3.add(new Vector3(quickRecoverCoefficient, 0, 0));
+                this._deltaV3.add(_v1.set(quickRecoverCoefficient, 0, 0));
 
             }
 
@@ -658,7 +652,7 @@ class Moveable2D {
                 this.backRightCorIntersects && this.leftFaceIntersects
             ) {
 
-                this._deltaV3.add(new Vector3(- quickRecoverCoefficient, 0, 0));
+                this._deltaV3.add(_v1.set(- quickRecoverCoefficient, 0, 0));
 
             }
 
@@ -708,7 +702,7 @@ class Moveable2D {
         const recoverCoefficient = $self.recoverCoefficient;
         const quickRecoverCoefficient = $self.quickRecoverCoefficient;
         const backwardCoefficient = $self.backwardCoefficient;
-        let deltaVec3, deltaX, deltaZ;
+        let deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
         const stoodRotateRad = stoodRotateVel * delta;
 
@@ -764,17 +758,17 @@ class Moveable2D {
             ) {
 
                 // dummyObject.position.z += quickRecoverCoefficient;
-                this._deltaV3.add(new Vector3(0, 0, quickRecoverCoefficient));
+                this._deltaV3.add(_v1.set(0, 0, quickRecoverCoefficient));
                 
             }
 
             if (leftCorIntersectFace?.includes(FACE_DEF[0]) || rightCorIntersectFace?.includes(FACE_DEF[0])) {
     
-                this._deltaV3.add(new Vector3(0, 0, - backwardCoefficient).applyMatrix4(dummyObject.matrixWorld).sub(dummyObject.position));
+                this._deltaV3.add(_v1.set(0, 0, - backwardCoefficient).applyMatrix4(dummyObject.matrixWorld).sub(dummyObject.position));
                 
             } else if (leftCorIntersectFace?.includes(FACE_DEF[1]) || rightCorIntersectFace?.includes(FACE_DEF[1])) {
 
-                this._deltaV3.add(new Vector3(0, 0, backwardCoefficient).applyMatrix4(dummyObject.matrixWorld).sub(dummyObject.position));
+                this._deltaV3.add(_v1.set(0, 0, backwardCoefficient).applyMatrix4(dummyObject.matrixWorld).sub(dummyObject.position));
                 
             }
 
@@ -784,13 +778,13 @@ class Moveable2D {
 
                 // dummyObject.position.x -= recoverCoefficient;
                 // dummyObject.position.z += recoverCoefficient;
-                this._deltaV3.add(new Vector3(- recoverCoefficient, 0, recoverCoefficient));
+                this._deltaV3.add(_v1.set(- recoverCoefficient, 0, recoverCoefficient));
             
             } else {
 
                 // dummyObject.position.x += recoverCoefficient;
                 // dummyObject.position.z += recoverCoefficient;
-                this._deltaV3.add(new Vector3(recoverCoefficient, 0, recoverCoefficient));
+                this._deltaV3.add(_v1.set(recoverCoefficient, 0, recoverCoefficient));
 
             }
 
@@ -822,8 +816,7 @@ class Moveable2D {
 
         if (this.isMovingForward) {
 
-            deltaVec3 = new Vector3(0, 0, dist);
-            const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
+            const offsetVec3 = _v1.set(0, 0, dist).applyMatrix4(dummyObject.matrixWorld);
             offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!borderReach) {
@@ -832,8 +825,8 @@ class Moveable2D {
 
                     const overlap = getMinCornorZ();
 
-                    const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                    this._deltaV3.add(dirVec3.sub(dummyObject.position));
+                    _v2.set(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
+                    this._deltaV3.add(_v2.sub(dummyObject.position));
                     // dummyObject.position.copy(dirVec3);        
 
                 }
@@ -849,14 +842,14 @@ class Moveable2D {
 
                         // dummyObject.position.x += recoverCoefficient;
                         // this.#logger.log(`left face reach`);
-                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, recoverCoefficient));
+                        this._deltaV3.add(_v1.set(recoverCoefficient, 0, recoverCoefficient));
 
 
                     } else {
 
                         // dummyObject.position.x -= recoverCoefficient;
                         // this.#logger.log(`right face reach`);
-                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, recoverCoefficient));
+                        this._deltaV3.add(_v1.set(- recoverCoefficient, 0, recoverCoefficient));
 
                     }
 
@@ -866,8 +859,7 @@ class Moveable2D {
 
         } else if (this.isMovingBackward) {
 
-            deltaVec3 = new Vector3(0, 0, - dist);
-            const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
+            const offsetVec3 = _v1.set(0, 0, - dist).applyMatrix4(dummyObject.matrixWorld);
             offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!borderReach) {
@@ -876,8 +868,8 @@ class Moveable2D {
 
                     const overlap = getMinCornorZ();
 
-                    const dirVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                    this._deltaV3.add(dirVec3.sub(dummyObject.position));
+                    _v2.set(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
+                    this._deltaV3.add(_v2.sub(dummyObject.position));
                     // dummyObject.position.copy(dirVec3);
 
                 }
@@ -892,12 +884,12 @@ class Moveable2D {
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
                         // dummyObject.position.x += recoverCoefficient;
-                        this._deltaV3.add(new Vector3(recoverCoefficient, 0, recoverCoefficient));
+                        this._deltaV3.add(_v1.set(recoverCoefficient, 0, recoverCoefficient));
 
                     } else {
 
                         // dummyObject.position.x -= recoverCoefficient;
-                        this._deltaV3.add(new Vector3(- recoverCoefficient, 0, recoverCoefficient));
+                        this._deltaV3.add(_v1.set(- recoverCoefficient, 0, recoverCoefficient));
 
                     }
 
@@ -958,9 +950,9 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    deltaVec3 = this.isMovingForwardLeft ? new Vector3(deltaX, 0, deltaZ) : new Vector3(deltaX, 0, - deltaZ);
+                    this.isMovingForwardLeft ? _v1.set(deltaX, 0, deltaZ) : _v1.set(deltaX, 0, - deltaZ);
 
-                    const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
+                    const offsetVec3 = _v1.applyMatrix4(dummyObject.matrixWorld);
                     offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
                     if (this.isForwardBlock || this.isBackwardBlock) {
@@ -970,8 +962,8 @@ class Moveable2D {
                     } else if (cornorsIsOverlap()) {
 
                         const overlap = getMinCornorZ();
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                        this._deltaV3.add(newVec3.sub(dummyObject.position));
+                        _v2.set(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
+                        this._deltaV3.add(_v2.sub(dummyObject.position));
 
                     }
 
@@ -1009,9 +1001,9 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    deltaVec3 = this.isMovingForwardRight ? new Vector3(- deltaX, 0, deltaZ) : new Vector3(- deltaX, 0, - deltaZ);
+                    this.isMovingForwardRight ? _v1.set(- deltaX, 0, deltaZ) : _v1.set(- deltaX, 0, - deltaZ);
 
-                    const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
+                    const offsetVec3 = _v1.applyMatrix4(dummyObject.matrixWorld);
                     offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
                     if (this.isForwardBlock || this.isBackwardBlock) {
@@ -1021,8 +1013,8 @@ class Moveable2D {
                     } else if (cornorsIsOverlap()) {
 
                         const overlap = getMinCornorZ();
-                        const newVec3 = new Vector3(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                        this._deltaV3.add(newVec3.sub(dummyObject.position));
+                        _v2.set(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
+                        this._deltaV3.add(_v2.sub(dummyObject.position));
 
                     }
 

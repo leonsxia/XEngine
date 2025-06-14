@@ -17,6 +17,11 @@ const DETECT_SCOPE_MIN = 1;
 const HEAD_LENGTH = .5;
 const HEAD_WIDTH = .1;
 
+const _v1 = new Vector3();
+const _v2 = new Vector3();
+const _v3 = new Vector3();
+const _down = new Vector3(0, -1, 0);
+
 class Tofu extends Moveable2D {
 
     name = '';
@@ -441,31 +446,23 @@ class Tofu extends Moveable2D {
 
     get worldPosition() {
 
-        const pos = new Vector3();
-
-        this.boundingBoxMesh.getWorldPosition(pos);
-
-        return pos;
+        return this.boundingBoxMesh.getWorldPosition(new Vector3());
 
     }
 
     get bottomY() {
 
-        const target = new Vector3();
+        this.boundingBoxMesh.getWorldPosition(_v1);
 
-        this.boundingBoxMesh.getWorldPosition(target);
-
-        return target.y - this.height * .5;
+        return _v1.y - this.height * .5;
 
     }
 
     get topY() {
 
-        const target = new Vector3();
+        this.boundingBoxMesh.getWorldPosition(_v1);
 
-        this.boundingBoxMesh.getWorldPosition(target);
-
-        return target.y + this.height * .5;
+        return _v1.y + this.height * .5;
 
     }
 
@@ -678,7 +675,6 @@ class Tofu extends Moveable2D {
         this.hasRays = true;
  
         const length = this.height;
-        const dir = new Vector3(0, - 1, 0);
         const posY = this.height * .5;
         const posX = this.width * .5 - this.#rayPadding;
         const posZ = this.depth * .5 - this.#rayPadding;
@@ -686,27 +682,27 @@ class Tofu extends Moveable2D {
 
         // left
         fromVec3 = new Vector3(posX, posY, posZ);
-        this.leftRay = new Raycaster(fromVec3, dir, 0, length);
+        this.leftRay = new Raycaster(fromVec3, _down, 0, length);
         this.leftRay.layers.set(TOFU_RAY_LAYER);
-        this.leftArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
+        this.leftArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
-        this.rightRay = new Raycaster(fromVec3, dir, 0, length);
+        this.rightRay = new Raycaster(fromVec3, _down, 0, length);
         this.rightRay.layers.set(TOFU_RAY_LAYER);
-        this.rightArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
+        this.rightArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
-        this.backLeftRay = new Raycaster(fromVec3, dir, 0, length);
+        this.backLeftRay = new Raycaster(fromVec3, _down, 0, length);
         this.backLeftRay.layers.set(TOFU_RAY_LAYER);
-        this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
+        this.backLeftArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
-        this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
+        this.backRightRay = new Raycaster(fromVec3, _down, 0, length);
         this.backRightRay.layers.set(TOFU_RAY_LAYER);
-        this.backRightArrow = new ArrowHelper(dir, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
+        this.backRightArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
 
@@ -725,43 +721,37 @@ class Tofu extends Moveable2D {
         const posY = this.#h * .5;
         const posX = this.#w * .5 - this.#rayPadding;
         const posZ = this.#d * .5 - this.#rayPadding;
-        const dir = new Vector3(0, - 1, 0);
-        let fromVec3;
 
         // left
-        fromVec3 = new Vector3(posX, posY, posZ);
-        fromVec3.applyMatrix4(this.group.matrixWorld);
-        this.leftRay.set(fromVec3, dir);
+        _v1.set(posX, posY, posZ).applyMatrix4(this.group.matrixWorld);
+        this.leftRay.set(_v1, _down);
         this.leftRay.far = length;
-        this.leftArrow.position.copy(fromVec3);
-        this.leftArrow.setDirection(dir);
+        this.leftArrow.position.copy(_v1);
+        this.leftArrow.setDirection(_down);
         this.leftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
-        fromVec3 = new Vector3(- posX, posY, posZ);
-        fromVec3.applyMatrix4(this.group.matrixWorld);
-        this.rightRay.set(fromVec3, dir);
+        _v1.set(- posX, posY, posZ).applyMatrix4(this.group.matrixWorld);
+        this.rightRay.set(_v1, _down);
         this.rightRay.far = length;
-        this.rightArrow.position.copy(fromVec3);
-        this.rightArrow.setDirection(dir);
+        this.rightArrow.position.copy(_v1);
+        this.rightArrow.setDirection(_down);
         this.rightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
-        fromVec3 = new Vector3(posX, posY, - posZ);
-        fromVec3.applyMatrix4(this.group.matrixWorld);
-        this.backLeftRay.set(fromVec3, dir);
+        _v1.set(posX, posY, - posZ).applyMatrix4(this.group.matrixWorld);
+        this.backLeftRay.set(_v1, _down);
         this.backLeftRay.far = length;
-        this.backLeftArrow.position.copy(fromVec3);
-        this.backLeftArrow.setDirection(dir);
+        this.backLeftArrow.position.copy(_v1);
+        this.backLeftArrow.setDirection(_down);
         this.backLeftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
-        fromVec3 = new Vector3(- posX, posY, - posZ);
-        fromVec3.applyMatrix4(this.group.matrixWorld);
-        this.backRightRay.set(fromVec3, dir);
+        _v1.set(- posX, posY, - posZ).applyMatrix4(this.group.matrixWorld);
+        this.backRightRay.set(_v1, _down);
         this.backRightRay.far = length;
-        this.backRightArrow.position.copy(fromVec3);
-        this.backRightArrow.setDirection(dir);
+        this.backRightArrow.position.copy(_v1);
+        this.backRightArrow.setDirection(_down);
         this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
@@ -1096,14 +1086,14 @@ class Tofu extends Moveable2D {
 
     getTargetDirectionAngle(target) {
 
-        const selfDir = this.boundingBoxMesh.getWorldDirection(new Vector3());
+        const selfDir = this.boundingBoxMesh.getWorldDirection(_v1);
         const tarPos = target.worldPosition;
         const selfPos = this.worldPosition;
-        const tarDir = new Vector3(tarPos.x, 0, tarPos.z).sub(new Vector3(selfPos.x, 0, selfPos.z));
+        const tarDir = _v2.set(tarPos.x, 0, tarPos.z).sub(_v3.set(selfPos.x, 0, selfPos.z));
         const angle = selfDir.angleTo(tarDir);
 
         // in right-handed system, y > 0 means counter-clockwise, y < 0 means clockwise
-        const direction = selfDir.clone().cross(tarDir).y > 0 ? polarity.left : polarity.right;
+        const direction = selfDir.cross(tarDir).y > 0 ? polarity.left : polarity.right;
 
         return {
             angle: angle,

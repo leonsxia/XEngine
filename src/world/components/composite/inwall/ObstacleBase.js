@@ -32,6 +32,9 @@ const HEAD_WIDTH = .08;
 
 const DEBUG = false;
 
+const _v1 = new Vector3();
+const _down = new Vector3(0, -1, 0);
+
 class ObstacleBase extends ObstacleMoveable {
 
     isObstacleBase = true;
@@ -151,31 +154,23 @@ class ObstacleBase extends ObstacleMoveable {
 
     get worldPosition() {
 
-        const pos = new Vector3();
-
-        this.group.getWorldPosition(pos);
-
-        return pos;
+        return this.group.getWorldPosition(new Vector3());
 
     }
 
     get bottomY() {
 
-        const target = new Vector3();
+        this.group.getWorldPosition(_v1);
 
-        this.group.getWorldPosition(target);
-
-        return target.y - this.height * .5;
+        return _v1.y - this.height * .5;
 
     }
 
     get topY() {
 
-        const target = new Vector3();
+        this.group.getWorldPosition(_v1);
 
-        this.group.getWorldPosition(target);
-
-        return target.y + this.height * .5;
+        return _v1.y + this.height * .5;
 
     }
 
@@ -690,7 +685,6 @@ class ObstacleBase extends ObstacleMoveable {
         this.hasRays = true;
  
         const length = this.box.geometry.parameters.height;
-        const dir = new Vector3(0, - 1, 0);
         const posY = this.box.geometry.parameters.height * .5;
         const posX = this.box.geometry.parameters.width * .5 - this.#rayPadding;
         const posZ = this.box.geometry.parameters.depth * .5 - this.#rayPadding;
@@ -698,27 +692,27 @@ class ObstacleBase extends ObstacleMoveable {
 
         // left
         fromVec3 = new Vector3(posX, posY, posZ);
-        this.leftRay = new Raycaster(fromVec3, dir, 0, length);
+        this.leftRay = new Raycaster(fromVec3, _down, 0, length);
         this.leftRay.layers.set(OBSTACLE_RAY_LAYER);
-        this.leftArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
+        this.leftArrow = new ArrowHelper(_down, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
         fromVec3 = new Vector3(- posX, posY, posZ);
-        this.rightRay = new Raycaster(fromVec3, dir, 0, length);
+        this.rightRay = new Raycaster(fromVec3, _down, 0, length);
         this.rightRay.layers.set(OBSTACLE_RAY_LAYER);
-        this.rightArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
+        this.rightArrow = new ArrowHelper(_down, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
         fromVec3 = new Vector3(posX, posY, - posZ);
-        this.backLeftRay = new Raycaster(fromVec3, dir, 0, length);
+        this.backLeftRay = new Raycaster(fromVec3, _down, 0, length);
         this.backLeftRay.layers.set(OBSTACLE_RAY_LAYER);
-        this.backLeftArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
+        this.backLeftArrow = new ArrowHelper(_down, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
         fromVec3 = new Vector3(- posX, posY, - posZ);
-        this.backRightRay = new Raycaster(fromVec3, dir, 0, length);
+        this.backRightRay = new Raycaster(fromVec3, _down, 0, length);
         this.backRightRay.layers.set(OBSTACLE_RAY_LAYER);
-        this.backRightArrow = new ArrowHelper(dir, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
+        this.backRightArrow = new ArrowHelper(_down, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
         this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
 
@@ -739,47 +733,41 @@ class ObstacleBase extends ObstacleMoveable {
         const posY = this.height * .5;
         const posX = this.width * .5 - this.#rayPadding;
         const posZ = this.depth * .5 - this.#rayPadding;
-        const dir = new Vector3(0, - 1, 0);
-        let fromVec3;
 
         // left
-        fromVec3 = new Vector3(posX, posY, posZ);
-        fromVec3.applyMatrix4(this.group.matrixWorld);
-        this.leftRay.set(fromVec3, dir);
+        _v1.set(posX, posY, posZ).applyMatrix4(this.group.matrixWorld);
+        this.leftRay.set(_v1, _down);
         this.leftRay.far = length;
 
-        this.leftArrow.position.copy(fromVec3);
-        this.leftArrow.setDirection(dir);
+        this.leftArrow.position.copy(_v1);
+        this.leftArrow.setDirection(_down);
         this.leftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
-        fromVec3 = new Vector3(- posX, posY, posZ);
-        fromVec3.applyMatrix4(this.group.matrixWorld);
-        this.rightRay.set(fromVec3, dir);
+        _v1.set(- posX, posY, posZ).applyMatrix4(this.group.matrixWorld);
+        this.rightRay.set(_v1, _down);
         this.rightRay.far = length;
 
-        this.rightArrow.position.copy(fromVec3);
-        this.rightArrow.setDirection(dir);
+        this.rightArrow.position.copy(_v1);
+        this.rightArrow.setDirection(_down);
         this.rightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
-        fromVec3 = new Vector3(posX, posY, - posZ);
-        fromVec3.applyMatrix4(this.group.matrixWorld);
-        this.backLeftRay.set(fromVec3, dir);
+        _v1.set(posX, posY, - posZ).applyMatrix4(this.group.matrixWorld);
+        this.backLeftRay.set(_v1, _down);
         this.backLeftRay.far = length;
 
-        this.backLeftArrow.position.copy(fromVec3);
-        this.backLeftArrow.setDirection(dir);
+        this.backLeftArrow.position.copy(_v1);
+        this.backLeftArrow.setDirection(_down);
         this.backLeftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
-        fromVec3 = new Vector3(- posX, posY, - posZ);
-        fromVec3.applyMatrix4(this.group.matrixWorld);
-        this.backRightRay.set(fromVec3, dir);
+        _v1.set(- posX, posY, - posZ).applyMatrix4(this.group.matrixWorld);
+        this.backRightRay.set(_v1, _down);
         this.backRightRay.far = length;
 
-        this.backRightArrow.position.copy(fromVec3);
-        this.backRightArrow.setDirection(dir);
+        this.backRightArrow.position.copy(_v1);
+        this.backRightArrow.setDirection(_down);
         this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;

@@ -1,6 +1,7 @@
 import { Matrix4, Vector3 } from 'three';
 
 const _m1 = new Matrix4();
+const _v1 = new Vector3();
 
 class ObstacleMoveable {
 
@@ -220,8 +221,6 @@ class ObstacleMoveable {
 
         const recoverCoefficient = .005;
 
-        let deltaVec3;
-
         if (this.forwardBlock) {
 
             obstacle.group.position.z -= recoverCoefficient;
@@ -248,33 +247,29 @@ class ObstacleMoveable {
 
         if (this.isMovingForward && !this.forwardBlock) {
 
-            deltaVec3 = new Vector3(0, 0, dist);
-            deltaVec3.applyEuler(obstacle.group.rotation);
-            obstacle.group.position.add(deltaVec3);
+            _v1.set(0, 0, dist).applyEuler(obstacle.group.rotation);
+            obstacle.group.position.add(_v1);
 
         }
         
         if (this.isMovingBackward && !this.backwardBlock) {
 
-            deltaVec3 = new Vector3(0, 0, - dist);
-            deltaVec3.applyEuler(obstacle.group.rotation);
-            obstacle.group.position.add(deltaVec3);
+            _v1.set(0, 0, - dist).applyEuler(obstacle.group.rotation);
+            obstacle.group.position.add(_v1);
 
         }
 
         if (this.isMovingLeft && !this.leftBlock) {
 
-            deltaVec3 = new Vector3(dist, 0, 0);
-            deltaVec3.applyEuler(obstacle.group.rotation);
-            obstacle.group.position.add(deltaVec3);
+            _v1.set(dist, 0, 0).applyEuler(obstacle.group.rotation);
+            obstacle.group.position.add(_v1);
 
         }
 
         if (this.isMovingRight && !this.rightBlock) {
 
-            deltaVec3 = new Vector3(- dist, 0, 0);
-            deltaVec3.applyEuler(obstacle.group.rotation);
-            obstacle.group.position.add(deltaVec3);
+            _v1.set(- dist, 0, 0).applyEuler(obstacle.group.rotation);
+            obstacle.group.position.add(_v1);
 
         }
 

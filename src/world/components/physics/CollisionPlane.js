@@ -7,6 +7,9 @@ const DEFAULT_RAY_LENGTH = 20;
 const HEAD_LENGTH = 1;
 const HEAD_WIDTH = .2;
 
+const _v1 = new Vector3();
+const _up = new Vector3(0, 1, 0);
+
 class CollisionPlane extends Plane {
 
     #w;
@@ -77,19 +80,17 @@ class CollisionPlane extends Plane {
         const width = this.#w;
         const originY = - this.#rayLength * .5;
 
-        const dir = new Vector3(0, 1, 0);
-
         // create left ray and arrow
         const leftfrom = new Vector3(width * .5, originY , 0);
 
-        this.leftRay = new Raycaster(leftfrom, dir, 0, this.#rayLength);
+        this.leftRay = new Raycaster(leftfrom, _up, 0, this.#rayLength);
         this.leftRay.layers.set(CORNOR_RAY_LAYER);
         this.leftArrow = new ArrowHelper(this.leftRay.ray.direction, this.leftRay.ray.origin, this.#rayLength, green, HEAD_LENGTH, HEAD_WIDTH);
          
         // create right ray and arrow
         const rightfrom = new Vector3(- width * .5, originY, 0);
 
-        this.rightRay = new Raycaster(rightfrom, dir, 0, this.#rayLength);
+        this.rightRay = new Raycaster(rightfrom, _up, 0, this.#rayLength);
         this.rightRay.layers.set(CORNOR_RAY_LAYER);
         this.rightArrow = new ArrowHelper(this.rightRay.ray.direction, this.rightRay.ray.origin, this.#rayLength, red, HEAD_LENGTH, HEAD_WIDTH);
 
@@ -110,32 +111,28 @@ class CollisionPlane extends Plane {
         const width = this.#w;
         const originY = - this.#rayLength * .5;
 
-        const dir = new Vector3(0, 1, 0);
-
         // udpate left ray and arrow
-        const leftfrom = new Vector3(width * .5, 0, 0);
-        leftfrom.applyMatrix4(this.mesh.matrixWorld);
-        leftfrom.y += originY;
+        _v1.set(width * .5, 0, 0).applyMatrix4(this.mesh.matrixWorld);
+        _v1.y += originY;
 
         const leftLen = this.#rayLength;
-        this.leftRay.set(leftfrom, dir);
+        this.leftRay.set(_v1, _up);
         this.leftRay.far = leftLen;
 
-        this.leftArrow.position.copy(leftfrom);
-        this.leftArrow.setDirection(dir);
+        this.leftArrow.position.copy(_v1);
+        this.leftArrow.setDirection(_up);
         this.leftArrow.setLength(leftLen, HEAD_LENGTH, HEAD_WIDTH);
          
         // udpate right ray and arrow
-        const rightfrom = new Vector3(- width * .5, 0, 0);
-        rightfrom.applyMatrix4(this.mesh.matrixWorld);
-        rightfrom.y += originY;
+        _v1.set(- width * .5, 0, 0).applyMatrix4(this.mesh.matrixWorld);
+        _v1.y += originY;
 
         const rightLen = this.#rayLength;
-        this.rightRay.set(rightfrom, dir);
+        this.rightRay.set(_v1, _up);
         this.rightRay.far = rightLen;
 
-        this.rightArrow.position.copy(rightfrom);
-        this.rightArrow.setDirection(dir);
+        this.rightArrow.position.copy(_v1);
+        this.rightArrow.setDirection(_up);
         this.rightArrow.setLength(rightLen, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
