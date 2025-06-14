@@ -1,4 +1,4 @@
-import { Object3D, Vector3 } from 'three';
+import { Matrix4, Object3D, Vector3 } from 'three';
 import * as Color from '../basic/colorBase.js';
 import { groupHasChild } from '../utils/objectHelper.js';
 
@@ -9,6 +9,10 @@ const STAIR_OFFSET_MAX = .3;
 const STAIR_OFFSET_MIN = .1;
 const OBSTACLE_BLOCK_OFFSET_MAX = .1;
 const OBSTACLE_BLOCK_OFFSET_MIN = .05;
+
+const _obj0 = new Object3D();
+const _m1 = new Matrix4();
+const _m2 = new Matrix4(); 
 
 class SimplePhysics {
 
@@ -269,32 +273,37 @@ class SimplePhysics {
         let intersectCor = null;
 
         // set dummy object related to zero position.
-        const dummyObject = avatar.dummyObject;
+        const dummyObject = avatar.dummyObject.copy(_obj0);
         const wallMesh = new Object3D();
 
-        plane.mesh.updateWorldMatrix(true, false);
+        // plane.mesh.updateWorldMatrix(true, false);
         wallMesh.applyMatrix4(plane.mesh.matrixWorld);
         wallMesh.scale.set(1, 1, 1);    // ignore wall plane scale
         wallMesh.updateMatrixWorld();
 
-        const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();
+        const wallWorldMatrixInverted = _m1.copy(wallMesh.matrixWorld).invert();
         // get avatar position towards wall local space
         // avatar.group.matrixWorld must cloned due to it will be used as raycasting below
-        const dummy2WallMtx4 = avatar.group.matrixWorld.clone().premultiply(wallWorldMatrixInverted);
-        const dummyMatrixInverted = dummyObject.matrix.invert();
-        dummyObject.applyMatrix4(dummy2WallMtx4.multiply(dummyMatrixInverted));
+        const dummy2WallMtx4 = _m2.copy(avatar.group.matrixWorld).premultiply(wallWorldMatrixInverted);
+        dummyObject.applyMatrix4(dummy2WallMtx4);
         
         const leftCorVec3 = avatar.leftCorVec3;
         const rightCorVec3 = avatar.rightCorVec3;
         const leftBackCorVec3 = avatar.leftBackCorVec3;
         const rightBackCorVec3 = avatar.rightBackCorVec3;
 
-        dummyObject.localToWorld(leftCorVec3);
-        dummyObject.localToWorld(rightCorVec3);
-        dummyObject.localToWorld(leftBackCorVec3);
-        dummyObject.localToWorld(rightBackCorVec3);
+        dummyObject.updateWorldMatrix(true, false);
+        leftCorVec3.applyMatrix4(dummyObject.matrixWorld);
+        rightCorVec3.applyMatrix4(dummyObject.matrixWorld);
+        leftBackCorVec3.applyMatrix4(dummyObject.matrixWorld);
+        rightBackCorVec3.applyMatrix4(dummyObject.matrixWorld);
 
-        const cornors = { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 };
+        const cornorsArr = [
+            leftCorVec3.x, leftCorVec3.y, leftCorVec3.z,
+            rightCorVec3.x, rightCorVec3.y, rightCorVec3.z,
+            leftBackCorVec3.x, leftBackCorVec3.y, leftBackCorVec3.z,
+            rightBackCorVec3.x, rightBackCorVec3.y, rightBackCorVec3.z
+        ];
 
         const halfAvatarDepth = Math.max(Math.abs(leftCorVec3.z - rightBackCorVec3.z), Math.abs(rightCorVec3.z - leftBackCorVec3.z)) * .5;
         const halfAvatarWidth = Math.max(Math.abs(leftCorVec3.x - rightBackCorVec3.x), Math.abs(rightCorVec3.x - leftBackCorVec3.x)) * .5;
@@ -389,7 +398,7 @@ class SimplePhysics {
 
                     intersect = true;
                     
-                    return { wallMesh, intersect, borderReach: true, cornors, leftCorIntersectFace, rightCorIntersectFace, halfEdgeLength };
+                    return { wallMesh, intersect, borderReach: true, cornorsArr, leftCorIntersectFace, rightCorIntersectFace, halfEdgeLength };
                 }
 
                 return { intersect, borderReach: false };
@@ -398,7 +407,7 @@ class SimplePhysics {
         }
 
         if (intersect)  
-            return { wallMesh, intersect, borderReach: false, intersectCor, cornors, halfEdgeLength };
+            return { wallMesh, intersect, borderReach: false, intersectCor, cornorsArr, halfEdgeLength };
         else
             return { intersect, borderReach: false }
 

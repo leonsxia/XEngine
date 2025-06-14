@@ -1,4 +1,6 @@
-import { Vector3 } from 'three';
+import { Matrix4, Vector3 } from 'three';
+
+const _m1 = new Matrix4();
 
 class ObstacleMoveable {
 
@@ -154,9 +156,9 @@ class ObstacleMoveable {
 
         const onGroundPadding = 0.001;
 
-        const dir = floor.worldPosition.clone();
+        const dir = floor.worldPosition;
         dir.y += obstacle.box.height * .5 - onGroundPadding;
-        obstacle.group.position.y = obstacle.group.parent ? obstacle.group.parent.worldToLocal(dir).y : dir.y;
+        obstacle.group.position.y = obstacle.group.parent ? dir.applyMatrix4(_m1.copy(obstacle.group.parent.matrixWorld).invert()).y : dir.y;
 
         this.resetFallingState();
         
@@ -184,7 +186,7 @@ class ObstacleMoveable {
 
             const dir = intersects[0].point.clone();
             dir.y += obstacle.height * .5;
-            obstacle.group.position.y = obstacle.group.parent ? obstacle.group.parent.worldToLocal(dir).y : dir.y;
+            obstacle.group.position.y = obstacle.group.parent ? dir.applyMatrix4(_m1.copy(obstacle.group.parent.matrixWorld).invert()).y : dir.y;
 
             this.resetFallingState();
 
@@ -277,6 +279,7 @@ class ObstacleMoveable {
         }
 
     }
+
 }
 
 export { ObstacleMoveable };

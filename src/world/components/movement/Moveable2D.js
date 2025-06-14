@@ -1,9 +1,14 @@
-import { Object3D, Quaternion, Vector3 } from 'three';
+import { Group, Matrix4, Object3D, Vector3 } from 'three';
 import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
 import { Logger } from '../../systems/Logger';
 
 const COOLING_TIME = .7;
 const DEBUG = true;
+
+const _m1 = new Matrix4();
+const _v1 = new Vector3();
+const _obj0 = new Object3D();
+const _g0 = new Group();
 
 class Moveable2D {
     #movingLeft = false;
@@ -365,9 +370,9 @@ class Moveable2D {
             
         }
 
-        const dir = bottomWall.worldPosition.clone();
+        const dir = bottomWall.worldPosition;
         dir.y -= $self.height * .5;
-        $self.group.position.y = $self.group.parent ? $self.group.parent.worldToLocal(dir).y : dir.y;
+        $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
 
     }
 
@@ -375,10 +380,10 @@ class Moveable2D {
 
         const { floor, $self } = params;
 
-        const dir = floor.worldPosition.clone();
+        const dir = floor.worldPosition;
         const onGroundPadding = .001;
         dir.y += $self.height * .5 - onGroundPadding;
-        $self.group.position.y = $self.group.parent ? $self.group.parent.worldToLocal(dir).y : dir.y;
+        $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
 
         this.resetFallingState();
 
@@ -405,9 +410,9 @@ class Moveable2D {
                 return b.point.y - a.point.y;
             });
 
-            const dir = intersects[0].point.clone();
+            const dir = _v1.copy(intersects[0].point);
             dir.y += $self.height * .5;
-            $self.group.position.y = $self.group.parent ? $self.group.parent.worldToLocal(dir).y : dir.y;
+            $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
 
             this.resetFallingState();
 
@@ -511,7 +516,7 @@ class Moveable2D {
                     const dist = delta * $self.climbingVel;
                     const dir = new Vector3(0, 0, dist);
 
-                    $self.group.position.copy($self.group.localToWorld(dir));
+                    $self.group.position.copy(dir.applyMatrix4($self.group.matrixWorld));
 
                     this.#climbForwardDist += dist;
 
@@ -520,8 +525,11 @@ class Moveable2D {
                     this.resetClimbingState();
 
                 }
+
             }
+
         }
+
     }
 
     tankmoveTick(params) {
@@ -541,12 +549,12 @@ class Moveable2D {
         if (this.isMovingForward) {
 
             deltaVec3 = new Vector3(0, 0, dist);
-            group.position.copy(group.localToWorld(deltaVec3));
+            group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
 
         } else if (this.isMovingBackward) {
 
             deltaVec3 = new Vector3(0, 0, - dist);
-            group.position.copy(group.localToWorld(deltaVec3));
+            group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
 
         } else if (this.isTurnClockwise) {
 
@@ -566,44 +574,34 @@ class Moveable2D {
             if (this.isMovingForwardLeft) {
 
                 deltaVec3 = new Vector3(deltaX, 0, deltaZ);
-                group.position.copy(group.localToWorld(deltaVec3));
+                group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
                 // group.rotation.y += rotateRad;
                 group.rotateOnWorldAxis(worldY, rotateRad);
 
             } else if (this.isMovingForwardRight) {
 
                 deltaVec3 = new Vector3(-deltaX, 0, deltaZ);
-                group.position.copy(group.localToWorld(deltaVec3));
+                group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
                 // group.rotation.y -= rotateRad;
                 group.rotateOnWorldAxis(worldY, - rotateRad);
 
             } else if (this.isMovingBackwardLeft) {
 
                 deltaVec3 = new Vector3(deltaX, 0, -deltaZ);
-                group.position.copy(group.localToWorld(deltaVec3));
+                group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
                 // group.rotation.y -= rotateRad;
                 group.rotateOnWorldAxis(worldY, - rotateRad);
 
             } else if (this.isMovingBackwardRight) {
 
                 deltaVec3 = new Vector3(-deltaX, 0, -deltaZ);
-                group.position.copy(group.localToWorld(deltaVec3));
+                group.position.copy(deltaVec3.applyMatrix4(group.matrixWorld));
                 // group.rotation.y += rotateRad;
                 group.rotateOnWorldAxis(worldY, rotateRad);
 
             }
 
         }
-
-    }
-
-    localToWorldBatch(object, positions) {
-
-        positions.forEach(pos => {
-
-            object.localToWorld(pos);
-
-        });
 
     }
 
@@ -619,13 +617,18 @@ class Moveable2D {
 
     }
 
-    rotateOffsetCorrection(cornors) {
+    rotateOffsetCorrection(cornorsArr) {
 
-        const { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 } = cornors;        
+        const [
+                , , leftCorVec3Z,
+                , , rightCorVec3Z,
+                , , leftBackCorVec3Z,
+                , , rightBackCorVec3Z
+            ] = cornorsArr
 
-        if (leftCorVec3.z <= 0 || rightCorVec3.z <= 0 || leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) {
+        if (leftCorVec3Z <= 0 || rightCorVec3Z <= 0 || leftBackCorVec3Z <= 0 || rightBackCorVec3Z <= 0) {
 
-            const overlap = Math.min(leftCorVec3.z, rightCorVec3.z, leftBackCorVec3.z, rightBackCorVec3.z);
+            const overlap = Math.min(leftCorVec3Z, rightCorVec3Z, leftBackCorVec3Z, rightBackCorVec3Z);
 
             this._deltaV3.add(new Vector3(0, 0, - overlap));
 
@@ -668,9 +671,14 @@ class Moveable2D {
         const {
             wallMesh,
             borderReach, leftCorIntersectFace, rightCorIntersectFace, intersectCor,
-            cornors: { leftCorVec3, rightCorVec3, leftBackCorVec3, rightBackCorVec3 },
+            cornorsArr: [
+                leftCorVec3X, , leftCorVec3Z,
+                rightCorVec3X, , rightCorVec3Z,
+                leftBackCorVec3X, , leftBackCorVec3Z,
+                rightBackCorVec3X, , rightBackCorVec3Z
+            ],
             halfEdgeLength
-         } = wall.checkResult;
+        } = wall.checkResult;
 
         if (this.quickTurnTick(params) || this.#isClimbingUp) {
 
@@ -679,19 +687,21 @@ class Moveable2D {
         }
 
         // set dummy object related to zero position.
-        const dummyObject = this.dummyObject;
+        const dummyObject = this.dummyObject.copy(_obj0);
 
         // group.updateWorldMatrix(true, false);
 
         const wallTransformMtx4 = wallMesh.matrixWorld;
-        const wallWorldMatrixInverted = wallMesh.matrixWorld.clone().invert();
+        const wallWorldMatrixInverted = _m1.copy(wallMesh.matrixWorld).invert();
         // get moving object position towards wall local space
         // group.matrixWorld will no longer needed below, so no need to clone, it will be auto updated
         const dummy2WallMtx4 = group.matrixWorld.premultiply(wallWorldMatrixInverted);
         // dummyObject.matrix no need to clone, 
         // due to applyMatrix4 will auto compose matrix from current position, quaternion and scale
-        const dummyMatrixInverted = dummyObject.matrix.invert();
-        dummyObject.applyMatrix4(dummy2WallMtx4.multiply(dummyMatrixInverted));
+        // const dummyMatrixInverted = dummyObject.matrix.invert();
+        dummyObject.applyMatrix4(dummy2WallMtx4);
+
+        dummyObject.updateWorldMatrix(true, false);
 
         // const posY = dummyObject.position.y;
 
@@ -710,29 +720,28 @@ class Moveable2D {
             dummyObject.updateMatrix();
 
             // ** this time dummyObject.matrix need to clone due to it will be used in SimplePhysics -> checkIntersection
-            const recoverMtx4 = dummyObject.matrix.clone().premultiply(wallTransformMtx4);
+            const recoverMtx4 = _m1.copy(dummyObject.matrix).premultiply(wallTransformMtx4);
 
             // add delta position transfer to worldDeltaV3
             // console.log(`deltaV3:${this._deltaV3.x}, ${this._deltaV3.y}, ${this._deltaV3.z}`);
-            const wallWorldQuat = new Quaternion(); 
-            wallMesh.getWorldQuaternion(wallWorldQuat);
-            this._worldDeltaV3.add(this._deltaV3.applyQuaternion(wallWorldQuat));
+            // wallMesh has no parent, so its matrix equals matrixWorld
+            this._worldDeltaV3.add(this._deltaV3.applyQuaternion(wallMesh.quaternion));
 
             // group.matrix and group.parent.matrixWorld no need to clone, 
             // due to applyMatrix4 will auto compose matrix from current position, quaternion and scale
             // group matrixWorld will auto updated when call worldToLocal
-            const movingObjMatrixInverted = group.matrix.invert();
+            group.copy(_g0);
             const movingObjWorldMatrixInvterted = group.parent.matrixWorld.invert();
             // follow the euquition:
             // parentWorldMatirx * localMatrix = recoverMtx4 => localMatrix = parentWorldMatrix.invert() * recoverMtx4
-            group.applyMatrix4(movingObjWorldMatrixInvterted.multiply(recoverMtx4.multiply(movingObjMatrixInverted)));
+            group.applyMatrix4(movingObjWorldMatrixInvterted.multiply(recoverMtx4));
 
         }
 
         // when climb forward has collistion with other walls, need to stop moving forward.
         if (this.#isClimbingForward) {
 
-            if (leftCorVec3.z <= 0 || rightCorVec3.z <= 0) {
+            if (leftCorVec3Z <= 0 || rightCorVec3Z <= 0) {
 
                 this.resetClimbingState();
 
@@ -748,10 +757,10 @@ class Moveable2D {
         if (this.stopped) {
 
             if (
-                (intersectCor === COR_DEF[0] && leftCorVec3.z < 0) ||
-                (intersectCor === COR_DEF[1] && rightCorVec3.z < 0) ||
-                (intersectCor === COR_DEF[2] && leftBackCorVec3.z < 0) ||
-                (intersectCor === COR_DEF[3] && rightBackCorVec3.z < 0)
+                (intersectCor === COR_DEF[0] && leftCorVec3Z < 0) ||
+                (intersectCor === COR_DEF[1] && rightCorVec3Z < 0) ||
+                (intersectCor === COR_DEF[2] && leftBackCorVec3Z < 0) ||
+                (intersectCor === COR_DEF[3] && rightBackCorVec3Z < 0)
             ) {
 
                 // dummyObject.position.z += quickRecoverCoefficient;
@@ -761,13 +770,11 @@ class Moveable2D {
 
             if (leftCorIntersectFace?.includes(FACE_DEF[0]) || rightCorIntersectFace?.includes(FACE_DEF[0])) {
     
-                // dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)));
-                this._deltaV3.add(dummyObject.localToWorld(new Vector3(0, 0, - backwardCoefficient)).sub(dummyObject.position));
+                this._deltaV3.add(new Vector3(0, 0, - backwardCoefficient).applyMatrix4(dummyObject.matrixWorld).sub(dummyObject.position));
                 
             } else if (leftCorIntersectFace?.includes(FACE_DEF[1]) || rightCorIntersectFace?.includes(FACE_DEF[1])) {
 
-                // dummyObject.position.copy(dummyObject.localToWorld(new Vector3(0, 0, backwardCoefficient)));
-                this._deltaV3.add(dummyObject.localToWorld(new Vector3(0, 0, backwardCoefficient)).sub(dummyObject.position));
+                this._deltaV3.add(new Vector3(0, 0, backwardCoefficient).applyMatrix4(dummyObject.matrixWorld).sub(dummyObject.position));
                 
             }
 
@@ -795,13 +802,13 @@ class Moveable2D {
 
             checkCornors = [];
             
-            if (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) checkCornors.push(leftCorVec3.z);
+            if (leftCorVec3Z <= 0 && Math.abs(leftCorVec3X) <= halfEdgeLength) checkCornors.push(leftCorVec3Z);
 
-            if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) checkCornors.push(rightCorVec3.z);
+            if (rightCorVec3Z <= 0 && Math.abs(rightCorVec3X) <= halfEdgeLength) checkCornors.push(rightCorVec3Z);
 
-            if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) checkCornors.push(leftBackCorVec3.z);
+            if (leftBackCorVec3Z <= 0 && Math.abs(leftBackCorVec3X) <= halfEdgeLength) checkCornors.push(leftBackCorVec3Z);
 
-            if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) checkCornors.push(rightBackCorVec3.z);
+            if (rightBackCorVec3Z <= 0 && Math.abs(rightBackCorVec3X) <= halfEdgeLength) checkCornors.push(rightBackCorVec3Z);
             
             return checkCornors.length ? true : false;
 
@@ -816,7 +823,7 @@ class Moveable2D {
         if (this.isMovingForward) {
 
             deltaVec3 = new Vector3(0, 0, dist);
-            const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+            const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
             offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!borderReach) {
@@ -860,7 +867,7 @@ class Moveable2D {
         } else if (this.isMovingBackward) {
 
             deltaVec3 = new Vector3(0, 0, - dist);
-            const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+            const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
             offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
             if (!borderReach) {
@@ -902,7 +909,7 @@ class Moveable2D {
 
             if (!borderReach) {
 
-                this.rotateOffsetCorrection(wall.checkResult.cornors);
+                this.rotateOffsetCorrection(wall.checkResult.cornorsArr);
 
                 this.rotateOffsetCorrection2(true, $self);
 
@@ -915,7 +922,7 @@ class Moveable2D {
 
             if (!borderReach) {
 
-                this.rotateOffsetCorrection(wall.checkResult.cornors);
+                this.rotateOffsetCorrection(wall.checkResult.cornorsArr);
 
                 this.rotateOffsetCorrection2(false, $self);
 
@@ -933,7 +940,7 @@ class Moveable2D {
 
                 deltaVec3 = this.isMovingForwardLeft ? new Vector3(deltaX, 0, deltaZ) : new Vector3(deltaX, 0, - deltaZ);
 
-                const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+                const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
                 offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
                 if (!this._rotated) {
@@ -958,7 +965,7 @@ class Moveable2D {
 
                     if (this.isForwardBlock || this.isBackwardBlock) {
 
-                        this.rotateOffsetCorrection(wall.checkResult.cornors);
+                        this.rotateOffsetCorrection(wall.checkResult.cornorsArr);
 
                     } else if (cornorsIsOverlap()) {
 
@@ -984,7 +991,7 @@ class Moveable2D {
 
                 deltaVec3 = this.isMovingForwardRight ? new Vector3(- deltaX, 0, deltaZ) : new Vector3(- deltaX, 0, - deltaZ);
 
-                const offsetVec3 = dummyObject.localToWorld(deltaVec3);
+                const offsetVec3 = deltaVec3.applyMatrix4(dummyObject.matrixWorld);
                 offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
 
                 if (!this._rotated) {
@@ -1009,7 +1016,7 @@ class Moveable2D {
 
                     if (this.isForwardBlock || this.isBackwardBlock) {
 
-                        this.rotateOffsetCorrection(wall.checkResult.cornors);
+                        this.rotateOffsetCorrection(wall.checkResult.cornorsArr);
 
                     } else if (cornorsIsOverlap()) {
 
@@ -1042,11 +1049,11 @@ class Moveable2D {
 
         const { group } = params;
 
-        const worldPos = group.getWorldPosition(new Vector3());
+        const worldPos = group.getWorldPosition(_v1);
         
         worldPos.add(this._worldDeltaV3);
 
-        group.position.copy(group.parent.worldToLocal(worldPos));
+        group.position.copy(worldPos.applyMatrix4(_m1.copy(group.parent.matrixWorld).invert()));
 
     }
     

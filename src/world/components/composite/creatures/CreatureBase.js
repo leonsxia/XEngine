@@ -6,7 +6,7 @@ import { CAMERA_RAY_LAYER } from "../../utils/constants";
 import { polarity } from "../../utils/enums";
 
 const DEBUG = false;
-const DEBUG_EVENTS = true;
+const DEBUG_EVENTS = false;
 
 class CreatureBase extends CustomizedCreatureTofu {
 
