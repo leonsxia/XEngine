@@ -182,7 +182,8 @@ class CustomizedCombatTofu extends Tofu {
         const pushingBox = this.pushingBoxMap.get(weaponType);
 
         this.group.remove(this.pushingOBBBoxMesh);
-        this.group.add(pushingBox);        
+        this.group.add(pushingBox); 
+        this.pushingOBBBoxMesh = pushingBox;
 
     }
 
@@ -232,6 +233,8 @@ class CustomizedCombatTofu extends Tofu {
 
         this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
         this.group.add(boundingBox, boundingBoxWire);
+        this.boundingBoxMesh = boundingBox;
+        this.boundingBoxWireMesh = boundingBoxWire;
 
     }
 
@@ -328,6 +331,7 @@ class CustomizedCombatTofu extends Tofu {
 
         const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
         this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
+        this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
         
     }
 

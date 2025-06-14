@@ -12,7 +12,11 @@ const OBSTACLE_BLOCK_OFFSET_MIN = .05;
 
 const _obj0 = new Object3D();
 const _m1 = new Matrix4();
-const _m2 = new Matrix4(); 
+const _m2 = new Matrix4();
+const _lv = new Vector3();
+const _rv = new Vector3();
+const _blv = new Vector3();
+const _brv = new Vector3();
 
 class SimplePhysics {
 
@@ -285,28 +289,28 @@ class SimplePhysics {
         // get avatar position towards wall local space
         // avatar.group.matrixWorld must cloned due to it will be used as raycasting below
         const dummy2WallMtx4 = _m2.copy(avatar.group.matrixWorld).premultiply(wallWorldMatrixInverted);
-        dummyObject.applyMatrix4(dummy2WallMtx4);
-        
-        const leftCorVec3 = avatar.leftCorVec3;
-        const rightCorVec3 = avatar.rightCorVec3;
-        const leftBackCorVec3 = avatar.leftBackCorVec3;
-        const rightBackCorVec3 = avatar.rightBackCorVec3;
+        dummyObject.applyMatrix4(dummy2WallMtx4);        
+
+        _lv.copy(avatar._cornors[0]);
+        _rv.copy(avatar._cornors[1]);
+        _blv.copy(avatar._cornors[2]);
+        _brv.copy(avatar._cornors[3]);
 
         dummyObject.updateWorldMatrix(true, false);
-        leftCorVec3.applyMatrix4(dummyObject.matrixWorld);
-        rightCorVec3.applyMatrix4(dummyObject.matrixWorld);
-        leftBackCorVec3.applyMatrix4(dummyObject.matrixWorld);
-        rightBackCorVec3.applyMatrix4(dummyObject.matrixWorld);
+        _lv.applyMatrix4(dummyObject.matrixWorld);
+        _rv.applyMatrix4(dummyObject.matrixWorld);
+        _blv.applyMatrix4(dummyObject.matrixWorld);
+        _brv.applyMatrix4(dummyObject.matrixWorld);
 
         const cornorsArr = [
-            leftCorVec3.x, leftCorVec3.y, leftCorVec3.z,
-            rightCorVec3.x, rightCorVec3.y, rightCorVec3.z,
-            leftBackCorVec3.x, leftBackCorVec3.y, leftBackCorVec3.z,
-            rightBackCorVec3.x, rightBackCorVec3.y, rightBackCorVec3.z
+            _lv.x, _lv.y, _lv.z,
+            _rv.x, _rv.y, _rv.z,
+            _blv.x, _blv.y, _blv.z,
+            _brv.x, _brv.y, _brv.z
         ];
 
-        const halfAvatarDepth = Math.max(Math.abs(leftCorVec3.z - rightBackCorVec3.z), Math.abs(rightCorVec3.z - leftBackCorVec3.z)) * .5;
-        const halfAvatarWidth = Math.max(Math.abs(leftCorVec3.x - rightBackCorVec3.x), Math.abs(rightCorVec3.x - leftBackCorVec3.x)) * .5;
+        const halfAvatarDepth = Math.max(Math.abs(_lv.z - _brv.z), Math.abs(_rv.z - _blv.z)) * .5;
+        const halfAvatarWidth = Math.max(Math.abs(_lv.x - _brv.x), Math.abs(_rv.x - _blv.x)) * .5;
         const halfAvatarHeight = avatar.height * .5;
 
         if (this.checkOutOfWallRangeLocal(dummyObject, plane, halfAvatarWidth, halfAvatarHeight)) {
@@ -323,7 +327,7 @@ class SimplePhysics {
 
         const halfEdgeLength = plane.width / 2;
 
-        if ((leftCorVec3.z <=0 || rightCorVec3.z <= 0 || leftBackCorVec3.z <= 0 || rightBackCorVec3.z <= 0) 
+        if ((_lv.z <=0 || _rv.z <= 0 || _blv.z <= 0 || _brv.z <= 0) 
             && Math.abs(dummyObject.position.z) - halfAvatarDepth <= 0
         ) {
             
@@ -332,32 +336,32 @@ class SimplePhysics {
             if (
                 (Math.abs(dummyObject.position.z - halfAvatarDepth) <=  padding) && 
                 (
-                    (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) ||
-                    (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) ||
-                    (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) ||
-                    (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength)
+                    (_lv.z <= 0 && Math.abs(_lv.x) <= halfEdgeLength) ||
+                    (_rv.z <= 0 && Math.abs(_rv.x) <= halfEdgeLength) ||
+                    (_blv.z <= 0 && Math.abs(_blv.x) <= halfEdgeLength) ||
+                    (_brv.z <= 0 && Math.abs(_brv.x) <= halfEdgeLength)
                 )
             ) {
 
-                if (leftCorVec3.z <= 0 && Math.abs(leftCorVec3.x) <= halfEdgeLength) {
+                if (_lv.z <= 0 && Math.abs(_lv.x) <= halfEdgeLength) {
                     
                     avatar.leftCorIntersects = true;
                     intersectCor = COR_DEF[0]; // left cornor
 
                 }
-                if (rightCorVec3.z <= 0 && Math.abs(rightCorVec3.x) <= halfEdgeLength) {
+                if (_rv.z <= 0 && Math.abs(_rv.x) <= halfEdgeLength) {
                     
                     avatar.rightCorIntersects = true;
                     intersectCor = COR_DEF[1]; // right cornor
 
                 }
-                if (leftBackCorVec3.z <= 0 && Math.abs(leftBackCorVec3.x) <= halfEdgeLength) {
+                if (_blv.z <= 0 && Math.abs(_blv.x) <= halfEdgeLength) {
                     
                     avatar.backLeftCorIntersects = true;
                     intersectCor = COR_DEF[2]; // left back cornor
 
                 }
-                if (rightBackCorVec3.z <= 0 && Math.abs(rightBackCorVec3.x) <= halfEdgeLength) {
+                if (_brv.z <= 0 && Math.abs(_brv.x) <= halfEdgeLength) {
                     
                     avatar.backRightCorIntersects = true;
                     intersectCor = COR_DEF[3]; // right back cornor

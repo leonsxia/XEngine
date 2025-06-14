@@ -24,6 +24,15 @@ class Tofu extends Moveable2D {
     meshes;
     boundingObjects;
 
+    bodyMesh;
+    slotMeshes = [];
+    boundingBoxMesh;
+    boundingBoxWireMesh;
+    pushingOBBBoxMesh;
+    boundingFaceMesh = []
+    boundingFace2Mesh = [];
+    sovBoundingSphereMesh;
+
     boundingBox;
     boundingBoxHelper;
 
@@ -78,6 +87,12 @@ class Tofu extends Moveable2D {
     #backwardSlowdownCoefficient = .7;
     #backwardRotatingRadiusCoefficient = .7;
     #isPushing = false;
+
+    _cachedWidth;
+    _cachedHeight;
+    _cachedDepth;
+
+    _cornors = [];
 
     resTracker = new ResourceTracker();
     track = this.resTracker.track.bind(this.resTracker);
@@ -137,6 +152,9 @@ class Tofu extends Moveable2D {
             body, slotLeft, slotRight
         ).name = name;
 
+        this.bodyMesh = body;
+        this.slotMeshes = [slotLeft, slotRight];
+
         if (createDefaultBoundingObjects) {
 
             this.boundingObjects = createDefaultBoundingObjectMeshes(this._size);
@@ -155,15 +173,24 @@ class Tofu extends Moveable2D {
                 frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2,
                 pushingOBBBox
             );
+
+            this.boundingBoxMesh = boundingBox;
+            this.boundingBoxWireMesh = boundingBoxWire;
+            this.pushingOBBBoxMesh = pushingOBBBox;
+            this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
+            this.boundingFace2Mesh = [frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2]
             
         }
 
         const { sovSphere } = createSovBoundingSphereMesh(this._size);
         this.group.add(sovSphere);
+        this.sovBoundingSphereMesh = sovSphere;
 
         this.#w = width;
         this.#d = depth;
         this.#h = height;
+
+        this._cornors.push(this.leftCorVec3, this.rightCorVec3, this.leftBackCorVec3, this.rightBackCorVec3);
 
         this.boundingBox = new Box3();
         this.boundingBoxHelper = new Box3Helper(this.boundingBox, 0x00ff00);
@@ -172,64 +199,6 @@ class Tofu extends Moveable2D {
         this.createRay();
 
         this.paddingCoefficient = .05 * ENLARGE;
-
-    }
-
-    get bodyMesh() {
-
-        return this.group.getObjectByName('body');
-
-    }
-
-    get slotMeshes() {
-
-        return [this.group.getObjectByName('slotLeft'), this.group.getObjectByName('slotRight')];
-
-    }
-
-    get boundingBoxWireMesh() {
-
-        return this.group.getObjectByName('boundingBoxWire');
-
-    }
-
-    get boundingBoxMesh() {
-
-        return this.group.getObjectByName('boundingBox');
-
-    }
-
-    get sovBoundingSphereMesh() {
-
-        return this.group.getObjectByName('sovBoundingSphere-helper');
-
-    }
-
-    get pushingOBBBoxMesh() {
-
-        return this.group.getObjectByName('pushingOBBBox');
-
-    }
-
-    get boundingFaceMesh() {
-
-        return [
-            this.group.getObjectByName('frontFace'),
-            this.group.getObjectByName('backFace'),
-            this.group.getObjectByName('leftFace'),
-            this.group.getObjectByName('rightFace')
-        ];
-
-    }
-
-    get boundingFace2Mesh() {
-
-        return [
-            this.group.getObjectByName('frontFace2'),
-            this.group.getObjectByName('backFace2'),
-            this.group.getObjectByName('leftFace2'),
-            this.group.getObjectByName('rightFace2')
-        ];
 
     }
 
@@ -405,12 +374,22 @@ class Tofu extends Moveable2D {
 
     }
 
+    onBasicSizeChanged() {
+
+        this._cornors[0].set(this.#w * .5, 0, this.#d * .5);
+        this._cornors[1].set(- this.#w * .5, 0, this.#d * .5);
+        this._cornors[2].set(this.#w * .5, 0, - this.#d * .5);
+        this._cornors[3].set(- this.#w * .5, 0, - this.#d * .5); 
+    }
+
     /**
      * @param {number} val
      */
     set w(val) {
 
         this.#w = val;
+        this._cachedWidth = this.#w * this.group.scale.x;
+        this.onBasicSizeChanged();
 
     }
 
@@ -420,24 +399,43 @@ class Tofu extends Moveable2D {
     set d(val) {
 
         this.#d = val;
+        this._cachedDepth = this.#d * this.group.scale.z;
+        this.onBasicSizeChanged();
 
     }
 
     get width() {
 
-        return this.#w * this.group.scale.x;
+        if (!this._cachedWidth) {
+
+            this._cachedWidth = this.#w * this.group.scale.x;
+
+        }
+
+        return this._cachedWidth;
         
     }
 
     get height() {
 
-        return this.#h * this.group.scale.y;
+        if (!this._cachedHeight) {
+
+            this._cachedHeight = this.#h * this.group.scale.y;
+        }
+
+        return this._cachedHeight;
 
     }
 
     get depth() {
 
-        return this.#d * this.group.scale.z;
+        if (!this._cachedDepth) {
+
+            this._cachedDepth = this.#d * this.group.scale.z;
+
+        }
+
+        return this._cachedDepth;
 
     }
 
@@ -491,7 +489,7 @@ class Tofu extends Moveable2D {
 
     get rightBackCorVec3() {
 
-        return new Vector3( - this.#w * .5, 0, - this.#d * .5);
+        return new Vector3(- this.#w * .5, 0, - this.#d * .5);
 
     }
 
@@ -908,8 +906,17 @@ class Tofu extends Moveable2D {
     setScale(scale) {
 
         this.group.scale.set(...scale);
+        this.onScaleChanged();
 
         return this;
+
+    }
+
+    onScaleChanged() {
+
+        this._cachedWidth = this.#w * this.group.scale.x;
+        this._cachedHeight = this.#h * this.group.scale.y;
+        this._cachedWidth = this.#d * this.group.scale.z;
 
     }
 

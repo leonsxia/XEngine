@@ -114,7 +114,9 @@ class CustomizedCreatureTofu extends Tofu {
             height: pushingBoxSize.height, depth: pushingBoxSize.depth, show: false
         }
 
-        this.group.add(createTofuPushingOBBBox(pushingBoxSpecs));
+        const pushBox = createTofuPushingOBBBox(pushingBoxSpecs)
+        this.group.add(pushBox);
+        this.pushingOBBBoxMesh = pushBox;
 
     }
 
@@ -144,6 +146,8 @@ class CustomizedCreatureTofu extends Tofu {
 
         this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
         this.group.add(boundingBox, boundingBoxWire);
+        this.boundingBoxMesh = boundingBox;
+        this.boundingBoxWireMesh = boundingBoxWire;
 
     }
 
@@ -210,6 +214,7 @@ class CustomizedCreatureTofu extends Tofu {
 
         const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
         this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
+        this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
 
         this.doBoundingFaceChangedEvents();
 
