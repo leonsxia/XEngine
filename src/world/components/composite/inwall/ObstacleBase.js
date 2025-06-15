@@ -110,8 +110,6 @@ class ObstacleBase extends ObstacleMoveable {
         this.group.isInwallObject = true;
         this.group.father = this;
 
-        this.rotationY = 0;     // local rotation y
-
         this.density = density;
 
     }
@@ -544,20 +542,15 @@ class ObstacleBase extends ObstacleMoveable {
 
     setRotationY(y) {
 
-        const preGroupRotY = this.rotationY;
-
         this.group.rotation.y = y;
-        this.rotationY = y;
-
-        for (let i = 0, il = this.walls.length; i < il; i++) {
-
-            const w = this.walls[i];
-
-            w.mesh.rotationY = w.mesh.rotationY - preGroupRotY + y;
-            
-        }
 
         return this;
+
+    }
+
+    get rotationY() {
+
+        return this.group.rotation.y;
 
     }
 

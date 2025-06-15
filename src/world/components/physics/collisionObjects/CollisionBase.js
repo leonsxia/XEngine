@@ -9,7 +9,6 @@ class CollisionBase extends EventDispatcher {
     topOBBs = [];
     bottomOBBs = [];
 
-    rotationY = 0;
     scale = [1, 1, 1];
 
     specs;
@@ -70,18 +69,7 @@ class CollisionBase extends EventDispatcher {
 
     setRotationY(rotY) {
 
-        const preRotY = this.rotationY;
-
-        for (let i = 0, il = this.walls.length; i < il; i++) {
-
-            const w = this.walls[i];
-
-            w.mesh.rotationY = w.mesh.rotationY - preRotY + rotY;
-
-        }
-
         this.group.rotation.set(0, rotY, 0);
-        this.rotationY = rotY;
 
         return this;
 
