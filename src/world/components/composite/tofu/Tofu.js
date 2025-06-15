@@ -450,6 +450,12 @@ class Tofu extends Moveable2D {
 
     }
 
+    getWorldPosition(target) {
+
+        return this.boundingBoxMesh.getWorldPosition(target);
+
+    }
+
     get bottomY() {
 
         this.boundingBoxMesh.getWorldPosition(_v1);
@@ -985,7 +991,7 @@ class Tofu extends Moveable2D {
     checkSightOfView(target) {
 
         let isInSight = false;
-        const distance = this.worldPosition.distanceTo(target.worldPosition);
+        const distance = this.getWorldPosition(_v1).distanceTo(target.getWorldPosition(_v2));
 
         if (distance < this.sightOfView) {
 
@@ -1087,9 +1093,11 @@ class Tofu extends Moveable2D {
     getTargetDirectionAngle(target) {
 
         const selfDir = this.boundingBoxMesh.getWorldDirection(_v1);
-        const tarPos = target.worldPosition;
-        const selfPos = this.worldPosition;
-        const tarDir = _v2.set(tarPos.x, 0, tarPos.z).sub(_v3.set(selfPos.x, 0, selfPos.z));
+        target.getWorldPosition(_v2);
+        this.getWorldPosition(_v3);
+        _v2.y = 0;
+        _v3.y = 0;
+        const tarDir = _v2.sub(_v3);
         const angle = selfDir.angleTo(tarDir);
 
         // in right-handed system, y > 0 means counter-clockwise, y < 0 means clockwise
@@ -1097,9 +1105,7 @@ class Tofu extends Moveable2D {
 
         return {
             angle: angle,
-            direction: direction,
-            targetPosition: tarPos,
-            selfPosition: selfPos
+            direction: direction
         };
 
     }

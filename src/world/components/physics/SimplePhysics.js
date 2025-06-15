@@ -17,6 +17,7 @@ const _lv = new Vector3();
 const _rv = new Vector3();
 const _blv = new Vector3();
 const _brv = new Vector3();
+const _v1 = new Vector3();
 
 class SimplePhysics {
 
@@ -420,9 +421,10 @@ class SimplePhysics {
     checkStair(avatar, top) {
 
         let isStair = false;
-        const offset = Math.abs(top.worldPosition.y - avatar.bottomY);
+        const topPosY = top.getWorldPosition(_v1).y;
+        const offset = Math.abs(topPosY - avatar.bottomY);
 
-        if (avatar.bottomY < top.worldPosition.y && offset <= STAIR_OFFSET_MAX && offset >= STAIR_OFFSET_MIN) {
+        if (avatar.bottomY < topPosY && offset <= STAIR_OFFSET_MAX && offset >= STAIR_OFFSET_MIN) {
             
             isStair = true;
 
@@ -435,9 +437,10 @@ class SimplePhysics {
     checkBlockByTopT(avatar, top) {
 
         let block = false;
-        const offset = Math.abs(top.worldPosition.y - avatar.bottomY);
+        const topPosY = top.getWorldPosition(_v1).y;
+        const offset = Math.abs(topPosY - avatar.bottomY);
 
-        if (avatar.bottomY < top.worldPosition.y - avatar.lastFrameFallingDistance && offset > STAIR_OFFSET_MAX) {
+        if (avatar.bottomY < topPosY - avatar.lastFrameFallingDistance && offset > STAIR_OFFSET_MAX) {
             
             block = true;
 
@@ -450,9 +453,10 @@ class SimplePhysics {
     checkBlockByBottomT(avatar, bottom) {
 
         let block = false;
-        const offset = Math.abs(bottom.worldPosition.y - avatar.topY);
+        const bottomPosY = bottom.getWorldPosition(_v1).y;
+        const offset = Math.abs(bottomPosY - avatar.topY);
 
-        if (avatar.topY > bottom.worldPosition.y && offset > .1) {
+        if (avatar.topY > bottomPosY && offset > .1) {
             
             block = true;
 
@@ -466,7 +470,7 @@ class SimplePhysics {
 
         let block = false;
 
-        if (obs.bottomY < top.worldPosition.y - obs.lastFrameFallingDistance - OBSTACLE_BLOCK_OFFSET_MAX) {
+        if (obs.bottomY < top.getWorldPosition(_v1).y - obs.lastFrameFallingDistance - OBSTACLE_BLOCK_OFFSET_MAX) {
 
             block = true;
 
@@ -479,8 +483,9 @@ class SimplePhysics {
     checkObstacleInWallRangeT(obs, wall) {
 
         let inRange = false;
-        const wallTopBorder = wall.worldPosition.y + wall.height * .5 - OBSTACLE_BLOCK_OFFSET_MIN;
-        const wallBottomBorder = wall.worldPosition.y - wall.height * .5 + OBSTACLE_BLOCK_OFFSET_MIN;
+        const wallPosY = wall.getWorldPosition(_v1).y;
+        const wallTopBorder = wallPosY + wall.height * .5 - OBSTACLE_BLOCK_OFFSET_MIN;
+        const wallBottomBorder = wallPosY - wall.height * .5 + OBSTACLE_BLOCK_OFFSET_MIN;
 
         if (obs.bottomY < wallTopBorder && obs.topY > wallBottomBorder) {
 
@@ -495,8 +500,9 @@ class SimplePhysics {
     checkWallClimbable(avatar, wall) {
 
         let climbable = false;
-        const wallBottom = wall.worldPosition.y - wall.height * .5;
-        const wallTop = wall.worldPosition.y + wall.height * .5;
+        const wallPosY = wall.getWorldPosition(_v1).y;
+        const wallBottom = wallPosY - wall.height * .5;
+        const wallTop = wallPosY + wall.height * .5;
 
         // if wall is lower than half avatar height, and not below avatar, it will be climbable
         if (avatar.bottomY >= wallBottom - avatar.height * .5 && avatar.bottomY < wallTop) {
@@ -514,21 +520,19 @@ class SimplePhysics {
         // from top to the bottom
         this.obstacleTops.sort((a, b) => {
 
-            return b.worldPosition.y - a.worldPosition.y;
+            return b.getWorldPosition(_v1).y - a.getWorldPosition(_v1).y;
 
         });
 
         this.floors.sort((a, b) => {
 
-            return b.worldPosition.y - a.worldPosition.y;
+            return b.getWorldPosition(_v1).y - a.getWorldPosition(_v1).y;
 
         });
 
         this.slopes.sort((a, b) => {
 
-            const tar = new Vector3();
-
-            return b.group.getWorldPosition(tar).y - a.group.getWorldPosition(tar).y;
+            return b.group.getWorldPosition(_v1).y - a.group.getWorldPosition(_v1).y;
 
         });
 

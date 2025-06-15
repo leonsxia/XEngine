@@ -291,11 +291,13 @@ class BasicObject extends EventDispatcher {
 
     get worldPosition() {
 
-        const target = new Vector3();
+        return this.mesh.getWorldPosition(new Vector3());
 
-        this.mesh.getWorldPosition(target);
+    }
 
-        return target;
+    getWorldPosition(target) {
+
+        return this.mesh.getWorldPosition(target);
 
     }
 

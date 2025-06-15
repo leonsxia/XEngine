@@ -371,7 +371,7 @@ class Moveable2D {
             
         }
 
-        const dir = bottomWall.worldPosition;
+        const dir = bottomWall.getWorldPosition(_v1);
         dir.y -= $self.height * .5;
         $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
 
@@ -381,7 +381,7 @@ class Moveable2D {
 
         const { floor, $self } = params;
 
-        const dir = floor.worldPosition;
+        const dir = floor.getWorldPosition(_v1);
         const onGroundPadding = .001;
         dir.y += $self.height * .5 - onGroundPadding;
         $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
@@ -493,7 +493,7 @@ class Moveable2D {
                 this.#logger.log(`${$self.name} is climbing ${wall.name}`);
 
                 const marginTop = .01;           
-                this.#climbHeight = wall.worldPosition.y + wall.height * .5 + marginTop;
+                this.#climbHeight = wall.getWorldPosition(_v1).y + wall.height * .5 + marginTop;
                 this.#climbDist = $self.boundingBoxMesh.geometry.parameters.depth;
 
                 this.#isClimbingUp = true;

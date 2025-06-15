@@ -158,6 +158,12 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    getWorldPosition(target) {
+
+        return this.group.getWorldPosition(target);
+
+    }
+
     get bottomY() {
 
         this.group.getWorldPosition(_v1);
