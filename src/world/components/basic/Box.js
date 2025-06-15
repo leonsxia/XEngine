@@ -4,6 +4,7 @@ import { BOX } from '../utils/constants';
 import { Logger } from '../../systems/Logger';
 
 const DEBUG = false;
+const _v1 = new Vector3();
 
 class Box extends BasicObject {
 
@@ -37,9 +38,9 @@ class Box extends BasicObject {
         const listener = (event) => {
 
             this.#logger.log(`${event.message}`);
-            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
-            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(new Vector3()).y;
-            this._cachedDepth = this.geometry.parameters.depth * this.mesh.getWorldScale(new Vector3()).z;
+            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(_v1).x;
+            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(_v1).y;
+            this._cachedDepth = this.geometry.parameters.depth * this.mesh.getWorldScale(_v1).z;
 
         }
         const type = 'scaleChanged';
@@ -53,7 +54,7 @@ class Box extends BasicObject {
 
         if (!this._cachedWidth) {
 
-            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
+            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(_v1).x;
 
         }
 
@@ -65,7 +66,7 @@ class Box extends BasicObject {
 
         if (!this._cachedHeight) {
 
-            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(new Vector3()).y;
+            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(_v1).y;
 
         }
 
@@ -77,7 +78,7 @@ class Box extends BasicObject {
 
         if (!this._cachedDepth) {
 
-            this._cachedDepth = this.geometry.parameters.depth * this.mesh.getWorldScale(new Vector3()).z;
+            this._cachedDepth = this.geometry.parameters.depth * this.mesh.getWorldScale(_v1).z;
 
         }
 

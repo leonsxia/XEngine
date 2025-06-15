@@ -5,6 +5,7 @@ import { clone } from '../utils/objectHelper';
 import { Logger } from '../../systems/Logger';
 
 const DEBUG = false;
+const _v1 = new Vector3();
 
 class Plane extends BasicObject {
 
@@ -39,8 +40,8 @@ class Plane extends BasicObject {
         const listener = (event) => {
 
             this.#logger.log(`${event.message}`);
-            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
-            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(new Vector3()).y;
+            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(_v1).x;
+            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(_v1).y;
 
         }
         const type = 'scaleChanged';
@@ -54,7 +55,7 @@ class Plane extends BasicObject {
 
         if (!this._cachedWidth) {
 
-            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(new Vector3()).x;
+            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(_v1).x;
 
         }
 
@@ -66,7 +67,7 @@ class Plane extends BasicObject {
 
         if (!this._cachedHeight) {
 
-            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(new Vector3()).y;
+            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(_v1).y;
 
         }
 
