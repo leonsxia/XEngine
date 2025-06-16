@@ -22,6 +22,7 @@ class CustomizedCombatTofu extends Tofu {
 
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
+    onBoundingFaceChanged = [];
 
     #logger = new Logger(DEBUG, 'CustomizedCombatTofu');
 
@@ -332,7 +333,9 @@ class CustomizedCombatTofu extends Tofu {
         const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
         this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
         this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
-        
+
+        this.doBoundingFaceChangedEvents();
+
     }
 
     createCollisionBoxes() {
@@ -424,7 +427,18 @@ class CustomizedCombatTofu extends Tofu {
 
         }
 
-    }    
+    }
+
+    doBoundingFaceChangedEvents() {
+
+        for (let i = 0, il = this.onBoundingFaceChanged.length; i < il; i++) {
+
+            const event = this.onBoundingFaceChanged[i];
+            event(this);
+
+        }
+
+    }
 
     showBB(show) {
 

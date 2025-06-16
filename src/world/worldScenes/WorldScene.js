@@ -239,6 +239,7 @@ class WorldScene {
 
                     player.onBeforeCollisionBoxChanged.push(this.onBeforePlayerCBoxChanged.bind(this));
                     player.onCollisionBoxChanged.push(this.onPlayerCBoxChanged.bind(this));
+                    player.onBoundingFaceChanged.push(this.onPlayerBFChanged.bind(this));
 
                 }
 
@@ -838,6 +839,14 @@ class WorldScene {
         this.player.showBF(s);
 
         return this;
+
+    }
+
+    onPlayerBFChanged(player) {
+
+        if (!player._showArrows) return;
+
+        player.updateRay();
 
     }
 
