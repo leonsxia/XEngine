@@ -81,6 +81,8 @@ class Tofu extends Moveable2D {
     #vel = 1.34;
     #stoodTurningVel = 1.5;
     #turnBackVel = 2.5 * Math.PI;
+    #aimVel;
+    #aimTime;
     #velEnlarge = 2.5;
     #rotateREnlarge = 2.5;
     #recoverCoefficient = .01;
@@ -116,7 +118,8 @@ class Tofu extends Moveable2D {
         }} = specs;
         const { 
             rotateR = .9, vel = 1.34, stoodTurningVel = 1.5, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = .2, 
-            recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7 
+            recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7,
+            aimVel = 3 * Math.PI, aimTime = .05
         } = specs;
         const { collisionSize = { width, depth, height } } = specs;
         const { createDefaultBoundingObjects = true } = specs;
@@ -140,6 +143,9 @@ class Tofu extends Moveable2D {
         this.#slowDownCoefficient = slowdownCt;
         this.#backwardSlowdownCoefficient = backwardSlowdownCt;
         this.#backwardRotatingRadiusCoefficient = backwardRotatingRCt;
+        this.#aimVel = aimVel;
+        this.#aimTime = aimTime;
+        this.aimingTime = aimTime;  // set Moveable2D default aimingTime
 
         this.name = name;
         this.group = new Group();
@@ -513,6 +519,18 @@ class Tofu extends Moveable2D {
     get turnBackVel() {
 
         return this.#turnBackVel;
+
+    }
+
+    get aimVel() {
+
+        return this.#aimVel;
+
+    }
+
+    get aimTime() {
+
+        return this.#aimTime;
 
     }
 
@@ -1055,13 +1073,15 @@ class Tofu extends Moveable2D {
 
         if (checkResult.isInSight) {
 
-            if (!this._inSightTargets.find(t => t.instance === checkResult.instance)) {
+            const find = this._inSightTargets.find(t => t.instance === checkResult.instance);
+            if (!find) {
 
                 this._inSightTargets.push(checkResult);
                 this.onSovSphereTriggerEnter.call(this, checkResult.instance);                
                 
             } else {
 
+                Object.assign(find, checkResult);
                 this.onSovSphereTriggerStay.call(this, checkResult.instance);
                 
             }

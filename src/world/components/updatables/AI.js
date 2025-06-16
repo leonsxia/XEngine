@@ -18,6 +18,24 @@ class AI {
 
     tick(delta) {
 
+        for (let i = 0, il = this.players.length; i < il; i++) {
+
+            const player = this.players[i];
+
+            if (!player.isActive) continue;
+
+            for (let j = 0, jl = this.enemies.length; j < jl; j++) {
+
+                const enemy = this.enemies[j];
+
+                if (!enemy.isActive) continue;
+
+                player.checkTargetInSight(enemy);
+
+            }
+
+        }
+
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];

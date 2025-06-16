@@ -33,6 +33,13 @@ class Moveable2D {
     #turingRad = 0;
     #coolingT = COOLING_TIME;
 
+    #isAimTurning = false;
+    #isAimTurnOver = false;
+    #aimingRad = 0;
+    #aimingRadStep = 0;
+    #aimingTime = 0;
+    _shootInQueue = false;
+
     #isClimbingUp = false;
     #isClimbingForward = false;
     #climbHeight = 0;
@@ -240,8 +247,8 @@ class Moveable2D {
         return this.#melee;
     }
 
-    get isGunPointing() {
-        return this.#gunPoint;
+    get isGunReady() {
+        return this.#gunPoint && !this.#isAimTurning;;
     }
 
     get isInteracting() {
@@ -421,12 +428,96 @@ class Moveable2D {
 
     }
 
-    // aimTick(params) {
+    /**
+     * @param {number} val
+     */
+    set aimingRad(val) {
 
-    //     const { group, delta, $self } = params;
+        this.#aimingRad = val;
 
+    }
 
-    // }
+    /**
+     * @param {number} val
+     */
+    set aimingTime(val) {
+
+        this.#aimingTime = val;
+
+    }
+
+    get isAimTurning() {
+
+        return this.#isAimTurning;
+
+    }
+
+    aimTick(params) {
+
+        let result = false;
+        const { group, delta, $self } = params;
+        const worldY = $self.worldYDirection;
+        const aimRad = Math.abs(this.#aimingRad);
+
+        if (this.#gunPoint  && !this.#isAimTurnOver) {
+
+            if (!this.#isAimTurning) {
+
+                this.#isAimTurning = true;
+
+            }
+
+            if (this.#aimingRadStep < aimRad) {
+
+                let ang = $self.aimVel * delta;
+                                
+                if (this.#aimingRadStep + ang >= aimRad) {
+
+                    ang = aimRad - this.#aimingRadStep;
+
+                }
+
+                group.rotateOnWorldAxis(worldY, this.#aimingRad > 0 ? ang : - ang);
+                this.#aimingRadStep += ang;
+                this.#aimingTime -= delta;
+                result = true;
+
+            } else {
+
+                if (this.#aimingTime <= 0 && this.#aimingRadStep === aimRad) {
+
+                    this.#isAimTurnOver = true;
+                    this.#isAimTurning = false;
+
+                    if (this._shootInQueue) {
+
+                        this.shoot?.(true);
+                        this._shootInQueue = false;
+
+                    }
+
+                } else {
+
+                    this.#aimingTime -= delta;
+
+                }
+
+            }
+            
+        }
+
+        if (!this.#gunPoint && (this.#aimingRadStep || this.#isAimTurnOver)) {
+
+            this.#isAimTurnOver = false;
+            this.#isAimTurning = false;
+            this.#aimingRadStep = 0;
+            this.#aimingTime = $self.aimTime;
+
+        }
+
+        return result;
+
+    }
 
     quickTurnTick(params) {
 
@@ -446,11 +537,18 @@ class Moveable2D {
 
                 if (this.#turingRad < Math.PI) {
 
-                    const ang = $self.turnBackVel * delta;
+                    let ang = $self.turnBackVel * delta;
 
-                    // group.rotation.y -= ang;
+                    if (this.#turingRad + ang >= Math.PI) {
+
+                        ang = Math.PI - this.#turingRad;
+
+                    }
+
                     group.rotateOnWorldAxis(worldY, - ang);
+
                     this.#turingRad += ang;
+                    
                     result = true;
 
                 }
@@ -461,12 +559,14 @@ class Moveable2D {
                     this.#turingRad = 0;
                     this.#coolingT = COOLING_TIME;
     
-                } else  {
-    
+                } else {
+
                     this.#coolingT -= delta;
-    
+
                 }
+
             }
+
         }
 
         return result;
@@ -540,7 +640,7 @@ class Moveable2D {
         const stoodRotateRad = stoodRotateVel * delta;
         const worldY = $self.worldYDirection;
 
-        if(this.quickTurnTick(params) || this.#isClimbingUp || this.#isClimbingForward) {
+        if(this.quickTurnTick(params) || this.aimTick(params) || this.#isClimbingUp || this.#isClimbingForward) {
 
             return;
 
@@ -674,7 +774,7 @@ class Moveable2D {
             halfEdgeLength
         } = wall.checkResult;
 
-        if (this.quickTurnTick(params) || this.#isClimbingUp) {
+        if (this.quickTurnTick(params) || this.aimTick(params) || this.#isClimbingUp) {
 
             return;
 

@@ -3,6 +3,7 @@ import { CustomizedCombatTofu, GLTFModel } from '../../Models';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
 import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
+import { polarity } from '../../utils/enums';
 
 const DEBUG = false;
 const DEBUG_WEAPON = true;
@@ -39,9 +40,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = specs;
         const { collisionSize = { width, depth, height } } = specs;
-        const { rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5 } = specs;
+        const { rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, aimVel = 3 * Math.PI, aimTime = .05 } = specs;
         const { clips, animationSetting } = specs;
-        const { scale = [1, 1, 1] } = specs;
+        const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
         const { showBS = false } = specs;
         const { createDefaultBoundingObjects = true, enableCollision = true } = specs;
         const { weaponActionMapping = {}, initialWeapon, weapons = [] } = specs;
@@ -49,7 +50,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         super({ 
             name, 
             size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, 
-            rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, 
+            rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, aimVel, aimTime,
             createDefaultBoundingObjects, enableCollision,
             weaponActionMapping, initialWeapon, weapons
         });
@@ -64,6 +65,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
+        this.gltf.setScale(gltfScale);
 
         this.setScale(scale);
 
@@ -959,6 +961,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             super.gunPoint(val);
             this.switchHelperComponents();
+            this.setAiming();
 
         } else if (this.gunPointing) {
 
@@ -1018,6 +1021,13 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (this.gunPointing) {
 
             if (val) {
+
+                if (this.isAimTurning) {
+
+                    this._shootInQueue = true;
+                    return;
+
+                }
 
                 if (this.armedWeapon.magzineEmpty) {
 
@@ -1226,6 +1236,35 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             }
             
+        }
+
+    }
+
+    setAiming() {
+
+        this.#weaponLogger.func = this.aimTick.name;
+
+        this._target = this.getNearestInSightTarget(null, this._inSightTargets, false);
+
+        if (!this._target) return;
+
+        const dirAngle = this.getTargetDirectionAngle(this._target);        
+
+        if (dirAngle.angle > 0) {
+
+            if (dirAngle.direction === polarity.left) {
+
+                this.aimingRad = dirAngle.angle;
+
+            } else {
+
+                this.aimingRad = - dirAngle.angle;
+            }
+
+        } else {
+
+            this.aimingRad = 0;
+
         }
 
     }

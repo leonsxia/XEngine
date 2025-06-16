@@ -145,7 +145,7 @@ class SoldierFemale extends CombatPlayerBase {
         // if collision box's depth is less than bounding face's depth,
         // it will let player harder to push against enemies
         const { collisionSize = { width, depth, height } } = specs;
-        const { vel = 1.2, rotateR = 1, velEnlarge = 2.8 } = specs;
+        const { vel = 1.2, rotateR = 1, velEnlarge = 2.8, aimVel = 3 * Math.PI, aimTime = .2 } = specs;
         const { scale = [1, 1, 1] } = specs;
         const { sovRadius = 10, showBS = false, enableCollision = true } = specs;
         const { createDefaultBoundingObjects = false } = specs;        
@@ -163,7 +163,7 @@ class SoldierFemale extends CombatPlayerBase {
                 position: [- .18, - .08, .096],
                 rotation: [1.2, 0, - .2],
                 fireRate: 1.5,
-                ammo: 19
+                ammo: 100
             }),
             new Revolver({
                 name: `${name}_magnum357`,
@@ -195,7 +195,7 @@ class SoldierFemale extends CombatPlayerBase {
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
             offsetY, offsetZ, width, width2, depth, depth2, height, collisionSize,
-            vel, velEnlarge, rotateR,
+            vel, velEnlarge, rotateR, aimVel, aimTime,
             scale,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,
             sovRadius, showBS, enableCollision, createDefaultBoundingObjects,
