@@ -365,7 +365,7 @@ class CreatureBase extends CustomizedCreatureTofu {
         if (this._isNoticed) {
 
             this._target = this.getNearestInSightTarget(null, this._inSightTargets, false);
-            const dirAngle = this.getTargetDirectionAngle(this._target);
+            const { dirAngle } = this._target;
 
             if (dirAngle.angle < 0.01) {
 

@@ -1249,11 +1249,11 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this.#weaponLogger.func = this.aimTick.name;
 
-        this._target = this.getNearestInSightTarget(null, this._inSightTargets, false);
+        this._target = this.getNearestInSightTarget(null, this._inSightTargets, false, 'angle');
 
         if (!this._target) return;
 
-        const dirAngle = this.getTargetDirectionAngle(this._target);        
+        const { dirAngle } = this._target;
 
         if (dirAngle.angle > 0) {
 

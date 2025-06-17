@@ -1099,11 +1099,13 @@ class Tofu extends Moveable2D {
 
         }
 
-        return { isInSight, distance, instance: target };
+        const dirAngle = this.getTargetDirectionAngle(target);
+
+        return { isInSight, distance, dirAngle, instance: target };
 
     }
 
-    getNearestInSightTarget(targets, wrappedTargets, force = true) {
+    getNearestInSightTarget(targets, wrappedTargets, force = true, type = 'distance') {
         
         let nearestTarget = null;
         const targetsInSight = [];
@@ -1131,13 +1133,28 @@ class Tofu extends Moveable2D {
 
         if (targetsInSight.length > 0) {
 
-            targetsInSight.sort((a, b) => {
+            switch (type) {
 
-                return a.distance - b.distance;
+                case 'distance':
+                    targetsInSight.sort((a, b) => {
 
-            });
+                        return a.distance - b.distance;
 
-            nearestTarget = targetsInSight[0].instance;
+                    });
+                    break;
+
+                case 'angle':
+                    targetsInSight.sort((a, b) => {
+
+                        return a.dirAngle.angle - b.dirAngle.angle;
+
+                    });
+                    break;
+
+            }
+            
+
+            nearestTarget = targetsInSight[0];
 
         }
 
