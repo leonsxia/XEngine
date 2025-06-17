@@ -1300,6 +1300,7 @@ class Tofu extends Moveable2D {
         this.track(this.rightArrow);
         this.track(this.backLeftArrow);
         this.track(this.backRightArrow);
+        this.track(this.aimArrow);
 
         this.track(this.boundingBoxHelper);
 
