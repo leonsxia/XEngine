@@ -239,6 +239,7 @@ class WorldScene {
 
                     player.onBeforeCollisionBoxChanged.push(this.onBeforePlayerCBoxChanged.bind(this));
                     player.onCollisionBoxChanged.push(this.onPlayerCBoxChanged.bind(this));
+                    player.onBoundingFaceChanged.push(this.onPlayerBFChanged.bind(this));
 
                 }
 
@@ -260,6 +261,7 @@ class WorldScene {
 
                     enemy.onBeforeCollisionBoxChanged.push(this.onBeforeEnemyCBoxChanged.bind(this));
                     enemy.onCollisionBoxChanged.push(this.onEnemyCBoxChanged.bind(this));
+                    enemy.onBoundingFaceChanged.push(this.onEnemyBFChanged.bind(this));
 
                     this.physics.addActiveEnemies(enemy.name);
                     // this.subscribeEvents(enemy, this.setup.moveType);
@@ -832,6 +834,14 @@ class WorldScene {
 
     }
 
+    onPlayerBFChanged(player) {
+
+        if (!player._showArrows) return;
+
+        player.updateRay();
+
+    }
+
     showPlayerCBox(show) {
 
         if (!this.player) return this;
@@ -1131,6 +1141,14 @@ class WorldScene {
         }
 
         return this;
+
+    }
+
+    onEnemyBFChanged(enemy) {
+
+        if (!enemy._showArrows) return;
+
+        enemy.updateRay();
 
     }
 

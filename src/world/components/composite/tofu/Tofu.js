@@ -402,8 +402,6 @@ class Tofu extends Moveable2D {
         this._cornors[2].set(this.#w * .5, 0, - this.#d * .5);
         this._cornors[3].set(- this.#w * .5, 0, - this.#d * .5);
 
-        this.updateRay();
-
     }
 
     /**
