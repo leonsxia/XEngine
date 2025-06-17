@@ -1,4 +1,4 @@
-import { MeshStandardMaterial, LineBasicMaterial, MeshPhongMaterial, MeshBasicMaterial } from 'three';
+import { MeshStandardMaterial, LineBasicMaterial, MeshPhongMaterial, MeshBasicMaterial, SpriteMaterial, CanvasTexture, LinearFilter, ClampToEdgeWrapping } from 'three';
 import * as Color from './colorBase.js';
 
 function createBasicMaterials() {
@@ -27,6 +27,22 @@ function createBasicMaterial(color) {
 
 }
 
+function createSpriteMaterial(canvas) {
+
+    const texture = new CanvasTexture(canvas);
+    // because our canvas is likely not a power of 2
+    // in both dimensions set the filtering appropriately.
+    texture.minFilter = LinearFilter;
+    texture.wrapS = ClampToEdgeWrapping;
+    texture.wrapT = ClampToEdgeWrapping;
+
+    return new SpriteMaterial({
+        map: texture,
+        transparent: false
+    });
+
+}
+
 const basicMateraials = createBasicMaterials();
 
-export { basicMateraials, createBasicMaterial };
+export { basicMateraials, createBasicMaterial, createSpriteMaterial };

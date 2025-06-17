@@ -697,7 +697,8 @@ class WorldScene {
                     .showPlayerCBoxArrows(cmdHide)
                     .showPlayerPushingBox(cmdHide)
                     .showPlayerArrows(cmdHide)
-                    .showPlayerSkeleton(cmdHide);
+                    .showPlayerSkeleton(cmdHide)
+                    .showPlayerHealth(cmdHide);
 
                 this.physics.removeActivePlayers(this.player.name);
 
@@ -968,6 +969,16 @@ class WorldScene {
 
     }
 
+    showPlayerHealth(show) {
+
+        const s = show === 'show' ? true : false;
+
+        this.player.showHealth(s);
+
+        return this;
+
+    }
+
     showEnemyBBHelper(show) {
 
         const s = show === 'show' ? true : false;
@@ -1207,6 +1218,24 @@ class WorldScene {
             }
 
             enemy.showSkeleton(s);
+
+        }
+
+        return this;
+
+    }
+
+    showEnemyHealth(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (!enemy.isActive) continue;
+
+            enemy.showHealth(s);
 
         }
 

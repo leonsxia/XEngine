@@ -361,6 +361,14 @@ class GuiMaker {
                 changeFn: $scene.showPlayerSkeleton.bind($scene)
             }));
 
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Health',
+                value: { Health: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showPlayerHealth.bind($scene)
+            }));
+
             this.guiLeftSpecs.details.push(folder);
 
             // add weapons control
@@ -461,6 +469,14 @@ class GuiMaker {
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: $scene.showEnemySkeleton.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Health',
+                value: { Health: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyHealth.bind($scene)
             }));
 
             this.guiLeftSpecs.details.push(folder);

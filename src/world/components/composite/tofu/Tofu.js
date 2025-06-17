@@ -7,6 +7,7 @@ import { polarity } from '../../utils/enums';
 import { CollisionBox } from '../../Models';
 import { ResourceTracker } from '../../../systems/ResourceTracker';
 import { Logger } from '../../../systems/Logger';
+import { Health } from '../../mechanism/Health';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -220,6 +221,14 @@ class Tofu extends Moveable2D {
         this.createRay();
 
         this.paddingCoefficient = .05 * ENLARGE;
+
+        this.health = new Health({
+            baseWidth: 80, size: 7, borderSize: 2, showText: true
+        });
+
+        this.group.add(this.health.strip);        
+        this.health.strip.position.y = height / 2 + .2;
+        this.health.showStrip(false);
 
     }
 
@@ -722,7 +731,13 @@ class Tofu extends Moveable2D {
             this.collisionBox.group.visible = show;
 
         }
-        
+
+    }
+
+    showHealth(show) {
+
+        this.health.showStrip(show);
+
     }
 
     createRay() {

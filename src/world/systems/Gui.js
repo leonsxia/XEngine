@@ -405,6 +405,8 @@ class Gui {
 
                             this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Skeleton').setValue('hide');
 
+                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Health').setValue('hide');
+
                             break;
 
                         }
