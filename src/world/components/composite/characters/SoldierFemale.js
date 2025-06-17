@@ -28,6 +28,7 @@ const WEAPON_ACTION_MAPPING = {
     [WEAPONS.NONE]: new WeaponActionMapping({
         name: 'emptyhand',
         idle: CLIPS.IDLE, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING,
+        damageRange: 0,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -46,6 +47,7 @@ const WEAPON_ACTION_MAPPING = {
     [WEAPONS.PISTOL1]: new WeaponActionMapping({ 
         name: 'pistol1',
         idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        damageRange: 10,
         attackInterval: 0.7, fireRate: 1.2,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
@@ -65,6 +67,7 @@ const WEAPON_ACTION_MAPPING = {
     [WEAPONS.GLOCK]: new WeaponActionMapping({
         name: 'glock',
         idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        damageRange: 13,
         attackInterval: 0.4667, fireRate: 1.8,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
@@ -84,6 +87,7 @@ const WEAPON_ACTION_MAPPING = {
     [WEAPONS.REVOLVER]: new WeaponActionMapping({
         name: 'revolver',
         idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        damageRange: 16,
         attackInterval: 1.05, fireRate: 0.8,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
@@ -103,6 +107,7 @@ const WEAPON_ACTION_MAPPING = {
     [WEAPONS.SMG_SHORT]: new WeaponActionMapping({
         name: 'smg_short',
         idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
+        damageRange: 9,
         attackInterval: 0.08, fireRate: 10.2,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
@@ -122,6 +127,7 @@ const WEAPON_ACTION_MAPPING = {
     [WEAPONS.BAYONET]: new WeaponActionMapping({
         name: 'bayonet',
         idle: CLIPS.IDLE, attack: CLIPS.SWORD_SLASH, attackInterval: 1.03, 
+        damageRange: 1,
         prepareInterval: 0.5, fireRate: 1.25,
         ignoreCollisionBox: true,
         ignoreBoundingFace: true,

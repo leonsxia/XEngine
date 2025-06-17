@@ -12,6 +12,7 @@ class WeaponActionMapping {
     attackInterval;
     prepareInterval;
     fireRate;
+    damageRange;
 
     ignoreCollisionBox = false;
     idleCollisionSize;
@@ -39,7 +40,7 @@ class WeaponActionMapping {
 
         const { name } = specs;
         const { idle, walk, run, rotate, aim, shoot, attack } = specs;
-        const { attackInterval, prepareInterval, fireRate } = specs;
+        const { attackInterval, prepareInterval, fireRate, damageRange } = specs;
         const { ignoreCollisionBox = false, idleCollisionSize, walkCollisionSize, runCollisionSize, attackCollisionSize } = specs;
         const { ignoreBoundingBox = false, idleBoundingBoxSize, walkBoundingBoxSize, runBoundingBoxSize, attackBoundingBoxSize } = specs;
         const { ignorePushingBox = false, pushingBoxSize } = specs;
@@ -56,6 +57,7 @@ class WeaponActionMapping {
         this.attackInterval = attackInterval;
         this.prepareInterval = prepareInterval;
         this.fireRate = fireRate;
+        this.damageRange = damageRange;
 
         this.ignoreCollisionBox = ignoreCollisionBox;
         this.idleCollisionSize = idleCollisionSize;

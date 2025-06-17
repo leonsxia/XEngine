@@ -14,7 +14,6 @@ class CustomizedCreatureTofu extends Tofu {
 
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
-    onBoundingFaceChanged = [];
 
     constructor(specs) {
 
@@ -216,8 +215,6 @@ class CustomizedCreatureTofu extends Tofu {
         this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
         this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
 
-        this.doBoundingFaceChangedEvents();
-
     }
 
     createCollisionBoxes() {
@@ -359,17 +356,6 @@ class CustomizedCreatureTofu extends Tofu {
         for (let i = 0, il = this.onCollisionBoxChanged.length; i < il; i++) {
 
             const event = this.onCollisionBoxChanged[i];
-            event(this);
-
-        }
-
-    }
-
-    doBoundingFaceChangedEvents() {
-
-        for (let i = 0, il = this.onBoundingFaceChanged.length; i < il; i++) {
-
-            const event = this.onBoundingFaceChanged[i];
             event(this);
 
         }

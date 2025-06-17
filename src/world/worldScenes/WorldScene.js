@@ -239,7 +239,6 @@ class WorldScene {
 
                     player.onBeforeCollisionBoxChanged.push(this.onBeforePlayerCBoxChanged.bind(this));
                     player.onCollisionBoxChanged.push(this.onPlayerCBoxChanged.bind(this));
-                    player.onBoundingFaceChanged.push(this.onPlayerBFChanged.bind(this));
 
                 }
 
@@ -261,7 +260,6 @@ class WorldScene {
 
                     enemy.onBeforeCollisionBoxChanged.push(this.onBeforeEnemyCBoxChanged.bind(this));
                     enemy.onCollisionBoxChanged.push(this.onEnemyCBoxChanged.bind(this));
-                    enemy.onBoundingFaceChanged.push(this.onEnemyBFChanged.bind(this));
 
                     this.physics.addActiveEnemies(enemy.name);
                     // this.subscribeEvents(enemy, this.setup.moveType);
@@ -559,15 +557,7 @@ class WorldScene {
 
             this.player.setPosition(allPlayerPos[this.loadSequence]);
 
-            this.player.updateOBB();
-
-            if (this.player.hasRays) {
-
-                this.player.updateRay();
-
-            }
-
-            this.player.updateWalls?.();
+            this.player.updateAccessories();
 
             this.player.setSlopeIntersection?.();
 
@@ -842,14 +832,6 @@ class WorldScene {
 
     }
 
-    onPlayerBFChanged(player) {
-
-        if (!player._showArrows) return;
-
-        player.updateRay();
-
-    }
-
     showPlayerCBox(show) {
 
         if (!this.player) return this;
@@ -936,6 +918,7 @@ class WorldScene {
             this.scene.add(this.player.rightArrow);
             this.scene.add(this.player.backLeftArrow);
             this.scene.add(this.player.backRightArrow);
+            this.scene.add(this.player.aimArrow);
 
         } else {
 
@@ -943,6 +926,7 @@ class WorldScene {
             this.scene.remove(this.player.rightArrow);
             this.scene.remove(this.player.backLeftArrow);
             this.scene.remove(this.player.backRightArrow);
+            this.scene.remove(this.player.aimArrow);
 
         }
 
@@ -1147,14 +1131,6 @@ class WorldScene {
         }
 
         return this;
-
-    }
-
-    onEnemyBFChanged(enemy) {
-
-        if (!enemy._showArrows) return;
-
-        enemy.updateRay();
 
     }
 

@@ -257,24 +257,29 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 weaponItem.visible = false;
 
             });
+
+            this.damageRange = this.weaponActionMapping[WEAPONS.NONE].damageRange;
             
             return;
 
         }
 
-        this.weapons.forEach(weaponItem => {
+        for (let i = 0, il = this.weapons.length; i < il; i++) {
 
-            if (weaponItem === weapon) {
+            const w = this.weapons[i];
 
-                weaponItem.visible = true;
+            if (w === weapon) {
+
+                w.visible = true;
+                this.damageRange = this.weaponActionMapping[w.weaponType].damageRange;
 
             } else {
 
-                weaponItem.visible = false;
+                w.visible = false;
 
             }
 
-        });
+        }
 
     }
 

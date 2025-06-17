@@ -1,11 +1,12 @@
 import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three';
 import { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
-import { orange, BF, BF2 } from '../../basic/colorBase';
+import { orange, BF, BF2, green } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
 import { polarity } from '../../utils/enums';
 import { CollisionBox } from '../../Models';
 import { ResourceTracker } from '../../../systems/ResourceTracker';
+import { Logger } from '../../../systems/Logger';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -21,6 +22,9 @@ const _v1 = new Vector3();
 const _v2 = new Vector3();
 const _v3 = new Vector3();
 const _down = new Vector3(0, -1, 0);
+const _forward = new Vector3(0, 0, 1);
+
+const DEBUG = true;
 
 class Tofu extends Moveable2D {
 
@@ -46,12 +50,14 @@ class Tofu extends Moveable2D {
     rightRay;
     backLeftRay;
     backRightRay;
+    aimRay;
     rays = [];
     
     leftArrow;
     rightArrow;
     backLeftArrow;
     backRightArrow;
+    aimArrow;
 
     intersectSlope;
 
@@ -95,6 +101,8 @@ class Tofu extends Moveable2D {
     #backwardRotatingRadiusCoefficient = .7;
     #isPushing = false;
 
+    #damageRange = 0;
+
     _cachedWidth;
     _cachedHeight;
     _cachedDepth;
@@ -105,6 +113,8 @@ class Tofu extends Moveable2D {
     track = this.resTracker.track.bind(this.resTracker);
     dispose = this.resTracker.dispose.bind(this.resTracker);
     isActive = true;
+
+    #logger = new Logger(DEBUG, 'Tofu');
 
     constructor(specs) {
 
@@ -390,7 +400,10 @@ class Tofu extends Moveable2D {
         this._cornors[0].set(this.#w * .5, 0, this.#d * .5);
         this._cornors[1].set(- this.#w * .5, 0, this.#d * .5);
         this._cornors[2].set(this.#w * .5, 0, - this.#d * .5);
-        this._cornors[3].set(- this.#w * .5, 0, - this.#d * .5); 
+        this._cornors[3].set(- this.#w * .5, 0, - this.#d * .5);
+
+        this.updateRay();
+
     }
 
     /**
@@ -594,6 +607,26 @@ class Tofu extends Moveable2D {
 
     }
 
+    get damageRange() {
+
+        return this.#damageRange;
+
+    }
+
+    set damageRange(val) {
+
+        this.#damageRange = val;
+        this.onDamgeRangeChanged();
+
+    }
+
+    onDamgeRangeChanged() {
+
+        this.#logger.log(`${this.name} - damgeRange: ${this.#damageRange}`);
+        this.updateAimRay();
+
+    }
+
     enablePickLayers(...meshes) {
 
         for (let i = 0, il = meshes.length; i < il; i++) {
@@ -728,9 +761,39 @@ class Tofu extends Moveable2D {
         this.backRightRay.layers.set(TOFU_RAY_LAYER);
         this.backRightArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
+        // aimRay
+        fromVec3 = new Vector3();
+        this.aimRay = new Raycaster(fromVec3, _forward.clone(), this.damageRange);
+        this.aimArrow = new ArrowHelper(_forward, fromVec3, this.damageRange, green, HEAD_LENGTH, HEAD_WIDTH);
+
         this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
 
         return this;
+
+    }
+
+    updateAimRay(needUpdateMatrixWorld = true) {
+
+        if (needUpdateMatrixWorld) {
+
+            this.group.updateWorldMatrix(true, true);
+
+        }
+        
+        _v1.set(0, 0, 0).applyMatrix4(this.group.matrixWorld);
+
+        // get world direction
+        const e = this.group.matrixWorld.elements;
+        _v2.set(e[8], e[9], e[10]).normalize();
+
+        this.aimRay.set(_v1, _v2);
+        this.aimRay.far = this.damageRange;
+        this.aimArrow.position.copy(_v1);
+        this.aimArrow.setDirection(_v2);
+        this.aimArrow.setLength(this.damageRange, HEAD_LENGTH, HEAD_WIDTH);
+
+        return this;
+
     }
 
     updateRay(needUpdateMatrixWorld = true) {
@@ -777,6 +840,8 @@ class Tofu extends Moveable2D {
         this.backRightArrow.position.copy(_v1);
         this.backRightArrow.setDirection(_down);
         this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+
+        this.updateAimRay(false);
 
         return this;
 
