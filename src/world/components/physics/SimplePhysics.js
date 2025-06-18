@@ -164,6 +164,8 @@ class SimplePhysics {
 
         this.sortFloorTops();
 
+        this.collisionPlanes = this.walls.concat(this.slopes).map(plane => plane.mesh || plane.slope.mesh);
+
     }
 
     onBeforeTofuCollisionBoxChanged(tofu) {        

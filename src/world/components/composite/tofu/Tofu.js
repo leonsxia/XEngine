@@ -2,7 +2,7 @@ import { Group, Box3, Box3Helper, Vector3, Raycaster, ArrowHelper } from 'three'
 import { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2, green } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_AIM_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
 import { polarity } from '../../utils/enums';
 import { CollisionBox } from '../../Models';
 import { ResourceTracker } from '../../../systems/ResourceTracker';
@@ -777,6 +777,7 @@ class Tofu extends Moveable2D {
         // aimRay
         fromVec3 = new Vector3();
         this.aimRay = new Raycaster(fromVec3, _forward.clone(), this.damageRange);
+        this.aimRay.layers.set(TOFU_AIM_LAYER);
         this.aimArrow = new ArrowHelper(_forward, fromVec3, this.damageRange, green, HEAD_LENGTH, HEAD_WIDTH);
 
         this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
@@ -1222,6 +1223,12 @@ class Tofu extends Moveable2D {
             angle: angle,
             direction: direction
         };
+
+    }
+
+    checkAimRayIntersect(objects) {
+
+        return this.aimRay.intersectObjects(objects);
 
     }
 

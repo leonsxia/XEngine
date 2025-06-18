@@ -84,13 +84,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         ]);
 
         this.showSkeleton(false);
-
-        this.gltf.traverse((mesh) => {
-            
-            mesh.layers.enable(CAMERA_RAY_LAYER);
-
-        });
-
         this.bindEvents();
 
         this.gltf.visible = true;
@@ -1179,9 +1172,11 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     }
 
-    attackTick(delta) {        
+    attackTick(params) {
 
-        this.#weaponLogger.func = this.attackTick.name;        
+        const { delta, aimObjects } = params;
+        this.#weaponLogger.func = this.attackTick.name;
+        let shootOnTarget = null;        
 
         if (this.shooting || this.meleeing || this.armedWeapon?.isFiring) {
 
@@ -1206,6 +1201,14 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     } else {
 
                         this._i++;
+
+                        const intersects = this.checkAimRayIntersect(aimObjects);
+
+                        if (intersects.length > 0) {
+
+                            shootOnTarget = intersects[0];
+
+                        }
 
                         if (this.armedWeapon.magzineEmpty) {
 
@@ -1235,6 +1238,15 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 if (this._delta >= attackInterval) {
 
                     this._i++;
+
+                    const intersects = this.checkAimRayIntersect(aimObjects);
+
+                    if (intersects.length > 0) {
+
+                        shootOnTarget = intersects[0];
+
+                    }
+
                     this.#weaponLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}`);
 
                 }
@@ -1242,6 +1254,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             }
             
         }
+
+        return shootOnTarget;
 
     }
 
@@ -1251,7 +1265,12 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this._target = this.getNearestInSightTarget(null, this._inSightTargets, false, 'angle');
 
-        if (!this._target) return;
+        if (!this._target) {
+            
+            this.aimingRad = 0;
+            return;
+        
+        }
 
         const { dirAngle } = this._target;
 

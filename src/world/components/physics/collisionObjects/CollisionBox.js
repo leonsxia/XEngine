@@ -19,7 +19,7 @@ class CollisionBox extends CollisionBase {
 
         super(specs);
 
-        const { name, enableWallOBBs, showArrow, lines = true } = specs;
+        const { name, enableWallOBBs, showArrow, lines = false } = specs;
         const { width, height, depth } = specs;
 
         const frontBackSpecs = { width, height, lines, transparent: true };

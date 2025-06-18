@@ -2,7 +2,7 @@ import { Logger } from "../../../systems/Logger";
 import { BF, BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
 import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
-import { WEAPONS } from "../../utils/constants";
+import { TOFU_AIM_LAYER, WEAPONS } from "../../utils/constants";
 
 const DEBUG = false;
 
@@ -232,10 +232,12 @@ class CustomizedCombatTofu extends Tofu {
 
         const { boundingBox, boundingBoxWire } = this.boundingBoxMap.get(weaponType).get(action);
 
+        this.boundingBoxMesh?.layers.disable(TOFU_AIM_LAYER);
         this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
         this.group.add(boundingBox, boundingBoxWire);
         this.boundingBoxMesh = boundingBox;
         this.boundingBoxWireMesh = boundingBoxWire;
+        this.boundingBoxMesh.layers.enable(TOFU_AIM_LAYER);
 
     }
 

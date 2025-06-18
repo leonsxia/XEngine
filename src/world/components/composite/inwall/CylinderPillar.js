@@ -152,7 +152,7 @@ class CylinderPillar extends InWallObjectBase {
 
     makePlaneConfig(specs, idx) {
 
-        const { baseSize = this._height, mapRatio, lines = true } = this.specs;
+        const { baseSize = this._height, mapRatio, lines = false } = this.specs;
         const { separatedFace = false } = this.specs;
         const { scale = [1, 1] } = this.specs;
         const { transparent = true } = this.specs;
@@ -175,7 +175,7 @@ class CylinderPillar extends InWallObjectBase {
 
     makeTBPlaneConfig(specs, top = true) {
         
-        const { baseSize = this.radius * 2, mapRatio, lines = true, scale = [1, 1], transparent = true } = this.specs;
+        const { baseSize = this.radius * 2, mapRatio, lines = false, scale = [1, 1], transparent = true } = this.specs;
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;

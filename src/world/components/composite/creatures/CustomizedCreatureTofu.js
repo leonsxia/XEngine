@@ -1,6 +1,7 @@
 import { BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
 import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
+import { TOFU_AIM_LAYER } from "../../utils/constants";
 
 class CustomizedCreatureTofu extends Tofu {
 
@@ -144,10 +145,12 @@ class CustomizedCreatureTofu extends Tofu {
 
         const { boundingBox, boundingBoxWire } = this.boundingBoxes.get(action);
 
+        this.boundingBoxMesh?.layers.disable(TOFU_AIM_LAYER);
         this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
         this.group.add(boundingBox, boundingBoxWire);
         this.boundingBoxMesh = boundingBox;
         this.boundingBoxWireMesh = boundingBoxWire;
+        this.boundingBoxMesh.layers.enable(TOFU_AIM_LAYER);
 
     }
 

@@ -12,7 +12,7 @@ class CollisionHexCylinder extends CollisionBase {
 
         super(specs);
 
-        const { name, enableWallOBBs, showArrow, lines = true } = specs;
+        const { name, enableWallOBBs, showArrow, lines = false } = specs;
         const { radius, height } = specs;
 
         const theta = Math.PI / 16;

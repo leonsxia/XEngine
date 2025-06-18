@@ -83,6 +83,18 @@ class Health {
 
     }
 
+    get currentLife() {
+
+        return 100 * (this.#current - this.#min) / this.#life;
+
+    }
+
+    get isEmpty() {
+
+        return this.#current === this.#min;
+
+    }
+
     showStrip(show) {
 
         this.strip.visible = show;
@@ -93,7 +105,7 @@ class Health {
 
         const { context: ctx, width, height, baseWidth } = this.labelCanvas;
 
-        const content = this.showText ? `${Math.round(this.#current * 100 / this.#max)}%` : '';
+        const content = this.showText ? `${Math.round(this.currentLife)}%` : '';
         // const content = `this is a very, very, very long text`;
         // measure how long the name will be
         const textWidth = ctx.measureText(content).width;        

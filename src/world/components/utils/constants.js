@@ -100,9 +100,10 @@ const TOFU_RAY_LAYER = 2;
 const CAMERA_RAY_LAYER = 3;
 const PLAYER_CAMERA_RAY_LAYER = 4;
 const PLAYER_CAMERA_TRANSPARENT_LAYER = 5;
+const TOFU_AIM_LAYER = 6;
 
 // post processing layers
-const BLOOM_SCENE_LAYER = 6;
+const BLOOM_SCENE_LAYER = 7;
 
 // obstacle layers
 const OBSTACLE_RAY_LAYER = 10;
@@ -473,6 +474,7 @@ export {
     CAMERA_RAY_LAYER,
     PLAYER_CAMERA_RAY_LAYER,
     PLAYER_CAMERA_TRANSPARENT_LAYER,
+    TOFU_AIM_LAYER,
 
     BLOOM_SCENE_LAYER,
 

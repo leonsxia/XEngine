@@ -22,7 +22,7 @@ class WoodenPicnicTable extends ObstacleBase {
 
         super(specs);
 
-        const { name, scale = [1, 1, 1], lines = true } = specs;
+        const { name, scale = [1, 1, 1], lines = false } = specs;
         const { offsetY = - .371 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;

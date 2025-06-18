@@ -16,7 +16,7 @@ class HexCylinderPillar extends ObstacleBase {
 
         super(specs);
 
-        const { name, lines = true, showArrow = false } = specs;
+        const { name, lines = false, showArrow = false } = specs;
         const { segments = 16, baseSize, mapRatio, rotationC = Math.PI * .5 } = specs;
         const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;

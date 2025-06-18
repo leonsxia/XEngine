@@ -1,31 +1,60 @@
+import { Logger } from "../../systems/Logger";
+
+const DEBUG = true;
+
 class Combat {
 
     player = [];
     enemies = [];
     isActive = true;
 
-    constructor(player = [], enemies = []) {
+    #logger = new Logger(DEBUG, 'Combat');
+
+    constructor(player = [], enemies = [], scene) {
 
         this.player = player;
         this.enemies = enemies;
+        this.scene = scene;
 
     }
 
     tick(delta) {
-
-        for (let i = 0, il = this.player.length; i < il; i++) {
-
-            const player = this.player[i];
-
-            player.attackTick?.(delta);
-
-        }
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];
 
             enemy.attackTick?.(delta);
+
+        }
+
+        for (let i = 0, il = this.player.length; i < il; i++) {
+
+            const player = this.player[i];
+
+            const attackOn = player.attackTick?.({ delta, aimObjects: this.scene.children });
+
+            if (attackOn) {
+
+                const { object } = attackOn;
+                const objectFather = object.parent.father;
+                let realTarget = objectFather ? 
+                (
+                    objectFather.isCreature ? 
+                        objectFather :      // CreatureBase
+                        object.father       // plane
+
+                ) : object;    // gltf mesh
+
+                if (realTarget.isCreature) {
+
+                    // todo
+
+                }
+
+                this.#logger.log(`player: ${player.name} attack on ${realTarget.name}`);
+
+            }
 
         }
 

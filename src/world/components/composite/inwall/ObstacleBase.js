@@ -2,7 +2,7 @@ import { Group, MathUtils, Vector3, Layers, Raycaster, ArrowHelper } from 'three
 import { createOBBBox, createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue, BF, red } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 import { Logger } from '../../../systems/Logger';
 import { BasicObject } from '../../basic/BasicObject';
@@ -305,6 +305,7 @@ class ObstacleBase extends ObstacleMoveable {
             this.#logger.log(`${obj.name}: ${event.message}`);
             obj.setLayers(CAMERA_RAY_LAYER);
             obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
+            obj.setLayers(TOFU_AIM_LAYER);
             
             const { transparent = true } = obj.specs;
 
@@ -334,6 +335,7 @@ class ObstacleBase extends ObstacleMoveable {
             this.gltf.setLayers(CAMERA_RAY_LAYER);
             this.gltf.setLayers(PLAYER_CAMERA_RAY_LAYER);
             this.gltf.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
+            this.gltf.setLayers(TOFU_AIM_LAYER);
 
         };
 
@@ -591,7 +593,7 @@ class ObstacleBase extends ObstacleMoveable {
     makePlaneConfig(specs) {
         
         const { height } = specs;
-        const { baseSize = height, mapRatio, lines = true, transparent = true } = this.specs;
+        const { baseSize = height, mapRatio, lines = false, transparent = true } = this.specs;
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;

@@ -213,7 +213,7 @@ class WorldScene {
         this.updatableQueue.add(this.physics);
 
         // combat
-        this.combat = new Combat(this.players, this.enemies);
+        this.combat = new Combat(this.players, this.enemies, this.scene);
         this.updatableQueue.add(this.combat);
 
         // ai

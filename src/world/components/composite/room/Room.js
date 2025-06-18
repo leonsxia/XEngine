@@ -1,7 +1,7 @@
 import { Object3D, Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
-import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../../utils/constants';
+import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 
 const DEBUG = false;
@@ -60,6 +60,7 @@ class Room {
         this.name = name;
         this.group = new Group();
         this.group.isRoom = true;
+        this.group.father = this;
         this.group.name = name;
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
@@ -174,6 +175,7 @@ class Room {
             wall.setLayers(CAMERA_RAY_LAYER);
             wall.setLayers(PLAYER_CAMERA_RAY_LAYER);
             wall.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
+            wall.setLayers(TOFU_AIM_LAYER);
 
         };
 
@@ -404,7 +406,7 @@ class Room {
 
         const { width, height } = specs;
 
-        const { baseSize = height, mapRatio, lines = true } = this.specs;
+        const { baseSize = height, mapRatio, lines = false } = this.specs;
         const { repeatU, repeatV, repeatModeU = REPEAT_WRAPPING, repeatModeV = REPEAT_WRAPPING } = this.specs;
 
         specs.lines = lines;

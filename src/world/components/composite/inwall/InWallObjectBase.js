@@ -1,5 +1,5 @@
 import { Group, MathUtils } from 'three';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 import { Logger } from '../../../systems/Logger';
 import { BasicObject } from '../../basic/BasicObject';
@@ -110,7 +110,7 @@ class InWallObjectBase {
     makePlaneConfig(specs) {
 
         const { height } = specs;
-        const { baseSize = height, mapRatio, lines = true, transparent = true } = this.specs;
+        const { baseSize = height, mapRatio, lines = false, transparent = true } = this.specs;
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;
@@ -129,6 +129,7 @@ class InWallObjectBase {
             this.#logger.log(`${obj.name}: ${event.message}`);
             obj.setLayers(CAMERA_RAY_LAYER);
             obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
+            obj.setLayers(TOFU_AIM_LAYER);
 
             const { transparent = true } = obj.specs;
 

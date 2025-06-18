@@ -76,14 +76,9 @@ class CreatureBase extends CustomizedCreatureTofu {
         await Promise.all([this.gltf.init()]);
 
         this.showSkeleton(false);
-
-        this.gltf.traverse((mesh) => {
-
-            mesh.layers.enable(CAMERA_RAY_LAYER);
-
-        });
-
         this.bindEvents();
+
+        this.gltf.visible = true;
 
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();

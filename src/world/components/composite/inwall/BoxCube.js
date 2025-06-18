@@ -20,7 +20,7 @@ class BoxCube extends ObstacleBase {
         super(specs);
 
         this.specs = specs;
-        const { name, lines = true } = specs;
+        const { name, lines = false } = specs;
         const { showArrow = false, freeTexture = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
