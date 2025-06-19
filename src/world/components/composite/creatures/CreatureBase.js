@@ -410,7 +410,7 @@ class CreatureBase extends CustomizedCreatureTofu {
             this.movingRight(false);
             this.movingForward(false);
             this.isActive = false;
-            this._isNoticed = false;
+            this.clearInSightTargets();
 
         }
 
