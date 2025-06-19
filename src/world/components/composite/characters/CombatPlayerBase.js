@@ -185,7 +185,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             this.switchWeaponAction(this.weaponActionMapping[weapon.weaponType]);
             this.armedWeapon = weapon;
 
-            const { shoot: { nick }, fireRate } = this.weaponActionMapping[weapon.weaponType];
+            const { shoot: { nick } } = this.weaponActionMapping[weapon.weaponType];
+            const fireRate = weapon.fireRate;
             this.AWS.setActionEffectiveTimeScale(nick, fireRate);
 
         } else {
@@ -251,7 +252,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             });
 
-            this.damageRange = this.weaponActionMapping[WEAPONS.NONE].damageRange;
+            this.damageRange = 0;
             
             return;
 
@@ -264,7 +265,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             if (w === weapon) {
 
                 w.visible = true;
-                this.damageRange = this.weaponActionMapping[w.weaponType].damageRange;
+                this.damageRange = weapon.damageRange;
 
             } else {
 
@@ -1155,11 +1156,11 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             const weaponItem = this.weapons[i];
 
-            if (!weaponItem.ammoCount) continue;
+            if (weaponItem.ammo.isMeleeWeapon) continue;
 
             this.reloadWeapon(weaponItem);
 
-            this.#weaponLogger.log(`${weaponItem.weaponType} reload magzine, ammo count: ${weaponItem.ammo}`);
+            this.#weaponLogger.log(`${weaponItem.weaponType} reload magzine, ammo count: ${weaponItem.ammoCount}`);
 
         }
 
@@ -1184,9 +1185,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             let attackInterval;
 
-            if (this.armedWeapon && (this.armedWeapon.isFiring || this.shooting) && this._i <= this.armedWeapon.ammoCount) {
+            if (this.armedWeapon && (this.armedWeapon.isFiring || this.shooting) && this._i <= this.armedWeapon.magzineCapacity) {
 
-                attackInterval = this.currentActionType.attackInterval * this._i;
+                attackInterval = this.armedWeapon.attackInterval * this._i;
 
                 if (this._i === 0 || this._delta >= attackInterval) {
 
@@ -1202,14 +1203,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                         this._i++;
 
-                        const intersects = this.checkAimRayIntersect(aimObjects);
-
-                        if (intersects.length > 0) {
-
-                            shootOnTarget = intersects[0];
-
-                        }
-
                         if (this.armedWeapon.magzineEmpty) {
 
                             this.armedWeapon.isFiring = false;
@@ -1219,8 +1212,16 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                         } else {
 
-                            this.armedWeapon.ammo--;
-                            this.#weaponLogger.log(`${this.armedWeapon.weaponType} fire ${this._i}, ammo count: ${this.armedWeapon.ammo}`);
+                            this.armedWeapon.ammoCount--;
+                            this.#weaponLogger.log(`${this.armedWeapon.weaponType} fire ${this._i}, ammo count: ${this.armedWeapon.ammoCount}, damage: ${this.armedWeapon.ammo.damage}`);
+
+                            const intersects = this.checkAimRayIntersect(aimObjects);
+
+                            if (intersects.length > 0) {
+
+                                shootOnTarget = intersects[0];
+
+                            }
 
                             this.armedWeapon.shoot();
 
@@ -1233,7 +1234,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             } else if (this.meleeing) {
 
-                attackInterval = this.meleeAttackAction.attackInterval * this._i + this.meleeAttackAction.prepareInterval;
+                attackInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.prepareInterval;
 
                 if (this._delta >= attackInterval) {
 
@@ -1247,7 +1248,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                     }
 
-                    this.#weaponLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}`);
+                    this.#weaponLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}, damage: ${this._meleeWeapon.ammo.damage}`);
 
                 }
 

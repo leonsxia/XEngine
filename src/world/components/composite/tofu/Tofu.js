@@ -629,7 +629,7 @@ class Tofu extends Moveable2D {
 
     onDamgeRangeChanged() {
 
-        this.#logger.log(`${this.name} - damgeRange: ${this.#damageRange}`);
+        this.#logger.log(`${this.name} - damgeRange change to: ${this.#damageRange}`);
         this.updateAimRay();
 
     }

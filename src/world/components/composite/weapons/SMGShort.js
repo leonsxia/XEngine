@@ -1,5 +1,6 @@
 import { WeaponBase } from '../../Models';
 import { WEAPONS } from '../../utils/constants';
+import { Ammo } from './Ammo';
 
 const GLTF_SRC = 'weapons/SMG1.glb';
 
@@ -19,8 +20,11 @@ class SMGShort extends WeaponBase {
             receiveShadow: true, 
             castShadow: true,
             src: GLTF_SRC,
-            fireRate: 1, 
-            ammo: 12,
+            damageRange: 9,
+            attackInterval: 0.08,
+            fireRate: 10.2,
+            ammo: new Ammo({ count: 35, damage: 7, offset: - 2, offset1: 2 }),
+            magzineCapacity: 12,
             isSemiAutomatic: false
         };
 

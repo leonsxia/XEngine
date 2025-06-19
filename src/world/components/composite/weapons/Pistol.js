@@ -1,5 +1,6 @@
 import { WeaponBase } from '../../Models';
 import { WEAPONS } from '../../utils/constants';
+import { Ammo } from './Ammo';
 
 const GLTF_SRC = 'weapons/Pistol.glb';
 
@@ -19,8 +20,11 @@ class Pistol extends WeaponBase {
             receiveShadow: true, 
             castShadow: true,
             src: GLTF_SRC,
-            fireRate: 1, 
-            ammo: 12,
+            damageRange: 10,
+            attackInterval: 0.7,
+            fireRate: 1.2,
+            ammo: new Ammo({ count: 12, damage: 20, offset0: - 5, offset1: 5 }),
+            magzineCapacity: 12,
             isSemiAutomatic: true
         };
 

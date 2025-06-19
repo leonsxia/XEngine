@@ -4,6 +4,7 @@ import { loadedGLTFModels } from '../../utils/gltfHelper';
 import { Logger } from '../../../systems/Logger';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { CAMERA_RAY_LAYER } from '../../utils/constants';
+import { Ammo } from './Ammo';
 
 const DEBUG = false;
 
@@ -19,12 +20,13 @@ class WeaponBase {
     _animationSettings = {};
 
     _weaponType;
-    _damage;
-    _fireRate = 1;
-    _ammo;
+    _prepareInterval;
+    _attackInterval;
+    _fireRate;
+    _damageRange;
     _isFiring = false;
-    _isSemiAutomatic = true;
-    ammoCount;
+    _magzineCapacity;
+    _ammo;
 
     _shootNick;
     _emptyNick = 'empty';
@@ -38,16 +40,20 @@ class WeaponBase {
         const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
-        const { weaponType, fireRate = 1, ammo, isSemiAutomatic = true } = specs;
+        const { weaponType, prepareInterval = 0, attackInterval = 1, fireRate = 1, damageRange = 0, magzineCapacity = 0, ammo = new Ammo(), isSemiAutomatic = true } = specs;
         const { clips, animationSetting } = specs;
         let { src } = specs;
 
         this.specs = specs;
 
         this._weaponType = weaponType;
+        this._prepareInterval = prepareInterval;
+        this._attackInterval = attackInterval;
         this._fireRate = fireRate;
-        this._ammo = this.ammoCount = ammo;
+        this._damageRange = damageRange;
         this._isSemiAutomatic = isSemiAutomatic;
+        this._magzineCapacity = magzineCapacity;
+        this._ammo = ammo;
 
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
@@ -131,9 +137,39 @@ class WeaponBase {
 
     }
 
+    get prepareInterval() {
+
+        return this._prepareInterval;
+
+    }
+
+    get attackInterval() {
+
+        return this._attackInterval;
+
+    }
+
     get fireRate() {
 
         return this._fireRate;
+
+    }
+
+    get damageRange() {
+
+        return this._damageRange;
+
+    }
+
+    get ammoCount() {
+
+        return this._ammo.count;
+
+    }
+
+    set ammoCount(val) {
+
+        this._ammo.count = val;
 
     }
 
@@ -143,15 +179,21 @@ class WeaponBase {
 
     }
 
-    set ammo(val) {
+    set magzineCapacity(val) {
 
-        this._ammo = val;
+        this._magzineCapacity = val;
+
+    }
+
+    get magzineCapacity() {
+
+        return this._magzineCapacity;
 
     }
 
     get magzineEmpty() {
 
-        return this._ammo === 0;
+        return this._ammo.count === 0;
 
     }
 
@@ -185,9 +227,17 @@ class WeaponBase {
         
     }
 
-    fillMagzine(ammo = this.ammoCount) {
+    fillMagzine(fillCount = this._magzineCapacity) {
 
-        this._ammo = ammo;
+        if (fillCount >= this._magzineCapacity) {
+
+            this._ammo.count = this._magzineCapacity;
+
+        } else {
+
+            this._ammo.count = fillCount;
+
+        }
 
         this.resetWeaponEmpty();
 

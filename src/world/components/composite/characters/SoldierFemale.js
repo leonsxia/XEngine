@@ -2,6 +2,7 @@ import { CombatPlayerBase, Pistol, Bayonet, Revolver, SMGShort, Glock } from '..
 import { SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 import { WeaponActionMapping } from './WeaponActionMapping';
+import { Ammo } from '../weapons/Ammo';
 
 const GLTF_SRC = 'characters/soldier_female.glb';
 const ANIMATION_SETTINGS = {
@@ -28,7 +29,6 @@ const WEAPON_ACTION_MAPPING = {
     [WEAPONS.NONE]: new WeaponActionMapping({
         name: 'emptyhand',
         idle: CLIPS.IDLE, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING,
-        damageRange: 0,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -46,9 +46,7 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.PISTOL1]: new WeaponActionMapping({ 
         name: 'pistol1',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
-        damageRange: 10,
-        attackInterval: 0.7, fireRate: 1.2,
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,         
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -66,9 +64,7 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.GLOCK]: new WeaponActionMapping({
         name: 'glock',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
-        damageRange: 13,
-        attackInterval: 0.4667, fireRate: 1.8,
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,         
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -86,9 +82,7 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.REVOLVER]: new WeaponActionMapping({
         name: 'revolver',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
-        damageRange: 16,
-        attackInterval: 1.05, fireRate: 0.8,
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,         
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -106,9 +100,7 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.SMG_SHORT]: new WeaponActionMapping({
         name: 'smg_short',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT, 
-        damageRange: 9,
-        attackInterval: 0.08, fireRate: 10.2,
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,         
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -126,9 +118,7 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.BAYONET]: new WeaponActionMapping({
         name: 'bayonet',
-        idle: CLIPS.IDLE, attack: CLIPS.SWORD_SLASH, attackInterval: 1.03, 
-        damageRange: 1,
-        prepareInterval: 0.5, fireRate: 1.25,
+        idle: CLIPS.IDLE, attack: CLIPS.SWORD_SLASH,
         ignoreCollisionBox: true,
         ignoreBoundingFace: true,
         ignoreBoundingBox: true,
@@ -161,29 +151,41 @@ class SoldierFemale extends CombatPlayerBase {
                 name: `${name}_pistol`,
                 position: [- .18, - .028, .065],
                 rotation: [- 0.35, - 1.3, - 1.6],
-                fireRate: 1,
-                ammo: 12
+                damageRange: 10,
+                attackInterval: 0.7, 
+                fireRate: 1.2,
+                ammo: new Ammo({ count: 12, damage: 20, offset0: - 5, offset1: 5 }),
+                magzineCapacity: 12
             }),
             new Glock({
                 name: `${name}_glock19`,
                 position: [- .18, - .08, .096],
                 rotation: [1.2, 0, - .2],
-                fireRate: 1.5,
-                ammo: 100
+                damageRange: 13,
+                attackInterval: 0.4667,
+                fireRate: 1.8,
+                ammo: new Ammo({ count: 50, damage: 18, offset: - 5, offset1: 10 }),
+                magzineCapacity: 50
             }),
             new Revolver({
                 name: `${name}_magnum357`,
                 position: [- .168, - .005, .075],
                 rotation: [- 0.35, - 1.3, - 1.6],
-                fireRate: 1,
-                ammo: 6
+                damageRange: 16,
+                attackInterval: 1.05,
+                fireRate: 0.8,
+                ammo: new Ammo({ count: 6, damage: 60, offset: - 10, offset1: 45 }),
+                magzineCapacity: 6
             }),
             new SMGShort({
                 name: `${name}_smg_short`,
                 position: [- .18, - .028, .065],
                 rotation: [- 0.35, - 1.3, - 1.6],
-                fireRate: 1,
-                ammo: 35,
+                damageRange: 9,
+                attackInterval: 0.08,
+                fireRate: 10.2,
+                ammo: new Ammo({ count: 35, damage: 7, offset: - 2, offset1: 2 }),
+                magzineCapacity: 35,
                 isSemiAutomatic: false
             }),
             new Bayonet({
@@ -191,7 +193,11 @@ class SoldierFemale extends CombatPlayerBase {
                 scale: [.35, .3, .25],
                 position: [- .18, .01, .046],
                 rotation: [- .5, - 1, - .3],
-                fireRate: 1.25
+                attackInterval: 1.03,
+                damageRange: 1,
+                prepareInterval: 0.5,
+                fireRate: 1.25,
+                ammo: new Ammo({ isMeleeWeapon: true, damage: 30, offset0: - 10, offset1: 10 })
             })
         ];
 

@@ -1,5 +1,6 @@
 import { WeaponBase } from '../../Models';
 import { WEAPONS } from '../../utils/constants';
+import { Ammo } from './Ammo';
 
 const GLTF_SRC = 'weapons/Bayonet.glb';
 
@@ -19,7 +20,11 @@ class Bayonet extends WeaponBase {
             receiveShadow: true,
             castShadow: true,
             src: GLTF_SRC,
-            fireRate: 1
+            attackInterval: 1.03,
+            damageRange: 1,
+            prepareInterval: 0.5,
+            fireRate: 1.25,
+            ammo: new Ammo({ isMeleeWeapon: true, damage: 30, offset0: - 10, offset1: 10 })
         };
 
         Object.assign(superSpecs, specs);

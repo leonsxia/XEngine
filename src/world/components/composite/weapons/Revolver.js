@@ -1,5 +1,6 @@
 import { WeaponBase } from '../../Models';
 import { WEAPONS } from '../../utils/constants';
+import { Ammo } from './Ammo';
 
 const GLTF_SRC = 'weapons/Revolver.glb';
 
@@ -19,8 +20,11 @@ class Revolver extends WeaponBase {
             receiveShadow: true,
             castShadow: true,
             src: GLTF_SRC,
-            fireRate: 1,
-            ammo: 6,
+            damageRange: 16,
+            attackInterval: 1.05,
+            fireRate: 0.8,
+            ammo:new Ammo({ count: 6, damage: 60, offset: - 10, offset1: 45 }),
+            magzineCapacity: 6,
             isSemiAutomatic: true
         };
 

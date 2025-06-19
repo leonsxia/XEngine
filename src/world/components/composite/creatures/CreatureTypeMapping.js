@@ -26,10 +26,6 @@ class CreatureTypeMapping {
 
     pushingBoxSize;
 
-    attackInterval;
-    prepareInterval;
-    fireRate;
-
     constructor(specs) {
 
         const { name } = specs;
@@ -38,7 +34,6 @@ class CreatureTypeMapping {
         const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize } = specs;
         const { idleBoundingBoxSize, walkBoundingBoxSize } = specs;
         const { pushingBoxSize } = specs;
-        const { attackInterval, prepareInterval, fireRate } = specs;
 
         this.name = name;
         this.idle = idle;
@@ -62,10 +57,6 @@ class CreatureTypeMapping {
         this.walkBoundingBoxSize = walkBoundingBoxSize;
 
         this.pushingBoxSize = pushingBoxSize;
-
-        this.attackInterval = attackInterval;
-        this.prepareInterval = prepareInterval;
-        this.fireRate = fireRate;
 
     }
 

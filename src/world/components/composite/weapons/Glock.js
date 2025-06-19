@@ -1,5 +1,6 @@
 import { WeaponBase } from '../../Models';
 import { GLOCK_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
+import { Ammo } from './Ammo';
 
 const GLTF_SRC = 'weapons/Glock19.glb';
 const ANIMATION_SETTINGS = {
@@ -24,8 +25,11 @@ class Glock extends WeaponBase {
             receiveShadow: true, 
             castShadow: true,
             src: GLTF_SRC,
-            fireRate: 1, 
-            ammo: 19,
+            damageRange: 13,
+            attackInterval: 0.4667,
+            fireRate: 1.8,
+            ammo: new Ammo({ count: 20, damage: 18, offset: - 5, offset1: 10 }),
+            magzineCapacity: 20,
             isSemiAutomatic: true,
             clips: CLIPS, animationSetting: ANIMATION_SETTINGS
         };
