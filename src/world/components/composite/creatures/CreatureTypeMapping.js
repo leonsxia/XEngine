@@ -6,6 +6,8 @@ class CreatureTypeMapping {
     walk;
     rotate;
     attack;
+    hurt;
+    die;
 
     idleToWalk;
     walkToIdle;
@@ -31,7 +33,7 @@ class CreatureTypeMapping {
     constructor(specs) {
 
         const { name } = specs;
-        const { idle, walk, walkTimeScale, rotate, attack, idleToWalk, walkToIdle } = specs;
+        const { idle, walk, walkTimeScale, rotate, attack, hurt, die, idleToWalk, walkToIdle } = specs;
         const { idleCollisionSize, walkCollisionSize } = specs;
         const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize } = specs;
         const { idleBoundingBoxSize, walkBoundingBoxSize } = specs;
@@ -44,6 +46,8 @@ class CreatureTypeMapping {
         this.walkTimeScale = walkTimeScale;
         this.rotate = rotate;
         this.attack = attack;
+        this.hurt = hurt;
+        this.die = die;
         this.idleToWalk = idleToWalk;
         this.walkToIdle = walkToIdle;
 

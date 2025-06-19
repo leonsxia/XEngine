@@ -14,13 +14,16 @@ const ANIMATION_SETTINGS = {
     WALK_TURN_TO_ZERO_TURN: 0.3,
     WALK_TIMESCALE: 2.1,
     TURN_WEIGHT: 0.7,
-    ATTACK: 0.2
+    ATTACK: 0.2,
+    HURT: 0.1,
+    DIE: 0.2,
+    HURT_TIMESCALE: 2
 };
 
 const ZOMBIE_TYPES_MAPPING = {
     STANDARD: new CreatureTypeMapping({
         name: 'standard',
-        idle: CLIPS.IDLE, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 2.1, idleToWalk: 0.1, walkToIdle: 0.3,
+        idle: CLIPS.IDLE, walk: CLIPS.WALK, hurt: CLIPS.HIT_RECEIVE, die: CLIPS.DEATH, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 2.1, idleToWalk: 0.1, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
         walkCollisionSize: { width: .63, depth: .9, height: 1.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
@@ -32,7 +35,7 @@ const ZOMBIE_TYPES_MAPPING = {
     }),
     VARIANT1: new CreatureTypeMapping({
         name: 'variant1',
-        idle: CLIPS.IDLE, walk: CLIPS.WALK2, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1.5, idleToWalk: 0.1, walkToIdle: 0.3,
+        idle: CLIPS.IDLE, walk: CLIPS.WALK2, hurt: CLIPS.HIT_RECEIVE, die: CLIPS.DEATH2, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1.5, idleToWalk: 0.1, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
         walkCollisionSize: { width: .63, depth: .9, height: 1.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
@@ -44,7 +47,7 @@ const ZOMBIE_TYPES_MAPPING = {
     }),
     VARIANT2: new CreatureTypeMapping({
         name: 'variant2',
-        idle: CLIPS.IDLE, walk: CLIPS.WLAK3, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.2, walkToIdle: 0.3,
+        idle: CLIPS.IDLE, walk: CLIPS.WLAK3, hurt: CLIPS.HIT_RECEIVE, die: CLIPS.DEATH, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.2, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
         walkCollisionSize: { width: .63, depth: 1.55, height: 0.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
@@ -56,7 +59,7 @@ const ZOMBIE_TYPES_MAPPING = {
     }),
     VARIANT3: new CreatureTypeMapping({
         name: 'variant3',
-        idle: CLIPS.IDLE, walk: CLIPS.CRAWL, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.3, walkToIdle: 0.3,
+        idle: CLIPS.IDLE, walk: CLIPS.CRAWL, hurt: CLIPS.HIT_RECEIVE, die: CLIPS.DEATH, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.3, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
         walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
@@ -118,6 +121,7 @@ class ZombieMale extends CreatureBase {
         await super.init();
 
         this.AWS.setActionEffectiveTimeScale(this.typeMapping.walk.nick, this._animationSettings.WALK_TIMESCALE);
+        this.AWS.setActionEffectiveTimeScale(this.typeMapping.hurt.nick, this._animationSettings.HURT_TIMESCALE)
    
     }
 

@@ -353,6 +353,7 @@ const SOLDIER_FEMALE_CLIPS = {
 
 const ZOMBIE_MALE_CLIPS = {
     DEATH: { nick: 'death', name: 'Armature|Die', idx: 0, enable: true, loopOnce: true },
+    DEATH2: { nick: 'death', name: 'Armature|Die2', idx: 0, enable: true, loopOnce: true },
     HIT_RECEIVE: { nick: 'hit_receive', name: 'Armature|Hit_reaction', idx: 1, enable: true, loopOnce: true },
     IDLE: { nick: 'idle', name: 'Armature|Idle', idx: 2, enable: true, isDefault: true },
     WALK: { nick: 'walk', name: 'Armature|Walk', idx: 3, startImmediately: false, enable: true },

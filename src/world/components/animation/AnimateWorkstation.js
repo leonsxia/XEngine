@@ -187,10 +187,13 @@ class AnimateWorkstation {
         const onLoopFinished = () => {
 
             this.mixer.removeEventListener('finished', onLoopFinished);
+
+            if (!this.isLooping) return;
+
             this.isLooping = false;
 
             // this.executeCrossFade(this.activeAction, this.previousAction, restoreDuration);
-            const fadeToAction = this.cachedAction ? this.cachedAction : this.previousAction;
+            const fadeToAction = this.cachedAction ?? this.previousAction;
             this.fadeToAction(fadeToAction, restoreDuration);
 
             if (endCallback) endCallback();

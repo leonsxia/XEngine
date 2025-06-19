@@ -48,7 +48,7 @@ class Combat {
 
                 if (realTarget.isCreature) {
 
-                    // todo
+                    realTarget.hurt(true);
 
                 }
 

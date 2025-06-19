@@ -22,6 +22,8 @@ class Moveable2D {
     #interact;
     #gunPoint;
     #shoot;
+    #hurt;
+    #die;
     
     #dummyObject = new Object3D();
 
@@ -139,6 +141,14 @@ class Moveable2D {
         // this.#logger.log(`interact ${this.#interact}`);
     }
 
+    hurt(val) {
+        this.#hurt = val;
+    }
+    
+    die(val) {
+        this.#die = val;
+    }
+
     // animation state
     get forward() {
         return this.#movingForward;
@@ -182,6 +192,14 @@ class Moveable2D {
 
     get interacting() {
         return this.#interact;
+    }
+
+    get hurting() {
+        return this.#hurt;
+    }
+
+    get dead() {
+        return this.#die;
     }
     // animation state
 

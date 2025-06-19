@@ -353,9 +353,52 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
+    hurt(val) {
+
+        this.#logger.func = this.hurt.name;
+
+        if (val) {
+
+            if (this.AWS.activeAction === this.AWS.actions[this.typeMapping.hurt.nick]) {
+
+                const fadeToAction = this.AWS.cachedAction ?? this.AWS.previousAction;
+                this.AWS.fadeToAction(fadeToAction, .01);
+                this.AWS.isLooping = false;
+
+            }
+
+            const endCallback = () => {
+
+                super.hurt(false);
+
+            }
+
+            this.#logger.log(`${this.name} is on hurt`);
+            this.AWS.prepareCrossFade(null, this.AWS.actions[this.typeMapping.hurt.nick], this._animationSettings.HURT, 1, false, false, this._animationSettings.HURT, endCallback);
+
+        } else {
+
+            return;
+
+        }
+
+        super.hurt(val);
+
+    }
+
     movingTick() {
 
         this.#logger.func = this.movingTick.name;
+
+        if (this.hurting) {
+
+            this.movingLeft(false);
+            this.movingRight(false);
+            this.movingForward(false);
+
+            return;
+
+        }
 
         if (this._isNoticed) {
 
