@@ -32,7 +32,7 @@ class Combat {
 
             const player = this.player[i];
 
-            const attackOn = player.attackTick?.({ delta, aimObjects: this.scene.children });
+            const { onTarget: attackOn, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children }) ?? {};
 
             if (attackOn) {
 
@@ -48,7 +48,13 @@ class Combat {
 
                 if (realTarget.isCreature) {
 
-                    realTarget.hurt(true);
+                    realTarget.damageReceiveTick({ damage });
+
+                    if (realTarget.health.isEmpty) {
+
+                        player.removeInSightTarget(realTarget);
+
+                    }
 
                 }
 

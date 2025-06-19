@@ -16,6 +16,7 @@ class CustomizedCreatureTofu extends Tofu {
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
     onBoundingFaceChanged = [];
+    onDisposed = [];
 
     constructor(specs) {
 
@@ -379,6 +380,17 @@ class CustomizedCreatureTofu extends Tofu {
 
     }
 
+    doDisposedEvents() {
+
+        for (let i = 0, il = this.onDisposed.length; i < il; i++) {
+
+            const event = this.onDisposed[i];
+            event(this);
+
+        }
+
+    }
+
     switchHelperComponents(forceEvent = true) {
 
         const action = this.currentAction;
@@ -391,7 +403,11 @@ class CustomizedCreatureTofu extends Tofu {
 
     destroy() {
 
-        this.doBeforeCollisionBoxChangedEvents();
+        this.doDisposedEvents();
+        this.onBeforeCollisionBoxChanged = [];
+        this.onCollisionBoxChanged = [];
+        this.onBoundingFaceChanged = [];
+        this.onDisposed = [];
         super.destroy();
 
     }

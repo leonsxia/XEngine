@@ -114,6 +114,7 @@ class Tofu extends Moveable2D {
     track = this.resTracker.track.bind(this.resTracker);
     dispose = this.resTracker.dispose.bind(this.resTracker);
     isActive = true;
+    disposed = false;
 
     #logger = new Logger(DEBUG, 'Tofu');
 
@@ -222,8 +223,9 @@ class Tofu extends Moveable2D {
 
         this.paddingCoefficient = .05 * ENLARGE;
 
+        const { HPMin = 0, HPMax = 100 } = specs;
         this.health = new Health({
-            baseWidth: 80, size: 7, borderSize: 2, showText: true
+            baseWidth: 80, size: 7, borderSize: 2, showText: true, min: HPMin, max: HPMax
         });
 
         this.group.add(this.health.strip);        
@@ -1197,6 +1199,27 @@ class Tofu extends Moveable2D {
 
     }
 
+    removeInSightTarget(target) {
+
+        const findIdx = this._inSightTargets.findIndex(t => t.instance === target);
+
+        if (findIdx > -1) {
+
+            this._inSightTargets.splice(findIdx, 1);
+
+        }
+
+    }
+
+    clearInSightTargets() {
+
+        if (this.disposed) return;
+
+        this._inSightTargets = [];
+        this.onInSightTargetsCleared();
+
+    }
+
     // inherited by children
     onSovSphereTriggerEnter() {}
 
@@ -1205,6 +1228,9 @@ class Tofu extends Moveable2D {
 
     // inherited by children
     onSovSphereTriggerExit() {}
+
+    // inherited by children
+    onInSightTargetsCleared() {}
 
     getTargetDirectionAngle(target) {
 
@@ -1229,6 +1255,15 @@ class Tofu extends Moveable2D {
     checkAimRayIntersect(objects) {
 
         return this.aimRay.intersectObjects(objects);
+
+    }
+
+    resetHealth() {
+
+        if (this.disposed) return;
+
+        this.health.current = this.health.max;
+        this.isActive = true;
 
     }
 
@@ -1347,6 +1382,8 @@ class Tofu extends Moveable2D {
 
         this.dispose();
         this.isActive = false;
+        this.disposed = true;
+        this._inSightTargets = undefined;
 
     }
 

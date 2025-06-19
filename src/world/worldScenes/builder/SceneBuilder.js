@@ -513,22 +513,23 @@ class SceneBuilder {
 
             const _targetPlayerSetup = updateSetupOnly ? null : _targetSetup.players.find (f => f.type === p.type && f.name === p.name);
 
-            this.updatePlayer(p, _targetPlayerSetup, updateSetupOnly);
-
-            if (needResetPlayers) this.worldScene.resetCharacterPosition();
+            this.updatePlayer(p, _targetPlayerSetup, updateSetupOnly);            
 
         }
+
+        if (needResetPlayers) this.worldScene.resetCharacter();
 
         for (let i = 0, il = enemies.length; i < il; i++) {
 
             const e = enemies[i];
 
-            const _targetEnemySetup = updateSetupOnly ? null : _targetSetup.enemies.find (f => f.type === e.type && f.name === e.name);
+            const _targetEnemySetup = updateSetupOnly ? null : _targetSetup.enemies.find(f => f.type === e.type && f.name === e.name);
 
             this.updateEnemies(e, _targetEnemySetup, updateSetupOnly);
-            
-            if (needResetEnemies) this.worldScene.resetEnemies();
+
         }
+
+        if (needResetEnemies) this.worldScene.resetEnemies();
 
         for (let i = 0, il = lights.length; i < il; i++) {
 
@@ -669,7 +670,7 @@ class SceneBuilder {
     updatePlayer(_origin, _target, updateSetupOnly = false) {
 
         const { name } = _origin;
-        const findPlayer = this.worldScene.players.find(p => p.name === name && p.isActive);
+        const findPlayer = this.worldScene.players.find(p => p.name === name && !p.disposed);
 
         if (!findPlayer) return;
 
@@ -694,7 +695,7 @@ class SceneBuilder {
     updateEnemies(_origin, _target, updateSetupOnly = false) {
 
         const { name } = _origin;
-        const findEnemy = this.worldScene.enemies.find(e => e.name === name && e.isActive);
+        const findEnemy = this.worldScene.enemies.find(e => e.name === name && !e.disposed);
         
         if (!findEnemy) return;
 

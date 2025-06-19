@@ -64,6 +64,18 @@ class Health {
 
     }
 
+    get max() {
+
+        return this.#max;
+
+    }
+
+    get min() {
+
+        return this.#min;
+
+    }
+
     get current() {
 
         return this.#current;
@@ -73,7 +85,7 @@ class Health {
     set current(val) {
 
         this.#current = Math.max(this.#min, val);
-        this.#current = Math.min(this.#max, val);
+        this.#current = Math.min(this.#max, this.#current);
 
         if (this.strip.visible) {
 
@@ -95,9 +107,18 @@ class Health {
 
     }
 
+    /**
+     * @param {boolean} val
+     */
+    set visible(val) {
+
+        this.strip.visible = val;
+
+    }
+
     showStrip(show) {
 
-        this.strip.visible = show;
+        this.visible = show;
 
     }
 
@@ -117,7 +138,7 @@ class Health {
         ctx.fillRect(0, 0, width, height);
 
         // draw health strip
-        const index = Math.ceil(((this.#current - this.#min) / this.#life) / colorStep) - 1;
+        const index = this.#current ? Math.ceil(((this.#current - this.#min) / this.#life) / colorStep) - 1 : 0;
         const color = PALETTE[index].color;
         ctx.fillStyle = color;
         ctx.fillRect(1, 1, (width - 2) * (this.#current - this.#min) / this.#life, height - 2);
@@ -132,6 +153,8 @@ class Health {
             ctx.fillText(content, 0, 0);
 
         }
+
+        this.strip.material.map.needsUpdate = true;
 
     }
 

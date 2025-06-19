@@ -52,6 +52,7 @@ class SimplePhysics {
 
                 player.onBeforeCollisionBoxChanged.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
                 player.onCollisionBoxChanged.push(this.onTofuCollisionBoxChanged.bind(this));
+                player.onDisposed.push(this.onTofuDisposed.bind(this));
 
             }
 
@@ -64,6 +65,7 @@ class SimplePhysics {
 
                 enemy.onBeforeCollisionBoxChanged.push(this.onBeforeTofuCollisionBoxChanged.bind(this));
                 enemy.onCollisionBoxChanged.push(this.onTofuCollisionBoxChanged.bind(this));
+                enemy.onDisposed.push(this.onTofuDisposed.bind(this));
 
             }
 
@@ -194,6 +196,8 @@ class SimplePhysics {
 
     onTofuCollisionBoxChanged(tofu) {
 
+        if (!tofu.isActive || tofu.disposed) return;
+
         for (let i = 0, il = tofu.walls.length; i < il; i++) {
 
             const wall = tofu.walls[i];
@@ -211,6 +215,25 @@ class SimplePhysics {
                 this.obstacleCollisionOBBWalls.push(wall);
 
             }
+
+        }
+
+    }
+
+    onTofuDisposed(tofu) {
+
+        const findPlayerIdx = this.activePlayers.indexOf(tofu);
+        const findEnemyIdx = this.activeEnemies.indexOf(tofu);
+
+        if (findPlayerIdx > -1) {
+
+            this.removeActivePlayers(tofu.name);
+
+        }
+
+        if (findEnemyIdx > -1) {
+
+            this.removeActiveEnemies(tofu.name);
 
         }
 

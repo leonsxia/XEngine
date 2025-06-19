@@ -353,6 +353,12 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
+    onInSightTargetsCleared() {
+
+        this._isNoticed = false;
+
+    }
+
     hurt(val) {
 
         this.#logger.func = this.hurt.name;
@@ -383,6 +389,30 @@ class CreatureBase extends CustomizedCreatureTofu {
         }
 
         super.hurt(val);
+
+    }
+
+    damageReceiveTick(params) {
+
+        this.#logger.func = this.damageReceiveTick.name;
+
+        const { damage } = params;
+
+        this.health.current -= damage;
+
+        if (this.health.currentLife > 0) {
+
+            this.hurt(true);
+
+        } else {
+
+            this.movingLeft(false);
+            this.movingRight(false);
+            this.movingForward(false);
+            this.isActive = false;
+            this._isNoticed = false;
+
+        }
 
     }
 

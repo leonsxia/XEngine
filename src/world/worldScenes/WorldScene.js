@@ -303,7 +303,7 @@ class WorldScene {
 
                 if (act === 'resetPlayer') {
 
-                    leftActions.actions[act] = this.resetCharacterPosition.bind(this);
+                    leftActions.actions[act] = this.resetCharacter.bind(this);
 
                 } else if (act === 'resetCamera') {
 
@@ -733,15 +733,15 @@ class WorldScene {
         }
     }
 
-    resetCharacterPosition() {
+    resetCharacter() {
         
         if (this.player) {
 
             const { allPlayerPos } = this.setup;
-
             this.player.setPosition(allPlayerPos[this.loadSequence]);
-
             this.player.resetFallingState?.();
+            this.player.resetHealth();
+            this.player.clearInSightTargets();
 
         }
 
@@ -753,6 +753,8 @@ class WorldScene {
 
             const enemy = this.enemies[i];
             enemy.resetFallingState();
+            enemy.resetHealth();
+            enemy.clearInSightTargets();
 
         }
         
@@ -987,7 +989,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
 
             if (s) {
 
@@ -1015,7 +1017,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
 
             enemy.showBB(s);
 
@@ -1033,7 +1035,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
 
             enemy.showBBW(s);
 
@@ -1051,7 +1053,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
 
             enemy.showBF(s);
 
@@ -1069,7 +1071,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
 
             enemy.showCollisionBox(s);
 
@@ -1117,7 +1119,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
             
             if (s) {
 
@@ -1145,7 +1147,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
 
             enemy.showPushingBox(s);
 
@@ -1171,7 +1173,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
 
             if (s) {
 
@@ -1205,7 +1207,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive || !enemy.gltf?.skeleton) continue;
+            if (enemy.disposed || !enemy.gltf?.skeleton) continue;
 
             if (s) {
 
@@ -1233,7 +1235,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (enemy.disposed) continue;
 
             enemy.showHealth(s);
 

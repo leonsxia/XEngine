@@ -1177,7 +1177,10 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         const { delta, aimObjects } = params;
         this.#weaponLogger.func = this.attackTick.name;
-        let shootOnTarget = null;        
+        const result = {
+            damage: 0,
+            onTarget: null
+        };
 
         if (this.shooting || this.meleeing || this.armedWeapon?.isFiring) {
 
@@ -1213,13 +1216,16 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                         } else {
 
                             this.armedWeapon.ammoCount--;
-                            this.#weaponLogger.log(`${this.armedWeapon.weaponType} fire ${this._i}, ammo count: ${this.armedWeapon.ammoCount}, damage: ${this.armedWeapon.ammo.damage}`);
+
+                            const damage = this.armedWeapon.ammo.damage;
+                            result.damage = damage;
+                            this.#weaponLogger.log(`${this.armedWeapon.weaponType} fire ${this._i}, ammo count: ${this.armedWeapon.ammoCount}, damage: ${damage}`);
 
                             const intersects = this.checkAimRayIntersect(aimObjects);
 
                             if (intersects.length > 0) {
 
-                                shootOnTarget = intersects[0];
+                                result.onTarget = intersects[0];
 
                             }
 
@@ -1244,11 +1250,13 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                     if (intersects.length > 0) {
 
-                        shootOnTarget = intersects[0];
+                        result.onTarget = intersects[0];
 
                     }
 
-                    this.#weaponLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}, damage: ${this._meleeWeapon.ammo.damage}`);
+                    const damage = this._meleeWeapon.ammo.damage;
+                    result.damage = damage;
+                    this.#weaponLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}, damage: ${damage}`);
 
                 }
 
@@ -1256,7 +1264,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             
         }
 
-        return shootOnTarget;
+        return result;
 
     }
 

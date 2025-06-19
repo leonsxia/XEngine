@@ -23,6 +23,7 @@ class CustomizedCombatTofu extends Tofu {
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
     onBoundingFaceChanged = [];
+    onDisposed = [];
 
     #logger = new Logger(DEBUG, 'CustomizedCombatTofu');
 
@@ -580,10 +581,24 @@ class CustomizedCombatTofu extends Tofu {
 
     }
 
-    
+    doDisposedEvents() {
+
+        for (let i = 0, il = this.onDisposed.length; i < il; i++) {
+
+            const event = this.onDisposed[i];
+            event(this);
+
+        }
+
+    }
 
     destroy() {
 
+        this.doDisposedEvents();
+        this.onBeforeCollisionBoxChanged = [];
+        this.onCollisionBoxChanged = [];
+        this.onBoundingFaceChanged = [];
+        this.onDisposed = [];
         super.destroy();
 
     }
