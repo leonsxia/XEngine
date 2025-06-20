@@ -34,33 +34,48 @@ class Combat {
 
             const player = this.player[i];
 
-            const { onTarget: attackOn, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children.filter(obj => obj.father?.isActive) }) ?? {};
+            const { onTarget: attackOn, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children, enemies: this.enemies.filter(e => e.isActive && !e.dead) }) ?? {};
 
             if (attackOn) {
 
-                const { object } = attackOn;
-                const objectFather = object.parent.father;
-                let realTarget = objectFather ? 
-                (
-                    objectFather.isCreature ? 
-                        objectFather :      // CreatureBase
-                        object.father       // plane
+                for (let i = 0, il = attackOn.length; i < il; i++) {
 
-                ) : object;    // gltf mesh
+                    const on = attackOn[i];
+                    let realTarget = null;
 
-                if (realTarget.isCreature && realTarget.isActive && !realTarget.dead) {
+                    if (on.isCreature) {
 
-                    realTarget.damageReceiveTick({ damage });
+                        realTarget = on;
 
-                    if (realTarget.health.isEmpty) {
+                    } else {
 
-                        player.removeInSightTarget(realTarget);
+                        const { object } = on;
+                        const objectFather = object.parent.father;
+                        realTarget = objectFather ?
+                            (
+                                objectFather.isCreature ?
+                                    objectFather :      // CreatureBase
+                                    object.father       // plane
+
+                            ) : object;    // gltf mesh
 
                     }
 
-                }
+                    if (realTarget.isCreature && realTarget.isActive && !realTarget.dead) {
 
-                this.#logger.log(`player: ${player.name} attack on ${realTarget.name}`);
+                        realTarget.damageReceiveTick({ damage });
+
+                        if (realTarget.health.isEmpty) {
+
+                            player.removeInSightTarget(realTarget);
+
+                        }
+
+                    }
+
+                    this.#logger.log(`player: ${player.name} attack on ${realTarget.name}`);
+
+                }
 
             }
 

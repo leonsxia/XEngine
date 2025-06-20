@@ -103,6 +103,7 @@ class Tofu extends Moveable2D {
     #isPushing = false;
 
     #damageRange = 0;
+    #damageRadius = 0;
 
     _cachedWidth;
     _cachedHeight;
@@ -618,7 +619,7 @@ class Tofu extends Moveable2D {
 
     get damageRange() {
 
-        return this.#damageRange;
+        return this.#damageRange * this.group.scale.z;
 
     }
 
@@ -629,9 +630,22 @@ class Tofu extends Moveable2D {
 
     }
 
+    get damageRadius() {
+
+        return this.#damageRadius;
+
+    }
+
+    set damageRadius(val) {
+
+        this.#damageRadius = val;
+        this.#logger.log(`${this.name} - damageRadius change to: ${this.#damageRadius}`);
+
+    }
+
     onDamgeRangeChanged() {
 
-        this.#logger.log(`${this.name} - damgeRange change to: ${this.#damageRange}`);
+        this.#logger.log(`${this.name} - damageRange change to: ${this.#damageRange}`);
         this.updateAimRay();
 
     }
@@ -778,9 +792,9 @@ class Tofu extends Moveable2D {
 
         // aimRay
         fromVec3 = new Vector3();
-        this.aimRay = new Raycaster(fromVec3, _forward.clone(), this.damageRange);
+        this.aimRay = new Raycaster(fromVec3, _forward.clone(), this.#damageRange);
         this.aimRay.layers.set(TOFU_AIM_LAYER);
-        this.aimArrow = new ArrowHelper(_forward, fromVec3, this.damageRange, green, HEAD_LENGTH, HEAD_WIDTH);
+        this.aimArrow = new ArrowHelper(_forward, fromVec3, this.#damageRange, green, HEAD_LENGTH, HEAD_WIDTH);
 
         this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
 
@@ -1249,6 +1263,58 @@ class Tofu extends Moveable2D {
             angle: angle,
             direction: direction
         };
+
+    }
+
+    checkTargetInDamageRange(target) {
+
+        const { angle } = this.getTargetDirectionAngle(target);
+        const distance = this.getWorldPosition(_v1).distanceTo(target.getWorldPosition(_v2));
+
+        const result = angle < this.damageRadius * .5 && distance < this.damageRange;
+
+        this.#logger.log(`target: ${target.name} is ${result ? 'in' : 'out of'} damage range.`);
+
+        return { in: result, distance, target };
+
+    }
+
+    getInDamageRangeTargets(objects, nearest = true) {
+
+        const check = [];
+        const inRangeTargets = [];
+        for (let i = 0, il = objects.length; i < il; i++) {
+
+            const obj = objects[i];
+
+            if  (obj === this) return;
+
+            const checkIns = this.checkTargetInDamageRange(obj);
+
+            if (checkIns.in) {
+
+                check.push(checkIns);
+                inRangeTargets.push(obj);
+
+            }
+
+        }
+
+        if (nearest) {
+
+            check.sort((a, b) => {
+
+                return a.distance - b.distance;
+
+            });
+
+            return check.length > 0 ? check[0].target : null;
+
+        } else {
+
+            return inRangeTargets;
+
+        }    
 
     }
 

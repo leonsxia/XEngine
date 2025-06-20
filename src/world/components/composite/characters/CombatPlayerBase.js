@@ -253,6 +253,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             });
 
             this.damageRange = 0;
+            this.damageRadius = 0;
             
             return;
 
@@ -266,6 +267,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                 w.visible = true;
                 this.damageRange = weapon.damageRange;
+                this.damageRadius = weapon.damageRadius;
 
             } else {
 
@@ -1175,7 +1177,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     attackTick(params) {
 
-        const { delta, aimObjects } = params;
+        const { delta, aimObjects, enemies } = params;
         this.#weaponLogger.func = this.attackTick.name;
         const result = {
             damage: 0,
@@ -1225,7 +1227,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                             if (intersects.length > 0) {
 
-                                result.onTarget = intersects[0];
+                                result.onTarget = [intersects[0]];
 
                             }
 
@@ -1246,13 +1248,15 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                     this._i++;
 
-                    const intersects = this.checkAimRayIntersect(aimObjects);
+                    // const intersects = this.checkAimRayIntersect(aimObjects);
 
-                    if (intersects.length > 0) {
+                    // if (intersects.length > 0) {
 
-                        result.onTarget = intersects[0];
+                    //     result.onTarget = intersects[0];
 
-                    }
+                    // }
+
+                    result.onTarget = this.getInDamageRangeTargets(enemies, false);
 
                     const damage = this._meleeWeapon.ammo.damage;
                     result.damage = damage;

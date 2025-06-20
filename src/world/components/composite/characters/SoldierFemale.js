@@ -152,6 +152,7 @@ class SoldierFemale extends CombatPlayerBase {
                 position: [- .18, - .028, .065],
                 rotation: [- 0.35, - 1.3, - 1.6],
                 damageRange: 10,
+                damageRadius: 0.52, // 30 degree
                 attackInterval: 0.7, 
                 fireRate: 1.2,
                 ammo: new Ammo({ count: 12, damage: 20, offset0: - 5, offset1: 5 }),
@@ -162,6 +163,7 @@ class SoldierFemale extends CombatPlayerBase {
                 position: [- .18, - .08, .096],
                 rotation: [1.2, 0, - .2],
                 damageRange: 13,
+                damageRadius: 0.52, // 30 degree
                 attackInterval: 0.4667,
                 fireRate: 1.8,
                 ammo: new Ammo({ count: 50, damage: 18, offset: - 5, offset1: 10 }),
@@ -172,6 +174,7 @@ class SoldierFemale extends CombatPlayerBase {
                 position: [- .168, - .005, .075],
                 rotation: [- 0.35, - 1.3, - 1.6],
                 damageRange: 16,
+                damageRadius: 0.52, // 30 degree
                 attackInterval: 1.05,
                 fireRate: 0.8,
                 ammo: new Ammo({ count: 6, damage: 60, offset: - 10, offset1: 45 }),
@@ -182,6 +185,7 @@ class SoldierFemale extends CombatPlayerBase {
                 position: [- .18, - .028, .065],
                 rotation: [- 0.35, - 1.3, - 1.6],
                 damageRange: 9,
+                damageRadius: 0.52, // 30 degree
                 attackInterval: 0.08,
                 fireRate: 10.2,
                 ammo: new Ammo({ count: 35, damage: 7, offset: - 2, offset1: 2 }),
@@ -194,7 +198,8 @@ class SoldierFemale extends CombatPlayerBase {
                 position: [- .18, .01, .046],
                 rotation: [- .5, - 1, - .3],
                 attackInterval: 1.03,
-                damageRange: 1,
+                damageRange: 1.55,
+                damageRadius: 1.75, // 100 degree
                 prepareInterval: 0.5,
                 fireRate: 1.25,
                 ammo: new Ammo({ isMeleeWeapon: true, damage: 30, offset0: - 10, offset1: 10 })

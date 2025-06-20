@@ -140,18 +140,32 @@ class CustomizedCreatureTofu extends Tofu {
 
     }
 
+    setBoundingBoxLayers(enable) {
+
+        if (enable) {
+
+            this.boundingBoxMesh.layers.enable(TOFU_AIM_LAYER);
+
+        } else {
+
+            this.boundingBoxMesh?.layers.disable(TOFU_AIM_LAYER);
+
+        }
+
+    }
+
     switchBoundingBox(action) {
 
         if (this.boundingBoxes.size === 0) return;
 
         const { boundingBox, boundingBoxWire } = this.boundingBoxes.get(action);
 
-        this.boundingBoxMesh?.layers.disable(TOFU_AIM_LAYER);
+        this.setBoundingBoxLayers(false);
         this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
         this.group.add(boundingBox, boundingBoxWire);
         this.boundingBoxMesh = boundingBox;
         this.boundingBoxWireMesh = boundingBoxWire;
-        this.boundingBoxMesh.layers.enable(TOFU_AIM_LAYER);
+        this.setBoundingBoxLayers(true);
 
     }
 
