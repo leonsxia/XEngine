@@ -1264,8 +1264,13 @@ class Tofu extends Moveable2D {
 
         this.health.current = this.health.max;
         this.isActive = true;
+        this.die(false);
+        this.onHealthReset();
 
     }
+
+    // inherited by children
+    onHealthReset() {}
 
     setTickParams(delta) {
 

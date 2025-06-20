@@ -28,7 +28,7 @@ class AI {
 
                 const enemy = this.enemies[j];
 
-                if (!enemy.isActive) continue;
+                if (!enemy.isActive || enemy.dead) continue;
 
                 player.checkTargetInSight(enemy);
 
@@ -40,13 +40,13 @@ class AI {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive) continue;
+            if (!enemy.isActive || enemy.dead) continue;
 
             for (let j = 0, jl = this.players.length; j < jl; j++) {
                 
                 const player = this.players[j];
 
-                if (!player.isActive) continue;
+                if (!player.isActive || player.dead) continue;
 
                 enemy.checkTargetInSight(player);
 

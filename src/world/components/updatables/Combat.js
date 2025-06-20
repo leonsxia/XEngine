@@ -24,6 +24,8 @@ class Combat {
 
             const enemy = this.enemies[i];
 
+            if (!enemy.isActive || enemy.dead) continue;
+
             enemy.attackTick?.(delta);
 
         }
@@ -32,7 +34,7 @@ class Combat {
 
             const player = this.player[i];
 
-            const { onTarget: attackOn, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children }) ?? {};
+            const { onTarget: attackOn, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children.filter(obj => obj.father?.isActive) }) ?? {};
 
             if (attackOn) {
 
@@ -46,7 +48,7 @@ class Combat {
 
                 ) : object;    // gltf mesh
 
-                if (realTarget.isCreature) {
+                if (realTarget.isCreature && realTarget.isActive && !realTarget.dead) {
 
                     realTarget.damageReceiveTick({ damage });
 

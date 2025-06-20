@@ -843,8 +843,6 @@ class SimplePhysics {
 
             const avatar = activeAvatars[i];
 
-            if (!avatar.isActive) continue;
-
             // console.log(`is in air: ${avatar.isInAir}`);
 
             if (DEBUG && avatar._showBBHelper) {

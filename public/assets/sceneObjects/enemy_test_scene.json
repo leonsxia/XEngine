@@ -132,7 +132,7 @@
             "isActive": true,
             "sovRadius": 6.5,
             "showBS": false,
-            "variant": "standard",
+            "variant": "variant1",
             "vel": 0.37,
             "rotateR": 1
         },
@@ -148,7 +148,7 @@
             "isActive": true,
             "sovRadius": 6.5,
             "showBS": false,
-            "variant": "variant1",
+            "variant": "standard",
             "vel": 0.45,
             "rotateR": 0.9
         },
@@ -164,7 +164,7 @@
             "isActive": true,
             "sovRadius": 6.5,
             "showBS": false,
-            "variant": "standard",
+            "variant": "variant1",
             "vel": 0.37,
             "rotateR": 1
         },
@@ -180,7 +180,7 @@
             "isActive": true,
             "sovRadius": 6.5,
             "showBS": false,
-            "variant": "variant1",
+            "variant": "standard",
             "vel": 0.45,
             "rotateR": 0.9
         }

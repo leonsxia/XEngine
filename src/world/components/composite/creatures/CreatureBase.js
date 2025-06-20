@@ -359,28 +359,37 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
+    onHealthReset() {
+
+        this.die(false);
+
+    }
+
     hurt(val) {
 
         this.#logger.func = this.hurt.name;
 
         if (val) {
 
-            if (this.AWS.activeAction === this.AWS.actions[this.typeMapping.hurt.nick]) {
+            const hurtAction = this.AWS.actions[this.typeMapping.hurt.nick]
+            if (this.AWS.activeAction === hurtAction) {
 
                 const fadeToAction = this.AWS.cachedAction ?? this.AWS.previousAction;
-                this.AWS.fadeToAction(fadeToAction, .01);
+                this.AWS.fadeToAction(fadeToAction, .1);
                 this.AWS.isLooping = false;
+                hurtAction.ignoreFinishedEvent = true;
 
             }
 
             const endCallback = () => {
 
                 super.hurt(false);
+                hurtAction.ignoreFinishedEvent = undefined;
 
             }
 
             this.#logger.log(`${this.name} is on hurt`);
-            this.AWS.prepareCrossFade(null, this.AWS.actions[this.typeMapping.hurt.nick], this._animationSettings.HURT, 1, false, false, this._animationSettings.HURT, endCallback);
+            this.AWS.prepareCrossFade(null, hurtAction, this._animationSettings.HURT, 1, false, false, this._animationSettings.HURT, endCallback);
 
         } else {
 
@@ -389,6 +398,46 @@ class CreatureBase extends CustomizedCreatureTofu {
         }
 
         super.hurt(val);
+
+    }
+
+    die(val) {
+
+        this.#logger.func = this.die.name;
+
+        if (val) {
+
+            this.#logger.log(`${this.name} is dead`);
+
+            const dieAction = this.AWS.actions[this.typeMapping.die.nick];
+            const hurtAction = this.AWS.actions[this.typeMapping.hurt.nick];
+            if (this.AWS.activeAction === hurtAction) {
+
+                const fadeToAction = this.AWS.cachedAction ?? this.AWS.previousAction;
+                this.AWS.fadeToAction(fadeToAction, .1);
+                this.AWS.isLooping = false;
+                hurtAction.ignoreFinishedEvent = true;
+                hurtAction.ignoreFadeOut = true;
+
+            }
+
+            const endCallback = () => {
+
+                this.isActive = false;
+                hurtAction.ignoreFinishedEvent = undefined;
+                hurtAction.ignoreFadeOut = undefined;
+                this.AWS.isLooping = false;
+                this.AWS.setActionEffectiveTimeScale(this.typeMapping.idle.nick, 1);
+
+            }
+            dieAction.ignoreFadeOut = true;
+            this.AWS.cachedAction = this.AWS.previousAction = null;
+
+            this.AWS.prepareCrossFade(null, dieAction, this._animationSettings.DIE, 1, false, false, 0, endCallback);
+
+        }        
+
+        super.die(val);
 
     }
 
@@ -405,12 +454,18 @@ class CreatureBase extends CustomizedCreatureTofu {
             this.hurt(true);
 
         } else {
+          
+            this.clearInSightTargets();
+            this.die(true);
+
+        }
+
+        if (this.forward || this.turningLeft || this.turningRight) {
 
             this.movingLeft(false);
             this.movingRight(false);
             this.movingForward(false);
-            this.isActive = false;
-            this.clearInSightTargets();
+            this.switchHelperComponents();
 
         }
 
@@ -420,11 +475,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         this.#logger.func = this.movingTick.name;
 
-        if (this.hurting) {
-
-            this.movingLeft(false);
-            this.movingRight(false);
-            this.movingForward(false);
+        if (this.hurting || this.dead) {
 
             return;
 
@@ -463,6 +514,20 @@ class CreatureBase extends CustomizedCreatureTofu {
             this.movingForward(false);
 
         }
+
+    }
+
+    // inherited by child
+    setInitialActions() {}
+
+    resetAnimation() {
+
+        this.AWS.resetAllActions();
+        this.movingLeft(false);
+        this.movingRight(false);
+        this.movingForward(false);
+        super.hurt(false);
+        super.die(false);
 
     }
 

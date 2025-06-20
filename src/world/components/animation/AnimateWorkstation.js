@@ -138,6 +138,40 @@ class AnimateWorkstation {
 
     }
 
+    resetAllActions() {
+
+        for (const act in this.actions) {
+
+            const action = this.actions[act];
+
+            action.reset();
+
+            if (action.isDefault) {
+
+                const { weight } = action;
+                this.setWeight(action, weight);
+                this.activeAction = this.previousAction = action;
+
+            } else {
+
+                this.setWeight(action, 0);
+
+            }
+
+            if (!action.loopOnce && action.startImmediately) {
+
+                action.play();
+
+            } else {
+
+                action.stop();
+
+            }
+
+        }
+
+    }
+
     pauseAllActions() {
 
         for (const act in this.actions) {
@@ -184,32 +218,36 @@ class AnimateWorkstation {
         this.fadeToAction(endAction, duration);
         this.isLooping = true;
 
-        const onLoopFinished = () => {
+        if (!endAction.ignoreFinishedEvent) {
 
-            this.mixer.removeEventListener('finished', onLoopFinished);
+            const onLoopFinished = () => {
 
-            if (!this.isLooping) return;
+                this.mixer.removeEventListener('finished', onLoopFinished);
 
-            this.isLooping = false;
+                if (!endAction.ignoreFadeOut) {
 
-            // this.executeCrossFade(this.activeAction, this.previousAction, restoreDuration);
-            const fadeToAction = this.cachedAction ?? this.previousAction;
-            this.fadeToAction(fadeToAction, restoreDuration);
+                    this.isLooping = false;
+                    const fadeToAction = this.cachedAction ?? this.previousAction;
+                    this.fadeToAction(fadeToAction, restoreDuration);
 
-            if (endCallback) endCallback();
+                    if (fadeToAction.callback) {
 
-            if (fadeToAction.callback) {
+                        this.logger.log(`end ${fadeToAction.name} callback`);
+                        fadeToAction.callback();
+                        this.logger.log(`end ${fadeToAction.name} weight: ${fadeToAction.weight}, timeScale: ${fadeToAction.timeScale}`);
+                        fadeToAction.callback = null;
 
-                this.logger.log(`end ${fadeToAction.name} callback`);
-                fadeToAction.callback();
-                this.logger.log(`end ${fadeToAction.name} weight: ${fadeToAction.weight}, timeScale: ${fadeToAction.timeScale}`);
-                fadeToAction.callback = null;
+                    }
+
+                }
+
+                if (endCallback) endCallback();
 
             }
-            
-        }
 
-        this.mixer.addEventListener('finished', onLoopFinished);
+            this.mixer.addEventListener('finished', onLoopFinished);
+
+        }
 
     }
 

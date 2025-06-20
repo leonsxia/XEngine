@@ -742,6 +742,7 @@ class WorldScene {
             this.player.resetFallingState?.();
             this.player.resetHealth();
             this.player.clearInSightTargets();
+            this.player.reloadAllWeapons?.();
 
         }
 
@@ -754,6 +755,7 @@ class WorldScene {
             const enemy = this.enemies[i];
             enemy.resetFallingState();
             enemy.resetHealth();
+            enemy.resetAnimation();
             enemy.clearInSightTargets();
 
         }

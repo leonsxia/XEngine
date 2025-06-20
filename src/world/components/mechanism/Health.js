@@ -126,7 +126,7 @@ class Health {
 
         const { context: ctx, width, height, baseWidth } = this.labelCanvas;
 
-        const content = this.showText ? `${Math.round(this.currentLife)}%` : '';
+        const content = this.showText ? `${this.currentLife.toFixed(1)}%` : '';
         // const content = `this is a very, very, very long text`;
         // measure how long the name will be
         const textWidth = ctx.measureText(content).width;        
