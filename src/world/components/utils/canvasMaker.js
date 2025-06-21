@@ -1,6 +1,6 @@
 function makeLabelCanvas(specs) {
 
-    const scale = window.devicePixelRatio;
+    const scale = 3;
     const { baseWidth, size, borderSize = 5 } = specs;
     const ctx = document.createElement('canvas').getContext('2d');
     const font = `${size * scale}px bold sans-serif`;
