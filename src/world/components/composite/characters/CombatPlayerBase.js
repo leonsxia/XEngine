@@ -31,6 +31,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     _delta = 0;
     _i = 0;
+    _onMeleeHurtTargets = [];
     _cancelGunPoint = false;
     _cancelShoot = false;
     
@@ -1242,25 +1243,45 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             } else if (this.meleeing) {
 
-                attackInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.prepareInterval;
+                let attackStartInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.prepareStart;
+                let attackEndInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.prepareEnd;
 
-                if (this._delta >= attackInterval) {
+                if (this._delta >= attackStartInterval && this._delta <= attackEndInterval) {
 
-                    this._i++;
+                    // this.#weaponLogger.log(`melee attack on: ${this._i}`);
+                    this._meleeWeapon.hittingBox.updateOBB(false);
 
-                    // const intersects = this.checkAimRayIntersect(aimObjects);
+                    const on = [];
+                    for (let i = 0, il = enemies.length; i < il; i++) {
 
-                    // if (intersects.length > 0) {
+                        const enemy = enemies[i];
 
-                    //     result.onTarget = intersects[0];
+                        if (this._onMeleeHurtTargets.indexOf(enemy) > -1) continue;
 
-                    // }
+                        if (this._meleeWeapon.hittingBox.obb.intersectsOBB(enemy.obb)) {
 
-                    result.onTarget = this.getInDamageRangeTargets(enemies, false);
+                            on.push(enemy);
+                            this._onMeleeHurtTargets.push(enemy);
+
+                        }
+
+                    }
+
+                    result.onTarget = on;
 
                     const damage = this._meleeWeapon.ammo.damage;
                     result.damage = damage;
-                    this.#weaponLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}, damage: ${damage}`);
+
+                    if (on.length > 0) {
+
+                        this.#weaponLogger.log(`${this._meleeWeapon.weaponType} attack ${this._i}, damage: ${damage}`);
+
+                    }
+
+                } else if (this._delta > attackEndInterval) {
+
+                    this._i++;
+                    this._onMeleeHurtTargets = [];
 
                 }
 

@@ -197,10 +197,14 @@ class SoldierFemale extends CombatPlayerBase {
                 scale: [.35, .3, .25],
                 position: [- .18, .01, .046],
                 rotation: [- .5, - 1, - .3],
+                obbSize: { size: { width: .03, depth: .01, height: .35 } },
+                obbPosition: [- .075, .038, .215],
+                obbRotation: [- .37, - 1.02, 1.38],
                 attackInterval: 1.03,
                 damageRange: 1.55,
                 damageRadius: 1.75, // 100 degree
-                prepareInterval: 0.5,
+                prepareStart: 0.15,
+                prepareEnd: 0.49,
                 fireRate: 1.25,
                 ammo: new Ammo({ isMeleeWeapon: true, damage: 20, offset0: - 10, offset1: 10 })
             })

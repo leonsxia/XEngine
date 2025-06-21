@@ -1,10 +1,15 @@
 import { WeaponBase } from '../../Models';
+import { createOBBBox } from '../../physics/collisionHelper';
 import { WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
 const GLTF_SRC = 'weapons/Bayonet.glb';
 
 class Bayonet extends WeaponBase {
+
+    hittingBox;
+    prepareStart;
+    prepareEnd;
 
     constructor(specs) {
 
@@ -30,6 +35,17 @@ class Bayonet extends WeaponBase {
         Object.assign(superSpecs, specs);
 
         super(superSpecs);
+
+        const { prepareStart = 0, prepareEnd = 0 } = specs;
+        this.prepareStart = prepareStart;
+        this.prepareEnd = prepareEnd;
+
+        const { obbSize, obbPosition, obbRotation } = specs;
+        this.hittingBox = createOBBBox(obbSize, `bayonet_hitting_obb_box`, obbPosition, obbRotation);
+        this.group.add(this.hittingBox.mesh);
+        this.hittingBox.mesh.isWeapon = true;
+        // this.hittingBox.mesh.layers.enable(CAMERA_RAY_LAYER);
+        this.hittingBox.mesh.visible = false;
 
     }
 
