@@ -225,6 +225,24 @@ class CustomizedCombatTofu extends Tofu {
 
         }
 
+        this.setAllBoundingBoxLayers(true);
+
+    }
+
+    setAllBoundingBoxLayers(enable) {
+
+        for (const mapping of this.boundingBoxMap.values()) {
+
+            const bboxes = mapping.values();
+
+            for (const bb of bboxes) {
+
+                enable ? bb.boundingBox.layers.enable(TOFU_AIM_LAYER) : bb.boundingBox.layers.disable(TOFU_AIM_LAYER);
+
+            }
+
+        }
+
     }
 
     switchBoundingBox(weaponType, action) {
@@ -233,12 +251,10 @@ class CustomizedCombatTofu extends Tofu {
 
         const { boundingBox, boundingBoxWire } = this.boundingBoxMap.get(weaponType).get(action);
 
-        this.boundingBoxMesh?.layers.disable(TOFU_AIM_LAYER);
         this.group.remove(this.boundingBoxMesh, this.boundingBoxWireMesh);
         this.group.add(boundingBox, boundingBoxWire);
         this.boundingBoxMesh = boundingBox;
         this.boundingBoxWireMesh = boundingBoxWire;
-        this.boundingBoxMesh.layers.enable(TOFU_AIM_LAYER);
 
     }
 

@@ -438,7 +438,6 @@ class CreatureBase extends CustomizedCreatureTofu {
         }        
 
         super.die(val);
-        this.setBoundingBoxLayers(false);
 
     }
 
@@ -466,6 +465,12 @@ class CreatureBase extends CustomizedCreatureTofu {
             this.movingLeft(false);
             this.movingRight(false);
             this.movingForward(false);
+
+        }
+
+        if (this.dead) {
+
+            this.setAllBoundingBoxLayers(false);
 
         }
 

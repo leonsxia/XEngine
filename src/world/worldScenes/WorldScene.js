@@ -764,6 +764,7 @@ class WorldScene {
             enemy.resetHealth();
             enemy.resetAnimation();
             enemy.clearInSightTargets();
+            enemy.setAllBoundingBoxLayers(true);
 
         }
         
