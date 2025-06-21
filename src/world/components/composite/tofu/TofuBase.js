@@ -2,7 +2,7 @@ import { Group, Box3, Box3Helper, Raycaster, ArrowHelper, Vector3 } from 'three'
 import { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2, green } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, CORNOR_RAY_LAYER, TOFU_AIM_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, TOFU_AIM_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
 import { CollisionBox } from '../../Models';
 import { ResourceTracker } from '../../../systems/ResourceTracker';
 import { Logger } from '../../../systems/Logger';
@@ -29,6 +29,7 @@ class TofuBase extends Moveable2D {
 
     name = '';
     group;
+    boundingFaceGroup;
     meshes;
     boundingObjects;
 
@@ -66,7 +67,6 @@ class TofuBase extends Moveable2D {
     _useCustomBoundingFaces = false;
     
     _size;
-    _useBF2 = false;
     _showBF = false;
     _showBBHelper = false;
     _showBB = false;
@@ -134,6 +134,7 @@ class TofuBase extends Moveable2D {
         } = specs;
         const { collisionSize = { width, depth, height } } = specs;
         const { createDefaultBoundingObjects = true } = specs;
+        const { enableDefaultCBox = false } = specs;
 
         this._size = { width, width2, depth, depth2, height, sovRadius };
         this._collisionSize = collisionSize;
@@ -163,6 +164,14 @@ class TofuBase extends Moveable2D {
         this.group.isTofu = true;
         this.group.father = this;
         this.meshes = createMeshes(this._size);
+        this.boundingFaceGroup = new Group();
+        this.group.add(this.boundingFaceGroup);
+
+        if (enableDefaultCBox) {
+
+            this.createCollisionBox();
+
+        }
 
         const {
             body, slotLeft, slotRight
@@ -191,8 +200,6 @@ class TofuBase extends Moveable2D {
 
             this.group.add(
                 boundingBox, boundingBoxWire,
-                frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace,
-                frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2,
                 pushingOBBBox
             );
 
@@ -201,6 +208,7 @@ class TofuBase extends Moveable2D {
             this.pushingOBBBoxMesh = pushingOBBBox;
             this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
             this.boundingFace2Mesh = [frontBoundingFace2, backBoundingFace2, leftBoundingFace2, rightBoundingFace2]
+            this.boundingFaceGroup.add(...this.boundingFaceMesh);
             
         }
 
@@ -241,15 +249,7 @@ class TofuBase extends Moveable2D {
 
         } else {
 
-            if (this._useBF2) {
-
-                return this.boundingFace2Mesh;
-
-            } else {
-
-                return this.boundingFaceMesh;
-
-            }
+            return this.boundingFaceGroup.children;
 
         }
 
@@ -259,34 +259,17 @@ class TofuBase extends Moveable2D {
 
         if (this.isRotating) {
             
-            this.boundingFaceMesh.forEach(bf => { bf.layers.disable(CORNOR_RAY_LAYER) });
-            this.boundingFace2Mesh.forEach(bf2 => { bf2.layers.enable(CORNOR_RAY_LAYER) });
+            this.boundingFaceGroup.remove(...this.boundingFaceMesh);
+            this.boundingFaceGroup.add(...this.boundingFace2Mesh);
             this.#w = this._size.width2;
             this.#d = this._size.depth2;
-            this._useBF2 = true;
 
         } else {
 
-            this.boundingFaceMesh.forEach(bf => { bf.layers.enable(CORNOR_RAY_LAYER) });
-            this.boundingFace2Mesh.forEach(bf2 => { bf2.layers.disable(CORNOR_RAY_LAYER) });
+            this.boundingFaceGroup.remove(...this.boundingFace2Mesh);
+            this.boundingFaceGroup.add(...this.boundingFaceMesh);
             this.#w = this._size.width;
             this.#d = this._size.depth;
-            this._useBF2 = false;
-
-        }
-
-        this.setBoundingFaceVisibility();
-
-    }
-
-    setBoundingFaceVisibility() {
-
-        this.boundingFace2Mesh.forEach(bf2 => { bf2.visible = false });
-        this.boundingFaceMesh.forEach(bf => { bf.visible = false });
-
-        if (this._showBF) {
-
-            this.activeBoundingFace.forEach(bf => bf.visible = true);
 
         }
 
@@ -688,6 +671,7 @@ class TofuBase extends Moveable2D {
         this._showBB = show ?? this._showBB;
 
         this.boundingBoxMesh.visible = this._showBB;
+        this.enablePickLayers(this.boundingBoxMesh);
 
     }
 
@@ -711,7 +695,8 @@ class TofuBase extends Moveable2D {
 
         this._showBF = show ?? this._showBF;
 
-        this.setBoundingFaceVisibility();
+        this.boundingFaceMesh.forEach(bf => bf.visible = show);
+        this.boundingFace2Mesh.forEach(bf2 => bf2.visible = show);
         this.enablePickLayers(...this.boundingFaceMesh, ...this.boundingFace2Mesh);
 
         return this;
@@ -723,6 +708,7 @@ class TofuBase extends Moveable2D {
         this._showPushingBox = show ?? this._showPushingBox;
 
         this.pushingOBBBoxMesh.visible = this._showPushingBox;
+        this.enablePickLayers(this.pushingOBBBoxMesh);
 
         return this;
 
@@ -742,7 +728,8 @@ class TofuBase extends Moveable2D {
 
         if (this.collisionBox) {
 
-            this.collisionBox.group.visible = show;
+            this.collisionBox.group.children.forEach(p => p.visible = show);
+            this.enablePickLayers(...this.collisionBox.group.children);
 
         }
 
@@ -910,10 +897,13 @@ class TofuBase extends Moveable2D {
         };
 
         this.collisionBox = new CollisionBox(cBoxSpecs);
+        // for SimplePhysics self-check
         this.collisionBox.father = this;
 
         this.walls.push(...this.collisionBox.walls);
         this.group.add(this.collisionBox.group);
+
+        this.showCollisionBox(false);
 
     }
 

@@ -398,8 +398,8 @@ class SimplePhysics {
 
             } else if (Math.abs(dummyObject.position.z - halfAvatarDepth) >  avatar.velocity * delta) {
                 
-                const leftBorderIntersects = plane.leftRay ? plane.leftRay.intersectObject(avatar.group) : [];
-                const rightBorderIntersects = plane.rightRay ? plane.rightRay.intersectObject(avatar.group) : [];
+                const leftBorderIntersects = plane.leftRay ? plane.leftRay.intersectObject(avatar.boundingFaceGroup) : [];
+                const rightBorderIntersects = plane.rightRay ? plane.rightRay.intersectObject(avatar.boundingFaceGroup) : [];
                 
                 if (
                     rightBorderIntersects.length > 0 ||

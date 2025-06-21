@@ -329,12 +329,12 @@ class CustomizedCombatTofu extends Tofu {
         for (let i = 0, il = currentFaces.length; i < il; i++) {
 
             const face = currentFaces[i];
-            this.group.remove(face);
+            this.boundingFaceGroup.remove(face);
 
         }
 
         const { frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace } = bf;
-        this.group.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
+        this.boundingFaceGroup.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
         this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
 
         this.doBoundingFaceChangedEvents();
@@ -454,6 +454,7 @@ class CustomizedCombatTofu extends Tofu {
             for (const bb of bboxes) {
 
                 bb.boundingBox.visible = show;
+                this.enablePickLayers(bb.boundingBox);
 
             }
 
@@ -495,6 +496,8 @@ class CustomizedCombatTofu extends Tofu {
                 leftBoundingFace.visible = show;
                 rightBoundingFace.visible = show;
 
+                this.enablePickLayers(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
+
             }
 
         }
@@ -508,6 +511,7 @@ class CustomizedCombatTofu extends Tofu {
         for (const pushBox of this.pushingBoxMap.values()) {
 
             pushBox.visible = show;
+            this.enablePickLayers(pushBox);
 
         }
 
@@ -521,7 +525,8 @@ class CustomizedCombatTofu extends Tofu {
 
             for (const cbox of cboxes) {
 
-                cbox.group.visible = show;
+                cbox.group.children.forEach(p => p.visible = show);
+                this.enablePickLayers(...cbox.group.children);
 
             }
 

@@ -95,9 +95,9 @@ class ModelBuilder {
     createTofu(specs) {
 
         let object;
-        const { name, position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
+        const { name, position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false, enableDefaultCBox = true } = specs;
 
-        object = new Tofu({ name });
+        object = new Tofu({ name, enableDefaultCBox });
         object.setPosition(position)
             .setScale(scale)
             .receiveShadow(receiveShadow)
