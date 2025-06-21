@@ -466,7 +466,6 @@ class CreatureBase extends CustomizedCreatureTofu {
             this.movingLeft(false);
             this.movingRight(false);
             this.movingForward(false);
-            this.switchHelperComponents();
 
         }
 

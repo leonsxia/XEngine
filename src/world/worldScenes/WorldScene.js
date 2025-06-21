@@ -268,6 +268,13 @@ class WorldScene {
 
                 }
 
+                for (let j = 0, jl = this.players.length; j < jl; j++) {
+
+                    const player = this.players[j];
+                    enemy.onDisposed.push(player.onTargetDisposed.bind(player));
+
+                }
+
             }
 
         }
