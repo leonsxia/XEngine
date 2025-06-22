@@ -18,6 +18,7 @@ class XBoxController extends InputBase {
     #APressed = false;
     #XPressed = false;
     #YPressed = false;
+    #LBPressed = false;
     #RBPressed = false;
     #LTPressed = false;
     #RTPressed = false;
@@ -442,7 +443,29 @@ class XBoxController extends InputBase {
 
         if (btnLB.pressed) {
 
-            this.#logger.log(`gamepad button LB pressed: ${btnLB.pressed}, value: ${btnLB.value}`);
+            if (!this.#LBPressed) {
+
+                this.#logger.log(`gamepad button LB pressed: ${btnLB.pressed}, value: ${btnLB.value}`);
+
+                this.#LBPressed = true;
+                eventDispatcher.publish(messageType, actions.NEXT_AIM_TARGET, world.current, this.#LBPressed);
+
+                this.#logger.log(`next aim target: ${this.#LBPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#LBPressed) {
+
+                this.#logger.log(`gamepad button LB pressed: ${btnLB.pressed}, value: ${btnLB.value}`);
+
+                this.#LBPressed = false;
+                eventDispatcher.publish(messageType, actions.NEXT_AIM_TARGET, world.current, this.#LBPressed);
+
+                this.#logger.log(`next aim target: ${this.#LBPressed}`);
+
+            }
 
         }
 
