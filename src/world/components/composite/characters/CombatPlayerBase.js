@@ -256,6 +256,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             this.damageRange = 0;
             this.damageRadius = 0;
+            this.armedHeight = 0;
             
             return;
 
@@ -270,6 +271,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 w.visible = true;
                 this.damageRange = weapon.damageRange;
                 this.damageRadius = weapon.damageRadius;
+                this.armedHeight = weapon.armedHeight;
+                this.updateAimRay();
 
             } else {
 

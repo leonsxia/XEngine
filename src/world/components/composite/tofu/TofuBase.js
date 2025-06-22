@@ -102,6 +102,7 @@ class TofuBase extends Moveable2D {
 
     #damageRange = 0;
     #damageRadius = 0;
+    #armedHeight = 0;
 
     _cachedWidth;
     _cachedHeight;
@@ -607,13 +608,13 @@ class TofuBase extends Moveable2D {
     set damageRange(val) {
 
         this.#damageRange = val;
-        this.onDamgeRangeChanged();
+        this.#logger.log(`${this.name} - damageRange change to: ${this.#damageRange}`);
 
     }
 
     get damageRadius() {
 
-        return this.#damageRadius;
+        return this.#damageRadius * this.group.scale.y;
 
     }
 
@@ -624,10 +625,15 @@ class TofuBase extends Moveable2D {
 
     }
 
-    onDamgeRangeChanged() {
+    get armedHeight() {
 
-        this.#logger.log(`${this.name} - damageRange change to: ${this.#damageRange}`);
-        this.updateAimRay();
+        return this.#armedHeight;
+
+    }
+
+    set armedHeight(val) {
+
+        this.#armedHeight = val;
 
     }
 
@@ -776,7 +782,7 @@ class TofuBase extends Moveable2D {
         this.backRightArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // aimRay
-        fromVec3 = new Vector3();
+        fromVec3 = new Vector3(0, this.#armedHeight, 0);
         this.aimRay = new Raycaster(fromVec3, _forward.clone(), this.#damageRange);
         this.aimRay.layers.set(TOFU_AIM_LAYER);
         this.aimArrow = new ArrowHelper(_forward, fromVec3, this.#damageRange, green, HEAD_LENGTH, HEAD_WIDTH);
@@ -795,7 +801,7 @@ class TofuBase extends Moveable2D {
 
         }
         
-        _v1.set(0, 0, 0).applyMatrix4(this.group.matrixWorld);
+        _v1.set(0, this.#armedHeight, 0).applyMatrix4(this.group.matrixWorld);
 
         // get world direction
         const e = this.group.matrixWorld.elements;

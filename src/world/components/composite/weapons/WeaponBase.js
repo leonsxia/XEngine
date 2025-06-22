@@ -28,6 +28,7 @@ class WeaponBase {
     _fireRate;
     _damageRange;
     _damageRadius;
+    _armedHeight;
     _isFiring = false;
     _magzineCapacity;
     _ammo;
@@ -47,7 +48,7 @@ class WeaponBase {
         const { 
             weaponType, 
             prepareInterval = 0, attackInterval = 1, startTime = 0, endTime = 1, fireRate = 1, 
-            damageRange = 0, damageRadius = Math.PI, 
+            damageRange = 0, damageRadius = Math.PI, armedHeight = 0,
             magzineCapacity = 0, ammo = new Ammo(), 
             isSemiAutomatic = true 
         } = specs;
@@ -64,6 +65,7 @@ class WeaponBase {
         this._fireRate = fireRate;
         this._damageRange = damageRange;
         this._damageRadius = damageRadius;
+        this._armedHeight = armedHeight;
         this._isSemiAutomatic = isSemiAutomatic;
         this._magzineCapacity = magzineCapacity;
         this._ammo = ammo;
@@ -189,6 +191,12 @@ class WeaponBase {
     get damageRadius() {
 
         return this._damageRadius;
+
+    }
+
+    get armedHeight() {
+
+        return this._armedHeight;
 
     }
 
