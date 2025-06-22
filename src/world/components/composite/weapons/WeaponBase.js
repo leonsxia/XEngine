@@ -12,6 +12,7 @@ class WeaponBase {
 
     gltf;
     group;
+    hittingBox;    
 
     specs;
 
@@ -22,6 +23,8 @@ class WeaponBase {
     _weaponType;
     _prepareInterval;
     _attackInterval;
+    _startTime;
+    _endTime;
     _fireRate;
     _damageRange;
     _damageRadius;
@@ -43,7 +46,7 @@ class WeaponBase {
         const { receiveShadow = true, castShadow = true } = specs;
         const { 
             weaponType, 
-            prepareInterval = 0, attackInterval = 1, fireRate = 1, 
+            prepareInterval = 0, attackInterval = 1, startTime = 0, endTime = 1, fireRate = 1, 
             damageRange = 0, damageRadius = Math.PI, 
             magzineCapacity = 0, ammo = new Ammo(), 
             isSemiAutomatic = true 
@@ -56,6 +59,8 @@ class WeaponBase {
         this._weaponType = weaponType;
         this._prepareInterval = prepareInterval;
         this._attackInterval = attackInterval;
+        this._startTime = startTime;
+        this._endTime = endTime;
         this._fireRate = fireRate;
         this._damageRange = damageRange;
         this._damageRadius = damageRadius;
@@ -154,6 +159,18 @@ class WeaponBase {
     get attackInterval() {
 
         return this._attackInterval;
+
+    }
+
+    get startTime() {
+
+        return this._startTime;
+
+    }
+
+    get endTime() {
+
+        return this._endTime;
 
     }
 

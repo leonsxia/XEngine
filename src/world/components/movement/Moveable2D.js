@@ -22,6 +22,7 @@ class Moveable2D {
     #interact;
     #gunPoint;
     #shoot;
+    #nextAimTarget;
     #hurt;
     #die;
     
@@ -136,6 +137,11 @@ class Moveable2D {
         // this.#logger.log(`shoot ${this.#shoot}`);
     }
 
+    nextAimTarget(val) {
+        this.#nextAimTarget = val;
+        // this.#logger.log(`nextAimTarget ${this.#nextAimTarget}`);
+    }
+
     interact(val) {
         this.#interact = val;
         // this.#logger.log(`interact ${this.#interact}`);
@@ -184,6 +190,10 @@ class Moveable2D {
 
     get shooting() {
         return this.#shoot;
+    }
+
+    get nextAimTargeting() {
+        return this.#nextAimTarget;
     }
 
     get attacking() {
@@ -517,6 +527,7 @@ class Moveable2D {
                 } else {
 
                     this.#aimingTime -= delta;
+                    result = true;
 
                 }
 
@@ -526,14 +537,20 @@ class Moveable2D {
 
         if (!this.#gunPoint && (this.#aimingRadStep || this.#isAimTurnOver)) {
 
-            this.#isAimTurnOver = false;
-            this.#isAimTurning = false;
-            this.#aimingRadStep = 0;
-            this.#aimingTime = $self.aimTime;
+            this.resetAimingState($self);
 
         }
 
         return result;
+
+    }
+
+    resetAimingState($self) {
+
+        this.#isAimTurnOver = false;
+        this.#isAimTurning = false;
+        this.#aimingRadStep = 0;
+        this.#aimingTime = $self.aimTime;
 
     }
 

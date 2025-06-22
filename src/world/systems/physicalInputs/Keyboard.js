@@ -15,6 +15,7 @@ class Keyboard extends InputBase {
     #interact = false;
     #gunPointing = false;
     #shoot = false;
+    #nextAimTarget = false;
 
     #logger = new Logger(DEBUG, 'Keyboard');
 
@@ -39,7 +40,7 @@ class Keyboard extends InputBase {
         const eventDispatcher = this.eventDispatcher;
         const messageType = InputBase.MOVEMENT_TYPE.TANKMOVE;
         const actions = InputBase.MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
-        const { A, D, W, S, J, K, L, F, Shift, Space } = Keyboard.KEYS;
+        const { A, D, W, S, J, K, L, P, F, Shift, Space } = Keyboard.KEYS;
         const world = this.attachTo;
 
         window.addEventListener('keydown', e => {
@@ -227,6 +228,21 @@ class Keyboard extends InputBase {
 
                     break;
 
+                case P.lower:
+                case P.upper:
+
+                    if (!P.isDown) {
+
+                        P.isDown = true;
+                        this.#nextAimTarget = true;
+
+                        // this.#logger.log('nextAimTarget');
+                        eventDispatcher.publish(messageType, actions.NEXT_AIM_TARGET, world.current, this.#nextAimTarget);
+
+                    }
+
+                    break;
+
                 case Shift.code:
 
                     if (!Shift.isDown) {
@@ -409,6 +425,17 @@ class Keyboard extends InputBase {
 
                     break;
 
+                case P.lower:
+                case P.upper:
+
+                    P.isDown = false;
+                    this.#nextAimTarget = false;
+
+                    // this.#logger.log('cancel nextAimTarget');
+                    eventDispatcher.publish(messageType, actions.NEXT_AIM_TARGET, world.current, this.#nextAimTarget);
+
+                    break;
+
                 case Shift.code:
 
                     Shift.isDown = false;
@@ -503,6 +530,7 @@ Keyboard.KEYS = {
     K: { upper: 'K', lower: 'k', isDown: false },
     L: { upper: 'L', lower: 'l', isDown: false },
     F: { upper: 'F', lower: 'f', isDown: false },
+    P: { upper: 'P', lower: 'p', isDown: false },
     Shift: { code: 'Shift', isDown: false },
     Space: { code: ' ', isDown: false }
 };

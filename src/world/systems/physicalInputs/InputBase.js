@@ -33,7 +33,8 @@ InputBase.MOVE_ACTIONS = [
             MELEE: 'melee',
             INTERACT: 'interact',
             GUN_POINT: 'gunPoint',
-            SHOOT: 'shoot'
+            SHOOT: 'shoot',
+            NEXT_AIM_TARGET: 'nextAimTarget'
         }
     }
 ];

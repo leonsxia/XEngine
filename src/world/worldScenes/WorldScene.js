@@ -212,13 +212,13 @@ class WorldScene {
         this.physics = new SimplePhysics(this.players, this.enemies);
         this.updatableQueue.add(this.physics);
 
-        // combat
-        this.combat = new Combat(this.players, this.enemies, this.scene);
-        this.updatableQueue.add(this.combat);
-
         // ai
         this.ai = new AI(this.players, this.enemies);
         this.updatableQueue.add(this.ai);
+
+        // combat
+        this.combat = new Combat(this.players, this.enemies, this.scene);
+        this.updatableQueue.add(this.combat);
 
         // anime mixer
         this.animeMixer = new AnimeMixer(this.players, this.enemies);

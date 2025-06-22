@@ -31,6 +31,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     _delta = 0;
     _i = 0;
+    _j = 0;
     _onMeleeHurtTargets = [];
     _cancelGunPoint = false;
     _cancelShoot = false;
@@ -1110,6 +1111,24 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     }
 
+    nextAimTarget(val) {
+
+        if (val) {
+
+            if (this.gunPointing && !this.isAimTurning) {
+
+                super.nextAimTarget(true);
+                this.setAimToNext();
+
+            }
+        } else {
+
+            super.nextAimTarget(false);
+
+        }
+
+    }
+
     interact(val) {
 
         this.#logger.func = this.interact.name;
@@ -1243,8 +1262,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             } else if (this.meleeing) {
 
-                let attackStartInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.prepareStart;
-                let attackEndInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.prepareEnd;
+                let attackStartInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.startTime;
+                let attackEndInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.endTime;
 
                 if (this._delta >= attackStartInterval && this._delta <= attackEndInterval) {
 
@@ -1298,6 +1317,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.#weaponLogger.func = this.aimTick.name;
 
         this._target = this.getNearestInSightTarget(null, this._inSightTargets, false, 'angle');
+        this._j = this._inSightTargets.findIndex(t => t.instance === this._target.instance);
 
         if (!this._target) {
             
@@ -1306,7 +1326,27 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         
         }
 
-        const { dirAngle } = this._target;
+        this.aimTowardsTo(this._target);
+
+    }
+
+    setAimToNext() {
+
+        this.#weaponLogger.func = this.setAimToNext.name;
+
+        if (this._inSightTargets.length === 0) return;
+
+        this.resetAimingState(this);
+        const nextIdx = ++ this._j % this._inSightTargets.length;
+        this._target = this._inSightTargets[nextIdx];
+
+        this.aimTowardsTo(this._target);
+
+    }
+
+    aimTowardsTo(target) {
+
+         const { dirAngle } = target;
 
         if (dirAngle.angle > 0) {
 

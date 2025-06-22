@@ -7,10 +7,6 @@ const GLTF_SRC = 'weapons/Bayonet.glb';
 
 class Bayonet extends WeaponBase {
 
-    hittingBox;
-    prepareStart;
-    prepareEnd;
-
     constructor(specs) {
 
         const superSpecs = {
@@ -35,10 +31,6 @@ class Bayonet extends WeaponBase {
         Object.assign(superSpecs, specs);
 
         super(superSpecs);
-
-        const { prepareStart = 0, prepareEnd = 0 } = specs;
-        this.prepareStart = prepareStart;
-        this.prepareEnd = prepareEnd;
 
         const { obbSize, obbPosition, obbRotation } = specs;
         this.hittingBox = createOBBBox(obbSize, `bayonet_hitting_obb_box`, obbPosition, obbRotation);

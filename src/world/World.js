@@ -28,7 +28,7 @@ const movementTypes = ['tankmove'];
 const moveActions = [
     { 
         category: 'tankmove', 
-        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump', 'melee', 'interact', 'gunPoint', 'shoot']
+        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump', 'melee', 'interact', 'gunPoint', 'shoot', 'nextAimTarget']
     }
 ];
 const DEBUG = true;

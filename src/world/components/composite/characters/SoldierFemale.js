@@ -203,8 +203,8 @@ class SoldierFemale extends CombatPlayerBase {
                 attackInterval: 1.03,
                 damageRange: 1.55,
                 damageRadius: 1.75, // 100 degree
-                prepareStart: 0.15,
-                prepareEnd: 0.49,
+                startTime: 0.15,
+                endTime: 0.49,
                 fireRate: 1.25,
                 ammo: new Ammo({ isMeleeWeapon: true, damage: 20, offset0: - 10, offset1: 10 })
             })
