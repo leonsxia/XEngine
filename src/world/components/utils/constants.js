@@ -360,7 +360,8 @@ const ZOMBIE_MALE_CLIPS = {
     WALK2: { nick: 'walk2', name: 'Armature|Walk2', idx: 4, startImmediately: false, enable: true },
     WLAK3: { nick: 'walk3', name: 'Armature|Running_Crawl', idx: 5, startImmediately: false, enable: true },
     CRAWL: { nick: 'crawl', name: 'Armature|Crawl', idx: 6, startImmediately: false, enable: true },
-    ATTACK: { nick: 'attack', name: 'Armature|Attack', idx: 7, enable: true, loopOnce: true }
+    ATTACK: { nick: 'attack', name: 'Armature|Attack', idx: 7, enable: true, loopOnce: true },
+    ATTACK_GROUND: {nick: 'attack_ground', name: 'Armature|Bite_ground', idx: 8, enable: true, loopOnce: true}
 }
 
 const GLOCK_CLIPS = {
