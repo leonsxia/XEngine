@@ -32,7 +32,13 @@ class Combat {
 
                 if (!player.isActive || player.dead) continue;
 
-                enemy.attackTick?.({ delta, target: player });
+                const { onTarget: attackOn, damage } = enemy.attackTick?.({ delta, target: player }) ?? {};
+
+                if (attackOn) {
+                    
+                    this.#logger.log(`${enemy.name} put damge: ${damage} on ${attackOn.name}`);
+
+                }
 
             }
         

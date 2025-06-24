@@ -432,6 +432,10 @@ class CreatureBase extends CustomizedCreatureTofu {
         if (this.hurting || this.dead) return;
 
         const { delta, target } = params;
+        const result = {
+            damage: 0,
+            onTarget: null
+        }
         
         if (this.checkTargetInDamageRange(target).in) {
 
@@ -472,11 +476,25 @@ class CreatureBase extends CustomizedCreatureTofu {
                     this.#attackLogger.log(`${this.name} attacks on ${target.name}: ${this._i}`);
                     this._attacked = true;
 
+                    if (this.checkTargetInDamageRange(target).in) {
+
+                        result.onTarget = target;
+                        result.damage = this._meleeWeapon.ammo.damage;
+                        this.#attackLogger.log(`right in the face!`);
+
+                    } else {
+
+                        this.#attackLogger.log(`but missed...`);
+
+                    }
+
                 }
 
             }
 
         }
+
+        return result;
 
     }
 

@@ -194,9 +194,18 @@ class Tofu extends TofuBase {
 
         const { angle } = this.getTargetDirectionAngle(target);
         
-        const distance = this.getWorldPosition(_v1).distanceTo(target.getWorldPosition(_v2)) - target.depth * .5;
+        this.getWorldPosition(_v1);
+        target.getWorldPosition(_v2);
+        _v3.copy(_v2);
+        _v2.y = _v1.y;
+        const distance = _v1.distanceTo(_v2) - target.depth * .5;
 
-        const result = angle < this.damageRadius * .5 && distance < this.damageRange;
+        const targetBottomY = _v3.y - target.height * .5;
+        const thisBottomY = _v1.y - this.height * .5;
+        const thisTopY = _v1.y + this.height * .5;
+        const result = angle < this.damageRadius * .5 && distance < this.damageRange && (
+            targetBottomY >= thisBottomY && targetBottomY <= thisTopY
+        );
 
         this.#logger.log(`target: ${target.name} is ${result ? 'in' : 'out of'} damage range.`);
 
