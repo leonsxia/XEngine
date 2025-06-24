@@ -614,7 +614,7 @@ class TofuBase extends Moveable2D {
 
     get damageRadius() {
 
-        return this.#damageRadius * this.group.scale.y;
+        return this.#damageRadius;
 
     }
 

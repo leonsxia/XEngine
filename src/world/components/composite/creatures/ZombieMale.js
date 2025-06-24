@@ -1,7 +1,8 @@
-import { CreatureBase } from "../../Models";
+import { CreatureBase, WeaponBase } from "../../Models.js";
 import { ZOMBIE_MALE_CLIPS as CLIPS } from "../../utils/constants";
 import { Logger } from '../../../systems/Logger';
 import { CreatureTypeMapping } from "./CreatureTypeMapping";
+import { Ammo } from "../weapons/Ammo";
 
 const GLTF_SRC = 'creatures/zombie_male.glb';
 
@@ -26,48 +27,96 @@ const ZOMBIE_TYPES_MAPPING = {
         idle: CLIPS.IDLE, walk: CLIPS.WALK, hurt: CLIPS.HIT_RECEIVE, die: CLIPS.DEATH, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 2.1, idleToWalk: 0.1, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
         walkCollisionSize: { width: .63, depth: .9, height: 1.8 },
+        attackCollisionSize: { width: .63, depth: .7, height: 1.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
         walkBoundingFaceSize: { width: .63, depth: .9, height: 1.8, bbfThickness: .18, gap: .1 },
         rotateBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
         walkBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
-        pushingBoxSize: { height: 1.8, depth: .9 }
+        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        pushingBoxSize: { height: 1.8, depth: .7 },
+        weapon: new WeaponBase({
+            name: `zombie_male_standard_claw`,
+            fireRate: 1.1,
+            prepareInterval: 1.1,
+            damageRange: .7,
+            damageRadius: Math.PI,
+            ammo: new Ammo({ isMeleeWeapon: true, damage: 35, offset0: - 8, offset1: 8 }),
+            isDefault: true
+        })
     }),
     VARIANT1: new CreatureTypeMapping({
         name: 'variant1',
         idle: CLIPS.IDLE, walk: CLIPS.WALK2, hurt: CLIPS.HIT_RECEIVE, die: CLIPS.DEATH2, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1.5, idleToWalk: 0.1, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
         walkCollisionSize: { width: .63, depth: .9, height: 1.8 },
+        attackCollisionSize: { width: .63, depth: .7, height: 1.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
         walkBoundingFaceSize: { width: .63, depth: .9, height: 1.8, bbfThickness: .18, gap: .1 },
         rotateBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
-        walkBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
-        pushingBoxSize: { height: 1.8, depth: .9 }
+        walkBoundingBoxSize: { width: .63, depth: .75, height: 1.8 },
+        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        pushingBoxSize: { height: 1.8, depth: .9 },
+        weapon: new WeaponBase({
+            name: `zombie_male_variant1_claw`,
+            fireRate: 1.25,
+            prepareInterval: .95,
+            damageRange: .7,
+            damageRadius: Math.PI,
+            ammo: new Ammo({ isMeleeWeapon: true, damage: 35, offset0: - 8, offset1: 8 }),
+            isDefault: true
+        })
     }),
     VARIANT2: new CreatureTypeMapping({
         name: 'variant2',
         idle: CLIPS.IDLE, walk: CLIPS.WLAK3, hurt: CLIPS.HIT_RECEIVE, die: CLIPS.DEATH, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.2, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
-        walkCollisionSize: { width: .63, depth: 1.55, height: 0.8 },
+        walkCollisionSize: { width: .63, depth: 1.2, height: 0.8 },
+        attackCollisionSize: { width: .63, depth: .7, height: 1.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
-        walkBoundingFaceSize: { width: .63, depth: 1.5, height: 1.8, bbfThickness: .18, gap: .1 },
-        rotateBoundingFaceSize: { width: .63, depth: 1.3, height: 1.8, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .63, depth: 1.15, height: 1.8, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .63, depth: 1.1, height: 1.8, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
-        walkBoundingBoxSize: { width: .63, depth: 1.5, height: 1.8},
-        pushingBoxSize: { height: 1.8, depth: 1.5 }
+        walkBoundingBoxSize: { width: .63, depth: 1.15, height: 1.8},
+        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        pushingBoxSize: { height: 1.8, depth: 1.15 },
+        weapon: new WeaponBase({
+            name: `zombie_male_variant2_claw`,
+            fireRate: 1.5,
+            prepareInterval: .7,
+            damageRange: .7,
+            damageRadius: Math.PI,
+            ammo: new Ammo({ isMeleeWeapon: true, damage: 35, offset0: - 8, offset1: 8 }),
+            isDefault: true
+        })
     }),
     VARIANT3: new CreatureTypeMapping({
         name: 'variant3',
         idle: CLIPS.IDLE, walk: CLIPS.CRAWL, hurt: CLIPS.HIT_RECEIVE, die: CLIPS.DEATH2, rotate: { nick: 'rotate' }, attack: CLIPS.ATTACK, walkTimeScale: 1, idleToWalk: 0.3, walkToIdle: 0.3,
         idleCollisionSize: { width: .63, depth: .6, height: 1.8 },
-        walkCollisionSize: { width: .63, depth: 1.5, height: 0.8 },
+        walkCollisionSize: { width: .63, depth: 1.15, height: 0.8 },
+        attackCollisionSize: { width: .63, depth: .7, height: 1.8 },
         idleBoundingFaceSize: { width: .63, depth: .6, height: 1.8, bbfThickness: .18, gap: .1 },
-        walkBoundingFaceSize: { width: .63, depth: 1.5, height: 1.8, bbfThickness: .18, gap: .1 },
-        rotateBoundingFaceSize: { width: .63, depth: 1.3, height: 1.8, bbfThickness: .18, gap: .1 },
+        walkBoundingFaceSize: { width: .63, depth: 1.15, height: 1.8, bbfThickness: .18, gap: .1 },
+        rotateBoundingFaceSize: { width: .63, depth: 1.1, height: 1.8, bbfThickness: .18, gap: .1 },
+        attackBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
-        walkBoundingBoxSize: { width: .63, depth: 1.5, height: 1.8},
-        pushingBoxSize: { height: 1.8, depth: 1.5 }
+        walkBoundingBoxSize: { width: .63, depth: 1.15, height: 1.8 },
+        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        pushingBoxSize: { height: 1.8, depth: 1.15 },
+        weapon: new WeaponBase({
+            name: `zombie_male_variant3_claw`,
+            fireRate: 1,
+            prepareInterval: 1.2,
+            damageRange: .8,
+            damageRadius: Math.PI,
+            ammo: new Ammo({ isMeleeWeapon: true, damage: 35, offset0: - 8, offset1: 8 }),
+            isDefault: true
+        })
     })
 };
 
@@ -119,7 +168,11 @@ class ZombieMale extends CreatureBase {
     async init() {
 
         await super.init();
-        
+
+        this._meleeWeapon = this.typeMapping.weapon;
+        this.damageRange = this._meleeWeapon.damageRange;
+        this.damageRadius = this._meleeWeapon.damageRadius;
+
         this.setInitialActions();
    
     }
@@ -128,6 +181,7 @@ class ZombieMale extends CreatureBase {
 
         this.AWS.setActionEffectiveTimeScale(this.typeMapping.walk.nick, this._animationSettings.WALK_TIMESCALE);
         this.AWS.setActionEffectiveTimeScale(this.typeMapping.hurt.nick, this._animationSettings.HURT_TIMESCALE);
+        this.AWS.setActionEffectiveTimeScale(this.typeMapping.attack.nick, this._meleeWeapon.fireRate);
 
     }
 

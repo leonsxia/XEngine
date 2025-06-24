@@ -12,7 +12,9 @@ class WeaponBase {
 
     gltf;
     group;
-    hittingBox;    
+    hittingBox;
+
+    isDefault = false;
 
     specs;
 
@@ -50,7 +52,7 @@ class WeaponBase {
             prepareInterval = 0, attackInterval = 1, startTime = 0, endTime = 1, fireRate = 1, 
             damageRange = 0, damageRadius = Math.PI, armedHeight = 0,
             magzineCapacity = 0, ammo = new Ammo(), 
-            isSemiAutomatic = true 
+            isSemiAutomatic = true, isDefault = false
         } = specs;
         const { clips, animationSetting } = specs;
         let { src } = specs;
@@ -69,6 +71,10 @@ class WeaponBase {
         this._isSemiAutomatic = isSemiAutomatic;
         this._magzineCapacity = magzineCapacity;
         this._ammo = ammo;
+
+        this.isDefault = isDefault;
+
+        if (this.isDefault) return this;
 
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
@@ -89,13 +95,15 @@ class WeaponBase {
         this.gltf.setRotation(rotation);
         this.gltf.group.isWeapon = true;
 
-        this.group = new Group();        
+        this.group = new Group();
 
         this.group.add(this.gltf.group);
 
     }
 
     async init() {
+
+        if (this.isDefault) return;
 
         await this.gltf.init();
 

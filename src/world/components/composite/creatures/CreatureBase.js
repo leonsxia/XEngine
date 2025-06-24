@@ -7,18 +7,19 @@ import { polarity } from "../../utils/enums";
 
 const DEBUG = false;
 const DEBUG_EVENTS = false;
+const DEBUG_ATTACK = true;
 
 class CreatureBase extends CustomizedCreatureTofu {
 
     specs;
 
     _isNoticed = false;
-    _isAttacking = false;
 
     gltf;
 
     #logger = new Logger(DEBUG, 'CreatureBase');
     #eventsLogger = new Logger(DEBUG_EVENTS, 'CreatureBase');
+    #attackLogger = new Logger(DEBUG_ATTACK, 'CreatureBase');
 
     AWS;
 
@@ -27,8 +28,10 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     isCreature = true;
 
+    _meleeWeapon;
     _delta = 0;
     _i = 0;
+    _attacked = false;
 
     constructor(specs) {
 
@@ -126,7 +129,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             if (!this.forward) {
 
-                if (this._isAttacking) {
+                if (this.attacking) {
 
                     this.#logger.log(`walk in queue`);
                     this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
@@ -153,7 +156,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             if (this.forward) {
 
-                if (this._isAttacking) {
+                if (this.attacking) {
 
                     if (this.rotating) {
 
@@ -204,7 +207,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 if (!this.forward) {
 
-                    if (this._isAttacking) {
+                    if (this.attacking) {
 
                         this.#logger.log(`left turn in queue`);
                         this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
@@ -232,7 +235,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 if (!this.forward) {
 
-                    if (this._isAttacking) {
+                    if (this.attacking) {
 
                         this.#logger.log(`idle in queue 3`);
                         this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
@@ -271,7 +274,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 if (!this.forward) {
 
-                    if (this._isAttacking) {
+                    if (this.attacking) {
 
                         this.#logger.log(`right turn in queue`);
                         this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
@@ -300,7 +303,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 if (!this.forward) {
 
-                    if (this._isAttacking) {
+                    if (this.attacking) {
 
                         this.#logger.log(`idle in queue 3`);
                         this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
@@ -365,13 +368,40 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
+    melee(val) {
+
+        this.#logger.func = this.melee.name;
+
+        if (val) {
+
+            if (!this.meleeing) {
+
+                this.startAttackTimer();
+
+                const endCallback = () => {
+
+                    super.melee(false);
+
+                }
+
+                this.AWS.prepareCrossFade(null, this.AWS.actions[this.typeMapping.attack.nick], this._animationSettings.ATTACK, 1, false, false, this._animationSettings.ATTACK, endCallback);
+                super.melee(val);
+                this.switchHelperComponents();
+
+            }
+
+        }
+
+    }
+
     hurt(val) {
 
         this.#logger.func = this.hurt.name;
 
         if (val) {
 
-            const hurtAction = this.AWS.actions[this.typeMapping.hurt.nick]
+            const hurtAction = this.AWS.actions[this.typeMapping.hurt.nick];
+            const attackAction = this.AWS.actions[this.typeMapping.attack.nick];
             if (this.AWS.activeAction === hurtAction) {
 
                 const fadeToAction = this.AWS.cachedAction ?? this.AWS.previousAction;
@@ -379,12 +409,24 @@ class CreatureBase extends CustomizedCreatureTofu {
                 this.AWS.isLooping = false;
                 hurtAction.ignoreFinishedEvent = true;
 
+            } else if (this.AWS.activeAction === attackAction) {
+
+                const fadeToAction = this.AWS.cachedAction ?? this.AWS.previousAction;
+                this.AWS.fadeToAction(fadeToAction, .1);
+                this.AWS.isLooping = false;
+                attackAction.ignoreFinishedEvent = true;
+                attackAction.ignoreFadeOut = true;
+                super.melee(false);
+                this._i = 0;
+
             }
 
             const endCallback = () => {
 
                 super.hurt(false);
                 hurtAction.ignoreFinishedEvent = undefined;
+                attackAction.ignoreFinishedEvent = undefined;
+                attackAction.ignoreFadeOut = undefined;
 
             }
 
@@ -411,6 +453,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             const dieAction = this.AWS.actions[this.typeMapping.die.nick];
             const hurtAction = this.AWS.actions[this.typeMapping.hurt.nick];
+            const attackAction = this.AWS.actions[this.typeMapping.attack.nick];
             if (this.AWS.activeAction === hurtAction) {
 
                 const fadeToAction = this.AWS.cachedAction ?? this.AWS.previousAction;
@@ -419,6 +462,16 @@ class CreatureBase extends CustomizedCreatureTofu {
                 hurtAction.ignoreFinishedEvent = true;
                 hurtAction.ignoreFadeOut = true;
 
+            } else if (this.AWS.activeAction === attackAction) {
+
+                const fadeToAction = this.AWS.cachedAction ?? this.AWS.previousAction;
+                this.AWS.fadeToAction(fadeToAction, .1);
+                this.AWS.isLooping = false;
+                attackAction.ignoreFinishedEvent = true;
+                attackAction.ignoreFadeOut = true;
+                super.melee(false);
+                this._i = 0;
+
             }
 
             const endCallback = () => {
@@ -426,6 +479,8 @@ class CreatureBase extends CustomizedCreatureTofu {
                 this.isActive = false;
                 hurtAction.ignoreFinishedEvent = undefined;
                 hurtAction.ignoreFadeOut = undefined;
+                attackAction.ignoreFinishedEvent = undefined;
+                attackAction.ignoreFadeOut = undefined;
                 this.AWS.isLooping = false;
                 this.AWS.setActionEffectiveTimeScale(this.typeMapping.idle.nick, 1);
 
@@ -438,6 +493,7 @@ class CreatureBase extends CustomizedCreatureTofu {
         }        
 
         super.die(val);
+        this.switchHelperComponents();
 
     }
 
@@ -476,11 +532,113 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
+    stopMovingActions() {
+
+        this.movingLeft(false);
+        this.movingRight(false);
+        this.movingForward(false);
+
+    }
+
+    setAiming() {
+
+        this._target = this.getNearestInSightTarget(null, this._inSightTargets, false, 'angle');
+        this._j = this._inSightTargets.findIndex(t => t.instance === this._target.instance);
+
+        if (!this._target) {
+            
+            this.aimingRad = 0;
+            return;
+        
+        }
+
+        this.aimTowardsTo(this._target);
+
+    }
+
+    aimTowardsTo(target) {
+
+        const { dirAngle } = target;
+
+        if (dirAngle.angle > 0) {
+
+            if (dirAngle.direction === polarity.left) {
+
+                this.aimingRad = dirAngle.angle;
+
+            } else {
+
+                this.aimingRad = - dirAngle.angle;
+            }
+
+        } else {
+
+            this.aimingRad = 0;
+
+        }
+
+    }
+
+    startAttackTimer() {
+
+        this._delta = 0;    
+        this._attacked = false;    
+
+    }
+
+    attackTick(params) {
+
+        this.#attackLogger.func = this.attackTick.name;
+
+        if (this.hurting || this.dead) return;
+
+        const { delta, target } = params;
+        
+        if (this.checkTargetInDamageRange(target).in) {
+
+            if (!this.meleeing) {
+
+                this.stopMovingActions();                
+                this.melee(true);
+
+            }
+            this.setAiming();
+
+        } else {
+
+            if (!this.meleeing) {
+
+                this._i = 0;
+
+            }
+
+        }
+
+        if (this.meleeing) {
+
+            this._delta += delta;
+            
+            if (this._delta >= this._meleeWeapon.prepareInterval) {
+
+                if (!this._attacked) {
+
+                    this._i++;
+                    this.#attackLogger.log(`${this.name} attacks on ${target.name}: ${this._i}`);
+                    this._attacked = true;
+
+                }
+
+            }
+
+        }
+
+    }
+
     movingTick() {
 
         this.#logger.func = this.movingTick.name;
 
-        if (this.hurting || this.dead) {
+        if (this.hurting || this.dead || this.meleeing) {
 
             return;
 
@@ -514,9 +672,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         } else {
 
-            this.movingLeft(false);
-            this.movingRight(false);
-            this.movingForward(false);
+            this.stopMovingActions();
 
         }
 
@@ -528,9 +684,7 @@ class CreatureBase extends CustomizedCreatureTofu {
     resetAnimation() {
 
         this.AWS.resetAllActions();
-        this.movingLeft(false);
-        this.movingRight(false);
-        this.movingForward(false);
+        this.stopMovingActions();
         super.hurt(false);
         super.die(false);
 

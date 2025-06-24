@@ -95,9 +95,9 @@ class CustomizedCreatureTofu extends Tofu {
 
             action = this.typeMapping.walk.nick;
 
-        } else if (this._isAttacking) {
+        } else if (this.attacking) {
 
-            // todo
+            action = this.typeMapping.attack.nick;
 
         } else {
 
@@ -124,19 +124,24 @@ class CustomizedCreatureTofu extends Tofu {
 
     createBoundingBoxes() {
 
-        const { idleBoundingBoxSize, walkBoundingBoxSize } = this.typeMapping;
+        const { idleBoundingBoxSize, walkBoundingBoxSize, attackBoundingBoxSize } = this.typeMapping;
         const idleBBSpecs = {
             width: idleBoundingBoxSize.width, depth: idleBoundingBoxSize.depth, height: idleBoundingBoxSize.height,
             showBB: false, showBBW: false
-        }
+        };
         const walkBBSpecs = {
             width: walkBoundingBoxSize.width, depth: walkBoundingBoxSize.depth, height: walkBoundingBoxSize.height,
             showBB: false, showBBW: false
-        }
+        };
+        const attackBBSpecs = {
+            width: attackBoundingBoxSize.width, depth: attackBoundingBoxSize.depth, height: attackBoundingBoxSize.height,
+            showBB: false, showBBW: false
+        };
 
         this.boundingBoxes.clear();
         this.boundingBoxes.set(this.typeMapping.idle.nick, createBoundingBox(idleBBSpecs));
         this.boundingBoxes.set(this.typeMapping.walk.nick, createBoundingBox(walkBBSpecs));
+        this.boundingBoxes.set(this.typeMapping.attack.nick, createBoundingBox(attackBBSpecs));
 
         this.setAllBoundingBoxLayers(true);
 
@@ -167,7 +172,7 @@ class CustomizedCreatureTofu extends Tofu {
 
     createBoundingFaces() {
 
-        const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize } = this.typeMapping;
+        const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize, attackBoundingFaceSize } = this.typeMapping;
         const idleBFSpecs = {
             width: idleBoundingFaceSize.width, depth: idleBoundingFaceSize.depth, height: idleBoundingFaceSize.height,
             bbfThickness: idleBoundingFaceSize.bbfThickness, gap: idleBoundingFaceSize.gap,
@@ -183,11 +188,17 @@ class CustomizedCreatureTofu extends Tofu {
             bbfThickness: rotateBoundingFaceSize.bbfThickness, gap: rotateBoundingFaceSize.gap,
             showBF: false, color: BF2
         };
+        const attackBFSpecs = {
+            width: attackBoundingFaceSize.width, depth: attackBoundingFaceSize.depth, height: attackBoundingFaceSize.height,
+            bbfThickness: attackBoundingFaceSize.bbfThickness, gap: attackBoundingFaceSize.gap,
+            showBF: false
+        }
 
         this.boundingFaces.clear();
         this.boundingFaces.set(this.typeMapping.idle.nick, createBoundingFacesMesh(idleBFSpecs));
         this.boundingFaces.set(this.typeMapping.walk.nick, createBoundingFacesMesh(walkBFSpecs));
         this.boundingFaces.set(this.typeMapping.rotate.nick, createBoundingFacesMesh(rotateBFSpecs));
+        this.boundingFaces.set(this.typeMapping.attack.nick, createBoundingFacesMesh(attackBFSpecs));
 
     }
 
@@ -195,7 +206,7 @@ class CustomizedCreatureTofu extends Tofu {
 
         if (this.boundingFaces.size === 0) return;
 
-        const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize } = this.typeMapping;
+        const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize, attackBoundingFaceSize } = this.typeMapping;
         let bf;
 
         if (this.isRotating) {
@@ -209,6 +220,12 @@ class CustomizedCreatureTofu extends Tofu {
             bf = this.boundingFaces.get(this.typeMapping.walk.nick);
             this.w = walkBoundingFaceSize.width;
             this.d = walkBoundingFaceSize.depth;
+
+        } else if (this.attacking) {
+
+            bf = this.boundingFaces.get(this.typeMapping.attack.nick);
+            this.w = attackBoundingFaceSize.width;
+            this.d = attackBoundingFaceSize.depth;
 
         } else {
 
@@ -236,7 +253,7 @@ class CustomizedCreatureTofu extends Tofu {
 
     createCollisionBoxes() {
 
-        const { name, idleCollisionSize, walkCollisionSize } = this.typeMapping;
+        const { name, idleCollisionSize, walkCollisionSize, attackCollisionSize } = this.typeMapping;
         const idleCBoxSpecs = {
             name: `${this.name}-${name}-idle-cBox`,
             width: idleCollisionSize.width, depth: idleCollisionSize.depth, height: idleCollisionSize.height,
@@ -246,6 +263,12 @@ class CustomizedCreatureTofu extends Tofu {
         const walkCBoxSpecs = {
             name: `${this.name}-${name}-walk-cBox`,
             width: walkCollisionSize.width, depth: walkCollisionSize.depth, height: walkCollisionSize.height,
+            enableWallOBBs: true, showArrow: false, lines: false,
+            ignoreFaces: [4, 5]
+        };
+        const attackCBoxSpecs = {
+            name: `${this.name}-${name}-walk-cBox`,
+            width: attackCollisionSize.width, depth: attackCollisionSize.depth, height: attackCollisionSize.height,
             enableWallOBBs: true, showArrow: false, lines: false,
             ignoreFaces: [4, 5]
         };
@@ -264,6 +287,7 @@ class CustomizedCreatureTofu extends Tofu {
 
         setCBox(idleCBoxSpecs, this.typeMapping.idle.nick);
         setCBox(walkCBoxSpecs, this.typeMapping.walk.nick);
+        setCBox(attackCBoxSpecs, this.typeMapping.attack.nick);
 
     }
 

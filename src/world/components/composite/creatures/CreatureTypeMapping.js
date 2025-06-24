@@ -16,24 +16,30 @@ class CreatureTypeMapping {
 
     idleCollisionSize;
     walkCollisionSize;
+    attackCollisionSize;
 
     idleBoundingFaceSize;
     walkBoundingFaceSize;
     rotateBoundingFaceSize;
+    attackBoundingFaceSize;
 
     idleBoundingBoxSize;
     walkBoundingBoxSize;
+    attackBoundingBoxSize;
 
     pushingBoxSize;
+
+    weapon;
 
     constructor(specs) {
 
         const { name } = specs;
         const { idle, walk, walkTimeScale, rotate, attack, hurt, die, idleToWalk, walkToIdle } = specs;
-        const { idleCollisionSize, walkCollisionSize } = specs;
-        const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize } = specs;
-        const { idleBoundingBoxSize, walkBoundingBoxSize } = specs;
+        const { idleCollisionSize, walkCollisionSize, attackCollisionSize } = specs;
+        const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize, attackBoundingFaceSize } = specs;
+        const { idleBoundingBoxSize, walkBoundingBoxSize, attackBoundingBoxSize } = specs;
         const { pushingBoxSize } = specs;
+        const { weapon } = specs;
 
         this.name = name;
         this.idle = idle;
@@ -48,15 +54,20 @@ class CreatureTypeMapping {
 
         this.idleCollisionSize = idleCollisionSize;
         this.walkCollisionSize = walkCollisionSize;
+        this.attackCollisionSize = attackCollisionSize;
 
         this.idleBoundingFaceSize = idleBoundingFaceSize;
         this.walkBoundingFaceSize = walkBoundingFaceSize;
         this.rotateBoundingFaceSize = rotateBoundingFaceSize;
+        this.attackBoundingFaceSize = attackBoundingFaceSize;
 
         this.idleBoundingBoxSize = idleBoundingBoxSize;
         this.walkBoundingBoxSize = walkBoundingBoxSize;
+        this.attackBoundingBoxSize = attackBoundingBoxSize;
 
         this.pushingBoxSize = pushingBoxSize;
+
+        this.weapon = weapon;
 
     }
 

@@ -487,7 +487,7 @@ class Moveable2D {
         const worldY = $self.worldYDirection;
         const aimRad = Math.abs(this.#aimingRad);
 
-        if (this.#gunPoint  && !this.#isAimTurnOver) {
+        if ((this.#gunPoint || this.#melee)  && !this.#isAimTurnOver) {
 
             if (!this.#isAimTurning) {
 
@@ -535,7 +535,7 @@ class Moveable2D {
             
         }
 
-        if (!this.#gunPoint && (this.#aimingRadStep || this.#isAimTurnOver)) {
+        if (!this.#gunPoint && !this.#melee && (this.#aimingRadStep || this.#isAimTurnOver)) {
 
             this.resetAimingState($self);
 

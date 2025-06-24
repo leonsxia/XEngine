@@ -13,14 +13,13 @@ export { StairsStepPlane } from './basic/StairsStepPlane.js';
 export { BirdsGroup } from './composite/birds/Birds.js';
 export { Train } from './composite/train/Train.js';
 
-// Characters
-export { Tofu } from './composite/tofu/Tofu.js';
-export { CustomizedCombatTofu } from './composite/characters/CustomizedCombatTofu.js';
-export { CombatPlayerBase } from './composite/characters/CombatPlayerBase.js';
-export { SoldierFemale } from './composite/characters/SoldierFemale.js';
-export { CustomizedCreatureTofu } from './composite/creatures/CustomizedCreatureTofu.js';
-export { CreatureBase } from './composite/creatures/CreatureBase.js';
-export { ZombieMale } from './composite/creatures/ZombieMale.js';
+// GLTF
+export { GLTFModel } from './basic/GLTFModel.js';
+
+// collision objects
+export { CollisionBase } from './physics/collisionObjects/CollisionBase.js';
+export { CollisionBox } from './physics/collisionObjects/CollisionBox.js';
+export { CollisionHexCylinder } from './physics/collisionObjects/CollisionHexCylinder.js';
 
 // Weapons
 export { WeaponBase } from './composite/weapons/WeaponBase.js';
@@ -30,8 +29,14 @@ export { Revolver } from './composite/weapons/Revolver.js';
 export { SMGShort } from './composite/weapons/SMGShort.js';
 export { Bayonet } from './composite/weapons/Bayonet.js';
 
-// GLTF
-export { GLTFModel } from './basic/GLTFModel.js';
+// Characters
+export { Tofu } from './composite/tofu/Tofu.js';
+export { CustomizedCombatTofu } from './composite/characters/CustomizedCombatTofu.js';
+export { CombatPlayerBase } from './composite/characters/CombatPlayerBase.js';
+export { SoldierFemale } from './composite/characters/SoldierFemale.js';
+export { CustomizedCreatureTofu } from './composite/creatures/CustomizedCreatureTofu.js';
+export { CreatureBase } from './composite/creatures/CreatureBase.js';
+export { ZombieMale } from './composite/creatures/ZombieMale.js';
 
 // physics
 export { CollisionPlane } from './physics/CollisionPlane.js';
@@ -69,8 +74,3 @@ export { ModernCeilingLamp01 } from './composite/inwall/lighting/ModernCeilingLa
 export { SecurityLight } from './composite/inwall/lighting/SecurityLight.js';
 export { FancyPictureFrame01 } from './composite/inwall/decorative/FancyPictureFrame01.js';
 export { VintageGrandfatherClock } from './composite/inwall/decorative/VintageGrandFatherClock.js';
-
-// collision objects
-export { CollisionBase } from './physics/collisionObjects/CollisionBase.js';
-export { CollisionBox } from './physics/collisionObjects/CollisionBox.js';
-export { CollisionHexCylinder } from './physics/collisionObjects/CollisionHexCylinder.js';

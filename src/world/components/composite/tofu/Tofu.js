@@ -7,7 +7,7 @@ const _v1 = new Vector3();
 const _v2 = new Vector3();
 const _v3 = new Vector3();
 
-const DEBUG = true;
+const DEBUG = false;
 
 class Tofu extends TofuBase {
 
@@ -193,7 +193,8 @@ class Tofu extends TofuBase {
     checkTargetInDamageRange(target) {
 
         const { angle } = this.getTargetDirectionAngle(target);
-        const distance = this.getWorldPosition(_v1).distanceTo(target.getWorldPosition(_v2));
+        
+        const distance = this.getWorldPosition(_v1).distanceTo(target.getWorldPosition(_v2)) - target.depth * .5;
 
         const result = angle < this.damageRadius * .5 && distance < this.damageRange;
 
