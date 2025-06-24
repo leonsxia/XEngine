@@ -24,7 +24,7 @@ class Combat {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive || enemy.dead) continue;
+            if (!enemy.isActive || enemy.dead || !enemy.isNoticed) continue;
 
             for (let j = 0, jl = this.players.length; j < jl; j++) {
 

@@ -31,6 +31,8 @@ class CreatureBase extends CustomizedCreatureTofu {
     _meleeWeapon;
     _delta = 0;
     _i = 0;
+    // in every attack loop, it will set to true at first frame,
+    // it will set to false when target out of damage range
     _attacked = false;
 
     constructor(specs) {
@@ -71,6 +73,12 @@ class CreatureBase extends CustomizedCreatureTofu {
         this.showBS(showBS);
 
         this.group.add(this.gltf.group);
+
+    }
+
+    get isNoticed() {
+
+        return this._isNoticed;
 
     }
 
@@ -129,21 +137,15 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             if (!this.forward) {
 
-                if (this.attacking) {
-
-                    this.#logger.log(`walk in queue`);
-                    this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
-                    this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.walk.nick, 1, this._animationSettings.WALK_TIMESCALE);
-
-                } else if (!this.rotating) {
-
-                    this.#logger.log('idle to walk');
-                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_WALK);
-
-                } else if (this.rotating) {
+                if (this.rotating) {
 
                     this.#logger.log(`zero turn to walk turn`);
                     this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.WALK_TURN_TO_ZERO_TURN, 1);
+
+                } else {
+
+                    this.#logger.log('idle to walk');
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_WALK);
 
                 }
 
@@ -156,33 +158,17 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             if (this.forward) {
 
-                if (this.attacking) {
-
-                    if (this.rotating) {
-
-                        this.#logger.log(`walk turn in queue 2`);
-                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.walk.nick, this._animationSettings.TURN_WEIGHT, this._animationSettings.WALK_TIMESCALE);
-
-                    } else {
-
-                        this.#logger.log(`idle in queue 2`);
-                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
-                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
-                        this.AWS.clearActionCallback(this.typeMapping.walk.nick);
-
-                    }
-
-                } else if (!this.rotating) {
-
-                    this.#logger.log(`walk to idle`);
-                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.WALK_TO_IDLE);
-
-                } else {
+                if (this.rotating) {
 
                     this.#logger.log(`walk turn to zero turn`);
                     this.AWS.setActionEffectiveWeight(this.typeMapping.walk.nick, this._animationSettings.TURN_WEIGHT);
 
-                }
+                } else {
+
+                    this.#logger.log(`walk to idle`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.WALK_TO_IDLE);
+
+                } 
 
                 super.movingForward(false);
                 this.switchHelperComponents();
@@ -206,19 +192,9 @@ class CreatureBase extends CustomizedCreatureTofu {
             if (!this.turningLeft) {
 
                 if (!this.forward) {
-
-                    if (this.attacking) {
-
-                        this.#logger.log(`left turn in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
-                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.walk.nick, this._animationSettings.TURN_WEIGHT, this._animationSettings.WALK_TIMESCALE);
-
-                    } else {
-
-                        this.#logger.log(`idle to left turn`);
-                        this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
-
-                    }
+          
+                    this.#logger.log(`idle to left turn`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
 
                     this.AWS.setActionEffectiveTimeScale(this.typeMapping.walk.nick, this._animationSettings.WALK_TIMESCALE);
 
@@ -235,19 +211,8 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 if (!this.forward) {
 
-                    if (this.attacking) {
-
-                        this.#logger.log(`idle in queue 3`);
-                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
-                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
-                        this.AWS.clearActionCallback(this.typeMapping.walk.nick);
-
-                    } else {
-
-                        this.#logger.log(`left turn to idle`);
-                        this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.TURN_TO_IDLE);
-
-                    }
+                    this.#logger.log(`left turn to idle`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.TURN_TO_IDLE);
 
                 }
 
@@ -274,19 +239,8 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 if (!this.forward) {
 
-                    if (this.attacking) {
-
-                        this.#logger.log(`right turn in queue`);
-                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.walk.nick];
-
-                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.walk.nick, this._animationSettings.TURN_WEIGHT);
-
-                    } else {
-
-                        this.#logger.log(`idle to right turn`);
-                        this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
-
-                    }
+                    this.#logger.log(`idle to right turn`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.idle.nick], this.AWS.actions[this.typeMapping.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
 
                     this.AWS.setActionEffectiveTimeScale(this.typeMapping.walk.nick, this._animationSettings.WALK_TIMESCALE);
 
@@ -303,19 +257,8 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 if (!this.forward) {
 
-                    if (this.attacking) {
-
-                        this.#logger.log(`idle in queue 3`);
-                        this.AWS.previousAction = this.AWS.actions[this.typeMapping.idle.nick];
-                        this.AWS.setActionWeightTimeScaleInCallback(this.typeMapping.idle.nick, 1);
-                        this.AWS.clearActionCallback(this.typeMapping.walk.nick);
-
-                    } else {
-
-                        this.#logger.log(`right turn to idle`);
-                        this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.TURN_TO_IDLE);
-
-                    }
+                    this.#logger.log(`right turn to idle`);
+                    this.AWS.prepareCrossFade(this.AWS.actions[this.typeMapping.walk.nick], this.AWS.actions[this.typeMapping.idle.nick], this._animationSettings.TURN_TO_IDLE);
 
                 }
 
@@ -325,46 +268,6 @@ class CreatureBase extends CustomizedCreatureTofu {
             }
 
         }
-
-    }
-
-    onSovSphereTriggerEnter(target) {
-
-        this.#eventsLogger.func = this.onSovSphereTriggerEnter.name;
-        this.#eventsLogger.log(`${this.name} sov sphere trigger entered by ${target.name}`);
-
-        if (this._inSightTargets.length === 1) {
-
-            this._isNoticed = true;
-            this.sovBoundingSphereMesh.material.color.setHex(AICodes.targetInRange);
-
-        }
-        
-    }
-
-    onSovSphereTriggerExit(target) {
-
-        this.#eventsLogger.func = this.onSovSphereTriggerExit.name;
-        this.#eventsLogger.log(`${target.name} exited ${this.name}'s sov sphere trigger`);
-
-        if (this._inSightTargets.length === 0) {
-
-            this._isNoticed = false;
-            this.sovBoundingSphereMesh.material.color.setHex(BS);
-
-        }
-
-    }
-
-    onInSightTargetsCleared() {
-
-        this._isNoticed = false;
-
-    }
-
-    onHealthReset() {
-
-        this.die(false);
 
     }
 
@@ -518,15 +421,112 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         if (this.forward || this.turningLeft || this.turningRight) {
 
-            this.movingLeft(false);
-            this.movingRight(false);
-            this.movingForward(false);
+            this.stopMovingActions();
 
         }
 
         if (this.dead) {
 
             this.setAllBoundingBoxLayers(false);
+
+        }
+
+    }
+
+    attackTick(params) {
+
+        this.#attackLogger.func = this.attackTick.name;
+
+        if (this.hurting || this.dead) return;
+
+        const { delta, target } = params;
+        
+        if (this.checkTargetInDamageRange(target).in) {
+
+            if (!this.meleeing) {
+
+                if (!this._attacked) {
+
+                    this.stopMovingActions();
+
+                }
+
+                this.melee(true);
+                this.setAiming();
+
+            }            
+
+        } else {
+
+            if (!this.meleeing) {
+
+                this._i = 0;
+                this._target = null;
+                this._attacked = false;
+
+            }
+
+        }
+
+        if (this.meleeing) {
+
+            this._delta += delta;
+            
+            if (this._delta >= this._meleeWeapon.prepareInterval) {
+
+                if (!this._attacked) {
+
+                    this._i++;
+                    this.#attackLogger.log(`${this.name} attacks on ${target.name}: ${this._i}`);
+                    this._attacked = true;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    movingTick() {
+
+        this.#logger.func = this.movingTick.name;
+
+        if (this.hurting || this.dead || this.meleeing || this._target) {
+
+            return;
+
+        }
+
+        if (this._isNoticed) {
+
+            const target = this.getNearestInSightTarget(null, this._inSightTargets, false);
+            const { dirAngle } = target;
+
+            if (dirAngle.angle < 0.01) {
+
+                this.movingLeft(false);
+                this.movingRight(false);
+
+            } else if (dirAngle.angle > 0.26) {
+                
+                if (dirAngle.direction === polarity.left) {
+
+                    this.movingLeft(true);
+
+                } else {
+
+                    this.movingRight(true);
+
+                }
+
+            }
+
+            this.movingForward(true);
+
+        } else {
+
+            this.stopMovingActions();
 
         }
 
@@ -581,100 +581,8 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     startAttackTimer() {
 
-        this._delta = 0;    
-        this._attacked = false;    
-
-    }
-
-    attackTick(params) {
-
-        this.#attackLogger.func = this.attackTick.name;
-
-        if (this.hurting || this.dead) return;
-
-        const { delta, target } = params;
-        
-        if (this.checkTargetInDamageRange(target).in) {
-
-            if (!this.meleeing) {
-
-                this.stopMovingActions();                
-                this.melee(true);
-
-            }
-            this.setAiming();
-
-        } else {
-
-            if (!this.meleeing) {
-
-                this._i = 0;
-
-            }
-
-        }
-
-        if (this.meleeing) {
-
-            this._delta += delta;
-            
-            if (this._delta >= this._meleeWeapon.prepareInterval) {
-
-                if (!this._attacked) {
-
-                    this._i++;
-                    this.#attackLogger.log(`${this.name} attacks on ${target.name}: ${this._i}`);
-                    this._attacked = true;
-
-                }
-
-            }
-
-        }
-
-    }
-
-    movingTick() {
-
-        this.#logger.func = this.movingTick.name;
-
-        if (this.hurting || this.dead || this.meleeing) {
-
-            return;
-
-        }
-
-        if (this._isNoticed) {
-
-            this._target = this.getNearestInSightTarget(null, this._inSightTargets, false);
-            const { dirAngle } = this._target;
-
-            if (dirAngle.angle < 0.01) {
-
-                this.movingLeft(false);
-                this.movingRight(false);
-
-            } else if (dirAngle.angle > 0.26) {
-                
-                if (dirAngle.direction === polarity.left) {
-
-                    this.movingLeft(true);
-
-                } else {
-
-                    this.movingRight(true);
-
-                }
-
-            }
-
-            this.movingForward(true);
-
-        } else {
-
-            this.stopMovingActions();
-
-        }
+        this._delta = 0;
+        this._attacked = false;
 
     }
 
@@ -687,6 +595,46 @@ class CreatureBase extends CustomizedCreatureTofu {
         this.stopMovingActions();
         super.hurt(false);
         super.die(false);
+
+    }
+
+    onSovSphereTriggerEnter(target) {
+
+        this.#eventsLogger.func = this.onSovSphereTriggerEnter.name;
+        this.#eventsLogger.log(`${this.name} sov sphere trigger entered by ${target.name}`);
+
+        if (this._inSightTargets.length === 1) {
+
+            this._isNoticed = true;
+            this.sovBoundingSphereMesh.material.color.setHex(AICodes.targetInRange);
+
+        }
+        
+    }
+
+    onSovSphereTriggerExit(target) {
+
+        this.#eventsLogger.func = this.onSovSphereTriggerExit.name;
+        this.#eventsLogger.log(`${target.name} exited ${this.name}'s sov sphere trigger`);
+
+        if (this._inSightTargets.length === 0) {
+
+            this._isNoticed = false;
+            this.sovBoundingSphereMesh.material.color.setHex(BS);
+
+        }
+
+    }
+
+    onInSightTargetsCleared() {
+
+        this._isNoticed = false;
+
+    }
+
+    onHealthReset() {
+
+        this.die(false);
 
     }
 
