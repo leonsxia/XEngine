@@ -307,12 +307,12 @@ class CreatureBase extends CustomizedCreatureTofu {
             const attackAction = this.AWS.actions[this.typeMapping.attack.nick];
             if (this.AWS.activeAction === hurtAction) {
 
-                this.fadeToPrevious();
+                this.AWS.fadeToPrevious();
                 hurtAction.ignoreFinishedEvent = true;
 
             } else if (this.AWS.activeAction === attackAction) {
 
-                this.fadeToPrevious();
+                this.AWS.fadeToPrevious();
                 attackAction.ignoreFinishedEvent = true;
                 attackAction.ignoreFadeOut = true;
                 super.melee(false);
@@ -355,13 +355,13 @@ class CreatureBase extends CustomizedCreatureTofu {
             const attackAction = this.AWS.actions[this.typeMapping.attack.nick];
             if (this.AWS.activeAction === hurtAction) {
 
-                this.fadeToPrevious();
+                this.AWS.fadeToPrevious();
                 hurtAction.ignoreFinishedEvent = true;
                 hurtAction.ignoreFadeOut = true;
 
             } else if (this.AWS.activeAction === attackAction) {
 
-                this.fadeToPrevious();
+                this.AWS.fadeToPrevious();
                 attackAction.ignoreFinishedEvent = true;
                 attackAction.ignoreFadeOut = true;
                 super.melee(false);
@@ -547,14 +547,6 @@ class CreatureBase extends CustomizedCreatureTofu {
         this.movingLeft(false);
         this.movingRight(false);
         this.movingForward(false);
-
-    }
-
-    fadeToPrevious() {
-
-        const fadeToAction = this.AWS.cachedAction ?? this.AWS.previousAction;
-        this.AWS.fadeToAction(fadeToAction, .1);
-        this.AWS.isLooping = false;
 
     }
 

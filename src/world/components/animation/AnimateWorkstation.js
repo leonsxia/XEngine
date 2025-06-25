@@ -226,9 +226,7 @@ class AnimateWorkstation {
 
                 if (!endAction.ignoreFadeOut) {
 
-                    this.isLooping = false;
-                    const fadeToAction = this.cachedAction ?? this.previousAction;
-                    this.fadeToAction(fadeToAction, restoreDuration);
+                    const fadeToAction = this.fadeToPrevious(restoreDuration);
 
                     if (fadeToAction.callback) {
 
@@ -297,6 +295,16 @@ class AnimateWorkstation {
             .setEffectiveWeight(endAction.weight)
             .fadeIn(duration)
             .play();
+
+    }
+
+    fadeToPrevious(duration = .1) {
+
+        this.isLooping = false;
+        const fadeToAction = this.cachedAction ?? this.previousAction;
+        this.fadeToAction(fadeToAction, duration);
+
+        return fadeToAction;
 
     }
 
