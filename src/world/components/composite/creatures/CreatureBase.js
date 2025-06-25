@@ -287,13 +287,14 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 }
 
-                this.AWS.prepareCrossFade(null, this.AWS.actions[this.typeMapping.attack.nick], this._animationSettings.ATTACK, 1, false, false, this._animationSettings.ATTACK, endCallback);
-                super.melee(val);
-                this.switchHelperComponents();
+                this.AWS.prepareCrossFade(null, this.AWS.actions[this.typeMapping.attack.nick], this._animationSettings.ATTACK, 1, false, false, this._animationSettings.ATTACK, endCallback);                
 
             }
 
         }
+
+        super.melee(val);
+        this.switchHelperComponents();
 
     }
 
@@ -322,7 +323,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             const endCallback = () => {
 
-                super.hurt(false);
+                this.hurt(false);
                 hurtAction.ignoreFinishedEvent = undefined;
                 attackAction.ignoreFinishedEvent = undefined;
                 attackAction.ignoreFadeOut = undefined;
@@ -331,10 +332,6 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             this.#logger.log(`${this.name} is on hurt`);
             this.AWS.prepareCrossFade(null, hurtAction, this._animationSettings.HURT, 1, false, false, this._animationSettings.HURT, endCallback);
-
-        } else {
-
-            return;
 
         }
 
@@ -377,11 +374,9 @@ class CreatureBase extends CustomizedCreatureTofu {
                 attackAction.ignoreFinishedEvent = undefined;
                 attackAction.ignoreFadeOut = undefined;
                 this.AWS.isLooping = false;
-                this.AWS.setActionEffectiveTimeScale(this.typeMapping.idle.nick, 1);
 
             }
             dieAction.ignoreFadeOut = true;
-            this.AWS.cachedAction = this.AWS.previousAction = null;
 
             this.AWS.prepareCrossFade(null, dieAction, this._animationSettings.DIE, 1, false, false, 0, endCallback);
 
@@ -502,7 +497,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         this.#logger.func = this.movingTick.name;
 
-        if (this.hurting || this.dead || this.meleeing || this._target) {
+        if (this.hurting || this.dead || this._target) {
 
             return;
 
@@ -600,11 +595,12 @@ class CreatureBase extends CustomizedCreatureTofu {
     setInitialActions() {}
 
     resetAnimation() {
-
-        this.AWS.resetAllActions();
+        
+        this.hurt(false);
+        this.die(false);
+        this.melee(false);
         this.stopMovingActions();
-        super.hurt(false);
-        super.die(false);
+        this.AWS.resetAllActions();
 
     }
 

@@ -140,9 +140,19 @@ class AnimateWorkstation {
 
     resetAllActions() {
 
+        this.isLooping = false;
+        if (this.mixer._listeners && this.mixer._listeners.finished) {
+
+            this.mixer._listeners.finished = [];
+
+        }
+
         for (const act in this.actions) {
 
             const action = this.actions[act];
+
+            action.ignoreFadeOut = undefined;
+            action.ignoreFinishedEvent = undefined;
 
             action.reset();
 
@@ -150,11 +160,13 @@ class AnimateWorkstation {
 
                 const { weight } = action;
                 this.setWeight(action, weight);
+                action.action.setEffectiveTimeScale(action.timeScale);
                 this.activeAction = this.previousAction = action;
 
             } else {
 
                 this.setWeight(action, 0);
+                action.action.setEffectiveTimeScale(action.timeScale);
 
             }
 
