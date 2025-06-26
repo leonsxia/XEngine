@@ -22,13 +22,17 @@ const ANIMATION_SETTINGS = {
     MELEE: .2,
     GUN_POINT: .2,
     SHOOT: .1,
-    INTERACT: .1
+    INTERACT: .1,
+    HURT: 0.1,
+    DIE: 0.1
 }
 
 const WEAPON_ACTION_MAPPING = {
     [WEAPONS.NONE]: new WeaponActionMapping({
         name: 'emptyhand',
         idle: CLIPS.IDLE, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING,
+        hurt: { body: CLIPS.HIT_RECEIVE, head: CLIPS.HIT_RECEIVE_2 },
+        die: CLIPS.DEATH,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -46,7 +50,9 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.PISTOL1]: new WeaponActionMapping({ 
         name: 'pistol1',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,         
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,
+        hurt: { body: CLIPS.HIT_RECEIVE, head: CLIPS.HIT_RECEIVE_2 },
+        die: CLIPS.DEATH,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -64,7 +70,9 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.GLOCK]: new WeaponActionMapping({
         name: 'glock',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,         
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,
+        hurt: { body: CLIPS.HIT_RECEIVE, head: CLIPS.HIT_RECEIVE_2 },
+        die: CLIPS.DEATH,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -82,7 +90,9 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.REVOLVER]: new WeaponActionMapping({
         name: 'revolver',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,         
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,
+        hurt: { body: CLIPS.HIT_RECEIVE, head: CLIPS.HIT_RECEIVE_2 },
+        die: CLIPS.DEATH,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -100,7 +110,9 @@ const WEAPON_ACTION_MAPPING = {
     }),
     [WEAPONS.SMG_SHORT]: new WeaponActionMapping({
         name: 'smg_short',
-        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,         
+        idle: CLIPS.IDLE_GUN, walk: CLIPS.WALK, rotate: { nick: 'rotate' }, run: CLIPS.RUN, aim: CLIPS.IDLE_GUN_POINTING, shoot: CLIPS.IDLE_GUN_SHOOT,
+        hurt: { body: CLIPS.HIT_RECEIVE, head: CLIPS.HIT_RECEIVE_2 },
+        die: CLIPS.DEATH,
         idleCollisionSize: { width: .65, depth: .75, height: 1.78 },
         walkCollisionSize: { width: .65, depth: .85, height: 1.78 },
         runCollisionSize: { width: .65, depth: .9, height: 1.78 },
@@ -119,6 +131,8 @@ const WEAPON_ACTION_MAPPING = {
     [WEAPONS.BAYONET]: new WeaponActionMapping({
         name: 'bayonet',
         idle: CLIPS.IDLE, attack: CLIPS.SWORD_SLASH,
+        hurt: { body: CLIPS.HIT_RECEIVE, head: CLIPS.HIT_RECEIVE_2 },
+        die: CLIPS.DEATH,
         ignoreCollisionBox: true,
         ignoreBoundingFace: true,
         ignoreBoundingBox: true,
@@ -144,7 +158,8 @@ class SoldierFemale extends CombatPlayerBase {
         const { vel = 1.2, rotateR = 1, velEnlarge = 2.8, aimVel = 3 * Math.PI, aimTime = .2 } = specs;
         const { scale = [1, 1, 1] } = specs;
         const { sovRadius = 10, showBS = false, enableCollision = true } = specs;
-        const { createDefaultBoundingObjects = false } = specs;        
+        const { createDefaultBoundingObjects = false } = specs;    
+        const { HPMax = 100 } = specs;    
 
         const armedHeight = .4;
         const weapons = [
@@ -226,7 +241,8 @@ class SoldierFemale extends CombatPlayerBase {
             scale,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,
             sovRadius, showBS, enableCollision, createDefaultBoundingObjects,
-            weaponActionMapping, initialWeapon, weapons
+            weaponActionMapping, initialWeapon, weapons,
+            HPMax
         };
 
         super(setup);

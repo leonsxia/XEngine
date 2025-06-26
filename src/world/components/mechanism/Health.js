@@ -45,7 +45,7 @@ class Health {
 
     constructor(specs) {
 
-        const { max = 100, min = 0, current = 100, showText = true } = specs;
+        const { max = 100, min = 0, current = max, showText = true } = specs;
 
         this.#max = max;
         this.#min = min;

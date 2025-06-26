@@ -22,7 +22,7 @@ class AI {
 
             const player = this.players[i];
 
-            if (!player.isActive) continue;
+            if (!player.isActive || player.dead) continue;
 
             for (let j = 0, jl = this.enemies.length; j < jl; j++) {
 

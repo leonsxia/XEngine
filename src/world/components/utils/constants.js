@@ -328,7 +328,7 @@ const SOLDIER_FEMALE_CLIPS = {
     DEATH: { nick: 'death', name: 'CharacterArmature|Death', idx: 0, enable: true, loopOnce: true },
     GUN_SHOOT: { nick: 'gun_shoot', name: 'CharacterArmature|Gun_Shoot', idx: 1, enable: false },
     HIT_RECEIVE: { nick: 'hit_receive', name: 'CharacterArmature|HitRecieve', idx: 2, enable: true, loopOnce: true },
-    HIT_RECEIVE_2: { nick: 'hit_receive_2', name: 'CharacterArmature|HitRecieve_2', idx: 3, enable: false },
+    HIT_RECEIVE_2: { nick: 'hit_receive_2', name: 'CharacterArmature|HitRecieve_2', idx: 3, enable: true, loopOnce: true },
     IDLE: { nick: 'idle', name: 'CharacterArmature|Idle', idx: 4, enable: true, isDefault: true },
     IDLE_GUN: { nick: 'idle_gun', name: 'CharacterArmature|Idle_Gun', idx: 5, enable: true },
     IDLE_GUN_POINTING: { nick: 'idle_gun_pointing', name: 'CharacterArmature|Idle_Gun_Pointing', idx: 6, enable: true },
@@ -353,15 +353,15 @@ const SOLDIER_FEMALE_CLIPS = {
 
 const ZOMBIE_MALE_CLIPS = {
     DEATH: { nick: 'death', name: 'Armature|Die', idx: 0, enable: true, loopOnce: true },
-    DEATH2: { nick: 'death2', name: 'Armature|Die2', idx: 0, enable: true, loopOnce: true },
-    HIT_RECEIVE: { nick: 'hit_receive', name: 'Armature|Hit_reaction', idx: 1, enable: true, loopOnce: true },
-    IDLE: { nick: 'idle', name: 'Armature|Idle', idx: 2, enable: true, isDefault: true },
-    WALK: { nick: 'walk', name: 'Armature|Walk', idx: 3, startImmediately: false, enable: true },
-    WALK2: { nick: 'walk2', name: 'Armature|Walk2', idx: 4, startImmediately: false, enable: true },
-    WLAK3: { nick: 'walk3', name: 'Armature|Running_Crawl', idx: 5, startImmediately: false, enable: true },
-    CRAWL: { nick: 'crawl', name: 'Armature|Crawl', idx: 6, startImmediately: false, enable: true },
-    ATTACK: { nick: 'attack', name: 'Armature|Attack', idx: 7, enable: true, loopOnce: true },
-    ATTACK_GROUND: {nick: 'attack_ground', name: 'Armature|Bite_ground', idx: 8, enable: true, loopOnce: true}
+    DEATH2: { nick: 'death2', name: 'Armature|Die2', idx: 1, enable: true, loopOnce: true },
+    HIT_RECEIVE: { nick: 'hit_receive', name: 'Armature|Hit_reaction', idx: 2, enable: true, loopOnce: true },
+    IDLE: { nick: 'idle', name: 'Armature|Idle', idx: 3, enable: true, isDefault: true },
+    WALK: { nick: 'walk', name: 'Armature|Walk', idx: 4, startImmediately: false, enable: true },
+    WALK2: { nick: 'walk2', name: 'Armature|Walk2', idx: 5, startImmediately: false, enable: true },
+    WLAK3: { nick: 'walk3', name: 'Armature|Running_Crawl', idx: 6, startImmediately: false, enable: true },
+    CRAWL: { nick: 'crawl', name: 'Armature|Crawl', idx: 7, startImmediately: false, enable: true },
+    ATTACK: { nick: 'attack', name: 'Armature|Attack', idx: 8, enable: true, loopOnce: true },
+    ATTACK_GROUND: {nick: 'attack_ground', name: 'Armature|Bite_ground', idx: 9, enable: true, loopOnce: true}
 }
 
 const GLOCK_CLIPS = {

@@ -141,6 +141,8 @@ class Tofu extends TofuBase {
 
         }
 
+        this.onInSightTargetsRemoved();
+
     }
 
     clearInSightTargets() {
@@ -170,6 +172,9 @@ class Tofu extends TofuBase {
 
     // inherited by children
     onInSightTargetsCleared() {}
+
+    // inherited by childre
+    onInSightTargetsRemoved() {}
 
     getTargetDirectionAngle(target) {
 

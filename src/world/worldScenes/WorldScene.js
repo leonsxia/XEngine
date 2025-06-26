@@ -748,6 +748,7 @@ class WorldScene {
             this.player.setPosition(allPlayerPos[this.loadSequence]);
             this.player.resetFallingState?.();
             this.player.resetHealth();
+            this.player.resetAnimation();
             this.player.clearInSightTargets();
             this.player.reloadAllWeapons?.();
 

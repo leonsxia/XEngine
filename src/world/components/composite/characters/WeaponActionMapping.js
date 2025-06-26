@@ -9,6 +9,8 @@ class WeaponActionMapping {
     aim;
     shoot;
     attack;
+    hurt;
+    die;
 
     ignoreCollisionBox = false;
     idleCollisionSize;
@@ -35,7 +37,7 @@ class WeaponActionMapping {
     constructor(specs) {
 
         const { name } = specs;
-        const { idle, walk, run, rotate, aim, shoot, attack } = specs;
+        const { idle, walk, run, rotate, aim, shoot, attack, hurt, die } = specs;
         const { ignoreCollisionBox = false, idleCollisionSize, walkCollisionSize, runCollisionSize, attackCollisionSize } = specs;
         const { ignoreBoundingBox = false, idleBoundingBoxSize, walkBoundingBoxSize, runBoundingBoxSize, attackBoundingBoxSize } = specs;
         const { ignorePushingBox = false, pushingBoxSize } = specs;
@@ -49,6 +51,8 @@ class WeaponActionMapping {
         this.aim = aim;
         this.shoot = shoot;
         this.attack = attack;
+        this.hurt = hurt;
+        this.die = die;
 
         this.ignoreCollisionBox = ignoreCollisionBox;
         this.idleCollisionSize = idleCollisionSize;

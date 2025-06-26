@@ -7,7 +7,7 @@ import { polarity } from "../../utils/enums";
 
 const DEBUG = false;
 const DEBUG_EVENTS = false;
-const DEBUG_ATTACK = true;
+const DEBUG_ATTACK = false;
 
 class CreatureBase extends CustomizedCreatureTofu {
 
@@ -638,9 +638,13 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
-    onHealthReset() {
+    onInSightTargetsRemoved() {
 
-        this.die(false);
+        if (this._inSightTargets.length === 0) {
+
+            this._isNoticed = false;
+
+        }
 
     }
 

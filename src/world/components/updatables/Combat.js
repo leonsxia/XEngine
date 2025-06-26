@@ -1,6 +1,6 @@
 import { Logger } from "../../systems/Logger";
 
-const DEBUG = true;
+const DEBUG = false;
 
 class Combat {
 
@@ -37,6 +37,22 @@ class Combat {
                 if (attackOn) {
                     
                     this.#logger.log(`${enemy.name} put damge: ${damage} on ${attackOn.name}`);
+                    attackOn.damageReceiveTick({ damage });
+
+                    if (attackOn.health.isEmpty) {
+
+                        for (let k = 0, kl = this.enemies.length; k < kl; k++) {
+
+                            const e = this.enemies[k];
+                            if (e.isActive && !e.dead) {
+
+                                e.removeInSightTarget(attackOn);
+
+                            }
+
+                        }
+
+                    }
 
                 }
 
@@ -47,6 +63,8 @@ class Combat {
         for (let i = 0, il = this.players.length; i < il; i++) {
 
             const player = this.players[i];
+
+            if (!player.isActive || player.dead) continue;
 
             const { onTarget: attackOn, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children, enemies: this.enemies.filter(e => e.isActive && !e.dead) }) ?? {};
 
@@ -81,7 +99,16 @@ class Combat {
 
                         if (realTarget.health.isEmpty) {
 
-                            player.removeInSightTarget(realTarget);
+                            for (let k = 0, kl = this.players.length; k < kl; k++) {
+
+                                const p = this.players[k];
+                                if (p.isActive && !p.dead) {
+
+                                    p.removeInSightTarget(realTarget);
+
+                                }
+
+                            }                            
 
                         }
 

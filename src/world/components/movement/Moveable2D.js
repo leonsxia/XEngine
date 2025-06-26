@@ -234,13 +234,13 @@ class Moveable2D {
     }
 
     get isTurnCounterClockwise() {
-        return !this.#interact &&
-            (this.#movingLeft && !this.#movingForward && !this.#movingBackward) || (this.#movingLeft && (this.#melee || this.#gunPoint));
+        return !this.#interact && !this.#hurt && !this.#die &&
+            ((this.#movingLeft && !this.#movingForward && !this.#movingBackward) || (this.#movingLeft && (this.#melee || this.#gunPoint)));
     }
 
     get isTurnClockwise() {
-        return !this.#interact &&
-            (this.#movingRight && !this.#movingForward && !this.#movingBackward) || (this.#movingRight && (this.#melee || this.#gunPoint));
+        return !this.#interact && !this.#hurt && !this.#die &&
+            ((this.#movingRight && !this.#movingForward && !this.#movingBackward) || (this.#movingRight && (this.#melee || this.#gunPoint)));
     }
 
     get isMovingForward() {
@@ -308,7 +308,7 @@ class Moveable2D {
     }
 
     get isActing() {
-        return this.#melee || this.#gunPoint || this.#interact;
+        return this.#melee || this.#gunPoint || this.#interact || this.#hurt || this.#die;
     }
 
     get isForwardBlock() {
