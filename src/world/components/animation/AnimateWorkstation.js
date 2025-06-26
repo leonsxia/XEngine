@@ -234,6 +234,9 @@ class AnimateWorkstation {
 
             const onLoopFinished = () => {
 
+                // make sure current end action is running over, then do the reset finished work
+                if (endAction.action.isRunning()) return;
+
                 this.mixer.removeEventListener('finished', onLoopFinished);
 
                 if (!endAction.ignoreFadeOut) {

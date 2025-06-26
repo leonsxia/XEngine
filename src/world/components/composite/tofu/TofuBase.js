@@ -23,7 +23,7 @@ const _v2 = new Vector3();
 const _down = new Vector3(0, -1, 0);
 const _forward = new Vector3(0, 0, 1);
 
-const DEBUG = true;
+const DEBUG = false;
 
 class TofuBase extends Moveable2D {
 

@@ -47,12 +47,14 @@ class CreatureBase extends CustomizedCreatureTofu {
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
         const { isActive = true, showBS = false, enableCollision = true, typeMapping = {} } = specs;
         const { createDefaultBoundingObjects = true } = specs;
+        const { HPMax = 100 } = specs;
 
         super({ 
             name, 
             size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, 
             rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, 
-            createDefaultBoundingObjects, enableCollision, typeMapping
+            createDefaultBoundingObjects, enableCollision, typeMapping,
+            HPMax
         });
 
         this.specs = specs;
@@ -318,6 +320,7 @@ class CreatureBase extends CustomizedCreatureTofu {
                 attackAction.ignoreFadeOut = true;
                 super.melee(false);
                 this._i = 0;
+                console.log(`${this.name} attack fade out`);
 
             }
 

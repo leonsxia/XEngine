@@ -136,6 +136,7 @@ class ZombieMale extends CreatureBase {
         const { isActive = true, sovRadius = 6.5, showBS = false, enableCollision = true } = specs;
         const { variant = 'standard' } = specs;
         const { createDefaultBoundingObjects = false } = specs;
+        const { HPMax = 100 } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
 
@@ -156,7 +157,8 @@ class ZombieMale extends CreatureBase {
             clips: CLIPS,  animationSetting: animationSetting,
             isActive, sovRadius, showBS, enableCollision,
             typeMapping,
-            createDefaultBoundingObjects
+            createDefaultBoundingObjects,
+            HPMax
         };
 
         super(setup);

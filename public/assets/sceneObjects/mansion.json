@@ -47,7 +47,8 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1.3, 1.3, 1.3],
-            "position": [0, 0, 0]
+            "position": [0, 0, 0],
+            "HPMax": 300
         }
     ],
     "enemies": [
@@ -80,7 +81,8 @@
             "val": 0.45,
             "rotateR": 0.9,
             "showBS": false,
-            "variant": "variant1"
+            "variant": "variant1",
+            "HPMax": 500
         },
         {
             "name": "zombie3",

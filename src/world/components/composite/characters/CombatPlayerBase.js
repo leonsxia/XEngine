@@ -1041,6 +1041,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 super.hurt(false);
                 hurtAction.ignoreFinishedEvent = undefined;
                 this.AWS.isLooping = false;
+                this.startAttackTimer();
 
             }
 
