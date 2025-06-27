@@ -725,6 +725,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         } else {
 
             endAction = this.AWS.actions[this.currentActionType.idle.nick];
+            this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 1);
 
         }
 
@@ -1078,7 +1079,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 hurtAction.ignoreFinishedEvent = undefined;
                 hurtAction.ignoreFadeOut = undefined;
                 this.AWS.isLooping = false;
-                this.stopAllMotionStates();
 
             }
 
@@ -1113,7 +1113,20 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         if (this.dead) {
 
+            this.resetWeaponState();
+            this.stopAllMotionStates();
             this.setAllBoundingBoxLayers(false);
+
+        }
+
+    }
+
+    resetWeaponState() {
+
+        if (this.armedWeapon) {
+
+            this.armedWeapon.isFiring = false;
+            this.armedWeapon.cancelShoot();
 
         }
 
@@ -1187,7 +1200,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                         if (this.armedWeapon.magzineEmpty) {
 
-                            this.armedWeapon.isFiring = false;
                             this.cancelGunShoot();
                             this.#weaponLogger.log(`${this.armedWeapon.weaponType} magzine empty`);
                             this.armedWeapon.weaponEmpty();
@@ -1337,13 +1349,19 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (this.shooting) super.shoot(false);
         if (this.meleeing) this.melee(false);
 
+        this.switchHelperComponents();
+
     }
 
     resetAnimation() {
 
         this.hurt(false);
+        this.die(false);
         this.stopAllMotionStates();
+        this.resetWeaponState();
         this.AWS.resetAllActions();
+        this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 1);
+        this.AWS.activeAction = this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
 
     }
 

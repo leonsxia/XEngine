@@ -263,7 +263,7 @@ class SoldierFemale extends CombatPlayerBase {
 
         this.setupWeaponScale();
         
-        this.armWeapon(this.initialWeapon);        
+        this.armWeapon(this.initialWeapon);
         
     }
 
