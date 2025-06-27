@@ -273,7 +273,7 @@
             ]
         },
         {
-            "type": "Room",
+            "type": "InspectorRoom",
             "width": 30,
             "height": 5,
             "depth": 30,
@@ -292,6 +292,52 @@
             "enableWallOBBs": true,
             "position": [0, 2.5, 0],
             "rotationY": 0,
+            "areas": [
+                {
+                    "name": "front_left",
+                    "width": 15,
+                    "height": 0.5,
+                    "depth": 15,
+                    "color": "#aaaaaa",
+                    "position": [7.5, -2.25, 7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [-3, 1.3, -3],
+                    "cameraTarget": [10, -6.74, 10]
+                },
+                {
+                    "name": "front_right",
+                    "width": 15,
+                    "height": 0.5,
+                    "depth": 15,
+                    "color": "#bbbbbb",
+                    "position": [-7.5, -2.25, 7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [3, 1.3, -3],
+                    "cameraTarget": [-10, -6.74, 10]
+                },
+                {
+                    "name": "back_left",
+                    "width": 15,
+                    "height": 0.5,
+                    "depth": 15,
+                    "color": "#cccccc",
+                    "position": [7.5, -2.25, -7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [-3, 1.3, 3],
+                    "cameraTarget": [10, -6.74, -10]
+                },
+                {
+                    "name": "back_right",
+                    "width": 15,
+                    "height": 0.5,
+                    "depth": 15,
+                    "color": "#dddddd",
+                    "position": [-7.5, -2.25, -7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [3, 1.3, 3],
+                    "cameraTarget": [-10, -6.74, -10]
+                }
+            ],
             "groups": [
                 {
                     "type": "BoxCube",

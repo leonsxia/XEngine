@@ -1,9 +1,12 @@
 import { Vector3 } from "three";
 
+const _v1 = new Vector3();
+const _v2 = new Vector3();
+
 class InspectorCamera {
 
     camera;
-    target;
+    target = new Vector3();
 
     #player;
     #control;
@@ -16,7 +19,7 @@ class InspectorCamera {
         const { defaultCamera } = specs;
         
         this.camera = defaultCamera.camera;
-        this.target = defaultCamera.target;
+        this.target.copy(defaultCamera.target);
 
     }
 
@@ -65,14 +68,15 @@ class InspectorCamera {
             const { box, cameraPosition, cameraTarget } = intersects[0];
 
             const room = box.mesh.parent;
-            const camPos = new Vector3(...cameraPosition);
-            const camTar = new Vector3(...cameraTarget);
-            const camPosWorld = room.localToWorld(camPos);
-            const camTarWorld = room.localToWorld(camTar);
+            _v1.set(...cameraPosition);
+            _v2.set(...cameraTarget);
+            room.updateWorldMatrix(true, false);
+            const camPosWorld = _v1.applyMatrix4(room.matrixWorld);
+            const camTarWorld = _v2.applyMatrix4(room.matrixWorld);
 
             this.camera.position.copy(camPosWorld);
             this.camera.lookAt(camTarWorld);
-            this.target = camTarWorld;
+            this.target.copy(camTarWorld);
 
             this.#control.target.copy(this.target);
 
