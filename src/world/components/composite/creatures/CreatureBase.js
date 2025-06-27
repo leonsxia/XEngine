@@ -320,7 +320,6 @@ class CreatureBase extends CustomizedCreatureTofu {
                 attackAction.ignoreFadeOut = true;
                 super.melee(false);
                 this._i = 0;
-                console.log(`${this.name} attack fade out`);
 
             }
 
