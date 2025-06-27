@@ -287,6 +287,15 @@ class GuiMaker {
 
         if ($scene.player) {
 
+            const healthActions = {
+                'player_hp_actions': {
+                    'Player HP': $scene.switchPlayerHealth.bind($scene)
+                }
+            }
+
+            setupFunctionPanel(this.guiLeftSpecs, healthActions);
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.HEALTH_CONTROL, GUI_CONFIG.PLAYER_HP_ACTIONS_PARENT, null, true));
+
             const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.PLAYER_CONTROL, parent: 'playerControl', close: true });
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -361,14 +370,6 @@ class GuiMaker {
                 changeFn: $scene.showPlayerSkeleton.bind($scene)
             }));
 
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'Health',
-                value: { Health: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: $scene.showPlayerHealth.bind($scene)
-            }));
-
             this.guiLeftSpecs.details.push(folder);
 
             // add weapons control
@@ -396,6 +397,15 @@ class GuiMaker {
         }
 
         if ($scene.enemies.length > 0) {
+
+            const healthActions = {
+                'enemy_hp_actions': {
+                    'Enemy HP': $scene.switchEnemyHealth.bind($scene)
+                }
+            }
+
+            setupFunctionPanel(this.guiLeftSpecs, healthActions);
+            this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.HEALTH_CONTROL, GUI_CONFIG.ENEMY_HP_ACTIONS_PARENT, null, true));
 
             const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.ENEMY_CONTROL, parent: 'enemyControl', close: true });
 
@@ -469,14 +479,6 @@ class GuiMaker {
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: $scene.showEnemySkeleton.bind($scene)
-            }));
-
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'Health',
-                value: { Health: 'hide' },
-                params: ['show', 'hide'],
-                type: 'dropdown',
-                changeFn: $scene.showEnemyHealth.bind($scene)
             }));
 
             this.guiLeftSpecs.details.push(folder);

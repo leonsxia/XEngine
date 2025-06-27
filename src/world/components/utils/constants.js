@@ -384,6 +384,7 @@ const GUI_CONFIG = {
     IC_CONTROL: 'Inspector Camera',
     CAMERA_CONTROL: 'Cameras',
     PICKER_CONTROL: 'Picker',
+    HEALTH_CONTROL: 'Health',
     WEAPON_CONTROL: 'Weapons',
     SELECT_WEAPONS: 'Select Weapons',
     WEAPON_ACTIONS: 'Weapon Actions',
@@ -392,6 +393,8 @@ const GUI_CONFIG = {
     PICKER_ACTIONS_PARENT: 'picker_actions',
     TPC_ACTIONS_PARENT: 'tpc_actions',
     IC_ACTIONS_PARENT: 'ic_actions',
+    PLAYER_HP_ACTIONS_PARENT: 'player_hp_actions',
+    ENEMY_HP_ACTIONS_PARENT: 'enemy_hp_actions',
     INACTIVES: '_inactive',
     CLASS_INACTIVE: 'control-inactive'
 }

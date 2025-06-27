@@ -90,6 +90,9 @@ class WorldScene {
     pickedObject = null;
     objectLocked = false;
 
+    enablePlayerHealth = false;
+    enableEnemyHealth = false;
+
     sceneBuilder;
     sceneSetup;
     sceneSetupCopy;
@@ -705,7 +708,6 @@ class WorldScene {
                     .showPlayerPushingBox(cmdHide)
                     .showPlayerArrows(cmdHide)
                     .showPlayerSkeleton(cmdHide)
-                    .showPlayerHealth(cmdHide);
 
                 this.physics.removeActivePlayers(this.player.name);
 
@@ -720,6 +722,7 @@ class WorldScene {
             this.player = find;
 
             this.player.isActive = true;
+            this.player.showHealth(this.enablePlayerHealth);
 
             --this.loadSequence;
             this.focusNext(forceStaticRender);
@@ -786,6 +789,26 @@ class WorldScene {
     loadScene() {
 
         this.sceneBuilder.loadScene();
+
+    }
+
+    switchPlayerHealth() {
+
+        this.enablePlayerHealth = !this.enablePlayerHealth;
+        this.player.showHealth(this.enablePlayerHealth);        
+
+    }
+
+    switchEnemyHealth() {
+
+        this.enableEnemyHealth = !this.enableEnemyHealth;
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            if (enemy.disposed) continue;
+            enemy.showHealth(this.enableEnemyHealth);
+
+        }
 
     }
 
@@ -977,16 +1000,6 @@ class WorldScene {
         }
 
         this.player.showSkeleton(s);
-
-        return this;
-
-    }
-
-    showPlayerHealth(show) {
-
-        const s = show === 'show' ? true : false;
-
-        this.player.showHealth(s);
 
         return this;
 
@@ -1231,24 +1244,6 @@ class WorldScene {
             }
 
             enemy.showSkeleton(s);
-
-        }
-
-        return this;
-
-    }
-
-    showEnemyHealth(show) {
-
-        const s = show === 'show' ? true : false;
-
-        for (let i = 0, il = this.enemies.length; i < il; i++) {
-
-            const enemy = this.enemies[i];
-
-            if (enemy.disposed) continue;
-
-            enemy.showHealth(s);
 
         }
 

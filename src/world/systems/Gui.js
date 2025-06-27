@@ -405,8 +405,6 @@ class Gui {
 
                             this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Skeleton').setValue('hide');
 
-                            this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'Health').setValue('hide');
-
                             break;
 
                         }
@@ -497,6 +495,18 @@ class Gui {
                                 }
 
                                 ctl.name(`${ctl._name === 'enable' ? 'disable' : 'enable'}`);
+
+                            } else if (find.parent.search(/player_hp_actions|enemy_hp_actions/) >= 0) {
+
+                                if (isActive) {
+
+                                    ctl.setInactive();
+
+                                } else {
+
+                                    ctl.setActive();
+
+                                }
 
                             } else if (find.parent.search(/tpc_actions|ic_actions/) >= 0) {
 
