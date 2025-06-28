@@ -1117,6 +1117,14 @@ class TofuBase extends Moveable2D {
 
     }
 
+    tickRotateActions(delta) {
+
+        const params = { group: this.group, delta, $self: this };
+        this.aimTick(params);
+        this.quickTurnTick(params);
+
+    }
+
     tick(delta) {
 
         const params = this.setTickParams(delta);

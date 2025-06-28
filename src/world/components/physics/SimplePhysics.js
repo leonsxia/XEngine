@@ -843,6 +843,8 @@ class SimplePhysics {
 
             const avatar = activeAvatars[i];
 
+            avatar.tickRotateActions(delta);
+
             // console.log(`is in air: ${avatar.isInAir}`);
 
             if (DEBUG && avatar._showBBHelper) {

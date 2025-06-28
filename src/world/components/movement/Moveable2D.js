@@ -2,7 +2,7 @@ import { Group, Matrix4, Object3D, Vector3 } from 'three';
 import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
 import { Logger } from '../../systems/Logger';
 
-const COOLING_TIME = .7;
+const COOLING_TIME = .4;
 const DEBUG = true;
 
 const _m1 = new Matrix4();
@@ -35,6 +35,7 @@ class Moveable2D {
     #isQuickTuring = false;
     #turingRad = 0;
     #coolingT = COOLING_TIME;
+    #quickTuringOver = false;
 
     #isAimTurning = false;
     #isAimTurnOver = false;
@@ -295,14 +296,6 @@ class Moveable2D {
         return this.isMovingBackward && this.#accelerate;
     }
 
-    set isQuickTuring(val) {
-
-        this.#isQuickTuring = val;
-        this.#turingRad = 0;
-        this.#coolingT = COOLING_TIME;
-
-    }
-
     get isInAir() {
         return this.#isFalling;
     }
@@ -554,13 +547,22 @@ class Moveable2D {
 
     }
 
+    stopQuickTurning() {
+
+        this.#isQuickTuring = false;
+        this.#quickTuringOver = true;
+        this.#turingRad = 0;
+        this.#coolingT = COOLING_TIME;
+
+    }
+
     quickTurnTick(params) {
 
         let result = false;
         const { group, delta, $self } = params;
         const worldY = $self.worldYDirection;
 
-        if ($self.enableQuickTurn && !this.#isClimbingUp && !this.#isClimbingForward) {
+        if ($self.enableQuickTurn && !this.#quickTuringOver && !this.#isClimbingUp && !this.#isClimbingForward) {
 
             if (!this.#isQuickTuring && this.isQuickTuring) {
 
@@ -590,9 +592,7 @@ class Moveable2D {
                 
                 if (this.#coolingT <= 0) {
 
-                    this.#isQuickTuring = false;
-                    this.#turingRad = 0;
-                    this.#coolingT = COOLING_TIME;
+                    this.stopQuickTurning();
     
                 } else {
 
@@ -601,6 +601,12 @@ class Moveable2D {
                 }
 
             }
+
+        }
+
+        if ((!this.#accelerate || !this.#movingBackward) && this.#quickTuringOver) {
+
+            this.#quickTuringOver = false;
 
         }
 
@@ -675,7 +681,7 @@ class Moveable2D {
         const stoodRotateRad = stoodRotateVel * delta;
         const worldY = $self.worldYDirection;
 
-        if(this.quickTurnTick(params) || this.aimTick(params) || this.#isClimbingUp || this.#isClimbingForward) {
+        if(this.#isQuickTuring || this.#isAimTurning || this.#isClimbingUp || this.#isClimbingForward) {
 
             return;
 
@@ -809,7 +815,7 @@ class Moveable2D {
             halfEdgeLength
         } = wall.checkResult;
 
-        if (this.quickTurnTick(params) || this.aimTick(params) || this.#isClimbingUp) {
+        if (this.#isQuickTuring || this.#isAimTurning || this.#isClimbingUp) {
 
             return;
 

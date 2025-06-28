@@ -808,7 +808,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             }
 
-            this.isQuickTuring = false;
+            this.stopQuickTurning();
 
             this.#logger.log(`gun point!`);
             this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.currentActionType.aim.nick], this._animationSettings.GUN_POINT, 1);
