@@ -331,12 +331,18 @@ class Gui {
 
         gui.onChange(event => {
 
-            const find = eventObjs.find(o => 
+            let find = eventObjs.find(o => 
                 (
-                    o.name === event.property || 
-                    o.prop === event.controller._name 
-                ) && o.parent === event.controller.identifier || 
-                o.type === 'function' && o.parent === event.controller.parent.identifier);
+                    o.name === event.property ||
+                    o.prop === event.controller._name
+                ) && o.parent === event.controller.identifier
+            );
+
+            if (!find) {
+
+                find = eventObjs.find(o => o.type === 'function' && o.parent === event.controller.parent.identifier);
+
+            }
 
             if (find) {
 
@@ -514,7 +520,7 @@ class Gui {
 
                                     ctl.setInactive();
                                     this.findOtherControllers(this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU), GUI_CONFIG.CAMERA_CONTROL, event.controller._name)
-                                        .forEach(ctl => ctl.setActive());
+                                        .forEach(ctl => ctl.setActive?.());
 
                                 } else {
 

@@ -39,14 +39,19 @@ class InspectorRoom extends Room {
             };
 
             areaBlock.box.isArea = true;
-            areaBlock.box.mesh.layers.enable(CAMERA_RAY_LAYER);
 
             // set collision areas invisible
+            const listener = () => {
+
+                areaBlock.box.setLayers(CAMERA_RAY_LAYER);
+
+            }
+            const type = 'visibleChanged';
+            areaBlock.box.addEventListener(type, listener);
+            areaBlock.box.eventList.set(type, listener);
             areaBlock.box.visible = false;
-            areaBlock.box.mesh.layers.disable(CAMERA_RAY_LAYER);
 
             this.areas.push(areaBlock);
-
             this.group.add(areaBlock.box.mesh);
 
         }

@@ -1753,6 +1753,27 @@ class WorldScene {
 
     }
 
+    showICAreas(show) {
+
+        const s = show === 'show' ? true : false;
+
+        for (let i = 0, il = this.rooms.length; i < il; i++) {
+
+            const room = this.rooms[i];
+
+            if (!room.isInspectorRoom) continue;
+
+            for (let j = 0, jl = room.areas.length; j < jl; j++) {
+
+                const { box } = room.areas[j];
+                box.visible = s;
+
+            }
+
+        }
+
+    }
+
     lockObjects() {
 
         this.objectLocked = !this.objectLocked;

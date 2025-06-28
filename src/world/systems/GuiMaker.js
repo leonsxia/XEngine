@@ -1,6 +1,6 @@
 import { updateSingleLightCamera } from "../components/shadowMaker";
 import { WEAPONS, GUI_CONFIG, CAMERAS } from "../components/utils/constants";
-import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, setupFunctionPanel } from "../components/utils/guiConfigHelper";
+import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, makeSubGuiControlFolder, setupFunctionPanel } from "../components/utils/guiConfigHelper";
 import { Gui } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcesser";
 import { Resizer } from "./Resizer";
@@ -282,6 +282,16 @@ class GuiMaker {
 
             setupFunctionPanel(this.guiLeftSpecs, icActions);
             this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.CAMERA_CONTROL, GUI_CONFIG.IC_ACTIONS_PARENT, null, true));
+
+            const icFolder = makeSubGuiControlFolder(GUI_CONFIG.CAMERA_CONTROL, GUI_CONFIG.IC_AREAS_PARENT);
+            icFolder.specs.push(makeFolderSpecGuiConfig({
+                name: 'IC Areas',
+                value: { 'IC Areas': 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showICAreas.bind($scene)
+            }));
+            this.guiLeftSpecs.details.push(icFolder);
 
         }
 

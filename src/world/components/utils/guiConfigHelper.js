@@ -38,6 +38,28 @@ function makeGuiPanel() {
     };
 }
 
+function makeSubFolder(folder, parent, subFolder, closeSub = false) {
+    return {
+        folder,
+        subFolder,
+        parent,
+        close: false,
+        closeSub,
+        specs: []
+    };
+}
+
+function makeSubGuiControlFolder(folder, parent, subFolder) {
+    return {
+        folder,
+        subFolder,
+        parent,
+        close: false,
+        closeSub: false,
+        specs: []
+    };
+}
+
 function makeFunctionGuiConfig(folder, parent, subFolder, close = false, closeSub = false) {
     return {
         folder,
@@ -1080,6 +1102,58 @@ function makeObjectsGuiConfig(objects) {
 
             }
 
+            if (object.father.isArea) {
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'cameraPositionX',
+                    prop: 'camPos.x',
+                    value: object.father,
+                    params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
+                    type: 'object-angle'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'cameraPositionY',
+                    prop: 'camPos.y',
+                    value: object.father,
+                    params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
+                    type: 'object-angle'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'cameraPositionZ',
+                    prop: 'camPos.z',
+                    value: object.father,
+                    params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
+                    type: 'object-angle'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'cameraTargetX',
+                    prop: 'camTar.x',
+                    value: object.father,
+                    params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
+                    type: 'object-angle'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'cameraTargetY',
+                    prop: 'camTar.y',
+                    value: object.father,
+                    params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
+                    type: 'object-angle'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'cameraTargetZ',
+                    prop: 'camTar.z',
+                    value: object.father,
+                    params: [- DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, picked_number_steps],
+                    type: 'object-angle'
+                }));
+
+            }
+
         }
 
         if (object.father.isWater || object.father.isWaterCube) {
@@ -1165,6 +1239,8 @@ function makeObjectsGuiConfig(objects) {
 
 export { 
     makeGuiPanel, 
+    makeSubFolder,
+    makeSubGuiControlFolder,
     makeFunctionGuiConfig, 
     makeDropdownGuiConfig,
     makeFolderGuiConfig,

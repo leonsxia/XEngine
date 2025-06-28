@@ -393,6 +393,7 @@ const GUI_CONFIG = {
     PICKER_ACTIONS_PARENT: 'picker_actions',
     TPC_ACTIONS_PARENT: 'tpc_actions',
     IC_ACTIONS_PARENT: 'ic_actions',
+    IC_AREAS_PARENT: 'ic_areas',
     PLAYER_HP_ACTIONS_PARENT: 'player_hp_actions',
     ENEMY_HP_ACTIONS_PARENT: 'enemy_hp_actions',
     INACTIVES: '_inactive',
