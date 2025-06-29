@@ -801,7 +801,7 @@ class Moveable2D {
 
     tankmoveTickWithWall(params) {
 
-        const { group, rotateVel, stoodRotateVel, delta, wall, $self } = params;
+        const { group, rotateVel, stoodRotateVel, dist, delta, wall, $self } = params;
         const {
             wallMesh,
             borderReach, leftCorIntersectFace, rightCorIntersectFace, intersectCor,
@@ -970,6 +970,10 @@ class Moveable2D {
 
                 if (this._intersectNum <= 2) {
 
+                    _v1.set(0, 0, dist).applyMatrix4(dummyObject.matrixWorld);
+                    _v1.x = dummyObject.position.x;
+                    this._deltaV3.add(_v1.sub(dummyObject.position));
+
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
                         // this.#logger.log(`left face reach`);
@@ -1002,6 +1006,10 @@ class Moveable2D {
             } else if (!leftCorIntersectFace?.includes(FACE_DEF[1]) && !rightCorIntersectFace?.includes(FACE_DEF[1])) {                
 
                 if (this._intersectNum <= 2) {
+
+                    _v1.set(0, 0, - dist).applyMatrix4(dummyObject.matrixWorld);
+                    _v1.x = dummyObject.position.x;
+                    this._deltaV3.add(_v1.sub(dummyObject.position));
 
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
