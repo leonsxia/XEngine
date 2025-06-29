@@ -64,7 +64,7 @@ function createPointLights(pointLightSpecsArr) {
 
         const { name } = point;
 
-        point.light = pointLights[name] = new createPointLight(point);
+        point.light = pointLights[name] = createPointLight(point);
 
     }
 
@@ -72,11 +72,11 @@ function createPointLights(pointLightSpecsArr) {
 
 }
 
-function createSpotLights(spotLihgtSpecsArr) {
+function createSpotLights(spotLightSpecsArr) {
 
     const spotLights = {};
 
-    const visibleSpotLightSpecsArr = spotLihgtSpecsArr.filter(l => l.visible);
+    const visibleSpotLightSpecsArr = spotLightSpecsArr.filter(l => l.visible);
 
     for (let i = 0, il = visibleSpotLightSpecsArr.length; i < il; i++) {
 
@@ -84,7 +84,7 @@ function createSpotLights(spotLihgtSpecsArr) {
 
         const { name } = spot;
 
-        spot.light = spotLights[name] = new createSpotLight(spot);
+        spot.light = spotLights[name] = createSpotLight(spot);
 
     }
 
@@ -130,6 +130,10 @@ function createPointLight(lightSpecs) {
 
     light.shadow.radius = shadowRadius;
     light.shadow.camera.aspect = shadowCameraAspect;
+    // ensure projection matrix is updated after camera param changes
+    if (light.shadow.camera.updateProjectionMatrix) {
+        light.shadow.camera.updateProjectionMatrix();
+    }
 
     light.position.set(...position);
 
@@ -148,6 +152,11 @@ function createSpotLight(lightSpecs) {
     light.target.position.set(...target);
 
     if (map) light.map = map;
+    
+    // keep camera projection in sync in case users modify shadow settings elsewhere
+    if (light.shadow?.camera?.updateProjectionMatrix) {
+        light.shadow.camera.updateProjectionMatrix();
+    }
     
     return light;
 
