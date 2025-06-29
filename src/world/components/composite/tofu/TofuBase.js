@@ -1177,12 +1177,11 @@ class TofuBase extends Moveable2D {
 
     }
 
-    tickWithWall(delta, wall, selfTicked = false) {
+    tickWithWall(delta, wall) {
 
         const params = this.setTickParams(delta);
 
         params.wall = wall;
-        params.selfTicked = selfTicked;
 
         this.#slowDownCoefficient = SLOWDOWN_COEFFICIENT;
 

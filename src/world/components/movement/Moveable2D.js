@@ -7,7 +7,6 @@ const DEBUG = true;
 
 const _m1 = new Matrix4();
 const _v1 = new Vector3();
-const _v2 = new Vector3();
 const _obj0 = new Object3D();
 const _g0 = new Group();
 
@@ -802,7 +801,7 @@ class Moveable2D {
 
     tankmoveTickWithWall(params) {
 
-        const { group, R, rotateVel, stoodRotateVel, dist, delta, wall, $self, selfTicked = false } = params;
+        const { group, rotateVel, stoodRotateVel, delta, wall, $self } = params;
         const {
             wallMesh,
             borderReach, leftCorIntersectFace, rightCorIntersectFace, intersectCor,
@@ -843,7 +842,6 @@ class Moveable2D {
         const recoverCoefficient = $self.recoverCoefficient;
         const quickRecoverCoefficient = $self.quickRecoverCoefficient;
         const backwardCoefficient = $self.backwardCoefficient;
-        let deltaX, deltaZ;
         const rotateRad = rotateVel * delta;
         const stoodRotateRad = stoodRotateVel * delta;
 
@@ -957,18 +955,14 @@ class Moveable2D {
 
         if (this.isMovingForward) {
 
-            const offsetVec3 = _v1.set(0, 0, dist).applyMatrix4(dummyObject.matrixWorld);
-            offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
-
             if (!borderReach) {
 
                 if (cornorsIsOverlap()) {
 
                     const overlap = getMinCornorZ();
 
-                    _v2.set(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                    this._deltaV3.add(_v2.sub(dummyObject.position));
-                    // dummyObject.position.copy(dirVec3);        
+                    _v1.set(dummyObject.position.x, dummyObject.position.y, dummyObject.position.z - overlap);
+                    this._deltaV3.add(_v1.sub(dummyObject.position));  
 
                 }
 
@@ -976,19 +970,14 @@ class Moveable2D {
 
                 if (this._intersectNum <= 2) {
 
-                    this._deltaV3.add(offsetVec3.sub(dummyObject.position));
-                    // dummyObject.position.copy(offsetVec3);
-
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
-                        // dummyObject.position.x += recoverCoefficient;
                         // this.#logger.log(`left face reach`);
                         this._deltaV3.add(_v1.set(recoverCoefficient, 0, recoverCoefficient));
 
 
                     } else {
 
-                        // dummyObject.position.x -= recoverCoefficient;
                         // this.#logger.log(`right face reach`);
                         this._deltaV3.add(_v1.set(- recoverCoefficient, 0, recoverCoefficient));
 
@@ -999,19 +988,14 @@ class Moveable2D {
             }
 
         } else if (this.isMovingBackward) {
-
-            const offsetVec3 = _v1.set(0, 0, - dist).applyMatrix4(dummyObject.matrixWorld);
-            offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
-
             if (!borderReach) {
 
                 if (cornorsIsOverlap()) {
 
                     const overlap = getMinCornorZ();
 
-                    _v2.set(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                    this._deltaV3.add(_v2.sub(dummyObject.position));
-                    // dummyObject.position.copy(dirVec3);
+                    _v1.set(dummyObject.position.x, dummyObject.position.y, dummyObject.position.z - overlap);
+                    this._deltaV3.add(_v1.sub(dummyObject.position));
 
                 }
 
@@ -1019,17 +1003,12 @@ class Moveable2D {
 
                 if (this._intersectNum <= 2) {
 
-                    this._deltaV3.add(offsetVec3.sub(dummyObject.position));
-                    // dummyObject.position.copy(offsetVec3);
-
                     if (leftCorIntersectFace) { // when left or right faces intersect the cornor
 
-                        // dummyObject.position.x += recoverCoefficient;
                         this._deltaV3.add(_v1.set(recoverCoefficient, 0, recoverCoefficient));
 
                     } else {
 
-                        // dummyObject.position.x -= recoverCoefficient;
                         this._deltaV3.add(_v1.set(- recoverCoefficient, 0, recoverCoefficient));
 
                     }
@@ -1048,7 +1027,6 @@ class Moveable2D {
 
             }
 
-            // dummyObject.rotation.y -= rotateRad;
             dummyObject.rotateOnWorldAxis(worldY, - stoodRotateRad);
 
         } else if (this.isTurnCounterClockwise) {
@@ -1061,13 +1039,9 @@ class Moveable2D {
 
             }
 
-            // dummyObject.rotation.y += rotateRad;
             dummyObject.rotateOnWorldAxis(worldY, stoodRotateRad);
 
         } else {
-
-            deltaX = R - R * Math.cos(dist / R);
-            deltaZ = R * Math.sin(dist / R);
 
             if (this.isMovingForwardLeft || this.isMovingBackwardLeft) {
 
@@ -1091,11 +1065,6 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    this.isMovingForwardLeft ? _v1.set(deltaX, 0, deltaZ) : _v1.set(deltaX, 0, - deltaZ);
-
-                    const offsetVec3 = _v1.applyMatrix4(dummyObject.matrixWorld);
-                    offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
-
                     if (this.isForwardBlock || this.isBackwardBlock) {
 
                         this.rotateOffsetCorrection(wall.checkResult.cornorsArr);
@@ -1103,8 +1072,8 @@ class Moveable2D {
                     } else if (cornorsIsOverlap()) {
 
                         const overlap = getMinCornorZ();
-                        _v2.set(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                        this._deltaV3.add(_v2.sub(dummyObject.position));
+                        _v1.set(dummyObject.position.x, dummyObject.position.y, dummyObject.position.z - overlap);
+                        this._deltaV3.add(_v1.sub(dummyObject.position));
 
                     }
 
@@ -1142,11 +1111,6 @@ class Moveable2D {
 
                 if (!borderReach) {
 
-                    this.isMovingForwardRight ? _v1.set(- deltaX, 0, deltaZ) : _v1.set(- deltaX, 0, - deltaZ);
-
-                    const offsetVec3 = _v1.applyMatrix4(dummyObject.matrixWorld);
-                    offsetVec3.x = selfTicked ? dummyObject.position.x : offsetVec3.x;
-
                     if (this.isForwardBlock || this.isBackwardBlock) {
 
                         this.rotateOffsetCorrection(wall.checkResult.cornorsArr);
@@ -1154,8 +1118,8 @@ class Moveable2D {
                     } else if (cornorsIsOverlap()) {
 
                         const overlap = getMinCornorZ();
-                        _v2.set(offsetVec3.x, offsetVec3.y, dummyObject.position.z - overlap);
-                        this._deltaV3.add(_v2.sub(dummyObject.position));
+                        _v1.set(dummyObject.position.x, dummyObject.position.y, dummyObject.position.z - overlap);
+                        this._deltaV3.add(_v1.sub(dummyObject.position));
 
                     }
 

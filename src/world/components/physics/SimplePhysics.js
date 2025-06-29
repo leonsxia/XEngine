@@ -879,8 +879,6 @@ class SimplePhysics {
 
             avatar.resetWorldDeltaV3();
 
-            let avatarTicked = true;
-
             if (!avatar.locked) {
 
                 avatar.tick(delta);
@@ -936,7 +934,7 @@ class SimplePhysics {
 
                     const wall = collisionedWalls[i];
 
-                    avatar.tickWithWall(delta, wall, avatarTicked);
+                    avatar.tickWithWall(delta, wall);
 
                 }
 
