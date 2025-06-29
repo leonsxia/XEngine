@@ -472,14 +472,6 @@ class Moveable2D {
 
     }
 
-    resetAllActionState($self) {
-
-        this.resetAimingState($self);
-        this.resetClimbingState();
-        this.stopQuickTurning();
-
-    }
-
     aimTick(params) {
 
         let result = false;
@@ -535,7 +527,7 @@ class Moveable2D {
             
         }
 
-        if (!this.#gunPoint && !this.#melee && (this.#aimingRadStep || this.#isAimTurnOver)) {
+        if (!this.#gunPoint && !this.#melee && (this.#isAimTurning || this.#isAimTurnOver)) {
 
             this.resetAimingState($self);
 

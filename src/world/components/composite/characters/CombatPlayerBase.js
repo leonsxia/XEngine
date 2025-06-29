@@ -1111,11 +1111,13 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         }
 
+        this.stopQuickTurning();
+        this.resetClimbingState();
+
         if (this.dead) {
 
             this.resetWeaponState();
-            this.stopAllMotionStates();
-            this.resetAllActionState(this);
+            this.stopAllMotionStates();            
             this.setAllBoundingBoxLayers(false);
 
         }
@@ -1359,7 +1361,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.hurt(false);
         this.die(false);
         this.stopAllMotionStates();
-        this.resetAllActionState(this);
+        this.stopQuickTurning();
+        this.resetClimbingState();
         this.resetWeaponState();
         this.AWS.resetAllActions();
         this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 1);
