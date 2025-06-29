@@ -416,6 +416,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         if (this.dead) {
 
+            this.resetAllActionState(this);
             this.setAllBoundingBoxLayers(false);
 
         }
@@ -602,6 +603,7 @@ class CreatureBase extends CustomizedCreatureTofu {
         this.die(false);
         this.melee(false);
         this.stopMovingActions();
+        this.resetAllActionState(this);
         this.AWS.resetAllActions();
 
     }

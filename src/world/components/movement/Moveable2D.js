@@ -472,6 +472,14 @@ class Moveable2D {
 
     }
 
+    resetAllActionState($self) {
+
+        this.resetAimingState($self);
+        this.resetClimbingState();
+        this.stopQuickTurning();
+
+    }
+
     aimTick(params) {
 
         let result = false;

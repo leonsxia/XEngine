@@ -1115,6 +1115,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             this.resetWeaponState();
             this.stopAllMotionStates();
+            this.resetAllActionState(this);
             this.setAllBoundingBoxLayers(false);
 
         }
@@ -1358,6 +1359,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.hurt(false);
         this.die(false);
         this.stopAllMotionStates();
+        this.resetAllActionState(this);
         this.resetWeaponState();
         this.AWS.resetAllActions();
         this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 1);
