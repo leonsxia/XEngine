@@ -119,6 +119,11 @@ class Health {
     showStrip(show) {
 
         this.visible = show;
+        if (show) {
+
+            this.updateHealth();
+
+        }
 
     }
 
