@@ -334,7 +334,7 @@ class CreatureBase extends CustomizedCreatureTofu {
             }
 
             this.#logger.log(`${this.name} is on hurt`);
-            this.AWS.prepareCrossFade(null, hurtAction, this._animationSettings.HURT, 1, false, false, this._animationSettings.HURT, endCallback);
+            this.AWS.prepareCrossFade(null, hurtAction, this._animationSettings.HURT, this._animationSettings.HURT_WEIGHT, false, false, this._animationSettings.HURT, endCallback);
 
         }
 

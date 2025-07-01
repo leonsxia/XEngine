@@ -15,6 +15,7 @@ const ANIMATION_SETTINGS = {
     WALK_TURN_TO_ZERO_TURN: 0.3,
     WALK_TIMESCALE: 2.1,
     TURN_WEIGHT: 0.7,
+    HURT_WEIGHT: 1,
     ATTACK: 0.2,
     HURT: 0.1,
     DIE: 0.2,

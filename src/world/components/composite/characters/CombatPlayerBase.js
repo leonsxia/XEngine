@@ -1104,8 +1104,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         }
 
-        super.die(val);        
-        this.switchHelperComponents();
+        super.die(val);
 
     }
 
@@ -1134,7 +1133,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (this.dead) {
 
             this.resetWeaponState();
-            this.stopAllMotionStates();            
+            this.stopAllMotionStates();
             this.setAllBoundingBoxLayers(false);
 
         }
@@ -1367,7 +1366,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (this.interacting) super.interact(false);
         if (this.gunPointing) super.gunPoint(false);
         if (this.shooting) super.shoot(false);
-        if (this.meleeing) this.melee(false);
+        if (this.meleeing) super.melee(false);
 
         this.switchHelperComponents();
 
