@@ -29,7 +29,7 @@ export { Revolver } from './composite/weapons/Revolver.js';
 export { SMGShort } from './composite/weapons/SMGShort.js';
 export { Bayonet } from './composite/weapons/Bayonet.js';
 
-// Characters
+// Characters & Creatures
 export { Tofu } from './composite/tofu/Tofu.js';
 export { CustomizedCombatTofu } from './composite/characters/CustomizedCombatTofu.js';
 export { CombatPlayerBase } from './composite/characters/CombatPlayerBase.js';
@@ -37,6 +37,7 @@ export { SoldierFemale } from './composite/characters/SoldierFemale.js';
 export { CustomizedCreatureTofu } from './composite/creatures/CustomizedCreatureTofu.js';
 export { CreatureBase } from './composite/creatures/CreatureBase.js';
 export { ZombieMale } from './composite/creatures/ZombieMale.js';
+export { BlackWidow } from './composite/creatures/BlackWidow.js';
 
 // physics
 export { CollisionPlane } from './physics/CollisionPlane.js';

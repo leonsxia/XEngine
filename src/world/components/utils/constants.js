@@ -19,12 +19,13 @@ const SPOT_LIGHT_TARGET = 'SpotLightTarget';
 const AXES = 'Axes';
 const GRID = 'Grid';
 
-// players
+// players & creatures
 const TOFU = 'Tofu';
 const TRAIN = 'Train';
 const SOLDIER_FEMALE = 'SoldierFemale';
 const CREATURE_BASE = 'CreatureBase';
 const ZOMBIE_MALE = 'ZombieMale';
+const BLACK_WIDOW = 'BlackWidow';
 
 // weapons
 const WEAPONS = {
@@ -247,6 +248,7 @@ const GLTF_NAMES = {
     SOLDIER_FEMALE: 'SOLDIER_FEMALE',
     // creatures
     ZOMBIE_MALE: 'ZOMBIE_MALE',
+    BLACK_WIDOW: 'BLACK_WIDOW',
     // tables
     WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
     WOODEN_TABLE: 'WOODEN_TABLE',
@@ -276,6 +278,8 @@ const GLTFS = [{
     name: GLTF_NAMES.SOLDIER_FEMALE, src: 'characters/soldier_female.glb'
 }, {
     name: GLTF_NAMES.ZOMBIE_MALE, src: 'creatures/zombie_male.glb'
+}, {
+    name: GLTF_NAMES.BLACK_WIDOW, src: 'creatures/black_widow.glb'
 }, {
     name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
 }, {
@@ -364,6 +368,14 @@ const ZOMBIE_MALE_CLIPS = {
     ATTACK_GROUND: {nick: 'attack_ground', name: 'Armature|Bite_ground', idx: 9, enable: true, loopOnce: true}
 }
 
+const BLACK_WIDOW_CLIPS = {
+    ATTACK: { nick: 'attack', name: 'SpiderArmature|Spider_Attack', idx: 0, enable: true, loopOnce: true },
+    DEATH: { nick: 'death', name: 'SpiderArmature|Spider_Death', idx: 1, enable: true, loopOnce: true },
+    IDLE: { nick: 'idle', name: 'SpiderArmature|Spider_Idle', idx: 2, enable: true, isDefault: true },
+    HIT_RECEIVE: { nick: 'hit_receive', name: 'SpiderArmature|Spider_Jump', idx: 3, enable: true, loopOnce: true },
+    WALK: { nick: 'walk', name: 'SpiderArmature|Spider_Walk', idx: 4, startImmediately: false, enable: true },
+}
+
 const GLOCK_CLIPS = {
     SHOOT: { nick: 'shoot', name: 'glock_19|Shoot', idx: 0, enable: true, isDefault: true, startImmediately: false, weight: 0, loopOnce: true }
 }
@@ -421,6 +433,7 @@ export {
     SOLDIER_FEMALE,
     CREATURE_BASE,
     ZOMBIE_MALE,
+    BLACK_WIDOW,
 
     WEAPONS,
 
@@ -503,6 +516,7 @@ export {
 
     SOLDIER_FEMALE_CLIPS,
     ZOMBIE_MALE_CLIPS,
+    BLACK_WIDOW_CLIPS,
     GLOCK_CLIPS,
 
     GUI_CONFIG
