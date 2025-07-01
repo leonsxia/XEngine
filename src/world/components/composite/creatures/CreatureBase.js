@@ -48,13 +48,14 @@ class CreatureBase extends CustomizedCreatureTofu {
         const { isActive = true, showBS = false, enableCollision = true, typeMapping = {} } = specs;
         const { createDefaultBoundingObjects = true } = specs;
         const { HPMax = 100 } = specs;
+        const { needAimRay = false } = specs;
 
         super({ 
             name, 
             size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, 
             rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, 
             createDefaultBoundingObjects, enableCollision, typeMapping,
-            HPMax
+            HPMax, needAimRay
         });
 
         this.specs = specs;
@@ -434,7 +435,7 @@ class CreatureBase extends CustomizedCreatureTofu {
             onTarget: null
         }
         
-        if (this.checkTargetInDamageRange(target).in) {
+        if (this.checkTargetInDamageRange(target, true).in) {
 
             if (!this.meleeing) {
 
@@ -473,7 +474,7 @@ class CreatureBase extends CustomizedCreatureTofu {
                     this.#attackLogger.log(`${this.name} attacks on ${target.name}: ${this._i}`);
                     this._attacked = true;
 
-                    if (this.checkTargetInDamageRange(target).in) {
+                    if (this.checkTargetInDamageRange(target, true).in) {
 
                         result.onTarget = target;
                         result.damage = this._meleeWeapon.ammo.damage;

@@ -7,6 +7,7 @@ import { CollisionBox } from '../../Models';
 import { ResourceTracker } from '../../../systems/ResourceTracker';
 import { Logger } from '../../../systems/Logger';
 import { Health } from '../../mechanism/Health';
+import { aimDirection } from '../../utils/enums';
 
 const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
@@ -22,6 +23,8 @@ const _v1 = new Vector3();
 const _v2 = new Vector3();
 const _down = new Vector3(0, -1, 0);
 const _forward = new Vector3(0, 0, 1);
+const _forwardDown = new Vector3(0, -1, 1).normalize();
+const _forwardUp = new Vector3(0, 1, 1).normalize();
 
 const DEBUG = false;
 
@@ -58,6 +61,8 @@ class TofuBase extends Moveable2D {
     backLeftArrow;
     backRightArrow;
     aimArrow;
+
+    _needAimRay;
 
     intersectSlope;
 
@@ -103,6 +108,7 @@ class TofuBase extends Moveable2D {
     #damageRange = 0;
     #damageRadius = 0;
     #armedHeight = 0;
+    #aimDirection = aimDirection.forward;
 
     _cachedWidth;
     _cachedHeight;
@@ -136,6 +142,7 @@ class TofuBase extends Moveable2D {
         const { collisionSize = { width, depth, height } } = specs;
         const { createDefaultBoundingObjects = true } = specs;
         const { enableDefaultCBox = false } = specs;
+        const { needAimRay = true } = specs;
 
         this._size = { width, width2, depth, depth2, height, sovRadius };
         this._collisionSize = collisionSize;
@@ -159,6 +166,7 @@ class TofuBase extends Moveable2D {
         this.#aimVel = aimVel;
         this.#aimTime = aimTime;
         this.aimingTime = aimTime;  // set Moveable2D default aimingTime
+        this._needAimRay = needAimRay;
 
         this.name = name;
         this.group = new Group();
@@ -637,6 +645,18 @@ class TofuBase extends Moveable2D {
 
     }
 
+    get aimDirection() {
+
+        return this.#aimDirection;
+
+    }
+
+    set aimDirection(val) {
+
+        this.#aimDirection = val;
+
+    }
+
     enablePickLayers(...meshes) {
 
         for (let i = 0, il = meshes.length; i < il; i++) {
@@ -782,10 +802,14 @@ class TofuBase extends Moveable2D {
         this.backRightArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // aimRay
-        fromVec3 = new Vector3(0, this.#armedHeight, 0);
-        this.aimRay = new Raycaster(fromVec3, _forward.clone(), this.#damageRange);
-        this.aimRay.layers.set(TOFU_AIM_LAYER);
-        this.aimArrow = new ArrowHelper(_forward, fromVec3, this.#damageRange, green, HEAD_LENGTH, HEAD_WIDTH);
+        if (this._needAimRay) {
+
+            fromVec3 = new Vector3(0, this.#armedHeight, 0);
+            this.aimRay = new Raycaster(fromVec3, _forward.clone(), this.#damageRange);
+            this.aimRay.layers.set(TOFU_AIM_LAYER);
+            this.aimArrow = new ArrowHelper(_forward, fromVec3, this.#damageRange, green, HEAD_LENGTH, HEAD_WIDTH);
+
+        }
 
         this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
 
@@ -794,6 +818,8 @@ class TofuBase extends Moveable2D {
     }
 
     updateAimRay(needUpdateMatrixWorld = true) {
+
+        if (!this._needAimRay) return;
 
         if (needUpdateMatrixWorld) {
 
@@ -804,8 +830,21 @@ class TofuBase extends Moveable2D {
         _v1.set(0, this.#armedHeight, 0).applyMatrix4(this.group.matrixWorld);
 
         // get world direction
-        const e = this.group.matrixWorld.elements;
-        _v2.set(e[8], e[9], e[10]).normalize();
+        if (this.#aimDirection === aimDirection.forward) {
+
+            _v2.copy(_forward);
+
+        } else if (this.#aimDirection === aimDirection.forwardDown) {
+
+            _v2.copy(_forwardDown);
+
+        } else if (this.#aimDirection === aimDirection.forwardUp) {
+
+            _v2.copy(_forwardUp);
+
+        }
+
+        _v2.applyQuaternion(this.group.quaternion).normalize();
 
         this.aimRay.set(_v1, _v2);
         this.aimRay.far = this.damageRange;

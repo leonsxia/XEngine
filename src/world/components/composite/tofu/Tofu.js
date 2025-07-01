@@ -196,7 +196,7 @@ class Tofu extends TofuBase {
 
     }
 
-    checkTargetInDamageRange(target) {
+    checkTargetInDamageRange(target, fullCheck = false) {
 
         const { angle } = this.getTargetDirectionAngle(target);
         
@@ -209,9 +209,17 @@ class Tofu extends TofuBase {
         const targetBottomY = _v3.y - target.height * .5;
         const thisBottomY = _v1.y - this.height * .5;
         const thisTopY = _v1.y + this.height * .5;
-        const result = angle < this.damageRadius * .5 && distance < this.damageRange && (
+        let result = angle < this.damageRadius * .5 && distance < this.damageRange && (
             targetBottomY >= thisBottomY && targetBottomY <= thisTopY
         );
+
+        if (fullCheck && !result) {
+            // full check for target top Y
+            const targetTopY = _v3.y + target.height * .5;
+            result = angle < this.damageRadius * .5 && distance < this.damageRange && (
+                targetTopY >= thisBottomY && targetTopY <= thisTopY
+            );
+        }
 
         this.#logger.log(`target: ${target.name} is ${result ? 'in' : 'out of'} damage range.`);
 

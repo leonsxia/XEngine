@@ -3,4 +3,10 @@ const polarity = {
     right: -1,
 }
 
-export { polarity };
+const aimDirection = {
+    forward: 0,
+    forwardDown: 1,
+    forwardUp: 2
+}
+
+export { polarity, aimDirection };

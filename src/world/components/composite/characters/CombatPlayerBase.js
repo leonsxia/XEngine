@@ -3,7 +3,7 @@ import { CustomizedCombatTofu, GLTFModel } from '../../Models';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
 import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
-import { polarity } from '../../utils/enums';
+import { aimDirection, polarity } from '../../utils/enums';
 
 const DEBUG = false;
 const DEBUG_WEAPON = true;
@@ -322,6 +322,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     if (this.shooting) {
 
                         this.#logger.log(`shoot up`);
+                        this.aimDirection = aimDirection.forwardUp;
 
                     } else if (this.meleeing) {
 
@@ -330,6 +331,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     } else if (this.gunPointing) {
 
                         this.#logger.log(`gun point up`);
+                        this.aimDirection = aimDirection.forwardUp;
 
                     }
 
@@ -350,6 +352,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 if (this.shooting) {
 
                     this.#logger.log(`shoot up`);
+                    this.aimDirection = aimDirection.forwardUp;
 
                 } else if (this.meleeing) {
 
@@ -358,6 +361,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 } else if (this.gunPointing) {
 
                     this.#logger.log(`gun point up`);
+                    this.aimDirection = aimDirection.forwardUp;
 
                 }
 
@@ -382,6 +386,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     if (this.shooting) {
 
                         this.#logger.log(`cancel shoot up`);
+                        this.aimDirection = aimDirection.forward;
 
                     } else if (this.meleeing) {
 
@@ -390,6 +395,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     } else if (this.gunPointing) {
 
                         this.#logger.log(`cancel gun point up`);
+                        this.aimDirection = aimDirection.forward;
 
                     }
 
@@ -410,6 +416,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 if (this.shooting) {
 
                     this.#logger.log(`cancel shoot up`);
+                    this.aimDirection = aimDirection.forward;
 
                 } else if (this.meleeing) {
 
@@ -418,6 +425,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 } else if (this.gunPointing) {
 
                     this.#logger.log(`cancel gun point up`);
+                    this.aimDirection = aimDirection.forward;
 
                 }
 
@@ -455,6 +463,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     if (this.shooting) {
 
                         this.#logger.log(`shoot down`);
+                        this.aimDirection = aimDirection.forwardDown;
 
                     } else if (this.meleeing) {
 
@@ -463,6 +472,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     } else if (this.gunPointing) {
 
                         this.#logger.log(`gun point down`);
+                        this.aimDirection = aimDirection.forwardDown;
 
                     }
                     
@@ -486,6 +496,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     if (this.shooting) {
 
                         this.#logger.log(`shoot down`);
+                        this.aimDirection = aimDirection.forwardDown;
 
                     } else if (this.meleeing) {
 
@@ -494,6 +505,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     } else if (this.gunPointing) {
 
                         this.#logger.log(`gun point down`);
+                        this.aimDirection = aimDirection.forwardDown;
 
                     }
 
@@ -520,6 +532,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 if (this.shooting) {
 
                     this.#logger.log(`cancel shoot down`);
+                    this.aimDirection = aimDirection.forward;
 
                 } else if (this.meleeing) {
 
@@ -528,6 +541,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 } else if (this.gunPointing) {
 
                     this.#logger.log(`cancel gun point down`);
+                    this.aimDirection = aimDirection.forward;
 
                 }
 
@@ -801,10 +815,12 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             if (this.forward) {
 
                 this.#logger.log(`gun point up`);
+                this.aimDirection = aimDirection.forwardUp;
 
             } else if (this.backward) {
 
                 this.#logger.log(`gun point down`);
+                this.aimDirection = aimDirection.forwardDown;
 
             }
 
@@ -861,6 +877,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         }
 
+        this.aimDirection = aimDirection.forward;
         this._cancelGunPoint = false;
         this._cancelShoot = false;
         super.gunPoint(false);
