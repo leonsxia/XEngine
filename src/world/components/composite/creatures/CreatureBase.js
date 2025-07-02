@@ -386,7 +386,6 @@ class CreatureBase extends CustomizedCreatureTofu {
         }        
 
         super.die(val);
-        this.switchHelperComponents();
 
     }
 
@@ -411,9 +410,13 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         if (this.forward || this.turningLeft || this.turningRight) {
 
-            this.stopMovingActions();
+            super.movingLeft(false);
+            super.movingRight(false);
+            super.movingForward(false);        
 
         }
+
+        this.switchHelperComponents();
 
         if (this.dead) {
 
@@ -599,10 +602,13 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     resetAnimation() {
         
-        this.hurt(false);
-        this.die(false);
-        this.melee(false);
-        this.stopMovingActions();
+        super.hurt(false);
+        super.die(false);
+        super.melee(false);
+        super.movingLeft(false);
+        super.movingRight(false);
+        super.movingForward(false);
+        this.switchHelperComponents();
         this.AWS.resetAllActions();
 
     }
