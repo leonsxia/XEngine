@@ -1151,6 +1151,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         }
 
+        this.switchWeapon(this.armedWeapon);
+
     }
 
     reloadWeapon(weapon) {
