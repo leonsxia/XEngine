@@ -1060,6 +1060,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 hurtAction.ignoreFinishedEvent = undefined;
                 this.AWS.isLooping = false;
                 this.startAttackTimer();
+                this.switchHelperComponents();
 
             }
 
@@ -1129,6 +1130,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this.stopQuickTurning();
         this.resetClimbingState();
+        this.switchHelperComponents();
 
         if (this.dead) {
 
@@ -1368,8 +1370,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (this.shooting) super.shoot(false);
         if (this.meleeing) super.melee(false);
 
-        this.switchHelperComponents();
-
     }
 
     resetAnimation() {
@@ -1377,6 +1377,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.hurt(false);
         this.die(false);
         this.stopAllMotionStates();
+        this.switchHelperComponents();
         this.stopQuickTurning();
         this.resetClimbingState();
         this.resetWeaponState();

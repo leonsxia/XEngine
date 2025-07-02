@@ -129,7 +129,7 @@ class CustomizedCombatTofu extends Tofu {
 
         let action;
 
-        if (this.attacking) {
+        if (this.attacking && !this.hurting) {
 
             action = this.currentActionType.aim.nick;
 
@@ -306,7 +306,7 @@ class CustomizedCombatTofu extends Tofu {
         const { idleBoundingFaceSize, walkBoundingFaceSize, runBoundingFaceSize, rotateBoundingFaceSize, attackBoundingFaceSize } = typeMapping;
         let bf;
 
-        if (this.attacking) {
+        if (this.attacking && !this.hurting) {
 
             bf = boundingFaces.get(typeMapping.aim.nick);
             this.w = attackBoundingFaceSize.width;
