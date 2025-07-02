@@ -64,7 +64,7 @@ function createPointLights(pointLightSpecsArr) {
 
         const { name } = point;
 
-        point.light = pointLights[name] = new createPointLight(point);
+        point.light = pointLights[name] = createPointLight(point);
 
     }
 
@@ -84,7 +84,7 @@ function createSpotLights(spotLihgtSpecsArr) {
 
         const { name } = spot;
 
-        spot.light = spotLights[name] = new createSpotLight(spot);
+        spot.light = spotLights[name] = createSpotLight(spot);
 
     }
 
