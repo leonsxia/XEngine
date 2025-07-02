@@ -286,7 +286,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 const endCallback = () => {
 
-                    super.melee(false);
+                    this.melee(false);
 
                 }
 
