@@ -1216,6 +1216,22 @@ class TofuBase extends Moveable2D {
 
     }
 
+    tickOnSurface(surface, point) {
+
+        const result = this.onSurfaceTick({ surface, point, $self: this });
+
+        if (surface) {
+
+            return result;
+
+        } else {
+
+            this.updateAccessories();
+
+        }
+
+    }
+
     tickWithWall(delta, wall) {
 
         const params = this.setTickParams(delta);

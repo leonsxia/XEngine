@@ -353,9 +353,9 @@ class BasicObject extends EventDispatcher {
         
     }
 
-    setLayers(layer) {
+    setLayers(layer, force = false) {
 
-        if (this.visible) {
+        if (this.visible || force) {
 
             this.mesh.layers.enable(layer);
 
