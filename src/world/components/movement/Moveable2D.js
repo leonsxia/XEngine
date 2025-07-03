@@ -1,4 +1,4 @@
-import { Group, Matrix4, Object3D, Vector3 } from 'three';
+import { Matrix4, Object3D, Vector3 } from 'three';
 import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
 import { Logger } from '../../systems/Logger';
 
@@ -8,7 +8,6 @@ const DEBUG = true;
 const _m1 = new Matrix4();
 const _v1 = new Vector3();
 const _obj0 = new Object3D();
-const _g0 = new Group();
 
 class Moveable2D {
     #movingLeft = false;
@@ -907,7 +906,9 @@ class Moveable2D {
             // group.matrix and group.parent.matrixWorld no need to clone, 
             // due to applyMatrix4 will auto compose matrix from current position, quaternion and scale
             // group matrixWorld will auto updated when call worldToLocal
-            group.copy(_g0);
+            group.position.set(0, 0, 0);
+            group.quaternion.set(0, 0, 0, 1);
+            group.scale.set(1, 1, 1);
             const movingObjWorldMatrixInvterted = group.parent.matrixWorld.invert();
             // follow the euquition:
             // parentWorldMatirx * localMatrix = recoverMtx4 => localMatrix = parentWorldMatrix.invert() * recoverMtx4
