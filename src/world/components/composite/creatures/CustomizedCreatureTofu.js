@@ -437,6 +437,12 @@ class CustomizedCreatureTofu extends Tofu {
         this.switchCollisionBox(action, forceEvent);
         this.switchBoundingBox(action);
 
+        // this is a must call !!!
+        // due to this lost of obb update will call wrong obb from boundingBoxMesh of last state
+        // must ensure the current boundingBoxMesh obb is up to date
+        // otherwise it will have misplaced height when on obstacle tops and change state
+        this.updateOBB();
+
     }
 
     destroy() {

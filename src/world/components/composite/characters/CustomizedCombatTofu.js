@@ -586,6 +586,12 @@ class CustomizedCombatTofu extends Tofu {
         this.switchPushingBox(weaponType);
         this.switchBoundingFace(weaponType);
 
+        // this is a must call !!!
+        // due to this lost of obb update will call wrong obb from boundingBoxMesh of last state
+        // must ensure the current boundingBoxMesh obb is up to date
+        // otherwise it will have misplaced height when on obstacle tops and change state
+        this.updateOBB();
+
         this.#logger.log(
             `current collision box map:`, this.collisionBoxMap.get(weaponType),
             `current collision box: ${this.collisionBox.group.uuid}`,
