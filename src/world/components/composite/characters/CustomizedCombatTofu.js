@@ -22,7 +22,6 @@ class CustomizedCombatTofu extends Tofu {
 
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
-    onBoundingFaceChanged = [];
     onDisposed = [];
 
     #logger = new Logger(DEBUG, 'CustomizedCombatTofu');
@@ -353,8 +352,6 @@ class CustomizedCombatTofu extends Tofu {
         this.boundingFaceGroup.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
         this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
 
-        this.doBoundingFaceChangedEvents();
-
     }
 
     createCollisionBoxes() {
@@ -442,17 +439,6 @@ class CustomizedCombatTofu extends Tofu {
         for (let i = 0, il = this.onCollisionBoxChanged.length; i < il; i++) {
 
             const event = this.onCollisionBoxChanged[i];
-            event(this);
-
-        }
-
-    }
-
-    doBoundingFaceChangedEvents() {
-
-        for (let i = 0, il = this.onBoundingFaceChanged.length; i < il; i++) {
-
-            const event = this.onBoundingFaceChanged[i];
             event(this);
 
         }
@@ -590,7 +576,7 @@ class CustomizedCombatTofu extends Tofu {
         // due to this lost of obb update will call wrong obb from boundingBoxMesh of last state
         // must ensure the current boundingBoxMesh obb is up to date
         // otherwise it will have misplaced height when on obstacle tops and change state
-        this.updateOBB();
+        this.updateAccessories();
 
         this.#logger.log(
             `current collision box map:`, this.collisionBoxMap.get(weaponType),
@@ -624,7 +610,6 @@ class CustomizedCombatTofu extends Tofu {
         this.doDisposedEvents();
         this.onBeforeCollisionBoxChanged = [];
         this.onCollisionBoxChanged = [];
-        this.onBoundingFaceChanged = [];
         this.onDisposed = [];
         super.destroy();
 

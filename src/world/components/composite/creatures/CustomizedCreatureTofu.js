@@ -15,7 +15,6 @@ class CustomizedCreatureTofu extends Tofu {
 
     onBeforeCollisionBoxChanged = [];
     onCollisionBoxChanged = [];
-    onBoundingFaceChanged = [];
     onDisposed = [];
 
     constructor(specs) {
@@ -247,8 +246,6 @@ class CustomizedCreatureTofu extends Tofu {
         this.boundingFaceGroup.add(frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace);
         this.boundingFaceMesh = [frontBoundingFace, backBoundingFace, leftBoundingFace, rightBoundingFace];
 
-        this.doBoundingFaceChangedEvents();
-
     }
 
     createCollisionBoxes() {
@@ -407,17 +404,6 @@ class CustomizedCreatureTofu extends Tofu {
 
     }
 
-    doBoundingFaceChangedEvents() {
-
-        for (let i = 0, il = this.onBoundingFaceChanged.length; i < il; i++) {
-
-            const event = this.onBoundingFaceChanged[i];
-            event(this);
-
-        }
-
-    }
-
     doDisposedEvents() {
 
         for (let i = 0, il = this.onDisposed.length; i < il; i++) {
@@ -441,7 +427,7 @@ class CustomizedCreatureTofu extends Tofu {
         // due to this lost of obb update will call wrong obb from boundingBoxMesh of last state
         // must ensure the current boundingBoxMesh obb is up to date
         // otherwise it will have misplaced height when on obstacle tops and change state
-        this.updateOBB();
+        this.updateAccessories();
 
     }
 
@@ -450,7 +436,6 @@ class CustomizedCreatureTofu extends Tofu {
         this.doDisposedEvents();
         this.onBeforeCollisionBoxChanged = [];
         this.onCollisionBoxChanged = [];
-        this.onBoundingFaceChanged = [];
         this.onDisposed = [];
         super.destroy();
 
