@@ -711,6 +711,7 @@ class WorldScene {
 
                 this.scene.remove(this.player.group);
 
+                this.player.resetAnimation?.();
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
