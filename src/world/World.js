@@ -1,3 +1,4 @@
+import { container, infosDomElements } from "./systems/htmlElements";
 import { WorldScene1 } from "./worldScenes/WorldScene1";
 import { WorldScene2 } from "./worldScenes/WorldScene2";
 import { WorldScene3 } from "./worldScenes/WorldScene3";
@@ -37,8 +38,6 @@ class World {
 
     #renderer;
     #currentScene;
-    #infosDomElements;
-    #container;
     #movementEventDispatcher;
 
     #textures;
@@ -49,17 +48,15 @@ class World {
     _systemLogger = new Logger(true, 'World');
     _eventLogger = new Logger(DEBUG, 'World');
 
-    constructor(container, infos) {
+    constructor() {
 
         this.#renderer = createRenderer();
         this.#renderer.name = 'world_renderer';
-        this.#container = container;
-        this.#infosDomElements = infos;
         this.#movementEventDispatcher = new EventDispatcher(movementTypes, moveActions);
 
         config.changeCallback = this.changeScene.bind(this);
 
-        const worldPicker = new Picker(container);
+        const worldPicker = new Picker();
         config.worldPicker = worldPicker;
         this.#sceneBuilder = new SceneBuilder();
         config.sceneBuilder = this.#sceneBuilder;
@@ -77,15 +74,15 @@ class World {
         keyboard.bindAllMoves();
 
         this.worldScenes = [];
-        this.worldScenes.push(new WorldScene1(container, this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldScene2(container, this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldScene3(container, this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldScene4(container, this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldScene5(container, this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WaterRoom(container, this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new Mansion(container, this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldMatrix(container, this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new EnemyTestScene(container, this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WorldScene1(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WorldScene2(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WorldScene3(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WorldScene4(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WorldScene5(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WaterRoom(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new Mansion(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WorldMatrix(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new EnemyTestScene(this.#renderer, config, this.#movementEventDispatcher));
         
         this.bindMouseEvent();
         this.bindTouchEvent();
@@ -123,12 +120,12 @@ class World {
         // this.#currentScene?.reset(); // reset camera, gui, controls, stop animation
         this.#currentScene?.suspend(); // stop looping, hide gui but not reset, disable controls
         
-        this.#container.innerHTML = '';
+        container.innerHTML = '';
 
-        if (this.#infosDomElements) {
+        if (infosDomElements) {
 
-            this.#infosDomElements.header.textContent = `XEngine - World ${name}`;
-            this.#infosDomElements.msg.textContent = 'loading assets...';
+            infosDomElements.header.textContent = `XEngine - World ${name}`;
+            infosDomElements.msg.textContent = 'loading assets...';
         
         }
 
@@ -143,7 +140,7 @@ class World {
 
         this._systemLogger.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
 
-        if (this.#infosDomElements) this.#infosDomElements.msg.textContent = 'assets all loaded. => renderding scene...';
+        if (infosDomElements) infosDomElements.msg.textContent = 'assets all loaded. => renderding scene...';
 
         const start = Date.now();
 
@@ -151,7 +148,7 @@ class World {
 
             loadScene.render();
 
-            this.#container.append(this.#renderer.domElement);
+            container.append(this.#renderer.domElement);
 
             const end = Date.now();
             this._systemLogger.log(`render in ${(end - start) * .001} s`);
@@ -160,17 +157,17 @@ class World {
 
             this._systemLogger.log(`objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
 
-            if (this.#infosDomElements) {
+            if (infosDomElements) {
                 
-                this.#infosDomElements.msg.textContent = 'render complete!';
+                infosDomElements.msg.textContent = 'render complete!';
 
                 if (loadScene.setup?.showManual) {
 
-                    this.#infosDomElements.manual.classList.remove('hide');
+                    infosDomElements.manual.classList.remove('hide');
 
                 } else {
 
-                    this.#infosDomElements.manual.classList.add('hide');
+                    infosDomElements.manual.classList.add('hide');
 
                 }
                 
@@ -253,13 +250,13 @@ class World {
 
     setInfo(show) {
 
-        for (const i in this.#infosDomElements) {
+        for (const i in infosDomElements) {
 
-            const info = this.#infosDomElements[i];
+            const info = infosDomElements[i];
 
             if (show) {
 
-                if (info === this.#infosDomElements.manual && !this.#currentScene.setup?.showManual) {
+                if (info === infosDomElements.manual && !this.#currentScene.setup?.showManual) {
 
                     continue;
 
@@ -289,9 +286,9 @@ class World {
 
         if (show) {
 
-            if (this.#container.classList.contains('nocursor')) {
+            if (container.classList.contains('nocursor')) {
 
-                this.#container.classList.remove('nocursor');
+                container.classList.remove('nocursor');
                 this.#currentScene?.guiMaker.gui.recover();
                 this.setInfo(true);
 
@@ -299,9 +296,9 @@ class World {
 
         } else {
 
-            if (!this.#container.classList.contains('nocursor')) {
+            if (!container.classList.contains('nocursor')) {
 
-                this.#container.classList.add('nocursor');
+                container.classList.add('nocursor');
                 this.#currentScene?.guiMaker.gui.hide();
                 this.setInfo(false);
 

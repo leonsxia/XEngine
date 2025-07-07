@@ -8,10 +8,10 @@ const worldSceneSpecs = {
 
 class Mansion extends WorldScene {
 
-    constructor(container, renderer, globalConfig, eventDispatcher) {
+    constructor(renderer, globalConfig, eventDispatcher) {
 
         Object.assign(worldSceneSpecs, globalConfig);
-        super(container, renderer, worldSceneSpecs, eventDispatcher);
+        super(renderer, worldSceneSpecs, eventDispatcher);
 
     }
 

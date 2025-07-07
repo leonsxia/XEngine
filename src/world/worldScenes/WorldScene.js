@@ -50,7 +50,6 @@ class WorldScene {
     loop = null;
     resizer = null;
     controls = null;
-    container = null;
     staticRendering = true;
     forceStaticRender = true;   // switch whether controls will render after control change.
 
@@ -103,7 +102,7 @@ class WorldScene {
 
     #paused = true;
 
-    constructor(container, renderer, specs, eventDispatcher) {
+    constructor(renderer, specs, eventDispatcher) {
 
         Object.assign(this.setup, specs);
 
@@ -111,14 +110,13 @@ class WorldScene {
 
         this.name = name;
 
-        this.container = container;
         this.renderer = renderer;
 
         this.defaultCamera = new Camera();
         this.camera = this.defaultCamera.camera;
         
         this.scene = createScene(backgroundColor);
-        this.postProcessor = new PostProcessor(renderer, this.scene, this.camera, container);
+        this.postProcessor = new PostProcessor(renderer, this.scene, this.camera);
         this.loop = new Loop(this.camera, this.scene, this.renderer, this.postProcessor);
         this.eventDispatcher = eventDispatcher;
 
@@ -130,7 +128,7 @@ class WorldScene {
         this.loop.updatables.push(this.controls.defControl, xboxController);
         // this.controls.defControl.listenToKeyEvents(window);
 
-        this.resizer = new Resizer(container, this.camera, this.renderer, this.postProcessor);
+        this.resizer = new Resizer(this.camera, this.renderer, this.postProcessor);
 
         this.resizer.onResize = 
         (needRender = true) => {

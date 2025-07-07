@@ -9,10 +9,10 @@ const worldSceneSpecs = {
 
 class WorldMatrix extends WorldScene {
 
-    constructor(container, renderer, globalConfig, eventDispatcher) {
+    constructor(renderer, globalConfig, eventDispatcher) {
 
         Object.assign(worldSceneSpecs, globalConfig);
-        super(container, renderer, worldSceneSpecs, eventDispatcher);
+        super(renderer, worldSceneSpecs, eventDispatcher);
 
     }
 

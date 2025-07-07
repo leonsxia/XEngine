@@ -1,15 +1,15 @@
+import { container } from "./htmlElements";
+
 class Resizer {
 
     #ratio = window.devicePixelRatio;
-    #container;
     #renderer;
     #camera;
     #postProcessor;
     #size = Resizer.SIZE.WIDE;
 
-    constructor(container, camera, renderer, postProcessor) {
+    constructor(camera, renderer, postProcessor) {
 
-        this.#container = container;
         this.#camera = camera;
         this.#renderer = renderer;
         this.#postProcessor = postProcessor;
@@ -41,8 +41,8 @@ class Resizer {
 
     setSize() {
 
-        const width = this.#container.clientWidth;
-        const height = this.#container.clientHeight;
+        const width = container.clientWidth;
+        const height = container.clientHeight;
         const containerSize = parseFloat(width / height).toFixed(2);
         const targetSize = this.#size === Resizer.SIZE.FULL ? containerSize : parseFloat(this.#size.toFixed(2));
         let targetWidth = width;
@@ -89,8 +89,8 @@ class Resizer {
         // renderer.domElement.style.height = `${container.clientHeight}px`;
 
         // this.#renderer.setScissorTest(true);
-        // this.#renderer.setScissor(0, 0, this.#container.clientWidth / 2, this.#container.clientHeight / 2);
-        // this.#renderer.setViewport(0, 0, this.#container.clientWidth / 2, this.#container.clientHeight / 2);
+        // this.#renderer.setScissor(0, 0, container.clientWidth / 2, container.clientHeight / 2);
+        // this.#renderer.setViewport(0, 0, container.clientWidth / 2, container.clientHeight / 2);
 
         this.#postProcessor.composer.setSize(targetWidth, targetHeight);
         this.#postProcessor.reset();

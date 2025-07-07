@@ -1,10 +1,9 @@
 import { Raycaster, Vector2 } from 'three';
 import { CAMERA_RAY_LAYER } from '../components/utils/constants';
 import { getInwallParent, getTopParent } from '../components/utils/objectHelper';
+import { container } from './htmlElements';
 
 class Picker {
-
-    #container;
     #camera;
     #scene;
     #postProcessor;
@@ -12,25 +11,12 @@ class Picker {
     #raycaster;
     #mouse = new Vector2();
 
-    constructor(container) {
+    constructor() {
 
         this.#raycaster = new Raycaster();
         this.#raycaster.layers.set(CAMERA_RAY_LAYER);
-        this.#container = container;
 
         this.bindClick();
-
-    }
-
-    get clientWidth() {
-
-        return this.#container.clientWidth;
-
-    }
-
-    get clientHeight() {
-
-        return this.#container.clientHeight;
 
     }
 
@@ -60,7 +46,7 @@ class Picker {
 
     bindClick() {
 
-        this.#container.addEventListener('click', this.clickEvent.bind(this));
+        container.addEventListener('click', this.clickEvent.bind(this));
 
     }
 
@@ -73,11 +59,11 @@ class Picker {
         ) 
             return;
 
-        const canvas = this.#container.querySelector('canvas');
-        const canvasRatioH = canvas.clientWidth / this.clientWidth;
-        const canvasRatioV = canvas.clientHeight / this.clientHeight;
-        this.#mouse.x = ((event.clientX / this.clientWidth) * 2 - 1) / canvasRatioH;
-        this.#mouse.y = (- (event.clientY / this.clientHeight) * 2 + 1) / canvasRatioV;
+        const canvas = container.querySelector('canvas');
+        const canvasRatioH = canvas.clientWidth / container.clientWidth;
+        const canvasRatioV = canvas.clientHeight / container.clientHeight;
+        this.#mouse.x = ((event.clientX / container.clientWidth) * 2 - 1) / canvasRatioH;
+        this.#mouse.y = (- (event.clientY / container.clientHeight) * 2 + 1) / canvasRatioV;
 
         if (Math.abs(this.#mouse.x) > 1 || Math.abs(this.#mouse.y) > 1) {
 

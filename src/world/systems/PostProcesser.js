@@ -13,6 +13,7 @@ import { black, white } from '../components/basic/colorBase';
 import { loadSingleTexture } from '../components/utils/textureHelper';
 import { basicMateraials } from '../components/basic/basicMaterial';
 import { shaders } from '../components/utils/shaderHelper';
+import { container } from './htmlElements';
 
 const DEFAULT_OUTLINE = {
     edgeStrength: 3.0,
@@ -60,7 +61,6 @@ class PostProcessor {
     #renderer;
     #scene;
     #camera;
-    #container;
 
     composer;
     bloomComposer;
@@ -94,12 +94,11 @@ class PostProcessor {
 
     ready = false;
 
-    constructor(renderer, scene, camera, container) {
+    constructor(renderer, scene, camera) {
 
         this.#renderer = renderer;
         this.#scene = scene;
         this.#camera = camera;
-        this.#container = container;
         this.#sceneBackground = scene.background;
 
         this.composer = new EffectComposer(renderer);
@@ -111,27 +110,15 @@ class PostProcessor {
         
     }
 
-    get clientWidth() {
-
-        return this.#container.clientWidth;
-
-    }
-
-    get clientHeight() {
-
-        return this.#container.clientHeight;
-
-    }
-
     get renderTargetWidth() {
 
-        return this.clientWidth * this.composer._pixelRatio;
+        return container.clientWidth * this.composer._pixelRatio;
 
     }
 
     get renderTargetHeight() {
 
-        return this.clientHeight * this.composer._pixelRatio;
+        return container.clientHeight * this.composer._pixelRatio;
 
     }
 
