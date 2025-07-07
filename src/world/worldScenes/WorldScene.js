@@ -241,6 +241,22 @@ class WorldScene {
                     player.onBeforeCollisionBoxChanged.push(this.onBeforePlayerCBoxChanged.bind(this));
                     player.onCollisionBoxChanged.push(this.onPlayerCBoxChanged.bind(this));
 
+                    player.pda.onVisibleChanged.push((val) => {
+
+                        if (val) {
+
+                            this.loop.stop();
+                            this.staticRendering = true;
+
+                        } else {
+
+                            this.loop.start(this.guiMaker.gui.stats);
+                            this.staticRendering = false;
+
+                        }
+
+                    });
+
                 }
 
             }
@@ -403,6 +419,8 @@ class WorldScene {
         
         }
 
+        this.updatePlayerPda(false);
+
     }
 
     start() {
@@ -410,6 +428,7 @@ class WorldScene {
         this.staticRendering = false;
         this.controls.initPreCoordinates();
         this.controls.setDamping(true, 0.1); // default damping factor 0.05
+        this.disablePlayerPda();
         this.loop.start(this.guiMaker.gui.stats);
         this.#paused = false;
 
@@ -419,6 +438,7 @@ class WorldScene {
 
         this.staticRendering = true;
         this.controls.setDamping(false);
+        this.disablePlayerPda();
         this.loop.stop();
         this.#paused = true;
 
@@ -472,6 +492,7 @@ class WorldScene {
     reset() {
 
         // renderTimes = 0;
+        this.disablePlayerPda();
         this.stop();
 
         this.renderer.shadowMap.enabled = false;
@@ -503,6 +524,7 @@ class WorldScene {
 
     suspend() {
 
+        this.disablePlayerPda();
         this.stop();
 
         this.renderer.shadowMap.enabled = false;
@@ -712,6 +734,8 @@ class WorldScene {
                 this.player.resetAnimation?.();
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
+                this.disablePlayerPda();
+
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
 
             }
@@ -738,6 +762,7 @@ class WorldScene {
             this.subscribeEvents(this.player, this.setup.moveType);
 
         }
+
     }
 
     resetCharacter() {
@@ -768,7 +793,23 @@ class WorldScene {
             enemy.setAllBoundingBoxLayers(true);
 
         }
-        
+
+    }
+
+    disablePlayerPda() {
+
+        if (this.player.pda?.visible) this.player.pda.visible = false;
+
+    }
+
+    updatePlayerPda() {
+
+        if (this.player.pda?.visible) {
+
+            this.player.pda.updatePosition();
+
+        }
+
     }
 
     resetScene() {

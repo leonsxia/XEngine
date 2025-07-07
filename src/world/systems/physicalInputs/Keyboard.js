@@ -16,6 +16,8 @@ class Keyboard extends InputBase {
     #gunPointing = false;
     #shoot = false;
     #nextAimTarget = false;
+    #pda = false;
+    #inventory = false;
 
     #logger = new Logger(DEBUG, 'Keyboard');
 
@@ -40,12 +42,14 @@ class Keyboard extends InputBase {
         const eventDispatcher = this.eventDispatcher;
         const messageType = InputBase.MOVEMENT_TYPE.TANKMOVE;
         const actions = InputBase.MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
-        const { A, D, W, S, J, K, L, P, F, Shift, Space } = Keyboard.KEYS;
+        const { A, D, W, S, J, K, L, P, F, I, Tab, Shift, Space } = Keyboard.KEYS;
         const world = this.attachTo;
 
         window.addEventListener('keydown', e => {
 
             if (!world.currentScene || world.currentScene.isScenePaused()) return;
+
+            e.preventDefault(); // prevent default browser behavior for keys
 
             switch (e.key) {
                 case A.lower:
@@ -269,6 +273,35 @@ class Keyboard extends InputBase {
                     }
 
                     break;
+                
+                case I.lower:
+                case I.upper:
+
+                    if (!I.isDown) {
+
+                        I.isDown = true;
+                        this.#inventory = true;
+
+                        // this.#logger.log('pda');
+                        eventDispatcher.publish(messageType, actions.INVENTORY_INFO, world.current, this.#inventory);
+
+                    }
+
+                    break;
+
+                case Tab.code:
+
+                    if (!Tab.isDown) {
+
+                        Tab.isDown = true;
+                        this.#pda = true;
+
+                        // this.#logger.log('tab');
+                        eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, true);
+
+                    }
+
+                    break;
 
             }
         });
@@ -454,6 +487,27 @@ class Keyboard extends InputBase {
                     eventDispatcher.publish(messageType, actions.JUMP, world.current, this.#jump);
 
                     break;
+                
+                case I.lower:
+                case I.upper:
+
+                    I.isDown = false;
+                    this.#inventory = false;
+
+                    // this.#logger.log('cancel pda');
+                    eventDispatcher.publish(messageType, actions.INVENTORY_INFO, world.current, this.#inventory);
+
+                    break;
+
+                case Tab.code:
+
+                    Tab.isDown = false;
+                    this.#pda = false;
+
+                    // this.#logger.log('cancel tab');
+                    eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, this.#pda);
+
+                    break;
 
             }
 
@@ -531,6 +585,8 @@ Keyboard.KEYS = {
     L: { upper: 'L', lower: 'l', isDown: false },
     F: { upper: 'F', lower: 'f', isDown: false },
     P: { upper: 'P', lower: 'p', isDown: false },
+    I: { upper: 'I', lower: 'i', isDown: false },
+    Tab: { code: 'Tab', isDown: false },
     Shift: { code: 'Shift', isDown: false },
     Space: { code: ' ', isDown: false }
 };

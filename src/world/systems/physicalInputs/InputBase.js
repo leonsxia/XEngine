@@ -34,7 +34,9 @@ InputBase.MOVE_ACTIONS = [
             INTERACT: 'interact',
             GUN_POINT: 'gunPoint',
             SHOOT: 'shoot',
-            NEXT_AIM_TARGET: 'nextAimTarget'
+            NEXT_AIM_TARGET: 'nextAimTarget',
+            PDA_INFO: 'pdaInfo',
+            INVENTORY_INFO: 'inventoryInfo'
         }
     }
 ];

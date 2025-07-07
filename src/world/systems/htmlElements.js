@@ -8,4 +8,35 @@ const infosDomElements = {
     manual
 };
 
-export { container, infosDomElements }
+function createPdaContainer(specs) {
+
+    const { background, backdropFilter } = specs || {};
+    const pdaContainer = document.createElement('div');
+    const pdaDiv = document.createElement('div');
+
+    pdaDiv.id = 'pda';
+    pdaContainer.id = 'pda-container';
+    pdaContainer.appendChild(pdaDiv);
+
+    pdaContainer.style.position = 'absolute';
+    pdaContainer.style.background = background;
+    pdaDiv.style.backdropFilter = backdropFilter;
+
+    return { pdaContainer, pdaDiv };
+
+}
+
+function getScenePosition() {
+    const sceneCanvas = container.querySelector('canvas');
+    const rect = sceneCanvas.getBoundingClientRect();
+
+    return {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height
+    };
+
+}
+
+export { container, infosDomElements, createPdaContainer, getScenePosition }

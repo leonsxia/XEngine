@@ -13,6 +13,8 @@ const blue = 0x0000ff;
 const yellow = 0xffff00;
 const orange = 0xffa500;
 const khaki = 0xF0E68C;
+const seaSaltLight = 0x4b6cb7;
+const seaSaltHeavy = 0x182848;
 const BB = 0xffffff;
 const BS = 0xFFC72C;
 const BF = 0xFFD700;
@@ -26,9 +28,31 @@ const AI = {
     targetInRange: 0xFF2400
 };
 
-function colorStr(r, g, b) {
+function hexToRGBA(hex, opacity = 1) {
 
-    return `rgb(${r},${g},${b})`;
+    hex = hex.toString(16);
+    // Remove 0x or # prefix if present
+    let cleanHex = hex.startsWith("0x") ? hex.substring(2) : hex;
+    cleanHex = cleanHex.startsWith("#") ? cleanHex.substring(1) : cleanHex;
+
+    // Handle 3-digit hex (e.g., #F00 becomes #FF0000)
+    if (cleanHex.length === 3) {
+        cleanHex = cleanHex[0] + cleanHex[0] + cleanHex[1] + cleanHex[1] + cleanHex[2] + cleanHex[2];
+    }
+
+    // Parse individual color components
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+
+    // Return the RGB string
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+
+}
+
+function colorStr(r, g, b, a = 1) {
+
+    return `rgba(${r},${g},${b},${a})`;
 
 }
 
@@ -71,6 +95,8 @@ export {
     yellow,
     orange,
     khaki,
+    seaSaltLight,
+    seaSaltHeavy,
     BB,
     BS,
     BF,
@@ -81,5 +107,6 @@ export {
     AI,
     colorStr,
     colorHex,
-    colorArr
+    colorArr,
+    hexToRGBA
 }

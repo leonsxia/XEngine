@@ -4,6 +4,7 @@ import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
 import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
 import { aimDirection, polarity } from '../../utils/enums';
+import { Pda } from '../../pda/Pda';
 
 const DEBUG = false;
 const DEBUG_WEAPON = true;
@@ -77,6 +78,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.showBS(showBS);
         
         this.group.add(this.gltf.group);
+
+        this.pda = new Pda();
 
     }
 
@@ -301,6 +304,26 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (this.gltf.skeleton) {
 
             this.gltf.skeleton.visible = show;
+
+        }
+
+    }
+
+    pdaInfo(val) {
+
+        if (val) {
+
+            this.pda.visible = !this.pda.visible;
+
+        }
+
+    }
+
+    inventoryInfo(val) {
+
+        if (val) {
+
+            this.pda.visible = !this.pda.visible;
 
         }
 
