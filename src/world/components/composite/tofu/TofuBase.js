@@ -954,11 +954,15 @@ class TofuBase extends Moveable2D {
 
     }
 
-    updateWalls(needUpdateMatrixWorld = true) {
+    updateWalls(needUpdateParentMatrixWorld = true) {
 
-        if (needUpdateMatrixWorld) {
+        if (needUpdateParentMatrixWorld) {
 
             this.collisionBox.group.updateWorldMatrix(true, true);
+
+        } else {
+
+            this.collisionBox.group.updateWorldMatrix(false, true);
 
         }
         
@@ -978,11 +982,26 @@ class TofuBase extends Moveable2D {
 
     }
 
+    updateBoundingFaces(needUpdateParentMatrixWorld = true) {
+
+        if (needUpdateParentMatrixWorld) {
+
+            this.boundingFaceGroup.updateWorldMatrix(true, true);
+
+        } else {
+
+            this.boundingFaceGroup.updateWorldMatrix(false, true)
+
+        }
+
+    }
+
     updateAccessories(needUpdateMatrixWorld = true) {
         
         this.updateOBB(needUpdateMatrixWorld);
         this.updateRay(false);
-        this.updateWalls(needUpdateMatrixWorld);
+        this.updateWalls(false);
+        this.updateBoundingFaces(false);
 
     }
 
