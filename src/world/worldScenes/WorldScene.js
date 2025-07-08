@@ -798,13 +798,13 @@ class WorldScene {
 
     disablePlayerPda() {
 
-        if (this.player.pda?.visible) this.player.pda.visible = false;
+        if (this.player?.pda?.visible) this.player.pda.visible = false;
 
     }
 
     updatePlayerPda() {
 
-        if (this.player.pda?.visible) {
+        if (this.player?.pda?.visible) {
 
             this.player.pda.updatePosition();
 
