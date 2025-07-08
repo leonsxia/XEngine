@@ -29,7 +29,7 @@ class Keyboard extends InputBase {
 
     bindAllMoves() {
 
-        if (this.controlType === InputBase.MOVEMENT_TYPE.TANKMOVE) {
+        if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TANKMOVE)) {
 
             this.bindKeysToTankMove();
 
@@ -40,8 +40,8 @@ class Keyboard extends InputBase {
     bindKeysToTankMove() {
 
         const eventDispatcher = this.eventDispatcher;
-        const messageType = InputBase.MOVEMENT_TYPE.TANKMOVE;
-        const actions = InputBase.MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
         const { A, D, W, S, J, K, L, P, F, I, Tab, Shift, Space } = Keyboard.KEYS;
         const world = this.attachTo;
 

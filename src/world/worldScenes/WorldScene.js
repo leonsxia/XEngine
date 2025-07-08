@@ -58,7 +58,7 @@ class WorldScene {
 
     guiMaker;
 
-    eventDispatcher;
+    controlEventDispatcher;
     
     // updatable modules
     updatableQueue;
@@ -102,7 +102,7 @@ class WorldScene {
 
     #paused = true;
 
-    constructor(renderer, specs, eventDispatcher) {
+    constructor(renderer, specs, controlEventDispatcher) {
 
         Object.assign(this.setup, specs);
 
@@ -118,7 +118,7 @@ class WorldScene {
         this.scene = createScene(backgroundColor);
         this.postProcessor = new PostProcessor(renderer, this.scene, this.camera);
         this.loop = new Loop(this.camera, this.scene, this.renderer, this.postProcessor);
-        this.eventDispatcher = eventDispatcher;
+        this.controlEventDispatcher = controlEventDispatcher;
 
         this.picker = worldPicker;
         this.sceneBuilder = sceneBuilder;
@@ -635,9 +635,9 @@ class WorldScene {
         // this.#renderer.forceContextLoss();
     }
 
-    subscribeEvents(obj, moveType) {
+    subscribeEvents(obj, controlType) {
 
-        const actionTypes = this.eventDispatcher.getActionTypes(moveType);
+        const actionTypes = this.controlEventDispatcher.getActionTypes(controlType);
 
         for (let i = 0, il = actionTypes.length; i < il; i++) {
 
@@ -653,7 +653,7 @@ class WorldScene {
                     callback: callback
                 }
 
-                this.eventDispatcher.subscribe(moveType, action, subscriber);
+                this.controlEventDispatcher.subscribe(controlType, action, subscriber);
 
             }
 
@@ -661,9 +661,9 @@ class WorldScene {
 
     }
 
-    unsubscribeEvents(obj, moveType) {
+    unsubscribeEvents(obj, controlType) {
 
-        const actionTypes = this.eventDispatcher.getActionTypes(moveType);
+        const actionTypes = this.controlEventDispatcher.getActionTypes(controlType);
 
         for (let i = 0, il = actionTypes.length; i < il; i++) {
 
@@ -679,7 +679,7 @@ class WorldScene {
                     callback: callback
                 }
 
-                this.eventDispatcher.unsubscribe(moveType, action, subscriber);
+                this.controlEventDispatcher.unsubscribe(controlType, action, subscriber);
 
             }
 

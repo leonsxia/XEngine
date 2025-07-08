@@ -61,7 +61,7 @@ class XBoxController extends InputBase {
 
     tick() {
 
-        if (this.controlType === InputBase.MOVEMENT_TYPE.TANKMOVE) {
+        if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TANKMOVE)) {
 
             this.tankmoveTick();
 
@@ -93,8 +93,8 @@ class XBoxController extends InputBase {
         this.#logger.func = 'processTankmoveStickEvents';
 
         const eventDispatcher = this.eventDispatcher;
-        const messageType = InputBase.MOVEMENT_TYPE.TANKMOVE;
-        const actions = InputBase.MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
         const world = this.attachTo;
 
         const leftStickH = this.gamepad.axes[0];
@@ -336,8 +336,8 @@ class XBoxController extends InputBase {
         this.#logger.func = 'processTankmoveButtonEvents';
 
         const eventDispatcher = this.eventDispatcher;
-        const messageType = InputBase.MOVEMENT_TYPE.TANKMOVE;
-        const actions = InputBase.MOVE_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
         const world = this.attachTo;
 
         const btnA = this.gamepad.buttons[0];

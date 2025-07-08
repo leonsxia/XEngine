@@ -1,26 +1,27 @@
 class InputBase {
 
     eventDispatcher;
-    controlType;
+    controlTypes;
     attachTo;
 
     constructor(specs) {
 
-        const { dispatcher, controlType, attachTo } = specs;
+        const { dispatcher, controlTypes, attachTo } = specs;
 
         this.eventDispatcher = dispatcher;
-        this.controlType = controlType;
+        this.controlTypes = controlTypes;
         this.attachTo = attachTo;
 
     }
 
 }
 
-InputBase.MOVEMENT_TYPE = {
-    TANKMOVE: 'tankmove'
+InputBase.CONTROL_TYPES = {
+    TANKMOVE: 'tankmove',
+    PDA: 'pda'
 };
 
-InputBase.MOVE_ACTIONS = [
+InputBase.CONTROL_ACTIONS = [
     {
         CATEGORY: 'tankmove',
         TYPES: {
@@ -37,6 +38,17 @@ InputBase.MOVE_ACTIONS = [
             NEXT_AIM_TARGET: 'nextAimTarget',
             PDA_INFO: 'pdaInfo',
             INVENTORY_INFO: 'inventoryInfo'
+        }
+    },
+    {
+        CATEGORY: 'pda',
+        TYPES: {
+            UP: 'goUp',
+            DOWN: 'goDown',
+            LEFT: 'goLeft',
+            RIGHT: 'goRight',
+            CONFIRM: 'confirm',
+            CANCEL: 'cancel'
         }
     }
 ];

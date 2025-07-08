@@ -1,4 +1,4 @@
-class EventDispatcher {
+class ControlEventDispatcher {
 
     #types = [];
     #actions = [];
@@ -54,7 +54,9 @@ class EventDispatcher {
                 }
 
             }
+
         }
+
     }
 
     subscribe(type, action, subscriber) {
@@ -74,7 +76,9 @@ class EventDispatcher {
                 }
 
             }
+
         }
+
     }
 
     unsubscribe(type, action, subscriber) {
@@ -96,7 +100,9 @@ class EventDispatcher {
                 }
 
             }
+
         }
+
     }
 
     publish(type, action, current) {
@@ -134,6 +140,7 @@ class EventDispatcher {
             }
 
         }
+
     }
 
     findSubscriber(subscriber, subscribers) {
@@ -144,4 +151,4 @@ class EventDispatcher {
 
 }
 
-export { EventDispatcher };
+export { ControlEventDispatcher };

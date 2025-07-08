@@ -11,7 +11,7 @@ import { EnemyTestScene } from "./worldScenes/EnemyTestScene";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
-import { EventDispatcher } from "./systems/EventDispatcher";
+import { ControlEventDispatcher } from "./systems/ControlEventDispatcher";
 
 import { loadTextures, loadedTextures } from "./components/utils/textureHelper";
 import { loadGLTFModels, loadedGLTFModels } from "./components/utils/gltfHelper";
@@ -19,26 +19,20 @@ import { loadShaders } from "./components/utils/shaderHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS, SHADERS } from "./components/utils/constants";
 import { Logger } from "./systems/Logger";
+import { InputBase } from "./systems/physicalInputs/InputBase";
 import { XBoxController } from "./systems/physicalInputs/gamepad/XBoxController";
 import { Keyboard } from "./systems/physicalInputs/Keyboard";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix', 'Enemy Test Scene'],  // scene list for scene selector
 };
-const movementTypes = ['tankmove'];
-const moveActions = [
-    { 
-        category: 'tankmove', 
-        types: ['movingLeft', 'movingRight', 'movingForward', 'movingBackward', 'accelerate', 'jump', 'melee', 'interact', 'gunPoint', 'shoot', 'nextAimTarget', 'pdaInfo', 'inventoryInfo']
-    }
-];
 const DEBUG = true;
 
 class World {
 
     #renderer;
     #currentScene;
-    #movementEventDispatcher;
+    #controlEventDispatcher;
 
     #textures;
     #gltfs;
@@ -50,9 +44,19 @@ class World {
 
     constructor() {
 
+        const controlTypes = Object.values(InputBase.CONTROL_TYPES);
+        const controlActions = InputBase.CONTROL_ACTIONS.map(actions => {
+
+            const category = actions.CATEGORY;
+            const types = Object.values(actions.TYPES);
+
+            return { category, types };
+
+        });
+        
         this.#renderer = createRenderer();
         this.#renderer.name = 'world_renderer';
-        this.#movementEventDispatcher = new EventDispatcher(movementTypes, moveActions);
+        this.#controlEventDispatcher = new ControlEventDispatcher(controlTypes, controlActions);
 
         config.changeCallback = this.changeScene.bind(this);
 
@@ -62,8 +66,8 @@ class World {
         config.sceneBuilder = this.#sceneBuilder;
 
         const inputConifg = {
-            dispatcher: this.#movementEventDispatcher,
-            controlType: movementTypes[0],
+            dispatcher: this.#controlEventDispatcher,
+            controlTypes: controlTypes,
             attachTo: this
         }
         const xboxController = new XBoxController(inputConifg);
@@ -74,15 +78,15 @@ class World {
         keyboard.bindAllMoves();
 
         this.worldScenes = [];
-        this.worldScenes.push(new WorldScene1(this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldScene2(this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldScene3(this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldScene4(this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldScene5(this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WaterRoom(this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new Mansion(this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new WorldMatrix(this.#renderer, config, this.#movementEventDispatcher));
-        this.worldScenes.push(new EnemyTestScene(this.#renderer, config, this.#movementEventDispatcher));
+        this.worldScenes.push(new WorldScene1(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new WorldScene2(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new WorldScene3(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new WorldScene4(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new WorldScene5(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new WaterRoom(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new Mansion(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new WorldMatrix(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new EnemyTestScene(this.#renderer, config, this.#controlEventDispatcher));
         
         this.bindMouseEvent();
         this.bindTouchEvent();
