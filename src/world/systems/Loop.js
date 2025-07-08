@@ -11,6 +11,8 @@ class Loop {
     #clock = new Clock();
     #postProcessingEnabled = false;
 
+    _paused = false;
+
     constructor(camera, scene, renderer, postProcessor) {
 
         this.#camera = camera;
@@ -36,6 +38,13 @@ class Loop {
             // tell every animated object to tick forward one frame
             this.tick();
 
+            if (this._paused) {
+                
+                stats.end();
+                return;
+
+            }
+
             // render a frame
             if (this.#postProcessingEnabled) {
 
@@ -48,12 +57,26 @@ class Loop {
             }
 
             stats.end();
+
         });
+
     }
 
     stop() {
 
         this.#renderer.setAnimationLoop(null);
+
+    }
+
+    pause() {
+
+        this._paused = true;
+
+    }
+
+    unpause() {
+
+        this._paused = false;
 
     }
 
@@ -65,6 +88,8 @@ class Loop {
         // console.log(
         //     `The last frame rendered in ${delta * 1000} milliseconds`,
         // );
+
+        if (this._paused) return;
 
         for (let i = 0, il = this.updatables.length; i < il; i++) {
 

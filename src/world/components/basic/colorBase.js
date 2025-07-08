@@ -15,6 +15,9 @@ const orange = 0xffa500;
 const khaki = 0xF0E68C;
 const seaSaltLight = 0x4b6cb7;
 const seaSaltHeavy = 0x182848;
+const moonlitAsteroidLight = 0x2c5364;
+const moonlitAsteroidMedium = 0x203A43;
+const moonlitAsteroidHeavy = 0x0F2027;
 const BB = 0xffffff;
 const BS = 0xFFC72C;
 const BF = 0xFFD700;
@@ -31,6 +34,13 @@ const AI = {
 function hexToRGBA(hex, opacity = 1) {
 
     hex = hex.toString(16);
+    hex = hex.length === 0 ? `000000` :
+        hex.length === 1 ? `00000${hex}` :
+            hex.length === 2 ? `0000${hex}` :
+                hex.length === 3 ? `000${hex}` :
+                    hex.length === 4 ? `00${hex}` :
+                        hex.length === 5 ? `0${hex}` :
+                            hex;
     // Remove 0x or # prefix if present
     let cleanHex = hex.startsWith("0x") ? hex.substring(2) : hex;
     cleanHex = cleanHex.startsWith("#") ? cleanHex.substring(1) : cleanHex;
@@ -97,6 +107,9 @@ export {
     khaki,
     seaSaltLight,
     seaSaltHeavy,
+    moonlitAsteroidLight,
+    moonlitAsteroidMedium,
+    moonlitAsteroidHeavy,   
     BB,
     BS,
     BF,

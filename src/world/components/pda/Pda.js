@@ -1,8 +1,9 @@
 import { container, getScenePosition, createPdaContainer } from "../../systems/htmlElements";
-import { hexToRGBA, seaSaltHeavy, seaSaltLight } from "../basic/colorBase";
+import { hexToRGBA, moonlitAsteroidHeavy, moonlitAsteroidLight, moonlitAsteroidMedium } from "../basic/colorBase";
 
-const BACKGROUND = `linear-gradient(90deg, ${hexToRGBA(seaSaltLight, .65)} 0%, ${hexToRGBA(seaSaltHeavy, .9)} 100%)`;
-const BLUR = 'blur(2px)';
+// const BACKGROUND = `linear-gradient(90deg, ${hexToRGBA(seaSaltLight, .65)} 0%, ${hexToRGBA(seaSaltHeavy, .9)} 100%)`;
+const BACKGROUND = `linear-gradient(to bottom, ${hexToRGBA(moonlitAsteroidLight, .65)}, ${hexToRGBA(moonlitAsteroidMedium, .8)}, ${hexToRGBA(moonlitAsteroidHeavy, .9)})`;
+const BLUR = 'blur(5px)';
 
 class Pda {
 
@@ -34,12 +35,17 @@ class Pda {
 
         if (val) {
 
-            container.appendChild(this._pdaContainer);
+            if (!this._pdaContainer.parentNode) {
+
+                this.addPdaToContainer();
+
+            }
+            this._pdaContainer.style.display = 'block';
             this.updatePosition();            
 
         } else {
 
-            container.removeChild(this._pdaContainer);
+            this._pdaContainer.style.display = 'none';
 
         }
 
@@ -49,6 +55,24 @@ class Pda {
             if (typeof callback === 'function') {
                 callback(val);
             }
+
+        }
+
+    }
+
+    addPdaToContainer() {
+
+        // Append the pda container to the main container
+        container.appendChild(this._pdaContainer);
+
+    }
+
+    removePdaFromContainer() {
+
+        // Remove the pda container from the main container
+        if (this._pdaContainer.parentNode) {
+
+            this._pdaContainer.parentNode.removeChild(this._pdaContainer);
 
         }
 
