@@ -56,12 +56,120 @@ class Keyboard extends InputBase {
 
     }
 
+    recoverMoveEventFromPda() {
+
+        const eventDispatcher = this.eventDispatcher;
+        const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const { A, D, W, S, J, K, L, Shift } = Keyboard.KEYS;
+        const world = this.attachTo;
+
+        // recover move events
+        if (A.isDown && !this.#movingLeft) {
+
+            if (!D.isDown) {
+
+                this.#movingLeft = true;
+                eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#movingLeft);
+
+            }
+
+        } else if (!A.isDown && this.#movingLeft) {
+
+            this.#movingLeft = false;
+            eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#movingLeft);
+
+        }
+
+        if (D.isDown && !this.#movingRight) {
+
+            if (!A.isDown) {
+
+                this.#movingRight = true;
+                eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#movingRight);
+
+            }
+
+        } else if (!D.isDown && this.#movingRight) {
+
+            this.#movingRight = false;
+            eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#movingRight);
+
+        }
+
+        if (W.isDown && !this.#movingForward) {
+
+            if (!S.isDown) {
+
+                this.#movingForward = true;
+                eventDispatcher.publish(messageType, actions.MOVE_FORWARD, world.current, this.#movingForward);
+
+            }
+
+        } else if (!W.isDown && this.#movingForward) {
+
+            this.#movingForward = false;
+            eventDispatcher.publish(messageType, actions.MOVE_FORWARD, world.current, this.#movingForward);
+
+        }
+
+        if (S.isDown && !this.#movingBackward) {
+
+            if (!W.isDown) {
+
+                this.#movingBackward = true;
+                eventDispatcher.publish(messageType, actions.MOVE_BACKWARD, world.current, this.#movingBackward);
+
+            }
+
+        } else if (!S.isDown && this.#movingBackward) {
+
+            this.#movingBackward = false;
+            eventDispatcher.publish(messageType, actions.MOVE_BACKWARD, world.current, this.#movingBackward);
+
+        }
+
+        if (Shift.isDown && !this.#accelerate) {
+
+            this.#accelerate = true;
+            eventDispatcher.publish(messageType, actions.ACCELERATE, world.current, this.#accelerate);
+
+        } else if (!Shift.isDown && this.#accelerate) {
+
+            this.#accelerate = false;
+            eventDispatcher.publish(messageType, actions.ACCELERATE, world.current, this.#accelerate);
+
+        }
+
+        if (J.isDown && !this.#gunPointing) {
+
+            this.#gunPointing = true;
+            eventDispatcher.publish(messageType, actions.GUN_POINT, world.current, this.#gunPointing);
+
+        }
+
+        if (K.isDown && !this.#shoot) {
+
+            this.#shoot = true;
+            eventDispatcher.publish(messageType, actions.SHOOT, world.current, this.#shoot);
+
+        }
+
+        if (L.isDown && !this.#melee) {
+
+            this.#melee = true;
+            eventDispatcher.publish(messageType, actions.MELEE, world.current, this.#melee);
+
+        }
+
+    }
+
     bindKeysToPdaTriggers() {
 
         const eventDispatcher = this.eventDispatcher;
         const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
         const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
-        const { A, D, W, S, I, Tab, Shift } = Keyboard.KEYS;
+        const { I, Tab } = Keyboard.KEYS;
         const world = this.attachTo;
 
          window.addEventListener('keydown', e => {
@@ -120,6 +228,8 @@ class Keyboard extends InputBase {
                     // this.#logger.log('cancel pda');
                     eventDispatcher.publish(messageType, actions.INVENTORY_INFO, world.current, this.#inventory);
 
+                    this.recoverMoveEventFromPda();
+
                     break;
 
                 case Tab.code:
@@ -130,82 +240,7 @@ class Keyboard extends InputBase {
                     // this.#logger.log('cancel tab');
                     eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, this.#pda);
 
-                    // recover move events
-                    if (A.isDown && !this.#movingLeft) {
-
-                        if (!D.isDown) {
-
-                            this.#movingLeft = true;
-                            eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#movingLeft);
-
-                        }
-
-                    } else if (!A.isDown && this.#movingLeft) {
-
-                        this.#movingLeft = false;
-                        eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#movingLeft);
-
-                    }
-
-                    if (D.isDown && !this.#movingRight) {
-
-                        if (!A.isDown) {
-
-                            this.#movingRight = true;
-                            eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#movingRight);
-
-                        }
-
-                    } else if (!D.isDown && this.#movingRight) {
-
-                        this.#movingRight = false;
-                        eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#movingRight);
-
-                    }
-
-                    if (W.isDown && !this.#movingForward) {
-
-                        if (!S.isDown) {
-
-                            this.#movingForward = true;
-                            eventDispatcher.publish(messageType, actions.MOVE_FORWARD, world.current, this.#movingForward);
-
-                        }
-
-                    } else if (!W.isDown && this.#movingForward) {
-
-                        this.#movingForward = false;
-                        eventDispatcher.publish(messageType, actions.MOVE_FORWARD, world.current, this.#movingForward);
-
-                    }
-
-                    if (S.isDown && !this.#movingBackward) {
-
-                        if (!W.isDown) {
-
-                            this.#movingBackward = true;
-                            eventDispatcher.publish(messageType, actions.MOVE_BACKWARD, world.current, this.#movingBackward);
-
-                        }
-
-                    } else if (!S.isDown && this.#movingBackward) {
-
-                        this.#movingBackward = false;
-                        eventDispatcher.publish(messageType, actions.MOVE_BACKWARD, world.current, this.#movingBackward);
-
-                    }
-
-                    if (Shift.isDown && !this.#accelerate) {
-
-                        this.#accelerate = true;
-                        eventDispatcher.publish(messageType, actions.ACCELERATE, world.current, this.#accelerate);
-
-                    } else if (!Shift.isDown && this.#accelerate) {
-
-                        this.#accelerate = false;
-                        eventDispatcher.publish(messageType, actions.ACCELERATE, world.current, this.#accelerate);
-
-                    }
+                    this.recoverMoveEventFromPda();
 
                     break;
 
@@ -648,7 +683,7 @@ class Keyboard extends InputBase {
         const eventDispatcher = this.eventDispatcher;
         const messageType = InputBase.CONTROL_TYPES.PDA;
         const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
-        const { A, D, W, S, J, K, Q, E, Shift } = Keyboard.KEYS;
+        const { A, D, W, S, J, K, L, Q, E, Shift } = Keyboard.KEYS;
         const world = this.attachTo;
 
         window.addEventListener('keydown', e => {
@@ -840,6 +875,17 @@ class Keyboard extends InputBase {
 
                     break;
 
+                case L.lower:
+                case L.upper:
+
+                    if (!L.isDown) {
+
+                        L.isDown = true;
+
+                    }
+
+                    break;
+
                 case Shift.code:
 
                     if (!Shift.isDown) {
@@ -1008,6 +1054,13 @@ class Keyboard extends InputBase {
                     this.#cancel = false;
 
                     eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#cancel);
+
+                    break;
+
+                case L.lower:
+                case L.upper:
+
+                    L.isDown = false;
 
                     break;
 
