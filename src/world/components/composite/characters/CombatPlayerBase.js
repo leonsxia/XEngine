@@ -79,7 +79,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         
         this.group.add(this.gltf.group);
 
-        this.pda = new Pda();
+        this.pda = new Pda({ attachTo: this });
 
     }
 
@@ -311,6 +311,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     pdaInfo(val) {
 
+        if (this.isActing) return;
+
         if (val) {
 
             this.pda.visible = !this.pda.visible;
@@ -320,6 +322,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     }
 
     inventoryInfo(val) {
+
+        if (this.isActing) return;
 
         if (val) {
 

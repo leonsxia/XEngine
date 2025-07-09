@@ -5,6 +5,7 @@ const DEBUG = false;
 
 class Keyboard extends InputBase {
 
+    // player tankmove and others
     #movingLeft = false;
     #movingRight = false;
     #movingForward = false;
@@ -19,6 +20,17 @@ class Keyboard extends InputBase {
     #pda = false;
     #inventory = false;
 
+    // pda
+    #up = false;
+    #down = false;
+    #left = false;
+    #right = false;
+    #confirm = false;
+    #cancel = false;
+    #shiftLeft = false;
+    #shiftRight = false;
+    #moveItem = false;
+
     #logger = new Logger(DEBUG, 'Keyboard');
 
     constructor(specs) {
@@ -32,8 +44,174 @@ class Keyboard extends InputBase {
         if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TANKMOVE)) {
 
             this.bindKeysToTankMove();
+            this.bindKeysToPdaTriggers();
 
         }
+
+        if (this.controlTypes.includes(InputBase.CONTROL_TYPES.PDA)) {
+            
+            this.bindKeysToPdaControl();
+
+        }
+
+    }
+
+    bindKeysToPdaTriggers() {
+
+        const eventDispatcher = this.eventDispatcher;
+        const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const { A, D, W, S, I, Tab, Shift } = Keyboard.KEYS;
+        const world = this.attachTo;
+
+         window.addEventListener('keydown', e => {
+
+            if (!world.currentScene || world.currentScene.isScenePaused()) return;
+
+            e.preventDefault(); // prevent default browser behavior for keys
+
+            switch (e.key) {
+
+                case I.lower:
+                case I.upper:
+
+                    if (!I.isDown) {
+
+                        I.isDown = true;
+                        this.#inventory = true;
+
+                        // this.#logger.log('pda');
+                        eventDispatcher.publish(messageType, actions.INVENTORY_INFO, world.current, this.#inventory);
+
+                    }
+
+                    break;
+
+                case Tab.code:
+
+                    if (!Tab.isDown) {
+
+                        Tab.isDown = true;
+                        this.#pda = true;
+
+                        // this.#logger.log('tab');
+                        eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, true);
+
+                     }
+
+                     break;
+
+             }
+
+        });
+
+        window.addEventListener('keyup', e => {
+
+            if (!world.currentScene || world.currentScene.isScenePaused()) return;
+
+            switch (e.key) {
+
+                case I.lower:
+                case I.upper:
+
+                    I.isDown = false;
+                    this.#inventory = false;
+
+                    // this.#logger.log('cancel pda');
+                    eventDispatcher.publish(messageType, actions.INVENTORY_INFO, world.current, this.#inventory);
+
+                    break;
+
+                case Tab.code:
+
+                    Tab.isDown = false;
+                    this.#pda = false;
+
+                    // this.#logger.log('cancel tab');
+                    eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, this.#pda);
+
+                    // recover move events
+                    if (A.isDown && !this.#movingLeft) {
+
+                        if (!D.isDown) {
+
+                            this.#movingLeft = true;
+                            eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#movingLeft);
+
+                        }
+
+                    } else if (!A.isDown && this.#movingLeft) {
+
+                        this.#movingLeft = false;
+                        eventDispatcher.publish(messageType, actions.MOVE_LEFT, world.current, this.#movingLeft);
+
+                    }
+
+                    if (D.isDown && !this.#movingRight) {
+
+                        if (!A.isDown) {
+
+                            this.#movingRight = true;
+                            eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#movingRight);
+
+                        }
+
+                    } else if (!D.isDown && this.#movingRight) {
+
+                        this.#movingRight = false;
+                        eventDispatcher.publish(messageType, actions.MOVE_RIGHT, world.current, this.#movingRight);
+
+                    }
+
+                    if (W.isDown && !this.#movingForward) {
+
+                        if (!S.isDown) {
+
+                            this.#movingForward = true;
+                            eventDispatcher.publish(messageType, actions.MOVE_FORWARD, world.current, this.#movingForward);
+
+                        }
+
+                    } else if (!W.isDown && this.#movingForward) {
+
+                        this.#movingForward = false;
+                        eventDispatcher.publish(messageType, actions.MOVE_FORWARD, world.current, this.#movingForward);
+
+                    }
+
+                    if (S.isDown && !this.#movingBackward) {
+
+                        if (!W.isDown) {
+
+                            this.#movingBackward = true;
+                            eventDispatcher.publish(messageType, actions.MOVE_BACKWARD, world.current, this.#movingBackward);
+
+                        }
+
+                    } else if (!S.isDown && this.#movingBackward) {
+
+                        this.#movingBackward = false;
+                        eventDispatcher.publish(messageType, actions.MOVE_BACKWARD, world.current, this.#movingBackward);
+
+                    }
+
+                    if (Shift.isDown && !this.#accelerate) {
+
+                        this.#accelerate = true;
+                        eventDispatcher.publish(messageType, actions.ACCELERATE, world.current, this.#accelerate);
+
+                    } else if (!Shift.isDown && this.#accelerate) {
+
+                        this.#accelerate = false;
+                        eventDispatcher.publish(messageType, actions.ACCELERATE, world.current, this.#accelerate);
+
+                    }
+
+                    break;
+
+            }
+
+        });
 
     }
 
@@ -42,12 +220,12 @@ class Keyboard extends InputBase {
         const eventDispatcher = this.eventDispatcher;
         const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
         const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
-        const { A, D, W, S, J, K, L, P, F, I, Tab, Shift, Space } = Keyboard.KEYS;
+        const { A, D, W, S, J, K, L, P, F, Shift, Space } = Keyboard.KEYS;
         const world = this.attachTo;
 
         window.addEventListener('keydown', e => {
 
-            if (!world.currentScene || world.currentScene.isScenePaused()) return;
+            if (!world.currentScene || world.currentScene.isScenePaused() || world.currentScene.isPdaOn) return;
 
             e.preventDefault(); // prevent default browser behavior for keys
 
@@ -273,42 +451,13 @@ class Keyboard extends InputBase {
                     }
 
                     break;
-                
-                case I.lower:
-                case I.upper:
-
-                    if (!I.isDown) {
-
-                        I.isDown = true;
-                        this.#inventory = true;
-
-                        // this.#logger.log('pda');
-                        eventDispatcher.publish(messageType, actions.INVENTORY_INFO, world.current, this.#inventory);
-
-                    }
-
-                    break;
-
-                case Tab.code:
-
-                    if (!Tab.isDown) {
-
-                        Tab.isDown = true;
-                        this.#pda = true;
-
-                        // this.#logger.log('tab');
-                        eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, true);
-
-                    }
-
-                    break;
 
             }
         });
 
         window.addEventListener('keyup', e => {
 
-            if (!world.currentScene || world.currentScene.isScenePaused()) return;
+            if (!world.currentScene || world.currentScene.isScenePaused() || world.currentScene.isPdaOn) return;
 
             switch (e.key) {
                 case A.lower:
@@ -487,32 +636,393 @@ class Keyboard extends InputBase {
                     eventDispatcher.publish(messageType, actions.JUMP, world.current, this.#jump);
 
                     break;
-                
-                case I.lower:
-                case I.upper:
 
-                    I.isDown = false;
-                    this.#inventory = false;
+            }
 
-                    // this.#logger.log('cancel pda');
-                    eventDispatcher.publish(messageType, actions.INVENTORY_INFO, world.current, this.#inventory);
+        });
+
+    }
+
+    bindKeysToPdaControl() {
+
+        const eventDispatcher = this.eventDispatcher;
+        const messageType = InputBase.CONTROL_TYPES.PDA;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const { A, D, W, S, J, K, Q, E, Shift } = Keyboard.KEYS;
+        const world = this.attachTo;
+
+        window.addEventListener('keydown', e => {
+
+            if (!world.currentScene || !world.currentScene.isPdaOn) return;
+
+            e.preventDefault(); // prevent default browser behavior for keys
+
+            switch (e.key) {
+                case A.lower:
+                case A.upper:
+                case 'ArrowLeft':
+
+                    if (!A.isDown) {
+
+                        A.isDown = true;
+
+                        if (!D.isDown) {
+
+                            this.#left = true;
+
+                            eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#left);
+
+                        } else {
+
+                            this.#right = false;
+
+                            eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#right);
+
+                        }
+
+                    }
 
                     break;
 
-                case Tab.code:
+                case D.lower:
+                case D.upper:
+                case 'ArrowRight':
 
-                    Tab.isDown = false;
-                    this.#pda = false;
+                    if (!D.isDown) {
 
-                    // this.#logger.log('cancel tab');
-                    eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, this.#pda);
+                        D.isDown = true;
+
+                        if (!A.isDown) {
+
+                            this.#right = true;
+
+                            eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#right);
+
+                        } else {
+
+                            this.#left = false;
+
+                            eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#left);
+
+                        }
+
+                    }
+
+                    break;
+
+                case W.lower:
+                case W.upper:
+                case 'ArrowUp':
+
+                    if (!W.isDown) {
+
+                        W.isDown = true;
+
+                        if (!S.isDown) {
+
+                            this.#up = true;
+
+                            eventDispatcher.publish(messageType, actions.UP, world.current, this.#up);
+
+                        } else {
+
+                            this.#down = false;
+
+                            eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#down);
+
+                        }
+
+                    }
+
+                    break;
+
+                case S.lower:
+                case S.upper:
+                case 'ArrowDown':
+
+                    if (!S.isDown) {
+
+                        S.isDown = true;
+
+                        if (!W.isDown) {
+
+                            this.#down = true;
+
+                            eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#down);
+
+                        } else {
+
+                            this.#up = false;
+
+                            eventDispatcher.publish(messageType, actions.UP, world.current, this.#up);
+
+                        }
+
+                    }
+
+                    break;
+
+                case Q.lower:
+                case Q.upper:
+
+                    if (!Q.isDown) {
+
+                        Q.isDown = true;
+
+                        if (!E.isDown) {
+
+                            this.#shiftLeft = true;
+
+                            eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#shiftLeft);
+
+                        } else {
+
+                            this.#shiftRight = false;
+
+                            eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#shiftRight);
+
+                        }
+
+                    }
+
+                    break;
+
+                case E.lower:
+                case E.upper:
+
+                    if (!E.isDown) {
+
+                        E.isDown = true;
+
+                        if (!Q.isDown) {
+
+                            this.#shiftRight = true;
+
+                            eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#shiftRight);
+
+                        } else {
+
+                            this.#shiftLeft = false;
+
+                            eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#shiftLeft);
+
+                        }
+
+                    }
+
+                    break;
+
+                case J.lower:
+                case J.upper:
+
+                    if (!J.isDown) {
+
+                        J.isDown = true;
+                        this.#confirm = true;
+
+                        eventDispatcher.publish(messageType, actions.CONFIRM, world.current, this.#confirm);
+
+                    }
+
+                    break;
+
+                case K.lower:
+                case K.upper:
+
+                    if (!K.isDown) {
+
+                        K.isDown = true;
+                        this.#cancel = true;
+
+                        eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#cancel);
+
+                    }
+
+                    break;
+
+                case Shift.code:
+
+                    if (!Shift.isDown) {
+
+                        Shift.isDown = true;
+                        this.#moveItem = true;
+
+                        eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#moveItem);
+
+                    }
+
+                    break;
+                
+            }
+        });
+
+        window.addEventListener('keyup', e => {
+
+            if (!world.currentScene || !world.currentScene.isPdaOn) return;
+
+            switch (e.key) {
+                case A.lower:
+                case A.upper:
+                case 'ArrowLeft':
+
+                    if (D.isDown) {
+
+                        this.#right = true;
+
+                        eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#right);
+
+                    } else {
+
+                        this.#left = false;
+
+                        eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#left);
+
+                    }
+
+                    A.isDown = false;
+
+                    break;
+
+                case D.lower:
+                case D.upper:
+                case 'ArrowRight':
+
+                    if (A.isDown) {
+
+                        this.#left = true;
+
+                        eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#left);
+
+                    } else {
+
+                        this.#right = false;
+
+                        eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#right);
+
+                    }
+
+                    D.isDown = false;
+
+                    break;
+
+                case W.lower:
+                case W.upper:
+                case 'ArrowUp':
+
+                    if (S.isDown) {
+
+                        this.#down = true;
+
+                        eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#down);
+
+                    } else {
+
+                        this.#up = false;
+
+                        eventDispatcher.publish(messageType, actions.UP, world.current, this.#up);
+
+                    }
+
+                    W.isDown = false;
+
+                    break;
+
+                case S.lower:
+                case S.upper:
+                case 'ArrowDown':
+
+                    if (W.isDown) {
+
+                        this.#up = true;
+
+                        eventDispatcher.publish(messageType, actions.UP, world.current, this.#up);
+
+                    } else {
+
+                        this.#down = false;
+
+                        eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#down);
+
+                    }
+
+                    S.isDown = false;
+
+                    break;
+
+                case Q.lower:
+                case Q.upper:
+
+                    if (E.isDown) {
+
+                        this.#shiftRight = true;
+
+                        eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#shiftRight);
+
+                    } else {
+
+                        this.#shiftLeft = false;
+
+                        eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#shiftLeft);
+
+                    }
+
+                    Q.isDown = false;
+
+                    break;
+
+                case E.lower:
+                case E.upper:
+
+                    if (Q.isDown) {
+
+                        this.#shiftLeft = true;
+
+                        eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#shiftLeft);
+
+                    } else {
+
+                        this.#shiftRight = false;
+
+                        eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#shiftRight);
+
+                    }
+
+                    E.isDown = false;
+
+                    break;
+
+                case J.lower:
+                case J.upper:
+
+                    J.isDown = false;
+                    this.#confirm = false;
+
+                    eventDispatcher.publish(messageType, actions.CONFIRM, world.current, this.#confirm);
+
+                    break;
+
+                case K.lower:
+                case K.upper:
+
+                    K.isDown = false;
+                    this.#cancel = false;
+
+                    eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#cancel);
+
+                    break;
+
+                case Shift.code:
+
+                    Shift.isDown = false;
+                    this.#moveItem = false;
+
+                    eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#moveItem);
 
                     break;
 
             }
 
         });
-
     }
 
     bindKeysToOtherMove() {
@@ -586,6 +1096,8 @@ Keyboard.KEYS = {
     F: { upper: 'F', lower: 'f', isDown: false },
     P: { upper: 'P', lower: 'p', isDown: false },
     I: { upper: 'I', lower: 'i', isDown: false },
+    Q: { upper: 'Q', lower: 'q', isDown: false },
+    E: { upper: 'E', lower: 'e', isDown: false },
     Tab: { code: 'Tab', isDown: false },
     Shift: { code: 'Shift', isDown: false },
     Space: { code: ' ', isDown: false }

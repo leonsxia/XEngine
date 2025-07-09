@@ -48,7 +48,10 @@ InputBase.CONTROL_ACTIONS = [
             LEFT: 'goLeft',
             RIGHT: 'goRight',
             CONFIRM: 'confirm',
-            CANCEL: 'cancel'
+            CANCEL: 'cancel',
+            SHIFT_LEFT: 'shiftLeft',
+            SHIFT_RIGHT: 'shiftRight',
+            MOVE_ITEM: 'moveItem'
         }
     }
 ];

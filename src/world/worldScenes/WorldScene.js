@@ -14,7 +14,6 @@ import { Combat } from '../components/updatables/Combat.js';
 import { AI } from '../components/updatables/AI.js';
 import { AnimeMixer } from '../components/updatables/AnimeMixer.js';
 import { independence } from '../components/basic/colorBase.js';
-// import { CombatPlayerBase } from '../components/Models.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -102,11 +101,11 @@ class WorldScene {
 
     #paused = true;
 
-    constructor(renderer, specs, controlEventDispatcher) {
+    constructor(renderer, specs) {
 
         Object.assign(this.setup, specs);
 
-        const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, xboxController, enableGui = false } = this.setup;
+        const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, xboxController, enableGui = false, controlEventDispatcher } = this.setup;
 
         this.name = name;
 
@@ -403,6 +402,12 @@ class WorldScene {
             return;
 
         }
+
+    }
+
+    get isPdaOn() {
+
+        return this.player?.pda?.visible ? true : false;
 
     }
 
@@ -735,6 +740,7 @@ class WorldScene {
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
                 this.disablePlayerPda();
+                if (this.player.pda) this.unsubscribeEvents(this.player.pda, 'pda');
 
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
 
@@ -760,6 +766,7 @@ class WorldScene {
             }
 
             this.subscribeEvents(this.player, this.setup.moveType);
+            if (this.player.pda) this.subscribeEvents(this.player.pda, 'pda');
 
         }
 

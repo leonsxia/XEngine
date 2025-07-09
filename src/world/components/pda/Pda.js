@@ -1,9 +1,11 @@
 import { container, getScenePosition, createPdaContainer } from "../../systems/htmlElements";
+import { Logger } from "../../systems/Logger";
 import { hexToRGBA, moonlitAsteroidHeavy, moonlitAsteroidLight, moonlitAsteroidMedium } from "../basic/colorBase";
 
 // const BACKGROUND = `linear-gradient(90deg, ${hexToRGBA(seaSaltLight, .65)} 0%, ${hexToRGBA(seaSaltHeavy, .9)} 100%)`;
 const BACKGROUND = `linear-gradient(to bottom, ${hexToRGBA(moonlitAsteroidLight, .65)}, ${hexToRGBA(moonlitAsteroidMedium, .8)}, ${hexToRGBA(moonlitAsteroidHeavy, .9)})`;
 const BLUR = 'blur(5px)';
+const DEBUG = true;
 
 class Pda {
 
@@ -12,14 +14,18 @@ class Pda {
     _visible = false;
     onVisibleChanged = [];
 
-    constructor() {
+    #logger = new Logger(DEBUG, 'Pda');
 
-        const background = BACKGROUND;
+    constructor(specs) {
+
+        const { background = BACKGROUND } = specs;
         const backdropFilter = BLUR;
         // Create the pda container and div with the specified background and backdrop filter
         const { pdaContainer, pdaDiv } = createPdaContainer({background, backdropFilter});
         this._pdaContainer = pdaContainer;
         this._pdaDiv = pdaDiv;
+
+        this._attachTo = specs.attachTo;
 
     }
 
@@ -86,6 +92,51 @@ class Pda {
         this._pdaContainer.style.width = this._pdaDiv.style.width = `${scenePosition.width}px`;
         this._pdaContainer.style.height = this._pdaDiv.style.height = `${scenePosition.height}px`;
 
+    }
+
+    goUp(val) {
+        this.#logger.func = this.goUp.name;
+        this.#logger.log(`goUp: ${val}`);
+    }
+
+    goDown(val) {
+        this.#logger.func = this.goDown.name;
+        this.#logger.log(`goDown: ${val}`);
+    }
+
+    goLeft(val) {
+        this.#logger.func = this.goLeft.name;
+        this.#logger.log(`goLeft: ${val}`);
+    }
+
+    goRight(val) {
+        this.#logger.func = this.goRight.name;
+        this.#logger.log(`goRight: ${val}`);
+    }
+
+    confirm(val) {
+        this.#logger.func = this.confirm.name;
+        this.#logger.log(`confirm: ${val}`);
+    }
+
+    cancel(val) {
+        this.#logger.func = this.cancel.name;
+        this.#logger.log(`cancel: ${val}`);
+    }
+
+    shiftLeft(val) {
+        this.#logger.func = this.shiftLeft.name;
+        this.#logger.log(`shiftLeft: ${val}`);
+    }
+
+    shiftRight(val) {
+        this.#logger.func = this.shiftRight.name;
+        this.#logger.log(`shiftRight: ${val}`);
+    }
+
+    moveItem(val) {
+        this.#logger.func = this.moveItem.name;
+        this.#logger.log(`moveItem: ${val}`);
     }
 
 }

@@ -26,13 +26,23 @@ import { Keyboard } from "./systems/physicalInputs/Keyboard";
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix', 'Enemy Test Scene'],  // scene list for scene selector
 };
+const controlTypes = Object.values(InputBase.CONTROL_TYPES);
+const controlActions = InputBase.CONTROL_ACTIONS.map(actions => {
+
+    const category = actions.CATEGORY;
+    const types = Object.values(actions.TYPES);
+
+    return { category, types };
+
+});
+const controlEventDispatcher = new ControlEventDispatcher(controlTypes, controlActions);
+config.controlEventDispatcher = controlEventDispatcher;
 const DEBUG = true;
 
 class World {
 
     #renderer;
     #currentScene;
-    #controlEventDispatcher;
 
     #textures;
     #gltfs;
@@ -44,19 +54,8 @@ class World {
 
     constructor() {
 
-        const controlTypes = Object.values(InputBase.CONTROL_TYPES);
-        const controlActions = InputBase.CONTROL_ACTIONS.map(actions => {
-
-            const category = actions.CATEGORY;
-            const types = Object.values(actions.TYPES);
-
-            return { category, types };
-
-        });
-        
         this.#renderer = createRenderer();
         this.#renderer.name = 'world_renderer';
-        this.#controlEventDispatcher = new ControlEventDispatcher(controlTypes, controlActions);
 
         config.changeCallback = this.changeScene.bind(this);
 
@@ -66,7 +65,7 @@ class World {
         config.sceneBuilder = this.#sceneBuilder;
 
         const inputConifg = {
-            dispatcher: this.#controlEventDispatcher,
+            dispatcher: controlEventDispatcher,
             controlTypes: controlTypes,
             attachTo: this
         }
@@ -78,15 +77,15 @@ class World {
         keyboard.bindAllMoves();
 
         this.worldScenes = [];
-        this.worldScenes.push(new WorldScene1(this.#renderer, config, this.#controlEventDispatcher));
-        this.worldScenes.push(new WorldScene2(this.#renderer, config, this.#controlEventDispatcher));
-        this.worldScenes.push(new WorldScene3(this.#renderer, config, this.#controlEventDispatcher));
-        this.worldScenes.push(new WorldScene4(this.#renderer, config, this.#controlEventDispatcher));
-        this.worldScenes.push(new WorldScene5(this.#renderer, config, this.#controlEventDispatcher));
-        this.worldScenes.push(new WaterRoom(this.#renderer, config, this.#controlEventDispatcher));
-        this.worldScenes.push(new Mansion(this.#renderer, config, this.#controlEventDispatcher));
-        this.worldScenes.push(new WorldMatrix(this.#renderer, config, this.#controlEventDispatcher));
-        this.worldScenes.push(new EnemyTestScene(this.#renderer, config, this.#controlEventDispatcher));
+        this.worldScenes.push(new WorldScene1(this.#renderer, config));
+        this.worldScenes.push(new WorldScene2(this.#renderer, config));
+        this.worldScenes.push(new WorldScene3(this.#renderer, config));
+        this.worldScenes.push(new WorldScene4(this.#renderer, config));
+        this.worldScenes.push(new WorldScene5(this.#renderer, config));
+        this.worldScenes.push(new WaterRoom(this.#renderer, config));
+        this.worldScenes.push(new Mansion(this.#renderer, config));
+        this.worldScenes.push(new WorldMatrix(this.#renderer, config));
+        this.worldScenes.push(new EnemyTestScene(this.#renderer, config));
         
         this.bindMouseEvent();
         this.bindTouchEvent();
