@@ -89,7 +89,14 @@ class Loop {
         //     `The last frame rendered in ${delta * 1000} milliseconds`,
         // );
 
-        if (this._paused) return;
+        if (this._paused) {
+            
+            const gamepad = this.updatables.find(u => u.isGamePad);
+            gamepad?.tick();
+
+            return;
+
+        }
 
         for (let i = 0, il = this.updatables.length; i < il; i++) {
 

@@ -5,6 +5,8 @@ const DEBUG = false;
 
 class XBoxController extends InputBase {
 
+    isGamePad = true;
+
     connected = false;
     gamepad = null;
     triggered = false;
@@ -16,12 +18,19 @@ class XBoxController extends InputBase {
     #RStickMoveLeft = false;
     #RStickMoveRight = false;
     #APressed = false;
+    #BPressed = false;
     #XPressed = false;
     #YPressed = false;
     #LBPressed = false;
     #RBPressed = false;
     #LTPressed = false;
     #RTPressed = false;
+    #LMenuPressed = false;
+
+    #UpPressed = false;
+    #DownPressed = false;
+    #leftPressed = false;
+    #rightPressed = false;
 
     #logger = new Logger(DEBUG, 'XBoxController');
 
@@ -61,26 +70,96 @@ class XBoxController extends InputBase {
 
     tick() {
 
-        if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TANKMOVE)) {
+         this.gamepad = navigator.getGamepads()[0];
 
-            this.tankmoveTick();
+        if (this.gamepad?.connected) {
+
+            this.triggered = false;
+            if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TANKMOVE)) {
+
+                this.tankmoveTick();
+                this.pdaTriggerTick();                
+
+            }
+
+            if (this.controlTypes.includes(InputBase.CONTROL_TYPES.PDA)) {
+
+                this.pdaTick();
+
+            }
+
+            this.triggered = !this.triggered ? this.gamepad.buttons.find(btn => btn.pressed) ? true : false : true;
+            if (this.triggered) {
+
+                this.attachTo.setCursorAndGui(false);
+
+            }
 
         }
 
     }
 
-    tankmoveTick() {        
+    pdaTriggerTick() {
 
-        this.gamepad = navigator.getGamepads()[0];
+        this.processPdaTriggerEvents();
 
-        if (this.gamepad?.connected) {
+    }
+
+    pdaTick() {
+
+        if (this.attachTo.currentScene.isPdaOn) {
+
+            this.processPdaButtonEvents();
+
+        }
+
+    }
+
+    tankmoveTick() {
+
+        if (!this.attachTo.currentScene.isPdaOn) {
 
             this.processTankmoveButtonEvents();
             this.processTankmoveStickEvents();
 
-            if (this.triggered) {
+        }
 
-                this.attachTo.setCursorAndGui(false);
+    }
+
+    processPdaTriggerEvents() {
+
+        this.#logger.func = 'processTankmoveButtonEvents';
+
+        const eventDispatcher = this.eventDispatcher;
+        const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const world = this.attachTo;
+
+        const btnLMenu = this.gamepad.buttons[8];
+
+        if (btnLMenu.pressed) {
+
+            if (!this.#LMenuPressed) {
+
+                this.#logger.log(`gamepad button left menu pressed: ${btnLMenu.pressed}, value: ${btnLMenu.value}`);
+
+                this.#LMenuPressed = true;
+                eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, this.#LMenuPressed);
+
+                this.#logger.log(`pda: ${this.#LMenuPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#LMenuPressed) {
+
+                this.#logger.log(`gamepad button A pressed: ${btnLMenu.pressed}, value: ${btnLMenu.value}`);
+
+                this.#LMenuPressed = false;
+                eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, this.#LMenuPressed);
+
+                this.#logger.log(`pda: ${this.#LMenuPressed}`);
 
             }
 
@@ -349,8 +428,6 @@ class XBoxController extends InputBase {
         const btnLT = this.gamepad.buttons[6];
         const btnRT = this.gamepad.buttons[7];
 
-        this.triggered = this.gamepad.buttons.find(btn => btn.pressed) ? true : false;
-
         if (btnA.pressed) {
 
             if (!this.#APressed) {
@@ -549,6 +626,192 @@ class XBoxController extends InputBase {
                 eventDispatcher.publish(messageType, actions.SHOOT, world.current, this.#RTPressed);
 
                 this.#logger.log(`shoot: ${this.#RTPressed}`);
+
+            }
+
+        }
+
+    }
+
+    processPdaButtonEvents() {
+
+        this.#logger.func = 'processPdaButtonEvents';
+
+        const eventDispatcher = this.eventDispatcher;
+        const messageType = InputBase.CONTROL_TYPES.PDA;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const world = this.attachTo;
+
+        const btnUp = this.gamepad.buttons[12];
+        const btnDown = this.gamepad.buttons[13];
+        const btnLeft = this.gamepad.buttons[14];
+        const btnRight = this.gamepad.buttons[15];
+        const btnA = this.gamepad.buttons[0];
+        const btnB = this.gamepad.buttons[1];
+
+        if (btnUp.pressed) {
+
+            if (!this.#UpPressed) {
+
+                this.#logger.log(`gamepad button up pressed: ${btnUp.pressed}, value: ${btnUp.value}`);
+
+                this.#UpPressed = true;
+                eventDispatcher.publish(messageType, actions.UP, world.current, this.#UpPressed);
+
+                this.#logger.log(`up: ${this.#UpPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#UpPressed) {
+
+                this.#logger.log(`gamepad button up pressed: ${btnUp.pressed}, value: ${btnUp.value}`);
+
+                this.#UpPressed = false;
+                eventDispatcher.publish(messageType, actions.UP, world.current, this.#UpPressed);
+
+                this.#logger.log(`up: ${this.#UpPressed}`);
+
+            }
+
+        }
+
+        if (btnDown.pressed) {
+
+            if (!this.#DownPressed) {
+
+                this.#logger.log(`gamepad button down pressed: ${btnDown.pressed}, value: ${btnDown.value}`);
+
+                this.#DownPressed = true;
+                eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#DownPressed);
+
+                this.#logger.log(`down: ${this.#DownPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#DownPressed) {
+
+                this.#logger.log(`gamepad button down pressed: ${btnDown.pressed}, value: ${btnDown.value}`);
+
+                this.#DownPressed = false;
+                eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#DownPressed);
+
+                this.#logger.log(`down: ${this.#DownPressed}`);
+
+            }
+
+        }
+
+        if (btnLeft.pressed) {
+
+            if (!this.#leftPressed) {
+
+                this.#logger.log(`gamepad button left pressed: ${btnLeft.pressed}, value: ${btnLeft.value}`);
+
+                this.#leftPressed = true;
+                eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#leftPressed);
+
+                this.#logger.log(`left: ${this.#leftPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#leftPressed) {
+
+                this.#logger.log(`gamepad button left pressed: ${btnLeft.pressed}, value: ${btnLeft.value}`);
+
+                this.#leftPressed = false;
+                eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#leftPressed);
+
+                this.#logger.log(`left: ${this.#leftPressed}`);
+
+            }
+
+        }
+
+        if (btnRight.pressed) {
+
+            if (!this.#rightPressed) {
+
+                this.#logger.log(`gamepad button right pressed: ${btnRight.pressed}, value: ${btnRight.value}`);
+
+                this.#rightPressed = true;
+                eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#rightPressed);
+
+                this.#logger.log(`right: ${this.#rightPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#rightPressed) {
+
+                this.#logger.log(`gamepad button right pressed: ${btnRight.pressed}, value: ${btnRight.value}`);
+
+                this.#rightPressed = false;
+                eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#rightPressed);
+
+                this.#logger.log(`right: ${this.#rightPressed}`);
+
+            }
+
+        }
+
+        if (btnA.pressed) {
+
+            if (!this.#APressed) {
+
+                this.#logger.log(`gamepad button A pressed: ${btnA.pressed}, value: ${btnA.value}`);
+
+                this.#APressed = true;
+                eventDispatcher.publish(messageType, actions.CONFIRM, world.current, this.#APressed);
+
+                this.#logger.log(`confirm: ${this.#APressed}`);
+
+            }
+
+        } else {
+
+            if (this.#APressed) {
+
+                this.#logger.log(`gamepad button A pressed: ${btnA.pressed}, value: ${btnA.value}`);
+
+                this.#APressed = false;
+                eventDispatcher.publish(messageType, actions.CONFIRM, world.current, this.#APressed);
+
+                this.#logger.log(`confirm: ${this.#APressed}`);
+
+            }
+
+        }
+
+        if (btnB.pressed) {
+
+            if (!this.#BPressed) {
+
+                this.#logger.log(`gamepad button B pressed: ${btnB.pressed}, value: ${btnB.value}`);
+
+                this.#BPressed = true;
+                eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#BPressed);
+
+                this.#logger.log(`cancel: ${this.#BPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#BPressed) {
+
+                this.#logger.log(`gamepad button B pressed: ${btnB.pressed}, value: ${btnB.value}`);
+
+                this.#BPressed = false;
+                eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#BPressed);
+
+                this.#logger.log(`cancel: ${this.#BPressed}`);
 
             }
 
