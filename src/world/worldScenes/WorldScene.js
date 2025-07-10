@@ -430,10 +430,10 @@ class WorldScene {
 
     start() {
 
+        this.disablePlayerPda();
         this.staticRendering = false;
         this.controls.initPreCoordinates();
         this.controls.setDamping(true, 0.1); // default damping factor 0.05
-        this.disablePlayerPda();
         this.loop.start(this.guiMaker.gui.stats);
         this.#paused = false;
 
@@ -441,9 +441,9 @@ class WorldScene {
 
     stop() {
 
-        this.staticRendering = true;
-        this.controls.setDamping(false);
         this.disablePlayerPda();
+        this.staticRendering = true;
+        this.controls.setDamping(false);        
         this.loop.stop();
         this.#paused = true;
 

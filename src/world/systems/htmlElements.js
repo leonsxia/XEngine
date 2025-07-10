@@ -12,17 +12,13 @@ function createPdaContainer(specs) {
 
     const { background, backdropFilter } = specs || {};
     const pdaContainer = document.createElement('div');
-    const pdaDiv = document.createElement('div');
 
-    pdaDiv.id = 'pda';
     pdaContainer.id = 'pda-container';
-    pdaContainer.appendChild(pdaDiv);
-
     pdaContainer.style.position = 'absolute';
     pdaContainer.style.background = background;
-    pdaDiv.style.backdropFilter = backdropFilter;
+    pdaContainer.style.backdropFilter = backdropFilter;
 
-    return { pdaContainer, pdaDiv };
+    return { pdaContainer };
 
 }
 

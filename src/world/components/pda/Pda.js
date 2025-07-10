@@ -10,7 +10,6 @@ const DEBUG = true;
 class Pda {
 
     _pdaContainer;
-    _pdaDiv;
     _visible = false;
     onVisibleChanged = [];
 
@@ -21,9 +20,8 @@ class Pda {
         const { background = BACKGROUND } = specs;
         const backdropFilter = BLUR;
         // Create the pda container and div with the specified background and backdrop filter
-        const { pdaContainer, pdaDiv } = createPdaContainer({background, backdropFilter});
+        const { pdaContainer } = createPdaContainer({ background, backdropFilter });
         this._pdaContainer = pdaContainer;
-        this._pdaDiv = pdaDiv;
 
         this._attachTo = specs.attachTo;
 
@@ -89,8 +87,8 @@ class Pda {
         const scenePosition = getScenePosition();
         this._pdaContainer.style.left = `${scenePosition.left}px`;
         this._pdaContainer.style.top = `${scenePosition.top}px`;
-        this._pdaContainer.style.width = this._pdaDiv.style.width = `${scenePosition.width}px`;
-        this._pdaContainer.style.height = this._pdaDiv.style.height = `${scenePosition.height}px`;
+        this._pdaContainer.style.width = `${scenePosition.width}px`;
+        this._pdaContainer.style.height = `${scenePosition.height}px`;
 
     }
 
