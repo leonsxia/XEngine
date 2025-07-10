@@ -14,11 +14,36 @@ class InputBase {
 
     }
 
+    disconnectXboxController() {
+
+        const messageType = InputBase.CONTROL_TYPES.XBOX_CONTROLLER;
+        this.eventDispatcher.publish(
+            messageType, 
+            InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES.CONNECTED, 
+            this.attachTo.current, 
+            false
+        );
+
+    }
+
+    connectXboxController() {
+        
+        const messageType = InputBase.CONTROL_TYPES.XBOX_CONTROLLER;
+        this.eventDispatcher.publish(
+            messageType, 
+            InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES.CONNECTED, 
+            this.attachTo.current, 
+            true
+        );
+
+    }
+
 }
 
 InputBase.CONTROL_TYPES = {
     TANKMOVE: 'tankmove',
-    PDA: 'pda'
+    PDA: 'pda',
+    XBOX_CONTROLLER: 'xboxController'
 };
 
 InputBase.CONTROL_ACTIONS = [
@@ -52,6 +77,12 @@ InputBase.CONTROL_ACTIONS = [
             SHIFT_LEFT: 'shiftLeft',
             SHIFT_RIGHT: 'shiftRight',
             MOVE_ITEM: 'moveItem'
+        }
+    },
+    {
+        CATEGORY: 'xboxController',
+        TYPES: {
+            CONNECTED: 'xboxControllerConnected'
         }
     }
 ];

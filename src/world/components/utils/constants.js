@@ -86,7 +86,7 @@ const VINTAGE_GRANDFATHER_CLOCK = 'VintageGrandfatherClock';
 const CAMERAS = {
     INSPECTOR: 'INSPECTOR',
     THIRD_PERSON: 'THIRD_PERSON'
-}
+};
 
 // post-processing
 const OUTLINE = 'outline';
@@ -366,7 +366,7 @@ const ZOMBIE_MALE_CLIPS = {
     CRAWL: { nick: 'crawl', name: 'Armature|Crawl', idx: 7, startImmediately: false, enable: true },
     ATTACK: { nick: 'attack', name: 'Armature|Attack', idx: 8, enable: true, loopOnce: true },
     ATTACK_GROUND: {nick: 'attack_ground', name: 'Armature|Bite_ground', idx: 9, enable: true, loopOnce: true}
-}
+};
 
 const BLACK_WIDOW_CLIPS = {
     ATTACK: { nick: 'attack', name: 'SpiderArmature|Spider_Attack', idx: 0, enable: true, loopOnce: true },
@@ -374,11 +374,11 @@ const BLACK_WIDOW_CLIPS = {
     IDLE: { nick: 'idle', name: 'SpiderArmature|Spider_Idle', idx: 2, enable: true, isDefault: true },
     HIT_RECEIVE: { nick: 'hit_receive', name: 'SpiderArmature|Spider_Jump', idx: 3, enable: true, loopOnce: true },
     WALK: { nick: 'walk', name: 'SpiderArmature|Spider_Walk', idx: 4, startImmediately: false, enable: true },
-}
+};
 
 const GLOCK_CLIPS = {
     SHOOT: { nick: 'shoot', name: 'glock_19|Shoot', idx: 0, enable: true, isDefault: true, startImmediately: false, weight: 0, loopOnce: true }
-}
+};
 
 // Gui
 const GUI_CONFIG = {
@@ -410,7 +410,13 @@ const GUI_CONFIG = {
     ENEMY_HP_ACTIONS_PARENT: 'enemy_hp_actions',
     INACTIVES: '_inactive',
     CLASS_INACTIVE: 'control-inactive'
-}
+};
+
+// controls
+const CONTROL_TYPES = {
+    KEYBOARD: 'keyboard',
+    XBOX: 'xbox'
+};
 
 export { 
     REPEAT_WRAPPING,
@@ -519,5 +525,7 @@ export {
     BLACK_WIDOW_CLIPS,
     GLOCK_CLIPS,
 
-    GUI_CONFIG
+    GUI_CONFIG,
+
+    CONTROL_TYPES
 };

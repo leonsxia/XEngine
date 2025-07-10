@@ -1,27 +1,31 @@
 import { container, getScenePosition, createPdaContainer } from "../../systems/htmlElements";
 import { Logger } from "../../systems/Logger";
-import { hexToRGBA, moonlitAsteroidHeavy, moonlitAsteroidLight, moonlitAsteroidMedium } from "../basic/colorBase";
+import { CONTROL_TYPES } from "../utils/constants";
+import { PdaMenu } from "./PdaMenu";
 
-// const BACKGROUND = `linear-gradient(90deg, ${hexToRGBA(seaSaltLight, .65)} 0%, ${hexToRGBA(seaSaltHeavy, .9)} 100%)`;
-const BACKGROUND = `linear-gradient(to bottom, ${hexToRGBA(moonlitAsteroidLight, .65)}, ${hexToRGBA(moonlitAsteroidMedium, .8)}, ${hexToRGBA(moonlitAsteroidHeavy, .9)})`;
-const BLUR = 'blur(5px)';
 const DEBUG = true;
 
 class Pda {
 
+    _theme;
     _pdaContainer;
     _visible = false;
     onVisibleChanged = [];
+
+    _pdaMenu;
+
+    _xboxControllerConnected;
 
     #logger = new Logger(DEBUG, 'Pda');
 
     constructor(specs) {
 
-        const { background = BACKGROUND } = specs;
-        const backdropFilter = BLUR;
-        // Create the pda container and div with the specified background and backdrop filter
-        const { pdaContainer } = createPdaContainer({ background, backdropFilter });
+        const { theme = 'default-theme' } = specs;
+        const { pdaContainer } = createPdaContainer(theme);
         this._pdaContainer = pdaContainer;
+
+        this._pdaMenu = new PdaMenu();
+        this._pdaContainer.appendChild(this._pdaMenu.menu);
 
         this._attachTo = specs.attachTo;
 
@@ -87,8 +91,8 @@ class Pda {
         const scenePosition = getScenePosition();
         this._pdaContainer.style.left = `${scenePosition.left}px`;
         this._pdaContainer.style.top = `${scenePosition.top}px`;
-        this._pdaContainer.style.width = `${scenePosition.width}px`;
-        this._pdaContainer.style.height = `${scenePosition.height}px`;
+        this._pdaContainer.style.width = `${scenePosition.width.toFixed()}px`;
+        this._pdaContainer.style.height = `${scenePosition.height.toFixed()}px`;
 
     }
 
@@ -124,17 +128,47 @@ class Pda {
 
     shiftLeft(val) {
         this.#logger.func = this.shiftLeft.name;
-        this.#logger.log(`shiftLeft: ${val}`);
+        // this.#logger.log(`shiftLeft: ${val}`);
+
+        if (val) {
+
+            this._pdaMenu.shiftLeft();
+
+        }
+
     }
 
     shiftRight(val) {
         this.#logger.func = this.shiftRight.name;
-        this.#logger.log(`shiftRight: ${val}`);
+        // this.#logger.log(`shiftRight: ${val}`);
+
+        if (val) {
+
+            this._pdaMenu.shiftRight();
+
+        }
+
     }
 
     moveItem(val) {
         this.#logger.func = this.moveItem.name;
         this.#logger.log(`moveItem: ${val}`);
+    }
+
+    xboxControllerConnected(val) {
+
+        if (val && !this._xboxControllerConnected) {
+
+            this._pdaMenu.switchControlType(CONTROL_TYPES.XBOX);
+            this._xboxControllerConnected = true;
+
+        } else if (!val && this._xboxControllerConnected) {
+
+            this._pdaMenu.switchControlType(CONTROL_TYPES.KEYBOARD);
+            this._xboxControllerConnected = false;
+
+        }
+
     }
 
 }

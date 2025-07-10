@@ -278,7 +278,6 @@ class WorldScene {
                     enemy.onCollisionBoxChanged.push(this.onEnemyCBoxChanged.bind(this));
 
                     this.physics.addActiveEnemies(enemy.name);
-                    // this.subscribeEvents(enemy, this.setup.moveType);
 
                 }
 
@@ -766,7 +765,12 @@ class WorldScene {
             }
 
             this.subscribeEvents(this.player, this.setup.moveType);
-            if (this.player.pda) this.subscribeEvents(this.player.pda, 'pda');
+            if (this.player.pda) {
+
+                this.subscribeEvents(this.player.pda, 'pda');
+                this.subscribeEvents(this.player.pda, 'xboxController');
+
+            }
 
         }
 

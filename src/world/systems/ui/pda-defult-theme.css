@@ -1,0 +1,111 @@
+
+:root {
+    --menu-margin: 3vw 0 1vw 0;
+    --menu-font: sans-serif;
+    --menu-letter-spacing: -.05vw;
+    --menu-side-font-size: 1.5vw;
+    --menu-side-width: 7.5vw;
+    --menu-side-first-width: 6vw;
+    --menu-side-first-margin: auto auto .75vw auto;
+    --menu-side-first-padding: .3vw 0;
+    --menu-side-first-border: .15vw solid white;
+    --menu-grey: #555;
+}
+
+.default-theme {
+    position: absolute;
+    background: linear-gradient(
+        rgba(17, 17, 17, 0.97) 8%,
+        rgba(44, 83, 100, 0.6) 38% 50%,
+        rgba(32, 58, 67, 0.85) 69%,
+        rgba(15, 32, 39, 0.9) 95%
+    );
+    -webkit-backdrop-filter: blur(.5vw);
+    backdrop-filter: blur(.5vw);
+}
+
+.default-theme div[name="pda-menu"] {
+    margin: var(--menu-margin);
+    font-family: var(--menu-font);
+}
+
+.default-theme div[name="pda-menu"] ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: .8vw;
+    color: white;
+}
+
+.default-theme div[name="pda-menu"] ul li.left {
+    display: block;
+    width: var(--menu-side-width);
+    font-size: var(--menu-side-font-size);
+    color: var(--menu-grey);
+    letter-spacing: var(--menu-letter-spacing);
+}
+
+.default-theme div[name="pda-menu"] ul li.left :first-child {
+    width: var(--menu-side-first-width);
+    margin: var(--menu-side-first-margin);
+    padding: var(--menu-side-first-padding);
+    border: var(--menu-side-first-border);
+    border-radius: 2vw .5vw .5vw .5vw;
+    background-color: var(--menu-grey);
+    color: white;
+}
+
+.default-theme div[name="pda-menu"] ul li.center {
+    display: block;
+    width: 11vw;
+    letter-spacing: var(--menu-letter-spacing);
+    font-size: 2vw;
+    text-align: center;
+}
+
+.default-theme div[name="pda-menu"] ul li.center :first-child {
+    margin-top: 0.15vw;
+}
+
+.default-theme div[name="pda-menu"] ul li.center :last-child {
+    margin-top: .1vw;
+}
+
+.default-theme div[name="pda-menu"] ul li.center :last-child span {
+    display: inline-block;
+    width: .6vw;
+    height: .6vw;
+    margin: 0 .5vw;
+    border: .15vw solid var(--menu-grey);;
+    border-radius: 1vw;
+    background-color: var(--menu-grey);;
+}
+
+.default-theme div[name="pda-menu"] ul li.center :last-child span.current {
+    display: inline-block;
+    width: .65vw;
+    height: .65vw;
+    border: .15vw solid white;
+    border-radius: 1vw;
+    background-color: white;
+}
+
+.default-theme div[name="pda-menu"] ul li.right {
+    display: block;
+    width: var(--menu-side-width);
+    font-size: var(--menu-side-font-size);
+    color: var(--menu-grey);;
+    letter-spacing: var(--menu-letter-spacing);
+}
+
+.default-theme div[name="pda-menu"] ul li.right :first-child {
+    width: var(--menu-side-first-width);
+    margin: var(--menu-side-first-margin);
+    padding: var(--menu-side-first-padding);
+    border: var(--menu-side-first-border);
+    border-radius: .5vw 2vw .5vw .5vw;
+    background-color: var(--menu-grey);;
+    color: white;
+}

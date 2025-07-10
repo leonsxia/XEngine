@@ -177,6 +177,8 @@ class Keyboard extends InputBase {
             if (!world.currentScene || world.currentScene.isScenePaused()) return;
 
             e.preventDefault(); // prevent default browser behavior for keys
+            this.attachTo.setCursorAndGui(false);
+            this.disconnectXboxController();
 
             switch (e.key) {
 
@@ -263,6 +265,8 @@ class Keyboard extends InputBase {
             if (!world.currentScene || world.currentScene.isScenePaused() || world.currentScene.isPdaOn) return;
 
             e.preventDefault(); // prevent default browser behavior for keys
+            this.attachTo.setCursorAndGui(false);
+            this.disconnectXboxController();
 
             switch (e.key) {
                 case A.lower:
@@ -691,6 +695,8 @@ class Keyboard extends InputBase {
             if (!world.currentScene || !world.currentScene.isPdaOn) return;
 
             e.preventDefault(); // prevent default browser behavior for keys
+            this.attachTo.setCursorAndGui(false);
+            this.disconnectXboxController();
 
             switch (e.key) {
                 case A.lower:

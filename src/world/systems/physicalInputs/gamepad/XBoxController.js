@@ -52,6 +52,8 @@ class XBoxController extends InputBase {
 
             this.attachTo.setCursorAndGui(false);
 
+            this.connectXboxController();
+
         });
 
         window.addEventListener("gamepaddisconnected", (e) => {
@@ -63,6 +65,9 @@ class XBoxController extends InputBase {
             this.attachTo.setCursorAndGui(true);
 
             this.triggered = false;
+            this.connected = false;
+
+            this.connectXboxController();
 
         });
 
@@ -70,10 +75,11 @@ class XBoxController extends InputBase {
 
     tick() {
 
-         this.gamepad = navigator.getGamepads()[0];
+        this.gamepad = navigator.getGamepads()[0];
 
         if (this.gamepad?.connected) {
 
+            this.connected = true;
             this.triggered = false;
             if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TANKMOVE)) {
 
@@ -92,6 +98,7 @@ class XBoxController extends InputBase {
             if (this.triggered) {
 
                 this.attachTo.setCursorAndGui(false);
+                this.connectXboxController();
 
             }
 
@@ -648,6 +655,8 @@ class XBoxController extends InputBase {
         const btnRight = this.gamepad.buttons[15];
         const btnA = this.gamepad.buttons[0];
         const btnB = this.gamepad.buttons[1];
+        const btnLB = this.gamepad.buttons[4];
+        const btnRB = this.gamepad.buttons[5];
 
         if (btnUp.pressed) {
 
@@ -812,6 +821,62 @@ class XBoxController extends InputBase {
                 eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#BPressed);
 
                 this.#logger.log(`cancel: ${this.#BPressed}`);
+
+            }
+
+        }
+
+        if (btnLB.pressed) {
+
+            if (!this.#LBPressed) {
+
+                this.#logger.log(`gamepad button LB pressed: ${btnLB.pressed}, value: ${btnLB.value}`);
+
+                this.#LBPressed = true;
+                eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#LBPressed);
+
+                this.#logger.log(`shiftLeft: ${this.#LBPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#LBPressed) {
+
+                this.#logger.log(`gamepad button LB pressed: ${btnLB.pressed}, value: ${btnLB.value}`);
+
+                this.#LBPressed = false;
+                eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#LBPressed);
+
+                this.#logger.log(`shiftLeft: ${this.#LBPressed}`);
+
+            }
+
+        }
+
+        if (btnRB.pressed) {
+
+            if (!this.#RBPressed) {
+
+                this.#logger.log(`gamepad button RB pressed: ${btnRB.pressed}, value: ${btnRB.value}`);
+
+                this.#RBPressed = true;
+                eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#RBPressed);
+
+                this.#logger.log(`shiftRight: ${this.#RBPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#RBPressed) {
+
+                this.#logger.log(`gamepad button RB pressed: ${btnRB.pressed}, value: ${btnRB.value}`);
+
+                this.#RBPressed = false;
+                eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#RBPressed);
+
+                this.#logger.log(`shiftRight: ${this.#RBPressed}`);
 
             }
 

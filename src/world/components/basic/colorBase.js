@@ -15,6 +15,7 @@ const orange = 0xffa500;
 const khaki = 0xF0E68C;
 const seaSaltLight = 0x4b6cb7;
 const seaSaltHeavy = 0x182848;
+const moonlitAsteroidHeavier = 0x111111;
 const moonlitAsteroidLight = 0x2c5364;
 const moonlitAsteroidMedium = 0x203A43;
 const moonlitAsteroidHeavy = 0x0F2027;
@@ -107,6 +108,7 @@ export {
     khaki,
     seaSaltLight,
     seaSaltHeavy,
+    moonlitAsteroidHeavier,
     moonlitAsteroidLight,
     moonlitAsteroidMedium,
     moonlitAsteroidHeavy,   
