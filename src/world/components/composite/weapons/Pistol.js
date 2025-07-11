@@ -2,7 +2,7 @@ import { WeaponBase } from '../../Models';
 import { WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
-const GLTF_SRC = 'weapons/Pistol.glb';
+const GLTF_SRC = 'weapons/pistol.glb';
 
 class Pistol extends WeaponBase {
 

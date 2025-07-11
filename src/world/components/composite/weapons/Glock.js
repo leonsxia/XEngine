@@ -2,7 +2,7 @@ import { WeaponBase } from '../../Models';
 import { GLOCK_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
-const GLTF_SRC = 'weapons/Glock19.glb';
+const GLTF_SRC = 'weapons/glock19.glb';
 const ANIMATION_SETTINGS = {
     SHOOT: 0.1,
     CANCEL_SHOOT: 0.1,

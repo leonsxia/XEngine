@@ -3,7 +3,7 @@ import { createOBBBox } from '../../physics/collisionHelper';
 import { WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
-const GLTF_SRC = 'weapons/Bayonet.glb';
+const GLTF_SRC = 'weapons/bayonet.glb';
 
 class Bayonet extends WeaponBase {
 
