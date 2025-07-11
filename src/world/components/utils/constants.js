@@ -82,6 +82,13 @@ const SECURITY_LIGHT = 'SecurityLight';
 const FANCY_PICTURE_FRAME_01 = 'FancyPictureFrame01';
 const VINTAGE_GRANDFATHER_CLOCK = 'VintageGrandfatherClock';
 
+// pickable items
+const AMMUNITION = {
+    PISTOL_AMMO_BOX: 'PISTOL_AMMO_BOX',
+    MAGNUM_AMMO_BOX: 'MAGNUM_AMMO_BOX',
+    SMG_AMMO_BOX: 'SMG_AMMO_BOX'
+}
+
 // cameras
 const CAMERAS = {
     INSPECTOR: 'INSPECTOR',
@@ -314,6 +321,22 @@ const GLTFS = [{
     name: GLTF_NAMES.FANCY_PICTURE_FRAME_01, src: 'inRoom/decorative/fancy_picture_frame_01_1k/fancy_picture_frame_01_1k.gltf'
 }, {
     name: GLTF_NAMES.VINTAGE_GRANDFATHER_CLOCK, src: 'inRoom/decorative/vintage_grandfather_clock_01_1k/vintage_grandfather_clock_01_1k.gltf'
+}, {
+    name: WEAPONS.BAYONET, src: 'weapons/bayonet.glb'
+}, {
+    name: WEAPONS.PISTOL1, src: 'weapons/pistol.glb'
+}, {
+    name: WEAPONS.GLOCK, src: 'weapons/glock19.glb'
+}, {
+    name: WEAPONS.REVOLVER, src: 'weapons/revolver.glb'
+}, {
+    name: WEAPONS.SMG_SHORT, src: 'weapons/smg1.glb'
+}, {
+    name: AMMUNITION.PISTOL_AMMO_BOX, src: 'pickableItems/ammunition/pistol_ammo_box.glb'
+}, {
+    name: AMMUNITION.MAGNUM_AMMO_BOX, src: 'pickableItems/ammunition/magnum_ammo_box.glb'
+}, {
+    name: AMMUNITION.SMG_AMMO_BOX, src: 'pickableItems/ammunition/smg_ammo_box.glb'
 }];
 
 const SHADER_NAMES = {
