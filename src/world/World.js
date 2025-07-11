@@ -17,11 +17,12 @@ import { loadTextures, loadedTextures } from "./components/utils/textureHelper";
 import { loadGLTFModels, loadedGLTFModels } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
-import { TEXTURES, GLTFS, SHADERS } from "./components/utils/constants";
+import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES } from "./components/utils/constants";
 import { Logger } from "./systems/Logger";
 import { InputBase } from "./systems/physicalInputs/InputBase";
 import { XBoxController } from "./systems/physicalInputs/gamepad/XBoxController";
 import { Keyboard } from "./systems/physicalInputs/Keyboard";
+import { Mouse } from "./systems/physicalInputs/Mouse";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix', 'Enemy Test Scene'],  // scene list for scene selector
@@ -49,8 +50,13 @@ class World {
 
     #sceneBuilder;
 
-    _systemLogger = new Logger(true, 'World');
-    _eventLogger = new Logger(DEBUG, 'World');
+    #systemLogger = new Logger(DEBUG, 'World');
+
+    _xboxController;
+    _keyboard;
+    _mouse;
+
+    _showGuiAndInfo = false;
 
     constructor() {
 
@@ -69,12 +75,15 @@ class World {
             controlTypes: controlTypes,
             attachTo: this
         }
-        const xboxController = new XBoxController(inputConifg);
-        xboxController.bindGamepadEvents();
-        config.xboxController = xboxController;
+        this._xboxController = new XBoxController(inputConifg);
+        this._xboxController.bindGamepadEvents();
+        config.xboxController = this._xboxController;
 
-        const keyboard = new Keyboard(inputConifg);
-        keyboard.bindAllMoves();
+        this._keyboard = new Keyboard(inputConifg);
+        this._keyboard.bindAllMoves();
+
+        this._mouse = new Mouse(inputConifg);
+        this._mouse.bindAllEvents();
 
         this.worldScenes = [];
         this.worldScenes.push(new WorldScene1(this.#renderer, config));
@@ -86,9 +95,6 @@ class World {
         this.worldScenes.push(new Mansion(this.#renderer, config));
         this.worldScenes.push(new WorldMatrix(this.#renderer, config));
         this.worldScenes.push(new EnemyTestScene(this.#renderer, config));
-        
-        this.bindMouseEvent();
-        this.bindTouchEvent();
 
     }
 
@@ -103,7 +109,7 @@ class World {
         ]);
 
         const end = Date.now();
-        this._systemLogger.log(`loading assests in ${(end - start) * .001} s`);
+        this.#systemLogger.log(`loading assests in ${(end - start) * .001} s`);
 
         Object.assign(loadedTextures, textures);
         Object.assign(loadedGLTFModels, gltfs);
@@ -141,7 +147,7 @@ class World {
 
         this.#currentScene = loadScene;
 
-        this._systemLogger.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
+        this.#systemLogger.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
 
         if (infosDomElements) infosDomElements.msg.textContent = 'assets all loaded. => renderding scene...';
 
@@ -154,11 +160,11 @@ class World {
             container.append(this.#renderer.domElement);
 
             const end = Date.now();
-            this._systemLogger.log(`render in ${(end - start) * .001} s`);
+            this.#systemLogger.log(`render in ${(end - start) * .001} s`);
 
             const { objects, vertices, triangles } = this.countObjects(loadScene.scene);
 
-            this._systemLogger.log(`objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
+            this.#systemLogger.log(`objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
 
             if (infosDomElements) {
                 
@@ -285,25 +291,27 @@ class World {
 
     }
 
-    setCursorAndGui(show) {
+    setGuiAndInfo() {
 
-        if (show) {
+        if (this._mouse.triggered && !Keyboard.isKeyboardOn) {
 
-            if (container.classList.contains('nocursor')) {
+            if (!this._showGuiAndInfo) {
 
                 container.classList.remove('nocursor');
                 this.#currentScene?.guiMaker.gui.recover();
                 this.setInfo(true);
+                this._showGuiAndInfo = true;
 
             }
 
         } else {
 
-            if (!container.classList.contains('nocursor')) {
+            if (this._showGuiAndInfo) {
 
                 container.classList.add('nocursor');
                 this.#currentScene?.guiMaker.gui.hide();
                 this.setInfo(false);
+                this._showGuiAndInfo = false;
 
             }
 
@@ -311,23 +319,35 @@ class World {
 
     }
 
-    bindMouseEvent() {
+    switchInput(type) {
 
-        window.addEventListener('mousemove', () => {
+        if (!this.#currentScene) return;
 
-            this.setCursorAndGui(true);
+        switch(type) {
 
-        });
+            case CONTROL_TYPES.KEYBOARD:
+                this._keyboard.triggered = true;
+                this._mouse.triggered = false;
+                this._xboxController.triggered = false;
+                this._xboxController.disconnectXboxController();
+                break;
 
-    }
+            case CONTROL_TYPES.MOUSE:
+                this._mouse.triggered = true;
+                this._xboxController.triggered = false;
+                this._xboxController.disconnectXboxController();
+                break;
 
-    bindTouchEvent() {
+            case CONTROL_TYPES.XBOX:
+                this._keyboard.triggered = false;
+                this._mouse.triggered = false;
+                this._xboxController.triggered = true;
+                this._xboxController.connectXboxController();
+                break;
 
-        window.addEventListener('touchstart', () => {
+        }
 
-            this.setCursorAndGui(true);
-
-        });
+        this.setGuiAndInfo();
 
     }
 

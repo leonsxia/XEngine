@@ -423,8 +423,6 @@ class WorldScene {
         
         }
 
-        this.updatePlayerPda(false);
-
     }
 
     start() {
@@ -810,16 +808,6 @@ class WorldScene {
     disablePlayerPda() {
 
         if (this.player?.pda?.visible) this.player.pda.visible = false;
-
-    }
-
-    updatePlayerPda() {
-
-        if (this.player?.pda?.visible) {
-
-            this.player.pda.updatePosition();
-
-        }
 
     }
 

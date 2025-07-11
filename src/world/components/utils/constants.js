@@ -415,7 +415,8 @@ const GUI_CONFIG = {
 // controls
 const CONTROL_TYPES = {
     KEYBOARD: 'keyboard',
-    XBOX: 'xbox'
+    XBOX: 'xbox',
+    MOUSE: 'mouse'
 };
 
 export { 

@@ -1,32 +1,39 @@
 
 :root {
-    --menu-margin: 3vw 0 1vw 0;
+    --menu-margin: calc(var(--calculated-vw) * 3) 0 calc(var(--calculated-vw) * 1) 0;
     --menu-font: sans-serif;
-    --menu-letter-spacing: -.05vw;
-    --menu-side-font-size: 1.5vw;
-    --menu-side-width: 7.5vw;
-    --menu-side-first-width: 6vw;
-    --menu-side-first-margin: auto auto .75vw auto;
-    --menu-side-first-padding: .3vw 0;
-    --menu-side-first-border: .15vw solid white;
+    --menu-letter-spacing: calc(var(--calculated-vw) * -.05);
+    --menu-border-width: calc(var(--calculated-vw) * .08);
+    --menu-side-font-size: calc(var(--calculated-vw) * 1.5);
+    --menu-side-width: calc(var(--calculated-vw) * 7.5);
+    --menu-side-first-width: calc(var(--calculated-vw) * 6);
+    --menu-side-first-margin: auto auto calc(var(--calculated-vw) * .75) auto;
+    --menu-side-first-padding: calc(var(--calculated-vw) * .3) 0;
+    --menu-side-first-border: var(--menu-border-width) solid white;
     --menu-grey: #555;
 }
 
 .default-theme {
     position: absolute;
+    top: calc(var(--calculated-v-top));
+    left: calc(var(--calculated-v-left));
+    width: calc(var(--calculated-vw) * 100);
+    height: calc(var(--calculated-vh) * 100);
     background: linear-gradient(
         rgba(17, 17, 17, 0.97) 8%,
         rgba(44, 83, 100, 0.6) 38% 50%,
         rgba(32, 58, 67, 0.85) 69%,
         rgba(15, 32, 39, 0.9) 95%
     );
-    -webkit-backdrop-filter: blur(.5vw);
-    backdrop-filter: blur(.5vw);
+    -webkit-backdrop-filter: blur(calc(var(--calculated-vw) * .5));
+    backdrop-filter: blur(calc(var(--calculated-vw) * .5));
 }
 
 .default-theme div[name="pda-menu"] {
     margin: var(--menu-margin);
     font-family: var(--menu-font);
+    -webkit-user-select: none; /* Safari */
+    user-select: none; /* Standard syntax */
 }
 
 .default-theme div[name="pda-menu"] ul {
@@ -35,7 +42,7 @@
     padding: 0;
     display: flex;
     justify-content: center;
-    gap: .8vw;
+    gap: calc(var(--calculated-vw) * .8);
     color: white;
 }
 
@@ -52,43 +59,44 @@
     margin: var(--menu-side-first-margin);
     padding: var(--menu-side-first-padding);
     border: var(--menu-side-first-border);
-    border-radius: 2vw .5vw .5vw .5vw;
+    border-radius: calc(var(--calculated-vw) * 2) calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * .5);
     background-color: var(--menu-grey);
     color: white;
 }
 
 .default-theme div[name="pda-menu"] ul li.center {
     display: block;
-    width: 11vw;
+    width: calc(var(--calculated-vw) * 11);
     letter-spacing: var(--menu-letter-spacing);
-    font-size: 2vw;
+    font-size: calc(var(--calculated-vw) * 2);
     text-align: center;
 }
 
 .default-theme div[name="pda-menu"] ul li.center :first-child {
-    margin-top: 0.15vw;
+    margin-top: calc(var(--calculated-vw) * .15);
 }
 
 .default-theme div[name="pda-menu"] ul li.center :last-child {
-    margin-top: .1vw;
+    margin-top: calc(var(--calculated-vw) * .1);
 }
 
 .default-theme div[name="pda-menu"] ul li.center :last-child span {
     display: inline-block;
-    width: .6vw;
-    height: .6vw;
-    margin: 0 .5vw;
-    border: .15vw solid var(--menu-grey);;
-    border-radius: 1vw;
+    width: calc(var(--calculated-vw) * .5);
+    height: calc(var(--calculated-vw) * .5);
+    margin: 0 calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * .06) calc(var(--calculated-vw) * .5);
+    border: var(--menu-border-width) solid var(--menu-grey);;
+    border-radius: calc(var(--calculated-vw) * 1);
     background-color: var(--menu-grey);;
 }
 
 .default-theme div[name="pda-menu"] ul li.center :last-child span.current {
     display: inline-block;
-    width: .65vw;
-    height: .65vw;
-    border: .15vw solid white;
-    border-radius: 1vw;
+    width: calc(var(--calculated-vw) * .65);
+    height: calc(var(--calculated-vw) * .65);
+    margin-bottom: 0;
+    border: var(--menu-border-width) solid white;
+    border-radius: calc(var(--calculated-vw) * 1);
     background-color: white;
 }
 
@@ -105,7 +113,7 @@
     margin: var(--menu-side-first-margin);
     padding: var(--menu-side-first-padding);
     border: var(--menu-side-first-border);
-    border-radius: .5vw 2vw .5vw .5vw;
+    border-radius: calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * 2) calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * .5);
     background-color: var(--menu-grey);;
     color: white;
 }

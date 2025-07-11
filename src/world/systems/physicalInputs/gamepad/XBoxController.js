@@ -1,5 +1,6 @@
 import { InputBase } from "../InputBase";
 import { Logger } from "../../Logger";
+import { CONTROL_TYPES } from "../../../components/utils/constants";
 
 const DEBUG = false;
 
@@ -9,7 +10,6 @@ class XBoxController extends InputBase {
 
     connected = false;
     gamepad = null;
-    triggered = false;
 
     #LStickMoveLeft = false;
     #LStickMoveRight = false;
@@ -50,9 +50,7 @@ class XBoxController extends InputBase {
 
             this.#logger.log(`Gamepad connected at index ${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
 
-            this.attachTo.setCursorAndGui(false);
-
-            this.connectXboxController();
+            this.attachTo.switchInput(CONTROL_TYPES.XBOX);
 
         });
 
@@ -62,12 +60,9 @@ class XBoxController extends InputBase {
 
             this.#logger.log(`Gamepad disconnected at index ${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
 
-            this.attachTo.setCursorAndGui(true);
-
-            this.triggered = false;
             this.connected = false;
 
-            this.connectXboxController();
+            this.attachTo.switchInput(CONTROL_TYPES.XBOX);
 
         });
 
@@ -80,7 +75,7 @@ class XBoxController extends InputBase {
         if (this.gamepad?.connected) {
 
             this.connected = true;
-            this.triggered = false;
+            this._triggered = false;
             if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TANKMOVE)) {
 
                 this.tankmoveTick();
@@ -94,11 +89,10 @@ class XBoxController extends InputBase {
 
             }
 
-            this.triggered = !this.triggered ? this.gamepad.buttons.find(btn => btn.pressed) ? true : false : true;
-            if (this.triggered) {
+            this._triggered = !this._triggered ? this.gamepad.buttons.find(btn => btn.pressed) ? true : false : true;
+            if (this._triggered) {
 
-                this.attachTo.setCursorAndGui(false);
-                this.connectXboxController();
+                this.attachTo.switchInput(CONTROL_TYPES.XBOX);
 
             }
 
@@ -229,7 +223,7 @@ class XBoxController extends InputBase {
         // process right stick events
         if (rightStickH <= - RStickHValidMin) {
 
-            this.triggered = true;
+            this._triggered = true;
 
             if (!this.#RStickMoveLeft) {
 
@@ -259,7 +253,7 @@ class XBoxController extends InputBase {
 
         if (rightStickH >= RStickHValidMin) {
 
-            this.triggered = true;
+            this._triggered = true;
 
             if (!this.#RStickMoveRight) {
 
@@ -297,7 +291,7 @@ class XBoxController extends InputBase {
         // if right stick not activated, process left stick events
         if (leftStickH <= - LStickHValidMin) {
 
-            this.triggered = true;
+            this._triggered = true;
 
             if (!this.#LStickMoveLeft) {
 
@@ -327,7 +321,7 @@ class XBoxController extends InputBase {
 
         if (leftStickH >= LStickHValidMin) {
 
-            this.triggered = true;
+            this._triggered = true;
 
             if (!this.#LStickMoveRight) {
 
@@ -357,7 +351,7 @@ class XBoxController extends InputBase {
 
         if (leftStickV <= - LStickForwardValidMin) {
 
-            this.triggered = true;
+            this._triggered = true;
 
             if (!this.#LStickMoveUp && !this.#LStickMoveDown) {
 
@@ -387,7 +381,7 @@ class XBoxController extends InputBase {
 
         if (leftStickV >= LStickBackwardValidMin) {
 
-            this.triggered = true;
+            this._triggered = true;
 
             if (!this.#LStickMoveDown && !this.#LStickMoveUp) {
 

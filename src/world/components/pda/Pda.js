@@ -1,4 +1,4 @@
-import { container, getScenePosition, createPdaContainer } from "../../systems/htmlElements";
+import { container, createPdaContainer } from "../../systems/htmlElements";
 import { Logger } from "../../systems/Logger";
 import { CONTROL_TYPES } from "../utils/constants";
 import { PdaMenu } from "./PdaMenu";
@@ -49,7 +49,6 @@ class Pda {
 
             }
             this._pdaContainer.style.display = 'block';
-            this.updatePosition();            
 
         } else {
 
@@ -83,16 +82,6 @@ class Pda {
             this._pdaContainer.parentNode.removeChild(this._pdaContainer);
 
         }
-
-    }
-
-    updatePosition() {
-
-        const scenePosition = getScenePosition();
-        this._pdaContainer.style.left = `${scenePosition.left}px`;
-        this._pdaContainer.style.top = `${scenePosition.top}px`;
-        this._pdaContainer.style.width = `${scenePosition.width.toFixed()}px`;
-        this._pdaContainer.style.height = `${scenePosition.height.toFixed()}px`;
 
     }
 

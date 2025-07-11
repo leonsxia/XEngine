@@ -47,31 +47,28 @@ class Resizer {
         const targetSize = this.#size === Resizer.SIZE.FULL ? containerSize : parseFloat(this.#size.toFixed(2));
         let targetWidth = width;
         let targetHeight = height;
+        let top = `0px`;
+        let left = `0px`;
 
         if (this.#size !== Resizer.SIZE.FULL) {
 
             if (containerSize > targetSize) {
 
                 targetWidth = targetHeight * this.#size;
-
-                this.#renderer.domElement.style.setProperty('top', `0px`);
-                this.#renderer.domElement.style.setProperty('left', `${(width - targetWidth) / 2}px`);
+                left = `${(width - targetWidth) / 2}px`;
+                
 
             } else {
 
                 targetHeight = targetWidth / this.#size;
-
-                this.#renderer.domElement.style.setProperty('top', `${(height - targetHeight) / 2}px`);
-                this.#renderer.domElement.style.setProperty('left', `0px`);
+                top = `${(height - targetHeight) / 2}px`;
 
             }
 
-        } else {
-
-            this.#renderer.domElement.style.setProperty('top', `0px`);
-            this.#renderer.domElement.style.setProperty('left', `0px`);
-
         }
+
+        this.#renderer.domElement.style.setProperty('top', top);
+        this.#renderer.domElement.style.setProperty('left', left);
 
         // Set the camera's aspect ratio
         this.#camera.aspect = targetSize;
@@ -94,6 +91,13 @@ class Resizer {
 
         this.#postProcessor.composer.setSize(targetWidth, targetHeight);
         this.#postProcessor.reset();
+
+        // set css calculated properties
+        const documentEl = document.documentElement;
+        documentEl.style.setProperty('--calculated-vh', `${targetHeight / 100}px`);
+        documentEl.style.setProperty('--calculated-vw', `${targetWidth / 100}px`);
+        documentEl.style.setProperty('--calculated-v-top', top);
+        documentEl.style.setProperty('--calculated-v-left', left);
 
     };
 

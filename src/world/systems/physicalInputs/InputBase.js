@@ -4,6 +4,8 @@ class InputBase {
     controlTypes;
     attachTo;
 
+    _triggered = false;
+
     constructor(specs) {
 
         const { dispatcher, controlTypes, attachTo } = specs;
@@ -11,6 +13,18 @@ class InputBase {
         this.eventDispatcher = dispatcher;
         this.controlTypes = controlTypes;
         this.attachTo = attachTo;
+
+    }
+
+    get triggered() {
+
+        return this._triggered;
+
+    }
+
+    set triggered(val) {
+
+        this._triggered = val;
 
     }
 
@@ -27,7 +41,7 @@ class InputBase {
     }
 
     connectXboxController() {
-        
+
         const messageType = InputBase.CONTROL_TYPES.XBOX_CONTROLLER;
         this.eventDispatcher.publish(
             messageType, 

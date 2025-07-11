@@ -1,3 +1,4 @@
+import { CONTROL_TYPES } from "../../components/utils/constants";
 import { Logger } from "../Logger";
 import { InputBase } from "./InputBase";
 
@@ -39,7 +40,25 @@ class Keyboard extends InputBase {
 
     }
 
+    static get isKeyboardOn() {
+
+        let isOn = false;
+        for (const key in Keyboard.KEYS) {
+
+            if (Keyboard.KEYS[key].isDown) {
+                isOn = true;
+                break;
+            }
+
+        }
+
+        return isOn;
+
+    }
+
     bindAllMoves() {
+
+        this.bindTriggerEvents();
 
         if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TANKMOVE)) {
 
@@ -53,6 +72,22 @@ class Keyboard extends InputBase {
             this.bindKeysToPdaControl();
 
         }
+
+    }
+
+    bindTriggerEvents() {
+
+         window.addEventListener('keydown', e => {
+
+            const world = this.attachTo;
+
+            if (!world.currentScene || world.currentScene.isScenePaused()) return;
+
+            e.preventDefault(); // prevent default browser behavior for keys
+
+            this.attachTo.switchInput(CONTROL_TYPES.KEYBOARD);
+
+         });
 
     }
 
@@ -176,10 +211,6 @@ class Keyboard extends InputBase {
 
             if (!world.currentScene || world.currentScene.isScenePaused()) return;
 
-            e.preventDefault(); // prevent default browser behavior for keys
-            this.attachTo.setCursorAndGui(false);
-            this.disconnectXboxController();
-
             switch (e.key) {
 
                 case I.lower:
@@ -263,10 +294,6 @@ class Keyboard extends InputBase {
         window.addEventListener('keydown', e => {
 
             if (!world.currentScene || world.currentScene.isScenePaused() || world.currentScene.isPdaOn) return;
-
-            e.preventDefault(); // prevent default browser behavior for keys
-            this.attachTo.setCursorAndGui(false);
-            this.disconnectXboxController();
 
             switch (e.key) {
                 case A.lower:
@@ -694,10 +721,6 @@ class Keyboard extends InputBase {
 
             if (!world.currentScene || !world.currentScene.isPdaOn) return;
 
-            e.preventDefault(); // prevent default browser behavior for keys
-            this.attachTo.setCursorAndGui(false);
-            this.disconnectXboxController();
-
             switch (e.key) {
                 case A.lower:
                 case A.upper:
@@ -1076,52 +1099,6 @@ class Keyboard extends InputBase {
                     this.#moveItem = false;
 
                     eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#moveItem);
-
-                    break;
-
-            }
-
-        });
-    }
-
-    bindKeysToOtherMove() {
-
-        window.addEventListener('keydown', e => {
-
-            switch (e.key) {
-                case 'a':
-                case 'A':
-                case 'ArrowLeft':
-
-                    this.#logger.log('other left');
-                    break;
-
-                case 'd':
-                case 'D':
-                case 'ArrowRight':
-
-                    this.#logger.log('other right');
-                    break;
-
-                case 'w':
-                case 'W':
-                case 'ArrowUp':
-
-                    this.#logger.log('other up');
-                    break;
-
-                case 's':
-                case 'S':
-                case 'ArrowDown':
-
-                    this.#logger.log('other down');
-                    break;
-
-                case 'Shift':
-
-                    break;
-
-                case ' ':
 
                     break;
 
