@@ -94,8 +94,8 @@ class Resizer {
 
         // set css calculated properties
         const documentEl = document.documentElement;
-        documentEl.style.setProperty('--calculated-vh', `${targetHeight / 100}px`);
-        documentEl.style.setProperty('--calculated-vw', `${targetWidth / 100}px`);
+        documentEl.style.setProperty('--calculated-vh', `${Math.ceil(targetHeight) / 100}px`);
+        documentEl.style.setProperty('--calculated-vw', `${Math.ceil(targetWidth) / 100}px`);
         documentEl.style.setProperty('--calculated-v-top', top);
         documentEl.style.setProperty('--calculated-v-left', left);
 
