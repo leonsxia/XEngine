@@ -2,7 +2,7 @@ import { WorldScene } from './WorldScene.js';
 
 const worldSceneSpecs = {
     name: "Mansion",
-    src: 'assets/sceneObjects/mansion.json',
+    src: 'assets/scene_objects/mansion.json',
     enableGui: true
 };
 

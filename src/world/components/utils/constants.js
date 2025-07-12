@@ -288,39 +288,39 @@ const GLTFS = [{
 }, {
     name: GLTF_NAMES.BLACK_WIDOW, src: 'creatures/black_widow.glb'
 }, {
-    name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'inRoom/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
+    name: GLTF_NAMES.WOODEN_PICNIC_TABLE, src: 'in_room/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf'
 }, {
-    name: GLTF_NAMES.WOODEN_TABLE, src: 'inRoom/tables/wooden_table_1k/wooden_table_02_1k.gltf'
+    name: GLTF_NAMES.WOODEN_TABLE, src: 'in_room/tables/wooden_table_1k/wooden_table_02_1k.gltf'
 }, {
-    name: GLTF_NAMES.ROUND_WOODEN_TABLE, src: 'inRoom/tables/round_wooden_table_01_1k/round_wooden_table_01_1k.gltf'
+    name: GLTF_NAMES.ROUND_WOODEN_TABLE, src: 'in_room/tables/round_wooden_table_01_1k/round_wooden_table_01_1k.gltf'
 }, {
-    name: GLTF_NAMES.PAINTED_WOODEN_TABLE, src: 'inRoom/tables/painted_wooden_table_1k/painted_wooden_table_1k.gltf'
+    name: GLTF_NAMES.PAINTED_WOODEN_TABLE, src: 'in_room/tables/painted_wooden_table_1k/painted_wooden_table_1k.gltf'
 }, {
-    name: GLTF_NAMES.PAINTED_WOODEN_NIGHTSTAND, src: 'inRoom/tables/painted_wooden_nightstand_1k/painted_wooden_nightstand_1k.gltf'
+    name: GLTF_NAMES.PAINTED_WOODEN_NIGHTSTAND, src: 'in_room/tables/painted_wooden_nightstand_1k/painted_wooden_nightstand_1k.gltf'
 }, {
-    name: GLTF_NAMES.PAINTED_WOODEN_BLUE_CHAIR, src: 'inRoom/seats/painted_wooden_chair_02_1k/painted_wooden_chair_02_1k.gltf'
+    name: GLTF_NAMES.PAINTED_WOODEN_BLUE_CHAIR, src: 'in_room/seats/painted_wooden_chair_02_1k/painted_wooden_chair_02_1k.gltf'
 }, {
-    name: GLTF_NAMES.PAINTED_WOODEN_WHITE_CHAIR, src: 'inRoom/seats/painted_wooden_chair_01_1k/painted_wooden_chair_01_1k.gltf'
+    name: GLTF_NAMES.PAINTED_WOODEN_WHITE_CHAIR, src: 'in_room/seats/painted_wooden_chair_01_1k/painted_wooden_chair_01_1k.gltf'
 }, {
-    name: GLTF_NAMES.PAINTED_WOODEN_STOOL, src: 'inRoom/seats/painted_wooden_stool_1k/painted_wooden_stool_1k.gltf'
+    name: GLTF_NAMES.PAINTED_WOODEN_STOOL, src: 'in_room/seats/painted_wooden_stool_1k/painted_wooden_stool_1k.gltf'
 }, {
-    name: GLTF_NAMES.SOFA_03, src: 'inRoom/seats/sofa_03_1k/sofa_03_1k.gltf'
+    name: GLTF_NAMES.SOFA_03, src: 'in_room/seats/sofa_03_1k/sofa_03_1k.gltf'
 }, {
-    name: GLTF_NAMES.PAINTED_WOODEN_BLUE_CABINET, src: 'inRoom/shelves/painted_wooden_cabinet_02_1k/painted_wooden_cabinet_02_1k.gltf'
+    name: GLTF_NAMES.PAINTED_WOODEN_BLUE_CABINET, src: 'in_room/shelves/painted_wooden_cabinet_02_1k/painted_wooden_cabinet_02_1k.gltf'
 }, {
-    name: GLTF_NAMES.SHELF_01, src: 'inRoom/shelves/Shelf_01_1k/Shelf_01_1k.gltf'
+    name: GLTF_NAMES.SHELF_01, src: 'in_room/shelves/Shelf_01_1k/Shelf_01_1k.gltf'
 }, {
-    name: GLTF_NAMES.PAINTED_WOODEN_WHITE_CABINET, src: 'inRoom/shelves/painted_wooden_cabinet_1k/painted_wooden_cabinet_1k.gltf'
+    name: GLTF_NAMES.PAINTED_WOODEN_WHITE_CABINET, src: 'in_room/shelves/painted_wooden_cabinet_1k/painted_wooden_cabinet_1k.gltf'
 }, {
-    name: GLTF_NAMES.TELEVISION_01, src: 'inRoom/electronics/Television_01_1k/Television_01_1k.gltf'
+    name: GLTF_NAMES.TELEVISION_01, src: 'in_room/electronics/Television_01_1k/Television_01_1k.gltf'
 }, {
-    name: GLTF_NAMES.MODERN_CEILING_LAMP_01, src: 'inRoom/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_01_1k.gltf'
+    name: GLTF_NAMES.MODERN_CEILING_LAMP_01, src: 'in_room/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_01_1k.gltf'
 }, {
-    name: GLTF_NAMES.SECURITY_LIGHT, src: 'inRoom/lighting/security_light_1k/security_light_1k.gltf'
+    name: GLTF_NAMES.SECURITY_LIGHT, src: 'in_room/lighting/security_light_1k/security_light_1k.gltf'
 }, {
-    name: GLTF_NAMES.FANCY_PICTURE_FRAME_01, src: 'inRoom/decorative/fancy_picture_frame_01_1k/fancy_picture_frame_01_1k.gltf'
+    name: GLTF_NAMES.FANCY_PICTURE_FRAME_01, src: 'in_room/decorative/fancy_picture_frame_01_1k/fancy_picture_frame_01_1k.gltf'
 }, {
-    name: GLTF_NAMES.VINTAGE_GRANDFATHER_CLOCK, src: 'inRoom/decorative/vintage_grandfather_clock_01_1k/vintage_grandfather_clock_01_1k.gltf'
+    name: GLTF_NAMES.VINTAGE_GRANDFATHER_CLOCK, src: 'in_room/decorative/vintage_grandfather_clock_01_1k/vintage_grandfather_clock_01_1k.gltf'
 }, {
     name: WEAPONS.BAYONET, src: 'weapons/bayonet.glb'
 }, {
@@ -332,11 +332,11 @@ const GLTFS = [{
 }, {
     name: WEAPONS.SMG_SHORT, src: 'weapons/smg1.glb'
 }, {
-    name: AMMUNITION.PISTOL_AMMO_BOX, src: 'pickableItems/ammunition/pistol_ammo_box.glb'
+    name: AMMUNITION.PISTOL_AMMO_BOX, src: 'pickable_items/ammunition/pistol_ammo_box.glb'
 }, {
-    name: AMMUNITION.MAGNUM_AMMO_BOX, src: 'pickableItems/ammunition/magnum_ammo_box.glb'
+    name: AMMUNITION.MAGNUM_AMMO_BOX, src: 'pickable_items/ammunition/magnum_ammo_box.glb'
 }, {
-    name: AMMUNITION.SMG_AMMO_BOX, src: 'pickableItems/ammunition/smg_ammo_box.glb'
+    name: AMMUNITION.SMG_AMMO_BOX, src: 'pickable_items/ammunition/smg_ammo_box.glb'
 }];
 
 const SHADER_NAMES = {

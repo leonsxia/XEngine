@@ -3,7 +3,7 @@ import { WorldScene } from './WorldScene.js';
 
 const worldSceneSpecs = {
     name: "Enemy Test Scene",
-    src: 'assets/sceneObjects/enemy_test_scene.json',
+    src: 'assets/scene_objects/enemy_test_scene.json',
     enableGui: true
 };
 

@@ -3,7 +3,7 @@ import { WorldScene } from './WorldScene.js';
 
 const worldSceneSpecs = {
     name: "Matrix",
-    src: 'assets/sceneObjects/matrix.json',
+    src: 'assets/scene_objects/matrix.json',
     enableGui: true
 };
 

@@ -2,7 +2,7 @@ import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionHexCylinder } from '../../../Models';
 
-const GLTF_SRC = 'inRoom/tables/round_wooden_table_01_1k/round_wooden_table_01_1k.gltf';
+const GLTF_SRC = 'in_room/tables/round_wooden_table_01_1k/round_wooden_table_01_1k.gltf';
 
 class RoundWoodenTable extends ObstacleBase {
 

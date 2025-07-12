@@ -3,7 +3,7 @@ import { GLTFModel, Sphere } from '../../../Models';
 import { khaki } from '../../../basic/colorBase';
 import { LightLamp } from './LightLamp';
 
-const GLTF_SRC = 'inRoom/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_01_1k.gltf';
+const GLTF_SRC = 'in_room/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_01_1k.gltf';
 
 class ModernCeilingLamp01 extends LightLamp {
 

@@ -2,7 +2,7 @@ import { WorldScene } from './WorldScene.js';
 
 const worldSceneSpecs = {
     name: "Water Room",
-    src: 'assets/sceneObjects/water_room.json',
+    src: 'assets/scene_objects/water_room.json',
     enableGui: true
 };
 

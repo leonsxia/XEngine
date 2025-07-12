@@ -3,7 +3,7 @@ import { WorldScene } from './WorldScene.js';
 
 const worldSceneSpecs = {
     name: "Animated Characters",
-    src: 'assets/sceneObjects/worldScene5.json',
+    src: 'assets/scene_objects/worldScene5.json',
     enableGui: true
 };
 

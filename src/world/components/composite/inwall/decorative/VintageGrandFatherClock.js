@@ -2,7 +2,7 @@ import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionBox } from '../../../Models';
 
-const GLTF_SRC = 'inRoom/decorative/vintage_grandfather_clock_01_1k/vintage_grandfather_clock_01_1k.gltf';
+const GLTF_SRC = 'in_room/decorative/vintage_grandfather_clock_01_1k/vintage_grandfather_clock_01_1k.gltf';
 
 class VintageGrandfatherClock extends ObstacleBase {
 

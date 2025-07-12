@@ -1,7 +1,7 @@
 import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionBox, Plane } from '../../../Models';
 
-const GLTF_SRC = 'inRoom/decorative/fancy_picture_frame_01_1k/fancy_picture_frame_01_1k.gltf';
+const GLTF_SRC = 'in_room/decorative/fancy_picture_frame_01_1k/fancy_picture_frame_01_1k.gltf';
 
 class FancyPictureFrame01 extends ObstacleBase {
 

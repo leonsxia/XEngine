@@ -2,7 +2,7 @@ import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionBox } from '../../../Models';
 
-const GLTF_SRC = 'inRoom/shelves/Shelf_01_1k/Shelf_01_1k.gltf';
+const GLTF_SRC = 'in_room/shelves/Shelf_01_1k/Shelf_01_1k.gltf';
 
 class Shelf01 extends ObstacleBase {
 

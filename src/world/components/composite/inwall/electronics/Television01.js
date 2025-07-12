@@ -5,7 +5,7 @@ import { TVNoise } from '../../../basic/colorBase';
 import { LightLamp } from '../lighting/LightLamp';
 import { updateSingleLightCamera } from '../../../shadowMaker';
 
-const GLTF_SRC = 'inRoom/electronics/Television_01_1k/Television_01_1k.gltf';
+const GLTF_SRC = 'in_room/electronics/Television_01_1k/Television_01_1k.gltf';
 
 class Television01 extends LightLamp {
 

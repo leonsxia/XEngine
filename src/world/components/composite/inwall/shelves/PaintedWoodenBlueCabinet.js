@@ -2,7 +2,7 @@ import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { GLTFModel, CollisionBox } from '../../../Models';
 
-const GLTF_SRC = 'inRoom/shelves/painted_wooden_cabinet_02_1k/painted_wooden_cabinet_02_1k.gltf';
+const GLTF_SRC = 'in_room/shelves/painted_wooden_cabinet_02_1k/painted_wooden_cabinet_02_1k.gltf';
 
 class PaintedWoodenBlueCabinet extends ObstacleBase {
 

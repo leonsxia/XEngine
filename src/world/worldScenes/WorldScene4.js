@@ -2,7 +2,7 @@ import { WorldScene } from './WorldScene.js';
 
 const worldSceneSpecs = {
     name: "Simple Physics",
-    src: 'assets/sceneObjects/worldScene4.json',
+    src: 'assets/scene_objects/worldScene4.json',
     enableGui: true
 };
 

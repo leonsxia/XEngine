@@ -2,7 +2,7 @@ import { Vector3 } from 'three';
 import { GLTFModel } from '../../../Models';
 import { LightLamp } from './LightLamp';
 
-const GLTF_SRC = 'inRoom/lighting/security_light_1k/security_light_1k.gltf';
+const GLTF_SRC = 'in_room/lighting/security_light_1k/security_light_1k.gltf';
 
 class SecurityLight extends LightLamp {
 
