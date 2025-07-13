@@ -4,16 +4,20 @@ class WeaponItem extends PickableItem {
 
     isWeaponItem = true;
 
-    _weaponType;
-    _ammo;
+    weaponType;
+    ammo;
+    isArmed = false;    
 
     constructor(specs) {
         
         super(specs);
 
-        const { weaponType, ammo } = specs;
-        this._weaponType = weaponType;
-        this._ammo = ammo;
+        const { weaponType, ammoInstance, isArmed = false } = specs;
+        this.weaponType = weaponType;
+        this.ammo = ammoInstance;
+        this.isArmed = isArmed;
+
+        this.count = 1;
 
     }
 

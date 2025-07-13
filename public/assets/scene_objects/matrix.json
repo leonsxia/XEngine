@@ -347,7 +347,13 @@
                         0
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1"
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false,
+                    "ammo": {
+                        "count": 30
+                    }
                 }
             ]
         },

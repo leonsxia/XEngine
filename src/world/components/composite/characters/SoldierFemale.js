@@ -184,7 +184,7 @@ class SoldierFemale extends CombatPlayerBase {
                 armedHeight,
                 attackInterval: 0.4667,
                 fireRate: 1.8,
-                ammo: new Ammo({ count: 50, damage: 18, offset: - 5, offset1: 10 }),
+                ammo: new Ammo({ count: 50, damage: 18, offset0: - 5, offset1: 10 }),
                 magzineCapacity: 50
             }),
             new Revolver({
@@ -196,7 +196,7 @@ class SoldierFemale extends CombatPlayerBase {
                 armedHeight,
                 attackInterval: 1.05,
                 fireRate: 0.8,
-                ammo: new Ammo({ count: 6, damage: 60, offset: - 10, offset1: 45 }),
+                ammo: new Ammo({ count: 6, damage: 60, offset0: - 10, offset1: 45 }),
                 magzineCapacity: 6
             }),
             new SMGShort({
@@ -208,7 +208,7 @@ class SoldierFemale extends CombatPlayerBase {
                 armedHeight,
                 attackInterval: 0.08,
                 fireRate: 10.2,
-                ammo: new Ammo({ count: 35, damage: 7, offset: - 2, offset1: 2 }),
+                ammo: new Ammo({ count: 35, damage: 7, offset0: - 2, offset1: 2 }),
                 magzineCapacity: 35,
                 isSemiAutomatic: false
             }),

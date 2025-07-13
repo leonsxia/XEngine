@@ -10,6 +10,8 @@ const DEBUG = false;
 
 class WeaponBase {
 
+    name;
+
     gltf;
     group;
     hittingBox;
@@ -40,6 +42,8 @@ class WeaponBase {
     _emptyNick = 'empty';
     _animateMapping = {};
 
+    onAmmoChanged = [];
+
     #logger = new Logger(DEBUG, 'WeaponBase');
 
     constructor(specs) {
@@ -59,6 +63,8 @@ class WeaponBase {
         let { src } = specs;
 
         this.specs = specs;
+
+        this.name = name;
 
         this._weaponType = weaponType;
         this._gltfName = gltfName;
@@ -219,6 +225,7 @@ class WeaponBase {
     set ammoCount(val) {
 
         this._ammo.count = val;
+        this.doAmmoChangedEvents();
 
     }
 
@@ -289,6 +296,7 @@ class WeaponBase {
         }
 
         this.resetWeaponEmpty();
+        this.doAmmoChangedEvents();
 
     }
 
@@ -330,6 +338,42 @@ class WeaponBase {
         if (this.animateEnabled) {
 
             this.AWS.actions[this._emptyNick].stop();
+
+        }
+
+    }
+
+    updateWeaponProperties(item) {
+
+        this._prepareInterval = item.specs.prepareInterval ?? this._prepareInterval;
+        this._attackInterval = item.specs.attackInterval ?? this._attackInterval;
+        this._startTime = item.specs.startTime ?? this._startTime;
+        this._endTime = item.specs.endTime ?? this._endTime;
+        this._fireRate = item.specs.fireRate ?? this._fireRate;
+        this._damageRange = item.specs.damageRange ?? this._damageRange;
+        this._damageRadius = item.specs.damageRadius ?? this._damageRadius;
+        this._armedHeight = item.specs.armedHeight ?? this._armedHeight;
+        this._isSemiAutomatic = item.specs.isSemiAutomatic ?? this._isSemiAutomatic;
+        this._magzineCapacity = item.specs.magzineCapacity ?? this._magzineCapacity;
+        
+        if (item.ammo) {
+
+            this._ammo.updateAmmoProperties(item.ammo);
+
+        }
+
+    }
+
+    doAmmoChangedEvents() {
+
+        for (let i = 0, il = this.onAmmoChanged.length; i < il; i++) {
+
+            const callback = this.onAmmoChanged[i];
+            if (typeof callback === 'function') {
+
+                callback(this);
+
+            }
 
         }
 

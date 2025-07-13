@@ -73,6 +73,7 @@ class WorldScene {
     loadSequence = 0;
     showRoleSelector = false;
 
+    currentRoom;
     pickables = [];
 
     combat = null;
@@ -257,6 +258,21 @@ class WorldScene {
                         }
 
                     });
+
+                    player.pda.onInventoryItemChanged.push((item) => {
+
+                        this.physics.setScenePickables(item);
+                        this.updatePickaleItem(item);
+
+                    });
+
+                    const pickedItems = this.pickables.filter(p => p.isPicked && p.belongTo === player.name);
+                    for (let j = 0, jl = pickedItems.length; j < jl; j++) {
+
+                        const item = pickedItems[j];
+                        player.addPickableItem(item);
+
+                    }
 
                 }
 
@@ -559,11 +575,17 @@ class WorldScene {
 
         this.focusNextProcess(forceStaticRender);
 
-        const currentRoom = this.rooms[this.loadSequence];
-        this.physics.initPhysics(currentRoom);
-        this.physics.addScenePickables(...this.pickables.filter(p => p.currentRoom === currentRoom.name));
-        this.pickables.filter(p => p.currentRoom !== currentRoom.name).forEach(p => p.setModelVisible(false));
-        this.player.updateRoomInfo?.(currentRoom);
+        this.currentRoom = this.rooms[this.loadSequence];
+        this.player.updateRoomInfo?.(this.currentRoom);
+        this.physics.initPhysics(this.currentRoom);
+        this.physics.setScenePickables(...this.pickables);
+
+        for (let i = 0, il = this.pickables.length; i < il; i++) {
+
+            const pickableItem = this.pickables[i];
+            this.updatePickaleItem(pickableItem);
+
+        }
 
         for (let i = 0, il = this.rooms.length; i < il; i++) {
 
@@ -814,6 +836,20 @@ class WorldScene {
     disablePlayerPda() {
 
         if (this.player?.pda?.visible) this.player.pda.visible = false;
+
+    }
+
+    updatePickaleItem(item) {
+
+        if (item.count === 0 || item.currentRoom !== this.currentRoom.name || item.isPicked) {
+
+            item.setModelVisible(false);
+
+        } else {
+
+            item.setModelVisible(true);
+
+        }
 
     }
 

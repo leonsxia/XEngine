@@ -18,6 +18,16 @@ class Ammo {
 
     }
 
+    updateAmmoProperties(ammo) {
+
+        this._type = ammo._type;
+        this._count = ammo._count;
+        this._damage = ammo._damage;
+        this._offset0 = ammo._offset0;
+        this._offset1 = ammo._offset1;
+
+    }
+
     get count() {
 
         return this._count;

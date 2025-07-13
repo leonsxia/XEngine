@@ -11,6 +11,7 @@ class PickableItem extends ObstacleBase {
 
     isPickableItem = true;
     isPicked = false;
+    belongTo = undefined;
 
     currentRoom;
 
@@ -25,6 +26,7 @@ class PickableItem extends ObstacleBase {
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { src, receiveShadow = true, castShadow = true } = specs;
         const { currentRoom } = specs;
+        const { isPicked = false, belongTo } = specs;
 
         this._width = width;
         this._height = height;
@@ -33,6 +35,8 @@ class PickableItem extends ObstacleBase {
         this._gltfScale = gltfScale;
 
         this.currentRoom = currentRoom;
+        this.isPicked = isPicked;
+        this.belongTo = belongTo;
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetX, offsetY, offsetZ, receiveShadow, castShadow };

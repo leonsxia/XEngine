@@ -39,6 +39,8 @@ class SimplePhysics {
 
     isActive = true;
 
+    _currentRoom;
+
     constructor(players = [], enemies = []) {
 
         this.players = players;
@@ -168,11 +170,32 @@ class SimplePhysics {
 
         this.collisionPlanes = this.walls.concat(this.slopes).map(plane => plane.mesh || plane.slope.mesh);
 
+        this._currentRoom = room.name;
+
     }
 
-    addScenePickables(...objects) {
+    setScenePickables(...objects) {
 
-        this.obstacles.push(...objects);
+        for (let i = 0, il = objects.length; i < il; i++) {
+
+            const obj = objects[i];
+            const idx = this.obstacles.findIndex(o => o === obj);
+
+            if (!obj.isPicked && obj.currentRoom === this._currentRoom && obj.count >= 1) {
+
+                if (idx === -1) {
+
+                    this.obstacles.push(obj);
+
+                }
+
+            } else if (idx > -1) {
+
+                this.obstacles.splice(idx, 1);
+
+            }
+
+        }    
 
     }
 

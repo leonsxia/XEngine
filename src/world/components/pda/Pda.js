@@ -2,6 +2,7 @@ import { container, createPdaContainer } from "../../systems/htmlElements";
 import { Logger } from "../../systems/Logger";
 import { CONTROL_TYPES } from "../utils/constants";
 import { PdaMenu } from "./PdaMenu";
+import { Inventory } from "./tabs/Inventory";
 
 const DEBUG = true;
 
@@ -11,8 +12,10 @@ class Pda {
     _pdaContainer;
     _visible = false;
     onVisibleChanged = [];
+    onInventoryItemChanged = [];
 
     _pdaMenu;
+    _inventory;
 
     _xboxControllerConnected;
 
@@ -26,6 +29,8 @@ class Pda {
 
         this._pdaMenu = new PdaMenu();
         this._pdaContainer.appendChild(this._pdaMenu.menu);
+
+        this._inventory = new Inventory({ attachTo: this });
 
         this._attachTo = specs.attachTo;
 
@@ -85,6 +90,7 @@ class Pda {
 
     }
 
+    // control events start
     goUp(val) {
         this.#logger.func = this.goUp.name;
         this.#logger.log(`goUp: ${val}`);
@@ -159,8 +165,67 @@ class Pda {
         }
 
     }
+    // control events end
 
-    updateInventoryItems() {}
+    // inventory
+    updateInventoryItems() {
+
+        for (let i = 0, il = this._inventory.items.length; i < il; i++) {
+
+            const item = this._inventory.items[i];
+            item.currentRoom = this._attachTo.currentRoom;
+
+        }
+
+    }
+
+    updateInventoryWeapon(weapon) {
+
+        this.#logger.func = this.updateInventoryWeapon.name;
+
+        const filter = this._inventory.findItems(i => i.weaponType === weapon.weaponType);
+        if (filter.length > 0) {
+
+            const weaponItem = filter[0];
+            weaponItem.ammo.updateAmmoProperties(weapon.ammo);
+            this.#logger.log(`weapon item: ${weaponItem.name}, count: ${weaponItem.ammo.count}`);
+
+        } else {
+
+            this.#logger.log(`there is no item bound to weapon: ${weapon.name}`);
+
+        }
+
+    }
+
+    addInventoryItem(item) {
+
+        this._inventory.add(item);        
+        this.doInventoryItemChangedEvents(item);        
+
+    }
+
+    removeInventoryItem(item) {
+
+        this._inventory.remove(item);        
+        this.doInventoryItemChangedEvents(item);
+
+    }
+
+    doInventoryItemChangedEvents(item) {
+
+        for (let i = 0, il = this.onInventoryItemChanged.length; i < il; i++) {
+
+            const callback = this.onInventoryItemChanged[i];
+            if (typeof callback === 'function') {
+
+                callback(item);
+
+            }
+
+        }
+
+    }
 
 }
 

@@ -37,7 +37,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     _cancelGunPoint = false;
     _cancelShoot = false;
 
-    _currentRoom;
+    currentRoom;
 
     constructor(specs) {
 
@@ -94,6 +94,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this.showSkeleton(false);
         this.bindEvents();
+        this.bindWeaponEvents();
 
         this.gltf.visible = true;
 
@@ -126,9 +127,40 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     }
 
+    addPickableItem(item) {
+
+        if (item.isWeaponItem) {
+
+            if (item.isArmed) {
+
+                const matched = this.weapons.find(w => w.weaponType === item.weaponType);
+
+                if (matched) {
+
+                    if (!matched.ammo.isMeleeWeapon) {
+
+                        matched.updateWeaponProperties(item);
+                        this.armWeapon(matched);
+
+                    } else {
+
+                        this._meleeWeapon = matched;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        this.pda.addInventoryItem(item);
+
+    }
+
     updateRoomInfo(room) {
 
-        this._currentRoom = room.name;
+        this.currentRoom = room.name;
         this.pda.updateInventoryItems();
 
     }
@@ -164,6 +196,20 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this.gltf.addEventListener(type, listener);
         this.gltf.eventList.set(type, listener);
+
+    }
+
+    bindWeaponEvents() {
+
+        for (let i = 0, il = this.weapons.length; i < il; i++) {
+
+            this.weapons[i].onAmmoChanged.push((weapon) => {
+
+                this.pda.updateInventoryWeapon(weapon);
+
+            });
+
+        }
 
     }
 
