@@ -350,7 +350,7 @@
                     "currentRoom": "room1",
                     "belongTo": "jill",
                     "isPicked": true,
-                    "isArmed": false,
+                    "isArmed": true,
                     "ammo": {
                         "count": 30
                     }

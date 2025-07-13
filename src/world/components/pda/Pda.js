@@ -168,6 +168,12 @@ class Pda {
     // control events end
 
     // inventory
+    findInventoryItems(predication) {
+
+        return this._inventory.findItems(predication);
+
+    }
+
     updateInventoryItems() {
 
         for (let i = 0, il = this._inventory.items.length; i < il; i++) {

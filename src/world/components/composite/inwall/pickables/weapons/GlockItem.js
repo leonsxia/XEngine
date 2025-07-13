@@ -16,7 +16,7 @@ class GlockItem extends WeaponItem {
         specs.weaponType = WEAPONS.GLOCK;
         specs.src = specs.src ?? GLTF_SRC;
 
-        const { ammo: { count = 20, damage = 18, offset0 = - 5, offset1 = 10 } } = specs;
+        const { count = 20, damage = 18, offset0 = - 5, offset1 = 10 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.PISTOL_9MM, count, damage, offset0, offset1 });
         super(specs);
 

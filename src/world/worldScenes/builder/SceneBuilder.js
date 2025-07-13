@@ -444,7 +444,7 @@ class SceneBuilder {
     saveScene() {
 
         this.worldScene.stop();
-        this.updateScene(this.worldScene.sceneSavedSetup, null, false, false, true);
+        this.updateScene(this.worldScene.sceneSavedSetup, null, false, false, false, true);
         const savedJson = JSON.stringify(this.worldScene.sceneSavedSetup);
         const savedBlob = new Blob([savedJson], {type: 'application/json'});
 
@@ -480,7 +480,7 @@ class SceneBuilder {
 
                 const loadJson = JSON.parse(text);
 
-                $this.updateScene($this.worldScene.sceneSetup, loadJson, false, false, false);
+                $this.updateScene($this.worldScene.sceneSetup, loadJson, false, false, true, false);
 
                 if ($this.worldScene.staticRendering) {
 
@@ -503,11 +503,11 @@ class SceneBuilder {
 
     resetScene() {
 
-        this.updateScene(this.worldScene.sceneSetup, this.worldScene.sceneSetupCopy, true, true);
+        this.updateScene(this.worldScene.sceneSetup, this.worldScene.sceneSetupCopy, true, true, true);
 
     }
 
-    updateScene(_setup, _targetSetup, needResetPlayers = false, needResetEnemies = false, updateSetupOnly = false) {
+    updateScene(_setup, _targetSetup, needResetPlayers = false, needResetEnemies = false, needResetPickables = false, updateSetupOnly = false) {
 
         const { players = [], enemies = [], lights, objects } = _setup;
         const sceneSpecs = objects.find(o => o.type === SCENE);
@@ -585,6 +585,13 @@ class SceneBuilder {
 
             }
 
+        }
+
+        if (needResetPickables) {
+            
+            this.worldScene.updatePickables();
+            this.worldScene.updatePlayerInventoryItems();
+        
         }
 
         for (let i = 0, il = roomSpecs.length; i < il; i++) {
@@ -1085,12 +1092,16 @@ class SceneBuilder {
                         if (updateSetupOnly) {
 
                             _origin.currentRoom = find.father.currentRoom;
+                            _origin.ammo ? _origin.ammo.count = find.father.ammo.count : _origin.ammo = { count: find.father.ammo.count };
 
                         } else {
 
                             const { currentRoom = '' } = _target;
+                            // if sceneSetupCopy object has no ammo, then check sceneSetup object
+                            const { count } = _target.ammo ?? _origin.ammo;
 
                             find.father.currentRoom = currentRoom;
+                            find.father.ammo.count = count;
 
                         }
 

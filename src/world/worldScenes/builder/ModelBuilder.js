@@ -214,6 +214,8 @@ class ModelBuilder {
         object.setPosition(position)
             .setRotationY(rotationY);
 
+        if (!specs.ammo) specs.ammo = { count: object.ammo.count };
+
         if (updateOBBs) object.updateOBBs();
 
         return object;

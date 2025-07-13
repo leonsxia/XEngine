@@ -472,6 +472,28 @@
                     "rotation": [1.5708, 0, 0],
                     "receiveShadow": true,
                     "castShadow": false
+                },
+                {
+                    "type": "Glock",
+                    "src": "GLOCK_ITEM",
+                    "name": "room1_glock",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        3,
+                        2,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
                 }
             ]
         },

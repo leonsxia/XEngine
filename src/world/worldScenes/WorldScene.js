@@ -261,8 +261,7 @@ class WorldScene {
 
                     player.pda.onInventoryItemChanged.push((item) => {
 
-                        this.physics.setScenePickables(item);
-                        this.updatePickaleItem(item);
+                        this.updatePickableItem(item);
 
                     });
 
@@ -578,14 +577,7 @@ class WorldScene {
         this.currentRoom = this.rooms[this.loadSequence];
         this.player.updateRoomInfo?.(this.currentRoom);
         this.physics.initPhysics(this.currentRoom);
-        this.physics.setScenePickables(...this.pickables);
-
-        for (let i = 0, il = this.pickables.length; i < il; i++) {
-
-            const pickableItem = this.pickables[i];
-            this.updatePickaleItem(pickableItem);
-
-        }
+        this.updatePickables();
 
         for (let i = 0, il = this.rooms.length; i < il; i++) {
 
@@ -839,7 +831,69 @@ class WorldScene {
 
     }
 
-    updatePickaleItem(item) {
+    updatePlayerInventoryItems() {
+
+        for (let i = 0, il = this.pickables.length; i < il; i++) {
+
+            const item = this.pickables[i];
+
+            for (let j = 0, jl = this.players.length; j < jl; j++) {
+
+                const player = this.players[j];
+                if (player.isCombatPlayer) {
+
+                    const filter = player.pda.findInventoryItems(ii => ii === item);
+                    if (filter.length > 0) {
+
+                        const find = filter[0];
+                        if (item.isPicked) {
+
+                            item.currentRoom = player.currentRoom;
+                            const bindWeapon = player.weapons.find(w => w.weaponType === item.weaponType);
+
+                            if (bindWeapon) {
+
+                                bindWeapon.fillMagzine(item.ammo.count);
+
+                            }
+
+                        } else if (!item.isPicked) {
+
+                            player.pda.removeInventoryItem(find);
+
+                        }
+
+                        break;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    updatePickableItem(item) {
+
+        this.physics.setScenePickables(item);
+        this.setPickableItemVisible(item);
+
+    }
+
+    updatePickables() {
+
+        for (let i = 0, il = this.pickables.length; i < il; i++) {
+
+            const item = this.pickables[i];
+            this.updatePickableItem(item);
+
+        }
+
+    }
+
+    setPickableItemVisible(item) {
 
         if (item.count === 0 || item.currentRoom !== this.currentRoom.name || item.isPicked) {
 
