@@ -1,6 +1,6 @@
 import { WeaponBase } from '../../Models';
 import { createOBBBox } from '../../physics/collisionHelper';
-import { WEAPONS } from '../../utils/constants';
+import { AMMOS, GLTF_NAMES, WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
 const GLTF_SRC = 'weapons/bayonet.glb';
@@ -11,6 +11,7 @@ class Bayonet extends WeaponBase {
 
         const superSpecs = {
             weaponType: WEAPONS.BAYONET,
+            gltfName: GLTF_NAMES.BAYONET_ITEM,
             name: null,
             scale: [.25, .25, .25],
             position: [0, 0, 0],
@@ -25,7 +26,7 @@ class Bayonet extends WeaponBase {
             damageRange: 1,
             prepareInterval: 0.5,
             fireRate: 1.25,
-            ammo: new Ammo({ isMeleeWeapon: true, damage: 30, offset0: - 10, offset1: 10 })
+            ammo: new Ammo({ type: AMMOS.BAYONET, isMeleeWeapon: true, damage: 30, offset0: - 10, offset1: 10 })
         };
 
         Object.assign(superSpecs, specs);

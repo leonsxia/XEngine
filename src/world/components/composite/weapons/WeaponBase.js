@@ -23,6 +23,7 @@ class WeaponBase {
     _animationSettings = {};
 
     _weaponType;
+    _gltfName;
     _prepareInterval;
     _attackInterval;
     _startTime;
@@ -48,7 +49,7 @@ class WeaponBase {
         const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { 
-            weaponType, 
+            weaponType, gltfName,
             prepareInterval = 0, attackInterval = 1, startTime = 0, endTime = 1, fireRate = 1, 
             damageRange = 0, damageRadius = Math.PI, armedHeight = 0,
             magzineCapacity = 0, ammo = new Ammo(), 
@@ -60,6 +61,7 @@ class WeaponBase {
         this.specs = specs;
 
         this._weaponType = weaponType;
+        this._gltfName = gltfName;
         this._prepareInterval = prepareInterval;
         this._attackInterval = attackInterval;
         this._startTime = startTime;
@@ -79,9 +81,9 @@ class WeaponBase {
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
 
-        if (loadedGLTFModels[weaponType]) {
+        if (loadedGLTFModels[gltfName]) {
 
-            src = loadedGLTFModels[weaponType];
+            src = loadedGLTFModels[gltfName];
 
         }
 
@@ -107,9 +109,9 @@ class WeaponBase {
 
         await this.gltf.init();
 
-        if (!loadedGLTFModels[this._weaponType]) {
+        if (!loadedGLTFModels[this._gltfName]) {
 
-            loadedGLTFModels[this._weaponType] = this.gltf.gltf;
+            loadedGLTFModels[this._gltfName] = this.gltf.gltf;
 
         }
 

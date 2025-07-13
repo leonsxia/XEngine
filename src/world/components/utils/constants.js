@@ -29,13 +29,20 @@ const BLACK_WIDOW = 'BlackWidow';
 
 // weapons
 const WEAPONS = {
-    NONE: 'NONE',
-    PISTOL1: 'PISTOL1',
-    GLOCK: 'GLOCK',
-    BAYONET: 'BAYONET',
-    REVOLVER: 'REVOLVER',
-    SMG_SHORT: 'SMG_SHORT'
+    NONE: 'None',
+    PISTOL1: 'Pistol1',
+    GLOCK: 'Glock',
+    BAYONET: 'Bayonet',
+    REVOLVER: 'Revolver',
+    SMG_SHORT: 'SMGShort'
 };
+
+const AMMOS = {
+    BAYONET: 'BayonetAmmo',
+    PISTOL_9MM: '9MMAmmo',
+    MAGNUM: '.375Ammo',
+    SMG: 'SMGAmmo'
+}
 
 // objects
 const PLANE = 'Plane';
@@ -84,9 +91,9 @@ const VINTAGE_GRANDFATHER_CLOCK = 'VintageGrandfatherClock';
 
 // pickable items
 const AMMUNITION = {
-    PISTOL_AMMO_BOX: 'PISTOL_AMMO_BOX',
-    MAGNUM_AMMO_BOX: 'MAGNUM_AMMO_BOX',
-    SMG_AMMO_BOX: 'SMG_AMMO_BOX'
+    PISTOL_AMMO_BOX: 'PistolAmmoBox',
+    MAGNUM_AMMO_BOX: 'MagnumAmmoBox',
+    SMG_AMMO_BOX: 'SMGAmmoBox'
 }
 
 // cameras
@@ -256,6 +263,15 @@ const GLTF_NAMES = {
     // creatures
     ZOMBIE_MALE: 'ZOMBIE_MALE',
     BLACK_WIDOW: 'BLACK_WIDOW',
+    // pickable items
+    GLOCK_ITEM: 'GLOCK_ITEM',
+    PISTOL1_ITEM: 'PISTOL1_ITEM',
+    REVOLVER_ITEM: 'REVOLVER_ITEM',
+    SMG_SHORT_ITEM: 'SMG_SHORT_ITEM',
+    BAYONET_ITEM: 'BAYONET_ITEM',
+    PISTOL_AMMO_BOX_ITEM: 'PISTOL_AMMO_BOX_ITEM',
+    MAGNUM_AMMO_BOX_ITEM: 'MAGNUM_AMMO_BOX_ITEM',
+    SMG_AMMO_BOX_ITEM: 'SMG_AMMO_BOX_ITEM',
     // tables
     WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
     WOODEN_TABLE: 'WOODEN_TABLE',
@@ -322,21 +338,21 @@ const GLTFS = [{
 }, {
     name: GLTF_NAMES.VINTAGE_GRANDFATHER_CLOCK, src: 'in_room/decorative/vintage_grandfather_clock_01_1k/vintage_grandfather_clock_01_1k.gltf'
 }, {
-    name: WEAPONS.BAYONET, src: 'weapons/bayonet.glb'
+    name: GLTF_NAMES.BAYONET_ITEM, src: 'weapons/bayonet.glb'
 }, {
-    name: WEAPONS.PISTOL1, src: 'weapons/pistol.glb'
+    name: GLTF_NAMES.PISTOL1_ITEM, src: 'weapons/pistol.glb'
 }, {
-    name: WEAPONS.GLOCK, src: 'weapons/glock19.glb'
+    name: GLTF_NAMES.GLOCK_ITEM, src: 'weapons/glock19.glb'
 }, {
-    name: WEAPONS.REVOLVER, src: 'weapons/revolver.glb'
+    name: GLTF_NAMES.REVOLVER_ITEM, src: 'weapons/revolver.glb'
 }, {
-    name: WEAPONS.SMG_SHORT, src: 'weapons/smg1.glb'
+    name: GLTF_NAMES.SMG_SHORT_ITEM, src: 'weapons/smg1.glb'
 }, {
-    name: AMMUNITION.PISTOL_AMMO_BOX, src: 'pickable_items/ammunition/pistol_ammo_box.glb'
+    name: GLTF_NAMES.PISTOL_AMMO_BOX_ITEM, src: 'pickable_items/ammunition/pistol_ammo_box.glb'
 }, {
-    name: AMMUNITION.MAGNUM_AMMO_BOX, src: 'pickable_items/ammunition/magnum_ammo_box.glb'
+    name: GLTF_NAMES.MAGNUM_AMMO_BOX_ITEM, src: 'pickable_items/ammunition/magnum_ammo_box.glb'
 }, {
-    name: AMMUNITION.SMG_AMMO_BOX, src: 'pickable_items/ammunition/smg_ammo_box.glb'
+    name: GLTF_NAMES.SMG_AMMO_BOX_ITEM, src: 'pickable_items/ammunition/smg_ammo_box.glb'
 }];
 
 const SHADER_NAMES = {
@@ -466,6 +482,8 @@ export {
     BLACK_WIDOW,
 
     WEAPONS,
+    AMMOS,
+    AMMUNITION,
 
     PLANE,
     OBBPLANE,

@@ -73,6 +73,8 @@ class WorldScene {
     loadSequence = 0;
     showRoleSelector = false;
 
+    pickables = [];
+
     combat = null;
     ai = null;
     animeMixer = null;
@@ -221,7 +223,7 @@ class WorldScene {
         this.updatableQueue.add(this.combat);
 
         // anime mixer
-        this.animeMixer = new AnimeMixer(this.players, this.enemies);
+        this.animeMixer = new AnimeMixer(this.players, this.enemies, this.pickables);
         this.updatableQueue.add(this.animeMixer);
         
         this.loop.updatables.push(this.updatableQueue);
@@ -557,7 +559,11 @@ class WorldScene {
 
         this.focusNextProcess(forceStaticRender);
 
-        this.physics.initPhysics(this.rooms[this.loadSequence]);
+        const currentRoom = this.rooms[this.loadSequence];
+        this.physics.initPhysics(currentRoom);
+        this.physics.addScenePickables(...this.pickables.filter(p => p.currentRoom === currentRoom.name));
+        this.pickables.filter(p => p.currentRoom !== currentRoom.name).forEach(p => p.setModelVisible(false));
+        this.player.updateRoomInfo?.(currentRoom);
 
         for (let i = 0, il = this.rooms.length; i < il; i++) {
 

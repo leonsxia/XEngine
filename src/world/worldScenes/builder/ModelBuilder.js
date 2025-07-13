@@ -8,7 +8,8 @@ import {
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
     Television01,
     FancyPictureFrame01, VintageGrandfatherClock,
-    ModernCeilingLamp01, SecurityLight
+    ModernCeilingLamp01, SecurityLight,
+    GlockItem
 } from '../../components/Models.js';
 import {
     AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, CREATURE_BASE, ZOMBIE_MALE, BLACK_WIDOW,
@@ -21,7 +22,8 @@ import {
     TELEVISION_01,
     FANCY_PICTURE_FRAME_01, VINTAGE_GRANDFATHER_CLOCK,
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
-    TEXTURE_NAMES, GLTF_NAMES
+    TEXTURE_NAMES, GLTF_NAMES,
+    WEAPONS
 } from '../../components/utils/constants.js';
 import { createAxesHelper, createGridHelper } from '../../components/utils/helpers.js';
 
@@ -56,6 +58,7 @@ class ModelBuilder {
         this.objectCreationMapping[CREATURE_BASE] = this.createCreatureBase;
         this.objectCreationMapping[ZOMBIE_MALE] = this.createZombieMale;
         this.objectCreationMapping[BLACK_WIDOW] = this.createBlackWidow;
+        this.objectCreationMapping[WEAPONS.GLOCK] = this.createGlockItem;
         this.objectCreationMapping[AXES] = this.createAxes;
         this.objectCreationMapping[GRID] = this.createGrid;
         this.objectCreationMapping[PLANE] = this.createPlane;
@@ -194,6 +197,24 @@ class ModelBuilder {
             .setRotation(rotation)
             .updateOBB()
             .updateRay();
+
+        return object;
+
+    }
+
+    createGlockItem(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new GlockItem(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        if (updateOBBs) object.updateOBBs();
 
         return object;
 

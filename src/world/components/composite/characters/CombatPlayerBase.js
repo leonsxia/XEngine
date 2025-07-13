@@ -36,7 +36,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     _onMeleeHurtTargets = [];
     _cancelGunPoint = false;
     _cancelShoot = false;
-    
+
+    _currentRoom;
+
     constructor(specs) {
 
         const { name, src, receiveShadow = true, castShadow = true, hasBones = true } = specs;
@@ -121,6 +123,13 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         }
 
         return loadPromises;
+
+    }
+
+    updateRoomInfo(room) {
+
+        this._currentRoom = room.name;
+        this.pda.updateInventoryItems();
 
     }
 

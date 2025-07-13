@@ -60,11 +60,17 @@ class SceneBuilder {
             for (let i = 0, il = sceneObjects.length; i < il; i++) {
 
                 const obj = sceneObjects[i];
-                const { mesh, group } = obj;
+                const { mesh, group, isPickableItem } = obj;
 
                 if (mesh) worldScene.scene.add(mesh);
                 else if (group) worldScene.scene.add(group);
                 else worldScene.scene.add(obj);
+
+                if (isPickableItem) {
+
+                    worldScene.pickables.push(obj);
+
+                }
 
             }
 
@@ -1069,6 +1075,22 @@ class SceneBuilder {
                             const { scale = [1, 1] } = _target;
 
                             find.father.scale = scale;
+
+                        }
+
+                    }
+
+                    if (find.father.isPickableItem) {
+
+                        if (updateSetupOnly) {
+
+                            _origin.currentRoom = find.father.currentRoom;
+
+                        } else {
+
+                            const { currentRoom = '' } = _target;
+
+                            find.father.currentRoom = currentRoom;
 
                         }
 

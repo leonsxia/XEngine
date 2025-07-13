@@ -838,14 +838,22 @@ class ObstacleBase extends ObstacleMoveable {
 
         let result = false;
 
-        for (let i = 0; i < this.obbPlanes.length; i++) {
+        if (this.isPickableItem) {
 
-            const plane = this.obbPlanes[i];
+            result = this.box.obb.intersectsOBB(obb);
 
-            if (plane.obb.intersectsOBB(obb)) {
+        } else {
 
-                result = true;
-                break;
+            for (let i = 0; i < this.obbPlanes.length; i++) {
+
+                const plane = this.obbPlanes[i];
+
+                if (plane.obb.intersectsOBB(obb)) {
+
+                    result = true;
+                    break;
+
+                }
 
             }
 

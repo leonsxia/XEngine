@@ -170,6 +170,12 @@ class SimplePhysics {
 
     }
 
+    addScenePickables(...objects) {
+
+        this.obstacles.push(...objects);
+
+    }
+
     onBeforeTofuCollisionBoxChanged(tofu) {        
 
         for (let i = 0, il = tofu.walls.length; i < il; i++) {

@@ -29,6 +29,9 @@ export { Revolver } from './composite/weapons/Revolver.js';
 export { SMGShort } from './composite/weapons/SMGShort.js';
 export { Bayonet } from './composite/weapons/Bayonet.js';
 
+// Pickable Items
+export { GlockItem } from './composite/inwall/pickables/weapons/GlockItem.js';
+
 // Characters & Creatures
 export { Tofu } from './composite/tofu/Tofu.js';
 export { CustomizedCombatTofu } from './composite/characters/CustomizedCombatTofu.js';

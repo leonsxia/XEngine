@@ -12,7 +12,8 @@ import {
     Shelf01,
     PaintedWoodenNightstand,
     PaintedWoodenTable,
-    WoodenSmallTable
+    WoodenSmallTable,
+    GlockItem
 } from "../Models";
 
 function clone(target, source, ignore = []) {
@@ -99,7 +100,7 @@ function getInwallParent(object) {
 
     let target = null;
     
-    if (object.parent.isMesh || object.parent.isGroup) {
+    if (object.parent) {
 
         if (object.parent.isInwallObject) {
 
@@ -163,7 +164,8 @@ function objectFilter(object) {
         object instanceof Shelf01 ||
         object instanceof PaintedWoodenNightstand ||
         object instanceof PaintedWoodenTable ||
-        object instanceof WoodenSmallTable
+        object instanceof WoodenSmallTable ||
+        object instanceof GlockItem
     ) {
 
         return true;

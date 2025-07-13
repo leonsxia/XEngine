@@ -160,6 +160,8 @@ class Pda {
 
     }
 
+    updateInventoryItems() {}
+
 }
 
 export { Pda };
