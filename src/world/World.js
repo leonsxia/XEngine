@@ -293,7 +293,7 @@ class World {
 
     setGuiAndInfo() {
 
-        if (this._mouse.triggered && !Keyboard.isKeyboardOn) {
+        if (this._mouse.triggered) {
 
             if (!this._showGuiAndInfo) {
 
@@ -327,7 +327,7 @@ class World {
 
             case CONTROL_TYPES.KEYBOARD:
                 this._keyboard.triggered = true;
-                this._mouse.triggered = false;
+                if (this.currentScene.isPdaOn) this._mouse.triggered = false;
                 this._xboxController.triggered = false;
                 this._xboxController.disconnectXboxController();
                 break;

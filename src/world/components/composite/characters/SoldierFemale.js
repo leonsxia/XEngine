@@ -232,7 +232,7 @@ class SoldierFemale extends CombatPlayerBase {
         ];
 
         const weaponActionMapping = WEAPON_ACTION_MAPPING;
-        const initialWeapon = weapons.find(w => w.weaponType === WEAPONS.GLOCK);
+        const initialWeaponType = WEAPONS.NONE;
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
@@ -241,7 +241,7 @@ class SoldierFemale extends CombatPlayerBase {
             scale,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,
             sovRadius, showBS, enableCollision, createDefaultBoundingObjects,
-            weaponActionMapping, initialWeapon, weapons,
+            weaponActionMapping, initialWeaponType, weapons,
             HPMax
         };
 
@@ -263,7 +263,7 @@ class SoldierFemale extends CombatPlayerBase {
 
         this.setupWeaponScale();
         
-        this.armWeapon(this.initialWeapon);
+        this.armWeapon();
         
     }
 

@@ -389,7 +389,7 @@ class GuiMaker {
                     'Glock 19': $scene.armWeapon.bind($scene, WEAPONS.GLOCK),
                     'Magnum357': $scene.armWeapon.bind($scene, WEAPONS.REVOLVER),
                     'SMG Short': $scene.armWeapon.bind($scene, WEAPONS.SMG_SHORT),
-                    _inactive: ['Pistol1', 'Magnum357', 'SMG Short']
+                    _inactive: ['Pistol1', 'Glock 19', 'Magnum357', 'SMG Short']
                 }
             };
 

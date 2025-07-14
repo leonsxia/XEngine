@@ -93,6 +93,8 @@ class Keyboard extends InputBase {
 
     recoverMoveEventFromPda() {
 
+        if (this.attachTo.currentScene.isPdaOn) return;
+
         const eventDispatcher = this.eventDispatcher;
         const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
         const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
@@ -274,6 +276,8 @@ class Keyboard extends InputBase {
                     eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, this.#pda);
 
                     this.recoverMoveEventFromPda();
+                    // make sure when pda is on the gui and cursor should hide
+                    world.switchInput(CONTROL_TYPES.KEYBOARD);
 
                     break;
 

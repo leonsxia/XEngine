@@ -50,7 +50,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
         const { showBS = false } = specs;
         const { createDefaultBoundingObjects = true, enableCollision = true } = specs;
-        const { weaponActionMapping = {}, initialWeapon, weapons = [] } = specs;
+        const { weaponActionMapping = {}, initialWeaponType, weapons = [] } = specs;
         const { HPMax = 100 } = specs;
 
         super({ 
@@ -58,7 +58,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, 
             rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, aimVel, aimTime,
             createDefaultBoundingObjects, enableCollision,
-            weaponActionMapping, initialWeapon, weapons,
+            weaponActionMapping, initialWeaponType, weapons,
             HPMax
         });
 
@@ -280,6 +280,10 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 this.AWS.copyActionEffectiveWeight(idle.nick, this.currentActionType.idle.nick);
                 this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 0);
 
+                if (this.AWS.activeAction === this.AWS.actions[this.currentActionType.idle.nick]) {
+                    this.AWS.activeAction = this.AWS.actions[idle.nick];
+                }
+
             }
 
             if (walk.nick !== this.currentActionType.walk.nick) {
@@ -287,12 +291,20 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 this.AWS.copyActionEffectiveWeight(walk.nick, this.currentActionType.walk.nick);
                 this.AWS.setActionEffectiveWeight(this.currentActionType.walk.nick, 0);
 
+                if (this.AWS.activeAction === this.AWS.actions[this.currentActionType.walk.nick]) {
+                    this.AWS.activeAction = this.AWS.actions[walk.nick];
+                }
+
             }
 
             if (run.nick !== this.currentActionType.run.nick) {
 
                 this.AWS.copyActionEffectiveWeight(run.nick, this.currentActionType.run.nick);
                 this.AWS.setActionEffectiveWeight(this.currentActionType.run.nick, 0);
+
+                if (this.AWS.activeAction === this.AWS.actions[this.currentActionType.run.nick]) {
+                    this.AWS.activeAction = this.AWS.actions[run.nick];
+                }
 
             }
 

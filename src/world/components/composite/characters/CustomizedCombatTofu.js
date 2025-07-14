@@ -12,7 +12,6 @@ class CustomizedCombatTofu extends Tofu {
 
     weaponActionMapping = {};
     currentActionType;
-    initialWeapon;
     weapons = [];
 
     collisionBoxMap = new Map();
@@ -31,14 +30,12 @@ class CustomizedCombatTofu extends Tofu {
         super(specs);
 
         const { enableCollision = true } = specs;
-        const { weaponActionMapping = {}, initialWeapon, weapons = [] } = specs;
+        const { weaponActionMapping = {}, initialWeaponType, weapons = [] } = specs;
         const { createDefaultBoundingObjects = true } = specs;
 
         this.weaponActionMapping = weaponActionMapping;
-        this.initialWeapon = initialWeapon;
         this.weapons = weapons;
 
-        const initialWeaponType = this.initialWeapon.weaponType;
         if (enableCollision) {
             
             this.createCollisionBoxes();
