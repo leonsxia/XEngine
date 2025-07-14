@@ -131,15 +131,16 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         if (item.isWeaponItem) {
 
-            if (item.isArmed) {
+            const matched = this.weapons.find(w => w.weaponType === item.weaponType);
 
-                const matched = this.weapons.find(w => w.weaponType === item.weaponType);
+            if (matched) {
 
-                if (matched) {
+                matched.updateWeaponProperties(item);
+
+                if (item.isArmed) {
 
                     if (!matched.ammo.isMeleeWeapon) {
 
-                        matched.updateWeaponProperties(item);
                         this.armWeapon(matched);
 
                     } else {
