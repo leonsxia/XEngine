@@ -476,7 +476,7 @@
                 {
                     "type": "Glock",
                     "src": "GLOCK_ITEM",
-                    "name": "room1_glock",
+                    "name": "glock",
                     "scale": [
                         1,
                         1,
@@ -485,8 +485,8 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        3,
-                        2,
+                        0,
+                        0,
                         0
                     ],
                     "rotationY": 0,
@@ -498,7 +498,7 @@
                 {
                     "type": "Bayonet",
                     "src": "BAYONET_ITEM",
-                    "name": "room1_bayonet",
+                    "name": "bayonet",
                     "scale": [
                         1,
                         1,
@@ -507,9 +507,9 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        5.5,
-                        2,
-                        4.89
+                        0,
+                        0,
+                        0
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",

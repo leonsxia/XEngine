@@ -408,6 +408,50 @@
                     "size": 100,
                     "divisions": 100,
                     "position": [0, 0.01, 0]
+                },
+                {
+                    "type": "Glock",
+                    "src": "GLOCK_ITEM",
+                    "name": "glock",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
+                },
+                {
+                    "type": "Bayonet",
+                    "src": "BAYONET_ITEM",
+                    "name": "bayonet",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
                 }
             ]
         },

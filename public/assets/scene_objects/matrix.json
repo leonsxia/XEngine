@@ -333,7 +333,7 @@
                 {
                     "type": "Glock",
                     "src": "GLOCK_ITEM",
-                    "name": "room1_glock",
+                    "name": "glock",
                     "scale": [
                         1,
                         1,
@@ -358,7 +358,7 @@
                 {
                     "type": "Bayonet",
                     "src": "BAYONET_ITEM",
-                    "name": "room1_bayonet",
+                    "name": "bayonet",
                     "scale": [
                         1,
                         1,
