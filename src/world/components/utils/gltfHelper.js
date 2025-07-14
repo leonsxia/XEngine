@@ -1,4 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GlockItem, GLTFModel } from '../Models';
+import { GLTF_NAMES } from './constants';
 
 function getGLTFLoader() {
 
@@ -53,4 +55,20 @@ async function loadGLTFModels(sources) {
 
 }
 
-export { worldGLTFLoader, loadedGLTFModels, loadGLTFModels };
+async function initPickableModels() {
+
+    const castShadow = true;
+    const receiveShadow = true;
+
+    GlockItem.gltfModel = new GLTFModel({
+        name: `glock_view_model`, src: loadedGLTFModels[GLTF_NAMES.GLOCK_ITEM], 
+        offsetX: 0, offsetY: 0, offsetZ: 0, receiveShadow, castShadow
+    });
+    GlockItem.gltfModel.setScale([.025, .025, .025]);
+    GlockItem.gltfModel.setRotation([0, Math.PI / 2, 0]);
+
+    await Promise.all([GlockItem.gltfModel.init()]);
+
+}
+
+export { worldGLTFLoader, loadedGLTFModels, loadGLTFModels, initPickableModels };

@@ -14,7 +14,7 @@ import { Picker } from "./systems/Picker";
 import { ControlEventDispatcher } from "./systems/ControlEventDispatcher";
 
 import { loadTextures, loadedTextures } from "./components/utils/textureHelper";
-import { loadGLTFModels, loadedGLTFModels } from "./components/utils/gltfHelper";
+import { initPickableModels, loadGLTFModels, loadedGLTFModels } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES } from "./components/utils/constants";
@@ -115,6 +115,8 @@ class World {
         Object.assign(loadedGLTFModels, gltfs);
         this.#textures = textures;
         this.#gltfs = gltfs;
+
+        await initPickableModels();
 
         this.#sceneBuilder.loadAssets(this.#textures, this.#gltfs);
 

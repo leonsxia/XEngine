@@ -6,6 +6,8 @@ const GLTF_SRC = 'weapons/glock19.glb';
 
 class GlockItem extends WeaponItem {
 
+    static gltfModel;
+
     constructor(specs) {
 
         specs.width = .26;
