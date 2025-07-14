@@ -293,7 +293,6 @@ class ObstacleBase extends ObstacleMoveable {
         const type = 'visibleChanged';
 
         obj.addEventListener(type, listener);
-        obj.eventList.set(type, listener);
         
     }
 
@@ -319,7 +318,6 @@ class ObstacleBase extends ObstacleMoveable {
         const type = 'visibleChanged';
 
         obj.addEventListener(type, listener);
-        obj.eventList.set(type, listener);
 
     }
 
@@ -341,7 +339,6 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.gltf.addEventListener(type, listener);
         this.gltf.visible = true;
-        this.gltf.eventList.set(type, listener);
 
     }
 

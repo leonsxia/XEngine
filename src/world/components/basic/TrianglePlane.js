@@ -44,7 +44,6 @@ class TrianglePlane extends BasicObject {
         const type = 'scaleChanged';
 
         this.addEventListener(type, listener);
-        this.eventList.set(type, listener);
 
     }
 

@@ -180,7 +180,6 @@ class Room {
         };
 
         wall.addEventListener(type, listener);
-        wall.eventList.set(type, listener);
 
     }
 

@@ -195,7 +195,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         };
 
         this.gltf.addEventListener(type, listener);
-        this.gltf.eventList.set(type, listener);
 
     }
 

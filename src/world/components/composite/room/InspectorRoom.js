@@ -48,7 +48,6 @@ class InspectorRoom extends Room {
             }
             const type = 'visibleChanged';
             areaBlock.box.addEventListener(type, listener);
-            areaBlock.box.eventList.set(type, listener);
             areaBlock.box.visible = false;
 
             this.areas.push(areaBlock);

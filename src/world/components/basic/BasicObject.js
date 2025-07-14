@@ -18,8 +18,6 @@ class BasicObject extends EventDispatcher {
     type;
     specs;
 
-    eventList = new Map();
-
     constructor(type, specs) {
 
         super();
