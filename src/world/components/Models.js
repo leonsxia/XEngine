@@ -30,6 +30,7 @@ export { SMGShort } from './composite/weapons/SMGShort.js';
 export { Bayonet } from './composite/weapons/Bayonet.js';
 
 // Pickable Items
+export { BayonetItem } from './composite/inwall/pickables/weapons/BayonetItem.js';
 export { GlockItem } from './composite/inwall/pickables/weapons/GlockItem.js';
 
 // Characters & Creatures

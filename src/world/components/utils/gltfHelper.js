@@ -1,5 +1,5 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { GlockItem, GLTFModel } from '../Models';
+import { BayonetItem, GlockItem, GLTFModel } from '../Models';
 import { GLTF_NAMES } from './constants';
 
 function getGLTFLoader() {
@@ -67,7 +67,16 @@ async function initPickableModels() {
     GlockItem.gltfModel.setScale([.025, .025, .025]);
     GlockItem.gltfModel.setRotation([0, Math.PI / 2, 0]);
 
-    await Promise.all([GlockItem.gltfModel.init()]);
+    BayonetItem.gltfModel = new GLTFModel({
+        name: `bayonet_view_model`, src: loadedGLTFModels[GLTF_NAMES.BAYONET_ITEM], 
+        offsetX: -.36, offsetY: 0, offsetZ: 0, receiveShadow, castShadow
+    });
+    BayonetItem.gltfModel.setScale([.25, .25, .25]);
+
+    await Promise.all([
+        GlockItem.gltfModel.init(),
+        BayonetItem.gltfModel.init()
+    ]);
 
 }
 

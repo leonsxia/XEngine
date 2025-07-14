@@ -9,7 +9,7 @@ import {
     Television01,
     FancyPictureFrame01, VintageGrandfatherClock,
     ModernCeilingLamp01, SecurityLight,
-    GlockItem
+    GlockItem, BayonetItem
 } from '../../components/Models.js';
 import {
     AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, CREATURE_BASE, ZOMBIE_MALE, BLACK_WIDOW,
@@ -58,6 +58,7 @@ class ModelBuilder {
         this.objectCreationMapping[CREATURE_BASE] = this.createCreatureBase;
         this.objectCreationMapping[ZOMBIE_MALE] = this.createZombieMale;
         this.objectCreationMapping[BLACK_WIDOW] = this.createBlackWidow;
+        this.objectCreationMapping[WEAPONS.BAYONET] = this.createBayonetItem;
         this.objectCreationMapping[WEAPONS.GLOCK] = this.createGlockItem;
         this.objectCreationMapping[AXES] = this.createAxes;
         this.objectCreationMapping[GRID] = this.createGrid;
@@ -202,6 +203,26 @@ class ModelBuilder {
 
     }
 
+    createBayonetItem(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new BayonetItem(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        if (!specs.ammo) specs.ammo = object.ammo.toJSON();
+
+        if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
     createGlockItem(specs) {
 
         let object;
@@ -214,7 +235,7 @@ class ModelBuilder {
         object.setPosition(position)
             .setRotationY(rotationY);
 
-        if (!specs.ammo) specs.ammo = { count: object.ammo.count };
+        if (!specs.ammo) specs.ammo = object.ammo.toJSON();
 
         if (updateOBBs) object.updateOBBs();
 

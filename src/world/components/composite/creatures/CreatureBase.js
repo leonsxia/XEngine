@@ -479,7 +479,7 @@ class CreatureBase extends CustomizedCreatureTofu {
                     if (this.checkTargetInDamageRange(target, true).in) {
 
                         result.onTarget = target;
-                        result.damage = this._meleeWeapon.ammo.damage;
+                        result.damage = this._meleeWeapon.ammo.realDamage;
                         this.#attackLogger.log(`right in the face!`);
 
                     } else {

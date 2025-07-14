@@ -1325,7 +1325,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                             this.armedWeapon.ammoCount--;
 
-                            const damage = this.armedWeapon.ammo.damage;
+                            const damage = this.armedWeapon.ammo.realDamage;
                             result.damage = damage;
                             this.#weaponLogger.log(`${this.armedWeapon.weaponType} fire ${this._i}, ammo count: ${this.armedWeapon.ammoCount}, damage: ${damage}`);
 
@@ -1374,7 +1374,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                     result.onTarget = on;
 
-                    const damage = this._meleeWeapon.ammo.damage;
+                    const damage = this._meleeWeapon.ammo.realDamage;
                     result.damage = damage;
 
                     if (on.length > 0) {

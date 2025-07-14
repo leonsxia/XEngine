@@ -342,9 +342,9 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        3,
+                        5,
                         2,
-                        0
+                        4.89
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -353,6 +353,33 @@
                     "isArmed": true,
                     "ammo": {
                         "count": 30
+                    }
+                },
+                {
+                    "type": "Bayonet",
+                    "src": "BAYONET_ITEM",
+                    "name": "room1_bayonet",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        5.5,
+                        2,
+                        4.89
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true,
+                    "ammo": {
+                        "damage": 10,
+                        "offset0": -3,
+                        "offset1": 3
                     }
                 }
             ]
@@ -456,6 +483,45 @@
                         -1.9528935184633294,
                         -1.901,
                         -1.0240740740878715
+                    ],
+                    "rotationY": 0,
+                    "transparent": false
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        3.6,
+                        1.2,
+                        1.2
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "frontMap": "CRATE",
+                    "frontNormal": "CRATE_NORMAL",
+                    "backMap": "CRATE",
+                    "backNormal": "CRATE_NORMAL",
+                    "leftMap": "CRATE",
+                    "leftNormal": "CRATE_NORMAL",
+                    "rightMap": "CRATE",
+                    "rightNormal": "CRATE_NORMAL",
+                    "topMap": "CRATE",
+                    "topNormal": "CRATE_NORMAL",
+                    "bottomMap": "CRATE",
+                    "bottomNormal": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": true,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "pushable": false,
+                    "name": "room1_CubeBox3",
+                    "position": [
+                        5.5,
+                        -1.901,
+                        4.89513
                     ],
                     "rotationY": 0,
                     "transparent": false
@@ -594,7 +660,7 @@
                     "thicknessS": 0.8,
                     "thicknessT": 0.3,
                     "scale": [
-                        3,
+                        4,
                         3.58,
                         5
                     ],
@@ -623,7 +689,7 @@
                     "isObstacle": true,
                     "climbable": true,
                     "position": [
-                        5,
+                        5.5,
                         -0.710000000000001,
                         8
                     ],
@@ -800,7 +866,7 @@
                         1
                     ],
                     "position": [
-                        5,
+                        5.5,
                         0.829999999999998,
                         5.31
                     ],

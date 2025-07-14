@@ -56,9 +56,58 @@ class Ammo {
 
     get damage() {
 
+        return this._damage;
+
+    }
+
+    get realDamage() {
+
         const floatDmg = parseFloat(getRandomFloat(this._offset0, this._offset1).toFixed(2));
 
         return this._damage + floatDmg;
+
+    }
+
+    set damage(val) {
+
+        this._damage = val;
+
+    }
+
+    get offset0() {
+
+        return this._offset0;
+
+    }
+
+    set offset0(val) {
+
+        this._offset0 = val;
+
+    }
+
+    get offset1() {
+
+        return this._offset1;
+
+    }
+
+    set offset1(val) {
+
+        this._offset1 = val;
+
+    }
+
+    toJSON() {
+
+        const output = {};
+        output.type = this._type;
+        output.count = this._count;
+        output.damage = this._damage;
+        output.offset0 = this._offset0;
+        output.offset1 = this._offset1;
+
+        return output;
 
     }
 

@@ -494,6 +494,28 @@
                     "belongTo": "jill",
                     "isPicked": true,
                     "isArmed": true
+                },
+                {
+                    "type": "Bayonet",
+                    "src": "BAYONET_ITEM",
+                    "name": "room1_bayonet",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        5.5,
+                        2,
+                        4.89
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
                 }
             ]
         },

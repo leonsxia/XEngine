@@ -13,7 +13,8 @@ import {
     PaintedWoodenNightstand,
     PaintedWoodenTable,
     WoodenSmallTable,
-    GlockItem
+    GlockItem,
+    BayonetItem
 } from "../Models";
 
 function clone(target, source, ignore = []) {
@@ -165,7 +166,8 @@ function objectFilter(object) {
         object instanceof PaintedWoodenNightstand ||
         object instanceof PaintedWoodenTable ||
         object instanceof WoodenSmallTable ||
-        object instanceof GlockItem
+        object instanceof GlockItem ||
+        object instanceof BayonetItem
     ) {
 
         return true;

@@ -51,6 +51,7 @@ class PickableItem extends ObstacleBase {
         // obb box
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.box.visible = false;
+        // this.box.setTransparent(true, .5);
 
         this.group.add(
             this.gltf.group,

@@ -853,7 +853,7 @@ class WorldScene {
 
                             if (bindWeapon) {
 
-                                bindWeapon.fillMagzine(item.ammo.count);
+                                bindWeapon.updateWeaponProperties(item);
 
                             }
 
