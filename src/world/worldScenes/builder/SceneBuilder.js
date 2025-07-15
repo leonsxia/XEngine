@@ -1100,15 +1100,14 @@ class SceneBuilder {
                         } else {
 
                             const { currentRoom = '' } = _target;
-                            // if sceneSetupCopy object has no ammo, then check sceneSetup object
-                            const _ammoSpecs = _target.ammo ?? _origin.ammo;
+                            const _ammoSpecs = _target.ammo;
                             const { count, damage, offset0, offset1 } = _ammoSpecs;
 
                             find.father.currentRoom = currentRoom;
-                            find.father.ammo.count = count;
-                            find.father.ammo.damage = damage;
-                            find.father.ammo.offset0 = offset0;
-                            find.father.ammo.offset1 = offset1;
+                            find.father.ammo.count = count ?? find.father.ammo.count;
+                            find.father.ammo.damage = damage ?? find.father.ammo.damage;
+                            find.father.ammo.offset0 = offset0 ?? find.father.ammo.offset0;
+                            find.father.ammo.offset1 = offset1 ?? find.father.ammo.offset1;
 
                         }
 
