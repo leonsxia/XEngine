@@ -1,4 +1,4 @@
-import { Matrix4, Quaternion, Vector3 } from 'three';
+import { Matrix4 } from 'three';
 import { CustomizedCombatTofu, GLTFModel } from '../../Models';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { Logger } from '../../../systems/Logger';
@@ -11,9 +11,6 @@ const DEBUG_WEAPON = true;
 const DEBUG_DAMAGE = true;
 
 const _m1 = new Matrix4();
-const _v1 = new Vector3();
-const _v2 = new Vector3();
-const _q1 = new Quaternion();
 
 class CombatPlayerBase extends CustomizedCombatTofu {
 
@@ -173,10 +170,12 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     attachWeapons(hand) {
 
-        this.group.updateWorldMatrix(true, false);
+        this.group.updateMatrix();
 
-        _m1.compose(this.group.getWorldPosition(_v1), this.group.getWorldQuaternion(_q1), this.group.getWorldScale(_v2));
-        this.group.applyMatrix4(_m1.clone().invert());
+        _m1.copy(this.group.matrix);
+        this.group.position.set(0, 0, 0);
+        this.group.quaternion.set(0, 0, 0, 1);
+        this.group.scale.set(1, 1, 1);
 
         for (let i = 0, il = this.weapons.length; i < il; i++) {
 

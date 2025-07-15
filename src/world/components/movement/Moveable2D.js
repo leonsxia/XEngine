@@ -878,7 +878,7 @@ class Moveable2D {
         // const dummyMatrixInverted = dummyObject.matrix.invert();
         dummyObject.applyMatrix4(dummy2WallMtx4);
 
-        dummyObject.updateWorldMatrix(true, false);
+        dummyObject.matrixWorld.copy(dummyObject.matrix);
 
         // const posY = dummyObject.position.y;
 
@@ -894,9 +894,7 @@ class Moveable2D {
 
             // transfer dummy to group world position.
             dummyObject.updateMatrix();
-
-            // ** this time dummyObject.matrix need to clone due to it will be used in SimplePhysics -> checkIntersection
-            const recoverMtx4 = _m1.copy(dummyObject.matrix).premultiply(wallTransformMtx4);
+            const recoverMtx4 = dummyObject.matrix.premultiply(wallTransformMtx4);
 
             // add delta position transfer to worldDeltaV3
             // console.log(`deltaV3:${this._deltaV3.x}, ${this._deltaV3.y}, ${this._deltaV3.z}`);
@@ -905,14 +903,14 @@ class Moveable2D {
 
             // group.matrix and group.parent.matrixWorld no need to clone, 
             // due to applyMatrix4 will auto compose matrix from current position, quaternion and scale
-            // group matrixWorld will auto updated when call worldToLocal
             group.position.set(0, 0, 0);
             group.quaternion.set(0, 0, 0, 1);
             group.scale.set(1, 1, 1);
-            const movingObjWorldMatrixInvterted = group.parent.matrixWorld.invert();
+            // const movingObjWorldMatrixInvterted = group.parent.matrixWorld.invert();
             // follow the euquition:
             // parentWorldMatirx * localMatrix = recoverMtx4 => localMatrix = parentWorldMatrix.invert() * recoverMtx4
-            group.applyMatrix4(movingObjWorldMatrixInvterted.multiply(recoverMtx4));
+            // group.applyMatrix4(movingObjWorldMatrixInvterted.multiply(recoverMtx4));
+            group.applyMatrix4(recoverMtx4);
 
         }
 
@@ -1199,11 +1197,12 @@ class Moveable2D {
 
         const { group } = params;
 
-        const worldPos = group.getWorldPosition(_v1);
+        // const worldPos = group.getWorldPosition(_v1);
         
-        worldPos.add(this._worldDeltaV3);
+        // worldPos.add(this._worldDeltaV3);
 
-        group.position.copy(worldPos.applyMatrix4(_m1.copy(group.parent.matrixWorld).invert()));
+        // group.position.copy(worldPos.applyMatrix4(_m1.copy(group.parent.matrixWorld).invert()));
+        group.position.add(this._worldDeltaV3);
 
     }
     

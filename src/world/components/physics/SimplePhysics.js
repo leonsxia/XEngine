@@ -351,7 +351,7 @@ class SimplePhysics {
         _blv.copy(avatar._cornors[2]);
         _brv.copy(avatar._cornors[3]);
 
-        dummyObject.updateWorldMatrix(true, false);
+        dummyObject.matrixWorld.copy(dummyObject.matrix);
         _lv.applyMatrix4(dummyObject.matrixWorld);
         _rv.applyMatrix4(dummyObject.matrixWorld);
         _blv.applyMatrix4(dummyObject.matrixWorld);
