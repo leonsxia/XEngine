@@ -191,6 +191,28 @@
                     "isArmed": true
                 },
                 {
+                    "type": "Pistol1",
+                    "src": "PISTOL1_ITEM",
+                    "name": "pistol",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
                     "type": "Bayonet",
                     "src": "BAYONET_ITEM",
                     "name": "bayonet",

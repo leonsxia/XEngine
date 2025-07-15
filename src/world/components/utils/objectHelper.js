@@ -14,6 +14,7 @@ import {
     PaintedWoodenTable,
     WoodenSmallTable,
     GlockItem,
+    PistolItem,
     BayonetItem
 } from "../Models";
 
@@ -167,6 +168,7 @@ function objectFilter(object) {
         object instanceof PaintedWoodenTable ||
         object instanceof WoodenSmallTable ||
         object instanceof GlockItem ||
+        object instanceof PistolItem ||
         object instanceof BayonetItem
     ) {
 

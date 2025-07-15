@@ -172,8 +172,8 @@ class SoldierFemale extends CombatPlayerBase {
                 armedHeight,
                 attackInterval: 0.7, 
                 fireRate: 1.2,
-                ammo: new Ammo({ count: 12, damage: 20, offset0: - 5, offset1: 5 }),
-                magzineCapacity: 12
+                ammo: new Ammo({ count: 15, damage: 20, offset0: - 5, offset1: 5 }),
+                magzineCapacity: 15
             }),
             new Glock({
                 name: `${name}_glock19`,

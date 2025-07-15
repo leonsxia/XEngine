@@ -24,8 +24,8 @@ class Pistol extends WeaponBase {
             damageRange: 10,
             attackInterval: 0.7,
             fireRate: 1.2,
-            ammo: new Ammo({ type: AMMOS.PISTOL_9MM, count: 12, damage: 20, offset0: - 5, offset1: 5 }),
-            magzineCapacity: 12,
+            ammo: new Ammo({ type: AMMOS.PISTOL_9MM, count: 15, damage: 20, offset0: - 5, offset1: 5 }),
+            magzineCapacity: 15,
             isSemiAutomatic: true
         };
 
