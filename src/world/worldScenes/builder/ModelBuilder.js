@@ -215,6 +215,9 @@ class ModelBuilder {
         object.setPosition(position)
             .setRotationY(rotationY);
 
+        if (!specs.ammo) specs.ammo = {};
+        Object.assign(specs.ammo, object.ammo.toJSON());
+
         if (updateOBBs) object.updateOBBs();
 
         return object;
@@ -232,6 +235,9 @@ class ModelBuilder {
         object = new GlockItem(specs);
         object.setPosition(position)
             .setRotationY(rotationY);
+
+        if (!specs.ammo) specs.ammo = {};
+        Object.assign(specs.ammo, object.ammo.toJSON());
 
         if (updateOBBs) object.updateOBBs();
 
