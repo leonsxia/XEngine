@@ -1092,23 +1092,32 @@ class SceneBuilder {
                         if (updateSetupOnly) {
 
                             _origin.currentRoom = find.father.currentRoom;
-                            _origin.ammo ? _origin.ammo.count = find.father.ammo.count : _origin.ammo = { count: find.father.ammo.count };
-                            _origin.ammo.damage = find.father.ammo.damage;
-                            _origin.ammo.offset0 = find.father.ammo.offset0;
-                            _origin.ammo.offset1 = find.father.ammo.offset1;
+
+                            if (find.father.ammo) {
+
+                                _origin.ammo ? _origin.ammo.count = find.father.ammo.count : _origin.ammo = { count: find.father.ammo.count };
+                                _origin.ammo.damage = find.father.ammo.damage;
+                                _origin.ammo.offset0 = find.father.ammo.offset0;
+                                _origin.ammo.offset1 = find.father.ammo.offset1;
+
+                            }
 
                         } else {
 
                             const { currentRoom = '' } = _target;
-                            // if sceneSetupCopy object has no ammo, then check sceneSetup object
-                            const _ammoSpecs = _target.ammo ?? _origin.ammo;
-                            const { count, damage, offset0, offset1 } = _ammoSpecs;
+                            const _ammoSpecs = _origin.ammo;
 
-                            find.father.currentRoom = currentRoom;
-                            find.father.ammo.count = count ?? find.father.ammo.count;
-                            find.father.ammo.damage = damage ?? find.father.ammo.damage;
-                            find.father.ammo.offset0 = offset0 ?? find.father.ammo.offset0;
-                            find.father.ammo.offset1 = offset1 ?? find.father.ammo.offset1;
+                            if (_ammoSpecs) {
+
+                                const { count, damage, offset0, offset1 } = _ammoSpecs;
+
+                                find.father.currentRoom = currentRoom;
+                                find.father.ammo.count = count ?? find.father.ammo.count;
+                                find.father.ammo.damage = damage ?? find.father.ammo.damage;
+                                find.father.ammo.offset0 = offset0 ?? find.father.ammo.offset0;
+                                find.father.ammo.offset1 = offset1 ?? find.father.ammo.offset1;
+
+                            }
 
                         }
 
