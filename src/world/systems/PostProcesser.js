@@ -349,7 +349,7 @@ class PostProcessor {
         if (this.outlinePass?.selectedObjects.length > 0) {
 
             delete this.outlinePass.selectedObjects[0].isPicked;
-            this.outlinePass.selectedObjects = [];
+            this.outlinePass.selectedObjects.length = 0;
 
         }
 

@@ -404,7 +404,7 @@ class CustomizedCombatTofu extends Tofu {
 
         const cbox = this.collisionBoxMap.get(weaponType).get(action);
 
-        this.walls = [];
+        this.walls.length = 0;
         this.walls.push(...cbox.walls);
 
         if (this.collisionBox) {
@@ -605,9 +605,9 @@ class CustomizedCombatTofu extends Tofu {
     destroy() {
 
         this.doDisposedEvents();
-        this.onBeforeCollisionBoxChanged = [];
-        this.onCollisionBoxChanged = [];
-        this.onDisposed = [];
+        this.onBeforeCollisionBoxChanged.length = 0;
+        this.onCollisionBoxChanged.length = 0;
+        this.onDisposed.length = 0;
         super.destroy();
 
     }

@@ -149,7 +149,7 @@ class Tofu extends TofuBase {
 
         if (this.disposed) return;
 
-        this._inSightTargets = [];
+        this._inSightTargets.length = 0;
         this._target = null;
         this.onInSightTargetsCleared();
 

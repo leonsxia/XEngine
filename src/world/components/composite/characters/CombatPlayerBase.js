@@ -1277,6 +1277,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this._delta = 0;
         this._i = 0;
+        this._onMeleeHurtTargets.length = 0;
 
     }
 
@@ -1386,7 +1387,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 } else if (this._delta > attackEndInterval) {
 
                     this._i++;
-                    this._onMeleeHurtTargets = [];
+                    this._onMeleeHurtTargets.length = 0;
                     this.#weaponLogger.log(`melee attack: ${this._i}`);
 
                 }

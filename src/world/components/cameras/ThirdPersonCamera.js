@@ -395,7 +395,7 @@ class ThirdPersonCamera {
 
         }
 
-        this.#intersectObjects = [];
+        this.#intersectObjects.length = 0;
 
     }
 
