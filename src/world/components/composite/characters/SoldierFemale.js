@@ -260,9 +260,6 @@ class SoldierFemale extends CombatPlayerBase {
 
         const holdingHand = this.gltf.getChildByName('WristR');
         this.attachWeapons(holdingHand);
-
-        this.setupWeaponScale();
-        
         this.armWeapon();
         
     }

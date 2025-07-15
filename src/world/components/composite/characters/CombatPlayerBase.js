@@ -10,6 +10,11 @@ const DEBUG = false;
 const DEBUG_WEAPON = true;
 const DEBUG_DAMAGE = true;
 
+const _m1 = new Matrix4();
+const _v1 = new Vector3();
+const _v2 = new Vector3();
+const _q1 = new Quaternion();
+
 class CombatPlayerBase extends CustomizedCombatTofu {
 
     specs;
@@ -168,10 +173,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     attachWeapons(hand) {
 
-        // must revert group to zero position and quaternion but keep scale infomation so weapon position could be right
         this.group.updateWorldMatrix(true, false);
 
-        const _m1 = new Matrix4().compose(this.group.getWorldPosition(new Vector3()), this.group.getWorldQuaternion(new Quaternion()), new Vector3(1, 1, 1));
+        _m1.compose(this.group.getWorldPosition(_v1), this.group.getWorldQuaternion(_q1), this.group.getWorldScale(_v2));
         this.group.applyMatrix4(_m1.clone().invert());
 
         for (let i = 0, il = this.weapons.length; i < il; i++) {
@@ -222,20 +226,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     get armedWeaponAction() {
 
         return this.weaponActionMapping[this.armedWeapon.weaponType];
-
-    }
-
-    setupWeaponScale() {
-
-        const { scale = [1, 1, 1] } = this.specs;
-
-        this.weapons.forEach(weaponItem => {
-
-            weaponItem.group.scale.x *= scale[0];
-            weaponItem.group.scale.y *= scale[1];
-            weaponItem.group.scale.z *= scale[2];
-
-        });
 
     }
 
