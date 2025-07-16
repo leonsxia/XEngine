@@ -5,6 +5,7 @@ import { Logger } from '../../../systems/Logger';
 import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
 import { aimDirection, polarity } from '../../utils/enums';
 import { Pda } from '../../pda/Pda';
+import { resetObject3D } from '../../utils/objectHelper';
 
 const DEBUG = false;
 const DEBUG_WEAPON = true;
@@ -173,9 +174,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.group.updateMatrix();
 
         _m1.copy(this.group.matrix);
-        this.group.position.set(0, 0, 0);
-        this.group.quaternion.set(0, 0, 0, 1);
-        this.group.scale.set(1, 1, 1);
+        resetObject3D(this.group);
 
         for (let i = 0, il = this.weapons.length; i < il; i++) {
 

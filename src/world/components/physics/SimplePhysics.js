@@ -1,6 +1,6 @@
 import { Matrix4, Object3D, Vector3 } from 'three';
 import * as Color from '../basic/colorBase.js';
-import { groupHasChild } from '../utils/objectHelper.js';
+import { groupHasChild, resetObject3D } from '../utils/objectHelper.js';
 
 const DEBUG = true;
 const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
@@ -10,7 +10,6 @@ const STAIR_OFFSET_MIN = .1;
 const OBSTACLE_BLOCK_OFFSET_MAX = .1;
 const OBSTACLE_BLOCK_OFFSET_MIN = .05;
 
-const _obj0 = new Object3D();
 const _m1 = new Matrix4();
 const _m2 = new Matrix4();
 const _lv = new Vector3();
@@ -332,7 +331,7 @@ class SimplePhysics {
         let intersectCor = null;
 
         // set dummy object related to zero position.
-        const dummyObject = avatar.dummyObject.copy(_obj0);
+        const dummyObject = resetObject3D(avatar.dummyObject);
         const wallMesh = new Object3D();
 
         // plane.mesh.updateWorldMatrix(true, false);

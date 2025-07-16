@@ -1,13 +1,13 @@
 import { Matrix4, Object3D, Vector3 } from 'three';
 import { COR_DEF, FACE_DEF } from '../physics/SimplePhysics';
 import { Logger } from '../../systems/Logger';
+import { resetObject3D } from '../utils/objectHelper';
 
 const COOLING_TIME = .4;
 const DEBUG = true;
 
 const _m1 = new Matrix4();
 const _v1 = new Vector3();
-const _obj0 = new Object3D();
 
 class Moveable2D {
     #movingLeft = false;
@@ -864,7 +864,7 @@ class Moveable2D {
         }
 
         // set dummy object related to zero position.
-        const dummyObject = this.dummyObject.copy(_obj0);
+        const dummyObject = resetObject3D(this.dummyObject);
 
         // group.updateWorldMatrix(true, false);
 
@@ -903,9 +903,7 @@ class Moveable2D {
 
             // group.matrix and group.parent.matrixWorld no need to clone, 
             // due to applyMatrix4 will auto compose matrix from current position, quaternion and scale
-            group.position.set(0, 0, 0);
-            group.quaternion.set(0, 0, 0, 1);
-            group.scale.set(1, 1, 1);
+            resetObject3D(group);
             // const movingObjWorldMatrixInvterted = group.parent.matrixWorld.invert();
             // follow the euquition:
             // parentWorldMatirx * localMatrix = recoverMtx4 => localMatrix = parentWorldMatrix.invert() * recoverMtx4

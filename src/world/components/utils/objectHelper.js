@@ -228,4 +228,18 @@ function objectFilter4(object) {
 
 }
 
-export { clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, objectFilter, objectFilter2, objectFilter3, objectFilter4 };
+function resetObject3D(object) {
+
+    object.position.set(0, 0, 0);
+    object.quaternion.set(0, 0, 0, 1);
+    object.scale.set(1, 1, 1);
+
+    return object;
+
+}
+
+export { 
+    clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, 
+    objectFilter, objectFilter2, objectFilter3, objectFilter4,
+    resetObject3D
+};
