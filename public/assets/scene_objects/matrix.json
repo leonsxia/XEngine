@@ -456,6 +456,75 @@
                         "offset0": -3,
                         "offset1": 3
                     }
+                },
+                {
+                    "type": "PistolAmmoBox",
+                    "src": "PISTOL_AMMO_BOX_ITEM",
+                    "name": "pistol_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        6.3,
+                        2,
+                        4.89
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 35
+                    }
+                },
+                {
+                    "type": "MagnumAmmoBox",
+                    "src": "MAGNUM_AMMO_BOX_ITEM",
+                    "name": "magnum_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        6.6,
+                        2,
+                        4.89
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 10
+                    }
+                },
+                {
+                    "type": "SMGAmmoBox",
+                    "src": "SMG_AMMO_BOX_ITEM",
+                    "name": "smg_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        6.9,
+                        2,
+                        4.89
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 90
+                    }
                 }
             ]
         },

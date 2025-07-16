@@ -9,7 +9,8 @@ import {
     Television01,
     FancyPictureFrame01, VintageGrandfatherClock,
     ModernCeilingLamp01, SecurityLight,
-    GlockItem, BayonetItem, PistolItem, RevolverItem, SMGShortItem
+    GlockItem, BayonetItem, PistolItem, RevolverItem, SMGShortItem,
+    PistolAmmoBox, MagnumAmmoBox, SMGAmmoBox
 } from '../../components/Models.js';
 import {
     AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, CREATURE_BASE, ZOMBIE_MALE, BLACK_WIDOW,
@@ -23,7 +24,7 @@ import {
     FANCY_PICTURE_FRAME_01, VINTAGE_GRANDFATHER_CLOCK,
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
     TEXTURE_NAMES, GLTF_NAMES,
-    WEAPONS
+    WEAPONS, AMMUNITION
 } from '../../components/utils/constants.js';
 import { createAxesHelper, createGridHelper } from '../../components/utils/helpers.js';
 
@@ -63,6 +64,9 @@ class ModelBuilder {
         this.objectCreationMapping[WEAPONS.PISTOL1] = this.createPistolItem;
         this.objectCreationMapping[WEAPONS.REVOLVER] = this.createRevolverItem;
         this.objectCreationMapping[WEAPONS.SMG_SHORT] = this.createSMGShortItem;
+        this.objectCreationMapping[AMMUNITION.PISTOL_AMMO_BOX] = this.createPistolAmmoBox;
+        this.objectCreationMapping[AMMUNITION.MAGNUM_AMMO_BOX] = this.createMagnumAmmoBox;
+        this.objectCreationMapping[AMMUNITION.SMG_AMMO_BOX] = this.createSMGAmmoBox;
         this.objectCreationMapping[AXES] = this.createAxes;
         this.objectCreationMapping[GRID] = this.createGrid;
         this.objectCreationMapping[PLANE] = this.createPlane;
@@ -299,6 +303,69 @@ class ModelBuilder {
         this.setupObjectGLTF({ src }, specs);
 
         object = new SMGShortItem(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        if (!specs.ammo) specs.ammo = {};
+        Object.assign(specs.ammo, object.ammo.toJSON());
+
+        if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
+    createPistolAmmoBox(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new PistolAmmoBox(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        if (!specs.ammo) specs.ammo = {};
+        Object.assign(specs.ammo, object.ammo.toJSON());
+
+        if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
+    createMagnumAmmoBox(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new MagnumAmmoBox(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        if (!specs.ammo) specs.ammo = {};
+        Object.assign(specs.ammo, object.ammo.toJSON());
+
+        if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
+    createSMGAmmoBox(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new SMGAmmoBox(specs);
         object.setPosition(position)
             .setRotationY(rotationY);
 

@@ -20,7 +20,7 @@ class RevolverItem extends WeaponItem {
         specs.weaponType = WEAPONS.REVOLVER;
         specs.src = specs.src ?? GLTF_SRC;
 
-        const { count = 6, damage = 60, offset0 = - - 10, offset1 = 45 } = specs.ammo ?? {};
+        const { count = 6, damage = 60, offset0 = - 10, offset1 = 45 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.MAGNUM, count, damage, offset0, offset1 });
         super(specs);
 
