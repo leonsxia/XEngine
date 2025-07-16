@@ -17,11 +17,9 @@ class Television01 extends LightLamp {
     _screenHeight = .28;
     _screenDepth = .04;
 
-    _cBoxZ = .012;
-
     _screenX = -.068;
     _screenY = .03;
-    _screenZ = .205;
+    _screenZ = .196;
     _targetZ = 1;
 
     _bloomScreen;
@@ -39,14 +37,13 @@ class Television01 extends LightLamp {
         super(specs);
 
         const { name, scale = [1, 1, 1], lines = false } = specs;
-        const { offsetY = - .228, offsetZ = .032 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this._scale = new Array(...scale);
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, offsetZ, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 
@@ -101,9 +98,7 @@ class Television01 extends LightLamp {
     update(needToUpdateOBBnRay = true, needToUpdateLight = true) {
 
         // update cBox scale and position
-        const cBoxZ = this._cBoxZ * this.scale[2];
-
-        this._cBox.setScale(this.scale).setPosition([0, 0, cBoxZ]);
+        this._cBox.setScale(this.scale);
 
         // update bloom screen scale and position
         const screenX = this._screenX * this.scale[0];

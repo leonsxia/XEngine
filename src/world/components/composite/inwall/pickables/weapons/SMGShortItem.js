@@ -13,8 +13,6 @@ class SMGShortItem extends WeaponItem {
         specs.width = .42;
         specs.height = .2;
         specs.depth = .26;
-        specs.offsetX = -.88;
-        specs.offsetY = -.11;
         specs.gltfScale = [.15, .15, .15];
         specs.gltfRotation = [- Math.PI / 2, 0, 0];
         specs.weaponType = WEAPONS.SMG_SHORT;

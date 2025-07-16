@@ -1247,7 +1247,7 @@
                     ],
                     "position": [
                         0,
-                        3.7,
+                        3.75,
                         7.5
                     ],
                     "rotationY": 0
@@ -1257,7 +1257,7 @@
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_2",
                     "scale": [1.2, 1.3],
-                    "position": [5, 3.93, -7.5],
+                    "position": [5, 3.98, -7.5],
                     "rotationY": 0
                 },
                 {
@@ -1265,7 +1265,7 @@
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_3",
                     "scale": [1.2, 1.3],
-                    "position": [-5, 3.93, -7.5],
+                    "position": [-5, 3.98, -7.5],
                     "rotationY": 0
                 },
                 {

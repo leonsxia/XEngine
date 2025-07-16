@@ -19,14 +19,13 @@ class VintageGrandfatherClock extends ObstacleBase {
         super(specs);
 
         const { name, scale = [1, 1, 1], lines = false } = specs;
-        const { offsetX = - .059, offsetY = - 1.1, offsetZ = .033 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this._scale = new Array(...scale);
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetX, offsetY, offsetZ, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 

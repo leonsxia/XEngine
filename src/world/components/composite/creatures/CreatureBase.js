@@ -39,7 +39,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         const { name } = specs;
         const { src, receiveShadow = true, castShadow = true, hasBones = true } = specs;
-        const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
+        const { offsetX, offsetY, offsetZ } = specs;
         const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = specs;
         const { collisionSize = { width, depth, height } } = specs;
         const { rotateR = .9, vel = 0.7, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5 } = specs;

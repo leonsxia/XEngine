@@ -13,9 +13,6 @@ class SMGAmmoBox extends AmmoBoxItem {
         specs.width = .27;
         specs.height = .28;
         specs.depth = .18;
-        specs.offsetX = .03;
-        specs.offsetY = 1.25;
-        specs.offsetZ = .03;
         specs.gltfScale = [0.08, 0.08, 0.08];
         specs.ammoBoxType = AMMUNITION.SMG_AMMO_BOX;
         specs.src = specs.src ?? GLTF_SRC;

@@ -25,14 +25,13 @@ class PaintedWoodenBlueChair extends ObstacleBase {
         super(specs);
 
         const { name, scale = [1, 1, 1], lines = false } = specs;
-        const { offsetY = - .6375 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this._scale = new Array(...scale);
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 
@@ -81,14 +80,12 @@ class PaintedWoodenBlueChair extends ObstacleBase {
         const bottomHeight = this._bottomHeight * this.scale[1];
         const backHeight = this._backHeight * this.scale[1];
 
-        const bottomX = - .015 * this.scale[0];
         const bottomY = (bottomHeight - height) * .5;
-        const backX = - .02 * this.scale[0];
         const backY = (backHeight - height) * .5 + bottomHeight;
         const backZ = - .28 * this.scale[2];
 
-        this._cBoxBottom.setPosition([bottomX, bottomY, 0]).setScale(this.scale);
-        this._cBoxBack.setPosition([backX, backY, backZ]).setScale(this.scale);
+        this._cBoxBottom.setPosition([0, bottomY, 0]).setScale(this.scale);
+        this._cBoxBack.setPosition([0, backY, backZ]).setScale(this.scale);
 
         // update gltf scale
         this.gltf.setScale(this.scale);

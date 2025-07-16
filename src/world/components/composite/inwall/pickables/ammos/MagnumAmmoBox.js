@@ -13,9 +13,6 @@ class MagnumAmmoBox extends AmmoBoxItem {
         specs.width = .2;
         specs.height = .2;
         specs.depth = .2;
-        specs.offsetX = - .048;
-        specs.offsetY = - .02;
-        specs.offsetZ = .032;
         specs.gltfScale = [1.13, 1.13, 1.13];
         specs.ammoBoxType = AMMUNITION.MAGNUM_AMMO_BOX;
         specs.src = specs.src ?? GLTF_SRC;

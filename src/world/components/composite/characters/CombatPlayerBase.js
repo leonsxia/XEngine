@@ -45,7 +45,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     constructor(specs) {
 
         const { name, src, receiveShadow = true, castShadow = true, hasBones = true } = specs;
-        const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = specs;
         const { collisionSize = { width, depth, height } } = specs;
         const { rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, aimVel = 3 * Math.PI, aimTime = .05 } = specs;
@@ -71,7 +70,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         Object.assign(this._animationSettings, animationSetting);
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetX, offsetY, offsetZ, receiveShadow, castShadow, hasBones };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, hasBones };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);

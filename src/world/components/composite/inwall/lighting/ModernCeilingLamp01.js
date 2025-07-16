@@ -8,7 +8,7 @@ const GLTF_SRC = 'in_room/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp
 class ModernCeilingLamp01 extends LightLamp {
 
     _radius = .2157;
-    _ropeHeight = .583;
+    _ropeHeight = .63;
     _height = this._radius * 2 + this._ropeHeight;
     _topHeight = 1.168;
 
@@ -25,13 +25,12 @@ class ModernCeilingLamp01 extends LightLamp {
         super(specs);
 
         const { name, scale = [1, 1] } = specs;
-        const { offsetY = this._height * .5 - this._topHeight } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this._scale = [scale[0], scale[1], scale[0]];
 
         // gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow }
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow }
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);

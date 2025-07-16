@@ -1,7 +1,10 @@
-import { EventDispatcher, Group, SkeletonHelper } from 'three';
+import { Box3, EventDispatcher, Group, SkeletonHelper, Vector3 } from 'three';
 import { worldGLTFLoader } from '../utils/gltfHelper';
 import { clone } from '../utils/objectHelper';
 import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js'
+
+const _box = new Box3();
+const _v1 = new Vector3();
 
 class GLTFModel extends EventDispatcher {
 
@@ -30,7 +33,8 @@ class GLTFModel extends EventDispatcher {
 
     async init() {
 
-        const { src, receiveShadow = false, castShadow = false, offsetX = 0, offsetY = 0, offsetZ = 0, hasBones = false } = this.specs;
+        const { src, receiveShadow = false, castShadow = false, hasBones = false } = this.specs;
+        let { offsetX, offsetY, offsetZ } = this.specs;
 
         let model;
 
@@ -61,6 +65,11 @@ class GLTFModel extends EventDispatcher {
 
             }
 
+            _box.setFromObject(gltfModel.scene);
+            _box.getCenter(_v1);
+            offsetX = offsetX ?? - _v1.x;
+            offsetY = offsetY ?? - _v1.y;
+            offsetZ = offsetZ ?? - _v1.z;
             modelGroup.position.set(offsetX, offsetY, offsetZ);
 
             this.group.add(modelGroup);

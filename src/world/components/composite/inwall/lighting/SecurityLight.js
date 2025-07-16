@@ -23,13 +23,12 @@ class SecurityLight extends LightLamp {
         super(specs);
 
         const { name, scale = [1, 1, 1] } = specs;
-        const { offsetY = .1, offsetZ = - this._depth * .5 } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this._scale = new Array(...scale);
 
         // gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, offsetZ, receiveShadow, castShadow }
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow }
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);

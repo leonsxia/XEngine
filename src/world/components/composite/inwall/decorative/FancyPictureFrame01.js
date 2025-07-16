@@ -22,7 +22,6 @@ class FancyPictureFrame01 extends ObstacleBase {
         super(specs);
 
         const { name, scale = [1, 1, 1], lines = false } = specs;
-        const { offsetZ = - .012 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, img, mapRatio, receiveShadow = true, castShadow = true } = specs;
 
@@ -35,7 +34,7 @@ class FancyPictureFrame01 extends ObstacleBase {
         }
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetZ, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         const cBoxSpecs = { name: `${name}_cbox`, width: this._width, depth: this._depth, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 

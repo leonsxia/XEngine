@@ -88,7 +88,7 @@ class BlackWidow extends CreatureBase {
         const { HPMax = 80 } = specs;
         let { width, width2, depth, depth2, height } = specs;
         let { gltfScale = [1, 1, 1] } = specs;
-        let { offsetY = 0, offsetZ = 0 } = specs;
+        let { offsetY } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
 
@@ -104,7 +104,7 @@ class BlackWidow extends CreatureBase {
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
-            offsetY, offsetZ, width, width2, depth, depth2, height,
+            offsetY, width, width2, depth, depth2, height,
             vel, rotateR,
             scale, gltfScale,
             clips: CLIPS,  animationSetting: animationSetting,

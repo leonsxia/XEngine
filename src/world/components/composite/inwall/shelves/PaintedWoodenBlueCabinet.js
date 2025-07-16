@@ -7,8 +7,8 @@ const GLTF_SRC = 'in_room/shelves/painted_wooden_cabinet_02_1k/painted_wooden_ca
 class PaintedWoodenBlueCabinet extends ObstacleBase {
 
     _width = 1;
-    _height = 2.6;
-    _depth = .665;
+    _height = 2.57;
+    _depth = .72;
     _frontHeight = 1.169;
     _backDepth = .388;
 
@@ -24,14 +24,13 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
         super(specs);
 
         const { name, scale = [1, 1, 1], lines = false } = specs;
-        const { offsetY = - 1.3 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this._scale = new Array(...scale);
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 

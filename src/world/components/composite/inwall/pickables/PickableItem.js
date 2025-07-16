@@ -23,7 +23,6 @@ class PickableItem extends ObstacleBase {
         const { width = 1, height = 1, depth = 1 } = specs;
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
         const { gltfRotation = [0, 0, 0] } = specs;
-        const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { src, receiveShadow = true, castShadow = true } = specs;
         const { currentRoom } = specs;
         const { isPicked = false, belongTo } = specs;
@@ -39,7 +38,7 @@ class PickableItem extends ObstacleBase {
         this.belongTo = belongTo;
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetX, offsetY, offsetZ, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 

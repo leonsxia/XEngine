@@ -129,7 +129,6 @@ class ZombieMale extends CreatureBase {
     constructor(specs) {
 
         const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true } = specs;
-        const { offsetY = - 2.225, offsetZ = 0 } = specs;
         const { width = .63, width2 = .63, depth = .9, depth2 = .7, height = 1.8 } = specs;
         const { collisionSize = { width, depth: .7, height } } = specs;
         const { vel = .37, rotateR = 1.1 } = specs;
@@ -152,7 +151,7 @@ class ZombieMale extends CreatureBase {
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
-            offsetY, offsetZ, width, width2, depth, depth2, height, collisionSize,
+            width, width2, depth, depth2, height, collisionSize,
             vel, rotateR,
             scale, gltfScale,
             clips: CLIPS,  animationSetting: animationSetting,

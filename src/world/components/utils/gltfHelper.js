@@ -66,51 +66,51 @@ async function initPickableModels() {
 
     GlockItem.gltfModel = new GLTFModel({
         name: `glock_view_model`, src: loadedGLTFModels[GLTF_NAMES.GLOCK_ITEM], 
-        offsetX: 0, offsetY: 0, offsetZ: 0, receiveShadow, castShadow
+        receiveShadow, castShadow
     });
     GlockItem.gltfModel.setScale([.025, .025, .025]);
     GlockItem.gltfModel.setRotation([0, Math.PI / 2, 0]);
 
     PistolItem.gltfModel = new GLTFModel({
         name: `pistol1_view_model`, src: loadedGLTFModels[GLTF_NAMES.PISTOL1_ITEM], 
-        offsetX: -.57, offsetY: -.15, offsetZ: 0, receiveShadow, castShadow
+        receiveShadow, castShadow
     });
     PistolItem.gltfModel.setScale([.15, .15, .15]);
 
     RevolverItem.gltfModel = new GLTFModel({
         name: `revolver_view_model`, src: loadedGLTFModels[GLTF_NAMES.REVOLVER_ITEM], 
-        offsetX: -.77, offsetY: -.16, offsetZ: 0, receiveShadow, castShadow
+        receiveShadow, castShadow
     });
     RevolverItem.gltfModel.setScale([.19, .19, .19]);
 
     SMGShortItem.gltfModel = new GLTFModel({
         name: `smg_short_view_model`, src: loadedGLTFModels[GLTF_NAMES.SMG_SHORT_ITEM], 
-        offsetX: -.88, offsetY: -.11, offsetZ: 0, receiveShadow, castShadow
+        receiveShadow, castShadow
     });
     SMGShortItem.gltfModel.setScale([.15, .15, .15]);
 
     BayonetItem.gltfModel = new GLTFModel({
         name: `bayonet_view_model`, src: loadedGLTFModels[GLTF_NAMES.BAYONET_ITEM], 
-        offsetX: -.36, offsetY: 0, offsetZ: 0, receiveShadow, castShadow
+        receiveShadow, castShadow
     });
     BayonetItem.gltfModel.setScale([.25, .25, .25]);
 
     PistolAmmoBox.gltfModel = new GLTFModel({
         name: `pistol_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.PISTOL1_ITEM], 
-        offsetX: .055, offsetY: .18, offsetZ: .017, receiveShadow, castShadow
+        receiveShadow, castShadow
     });
     PistolAmmoBox.gltfModel.setScale([.1, .1, .1]);
     PistolAmmoBox.gltfModel.setRotation([0, Math.PI / 2, 0]);
 
     MagnumAmmoBox.gltfModel = new GLTFModel({
         name: `magnum_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.PISTOL1_ITEM], 
-        offsetX: - .048, offsetY: - .02, offsetZ: .032, receiveShadow, castShadow
+        receiveShadow, castShadow
     });
     MagnumAmmoBox.gltfModel.setScale([1.13, 1.13, 1.13]);
 
     SMGAmmoBox.gltfModel = new GLTFModel({
         name: `smg_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.PISTOL1_ITEM], 
-        offsetX: .03, offsetY: 1.25, offsetZ: .03, receiveShadow, castShadow
+        receiveShadow, castShadow
     });
     SMGAmmoBox.gltfModel.setScale([0.08, 0.08, 0.08]);
 

@@ -50,7 +50,6 @@ class WeaponBase {
         
         const { name, scale = [1, 1, 1] } = specs;
         const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
-        const { offsetX = 0, offsetY = 0, offsetZ = 0 } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { 
             weaponType, gltfName,
@@ -94,7 +93,7 @@ class WeaponBase {
         }
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetX, offsetY, offsetZ, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);

@@ -13,8 +13,6 @@ class RevolverItem extends WeaponItem {
         specs.width = .37;
         specs.height = .2;
         specs.depth = .185;
-        specs.offsetX = -.77;
-        specs.offsetY = -.16;
         specs.gltfScale = [.19, .19, .19];
         specs.gltfRotation = [- Math.PI / 2, 0, 0];
         specs.weaponType = WEAPONS.REVOLVER;

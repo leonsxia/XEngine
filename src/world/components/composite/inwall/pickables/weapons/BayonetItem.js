@@ -13,7 +13,6 @@ class BayonetItem extends WeaponItem {
         specs.width = .28;
         specs.height = .2;
         specs.depth = .06;
-        specs.offsetX = -.36;
         specs.gltfScale = [.25, .25, .25];
         specs.gltfRotation = [- Math.PI / 2, 0, 0];
         specs.weaponType = WEAPONS.BAYONET;

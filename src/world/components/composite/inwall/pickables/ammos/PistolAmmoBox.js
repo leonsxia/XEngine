@@ -13,9 +13,6 @@ class PistolAmmoBox extends AmmoBoxItem {
         specs.width = .2;
         specs.height = .2;
         specs.depth = .12;
-        specs.offsetX = .055;
-        specs.offsetY = .18;
-        specs.offsetZ = .017;
         specs.gltfScale = [.1, .1, .1];
         specs.gltfRotation = [0, Math.PI / 2, 0];
         specs.ammoBoxType = AMMUNITION.PISTOL_AMMO_BOX;

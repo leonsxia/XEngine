@@ -150,7 +150,6 @@ class SoldierFemale extends CombatPlayerBase {
     constructor(specs) {
 
         const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true } = specs;
-        const { offsetY = - .89, offsetZ = - .1 } = specs;
         const { width = .6, width2 = .6, depth = .8, depth2 = .7, height = 1.78 } = specs;
         // if collision box's depth is less than bounding face's depth,
         // it will let player harder to push against enemies
@@ -165,7 +164,7 @@ class SoldierFemale extends CombatPlayerBase {
         const weapons = [
             new Pistol({
                 name: `${name}_pistol`,
-                position: [- .18, - .028, .065],
+                position: [- .18, - .094, .08],
                 rotation: [- 0.35, - 1.3, - 1.6],
                 damageRange: 10,
                 damageRadius: 0.52, // 30 degree
@@ -177,7 +176,7 @@ class SoldierFemale extends CombatPlayerBase {
             }),
             new Glock({
                 name: `${name}_glock19`,
-                position: [- .18, - .08, .096],
+                position: [- .18, - .08, .066],
                 rotation: [1.2, 0, - .2],
                 damageRange: 13,
                 damageRadius: 0.52, // 30 degree
@@ -189,7 +188,7 @@ class SoldierFemale extends CombatPlayerBase {
             }),
             new Revolver({
                 name: `${name}_magnum357`,
-                position: [- .168, - .005, .075],
+                position: [- .168, - .134, .118],
                 rotation: [- 0.35, - 1.3, - 1.6],
                 damageRange: 16,
                 damageRadius: 0.52, // 30 degree
@@ -201,7 +200,7 @@ class SoldierFemale extends CombatPlayerBase {
             }),
             new SMGShort({
                 name: `${name}_smg_short`,
-                position: [- .18, - .028, .065],
+                position: [- .18, - .143, .086],
                 rotation: [- 0.35, - 1.3, - 1.6],
                 damageRange: 9,
                 damageRadius: 0.52, // 30 degree
@@ -215,10 +214,10 @@ class SoldierFemale extends CombatPlayerBase {
             new Bayonet({
                 name: `${name}_bayonet`,
                 scale: [.35, .3, .25],
-                position: [- .18, .01, .046],
+                position: [- .125, .01, .121],
                 rotation: [- .5, - 1, - .3],
                 obbSize: { size: { width: .03, depth: .01, height: .35 } },
-                obbPosition: [- .075, .038, .215],
+                obbPosition: [- .063, .03, .218],
                 obbRotation: [- .37, - 1.02, 1.38],
                 attackInterval: 1.03,
                 damageRange: 1.55,
@@ -236,7 +235,7 @@ class SoldierFemale extends CombatPlayerBase {
 
         const setup = { 
             name, src, receiveShadow, castShadow, hasBones, 
-            offsetY, offsetZ, width, width2, depth, depth2, height, collisionSize,
+            width, width2, depth, depth2, height, collisionSize,
             vel, velEnlarge, rotateR, aimVel, aimTime,
             scale,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,

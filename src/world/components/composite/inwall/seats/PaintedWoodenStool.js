@@ -19,14 +19,13 @@ class PaintedWoodenStool extends ObstacleBase {
         super(specs);
 
         const { name, scale = [1, 1, 1], lines = false } = specs;
-        const { offsetY = - .29 } = specs;  // offsetY used to set gltf model to zero position.
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this._scale = new Array(...scale);
 
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, offsetY, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
 
@@ -69,8 +68,7 @@ class PaintedWoodenStool extends ObstacleBase {
     update(needToUpdateOBBnRay = true) {
 
         // update cBox position and scale
-        const cBoxZ = .012 * this.scale[2];
-        this._cBox.setPosition([0, 0, cBoxZ]).setScale(this.scale);
+        this._cBox.setScale(this.scale);
 
         // update gltf scale
         this.gltf.setScale(this.scale);
