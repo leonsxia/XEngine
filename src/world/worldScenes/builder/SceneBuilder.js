@@ -1105,7 +1105,7 @@ class SceneBuilder {
                         } else {
 
                             const { currentRoom = '' } = _target;
-                            const _ammoSpecs = _origin.ammo;
+                            const _ammoSpecs = _target.ammo ?? _origin.ammo;
 
                             if (_ammoSpecs) {
 

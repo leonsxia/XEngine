@@ -342,7 +342,7 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        5,
+                        5.5,
                         2,
                         4.89
                     ],
@@ -367,7 +367,7 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        4.5,
+                        5,
                         2,
                         4.89
                     ],
@@ -378,6 +378,56 @@
                     "isArmed": false,
                     "ammo": {
                         "count": 15
+                    }
+                },
+                {
+                    "type": "Revolver",
+                    "src": "REVOLVER_ITEM",
+                    "name": "revolver",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        4.5,
+                        2,
+                        4.89
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false,
+                    "ammo": {
+                        "count": 6
+                    }
+                },
+                {
+                    "type": "SMGShort",
+                    "src": "SMG_SHORT_ITEM",
+                    "name": "smg_short",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        4,
+                        2,
+                        4.89
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false,
+                    "ammo": {
+                        "count": 35
                     }
                 },
                 {
@@ -392,7 +442,7 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        5.5,
+                        6,
                         2,
                         4.89
                     ],

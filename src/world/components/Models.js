@@ -33,6 +33,8 @@ export { Bayonet } from './composite/weapons/Bayonet.js';
 export { BayonetItem } from './composite/inwall/pickables/weapons/BayonetItem.js';
 export { GlockItem } from './composite/inwall/pickables/weapons/GlockItem.js';
 export { PistolItem } from './composite/inwall/pickables/weapons/PistolItem.js';
+export { RevolverItem } from './composite/inwall/pickables/weapons/RevolverItem.js';
+export { SMGShortItem } from './composite/inwall/pickables/weapons/SMGShortItem.js';
 
 // Characters & Creatures
 export { Tofu } from './composite/tofu/Tofu.js';

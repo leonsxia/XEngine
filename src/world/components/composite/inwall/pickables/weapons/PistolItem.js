@@ -15,7 +15,6 @@ class PistolItem extends WeaponItem {
         specs.depth = .165;
         specs.offsetX = -.57;
         specs.offsetY = -.15;
-        specs.offsetZ = -.01;
         specs.gltfScale = [.15, .15, .15];
         specs.gltfRotation = [- Math.PI / 2, 0, 0];
         specs.weaponType = WEAPONS.PISTOL1;

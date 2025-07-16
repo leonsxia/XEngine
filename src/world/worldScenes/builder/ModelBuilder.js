@@ -9,7 +9,7 @@ import {
     Television01,
     FancyPictureFrame01, VintageGrandfatherClock,
     ModernCeilingLamp01, SecurityLight,
-    GlockItem, BayonetItem, PistolItem
+    GlockItem, BayonetItem, PistolItem, RevolverItem, SMGShortItem
 } from '../../components/Models.js';
 import {
     AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, CREATURE_BASE, ZOMBIE_MALE, BLACK_WIDOW,
@@ -61,6 +61,8 @@ class ModelBuilder {
         this.objectCreationMapping[WEAPONS.BAYONET] = this.createBayonetItem;
         this.objectCreationMapping[WEAPONS.GLOCK] = this.createGlockItem;
         this.objectCreationMapping[WEAPONS.PISTOL1] = this.createPistolItem;
+        this.objectCreationMapping[WEAPONS.REVOLVER] = this.createRevolverItem;
+        this.objectCreationMapping[WEAPONS.SMG_SHORT] = this.createSMGShortItem;
         this.objectCreationMapping[AXES] = this.createAxes;
         this.objectCreationMapping[GRID] = this.createGrid;
         this.objectCreationMapping[PLANE] = this.createPlane;
@@ -255,6 +257,48 @@ class ModelBuilder {
         this.setupObjectGLTF({ src }, specs);
 
         object = new PistolItem(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        if (!specs.ammo) specs.ammo = {};
+        Object.assign(specs.ammo, object.ammo.toJSON());
+
+        if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
+    createRevolverItem(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new RevolverItem(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        if (!specs.ammo) specs.ammo = {};
+        Object.assign(specs.ammo, object.ammo.toJSON());
+
+        if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
+    createSMGShortItem(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new SMGShortItem(specs);
         object.setPosition(position)
             .setRotationY(rotationY);
 

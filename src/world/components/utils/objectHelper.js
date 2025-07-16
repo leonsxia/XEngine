@@ -15,7 +15,9 @@ import {
     WoodenSmallTable,
     GlockItem,
     PistolItem,
-    BayonetItem
+    RevolverItem,
+    SMGShortItem,
+    BayonetItem    
 } from "../Models";
 
 function clone(target, source, ignore = []) {
@@ -169,6 +171,8 @@ function objectFilter(object) {
         object instanceof WoodenSmallTable ||
         object instanceof GlockItem ||
         object instanceof PistolItem ||
+        object instanceof RevolverItem ||
+        object instanceof SMGShortItem ||
         object instanceof BayonetItem
     ) {
 

@@ -25,7 +25,7 @@ class SMGShort extends WeaponBase {
             attackInterval: 0.08,
             fireRate: 10.2,
             ammo: new Ammo({ type: AMMOS.SMG, count: 35, damage: 7, offset: - 2, offset1: 2 }),
-            magzineCapacity: 12,
+            magzineCapacity: 35,
             isSemiAutomatic: false
         };
 
