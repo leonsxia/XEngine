@@ -32,7 +32,7 @@ class Pda {
 
         this._inventory = new Inventory({ attachTo: this });
 
-        this._attachTo = specs.attachTo;
+        this._owner = specs.owner;
 
     }
 
@@ -179,7 +179,7 @@ class Pda {
         for (let i = 0, il = this._inventory.items.length; i < il; i++) {
 
             const item = this._inventory.items[i];
-            item.currentRoom = this._attachTo.currentRoom;
+            item.currentRoom = this._owner.currentRoom;
 
         }
 
@@ -206,8 +206,8 @@ class Pda {
 
     addInventoryItem(item) {
 
-        this._inventory.add(item);        
-        this.doInventoryItemChangedEvents(item);        
+        this._inventory.add(item);
+        this.doInventoryItemChangedEvents(item);
 
     }
 

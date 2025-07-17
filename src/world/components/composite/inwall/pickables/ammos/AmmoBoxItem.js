@@ -2,7 +2,7 @@ import { PickableItem } from "../PickableItem";
 
 class AmmoBoxItem extends PickableItem {
 
-    isAmmoItem = true;
+    isAmmoBoxItem = true;
 
     ammoBoxType;
     ammo;

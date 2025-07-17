@@ -1092,6 +1092,8 @@ class SceneBuilder {
                         if (updateSetupOnly) {
 
                             _origin.currentRoom = find.father.currentRoom;
+                            _origin.isPicked = find.father.isPicked;
+                            _origin.belongTo = find.father.belongTo;
 
                             if (find.father.ammo) {
 
@@ -1104,14 +1106,15 @@ class SceneBuilder {
 
                         } else {
 
-                            const { currentRoom = '' } = _target;
-                            const _ammoSpecs = _target.ammo ?? _origin.ammo;
+                            const { currentRoom = '', isPicked = false, belongTo } = _target;
+                            find.father.currentRoom = currentRoom;
+                            find.father.isPicked = isPicked;
+                            find.father.belongTo = belongTo;
 
+                            const _ammoSpecs = _target.ammo ?? _origin.ammo;
                             if (_ammoSpecs) {
 
-                                const { count, damage, offset0, offset1 } = _ammoSpecs;
-
-                                find.father.currentRoom = currentRoom;
+                                const { count, damage, offset0, offset1 } = _ammoSpecs;                                
                                 find.father.ammo.count = count ?? find.father.ammo.count;
                                 find.father.ammo.damage = damage ?? find.father.ammo.damage;
                                 find.father.ammo.offset0 = offset0 ?? find.father.ammo.offset0;

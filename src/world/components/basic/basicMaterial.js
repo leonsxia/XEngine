@@ -38,7 +38,7 @@ function createSpriteMaterial(canvas) {
 
     return new SpriteMaterial({
         map: texture,
-        transparent: false
+        transparent: true
     });
 
 }

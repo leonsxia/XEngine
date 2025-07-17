@@ -14,7 +14,7 @@ class Inventory extends TabPanel {
 
         this.items.push(item);
         item.isPicked = true;
-        item.belongTo = this._attachTo._attachTo.name;
+        item.belongTo = this._attachTo._owner.name;
 
     }
 
@@ -27,6 +27,8 @@ class Inventory extends TabPanel {
             this.items.splice(idx, 1);
             item.isPicked = false;
             item.belongTo = undefined;
+
+            if (item.isWeaponItem) item.isArmed = false;
 
         }
 

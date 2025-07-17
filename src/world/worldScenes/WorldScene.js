@@ -11,9 +11,11 @@ import { GuiMaker } from '../systems/GuiMaker.js';
 import { UpdatableQueue } from '../components/updatables/UpdatableQueue.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { Combat } from '../components/updatables/Combat.js';
+import { Interaction } from '../components/updatables/Interaction.js';
 import { AI } from '../components/updatables/AI.js';
 import { AnimeMixer } from '../components/updatables/AnimeMixer.js';
 import { independence } from '../components/basic/colorBase.js';
+import { InputBase } from '../systems/physicalInputs/InputBase.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -77,6 +79,7 @@ class WorldScene {
     pickables = [];
 
     combat = null;
+    interaction = null;
     ai = null;
     animeMixer = null;
     // updatable modules
@@ -223,6 +226,10 @@ class WorldScene {
         this.combat = new Combat(this.players, this.enemies, this.scene);
         this.updatableQueue.add(this.combat);
 
+        // interaction
+        this.interaction = new Interaction(this.players, this.pickables);
+        this.updatableQueue.add(this.interaction);
+
         // anime mixer
         this.animeMixer = new AnimeMixer(this.players, this.enemies, this.pickables);
         this.updatableQueue.add(this.animeMixer);
@@ -304,6 +311,18 @@ class WorldScene {
                     enemy.onDisposed.push(player.onTargetDisposed.bind(player));
 
                 }
+
+            }
+
+        }
+
+        // initialize pickables
+        {
+
+            for (let i = 0, il = this.pickables.length; i < il; i++) {
+
+                const pickableItem = this.pickables[i];
+                this.subscribeEvents(pickableItem, InputBase.CONTROL_TYPES.XBOX_CONTROLLER);
 
             }
 
@@ -757,7 +776,7 @@ class WorldScene {
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
                 this.disablePlayerPda();
-                if (this.player.pda) this.unsubscribeEvents(this.player.pda, 'pda');
+                if (this.player.pda) this.unsubscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.PDA);
 
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
 
@@ -785,8 +804,8 @@ class WorldScene {
             this.subscribeEvents(this.player, this.setup.moveType);
             if (this.player.pda) {
 
-                this.subscribeEvents(this.player.pda, 'pda');
-                this.subscribeEvents(this.player.pda, 'xboxController');
+                this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.PDA);
+                this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.XBOX_CONTROLLER);
 
             }
 
@@ -846,24 +865,36 @@ class WorldScene {
                     if (filter.length > 0) {
 
                         const find = filter[0];
-                        if (item.isPicked) {
+                        if (item.isPicked && item.belongTo === player.name) {
 
                             item.currentRoom = player.currentRoom;
-                            const bindWeapon = player.weapons.find(w => w.weaponType === item.weaponType);
 
-                            if (bindWeapon) {
+                            if (item.isWeaponItem) {
 
-                                bindWeapon.updateWeaponProperties(item);
+                                const bindWeapon = player.weapons.find(w => w.weaponType === item.weaponType);
+                                if (bindWeapon) {
+
+                                    bindWeapon.updateWeaponProperties(item);
+
+                                }
 
                             }
 
-                        } else if (!item.isPicked) {
+                        } else {
 
                             player.pda.removeInventoryItem(find);
 
                         }
 
                         break;
+
+                    } else {
+
+                        if (item.isPicked && item.belongTo === player.name) {
+
+                            player.addPickableItem(item);
+
+                        }
 
                     }
 

@@ -27,6 +27,9 @@ const BBW = 0x00ff00;
 const intersect = 0xFF2400;
 const specular = 0x111111;
 
+// ui
+const labelBackground = 0x555555; 
+
 // AI color codes
 const AI = {
     targetInRange: 0xFF2400
@@ -119,6 +122,7 @@ export {
     BBW,
     intersect,
     specular,
+    labelBackground,
     AI,
     colorStr,
     colorHex,

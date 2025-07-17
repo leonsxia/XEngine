@@ -1,6 +1,11 @@
+import { Sprite } from "three";
+import { ObstacleBase } from "../ObstacleBase";
 import { GLTFModel } from "../../../Models";
 import { createOBBBox } from "../../../physics/collisionHelper";
-import { ObstacleBase } from "../ObstacleBase";
+import { makeInteractiveLabelCanvas } from "../../../utils/canvasMaker";
+import { createSpriteMaterial } from "../../../basic/basicMaterial";
+import { GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
+import { hexToRGBA, labelBackground, white } from "../../../basic/colorBase";
 
 class PickableItem extends ObstacleBase {
 
@@ -14,6 +19,8 @@ class PickableItem extends ObstacleBase {
     belongTo = undefined;
 
     currentRoom;
+
+    _xboxControllerConnected;
 
     constructor(specs) {
 
@@ -52,9 +59,19 @@ class PickableItem extends ObstacleBase {
         this.box.visible = false;
         // this.box.setTransparent(true, .5);
 
+        // interaction label
+        this.labelCanvas = makeInteractiveLabelCanvas({ baseWidth: 15, borderHeight: 15, size: 10, borderSize: 2 });
+        this.interactiveLabelTip = new Sprite(createSpriteMaterial(this.labelCanvas.canvas));
+        this.interactiveLabelTip.scale.x = this.labelCanvas.clientWidth * LABEL_BASE_SCALE;
+        this.interactiveLabelTip.scale.y = this.labelCanvas.clientHeight * LABEL_BASE_SCALE;
+        this.interactiveLabelTip.position.y = this._height / 2 + .3;
+        this.updateLabelTip();
+        this.showLabelTip(false);
+
         this.group.add(
             this.gltf.group,
-            this.box.mesh
+            this.box.mesh,
+            this.interactiveLabelTip
         );
 
     }
@@ -64,6 +81,12 @@ class PickableItem extends ObstacleBase {
         await this.gltf.init();
 
         this.setPickLayers();
+
+    }
+
+    setModelVisible(show) {
+
+        this.group.visible = show;
 
     }
 
@@ -79,6 +102,67 @@ class PickableItem extends ObstacleBase {
         if (needToUpdateOBBnRay) {
 
             this.updateOBBs();
+
+        }
+
+    }
+
+    showLabelTip(show) {
+
+        if (this.interactiveLabelTip.visible !== show) {
+
+            this.interactiveLabelTip.visible = show;
+
+        }
+
+    }
+
+    updateLabelTip() {
+
+        const { context: ctx, width, height, baseWidth } = this.labelCanvas;
+
+        const content = this._xboxControllerConnected ? GAMEPAD_BUTTONS.A : KEYS.E;
+        // measure how long the name will be
+        const textWidth = ctx.measureText(content).width;
+
+        // transform back
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = hexToRGBA(labelBackground);
+        ctx.translate(width / 2, height / 2);
+        ctx.beginPath();
+        ctx.arc(0, 0, width / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = hexToRGBA(white);
+        ctx.arc(0, 0, (width - 2) / 2, 0, 2 * Math.PI);
+        ctx.stroke();
+
+        if (textWidth > 0) {
+
+            // scale to fit but don't stretch
+            const scaleFactor = Math.min(1, baseWidth / textWidth);
+            ctx.scale(scaleFactor, 1);
+            ctx.fillStyle = hexToRGBA(white);
+            ctx.fillText(content, 0, 0);
+
+        }
+
+        this.interactiveLabelTip.material.map.needsUpdate = true;
+
+    }
+
+    // events
+    xboxControllerConnected(val) {
+
+        if (val && !this._xboxControllerConnected) {
+
+            this._xboxControllerConnected = true;
+            this.updateLabelTip();
+
+        } else if (!val && this._xboxControllerConnected) {
+
+            this._xboxControllerConnected = false;
+            this.updateLabelTip();
 
         }
 

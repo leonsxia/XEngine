@@ -196,6 +196,26 @@ class Tofu extends TofuBase {
 
     }
 
+    checkTargetInPickRange(target) {
+
+        const { angle } = this.getTargetDirectionAngle(target);
+        
+        this.getWorldPosition(_v1);
+        target.getWorldPosition(_v2);
+        _v3.copy(_v2);
+        _v2.y = _v1.y;
+        const distance = _v1.distanceTo(_v2) - target.depth * .5;
+
+        const thisBottomY = _v1.y - this.height * .5;
+        const thisTopY = _v1.y + this.height * .5;
+        const result = angle < this.pickRadius * .5 && distance < this.pickRange && (
+            _v3.y > thisBottomY && _v3.y < thisTopY
+        );
+
+        return { in: result, distance, target };
+
+    }
+
     checkTargetInDamageRange(target, fullCheck = false) {
 
         const { angle } = this.getTargetDirectionAngle(target);

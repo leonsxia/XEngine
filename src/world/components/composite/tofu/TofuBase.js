@@ -110,6 +110,9 @@ class TofuBase extends Moveable2D {
     #armedHeight = 0;
     #aimDirection = aimDirection.forward;
 
+    #pickRange = 1;
+    #pickRadius = Math.PI / 3;
+
     _cachedWidth;
     _cachedHeight;
     _cachedDepth;
@@ -654,6 +657,18 @@ class TofuBase extends Moveable2D {
     set aimDirection(val) {
 
         this.#aimDirection = val;
+
+    }
+
+    get pickRange() {
+
+        return this.#pickRange * this.group.scale.z;
+
+    }
+
+    get pickRadius() {
+
+        return this.#pickRadius;
 
     }
 

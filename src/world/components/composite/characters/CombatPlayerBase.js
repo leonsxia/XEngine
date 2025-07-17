@@ -10,6 +10,7 @@ import { resetObject3D } from '../../utils/objectHelper';
 const DEBUG = false;
 const DEBUG_WEAPON = true;
 const DEBUG_DAMAGE = true;
+const DEBUG_INTERACTION = true;
 
 const _m1 = new Matrix4();
 
@@ -22,6 +23,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     #logger = new Logger(DEBUG, 'CombatPlayerBase');
     #weaponLogger = new Logger(DEBUG_WEAPON, 'CombatPlayerBase');
     #damageLogger = new Logger(DEBUG_DAMAGE, 'CombatPlayerBase');
+    #interactionLogger = new Logger(DEBUG_INTERACTION, 'CombatPlayerBase');
 
     AWS;    
 
@@ -39,6 +41,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     _onMeleeHurtTargets = [];
     _cancelGunPoint = false;
     _cancelShoot = false;
+
+    isInteractiveReady = false;
+    readyToPickItem;
 
     currentRoom;
 
@@ -83,7 +88,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         
         this.group.add(this.gltf.group);
 
-        this.pda = new Pda({ attachTo: this });
+        this.pda = new Pda({ owner: this });
 
     }
 
@@ -1088,7 +1093,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     interact(val) {
 
-        if (this.attacking || this.interacting || this.dead) {
+        if (!this.isInteractiveReady || this.attacking || this.interacting || this.dead) {
 
             return;
 
@@ -1110,14 +1115,21 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             this.showArmedWeapon(false);
             this.AWS.prepareCrossFade(null, this.AWS.actions[this._clips.INTERACT.nick], this._animationSettings.INTERACT, 1, false, false, this._animationSettings.INTERACT, endCallback);
 
+            if (this.readyToPickItem) {
+
+                this.#interactionLogger.log(`player: ${this.name} picked item: ${this.readyToPickItem.name}`);
+                this.addPickableItem(this.readyToPickItem);
+
+            }
+
+            super.interact(true);
+            this.switchHelperComponents();
+
         } else if (this.AWS.isLooping) {
 
             return;
 
-        }
-
-        super.interact(val);
-        this.switchHelperComponents();
+        }        
 
     }
 

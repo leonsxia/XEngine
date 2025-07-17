@@ -2,6 +2,7 @@ import { Sprite } from "three";
 import { makeLabelCanvas } from "../utils/canvasMaker";
 import { createSpriteMaterial } from "../basic/basicMaterial";
 import { colorStr } from "../basic/colorBase";
+import { LABEL_BASE_SCALE } from "../../systems/ui/uiConstants";
 
 const PALETTE = [];
 
@@ -56,9 +57,8 @@ class Health {
 
         this.strip = new Sprite(createSpriteMaterial(this.labelCanvas.canvas));
 
-        const labelBaseScale = 0.01;
-		this.strip.scale.x = this.labelCanvas.clientWidth * labelBaseScale;
-		this.strip.scale.y = this.labelCanvas.clientHeight * labelBaseScale;
+		this.strip.scale.x = this.labelCanvas.clientWidth * LABEL_BASE_SCALE;
+		this.strip.scale.y = this.labelCanvas.clientHeight * LABEL_BASE_SCALE;
 
         this.updateHealth();
 
