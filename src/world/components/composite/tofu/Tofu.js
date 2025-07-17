@@ -11,6 +11,8 @@ const DEBUG = false;
 
 class Tofu extends TofuBase {
 
+    _currentHP;
+
     #logger = new Logger(DEBUG, 'Tofu');
 
     constructor(specs) {
@@ -18,6 +20,36 @@ class Tofu extends TofuBase {
         super(specs);
 
     }
+
+    get currentHP() {
+
+        return this.health.current;
+
+    }
+
+    set currentHP(val) {
+
+        this.health.current = val;
+        
+        if (this.health.isEmpty && !this.dead) {
+
+            this.setStateAfterDamageReceived();
+
+        } else if (!this.health.isEmpty && this.dead) {
+
+            this.isActive = true;
+            this.resetAnimation();            
+
+        } else {
+
+            this.clearInSightTargets();
+
+        }
+
+    }
+
+    // inherited by children
+    setStateAfterDamageReceived() {}
 
     checkSightOfView(target) {
 
@@ -305,6 +337,9 @@ class Tofu extends TofuBase {
 
     // inherited by children
     onHealthReset() {}
+
+    // inherited by children
+    resetAnimation() {}
 
 }
 

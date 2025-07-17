@@ -396,6 +396,12 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         this.health.current -= damage;
 
+        this.setStateAfterDamageReceived();
+
+    }
+
+    setStateAfterDamageReceived() {
+
         if (this.health.currentLife > 0) {
 
             this.hurt(true);
@@ -411,7 +417,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             super.movingLeft(false);
             super.movingRight(false);
-            super.movingForward(false);        
+            super.movingForward(false);
 
         }
 

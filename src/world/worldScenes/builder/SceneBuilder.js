@@ -690,16 +690,20 @@ class SceneBuilder {
         if (updateSetupOnly) {
 
             _origin.position = this.positionArr(findPlayer.position);
+            _origin.rotation = this.rotationArr(findPlayer.rotation);
+            _origin.currentHP = findPlayer.currentHP;
 
         } else {
 
-            const { position } = _target;
+            const { position, rotation = this.rotationArr(findPlayer.rotation), currentHP } = _target;
 
             findPlayer.setPosition(position)
+                .setRotation(rotation)
                 .updateOBB()
                 .updateRay?.()
                 .updateWalls?.();
-            _origin.position = new Array(...position);
+            
+            if (currentHP !== undefined) findPlayer.currentHP = currentHP;
 
         }
 
@@ -715,17 +719,20 @@ class SceneBuilder {
         if (updateSetupOnly) {
 
             _origin.position = this.positionArr(findEnemy.position);
+            _origin.rotation = this.rotationArr(findEnemy.rotation);
+            _origin.currentHP = findEnemy.currentHP;
 
         } else {
 
-            const { position, rotation } = _target;
+            const { position, rotation = this.rotationArr(findEnemy.rotation), currentHP } = _target;
 
             findEnemy.setPosition(position)
                 .setRotation(rotation)
                 .updateOBB()
                 .updateRay?.()
                 .updateWalls?.();
-            _origin.position = new Array(...position);
+
+            if (currentHP !== undefined) findEnemy.currentHP = currentHP;
 
         }
 

@@ -1210,12 +1210,18 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this.health.current -= damage;
 
+        this.setStateAfterDamageReceived();
+
+    }
+
+    setStateAfterDamageReceived() {
+
         if (this.health.currentLife > 0) {
 
             this.hurt(true);
 
         } else {
-          
+
             this.clearInSightTargets();
             this.die(true);
 

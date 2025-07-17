@@ -107,10 +107,11 @@ class ModelBuilder {
     createTofu(specs) {
 
         let object;
-        const { name, position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false, enableDefaultCBox = true } = specs;
+        const { name, position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false, enableDefaultCBox = true } = specs;
 
         object = new Tofu({ name, enableDefaultCBox });
         object.setPosition(position)
+            .setRotation(rotation)
             .setScale(scale)
             .receiveShadow(receiveShadow)
             .castShadow(castShadow)
@@ -124,10 +125,11 @@ class ModelBuilder {
     createTrain(specs) {
 
         let object;
-        const { name, position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
+        const { name, position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
 
         object = new Train(name);
         object.setPosition(position)
+            .setRotation(rotation)
             .setScale(scale)
             .receiveShadow(receiveShadow)
             .castShadow(castShadow)
@@ -157,16 +159,14 @@ class ModelBuilder {
     createSoldierFemale(specs) {
 
         let object;
-        const { position = [0, 0, 0] } = specs;
+        const { position = [0, 0, 0], rotation = [0, 0, 0] } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new SoldierFemale(specs);
         object.setPosition(position)
-            // .setScale(scale)
-            // .receiveShadow(receiveShadow)
-            // .castShadow(castShadow)
+            .setRotation(rotation)
             .updateOBB()
             .updateRay();
 
