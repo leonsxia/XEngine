@@ -886,8 +886,6 @@ class WorldScene {
 
                         }
 
-                        break;
-
                     } else {
 
                         if (item.isPicked && item.belongTo === player.name) {
