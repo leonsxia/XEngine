@@ -11,7 +11,7 @@ class PaintedWoodenBlueChair extends ObstacleBase {
     _depth = .666;
     _bottomWidth = .572;
     _bottomHeight = .589;
-    _bottomDepth = .585;
+    _bottomDepth = .655;
     _backHeight = .691;
     _backDepth = .154;
 

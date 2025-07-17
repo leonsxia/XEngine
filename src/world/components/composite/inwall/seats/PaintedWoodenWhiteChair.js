@@ -10,7 +10,7 @@ class PaintedWoodenWhiteChair extends ObstacleBase {
     _height = .964;
     _depth = .506;
     _bottomHeight = .458;
-    _bottomDepth = .476;
+    _bottomDepth = .536;
     _backWidth = .377;
     _backHeight = .518;
     _backDepth = .125;
