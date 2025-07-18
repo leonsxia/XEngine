@@ -1,3 +1,4 @@
+import { IMAGE_URLS } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, WEAPONS } from "../../../../utils/constants";
 import { Ammo } from "../../../weapons/Ammo";
 import { WeaponItem } from "./WeaponItem";
@@ -7,6 +8,7 @@ const GLTF_SRC = 'weapons/bayonet.glb';
 class BayonetItem extends WeaponItem {
 
     static gltfModel;
+    static imgUrl = IMAGE_URLS.BAYONET;
 
     constructor(specs) {
 
@@ -17,6 +19,7 @@ class BayonetItem extends WeaponItem {
         specs.gltfRotation = [- Math.PI / 2, 0, 0];
         specs.weaponType = WEAPONS.BAYONET;
         specs.src = specs.src ?? GLTF_SRC;
+        specs.imgUrl = BayonetItem.imgUrl;
 
         const { damage = 30, offset0 = - 10, offset1 = 10 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.BAYONET, isMeleeWeapon: true, damage, offset0, offset1 });

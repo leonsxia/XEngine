@@ -71,6 +71,56 @@ function createPdaMenu() {
 
 }
 
+function createInventory() {
+
+    const inventoryContainer = document.createElement('div');
+    inventoryContainer.setAttribute('name', 'pda-inventory');
+
+    const inventoryPanel = document.createElement('div');
+    inventoryPanel.classList.add('inventory-panel');
+
+    const slotsPanel = document.createElement('div');
+    slotsPanel.classList.add('slots-panel');
+
+    const itemsPanel = document.createElement('div');
+    itemsPanel.classList.add('items-panel');
+
+    const descriptionPanel = document.createElement('div');
+    descriptionPanel.classList.add('description-panel');
+
+    const slotsDivList = [];
+    for (let i = 0; i < 16; i++) {
+
+        const slot = document.createElement('div');
+        slot.setAttribute('idx', i);
+        slot.classList.add('slot');
+        slotsDivList.push(slot);
+
+    }
+    slotsPanel.append(...slotsDivList);
+
+    const itemsDivList = [];
+
+    inventoryPanel.append(slotsPanel, itemsPanel, descriptionPanel);
+    inventoryContainer.appendChild(inventoryPanel);
+
+    return { inventoryContainer, inventoryPanel, slotsPanel, itemsPanel, descriptionPanel, slotsDivList, itemsDivList }
+
+}
+
+function createInventoryItem(specs) {
+
+    const { itemSize = 1, imgUrl } = specs;
+
+    const itemDiv = document.createElement('div');
+    itemDiv.classList.add('inv-item', `item-size-${itemSize}`);
+    itemDiv.style.backgroundImage = `url("${imgUrl}")`;
+    itemDiv.style.position = 'absolute';
+
+    return itemDiv;
+
+}
+
 function getScenePosition() {
     const sceneCanvas = container.querySelector('canvas');
     const rect = sceneCanvas.getBoundingClientRect();
@@ -88,5 +138,7 @@ export {
     container, infosDomElements,
     createPdaContainer,
     createPdaMenu,
+    createInventory,
+    createInventoryItem,
     getScenePosition 
 }

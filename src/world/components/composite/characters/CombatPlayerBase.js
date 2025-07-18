@@ -387,6 +387,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (val) {
 
             this.pda.visible = !this.pda.visible;
+            this.pda._pdaMenu.currentIndex = 1;
 
         }
 

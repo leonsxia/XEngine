@@ -1,3 +1,4 @@
+import { IMAGE_URLS } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, WEAPONS } from "../../../../utils/constants";
 import { Ammo } from "../../../weapons/Ammo";
 import { WeaponItem } from "./WeaponItem";
@@ -7,6 +8,7 @@ const GLTF_SRC = 'weapons/revolver.glb';
 class SMGShortItem extends WeaponItem {
 
     static gltfModel;
+    static imgUrl = IMAGE_URLS.SMG_SHORT;
 
     constructor(specs) {
 
@@ -17,10 +19,13 @@ class SMGShortItem extends WeaponItem {
         specs.gltfRotation = [- Math.PI / 2, 0, 0];
         specs.weaponType = WEAPONS.SMG_SHORT;
         specs.src = specs.src ?? GLTF_SRC;
+        specs.imgUrl = SMGShortItem.imgUrl;
 
         const { count = 35, damage = 7, offset0 = - - 2, offset1 = 2 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.SMG, count, damage, offset0, offset1 });
         super(specs);
+
+        // this.itemSize = 2;
 
     }
 

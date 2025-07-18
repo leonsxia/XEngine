@@ -11,6 +11,20 @@
     --menu-side-first-padding: calc(var(--calculated-vw) * .3) 0;
     --menu-side-first-border: var(--menu-border-width) solid white;
     --menu-grey: #555;
+    --inventory-panel-width: calc(var(--calculated-vw) * 28);
+    --inventory-slots-panel-height: calc(var(--calculated-vw) * 28);
+    --inventory-item-size: 6.5;
+    --inventory-item-gap-size: .45333;
+    --inventory-item-width: calc(var(--calculated-vw) * var(--inventory-item-size));
+    --inventory-2-item-width: calc(var(--calculated-vw) * (var(--inventory-item-size) * 2 + var(--inventory-item-gap-size)) + 2 * var(--inventory-item-border-width));
+    --inventory-item-gap-width: calc(var(--calculated-vw) * (var(--inventory-item-size) + var(--inventory-item-gap-size)));
+    --inventory-item-border-width: calc(var(--calculated-vw) * .08);
+    --inventory-item-border: var(--inventory-item-border-width) solid white;
+    --inventory-item-grey: rgba(75, 75, 75, .5);
+}
+
+.hide {
+    display: none;
 }
 
 .default-theme {
@@ -29,6 +43,7 @@
     backdrop-filter: blur(calc(var(--calculated-vw) * .5));
 }
 
+/* pda-menu */
 .default-theme div[name="pda-menu"] {
     margin: var(--menu-margin);
     font-family: var(--menu-font);
@@ -116,4 +131,139 @@
     border-radius: calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * 2) calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * .5);
     background-color: var(--menu-grey);;
     color: white;
+}
+
+/* pda-inventory */
+.default-theme div[name="pda-inventory"] {
+    font-family: var(--menu-font);
+    -webkit-user-select: none; /* Safari */
+    user-select: none; /* Standard syntax */
+}
+
+.default-theme div[name="pda-inventory"] div.inventory-panel {
+    width: var(--inventory-panel-width);
+    height: calc(var(--calculated-vw) * 45);
+    margin-inline: auto;
+}
+
+.default-theme div[name="pda-inventory"] div.slots-panel {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: calc(var(--calculated-vw) * var(--inventory-item-gap-size));
+    width: var(--inventory-panel-width);
+    height: var(--inventory-slots-panel-height);
+}
+
+.default-theme div[name="pda-inventory"] div.slots-panel div.slot {
+    width: var(--inventory-item-width);
+    height: var(--inventory-item-width);
+    border: var(--inventory-item-border);
+    border-radius: calc(var(--calculated-vw) * .5);  
+    background-color: var(--inventory-item-grey);
+}
+
+.default-theme div[name="pda-inventory"] div.slots-panel div.occupied {
+    border: none;
+    background-color: transparent; /*rgba(0,0,0,0)*/
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel {
+    position: relative;
+    top: calc(var(--inventory-slots-panel-height) * -1);
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.item-size-1 {
+    width: var(--inventory-item-width);
+    height: var(--inventory-item-width);
+    background-size: 100% 100%;
+    border: var(--inventory-item-border);
+    border-radius: calc(var(--calculated-vw) * .5);
+    background-color: var(--inventory-item-grey);
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.item-size-2 {
+    width: var(--inventory-2-item-width);
+    height: var(--inventory-item-width);
+    background-size: 100% 100%;
+    border: var(--inventory-item-border);
+    border-radius: calc(var(--calculated-vw) * .5);
+    background-color: var(--inventory-item-grey);
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-0 {
+    left: 0;
+    top: 0;
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-1 {
+    left: calc(var(--inventory-item-gap-width) + 2 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-2 {
+    left: calc(var(--inventory-item-gap-width) * 2 + 4 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-3 {
+    left: calc(var(--inventory-item-gap-width) * 3 + 6 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-4 {
+    left: 0;
+    top: calc(var(--inventory-item-gap-width) + 2 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-5 {
+    left: calc(var(--inventory-item-gap-width) + 2 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) + 2 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-6 {
+    left: calc(var(--inventory-item-gap-width) * 2 + 4 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) + 2 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-7 {
+    left: calc(var(--inventory-item-gap-width) * 3 + 6 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) + 2 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-8 {
+    left: 0;
+    top: calc(var(--inventory-item-gap-width) * 2 + 4 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-9 {
+    left: calc(var(--inventory-item-gap-width) + 2 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) * 2 + 4 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-10 {
+    left: calc(var(--inventory-item-gap-width) * 2 + 4 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) * 2 + 4 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-11 {
+    left: calc(var(--inventory-item-gap-width) * 3 + 6 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) * 2 + 4 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-12 {
+    left: 0;
+    top: calc(var(--inventory-item-gap-width) * 3 + 6 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-13 {
+    left: calc(var(--inventory-item-gap-width) + 2 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) * 3 + 6 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-14 {
+    left: calc(var(--inventory-item-gap-width) * 2 + 4 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) * 3 + 6 * var(--inventory-item-border-width));
+}
+
+.default-theme div[name="pda-inventory"] div.items-panel div.idx-15 {
+    left: calc(var(--inventory-item-gap-width) * 3 + 6 * var(--inventory-item-border-width));
+    top: calc(var(--inventory-item-gap-width) * 3 + 6 * var(--inventory-item-border-width));
 }

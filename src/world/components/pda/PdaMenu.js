@@ -7,7 +7,7 @@ class PdaMenu {
     _currentIdx = 1;
     _tabCount = 3;
 
-    constructor() {
+    constructor(specs) {
 
         const { menu, menuUl, menuLiLeft, menuLiRight, menuLiCenter, menuCenterDivMain, menuCenterDots } = createPdaMenu();
         this.menu = menu;
@@ -17,6 +17,8 @@ class PdaMenu {
         this.menuLiCenter = menuLiCenter;
         this.menuCenterDivMain = menuCenterDivMain;
         this.menuCenterDots = menuCenterDots;
+
+        this._attachTo = specs.attachTo;
 
     }
 
@@ -32,6 +34,10 @@ class PdaMenu {
     set currentIndex(val) {
 
         this._currentIdx = val > 0 ? val % this._tabCount : (this._tabCount + val) % this._tabCount;
+        this.applyContent();
+        this.highlightDot();
+        this._attachTo.hideAllPanels();
+        this._attachTo.showPanel(this._currentIdx);
 
     }
 
@@ -52,16 +58,12 @@ class PdaMenu {
     shiftLeft() {
 
         this.currentIndex --;
-        this.applyContent();
-        this.highlightDot();
 
     }
 
     shiftRight() {
         
         this.currentIndex ++;
-        this.applyContent();
-        this.highlightDot()
 
     }
 

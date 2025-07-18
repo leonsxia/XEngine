@@ -27,10 +27,11 @@ class Pda {
         const { pdaContainer } = createPdaContainer(theme);
         this._pdaContainer = pdaContainer;
 
-        this._pdaMenu = new PdaMenu();
+        this._pdaMenu = new PdaMenu({ attachTo: this });
         this._pdaContainer.appendChild(this._pdaMenu.menu);
 
         this._inventory = new Inventory({ attachTo: this });
+        this._pdaContainer.appendChild(this._inventory._html.inventoryContainer);
 
         this._owner = specs.owner;
 
@@ -85,6 +86,28 @@ class Pda {
         if (this._pdaContainer.parentNode) {
 
             this._pdaContainer.parentNode.removeChild(this._pdaContainer);
+
+        }
+
+    }
+
+    hideAllPanels() {
+
+        this._inventory._html.inventoryContainer.classList.add('hide');
+
+    }
+
+    showPanel(panelIdx) {
+
+        switch(panelIdx) {
+
+            case 0:
+                break;
+            case 1:
+                this._inventory._html.inventoryContainer.classList.remove('hide');
+                break;
+            case 2:
+                break;
 
         }
 

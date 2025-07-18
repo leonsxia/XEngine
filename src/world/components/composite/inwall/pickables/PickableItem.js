@@ -6,6 +6,7 @@ import { makeInteractiveLabelCanvas } from "../../../utils/canvasMaker";
 import { createSpriteMaterial } from "../../../basic/basicMaterial";
 import { GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
 import { hexToRGBA, labelBackground, white } from "../../../basic/colorBase";
+import { createInventoryItem } from "../../../../systems/htmlElements";
 
 class PickableItem extends ObstacleBase {
 
@@ -13,6 +14,10 @@ class PickableItem extends ObstacleBase {
     _height;
     _depth;
     _gltfScale = [1, 1, 1];
+
+    _itemSize = 1;
+    itemHtml;
+    occupiedSlotIdx = -1;
 
     isPickableItem = true;
     isPicked = false;
@@ -59,6 +64,9 @@ class PickableItem extends ObstacleBase {
         this.box.visible = false;
         // this.box.setTransparent(true, .5);
 
+        // html
+        this.createItemHtml();
+
         // interaction label
         this.labelCanvas = makeInteractiveLabelCanvas({ baseWidth: 15, borderHeight: 15, size: 10, borderSize: 2 });
         this.interactiveLabelTip = new Sprite(createSpriteMaterial(this.labelCanvas.canvas));
@@ -84,6 +92,49 @@ class PickableItem extends ObstacleBase {
 
     }
 
+    get itemSize() {
+
+        return this._itemSize;
+
+    }
+
+    set itemSize(val) {
+
+        this._itemSize = val;
+        this.removeHtmlClass('item-size-');
+        this.addHtmlClass('item-size-2');
+        
+    }
+
+    removeHtmlClass(clsname) {
+
+        let find = [];
+        for (let i = 0, il = this.itemHtml.classList.length; i < il; i++) {
+
+            const cls = this.itemHtml.classList[i];
+            if (cls.includes(clsname)) {
+
+                find.push(cls);
+
+            }
+
+        }
+
+        for (let i = 0, il = find.length; i < il; i++) {
+
+            const cls = find[i];
+            this.itemHtml.classList.remove(cls);
+
+        }
+
+    }
+
+    addHtmlClass(clsname) {
+
+        this.itemHtml.classList.add(clsname);
+
+    }
+
     setModelVisible(show) {
 
         this.group.visible = show;
@@ -104,6 +155,12 @@ class PickableItem extends ObstacleBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    createItemHtml() {
+
+        this.itemHtml = createInventoryItem({ imgUrl: this.specs.imgUrl, itemSize: this.itemSize });
 
     }
 
