@@ -110,7 +110,7 @@ class TofuBase extends Moveable2D {
     #armedHeight = 0;
     #aimDirection = aimDirection.forward;
 
-    #pickRange = 1;
+    #pickRange = .8;
     #pickRadius = Math.PI / 3;
 
     _cachedWidth;

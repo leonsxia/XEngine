@@ -128,13 +128,14 @@ class PickableItem extends ObstacleBase {
         // transform back
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = hexToRGBA(labelBackground);
         ctx.translate(width / 2, height / 2);
         ctx.beginPath();
-        ctx.arc(0, 0, width / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = hexToRGBA(labelBackground, .5);
+        ctx.arc(0, 0, (width - 5) / 2, 0, 2 * Math.PI);
         ctx.fill();
         ctx.strokeStyle = hexToRGBA(white);
-        ctx.arc(0, 0, (width - 2) / 2, 0, 2 * Math.PI);
+        ctx.lineWidth = 4;
+        ctx.arc(0, 0, (width - 5) / 2, 0, 2 * Math.PI);
         ctx.stroke();
 
         if (textWidth > 0) {

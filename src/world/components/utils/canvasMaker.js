@@ -1,6 +1,6 @@
 function makeLabelCanvas(specs) {
 
-    const scale = 3;
+    const scale = 3 * window.devicePixelRatio;
     const { baseWidth, size, borderSize = 5 } = specs;
     const ctx = document.createElement('canvas').getContext('2d');
     const font = `bold ${size * scale}px sans-serif`;
@@ -33,7 +33,7 @@ function makeLabelCanvas(specs) {
 
 function makeInteractiveLabelCanvas(specs) {
 
-    const scale = 3;
+    const scale = 3 * window.devicePixelRatio;
     const { baseWidth, borderHeight, size, borderSize } = specs;
     const ctx = document.createElement('canvas').getContext('2d');
     const font = `bold ${size * scale}px sans-serif`;
