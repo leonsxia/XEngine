@@ -104,7 +104,7 @@
     margin: 0 calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * .06) calc(var(--calculated-vw) * .5);
     border: var(--menu-border-width) solid var(--menu-grey);;
     border-radius: calc(var(--calculated-vw) * 1);
-    background-color: var(--menu-grey);;
+    background-color: var(--menu-grey);
 }
 
 .default-theme div[name="pda-menu"] ul li.center :last-child span.current {
@@ -189,12 +189,12 @@
     transform: rotate(-45deg);
 }
 
-.default-theme div[name="pda-inventory"] div.slots-panel div.occupied .slot-content {    
+.default-theme div[name="pda-inventory"] div.slots-panel div.occupied .slot-content {
     border: none;
     background-color: transparent; /*rgba(0,0,0,0)*/
 }
 
-.default-theme div[name="pda-inventory"] div.slots-panel div.occupied .crossline {    
+.default-theme div[name="pda-inventory"] div.slots-panel div.occupied .crossline {
     display: none;
 }
 
@@ -257,11 +257,11 @@
 }
 
 .default-theme div[name="pda-inventory"] div.items-panel .count-info.full {
-    color: #7CFC00
+    color: #7CFC00;
 }
 
 .default-theme div[name="pda-inventory"] div.items-panel .count-info.empty {
-    color: #ED2939
+    color: #ED2939;
 }
 
 .default-theme div[name="pda-inventory"] div.items-panel div.idx-0 {
