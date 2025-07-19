@@ -836,7 +836,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     melee(val) {
 
-        if (this.interacting || this.gunPointing || this.dead) {
+        if (this.gunPointing || this.dead) {
 
             return;
 
@@ -859,7 +859,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             }
 
             this.#logger.log(`melee attack!`);
-            this.switchWeapon(this._meleeWeapon);
+            if (!this.interacting && !this.hurting) this.switchWeapon(this._meleeWeapon);
             this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.meleeAttackAction.attack.nick], this._animationSettings.MELEE, 1);
             this.aimingRad = 0;
 
@@ -889,7 +889,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     gunPoint(val) {
 
-        if (this.interacting || this.meleeing || !this.armedWeapon || this.dead) {
+        if (this.meleeing || !this.armedWeapon || this.dead) {
 
             return;
 
@@ -1106,22 +1106,39 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             const endCallback = () => {
 
+                if (!this.hurting && !this.dead && this.readyToPickItem) {
+
+                    this.#interactionLogger.log(`player: ${this.name} picked item: ${this.readyToPickItem.name}`);
+                    this.addPickableItem(this.readyToPickItem);
+                    this.readyToPickItem = undefined;
+
+                }
+
                 super.interact(false);
-                this.showArmedWeapon(true);
                 this.switchHelperComponents();
+
+                if (!this.meleeing) {
+
+                    this.showArmedWeapon(true);
+
+                } else {
+
+                    this.switchWeapon(this._meleeWeapon);
+
+                }
+
+                if (this.gunPointing) {
+
+                    this.resetAimingState(this);
+                    this.setAiming();
+
+                }
 
             }
 
             this.#logger.log(`interact !`);
             this.showArmedWeapon(false);
-            this.AWS.prepareCrossFade(null, this.AWS.actions[this._clips.INTERACT.nick], this._animationSettings.INTERACT, 1, false, false, this._animationSettings.INTERACT, endCallback);
-
-            if (this.readyToPickItem) {
-
-                this.#interactionLogger.log(`player: ${this.name} picked item: ${this.readyToPickItem.name}`);
-                this.addPickableItem(this.readyToPickItem);
-
-            }
+            this.AWS.prepareCrossFade(null, this.AWS.actions[this._clips.INTERACT.nick], this._animationSettings.INTERACT, 1, false, false, this._animationSettings.INTERACT, endCallback);            
 
             super.interact(true);
             this.switchHelperComponents();
@@ -1141,10 +1158,16 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (val) {
 
             const hurtAction = this.AWS.actions[this.currentActionType.hurt.body.nick];
+            const interactAction = this.AWS.actions[this._clips.INTERACT.nick];
             if (this.AWS.activeAction === hurtAction) {
 
                 this.AWS.fadeToPrevious();
                 hurtAction.ignoreFinishedEvent = true;
+
+            } else if (this.AWS.activeAction === interactAction) {
+
+                this.AWS.fadeToPrevious();
+                interactAction.ignoreFadeOut = true;
 
             }
 
@@ -1152,15 +1175,35 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                 super.hurt(false);
                 hurtAction.ignoreFinishedEvent = undefined;
+                interactAction.ignoreFadeOut = undefined;
                 this.AWS.isLooping = false;
                 this.startAttackTimer();
                 this.switchHelperComponents();
+
+                if (!this.meleeing) {
+
+                    this.showArmedWeapon(true);
+
+                } else {
+
+                    this.switchWeapon(this._meleeWeapon);
+
+                }
+
+                if (this.gunPointing) {
+
+                    this.resetAimingState(this);
+                    this.setAiming();
+
+                }
 
             }
 
             this.#logger.log(`${this.name} is on hurt`);
             this.AWS.prepareCrossFade(null, hurtAction, this._animationSettings.HURT, 1, false, false, this._animationSettings.HURT, endCallback);
 
+            // stop aim turning
+            this.aimingRad = 0;
         }
 
         super.hurt(val);
@@ -1177,11 +1220,17 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             const dieAction = this.AWS.actions[this.currentActionType.die.nick];
             const hurtAction = this.AWS.actions[this.currentActionType.hurt.body.nick];
+            const interactAction = this.AWS.actions[this._clips.INTERACT.nick];
             if (this.AWS.activeAction === hurtAction) {
 
                 this.AWS.fadeToPrevious();
                 hurtAction.ignoreFinishedEvent = true;
                 hurtAction.ignoreFadeOut = true;
+
+            } else if (this.AWS.activeAction === interactAction) {
+
+                this.AWS.fadeToPrevious();
+                interactAction.ignoreFadeOut = true;
 
             }
 
@@ -1190,6 +1239,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 this.isActive = false;
                 hurtAction.ignoreFinishedEvent = undefined;
                 hurtAction.ignoreFadeOut = undefined;
+                interactAction.ignoreFadeOut = undefined;
                 this.AWS.isLooping = false;
 
             }
@@ -1413,7 +1463,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this._target = this.getNearestInSightTarget(null, this._inSightTargets, false, 'angle');
         this._j = this._inSightTargets.findIndex(t => t.instance === this._target.instance);
 
-        if (!this._target) {
+        if (!this._target || this.interacting || this.hurting) {
             
             this.aimingRad = 0;
             return;

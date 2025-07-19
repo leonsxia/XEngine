@@ -178,6 +178,7 @@ class PickableItem extends ObstacleBase {
 
         const { context: ctx, width, height, baseWidth } = this.labelCanvas;
 
+        const borderGap = 2.5 * window.devicePixelRatio;
         const content = this._xboxControllerConnected ? GAMEPAD_BUTTONS.A : KEYS.F;
         // measure how long the name will be
         const textWidth = ctx.measureText(content).width;
@@ -188,11 +189,11 @@ class PickableItem extends ObstacleBase {
         ctx.translate(width / 2, height / 2);
         ctx.beginPath();
         ctx.fillStyle = hexToRGBA(labelBackground, .5);
-        ctx.arc(0, 0, (width - 5) / 2, 0, 2 * Math.PI);
+        ctx.arc(0, 0, (width - borderGap) / 2, 0, 2 * Math.PI);
         ctx.fill();
         ctx.strokeStyle = hexToRGBA(white);
         ctx.lineWidth = 4;
-        ctx.arc(0, 0, (width - 5) / 2, 0, 2 * Math.PI);
+        ctx.arc(0, 0, (width - borderGap) / 2, 0, 2 * Math.PI);
         ctx.stroke();
 
         if (textWidth > 0) {

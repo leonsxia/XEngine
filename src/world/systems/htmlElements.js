@@ -94,6 +94,11 @@ function createInventory() {
         const slot = document.createElement('div');
         slot.setAttribute('idx', i);
         slot.classList.add('slot');
+
+        const slotContent = document.createElement('div');
+        slotContent.classList.add('slot-content');
+
+        slot.appendChild(slotContent);
         slotsDivList.push(slot);
 
     }
@@ -114,8 +119,13 @@ function createInventoryItem(specs) {
 
     const itemDiv = document.createElement('div');
     itemDiv.classList.add('inv-item', `item-size-${itemSize}`);
-    itemDiv.style.backgroundImage = `url("${imgUrl}")`;
     itemDiv.style.position = 'absolute';
+
+    const itemContent = document.createElement('div');
+    itemContent.classList.add('item-img');
+    itemContent.style.backgroundImage = `url("${imgUrl}")`;
+
+    itemDiv.appendChild(itemContent);
 
     return itemDiv;
 

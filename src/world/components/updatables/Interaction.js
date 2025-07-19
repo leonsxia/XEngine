@@ -65,7 +65,6 @@ class Interaction {
             } else {
 
                 player.isInteractiveReady = false;
-                player.readyToPickItem = undefined;
 
             }
 
