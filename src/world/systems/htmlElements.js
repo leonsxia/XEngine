@@ -98,6 +98,12 @@ function createInventory() {
         const slotContent = document.createElement('div');
         slotContent.classList.add('slot-content');
 
+        const crossline0 = document.createElement('span');
+        const crossline1 = document.createElement('span');
+        crossline0.classList.add('crossline', 'cross-0');
+        crossline1.classList.add('crossline', 'cross-1');
+
+        slotContent.append(crossline0, crossline1);
         slot.appendChild(slotContent);
         slotsDivList.push(slot);
 
@@ -125,9 +131,17 @@ function createInventoryItem(specs) {
     itemContent.classList.add('item-img');
     itemContent.style.backgroundImage = `url("${imgUrl}")`;
 
+    const equipInfo = document.createElement('div');
+    equipInfo.innerText = 'E';
+    equipInfo.classList.add('equip-info', 'hide');
+
+    const countInfo = document.createElement('div');
+    countInfo.classList.add('count-info');
+
+    itemContent.append(equipInfo, countInfo);
     itemDiv.appendChild(itemContent);
 
-    return itemDiv;
+    return { itemDiv, equipInfo, countInfo };
 
 }
 

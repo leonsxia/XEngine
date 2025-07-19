@@ -26,12 +26,6 @@ class PistolAmmoBox extends AmmoBoxItem {
         specs.ammoInstance = new Ammo({ type: AMMOS.PISTOL_9MM, count, damage, offset0, offset1 });
         super(specs);
 
-        if (count > this.capacity) { 
-
-            this.count = this.capacity;
-
-        }
-
     }
 
     setGLTFScale() {

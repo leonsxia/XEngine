@@ -127,6 +127,66 @@ class Inventory extends TabPanel {
 
     }
 
+    equipFirearm(weapon) {
+
+        for (let i = 0, il = this.items.length; i < il; i++) {
+
+            const item = this.items[i];
+            if (item.isWeaponItem && !item.ammo.isMeleeWeapon) {
+
+                if (!weapon) {
+
+                    item.equipInfo.classList.add('hide');
+                    continue;
+
+                }
+
+                if (weapon.weaponType !== item.weaponType) {
+
+                    item.equipInfo.classList.add('hide');
+
+                } else {
+
+                    item.equipInfo.classList.remove('hide');
+
+                }
+
+            }
+
+        }
+
+    }
+
+    equipMelee(weapon) {
+
+        for (let i = 0, il = this.items.length; i < il; i++) {
+
+            const item = this.items[i];
+            if (item.isWeaponItem && item.ammo.isMeleeWeapon) {
+
+                if (!weapon) {
+
+                    item.equipInfo.classList.add('hide');
+                    continue;
+
+                }
+
+                if (weapon.weaponType !== item.weaponType) {
+
+                    item.equipInfo.classList.add('hide');
+
+                } else {
+
+                    item.equipInfo.classList.remove('hide');
+
+                }
+
+            }
+
+        }
+
+    }
+
 }
 
 export { Inventory };

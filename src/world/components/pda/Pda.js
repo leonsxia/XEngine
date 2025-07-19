@@ -191,6 +191,18 @@ class Pda {
     // control events end
 
     // inventory
+    changeFirearm(weapon) {
+
+        this._inventory.equipFirearm(weapon);
+
+    }
+
+    changeMelee(weapon) {
+
+        this._inventory.equipMelee(weapon);
+
+    }
+
     findInventoryItems(predication) {
 
         return this._inventory.findItems(predication);
@@ -217,6 +229,7 @@ class Pda {
 
             const weaponItem = filter[0];
             weaponItem.ammo.updateAmmoProperties(weapon.ammo);
+            weaponItem.updateCountInfo(weapon);
             this.#logger.log(`weapon item: ${weaponItem.name}, count: ${weaponItem.ammo.count}`);
 
         } else {

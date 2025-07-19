@@ -6,7 +6,6 @@ import { makeInteractiveLabelCanvas } from "../../../utils/canvasMaker";
 import { createSpriteMaterial } from "../../../basic/basicMaterial";
 import { GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
 import { hexToRGBA, labelBackground, white } from "../../../basic/colorBase";
-import { createInventoryItem } from "../../../../systems/htmlElements";
 
 class PickableItem extends ObstacleBase {
 
@@ -15,8 +14,10 @@ class PickableItem extends ObstacleBase {
     _depth;
     _gltfScale = [1, 1, 1];
 
+    // html content
     _itemSize = 1;
     itemHtml;
+    countInfo;
     occupiedSlotIdx = -1;
 
     isPickableItem = true;
@@ -63,9 +64,6 @@ class PickableItem extends ObstacleBase {
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.box.visible = false;
         // this.box.setTransparent(true, .5);
-
-        // html
-        this.createItemHtml();
 
         // interaction label
         this.labelCanvas = makeInteractiveLabelCanvas({ baseWidth: 15, borderHeight: 15, size: 10, borderSize: 2 });
@@ -155,12 +153,6 @@ class PickableItem extends ObstacleBase {
             this.updateOBBs();
 
         }
-
-    }
-
-    createItemHtml() {
-
-        this.itemHtml = createInventoryItem({ imgUrl: this.specs.imgUrl, itemSize: this.itemSize });
 
     }
 

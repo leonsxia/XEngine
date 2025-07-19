@@ -136,6 +136,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     addPickableItem(item) {
 
+        this.pda.addInventoryItem(item);
+
         if (item.isWeaponItem) {
 
             const matched = this.weapons.find(w => w.weaponType === item.weaponType);
@@ -153,16 +155,17 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     } else {
 
                         this._meleeWeapon = matched;
+                        this.pda.changeMelee(matched);
 
                     }
 
                 }
 
+                item.updateCountInfo(matched);
+
             }
 
         }
-
-        this.pda.addInventoryItem(item);
 
     }
 
@@ -250,6 +253,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         }
 
+        this.pda.changeFirearm(weapon);
         this.switchHelperComponents();
 
     }

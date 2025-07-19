@@ -1,3 +1,4 @@
+import { createInventoryItem } from "../../../../../systems/htmlElements";
 import { PickableItem } from "../PickableItem";
 
 class AmmoBoxItem extends PickableItem {
@@ -8,6 +9,9 @@ class AmmoBoxItem extends PickableItem {
     ammo;
     capacity;
 
+    // html
+    countInfo;
+
     constructor(specs) {
 
         super(specs);
@@ -16,6 +20,15 @@ class AmmoBoxItem extends PickableItem {
         this.ammoBoxType = ammoBoxType;
         this.ammo = ammoInstance;
         this.capacity = capacity;
+
+         if (this.count > this.capacity) { 
+
+            this.count = this.capacity;
+
+        }
+
+        // html
+        this.createItemHtml();
 
     }
 
@@ -35,7 +48,33 @@ class AmmoBoxItem extends PickableItem {
 
         return this.ammo.type;
 
-    }    
+    }
+
+    createItemHtml() {
+
+        const { itemDiv, countInfo } = createInventoryItem({ imgUrl: this.specs.imgUrl, itemSize: this.itemSize });
+        this.itemHtml = itemDiv;
+        this.countInfo = countInfo;
+
+        this.updateCountInfo();
+
+    }
+
+    updateCountInfo() {
+
+        this.countInfo.innerText = this.count;
+
+        if (this.count === this.capacity) {
+
+            this.countInfo.classList.add('full');
+
+        } else {
+
+            this.countInfo.classList.remove('full');
+
+        }
+
+    }
 
 }
 

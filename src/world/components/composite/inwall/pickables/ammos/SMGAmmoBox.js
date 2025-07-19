@@ -25,12 +25,6 @@ class SMGAmmoBox extends AmmoBoxItem {
         specs.ammoInstance = new Ammo({ type: AMMOS.SMG, count, damage, offset0, offset1 });
         super(specs);
 
-        if (count > this.capacity) { 
-
-            this.count = this.capacity;
-
-        }
-
     }
 
     setGLTFScale() {
