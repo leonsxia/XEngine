@@ -44,6 +44,8 @@ class Health {
     #current;
     #life;
 
+    onHealthChangeEvents = [];
+
     constructor(specs) {
 
         const { max = 100, min = 0, current = max, showText = true } = specs;
@@ -92,6 +94,8 @@ class Health {
             this.updateHealth();
 
         }
+
+        this.doHealthChangeEvents();
 
     }
 
@@ -160,6 +164,21 @@ class Health {
         }
 
         this.strip.material.map.needsUpdate = true;
+
+    }
+
+    doHealthChangeEvents() {
+
+        for (let i = 0, il = this.onHealthChangeEvents.length; i < il; i++) {
+
+            const callback = this.onHealthChangeEvents[i];
+            if (typeof callback === 'function') {
+
+                callback(this);
+
+            }
+
+        }
 
     }
 

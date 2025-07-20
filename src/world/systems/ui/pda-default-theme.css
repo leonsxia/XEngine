@@ -1,8 +1,7 @@
-
 :root {
     --border-radius: calc(var(--calculated-vw) * .5);
+    --pda-font: sans-serif;
     --menu-margin: calc(var(--calculated-vw) * 3) 0 calc(var(--calculated-vw) * 1) 0;
-    --menu-font: sans-serif;
     --menu-letter-spacing: calc(var(--calculated-vw) * -.05);
     --menu-border-width: calc(var(--calculated-vw) * .08);
     --menu-side-font-size: calc(var(--calculated-vw) * 1.5);
@@ -12,8 +11,11 @@
     --menu-side-first-padding: calc(var(--calculated-vw) * .3) 0;
     --menu-side-first-border: var(--menu-border-width) solid white;
     --menu-grey: #555;
-    --inventory-panel-width: calc(var(--calculated-vw) * 28);
-    --inventory-slots-panel-height: calc(var(--calculated-vw) * 28);
+    --inventory-panel-size-w: 28;
+    --inventory-panel-size-h: 45;
+    --inventory-panel-width: calc(var(--calculated-vw) * var(--inventory-panel-size-w));
+    --inventory-panel-height: calc(var(--calculated-vw) * var(--inventory-panel-size-h));
+    --inventory-slots-panel-height: calc(var(--calculated-vw) * var(--inventory-panel-size-w));
     --inventory-item-size: 6.5;
     --inventory-item-gap-size: .666667;
     --inventory-item-width: calc(var(--calculated-vw) * var(--inventory-item-size));
@@ -21,12 +23,23 @@
     --inventory-item-gap-width: calc(var(--calculated-vw) * (var(--inventory-item-size) + var(--inventory-item-gap-size)));
     --inventory-item-border-width: calc(var(--calculated-vw) * .08);
     --inventory-item-border: var(--inventory-item-border-width) solid white;
-    --inventory-item-grey: rgba(75, 75, 75, .5);  
-    --inventory-item-info-background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(51, 51, 51, 0.5) 50%, rgba(17, 17, 17, 0.9) 100%);  
-}
-
-.hide {
-    display: none;
+    --inventory-item-grey: rgba(75, 75, 75, .5);
+    --inventory-item-info-background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(51, 51, 51, 0.5) 50%, rgba(17, 17, 17, 0.9) 100%);
+    --inventory-item-info-height: calc(var(--calculated-vw) * 1.8);
+    --ecg-fine-color: rgba(55, 175, 140, 1);
+    --ecg-fine-background-color: rgba(0, 255, 0, 0.2);
+    --ecg-caution-color: rgba(254, 190, 16, 1);
+    --ecg-caution-background-color: rgba(255, 255, 0, 0.2);
+    --ecg-danger-color: rgba(179, 27, 27, 1);
+    --ecg-danger-background-color: rgba(255, 0, 0, 0.2);
+    --maps-panel-size-w: 80;
+    --maps-panel-size-h: 45;
+    --maps-panel-width: calc(var(--calculated-vw) * var(--maps-panel-size-w));
+    --maps-panel-height: calc(var(--calculated-vw) * var(--maps-panel-size-h));
+    --files-panel-size-w: 80;
+    --files-panel-size-h: 45;
+    --files-panel-width: calc(var(--calculated-vw) * var(--files-panel-size-w));
+    --files-panel-height: calc(var(--calculated-vw) * var(--files-panel-size-h));
 }
 
 .default-theme {
@@ -35,6 +48,10 @@
     left: calc(var(--calculated-v-left));
     width: calc(var(--calculated-vw) * 100);
     height: calc(var(--calculated-vh) * 100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column nowrap;
     background: linear-gradient(
         rgba(17, 17, 17, 0.97) 8%,
         rgba(44, 83, 100, 0.6) 38% 50%,
@@ -43,300 +60,441 @@
     );
     -webkit-backdrop-filter: blur(calc(var(--calculated-vw) * .5));
     backdrop-filter: blur(calc(var(--calculated-vw) * .5));
+
+    .hide {
+        display: none;
+    }
+
+    > div{
+        font-family: var(--pda-font);
+        -webkit-user-select: none; /* Safari */
+        user-select: none; /* Standard syntax */
+    }
+
+    /* pda-menu */
+    div[name="pda-menu"] {
+        margin: var(--menu-margin);
+        
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: calc(var(--calculated-vw) * .8);
+            color: white;
+
+            li.left {
+                display: block;
+                width: var(--menu-side-width);
+                font-size: var(--menu-side-font-size);
+                color: var(--menu-grey);
+                letter-spacing: var(--menu-letter-spacing);
+
+                :first-child {
+                    width: var(--menu-side-first-width);
+                    margin: var(--menu-side-first-margin);
+                    padding: var(--menu-side-first-padding);
+                    border: var(--menu-side-first-border);
+                    border-radius: calc(var(--calculated-vw) * 2) var(--border-radius) var(--border-radius) var(--border-radius);
+                    background-color: var(--menu-grey);
+                    color: white;
+                }
+            }
+
+            li.center {
+                display: block;
+                width: calc(var(--calculated-vw) * 11);
+                letter-spacing: var(--menu-letter-spacing);
+                font-size: calc(var(--calculated-vw) * 2);
+                text-align: center;
+
+                :first-child {
+                    margin-top: calc(var(--calculated-vw) * .15);
+                }
+
+                :last-child {
+                    margin-top: calc(var(--calculated-vw) * .1);
+
+                    span {
+                        display: inline-block;
+                        width: calc(var(--calculated-vw) * .5);
+                        height: calc(var(--calculated-vw) * .5);
+                        margin: 0 calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * .06) calc(var(--calculated-vw) * .5);
+                        border: var(--menu-border-width) solid var(--menu-grey);;
+                        border-radius: calc(var(--calculated-vw) * 1);
+                        background-color: var(--menu-grey);
+                    }
+
+                    span.current {
+                        display: inline-block;
+                        width: calc(var(--calculated-vw) * .65);
+                        height: calc(var(--calculated-vw) * .65);
+                        margin-bottom: 0;
+                        border: var(--menu-border-width) solid white;
+                        border-radius: calc(var(--calculated-vw) * 1);
+                        background-color: white;
+                    }
+                }
+            }
+
+            li.right {
+                display: block;
+                width: var(--menu-side-width);
+                font-size: var(--menu-side-font-size);
+                color: var(--menu-grey);;
+                letter-spacing: var(--menu-letter-spacing);
+
+                :first-child {
+                    width: var(--menu-side-first-width);
+                    margin: var(--menu-side-first-margin);
+                    padding: var(--menu-side-first-padding);
+                    border: var(--menu-side-first-border);
+                    border-radius: var(--border-radius) calc(var(--calculated-vw) * 2) var(--border-radius) var(--border-radius);
+                    background-color: var(--menu-grey);;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    /* pda-inventory */
+    div[name="pda-inventory"] {
+        position: relative;
+        width: var(--inventory-panel-width);
+        height: var(--inventory-panel-height);
+
+        div.slots-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: calc(var(--calculated-vw) * var(--inventory-item-gap-size));
+            width: var(--inventory-panel-width);
+            height: var(--inventory-slots-panel-height);
+
+            div.slot {
+                width: var(--inventory-item-width);
+                height: var(--inventory-item-width);
+
+                .slot-content {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                    border: var(--inventory-item-border);
+                    border-radius: var(--border-radius);
+                    background-color: var(--inventory-item-grey);
+
+                    .crossline {
+                        width: calc(var(--calculated-vw) * 6);
+                        height: calc(var(--calculated-vw) * .1);
+                        background: #ccc;
+                        border-radius: var(--border-radius);
+                    }
+
+                    .cross-0 {
+                        position: absolute;
+                        transform: rotate(45deg);
+                    }
+
+                    .cross-1 {
+                        transform: rotate(-45deg);
+                    }
+                }
+            }
+
+            div.occupied {
+                .slot-content {
+                    border: none;
+                    background-color: transparent; /*rgba(0,0,0,0)*/
+                }
+
+                .crossline {
+                    display: none;
+                }
+            }
+        }
+
+        div.items-panel {
+            position: relative;
+            top: calc(var(--inventory-slots-panel-height) * -1);
+
+            div.item-size-1 {
+                width: var(--inventory-item-width);
+                height: var(--inventory-item-width);
+
+                .item-img {
+                    width: 100%;
+                    height: 100%;
+                    background-size: 100% 100%;
+                    border: var(--inventory-item-border);
+                    border-radius: var(--border-radius);
+                    background-color: var(--inventory-item-grey);
+                    font-size: calc(var(--calculated-vw) * 1.2);
+                }
+            }
+
+            div.item-size-2 {
+                width: var(--inventory-2-item-width);
+                height: var(--inventory-item-width);
+
+                .item-img {
+                    width: 100%;
+                    height: 100%;
+                    background-size: 100% 100%;
+                    border: var(--inventory-item-border);
+                    border-radius: var(--border-radius);
+                    background-color: var(--inventory-item-grey);
+                    font-size: calc(var(--calculated-vw) * 1.2);
+                }
+            }
+
+            .equip-info {
+                position: absolute;
+                right: 0;
+                width: calc(var(--calculated-vw) * 2);
+                height: var(--inventory-item-info-height);
+                line-height: var(--inventory-item-info-height);
+                background: var(--inventory-item-info-background);
+                background-color: transparent;
+                color: white;
+                border-radius: 0 var(--border-radius) 0 0;
+            }
+
+            .count-info {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: calc(var(--calculated-vw) * 2);
+                height: var(--inventory-item-info-height);
+                line-height: var(--inventory-item-info-height);
+                background: var(--inventory-item-info-background);
+                background-color: transparent;
+                color: white;
+                border-radius: 0 0 var(--border-radius) 0;
+            }
+
+            .count-info.full {
+                color: #7CFC00
+            }
+
+            .count-info.empty {
+                color: #ED2939;
+            }
+
+            div.idx-0 {
+                left: 0;
+                top: 0;
+            }
+
+            div.idx-1 {
+                left: var(--inventory-item-gap-width);
+            }
+
+            div.idx-2 {
+                left: calc(var(--inventory-item-gap-width) * 2);
+            }
+
+            div.idx-3 {
+                left: calc(var(--inventory-item-gap-width) * 3);
+            }
+
+            div.idx-4 {
+                left: 0;
+                top: var(--inventory-item-gap-width);
+            }
+
+            div.idx-5 {
+                left: var(--inventory-item-gap-width);
+                top: var(--inventory-item-gap-width);
+            }
+
+            div.idx-6 {
+                left: calc(var(--inventory-item-gap-width) * 2);
+                top: var(--inventory-item-gap-width);
+            }
+
+            div.idx-7 {
+                left: calc(var(--inventory-item-gap-width) * 3);
+                top: var(--inventory-item-gap-width);
+            }
+
+            div.idx-8 {
+                left: 0;
+                top: calc(var(--inventory-item-gap-width) * 2);
+            }
+
+            div.idx-9 {
+                left: var(--inventory-item-gap-width);
+                top: calc(var(--inventory-item-gap-width) * 2);
+            }
+
+            div.idx-10 {
+                left: calc(var(--inventory-item-gap-width) * 2);
+                top: calc(var(--inventory-item-gap-width) * 2);
+            }
+
+            div.idx-11 {
+                left: calc(var(--inventory-item-gap-width) * 3);
+                top: calc(var(--inventory-item-gap-width) * 2);
+            }
+
+            div.idx-12 {
+                left: 0;
+                top: calc(var(--inventory-item-gap-width) * 3);
+            }
+
+            div.idx-13 {
+                left: calc(var(--inventory-item-gap-width));
+                top: calc(var(--inventory-item-gap-width) * 3);
+            }
+
+            div.idx-14 {
+                left: calc(var(--inventory-item-gap-width) * 2);
+                top: calc(var(--inventory-item-gap-width) * 3);
+            }
+
+            div.idx-15 {
+                left: calc(var(--inventory-item-gap-width) * 3);
+                top: calc(var(--inventory-item-gap-width) * 3);
+            }
+        }
+
+        div.ecg {
+            position: absolute;
+            width: calc(var(--calculated-vw) * 40);
+            height: calc(var(--calculated-vw) * 9.6);
+            top: var(--inventory-slots-panel-height);
+            left: calc(var(--calculated-vw) * (var(--inventory-panel-size-w) / 2 - 50));
+            background: linear-gradient(to right, rgba(35, 31, 32, 1) 0, var(--ecg-fine-color) 50%, rgba(35, 31, 32, 1) 50%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, .85) 60%, rgba(0, 0, 0, .5) 70%, transparent 85%);
+            mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, .85) 60%, rgba(0, 0, 0, .5) 70%, transparent 85%);
+            animation: travel 6s infinite linear;
+
+            .pulse-wave {
+                background-size: cover;
+                width: 100%;
+                height: 100%;
+            }
+
+            .state {
+                position: absolute;
+                bottom: 0;
+                left: calc(var(--calculated-vw) * 3);
+                height: calc(var(--calculated-vw) * 4);
+                line-height: calc(var(--calculated-vw) * 4);
+                color: var(--ecg-fine-color);
+                font-family: var(--pda-font);
+                font-size: calc(var(--calculated-vw) * 1.5);
+                text-shadow: 0 0 4px var(--ecg-fine-color);
+                animation: beat 3s infinite;
+            }
+            
+            .state::before{
+                content: "FINE";
+            }
+        }
+
+        div.ecg.caution {
+            background: linear-gradient(to right, rgba(35, 31, 32, 1) 0, var(--ecg-caution-color) 50%, rgba(35, 31, 32, 1) 50%);
+            animation: travel 4s infinite linear;
+
+            .state {
+                color: var(--ecg-caution-color);
+                text-shadow: 0 0 4px var(--ecg-caution-color);
+                animation: beat 2s infinite;
+            }
+
+            .state::before {
+                content: "CAUTION";
+            }
+        }
+
+        div.ecg.danger {
+            background: linear-gradient(to right, rgba(35, 31, 32, 1) 0, var(--ecg-danger-color) 50%, rgba(35, 31, 32, 1) 50%);
+            animation: travel 2s infinite linear;
+
+            .state {
+                color: var(--ecg-danger-color);
+                text-shadow: 0 0 4px var(--ecg-danger-color);
+                animation: beat 1s infinite;
+            }
+
+            .state::before {
+                content: "DANGER";
+            }
+        }
+
+        div.ecg::after {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            content: "";
+            background: linear-gradient(0deg, transparent 60%, var(--ecg-fine-background-color) 95%);
+            background-size: 100% calc(var(--calculated-vw) * 0.6);
+        }
+
+        div.ecg.caution::after {
+            background: linear-gradient(0deg, transparent 60%, var(--ecg-caution-background-color) 95%);
+            background-size: 100% calc(var(--calculated-vw) * 0.6);
+        }
+
+        div.ecg.danger::after {
+            background: linear-gradient(0deg, transparent 60%, var(--ecg-danger-background-color) 95%);
+            background-size: 100% calc(var(--calculated-vw) * 0.6);
+        }
+    }
+
+    /* pda-files */
+    div[name="pda-files"] {
+        position: relative;
+        width: var(--files-panel-width);
+        height: var(--files-panel-height);
+    }
+
+    /* pda-files */
+    div[name="pda-maps"] {
+        position: relative;
+        width: var(--maps-panel-width);
+        height: var(--maps-panel-height);
+    }
 }
 
-/* pda-menu */
-.default-theme div[name="pda-menu"] {
-    margin: var(--menu-margin);
-    font-family: var(--menu-font);
-    -webkit-user-select: none; /* Safari */
-    user-select: none; /* Standard syntax */
-}
-
-.default-theme div[name="pda-menu"] ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: calc(var(--calculated-vw) * .8);
-    color: white;
-}
-
-.default-theme div[name="pda-menu"] ul li.left {
-    display: block;
-    width: var(--menu-side-width);
-    font-size: var(--menu-side-font-size);
-    color: var(--menu-grey);
-    letter-spacing: var(--menu-letter-spacing);
-}
-
-.default-theme div[name="pda-menu"] ul li.left :first-child {
-    width: var(--menu-side-first-width);
-    margin: var(--menu-side-first-margin);
-    padding: var(--menu-side-first-padding);
-    border: var(--menu-side-first-border);
-    border-radius: calc(var(--calculated-vw) * 2) var(--border-radius) var(--border-radius) var(--border-radius);
-    background-color: var(--menu-grey);
-    color: white;
-}
-
-.default-theme div[name="pda-menu"] ul li.center {
-    display: block;
-    width: calc(var(--calculated-vw) * 11);
-    letter-spacing: var(--menu-letter-spacing);
-    font-size: calc(var(--calculated-vw) * 2);
-    text-align: center;
-}
-
-.default-theme div[name="pda-menu"] ul li.center :first-child {
-    margin-top: calc(var(--calculated-vw) * .15);
-}
-
-.default-theme div[name="pda-menu"] ul li.center :last-child {
-    margin-top: calc(var(--calculated-vw) * .1);
-}
-
-.default-theme div[name="pda-menu"] ul li.center :last-child span {
-    display: inline-block;
-    width: calc(var(--calculated-vw) * .5);
-    height: calc(var(--calculated-vw) * .5);
-    margin: 0 calc(var(--calculated-vw) * .5) calc(var(--calculated-vw) * .06) calc(var(--calculated-vw) * .5);
-    border: var(--menu-border-width) solid var(--menu-grey);;
-    border-radius: calc(var(--calculated-vw) * 1);
-    background-color: var(--menu-grey);
-}
-
-.default-theme div[name="pda-menu"] ul li.center :last-child span.current {
-    display: inline-block;
-    width: calc(var(--calculated-vw) * .65);
-    height: calc(var(--calculated-vw) * .65);
-    margin-bottom: 0;
-    border: var(--menu-border-width) solid white;
-    border-radius: calc(var(--calculated-vw) * 1);
-    background-color: white;
-}
-
-.default-theme div[name="pda-menu"] ul li.right {
-    display: block;
-    width: var(--menu-side-width);
-    font-size: var(--menu-side-font-size);
-    color: var(--menu-grey);;
-    letter-spacing: var(--menu-letter-spacing);
-}
-
-.default-theme div[name="pda-menu"] ul li.right :first-child {
-    width: var(--menu-side-first-width);
-    margin: var(--menu-side-first-margin);
-    padding: var(--menu-side-first-padding);
-    border: var(--menu-side-first-border);
-    border-radius: var(--border-radius) calc(var(--calculated-vw) * 2) var(--border-radius) var(--border-radius);
-    background-color: var(--menu-grey);;
-    color: white;
-}
-
-/* pda-inventory */
-.default-theme div[name="pda-inventory"] {
-    font-family: var(--menu-font);
-    -webkit-user-select: none; /* Safari */
-    user-select: none; /* Standard syntax */
-}
-
-.default-theme div[name="pda-inventory"] div.inventory-panel {
-    width: var(--inventory-panel-width);
-    height: calc(var(--calculated-vw) * 45);
-    margin-inline: auto;
-}
-
-.default-theme div[name="pda-inventory"] div.slots-panel {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: calc(var(--calculated-vw) * var(--inventory-item-gap-size));
-    width: var(--inventory-panel-width);
-    height: var(--inventory-slots-panel-height);
-}
-
-.default-theme div[name="pda-inventory"] div.slots-panel div.slot {
-    width: var(--inventory-item-width);
-    height: var(--inventory-item-width);
-}
-
-.default-theme div[name="pda-inventory"] div.slots-panel div.slot .slot-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    border: var(--inventory-item-border);
-    border-radius: var(--border-radius);
-    background-color: var(--inventory-item-grey);
-}
-
-.default-theme div[name="pda-inventory"] div.slots-panel div.slot .slot-content .crossline {
-    width: calc(var(--calculated-vw) * 6);
-    height: calc(var(--calculated-vw) * .1);
-    background: #ccc;
-    border-radius: var(--border-radius);
-}
-
-.default-theme div[name="pda-inventory"] div.slots-panel div.slot .slot-content .cross-0 {
-    position: absolute;
-    transform: rotate(45deg);
-}
-
-.default-theme div[name="pda-inventory"] div.slots-panel div.slot .slot-content .cross-1 {
-    transform: rotate(-45deg);
-}
-
-.default-theme div[name="pda-inventory"] div.slots-panel div.occupied .slot-content {
-    border: none;
-    background-color: transparent; /*rgba(0,0,0,0)*/
-}
-
-.default-theme div[name="pda-inventory"] div.slots-panel div.occupied .crossline {
+.default-theme.hide {
     display: none;
 }
 
-.default-theme div[name="pda-inventory"] div.items-panel {
-    position: relative;
-    top: calc(var(--inventory-slots-panel-height) * -1);
+@keyframes travel {
+    0% {
+        background-position: calc(var(--calculated-vw) * -40) 0;
+    }
+
+    100% {
+        background-position: calc(var(--calculated-vw) * 40) 0;
+    }
 }
 
-.default-theme div[name="pda-inventory"] div.items-panel div.item-size-1 {
-    width: var(--inventory-item-width);
-    height: var(--inventory-item-width);
-}
+@keyframes beat {
+    0% {
+        opacity: 1;
+    }
 
-.default-theme div[name="pda-inventory"] div.items-panel div.item-size-1 .item-img {
-    width: 100%;
-    height: 100%;
-    background-size: 100% 100%;
-    border: var(--inventory-item-border);
-    border-radius: var(--border-radius);
-    background-color: var(--inventory-item-grey);
-    font-size: calc(var(--calculated-vw) * 1.2);
-}
+    35% {
+        opacity: 1;
+    }
 
-.default-theme div[name="pda-inventory"] div.items-panel div.item-size-2 {
-    width: var(--inventory-2-item-width);
-    height: var(--inventory-item-width);
-}
+    45% {
+        opacity: 0.3;
+    }
 
-.default-theme div[name="pda-inventory"] div.items-panel div.item-size-2 .item-img {
-    width: 100%;
-    height: 100%;
-    background-size: 100% 100%;
-    border: var(--inventory-item-border);
-    border-radius: var(--border-radius);
-    background-color: var(--inventory-item-grey);
-    font-size: calc(var(--calculated-vw) * 1.2);
-}
+    60% {
+        opacity: 1
+    }
 
-.default-theme div[name="pda-inventory"] div.items-panel .equip-info {
-    position: absolute;
-    right: 0;
-    width: calc(var(--calculated-vw) * 2);
-    height: calc(var(--calculated-vw) * 1.8);
-    background: var(--inventory-item-info-background);
-    background-color: transparent;
-    color: white;
-    border-radius: 0 var(--border-radius) 0 0;
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel .count-info {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: calc(var(--calculated-vw) * 2);
-    height: calc(var(--calculated-vw) * 1.8);
-    background: var(--inventory-item-info-background);
-    background-color: transparent;
-    color: white;
-    border-radius: 0 0 var(--border-radius) 0;
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel .count-info.full {
-    color: #7CFC00;
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel .count-info.empty {
-    color: #ED2939;
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-0 {
-    left: 0;
-    top: 0;
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-1 {
-    left: var(--inventory-item-gap-width);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-2 {
-    left: calc(var(--inventory-item-gap-width) * 2);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-3 {
-    left: calc(var(--inventory-item-gap-width) * 3);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-4 {
-    left: 0;
-    top: var(--inventory-item-gap-width);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-5 {
-    left: var(--inventory-item-gap-width);
-    top: var(--inventory-item-gap-width);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-6 {
-    left: calc(var(--inventory-item-gap-width) * 2);
-    top: var(--inventory-item-gap-width);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-7 {
-    left: calc(var(--inventory-item-gap-width) * 3);
-    top: var(--inventory-item-gap-width);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-8 {
-    left: 0;
-    top: calc(var(--inventory-item-gap-width) * 2);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-9 {
-    left: var(--inventory-item-gap-width);
-    top: calc(var(--inventory-item-gap-width) * 2);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-10 {
-    left: calc(var(--inventory-item-gap-width) * 2);
-    top: calc(var(--inventory-item-gap-width) * 2);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-11 {
-    left: calc(var(--inventory-item-gap-width) * 3);
-    top: calc(var(--inventory-item-gap-width) * 2);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-12 {
-    left: 0;
-    top: calc(var(--inventory-item-gap-width) * 3);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-13 {
-    left: calc(var(--inventory-item-gap-width));
-    top: calc(var(--inventory-item-gap-width) * 3);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-14 {
-    left: calc(var(--inventory-item-gap-width) * 2);
-    top: calc(var(--inventory-item-gap-width) * 3);
-}
-
-.default-theme div[name="pda-inventory"] div.items-panel div.idx-15 {
-    left: calc(var(--inventory-item-gap-width) * 3);
-    top: calc(var(--inventory-item-gap-width) * 3);
+    100% {
+        opacity: 1;
+    }
 }

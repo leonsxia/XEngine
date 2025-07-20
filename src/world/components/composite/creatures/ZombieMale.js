@@ -43,7 +43,7 @@ const ZOMBIE_TYPES_MAPPING = {
             prepareInterval: 1.1,
             damageRange: .7,
             damageRadius: Math.PI * 2,
-            ammo: new Ammo({ isMeleeWeapon: true, damage: 35, offset0: - 8, offset1: 8 }),
+            ammo: new Ammo({ isMeleeWeapon: true, damage: 20, offset0: - 8, offset1: 8 }),
             isDefault: true
         })
     }),
@@ -67,7 +67,7 @@ const ZOMBIE_TYPES_MAPPING = {
             prepareInterval: .95,
             damageRange: .7,
             damageRadius: Math.PI * 2,
-            ammo: new Ammo({ isMeleeWeapon: true, damage: 35, offset0: - 8, offset1: 8 }),
+            ammo: new Ammo({ isMeleeWeapon: true, damage: 20, offset0: - 8, offset1: 8 }),
             isDefault: true
         })
     }),
@@ -115,7 +115,7 @@ const ZOMBIE_TYPES_MAPPING = {
             prepareInterval: 1.2,
             damageRange: .7,
             damageRadius: Math.PI * 2,
-            ammo: new Ammo({ isMeleeWeapon: true, damage: 35, offset0: - 8, offset1: 8 }),
+            ammo: new Ammo({ isMeleeWeapon: true, damage: 15, offset0: - 8, offset1: 8 }),
             isDefault: true
         })
     })

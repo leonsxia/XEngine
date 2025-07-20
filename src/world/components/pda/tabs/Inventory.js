@@ -1,4 +1,5 @@
 import { createInventory } from "../../../systems/htmlElements";
+import { ECG } from "./ECG";
 import { TabPanel } from "./TabPanel";
 
 class Inventory extends TabPanel {
@@ -16,6 +17,9 @@ class Inventory extends TabPanel {
         super(specs);
 
         this._html = createInventory();
+        this.ecg = new ECG();
+
+        this._html.inventoryContainer.appendChild(this.ecg.container);
 
     }
 

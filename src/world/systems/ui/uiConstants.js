@@ -8,7 +8,8 @@ const IMAGE_URLS = {
     BAYONET: 'assets/images/item_snapshots/weapons/bayonet.png',
     PISTOL_AMMO_BOX: 'assets/images/item_snapshots/ammo/pistol_ammo_box.png',
     MAGNUM_AMMO_BOX: 'assets/images/item_snapshots/ammo/magnum_ammo_box.png',
-    SMG_AMMO_BOX: 'assets/images/item_snapshots/ammo/smg_ammo_box.png'
+    SMG_AMMO_BOX: 'assets/images/item_snapshots/ammo/smg_ammo_box.png',
+    ECG: 'assets/images/pda/ecg.svg'
 }
 
 const PDA_MENU_NAMES = [
@@ -29,10 +30,17 @@ const GAMEPAD_BUTTONS = {
     A: 'A'
 }
 
+const ECG_STATE = {
+    FINE: 'fine',
+    CAUTION: 'caution',
+    DANGER: 'danger'
+}
+
 export {
     LABEL_BASE_SCALE,
     IMAGE_URLS,
     PDA_MENU_NAMES,
     KEYS,
-    GAMEPAD_BUTTONS
+    GAMEPAD_BUTTONS,
+    ECG_STATE
 }

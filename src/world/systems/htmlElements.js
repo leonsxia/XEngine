@@ -1,4 +1,4 @@
-import { KEYS, PDA_MENU_NAMES } from "./ui/uiConstants";
+import { IMAGE_URLS, KEYS, PDA_MENU_NAMES } from "./ui/uiConstants";
 
 const container = document.querySelector('#scene-container');
 const header = document.querySelector('#sceneTitle');
@@ -68,6 +68,24 @@ function createPdaMenu() {
     menu.appendChild(menuUl);
 
     return { menu, menuUl, menuLiLeft, menuLiRight, menuLiCenter, menuCenterDivMain, menuCenterDots };
+
+}
+
+function createMap() {
+
+    const mapsContainer = document.createElement('div');
+    mapsContainer.setAttribute('name', 'pda-maps');
+
+    return { mapsContainer };
+    
+}
+
+function createFiles() {
+
+    const filesContainer = document.createElement('div');
+    filesContainer.setAttribute('name', 'pda-files');
+
+    return { filesContainer };
 
 }
 
@@ -145,6 +163,24 @@ function createInventoryItem(specs) {
 
 }
 
+function createECG() {
+
+    const ecgDiv = document.createElement('div');
+    ecgDiv.classList.add('ecg');
+
+    const pulseWave = document.createElement('div');
+    pulseWave.classList.add('pulse-wave');
+    pulseWave.style.background = `url("${IMAGE_URLS.ECG}")`;
+
+    const stateText = document.createElement('div');
+    stateText.classList.add('state');
+
+    ecgDiv.append(pulseWave, stateText);
+
+    return { ecgDiv, pulseWave, stateText };
+
+}
+
 function getScenePosition() {
     const sceneCanvas = container.querySelector('canvas');
     const rect = sceneCanvas.getBoundingClientRect();
@@ -164,5 +200,8 @@ export {
     createPdaMenu,
     createInventory,
     createInventoryItem,
+    createECG,
+    createMap,
+    createFiles,
     getScenePosition 
 }

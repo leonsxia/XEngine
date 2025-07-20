@@ -1,8 +1,11 @@
 import { container, createPdaContainer } from "../../systems/htmlElements";
 import { Logger } from "../../systems/Logger";
+import { ECG_STATE } from "../../systems/ui/uiConstants";
 import { CONTROL_TYPES } from "../utils/constants";
 import { PdaMenu } from "./PdaMenu";
+import { Files } from "./tabs/Files";
 import { Inventory } from "./tabs/Inventory";
+import { Maps } from "./tabs/Maps";
 
 const DEBUG = true;
 
@@ -16,6 +19,8 @@ class Pda {
 
     _pdaMenu;
     _inventory;
+    _maps;
+    _files;
 
     _xboxControllerConnected;
 
@@ -33,7 +38,18 @@ class Pda {
         this._inventory = new Inventory({ attachTo: this });
         this._pdaContainer.appendChild(this._inventory._html.inventoryContainer);
 
+        this._maps = new Maps({ attachTo: this });
+        this._pdaContainer.appendChild(this._maps._html.mapsContainer);
+
+        this._files = new Files({ attachTo: this });
+        this._pdaContainer.appendChild(this._files._html.filesContainer);
+
+        // initialize inventory as default panel
+        this._pdaMenu.currentIndex = 1;
+
         this._owner = specs.owner;
+
+        this.bindHealthChangeEvents();
 
     }
 
@@ -54,11 +70,11 @@ class Pda {
                 this.addPdaToContainer();
 
             }
-            this._pdaContainer.style.display = 'block';
+            this._pdaContainer.classList.remove('hide');
 
         } else {
 
-            this._pdaContainer.style.display = 'none';
+            this._pdaContainer.classList.add('hide');
 
         }
 
@@ -71,6 +87,30 @@ class Pda {
 
         }
 
+    }
+
+    bindHealthChangeEvents() {
+
+        const cautionBottom = 25;
+        const cautionTop = 70;
+
+        this._owner.health.onHealthChangeEvents.push((health) => {
+
+            if (health.currentLife < cautionTop && health.currentLife >= cautionBottom) {
+
+                this._inventory.ecg.switchState(ECG_STATE.CAUTION);
+
+            } else if (health.currentLife < cautionBottom) {
+
+                this._inventory.ecg.switchState(ECG_STATE.DANGER);
+
+            } else {
+
+                this._inventory.ecg.switchState(ECG_STATE.FINE);
+
+            }
+
+        });
     }
 
     addPdaToContainer() {
@@ -94,6 +134,8 @@ class Pda {
     hideAllPanels() {
 
         this._inventory._html.inventoryContainer.classList.add('hide');
+        this._files._html.filesContainer.classList.add('hide');
+        this._maps._html.mapsContainer.classList.add('hide');
 
     }
 
@@ -102,11 +144,13 @@ class Pda {
         switch(panelIdx) {
 
             case 0:
+                this._maps._html.mapsContainer.classList.remove('hide');
                 break;
             case 1:
                 this._inventory._html.inventoryContainer.classList.remove('hide');
                 break;
             case 2:
+                this._files._html.filesContainer.classList.remove('hide');
                 break;
 
         }
