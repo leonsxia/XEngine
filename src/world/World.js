@@ -160,7 +160,7 @@ class World {
 
             loadScene.render();
 
-            container.append(this.#renderer.domElement);
+            container.prepend(this.#renderer.domElement);
 
             const end = Date.now();
             this.#systemLogger.log(`render in ${(end - start) * .001} s`);

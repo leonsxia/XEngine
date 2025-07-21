@@ -1,6 +1,8 @@
 :root {
     --border-radius: calc(var(--calculated-vw) * .5);
     --pda-font: sans-serif;
+    --pda-fade-in-transition: opacity .2s linear;
+    --pda-fade-out-transition: visibility 0s .2s, opacity .2s linear;
     --menu-margin: calc(var(--calculated-vw) * 3) 0 calc(var(--calculated-vw) * 1) 0;
     --menu-letter-spacing: calc(var(--calculated-vw) * -.05);
     --menu-border-width: calc(var(--calculated-vw) * .08);
@@ -63,6 +65,19 @@
     );
     -webkit-backdrop-filter: blur(calc(var(--calculated-vw) * .5));
     backdrop-filter: blur(calc(var(--calculated-vw) * .5));
+
+    .visible {
+        visibility: visible;
+        opacity: 1;
+        transition: var(--pda-fade-in-transition);
+    }
+
+    .hidden {
+        visibility: hidden;
+        opacity: 0;
+        transition: var(--pda-fade-out-transition);
+        pointer-events: none;
+    }
 
     .hide {
         display: none;
@@ -462,8 +477,17 @@
     }
 }
 
-.default-theme.hide {
-    display: none;
+.default-theme.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: var(--pda-fade-in-transition);
+}
+
+.default-theme.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: var(--pda-fade-out-transition);
+    pointer-events: none;
 }
 
 @keyframes travel {

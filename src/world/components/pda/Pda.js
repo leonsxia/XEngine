@@ -73,11 +73,12 @@ class Pda {
                 this.addPdaToContainer();
 
             }
-            this._pdaContainer.classList.remove('hide');
+
+            this.showElement(this._pdaContainer, true);
 
         } else {
 
-            this._pdaContainer.classList.add('hide');
+            this.showElement(this._pdaContainer, false);
 
         }
 
@@ -136,9 +137,9 @@ class Pda {
 
     hideAllPanels() {
 
-        this._inventory._html.inventoryContainer.classList.add('hide');
-        this._files._html.filesContainer.classList.add('hide');
-        this._maps._html.mapsContainer.classList.add('hide');
+        this.showElement(this._inventory._html.inventoryContainer, false);
+        this.showElement(this._files._html.filesContainer, false);
+        this.showElement(this._maps._html.mapsContainer, false);
 
     }
 
@@ -147,13 +148,13 @@ class Pda {
         switch(panelIdx) {
 
             case 0:
-                this._maps._html.mapsContainer.classList.remove('hide');
+                this.showElement(this._maps._html.mapsContainer, true);
                 break;
             case 1:
-                this._inventory._html.inventoryContainer.classList.remove('hide');
+                this.showElement(this._inventory._html.inventoryContainer, true);
                 break;
             case 2:
-                this._files._html.filesContainer.classList.remove('hide');
+                this.showElement(this._files._html.filesContainer, true);
                 break;
 
         }
@@ -311,6 +312,22 @@ class Pda {
                 callback(item);
 
             }
+
+        }
+
+    }
+
+    showElement(element, show) {
+
+        if (show) {
+
+            element.classList.remove('hidden');
+            element.classList.add('visible');
+
+        } else {
+
+            element.classList.remove('visible');
+            element.classList.add('hidden');
 
         }
 

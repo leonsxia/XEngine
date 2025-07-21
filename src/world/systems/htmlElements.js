@@ -14,7 +14,7 @@ function createPdaContainer(theme) {
 
     const pdaContainer = document.createElement('div');
     pdaContainer.setAttribute('name', 'pda-container');
-    pdaContainer.classList.add(theme);
+    pdaContainer.classList.add(theme, 'hidden');
 
     return { pdaContainer };
 

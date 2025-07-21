@@ -109,6 +109,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
 
+        this.pda.addPdaToContainer();
+
         this.trackResources();
 
     }
@@ -392,7 +394,11 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         if (val) {
 
             this.pda.visible = !this.pda.visible;
-            this.pda._pdaMenu.currentIndex = 1;
+            if (this.pda.visible) {
+
+                this.pda._pdaMenu.currentIndex = 1;
+
+            }
 
         }
 
