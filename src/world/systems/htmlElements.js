@@ -107,7 +107,7 @@ function createInventory() {
     descriptionPanel.classList.add('description-panel');
 
     const slotsDivList = [];
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < 20; i++) {
 
         const slot = document.createElement('div');
         slot.setAttribute('idx', i);

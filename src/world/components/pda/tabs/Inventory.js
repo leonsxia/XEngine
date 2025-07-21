@@ -9,7 +9,8 @@ class Inventory extends TabPanel {
         0, 1, 2, 3,
         4, 5, 6, 7,
         8, 9, 10, 11, 
-        12, 13, 14, 15
+        12, 13, 14, 15,
+        16, 17, 18, 19
     ];
 
     constructor(specs) {
@@ -51,7 +52,7 @@ class Inventory extends TabPanel {
                     const second = sorted[i + 1];
 
                     if (itemSize === 2 && second === first + 1 && (
-                        first !== 3 && first !== 7 && first !== 11 && first !== 15
+                        first !== 3 && first !== 7 && first !== 11 && first !== 15 && first !== 19
                     )) {
 
                         idx = first;
