@@ -145,9 +145,9 @@ function createInventoryItem(specs) {
     itemDiv.classList.add('inv-item', `item-size-${itemSize}`);
     itemDiv.style.position = 'absolute';
 
-    const itemImg = document.createElement('img');
+    const itemImg = document.createElement('div');
     itemImg.classList.add('item-img');
-    itemImg.src = imgUrl;
+    itemImg.style.backgroundImage = `url("${imgUrl}")`;
 
     const equipInfo = document.createElement('div');
     equipInfo.innerText = 'E';
@@ -156,7 +156,8 @@ function createInventoryItem(specs) {
     const countInfo = document.createElement('div');
     countInfo.classList.add('count-info');
 
-    itemDiv.append(itemImg, equipInfo, countInfo);
+    itemImg.append(equipInfo, countInfo);
+    itemDiv.append(itemImg);
 
     return { itemDiv, equipInfo, countInfo };
 
@@ -168,9 +169,9 @@ function createECG(specs) {
     const ecgDiv = document.createElement('div');
     ecgDiv.classList.add('ecg');
 
-    const pulseWave = document.createElement('img');
+    const pulseWave = document.createElement('div');
     pulseWave.classList.add('pulse-wave');
-    pulseWave.src = url;
+    pulseWave.style.backgroundImage = `url("${url}")`;
 
     const stateText = document.createElement('div');
     stateText.classList.add('state');

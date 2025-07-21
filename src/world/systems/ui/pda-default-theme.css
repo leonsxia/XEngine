@@ -257,6 +257,7 @@
                 border: var(--inventory-item-border);
                 border-radius: var(--border-radius);
                 background-color: var(--inventory-item-grey);
+                background-size: cover;
             }
 
             .equip-info {
@@ -378,18 +379,20 @@
 
         div.ecg {
             position: absolute;
+            display: flex;
+            align-items: self-start;
             width: calc(var(--calculated-vw) * 40);
             height: calc(var(--calculated-vw) * 9.6);
             top: var(--inventory-slots-panel-height);
             left: calc(var(--calculated-vw) * (var(--inventory-panel-size-w) / 2 - 50));
             background: linear-gradient(to right, rgba(35, 31, 32, 1) 0, var(--ecg-fine-color) 50%, rgba(35, 31, 32, 1) 50%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, .85) 60%, rgba(0, 0, 0, .5) 70%, transparent 85%);
-            mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, .85) 60%, rgba(0, 0, 0, .5) 70%, transparent 85%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, .85) 60%, rgba(0, 0, 0, .5) 70%, transparent 80%);
+            mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, .85) 60%, rgba(0, 0, 0, .5) 70%, transparent 80%);
             animation: travel 6s infinite linear;
 
             .pulse-wave {
                 width: 100%;
-                height: 100%;
+                height: 98%;
             }
 
             .state {
