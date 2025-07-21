@@ -27,9 +27,6 @@ class AmmoBoxItem extends PickableItem {
 
         }
 
-        // html
-        this.createItemHtml();
-
     }
 
     get count() {
@@ -52,7 +49,7 @@ class AmmoBoxItem extends PickableItem {
 
     createItemHtml() {
 
-        const { itemDiv, countInfo } = createInventoryItem({ imgUrl: this.specs.imgUrl, itemSize: this.itemSize });
+        const { itemDiv, countInfo } = createInventoryItem({ imgUrl: this._imgUrl, itemSize: this.itemSize });
         this.itemHtml = itemDiv;
         this.countInfo = countInfo;
 

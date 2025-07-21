@@ -55,6 +55,8 @@ async function loadGLTFModels(sources) {
 
     }
 
+    Object.assign(loadedGLTFModels, loaded);
+
     return loaded;
 
 }

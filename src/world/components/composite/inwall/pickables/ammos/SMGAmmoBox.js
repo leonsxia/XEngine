@@ -1,4 +1,4 @@
-import { IMAGE_URLS } from "../../../../../systems/ui/uiConstants";
+import { IMAGE_NAMES } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, AMMUNITION } from "../../../../utils/constants";
 import { Ammo } from "../../../weapons/Ammo";
 import { AmmoBoxItem } from "./AmmoBoxItem";
@@ -8,7 +8,7 @@ const GLTF_SRC = 'pickable_items/ammunition/smg_ammo_box.glb';
 class SMGAmmoBox extends AmmoBoxItem {
 
     static gltfModel;
-    static imgUrl = IMAGE_URLS.SMG_AMMO_BOX;
+    static imgName = IMAGE_NAMES.SMG_AMMO_BOX;
 
     constructor(specs) {
 
@@ -19,7 +19,7 @@ class SMGAmmoBox extends AmmoBoxItem {
         specs.ammoBoxType = AMMUNITION.SMG_AMMO_BOX;
         specs.src = specs.src ?? GLTF_SRC;
         specs.capacity = 100;
-        specs.imgUrl = SMGAmmoBox.imgUrl;
+        specs.imgName = SMGAmmoBox.imgName;
         
         const { count = specs.capacity, damage = 7, offset0 = - 2, offset1 = 2 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.SMG, count, damage, offset0, offset1 });

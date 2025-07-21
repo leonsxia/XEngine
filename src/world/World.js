@@ -13,11 +13,13 @@ import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
 import { ControlEventDispatcher } from "./systems/ControlEventDispatcher";
 
-import { loadTextures, loadedTextures } from "./components/utils/textureHelper";
-import { initPickableModels, loadGLTFModels, loadedGLTFModels } from "./components/utils/gltfHelper";
+import { loadTextures } from "./components/utils/textureHelper";
+import { initPickableModels, loadGLTFModels } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
+import { loadImages } from "./components/utils/imageHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES } from "./components/utils/constants";
+import { IMAGES } from "./systems/ui/uiConstants";
 import { Logger } from "./systems/Logger";
 import { InputBase } from "./systems/physicalInputs/InputBase";
 import { XBoxController } from "./systems/physicalInputs/gamepad/XBoxController";
@@ -105,14 +107,13 @@ class World {
         const [textures, gltfs] = await Promise.all([
             loadTextures(TEXTURES),
             loadGLTFModels(GLTFS),
-            loadShaders(SHADERS)
+            loadShaders(SHADERS),
+            loadImages(IMAGES)
         ]);
 
         const end = Date.now();
         this.#systemLogger.log(`loading assests in ${(end - start) * .001} s`);
 
-        Object.assign(loadedTextures, textures);
-        Object.assign(loadedGLTFModels, gltfs);
         this.#textures = textures;
         this.#gltfs = gltfs;
 

@@ -8,7 +8,7 @@ import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
 import { SSAARenderPass } from 'three/addons/postprocessing/SSAARenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OUTLINE, SSAO, FXAA, SSAA, BLOOM, TRI_PATTERN, REPEAT_WRAPPING, BLOOM_SCENE_LAYER, SHADER_NAMES } from '../components/utils/constants';
+import { OUTLINE, SSAO, FXAA, SSAA, BLOOM, REPEAT_WRAPPING, BLOOM_SCENE_LAYER, SHADER_NAMES, TEXTURE_NAMES } from '../components/utils/constants';
 import { black, white } from '../components/basic/colorBase';
 import { loadSingleTexture } from '../components/utils/textureHelper';
 import { basicMateraials } from '../components/basic/basicMaterial';
@@ -183,7 +183,7 @@ class PostProcessor {
 
         this.initPass();
 
-        const { texture } = await loadSingleTexture({ map: TRI_PATTERN });
+        const { texture } = await loadSingleTexture({ map: TEXTURE_NAMES.TRI_PATTERN });
 
         texture.wrapS = REPEAT_WRAPPING;
         texture.wrapT = REPEAT_WRAPPING;

@@ -23,9 +23,6 @@ class WeaponItem extends PickableItem {
 
         this.count = this.ammo.count;
 
-        // html
-        this.createItemHtml();
-
     }
 
     get count() {
@@ -42,7 +39,7 @@ class WeaponItem extends PickableItem {
 
     createItemHtml() {
 
-        const { itemDiv, countInfo, equipInfo } = createInventoryItem({ imgUrl: this.specs.imgUrl, itemSize: this.itemSize });
+        const { itemDiv, countInfo, equipInfo } = createInventoryItem({ imgUrl: this._imgUrl, itemSize: this.itemSize });
         this.itemHtml = itemDiv;
         this.equipInfo = equipInfo;
         this.countInfo = countInfo;

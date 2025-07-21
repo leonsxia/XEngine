@@ -1,4 +1,4 @@
-import { IMAGE_URLS, KEYS, PDA_MENU_NAMES } from "./ui/uiConstants";
+import { KEYS, PDA_MENU_NAMES } from "./ui/uiConstants";
 
 const container = document.querySelector('#scene-container');
 const header = document.querySelector('#sceneTitle');
@@ -145,9 +145,9 @@ function createInventoryItem(specs) {
     itemDiv.classList.add('inv-item', `item-size-${itemSize}`);
     itemDiv.style.position = 'absolute';
 
-    const itemContent = document.createElement('div');
-    itemContent.classList.add('item-img');
-    itemContent.style.backgroundImage = `url("${imgUrl}")`;
+    const itemImg = document.createElement('img');
+    itemImg.classList.add('item-img');
+    itemImg.src = imgUrl;
 
     const equipInfo = document.createElement('div');
     equipInfo.innerText = 'E';
@@ -156,21 +156,21 @@ function createInventoryItem(specs) {
     const countInfo = document.createElement('div');
     countInfo.classList.add('count-info');
 
-    itemContent.append(equipInfo, countInfo);
-    itemDiv.appendChild(itemContent);
+    itemDiv.append(itemImg, equipInfo, countInfo);
 
     return { itemDiv, equipInfo, countInfo };
 
 }
 
-function createECG() {
+function createECG(specs) {
 
+    const { url } = specs;
     const ecgDiv = document.createElement('div');
     ecgDiv.classList.add('ecg');
 
-    const pulseWave = document.createElement('div');
+    const pulseWave = document.createElement('img');
     pulseWave.classList.add('pulse-wave');
-    pulseWave.style.background = `url("${IMAGE_URLS.ECG}")`;
+    pulseWave.src = url;
 
     const stateText = document.createElement('div');
     stateText.classList.add('state');

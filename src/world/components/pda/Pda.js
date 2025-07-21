@@ -33,23 +33,26 @@ class Pda {
         this._pdaContainer = pdaContainer;
 
         this._pdaMenu = new PdaMenu({ attachTo: this });
-        this._pdaContainer.appendChild(this._pdaMenu.menu);
-
-        this._inventory = new Inventory({ attachTo: this });
-        this._pdaContainer.appendChild(this._inventory._html.inventoryContainer);
-
-        this._maps = new Maps({ attachTo: this });
-        this._pdaContainer.appendChild(this._maps._html.mapsContainer);
-
+        this._inventory = new Inventory({ attachTo: this });        
+        this._maps = new Maps({ attachTo: this });        
         this._files = new Files({ attachTo: this });
+                
+        this._owner = specs.owner;
+
+        this.bindHealthChangeEvents();
+
+    }
+
+    async init() {
+
+        await this._inventory.init();
+        this._pdaContainer.appendChild(this._pdaMenu.menu);
+        this._pdaContainer.appendChild(this._inventory._html.inventoryContainer);
+        this._pdaContainer.appendChild(this._maps._html.mapsContainer);
         this._pdaContainer.appendChild(this._files._html.filesContainer);
 
         // initialize inventory as default panel
         this._pdaMenu.currentIndex = 1;
-
-        this._owner = specs.owner;
-
-        this.bindHealthChangeEvents();
 
     }
 

@@ -96,7 +96,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         await Promise.all([
             this.gltf.init(),
-            ...this.initPromises()
+            ...this.initPromises(),
+            this.pda.init()
         ]);
 
         this.showSkeleton(false);

@@ -3,7 +3,6 @@ import { RepeatWrapping, MirroredRepeatWrapping } from 'three';
 // texture
 const REPEAT_WRAPPING = RepeatWrapping;
 const MIRRORED_REPEAT_WRAPPING = MirroredRepeatWrapping;
-const TRI_PATTERN = 'assets/textures/tri_pattern.jpg';
 
 // light
 const DIRECTIONAL_LIGHT = 'DirectionalLight';
@@ -193,7 +192,9 @@ const TEXTURE_NAMES = {
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
     WATER_2_M: 'WATER_2_M',
-    WATER_2_M_NORMAL: 'WATER_2_M_NORMAL'
+    WATER_2_M_NORMAL: 'WATER_2_M_NORMAL',
+    // post-processor
+    TRI_PATTERN: 'TRI_PATTERN'
 };
 
 const TEXTURES = [{
@@ -254,6 +255,8 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {
     name: TEXTURE_NAMES.WATER_2_M, normalMap: 'assets/textures/water/Water_2_M_Normal.jpg'
+}, {
+    name: TEXTURE_NAMES.TRI_PATTERN, map: 'assets/textures/tri_pattern.jpg'
 }];
 
 // gltfs
@@ -461,7 +464,6 @@ const CONTROL_TYPES = {
 export { 
     REPEAT_WRAPPING,
     MIRRORED_REPEAT_WRAPPING,
-    TRI_PATTERN,
 
     DIRECTIONAL_LIGHT,
     AMBIENT_LIGHT,

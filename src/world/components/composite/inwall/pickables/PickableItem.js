@@ -6,6 +6,7 @@ import { makeInteractiveLabelCanvas } from "../../../utils/canvasMaker";
 import { createSpriteMaterial } from "../../../basic/basicMaterial";
 import { GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
 import { hexToRGBA, labelBackground, white } from "../../../basic/colorBase";
+import { getImageUrl } from "../../../utils/imageHelper";
 
 class PickableItem extends ObstacleBase {
 
@@ -27,6 +28,7 @@ class PickableItem extends ObstacleBase {
     currentRoom;
 
     _xboxControllerConnected;
+    _imgUrl;
 
     constructor(specs) {
 
@@ -86,6 +88,11 @@ class PickableItem extends ObstacleBase {
 
         await this.gltf.init();
 
+        this._imgUrl = await getImageUrl(this.specs.imgName);
+
+        // html
+        this.createItemHtml();
+
         this.setPickLayers();
 
     }
@@ -103,6 +110,8 @@ class PickableItem extends ObstacleBase {
         this.addHtmlClass('item-size-2');
         
     }
+
+    createItemHtml() {}
 
     removeHtmlClass(clsname) {
 

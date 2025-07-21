@@ -1,11 +1,16 @@
 import { createECG } from "../../../systems/htmlElements";
-import { ECG_STATE } from "../../../systems/ui/uiConstants";
+import { ECG_STATE, IMAGE_NAMES } from "../../../systems/ui/uiConstants";
+import { getImageUrl } from "../../utils/imageHelper";
 
 class ECG {
 
-    constructor() {
+    constructor() {}
 
-        const { ecgDiv, pulseWave, stateText } = createECG();
+    async init() {
+
+        const url = await getImageUrl(IMAGE_NAMES.ECG);
+
+        const { ecgDiv, pulseWave, stateText } = createECG({ url });
         this.container = ecgDiv;
         this.pulseWave = pulseWave;
         this.stateText = stateText;

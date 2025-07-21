@@ -19,6 +19,11 @@ class Inventory extends TabPanel {
         this._html = createInventory();
         this.ecg = new ECG();
 
+    }
+
+    async init() {
+
+        await this.ecg.init();
         this._html.inventoryContainer.appendChild(this.ecg.container);
 
     }

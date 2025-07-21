@@ -14,12 +14,31 @@ const loadedTextures = {};
 async function loadSingleTexture(specs) {
 
     const { map, normalMap } = specs;
-    const loader = worldTextureLoader;
+    let texture, normal;
 
-    const [texture, normal] = await Promise.all([
-        map ? loader.loadAsync(map) : Promise.resolve(null),
-        normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null)
-    ]);
+    if (loadedTextures[map]) {
+        texture = loadedTextures[map];
+    }
+
+    if (loadedTextures[normal]) {
+        normal = loadedTextures[normal];
+    }
+
+    if ((map && !texture) || (normalMap && !normal)) {
+
+        const loader = worldTextureLoader;
+        const loadPromises = [];
+        if (!texture) {
+            loadPromises.push(map ? loader.loadAsync(map) : Promise.resolve(null));
+        }
+
+        if (!normal) {
+            loadPromises.push(normalMap ? loader.loadAsync(normalMap) : Promise.resolve(null));
+        }
+
+        [texture, normal] = await Promise.all(loadPromises);
+
+    }
 
     return { texture, normal };
 
@@ -77,6 +96,8 @@ async function loadTextures(mapsArr) {
         }
         
     }
+
+    Object.assign(loadedTextures, loaded);
 
     return loaded;
 
