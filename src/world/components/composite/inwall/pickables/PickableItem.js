@@ -179,7 +179,7 @@ class PickableItem extends ObstacleBase {
 
         const { context: ctx, width, height, baseWidth } = this.labelCanvas;
 
-        const borderGap = 2.5 * window.devicePixelRatio;
+        const borderGap = 5;
         const content = this._xboxControllerConnected ? GAMEPAD_BUTTONS.A : KEYS.F;
         // measure how long the name will be
         const textWidth = ctx.measureText(content).width;
