@@ -39,7 +39,7 @@ class WeaponItem extends PickableItem {
 
     createItemHtml() {
 
-        const { itemDiv, countInfo, equipInfo } = createInventoryItem({ imgUrl: this._imgUrl, itemSize: this.itemSize });
+        const { itemDiv, countInfo, equipInfo } = createInventoryItem({ imgUrl: this._imgUrl, itemSize: this.itemSize, isWeaponItem: true });
         this.itemHtml = itemDiv;
         this.equipInfo = equipInfo;
         this.countInfo = countInfo;

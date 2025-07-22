@@ -13,7 +13,7 @@ const infosDomElements = {
 function createPdaContainer(theme) {
 
     const pdaContainer = document.createElement('div');
-    pdaContainer.setAttribute('name', 'pda-container');
+    pdaContainer.toggleAttribute('pda-container');
     pdaContainer.classList.add(theme, 'hidden');
 
     return { pdaContainer };
@@ -23,7 +23,7 @@ function createPdaContainer(theme) {
 function createPdaMenu() {
 
     const menu = document.createElement('div');
-    menu.setAttribute('name', 'pda-menu');
+    menu.toggleAttribute('pda-menu');
 
     const menuUl = document.createElement('ul');
     const menuLiLeft = document.createElement('li');
@@ -74,7 +74,7 @@ function createPdaMenu() {
 function createMap() {
 
     const mapsContainer = document.createElement('div');
-    mapsContainer.setAttribute('name', 'pda-maps');
+    mapsContainer.toggleAttribute('pda-maps');
 
     return { mapsContainer };
     
@@ -83,7 +83,7 @@ function createMap() {
 function createFiles() {
 
     const filesContainer = document.createElement('div');
-    filesContainer.setAttribute('name', 'pda-files');
+    filesContainer.toggleAttribute('pda-files');
 
     return { filesContainer };
 
@@ -92,10 +92,10 @@ function createFiles() {
 function createInventory() {
 
     const inventoryContainer = document.createElement('div');
-    inventoryContainer.setAttribute('name', 'pda-inventory');
+    inventoryContainer.toggleAttribute('pda-inventory');
 
     const inventoryPanel = document.createElement('div');
-    inventoryPanel.classList.add('inventory-panel');
+    inventoryPanel.classList.add('inventory-panel', 'popup-panel');
 
     const slotsPanel = document.createElement('div');
     slotsPanel.classList.add('slots-panel');
@@ -139,25 +139,31 @@ function createInventory() {
 
 function createInventoryItem(specs) {
 
-    const { itemSize = 1, imgUrl } = specs;
+    const { itemSize = 1, imgUrl, isWeaponItem = false } = specs;
 
     const itemDiv = document.createElement('div');
     itemDiv.classList.add('inv-item', `item-size-${itemSize}`);
     itemDiv.style.position = 'absolute';
 
-    const itemImg = document.createElement('div');
+    const itemImg = document.createElement('img');
     itemImg.classList.add('item-img');
-    itemImg.style.backgroundImage = `url("${imgUrl}")`;
+    itemImg.src = imgUrl;
+    itemImg.setAttribute('alt', 'item-img');
+    itemDiv.append(itemImg);
 
-    const equipInfo = document.createElement('div');
-    equipInfo.innerText = 'E';
-    equipInfo.classList.add('equip-info', 'hide');
+    let equipInfo;
+    if (isWeaponItem) {
+
+        equipInfo = document.createElement('div');
+        equipInfo.innerText = 'E';
+        equipInfo.classList.add('equip-info', 'hide');
+        itemDiv.append(equipInfo);
+
+    }
 
     const countInfo = document.createElement('div');
     countInfo.classList.add('count-info');
-
-    itemImg.append(equipInfo, countInfo);
-    itemDiv.append(itemImg);
+    itemDiv.append(countInfo);
 
     return { itemDiv, equipInfo, countInfo };
 
@@ -169,14 +175,18 @@ function createECG(specs) {
     const ecgDiv = document.createElement('div');
     ecgDiv.classList.add('ecg');
 
-    const pulseWave = document.createElement('div');
+    const pulseWave = document.createElement('img');
     pulseWave.classList.add('pulse-wave');
-    pulseWave.style.backgroundImage = `url("${url}")`;
+    pulseWave.src = url;
+    pulseWave.setAttribute('alt', 'pulse-wave');
+
+    const sweep = document.createElement('div');
+    sweep.classList.add('sweep');
 
     const stateText = document.createElement('div');
     stateText.classList.add('state');
 
-    ecgDiv.append(pulseWave, stateText);
+    ecgDiv.append(pulseWave, sweep, stateText);
 
     return { ecgDiv, pulseWave, stateText };
 

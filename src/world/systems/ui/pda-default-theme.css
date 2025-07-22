@@ -1,8 +1,9 @@
 :root {
     --border-radius: calc(var(--calculated-vw) * .5);
     --pda-font: sans-serif;
-    --pda-fade-in-transition: opacity .2s linear;
-    --pda-fade-out-transition: visibility 0s .2s, opacity .2s linear;
+    --pda-fade-in-transition: display 0s .2s allow-discrete, opacity .2s linear;
+    --pda-fade-out-transition: display 0s .2s allow-discrete, opacity .2s linear;
+    --pda-panel-fade-in-transition: scale .2s linear;
     --menu-margin: calc(var(--calculated-vw) * 3) 0 calc(var(--calculated-vw) * 1) 0;
     --menu-letter-spacing: calc(var(--calculated-vw) * -.05);
     --menu-border-width: calc(var(--calculated-vw) * .08);
@@ -31,12 +32,24 @@
     --inventory-item-info-background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(51, 51, 51, 0.5) 50%, rgba(17, 17, 17, 0.9) 100%);
     --inventory-item-info-height: calc(var(--calculated-vw) * 1.5);
     --inventory-item-info-border-radius: calc(var(--calculated-vw) * .3);
+    --ecg-sweep-background-size: 100% calc(var(--calculated-vw) * 1.5);
+    --ecg-sweep-animation: travel-up 2.5s infinite linear;
+    --ecg-sweep-color-opacity: .2;
     --ecg-fine-color: rgba(55, 175, 140, 1);
+    --ecg-fine-sweep-color: rgba(55, 175, 140, var(--ecg-sweep-color-opacity));
     --ecg-fine-background-color: rgba(0, 255, 0, 0.2);
+    --ecg-fine-travel-animation: travel 6s infinite linear;
+    --ecg-fine-beat-animation: beat 3s infinite linear;
     --ecg-caution-color: rgba(254, 190, 16, 1);
+    --ecg-caution-sweep-color: rgba(254, 190, 16, var(--ecg-sweep-color-opacity));
     --ecg-caution-background-color: rgba(255, 255, 0, 0.2);
+    --ecg-caution-travel-animation: travel 4s infinite linear;
+    --ecg-caution-beat-animation: beat 2s infinite linear;
     --ecg-danger-color: rgba(179, 27, 27, 1);
+    --ecg-danger-sweep-color: rgba(179, 27, 27, var(--ecg-sweep-color-opacity));
     --ecg-danger-background-color: rgba(255, 0, 0, 0.2);
+    --ecg-danger-travel-animation: travel 2s infinite linear;
+    --ecg-danger-beat-animation: beat 1s infinite linear;
     --maps-panel-size-w: 80;
     --maps-panel-size-h: 45;
     --maps-panel-width: calc(var(--calculated-vw) * var(--maps-panel-size-w));
@@ -67,20 +80,28 @@
     backdrop-filter: blur(calc(var(--calculated-vw) * .5));
 
     .visible {
-        visibility: visible;
+
         opacity: 1;
         transition: var(--pda-fade-in-transition);
+        @starting-style {
+            opacity: 0;
+        }
     }
 
     .hidden {
-        visibility: hidden;
+        display: none;
         opacity: 0;
-        transition: var(--pda-fade-out-transition);
-        pointer-events: none;
     }
 
     .hide {
         display: none;
+    }
+
+    .popup-panel {
+        transition: var(--pda-panel-fade-in-transition);
+        @starting-style {
+            scale: .9;
+        }
     }
 
     > div{
@@ -90,7 +111,7 @@
     }
 
     /* pda-menu */
-    div[name="pda-menu"] {
+    [pda-menu] {
         margin: var(--menu-margin);
         
         ul {
@@ -177,7 +198,7 @@
     }
 
     /* pda-inventory */
-    div[name="pda-inventory"] {
+    [pda-inventory] {
         position: relative;
         width: var(--inventory-panel-width);
         height: var(--inventory-panel-height);
@@ -388,11 +409,22 @@
             background: linear-gradient(to right, rgba(35, 31, 32, 1) 0, var(--ecg-fine-color) 50%, rgba(35, 31, 32, 1) 50%);
             -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, .85) 60%, rgba(0, 0, 0, .5) 70%, transparent 80%);
             mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 1) 8%, rgba(0, 0, 0, .85) 60%, rgba(0, 0, 0, .5) 70%, transparent 80%);
-            animation: travel 6s infinite linear;
+            animation: var(--ecg-fine-travel-animation);
 
             .pulse-wave {
-                width: 100%;
+                width: auto;
                 height: 98%;
+            }
+
+            .sweep {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(0deg, transparent 60%, var(--ecg-fine-sweep-color) 95%);
+                background-size: var(--ecg-sweep-background-size);
+                background-repeat: no-repeat;
+                animation: var(--ecg-sweep-animation), var(--ecg-fine-beat-animation);
             }
 
             .state {
@@ -405,7 +437,6 @@
                 font-family: var(--pda-font);
                 font-size: calc(var(--calculated-vw) * 1.5);
                 text-shadow: 0 0 4px var(--ecg-fine-color);
-                animation: beat 3s infinite;
             }
             
             .state::before{
@@ -415,12 +446,18 @@
 
         div.ecg.caution {
             background: linear-gradient(to right, rgba(35, 31, 32, 1) 0, var(--ecg-caution-color) 50%, rgba(35, 31, 32, 1) 50%);
-            animation: travel 4s infinite linear;
+            animation: var(--ecg-caution-travel-animation);
+
+            .sweep {
+                background: linear-gradient(0deg, transparent 60%, var(--ecg-caution-sweep-color) 95%);
+                background-size: var(--ecg-sweep-background-size);
+                background-repeat: no-repeat;
+                animation: var(--ecg-sweep-animation), var(--ecg-caution-beat-animation);
+            }
 
             .state {
                 color: var(--ecg-caution-color);
                 text-shadow: 0 0 4px var(--ecg-caution-color);
-                animation: beat 2s infinite;
             }
 
             .state::before {
@@ -430,12 +467,18 @@
 
         div.ecg.danger {
             background: linear-gradient(to right, rgba(35, 31, 32, 1) 0, var(--ecg-danger-color) 50%, rgba(35, 31, 32, 1) 50%);
-            animation: travel 2s infinite linear;
+            animation: var(--ecg-danger-travel-animation);
+
+            .sweep {
+                background: linear-gradient(0deg, transparent 60%, var(--ecg-danger-sweep-color) 95%);
+                background-size: var(--ecg-sweep-background-size);
+                background-repeat: no-repeat;
+                animation: var(--ecg-sweep-animation), var(--ecg-danger-beat-animation);
+            }
 
             .state {
                 color: var(--ecg-danger-color);
                 text-shadow: 0 0 4px var(--ecg-danger-color);
-                animation: beat 1s infinite;
             }
 
             .state::before {
@@ -452,28 +495,31 @@
             content: "";
             background: linear-gradient(0deg, transparent 60%, var(--ecg-fine-background-color) 95%);
             background-size: 100% calc(var(--calculated-vw) * 0.6);
+            animation: var(--ecg-fine-beat-animation);
         }
 
         div.ecg.caution::after {
             background: linear-gradient(0deg, transparent 60%, var(--ecg-caution-background-color) 95%);
             background-size: 100% calc(var(--calculated-vw) * 0.6);
+            animation: var(--ecg-caution-beat-animation);
         }
 
         div.ecg.danger::after {
             background: linear-gradient(0deg, transparent 60%, var(--ecg-danger-background-color) 95%);
             background-size: 100% calc(var(--calculated-vw) * 0.6);
+            animation: var(--ecg-danger-beat-animation);
         }
     }
 
     /* pda-files */
-    div[name="pda-files"] {
+    [pda-files] {
         position: relative;
         width: var(--files-panel-width);
         height: var(--files-panel-height);
     }
 
     /* pda-files */
-    div[name="pda-maps"] {
+    [pda-maps] {
         position: relative;
         width: var(--maps-panel-width);
         height: var(--maps-panel-height);
@@ -481,16 +527,17 @@
 }
 
 .default-theme.visible {
-    visibility: visible;
     opacity: 1;
     transition: var(--pda-fade-in-transition);
+    @starting-style {
+        opacity: 0;
+    }
 }
 
 .default-theme.hidden {
-    visibility: hidden;
+    display: none;
     opacity: 0;
     transition: var(--pda-fade-out-transition);
-    pointer-events: none;
 }
 
 @keyframes travel {
@@ -503,21 +550,31 @@
     }
 }
 
+@keyframes travel-up {
+    0% {
+        background-position: 0 calc(var(--calculated-vw) * 9.6);
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
 @keyframes beat {
     0% {
         opacity: 1;
     }
 
     35% {
-        opacity: 1;
+        opacity: 0.4;
     }
 
     45% {
-        opacity: 0.3;
+        opacity: 0;
     }
 
-    60% {
-        opacity: 1
+    70% {
+        opacity: 0.4;
     }
 
     100% {
