@@ -93,7 +93,17 @@ const AMMUNITION = {
     PISTOL_AMMO_BOX: 'PistolAmmoBox',
     MAGNUM_AMMO_BOX: 'MagnumAmmoBox',
     SMG_AMMO_BOX: 'SMGAmmoBox'
-}
+};
+
+const HEALTH_CATEGORY = {
+    FIRST_AID_KIT: 'FirstAidKit'
+};
+
+const FIRST_AID_KIT = {
+    FIRST_AID_KIT_SMALL: 'FirstAidKitSmall',
+    FIRST_AID_KIT_MEDIUM: 'FirstAidKitMedium',
+    FIRST_AID_KIT_LARGE: 'FirstAidKitLarge'
+};
 
 // cameras
 const CAMERAS = {
@@ -275,6 +285,9 @@ const GLTF_NAMES = {
     PISTOL_AMMO_BOX_ITEM: 'PISTOL_AMMO_BOX_ITEM',
     MAGNUM_AMMO_BOX_ITEM: 'MAGNUM_AMMO_BOX_ITEM',
     SMG_AMMO_BOX_ITEM: 'SMG_AMMO_BOX_ITEM',
+    FIRST_AID_KIT_SMALL: 'FIRST_AID_KIT_SMALL',
+    FIRST_AID_KIT_MEDIUM: 'FIRST_AID_KIT_MEDIUM',
+    FIRST_AID_KIT_LARGE: 'FIRST_AID_KIT_LARGE',
     // tables
     WOODEN_PICNIC_TABLE: 'WOODEN_PICNIC_TABLE',
     WOODEN_TABLE: 'WOODEN_TABLE',
@@ -356,6 +369,12 @@ const GLTFS = [{
     name: GLTF_NAMES.MAGNUM_AMMO_BOX_ITEM, src: 'pickable_items/ammunition/magnum_ammo_box.glb'
 }, {
     name: GLTF_NAMES.SMG_AMMO_BOX_ITEM, src: 'pickable_items/ammunition/smg_ammo_box.glb'
+}, {
+    name: GLTF_NAMES.FIRST_AID_KIT_SMALL, src: 'pickable_items/health/first_aid_kit_small.glb'
+}, {
+    name: GLTF_NAMES.FIRST_AID_KIT_MEDIUM, src: 'pickable_items/health/first_aid_kit_medium.glb'
+}, {
+    name: GLTF_NAMES.FIRST_AID_KIT_LARGE, src: 'pickable_items/health/first_aid_kit_large.glb'
 }];
 
 const SHADER_NAMES = {
@@ -486,6 +505,8 @@ export {
     WEAPONS,
     AMMOS,
     AMMUNITION,
+    HEALTH_CATEGORY,
+    FIRST_AID_KIT,
 
     PLANE,
     OBBPLANE,

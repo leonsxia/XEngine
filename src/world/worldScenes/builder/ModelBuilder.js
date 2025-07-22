@@ -10,7 +10,8 @@ import {
     FancyPictureFrame01, VintageGrandfatherClock,
     ModernCeilingLamp01, SecurityLight,
     GlockItem, BayonetItem, PistolItem, RevolverItem, SMGShortItem,
-    PistolAmmoBox, MagnumAmmoBox, SMGAmmoBox
+    PistolAmmoBox, MagnumAmmoBox, SMGAmmoBox,
+    FirstAidKitItem
 } from '../../components/Models.js';
 import {
     AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, CREATURE_BASE, ZOMBIE_MALE, BLACK_WIDOW,
@@ -24,7 +25,7 @@ import {
     FANCY_PICTURE_FRAME_01, VINTAGE_GRANDFATHER_CLOCK,
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
     TEXTURE_NAMES, GLTF_NAMES,
-    WEAPONS, AMMUNITION
+    WEAPONS, AMMUNITION, HEALTH_CATEGORY
 } from '../../components/utils/constants.js';
 import { createAxesHelper, createGridHelper } from '../../components/utils/helpers.js';
 
@@ -67,6 +68,7 @@ class ModelBuilder {
         this.objectCreationMapping[AMMUNITION.PISTOL_AMMO_BOX] = this.createPistolAmmoBox;
         this.objectCreationMapping[AMMUNITION.MAGNUM_AMMO_BOX] = this.createMagnumAmmoBox;
         this.objectCreationMapping[AMMUNITION.SMG_AMMO_BOX] = this.createSMGAmmoBox;
+        this.objectCreationMapping[HEALTH_CATEGORY.FIRST_AID_KIT] = this.createFirstAidKitItem;
         this.objectCreationMapping[AXES] = this.createAxes;
         this.objectCreationMapping[GRID] = this.createGrid;
         this.objectCreationMapping[PLANE] = this.createPlane;
@@ -371,6 +373,24 @@ class ModelBuilder {
 
         if (!specs.ammo) specs.ammo = {};
         Object.assign(specs.ammo, object.ammo.toJSON());
+
+        if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
+    createFirstAidKitItem(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { smallSrc, mediumSrc, largeSrc } = specs;
+
+        this.setupObjectGLTF({ smallSrc, mediumSrc, largeSrc }, specs);
+
+        object = new FirstAidKitItem(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
 
         if (updateOBBs) object.updateOBBs();
 

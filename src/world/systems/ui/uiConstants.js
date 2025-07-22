@@ -9,6 +9,9 @@ const IMAGE_NAMES = {
     PISTOL_AMMO_BOX: 'PISTOL_AMMO_BOX',
     MAGNUM_AMMO_BOX: 'MAGNUM_AMMO_BOX',
     SMG_AMMO_BOX: 'SMG_AMMO_BOX',
+    FIRST_AID_KIT_SMALL: 'FIRST_AID_KIT_SMALL',
+    FIRST_AID_KIT_MEDIUM: 'FIRST_AID_KIT_MEDIUM',
+    FIRST_AID_KIT_LARGE: 'FIRST_AID_KIT_LARGE',    
     ECG: 'ECG'
 };
 
@@ -28,6 +31,12 @@ const IMAGES = [{
     name: IMAGE_NAMES.MAGNUM_AMMO_BOX, src: 'assets/images/item_snapshots/ammo/magnum_ammo_box.png'
 }, {
     name: IMAGE_NAMES.SMG_AMMO_BOX, src: 'assets/images/item_snapshots/ammo/smg_ammo_box.png'
+}, {
+    name: IMAGE_NAMES.FIRST_AID_KIT_SMALL, src: 'assets/images/item_snapshots/health/first_aid_kit_small.png'
+}, {
+    name: IMAGE_NAMES.FIRST_AID_KIT_MEDIUM, src: 'assets/images/item_snapshots/health/first_aid_kit_medium.png'
+}, {
+    name: IMAGE_NAMES.FIRST_AID_KIT_LARGE, src: 'assets/images/item_snapshots/health/first_aid_kit_large.png'
 }, {
     name: IMAGE_NAMES.ECG, src: 'assets/images/pda/ecg.svg'
 }];

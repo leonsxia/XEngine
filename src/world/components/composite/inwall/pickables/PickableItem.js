@@ -10,9 +10,6 @@ import { getImageUrl } from "../../../utils/imageHelper";
 
 class PickableItem extends ObstacleBase {
 
-    _width;
-    _height;
-    _depth;
     _gltfScale = [1, 1, 1];
 
     // html content
@@ -20,6 +17,7 @@ class PickableItem extends ObstacleBase {
     itemHtml;
     countInfo;
     occupiedSlotIdx = -1;
+    _imgUrl;
 
     isPickableItem = true;
     isPicked = false;
@@ -28,38 +26,48 @@ class PickableItem extends ObstacleBase {
     currentRoom;
 
     _xboxControllerConnected;
-    _imgUrl;
 
     constructor(specs) {
 
         super(specs);
 
-        const { name, lines = false } = specs;
-        const { width = 1, height = 1, depth = 1 } = specs;
-        const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
-        const { gltfRotation = [0, 0, 0] } = specs;
-        const { src, receiveShadow = true, castShadow = true } = specs;
+        const { scale = [1, 1, 1] } = specs;
         const { currentRoom } = specs;
         const { isPicked = false, belongTo } = specs;
-
-        this._width = width;
-        this._height = height;
-        this._depth = depth;
         this._scale = new Array(...scale);
-        this._gltfScale = gltfScale;
-
         this.currentRoom = currentRoom;
         this.isPicked = isPicked;
         this.belongTo = belongTo;
 
+        // interaction label
+        this.labelCanvas = makeInteractiveLabelCanvas({ baseWidth: 15, borderHeight: 15, size: 10, borderSize: 2 });
+        this.interactiveLabelTip = new Sprite(createSpriteMaterial(this.labelCanvas.canvas));
+        this.interactiveLabelTip.scale.x = this.labelCanvas.clientWidth * LABEL_BASE_SCALE;
+        this.interactiveLabelTip.scale.y = this.labelCanvas.clientHeight * LABEL_BASE_SCALE;
+
+        this.group.add(this.interactiveLabelTip);
+
+        if (specs.isCombinable) {
+
+            return this;
+
+        }
+
+        const { name, lines = false } = specs;
+        const { width = 1, height = 1, depth = 1 } = specs;
+        const { gltfScale = [1, 1, 1] } = specs;
+        const { gltfRotation = [0, 0, 0] } = specs;
+        const { src, receiveShadow = true, castShadow = true } = specs;
+
+        this._gltfScale = gltfScale;
+
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
-        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
+        const boxSpecs = { size: { width, depth, height }, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
-        this.gltf.setScale(gltfScale);
         this.gltf.setRotation(gltfRotation);
 
         // obb box
@@ -67,19 +75,15 @@ class PickableItem extends ObstacleBase {
         this.box.visible = false;
         // this.box.setTransparent(true, .5);
 
-        // interaction label
-        this.labelCanvas = makeInteractiveLabelCanvas({ baseWidth: 15, borderHeight: 15, size: 10, borderSize: 2 });
-        this.interactiveLabelTip = new Sprite(createSpriteMaterial(this.labelCanvas.canvas));
-        this.interactiveLabelTip.scale.x = this.labelCanvas.clientWidth * LABEL_BASE_SCALE;
-        this.interactiveLabelTip.scale.y = this.labelCanvas.clientHeight * LABEL_BASE_SCALE;
-        this.interactiveLabelTip.position.y = this._height / 2 + .3;
+        this.update(false);
+        
+        this.setLableTip();
         this.updateLabelTip();
         this.showLabelTip(false);
 
         this.group.add(
             this.gltf.group,
-            this.box.mesh,
-            this.interactiveLabelTip
+            this.box.mesh
         );
 
     }
@@ -162,6 +166,12 @@ class PickableItem extends ObstacleBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    setLableTip() {
+
+        this.interactiveLabelTip.position.y = this.height / 2 + .3;
 
     }
 

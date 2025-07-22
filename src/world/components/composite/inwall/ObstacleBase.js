@@ -321,24 +321,24 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
-    bindGLTFEvents() {
+    bindGLTFEvents(gltf = this.gltf) {
 
-        if (!this.gltf) return;        
+        if (!gltf) return;
 
         const type = 'visibleChanged';
         const listener = (event) => {
 
             this.#logger.func = 'bindGLTFEvents';
-            this.#logger.log(`${this.gltf.name}: ${event.message}`);
-            this.gltf.setLayers(CAMERA_RAY_LAYER);
-            this.gltf.setLayers(PLAYER_CAMERA_RAY_LAYER);
-            this.gltf.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
-            this.gltf.setLayers(TOFU_AIM_LAYER);
+            this.#logger.log(`${gltf.name}: ${event.message}`);
+            gltf.setLayers(CAMERA_RAY_LAYER);
+            gltf.setLayers(PLAYER_CAMERA_RAY_LAYER);
+            gltf.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
+            gltf.setLayers(TOFU_AIM_LAYER);
 
         };
 
-        this.gltf.addEventListener(type, listener);
-        this.gltf.visible = true;
+        gltf.addEventListener(type, listener);
+        gltf.visible = true;
 
     }
 

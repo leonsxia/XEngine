@@ -36,6 +36,11 @@ export { PistolItem } from './composite/inwall/pickables/weapons/PistolItem.js';
 export { RevolverItem } from './composite/inwall/pickables/weapons/RevolverItem.js';
 export { SMGShortItem } from './composite/inwall/pickables/weapons/SMGShortItem.js';
 
+export { FirstAidKitItem } from './composite/inwall/pickables/health/FirstAidKitItem.js';
+export { FirstAidKitSmall } from './composite/inwall/pickables/health/firstAidKit/FirstAidKitSmall.js';
+export { FirstAidKitMedium } from './composite/inwall/pickables/health/firstAidKit/FirstAidKitMedium.js';
+export { FirstAidKitLarge } from './composite/inwall/pickables/health/firstAidKit/FirstAidKitLarge.js';
+
 export { PistolAmmoBox } from './composite/inwall/pickables/ammos/PistolAmmoBox.js';
 export { MagnumAmmoBox } from './composite/inwall/pickables/ammos/MagnumAmmoBox.js';
 export { SMGAmmoBox } from './composite/inwall/pickables/ammos/SMGAmmoBox.js';

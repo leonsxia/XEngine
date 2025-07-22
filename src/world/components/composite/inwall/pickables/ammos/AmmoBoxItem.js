@@ -9,9 +9,6 @@ class AmmoBoxItem extends PickableItem {
     ammo;
     capacity;
 
-    // html
-    countInfo;
-
     constructor(specs) {
 
         super(specs);

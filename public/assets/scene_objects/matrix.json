@@ -525,6 +525,75 @@
                     "ammo": {
                         "count": 90
                     }
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitSmall",
+                    "name": "small_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        6,
+                        2,
+                        4.63
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitMedium",
+                    "name": "medium_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        5.7,
+                        2,
+                        4.63
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitLarge",
+                    "name": "large_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        5.3,
+                        2,
+                        4.63
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false
                 }
             ]
         },

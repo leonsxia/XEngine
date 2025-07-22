@@ -139,7 +139,7 @@ function createInventory() {
 
 function createInventoryItem(specs) {
 
-    const { itemSize = 1, imgUrl, isWeaponItem = false } = specs;
+    const { itemSize = 1, imgUrl, isWeaponItem = false, needCountInfo = true } = specs;
 
     const itemDiv = document.createElement('div');
     itemDiv.classList.add('inv-item', `item-size-${itemSize}`);
@@ -161,9 +161,14 @@ function createInventoryItem(specs) {
 
     }
 
-    const countInfo = document.createElement('div');
-    countInfo.classList.add('count-info');
-    itemDiv.append(countInfo);
+    let countInfo;
+    if (needCountInfo) {
+
+        countInfo = document.createElement('div');
+        countInfo.classList.add('count-info');
+        itemDiv.append(countInfo);
+
+    }
 
     return { itemDiv, equipInfo, countInfo };
 

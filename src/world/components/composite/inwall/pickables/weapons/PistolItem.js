@@ -8,7 +8,6 @@ const GLTF_SRC = 'weapons/pistol.glb';
 class PistolItem extends WeaponItem {
 
     static gltfModel;
-    static imgName = IMAGE_NAMES.PISTOL;
 
     constructor(specs) {
 
@@ -19,7 +18,7 @@ class PistolItem extends WeaponItem {
         specs.gltfRotation = [- Math.PI / 2, 0, 0];
         specs.weaponType = WEAPONS.PISTOL1;
         specs.src = specs.src ?? GLTF_SRC;
-        specs.imgName = PistolItem.imgName;
+        specs.imgName = IMAGE_NAMES.PISTOL;
 
         const { count = 15, damage = 20, offset0 = - 5, offset1 = 5 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.PISTOL_9MM, count, damage, offset0, offset1 });

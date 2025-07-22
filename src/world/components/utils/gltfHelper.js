@@ -1,8 +1,8 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { 
     GLTFModel, BayonetItem, GlockItem, PistolItem, RevolverItem, SMGShortItem,
-    PistolAmmoBox, MagnumAmmoBox,
-    SMGAmmoBox
+    PistolAmmoBox, MagnumAmmoBox, SMGAmmoBox,
+    FirstAidKitSmall, FirstAidKitMedium, FirstAidKitLarge
 } from '../Models';
 import { GLTF_NAMES } from './constants';
 
@@ -115,6 +115,24 @@ async function initPickableModels() {
         receiveShadow, castShadow
     });
     SMGAmmoBox.gltfModel.setScale([0.08, 0.08, 0.08]);
+
+    FirstAidKitSmall.gltfModel = new GLTFModel({
+        name: `first_aid_kit_small_view_model`, src: loadedGLTFModels[GLTF_NAMES.FIRST_AID_KIT_SMALL], 
+        receiveShadow, castShadow
+    });
+    FirstAidKitSmall.gltfModel.setScale([.2, .2, .2]);
+
+    FirstAidKitMedium.gltfModel = new GLTFModel({
+        name: `first_aid_kit_medium_view_model`, src: loadedGLTFModels[GLTF_NAMES.FIRST_AID_KIT_MEDIUM], 
+        receiveShadow, castShadow
+    });
+    FirstAidKitMedium.gltfModel.setScale([.15, .15, .15]);
+
+    FirstAidKitLarge.gltfModel = new GLTFModel({
+        name: `first_aid_kit_large_view_model`, src: loadedGLTFModels[GLTF_NAMES.FIRST_AID_KIT_LARGE], 
+        receiveShadow, castShadow
+    });
+    FirstAidKitLarge.gltfModel.setScale([.15, .15, .15]);
 
     await Promise.all([
         GlockItem.gltfModel.init(),

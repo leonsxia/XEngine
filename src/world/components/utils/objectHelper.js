@@ -20,7 +20,8 @@ import {
     BayonetItem,
     PistolAmmoBox,
     MagnumAmmoBox,
-    SMGAmmoBox
+    SMGAmmoBox,
+    FirstAidKitItem
 } from "../Models";
 
 function clone(target, source, ignore = []) {
@@ -179,7 +180,8 @@ function objectFilter(object) {
         object instanceof BayonetItem ||
         object instanceof PistolAmmoBox ||
         object instanceof MagnumAmmoBox ||
-        object instanceof SMGAmmoBox
+        object instanceof SMGAmmoBox ||
+        object instanceof FirstAidKitItem
     ) {
 
         return true;
