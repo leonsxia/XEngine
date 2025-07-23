@@ -33,7 +33,7 @@ class SubCombinableItem {
 
         const boxSpecs = { size: { width, depth, height }, lines };
         // obb box
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
+        this.box = createOBBBox(boxSpecs, `${name}_${healthType}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.box.visible = false;
         // this.box.setTransparent(true, .5);
 

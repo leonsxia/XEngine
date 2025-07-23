@@ -29,7 +29,7 @@ class FirstAidKitBase extends SubCombinableItem {
                 
         }                
 
-        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };        
+        const gltfSpecs = { name: `${name}_${this.type}_gltf_model`, src, receiveShadow, castShadow };        
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
         this.gltf.setRotation(gltfRotation);

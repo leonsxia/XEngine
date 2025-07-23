@@ -590,7 +590,7 @@ class BasicObject extends EventDispatcher {
 
     setName(name) {
 
-        this.mesh.name = name;;
+        this.mesh.name = `${name}_mesh`;;
         this.name = name;
 
         return this;

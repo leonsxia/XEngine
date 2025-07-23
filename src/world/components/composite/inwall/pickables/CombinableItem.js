@@ -74,6 +74,8 @@ class CombinableItem extends PickableItem {
 
             this.assignModels(this.currentItem);
 
+            this.itemType = type;
+
             const imgTag = this.itemHtml.querySelector('img');
             imgTag.src = this.currentItem.imgUrl;
 
@@ -90,8 +92,12 @@ class CombinableItem extends PickableItem {
             this.setLableTip();
 
             this.updateOBBs();
-            
+
+            return true;
+
         }
+
+        return false;
 
     }
 
