@@ -38,7 +38,8 @@ class Tofu extends TofuBase {
         } else if (!this.health.isEmpty && this.dead) {
 
             this.isActive = true;
-            this.resetAnimation();            
+            this.resetAnimation();
+            this.setAllBoundingBoxLayers(true);
 
         } else {
 
@@ -50,6 +51,9 @@ class Tofu extends TofuBase {
 
     // inherited by children
     setStateAfterDamageReceived() {}
+
+    // inherited by children
+    setAllBoundingBoxLayers() {}
 
     checkSightOfView(target) {
 
@@ -205,7 +209,7 @@ class Tofu extends TofuBase {
     // inherited by children
     onInSightTargetsCleared() {}
 
-    // inherited by childre
+    // inherited by children
     onInSightTargetsRemoved() {}
 
     getTargetDirectionAngle(target) {

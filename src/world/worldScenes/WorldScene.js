@@ -824,6 +824,7 @@ class WorldScene {
             this.player.resetAnimation?.();
             this.player.clearInSightTargets();
             this.player.reloadAllWeapons?.();
+            this.player.setAllBoundingBoxLayers(true);
 
         }
 
