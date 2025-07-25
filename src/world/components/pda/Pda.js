@@ -54,6 +54,8 @@ class Pda {
         // initialize inventory as default panel
         this._pdaMenu.currentIndex = 1;
 
+        this.addPdaToContainer();
+
     }
 
     get visible() {

@@ -109,8 +109,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
 
-        this.pda.addPdaToContainer();
-
         this.trackResources();
 
     }
