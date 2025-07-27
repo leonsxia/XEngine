@@ -7,6 +7,7 @@ import { createSpriteMaterial } from "../../../basic/basicMaterial";
 import { GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
 import { hexToRGBA, labelBackground, white } from "../../../basic/colorBase";
 import { getImageUrl } from "../../../utils/imageHelper";
+import { addElementClass, removeElementClass } from "../../../utils/htmlHelper";
 
 class PickableItem extends ObstacleBase {
 
@@ -119,30 +120,13 @@ class PickableItem extends ObstacleBase {
 
     removeHtmlClass(clsname) {
 
-        let find = [];
-        for (let i = 0, il = this.itemHtml.classList.length; i < il; i++) {
-
-            const cls = this.itemHtml.classList[i];
-            if (cls.includes(clsname)) {
-
-                find.push(cls);
-
-            }
-
-        }
-
-        for (let i = 0, il = find.length; i < il; i++) {
-
-            const cls = find[i];
-            this.itemHtml.classList.remove(cls);
-
-        }
+        removeElementClass(this.itemHtml, clsname);
 
     }
 
     addHtmlClass(clsname) {
 
-        this.itemHtml.classList.add(clsname);
+        addElementClass(this.itemHtml, clsname);
 
     }
 

@@ -103,6 +103,9 @@ function createInventory() {
     const itemsPanel = document.createElement('div');
     itemsPanel.classList.add('items-panel');
 
+    const operatePanel = document.createElement('div');
+    operatePanel.classList.add('operate-panel');
+
     const descriptionPanel = document.createElement('div');
     descriptionPanel.classList.add('description-panel');
 
@@ -130,10 +133,15 @@ function createInventory() {
 
     const itemsDivList = [];
 
-    inventoryPanel.append(slotsPanel, itemsPanel, descriptionPanel);
+    const focusedSlot = document.createElement('div');
+    focusedSlot.classList.add('focused-slot', 'idx-0', 'item-size-1');
+    focusedSlot.style.position = 'absolute';
+    operatePanel.append(focusedSlot);
+
+    inventoryPanel.append(slotsPanel, operatePanel, itemsPanel, descriptionPanel);
     inventoryContainer.appendChild(inventoryPanel);
 
-    return { inventoryContainer, inventoryPanel, slotsPanel, itemsPanel, descriptionPanel, slotsDivList, itemsDivList }
+    return { inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, slotsDivList, itemsDivList, focusedSlot }
 
 }
 

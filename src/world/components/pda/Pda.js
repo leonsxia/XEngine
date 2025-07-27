@@ -8,6 +8,11 @@ import { Inventory } from "./tabs/Inventory";
 import { Maps } from "./tabs/Maps";
 
 const DEBUG = true;
+const TABS = {
+    MAP: 'MAP',
+    INVENTORY: 'INVENTORY',
+    FIELS: 'FILES'
+}
 
 class Pda {
 
@@ -95,6 +100,27 @@ class Pda {
 
     }
 
+    get currentTab() {
+
+        let current;
+        switch (this._pdaMenu.currentIndex) {
+
+            case 0:
+                current = TABS.MAP;
+                break;
+            case 1:
+                current = TABS.INVENTORY;
+                break;
+            case 2:
+                current = TABS.FIELS;
+                break;
+
+        }
+
+        return current;
+
+    }
+
     bindHealthChangeEvents() {
 
         const cautionBottom = 25;
@@ -166,22 +192,66 @@ class Pda {
     // control events start
     goUp(val) {
         this.#logger.func = this.goUp.name;
-        this.#logger.log(`goUp: ${val}`);
+        // this.#logger.log(`goUp: ${val}`);
+
+        if (val) {
+
+            if (this.currentTab === TABS.INVENTORY) {
+
+                this._inventory.focusUp();
+
+            }
+
+        }
+
     }
 
     goDown(val) {
         this.#logger.func = this.goDown.name;
-        this.#logger.log(`goDown: ${val}`);
+        // this.#logger.log(`goDown: ${val}`);
+
+        if (val) {
+
+            if (this.currentTab === TABS.INVENTORY) {
+
+                this._inventory.focusDown();
+
+            }
+
+        }
+
     }
 
     goLeft(val) {
         this.#logger.func = this.goLeft.name;
-        this.#logger.log(`goLeft: ${val}`);
+        // this.#logger.log(`goLeft: ${val}`);
+
+        if (val) {
+
+            if (this.currentTab === TABS.INVENTORY) {
+
+                this._inventory.focusLeft();
+
+            }
+
+        }
+
     }
 
     goRight(val) {
         this.#logger.func = this.goRight.name;
-        this.#logger.log(`goRight: ${val}`);
+        // this.#logger.log(`goRight: ${val}`);
+
+        if (val) {
+
+            if (this.currentTab === TABS.INVENTORY) {
+
+                this._inventory.focusRight();
+
+            }
+
+        }
+
     }
 
     confirm(val) {

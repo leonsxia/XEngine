@@ -1,4 +1,5 @@
 import { createInventory } from "../../../systems/htmlElements";
+import { addElementClass, removeElementClass } from "../../utils/htmlHelper";
 import { ECG } from "./ECG";
 import { TabPanel } from "./TabPanel";
 
@@ -12,6 +13,8 @@ class Inventory extends TabPanel {
         12, 13, 14, 15,
         16, 17, 18, 19
     ];
+    _currentIdx = 0;
+    _size = 20;
 
     constructor(specs) {
 
@@ -26,6 +29,96 @@ class Inventory extends TabPanel {
 
         await this.ecg.init();
         this._html.inventoryContainer.appendChild(this.ecg.container);
+
+    }
+
+    get matchedItem() {
+
+        let matched;
+        for (let i = 0, il = this.items.length; i < il; i++) {
+
+            const item = this.items[i];
+            if (item.occupiedSlotIdx === this._currentIdx || (item.itemSize === 2 && item.occupiedSlotIdx + 1 === this._currentIdx)) {
+
+                matched = item;
+
+            }
+
+        }
+
+        return matched;
+
+    }
+
+    get focusedIndex() {
+        
+        return this._currentIdx;
+
+    }
+
+    set focusedIndex(val) {
+
+        const interval = val - this._currentIdx;
+        this._currentIdx = val > 0 ? val % this._size : (this._size + val) % this._size;        
+
+        const matched = this.matchedItem;
+
+        if (matched && matched.itemSize === 2) {
+
+            removeElementClass(this._html.focusedSlot, 'item-size-');
+            if (this._currentIdx === matched.occupiedSlotIdx + 1) {
+
+                if (Math.abs(interval) > 1 || interval === -1) {
+
+                    this._currentIdx = matched.occupiedSlotIdx;
+                    addElementClass(this._html.focusedSlot, 'item-size-2');
+
+                } else if (interval === 1) {
+
+                    this._currentIdx += 1;
+                    addElementClass(this._html.focusedSlot, 'item-size-1');
+
+                }
+
+            } else {
+
+                addElementClass(this._html.focusedSlot, 'item-size-2');
+
+            }
+
+        } else {
+
+            removeElementClass(this._html.focusedSlot, 'item-size-');
+            addElementClass(this._html.focusedSlot, 'item-size-1');
+
+        }
+
+        removeElementClass(this._html.focusedSlot, 'idx');
+        addElementClass(this._html.focusedSlot, `idx-${this._currentIdx}`);
+
+    }
+
+    focusLeft() {
+
+        this.focusedIndex--;
+
+    }
+
+    focusRight() {
+
+        this.focusedIndex++;
+
+    }
+
+    focusUp() {
+
+        this.focusedIndex -= 4;
+
+    }
+
+    focusDown() {
+
+        this.focusedIndex += 4;
 
     }
 
