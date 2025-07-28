@@ -15,6 +15,9 @@ class Inventory extends TabPanel {
     ];
     _currentIdx = 0;
     _size = 20;
+    _shiftReady = false;
+    _shiftIdx = 0;
+    _shiftSlotSize = 1;
 
     constructor(specs) {
 
@@ -32,21 +35,54 @@ class Inventory extends TabPanel {
 
     }
 
-    get matchedItem() {
+    get shiftReady() {
 
-        let matched;
-        for (let i = 0, il = this.items.length; i < il; i++) {
+        return this._shiftReady;
 
-            const item = this.items[i];
-            if (item.occupiedSlotIdx === this._currentIdx || (item.itemSize === 2 && item.occupiedSlotIdx + 1 === this._currentIdx)) {
+    }
 
-                matched = item;
+    set shiftReady(val) {
+
+        if (val) {
+
+            const matched = this.getMatchedItem(this._currentIdx);
+            if (matched) {
+                
+                this._shiftReady = true;
+                removeElementClass(this._html.shiftSlot, 'hide');
+                removeElementClass(this._html.shiftSlot, 'item-size-');
+
+                if (matched.itemSize === 2) {
+
+                    addElementClass(this._html.shiftSlot, 'item-size-2');
+                    this._shiftSlotSize = 2;
+
+                } else {
+
+                    addElementClass(this._html.shiftSlot, 'item-size-1');
+                    this._shiftSlotSize = 1;
+
+                }
+
+                this._shiftIdx = this._currentIdx;
+                removeElementClass(this._html.shiftSlot, 'idx');
+                addElementClass(this._html.shiftSlot, `idx-${this._currentIdx}`);
 
             }
 
-        }
+        } else {
 
-        return matched;
+            this._shiftReady = false;
+            const matched = this.getMatchedItem(this._shiftIdx);
+            if (matched) {
+
+                // todo
+
+            }
+
+            addElementClass(this._html.shiftSlot, 'hide');
+
+        }
 
     }
 
@@ -58,55 +94,140 @@ class Inventory extends TabPanel {
 
     set focusedIndex(val) {
 
-        const interval = val - this._currentIdx;
-        this._currentIdx = val > 0 ? val % this._size : (this._size + val) % this._size;        
+        this.processFocusedSlot(val);
 
-        const matched = this.matchedItem;
+    }
+
+    get shiftIndex() {
+
+        return this._shiftIdx;
+
+    }
+
+    set shiftIndex(val) {
+
+        this.processShiftSlot(val);
+
+    }
+
+    processShiftSlot(val) {
+
+        const element = this._html.shiftSlot;
+        const prevIdx = this._shiftIdx;
+        const interval = val - prevIdx;
+        let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
+        if (this._shiftSlotSize === 2 && tarIdx % 4 === 3){
+
+            if (interval > 0) {
+
+                tarIdx = ++tarIdx % this._size;
+
+            } else {
+
+                tarIdx = --tarIdx;
+
+            }
+
+        }
+
+        removeElementClass(element, 'idx');
+        addElementClass(element, `idx-${tarIdx}`);
+
+        this._shiftIdx = tarIdx;
+
+    }
+
+    processFocusedSlot(val) {
+
+        const element = this._html.focusedSlot;
+        const prevIdx = this._currentIdx;
+        const interval = val - prevIdx;
+        let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
+
+        const matched = this.getMatchedItem(tarIdx);
 
         if (matched && matched.itemSize === 2) {
 
-            removeElementClass(this._html.focusedSlot, 'item-size-');
-            if (this._currentIdx === matched.occupiedSlotIdx + 1) {
+            removeElementClass(element, 'item-size-');
+            if (tarIdx === matched.occupiedSlotIdx + 1) {
 
                 if (Math.abs(interval) > 1 || interval === -1) {
 
-                    this._currentIdx = matched.occupiedSlotIdx;
-                    addElementClass(this._html.focusedSlot, 'item-size-2');
+                    tarIdx = matched.occupiedSlotIdx;
+                    addElementClass(element, 'item-size-2');
 
                 } else if (interval === 1) {
 
-                    this._currentIdx += 1;
-                    addElementClass(this._html.focusedSlot, 'item-size-1');
+                    tarIdx += 1;
+                    const next = this.getMatchedItem(tarIdx);
+                    if (next && next.itemSize === 2) {
+
+                        addElementClass(element, 'item-size-2');
+
+                    } else {
+
+                        addElementClass(element, 'item-size-1');
+
+                    }
 
                 }
 
             } else {
 
-                addElementClass(this._html.focusedSlot, 'item-size-2');
+                addElementClass(element, 'item-size-2');
 
             }
 
         } else {
 
-            removeElementClass(this._html.focusedSlot, 'item-size-');
-            addElementClass(this._html.focusedSlot, 'item-size-1');
+            removeElementClass(element, 'item-size-');
+            addElementClass(element, 'item-size-1');
+
+        }
+        
+        removeElementClass(element, 'idx');
+        addElementClass(element, `idx-${tarIdx}`);
+
+        this._currentIdx = tarIdx;
+
+    }
+
+    getMatchedItem(idx) {
+
+        let matched;
+        for (let i = 0, il = this.items.length; i < il; i++) {
+
+            const item = this.items[i];
+            if (item.occupiedSlotIdx === idx || (item.itemSize === 2 && item.occupiedSlotIdx + 1 === idx)) {
+
+                matched = item;
+                break;
+
+            }
 
         }
 
-        removeElementClass(this._html.focusedSlot, 'idx');
-        addElementClass(this._html.focusedSlot, `idx-${this._currentIdx}`);
+        return matched;
+
+    }
+
+    resetShift() {
+
+        removeElementClass(this._html.shiftSlot, 'idx');
+        addElementClass(this._html.shiftSlot, 'hide');
+        this._shiftReady = false;
 
     }
 
     focusLeft() {
 
-        this.focusedIndex--;
+        this.focusedIndex --;
 
     }
 
     focusRight() {
 
-        this.focusedIndex++;
+        this.focusedIndex ++;
 
     }
 
@@ -119,6 +240,30 @@ class Inventory extends TabPanel {
     focusDown() {
 
         this.focusedIndex += 4;
+
+    }
+
+    shiftLeft() {
+
+        this.shiftIndex --;
+
+    }
+
+    shiftRight() {
+
+        this.shiftIndex ++;
+
+    }
+
+    shiftUp() {
+
+        this.shiftIndex -= 4;
+
+    }
+
+    shiftDown() {
+
+        this.shiftIndex += 4;
 
     }
 

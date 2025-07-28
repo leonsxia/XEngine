@@ -86,6 +86,7 @@ class Pda {
         } else {
 
             this.showElement(this._pdaContainer, false);
+            this._inventory.resetShift();
 
         }
 
@@ -198,7 +199,15 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                this._inventory.focusUp();
+                if (!this._inventory.shiftReady) {
+
+                    this._inventory.focusUp();
+
+                } else {
+
+                    this._inventory.shiftUp();
+
+                }
 
             }
 
@@ -214,7 +223,15 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                this._inventory.focusDown();
+                if (!this._inventory.shiftReady) {
+
+                    this._inventory.focusDown();
+
+                } else {
+
+                    this._inventory.shiftDown();
+
+                }
 
             }
 
@@ -230,7 +247,15 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                this._inventory.focusLeft();
+                if (!this._inventory.shiftReady) {
+
+                    this._inventory.focusLeft();
+
+                } else {
+
+                    this._inventory.shiftLeft();
+
+                }
 
             }
 
@@ -246,7 +271,15 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                this._inventory.focusRight();
+                if (!this._inventory.shiftReady) {
+
+                    this._inventory.focusRight();
+
+                } else {
+
+                    this._inventory.shiftRight();
+
+                }
 
             }
 
@@ -290,7 +323,14 @@ class Pda {
 
     moveItem(val) {
         this.#logger.func = this.moveItem.name;
-        this.#logger.log(`moveItem: ${val}`);
+        // this.#logger.log(`moveItem: ${val}`);
+
+        if (val) {
+
+            this._inventory.shiftReady = !this._inventory.shiftReady;
+
+        }
+
     }
 
     xboxControllerConnected(val) {

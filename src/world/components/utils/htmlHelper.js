@@ -1,12 +1,19 @@
-function removeElementClass(element, clsname) {
+function removeElementClass(element, ...clsnames) {
 
     let find = [];
     for (let i = 0, il = element.classList.length; i < il; i++) {
 
         const cls = element.classList[i];
-        if (cls.includes(clsname)) {
 
-            find.push(cls);
+        for (let j = 0, jl = clsnames.length; j < jl; j++) {
+
+            const clsname = clsnames[j];
+            if (cls.includes(clsname)) {
+
+                find.push(cls);
+                break;
+
+            }
 
         }
 
@@ -21,9 +28,9 @@ function removeElementClass(element, clsname) {
 
 }
 
-function addElementClass(element, clsname) {
+function addElementClass(element, ...clsnames) {
 
-    element.classList.add(clsname);
+    element.classList.add(...clsnames);
 
 }
 

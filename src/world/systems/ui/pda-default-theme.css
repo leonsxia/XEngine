@@ -23,7 +23,7 @@
     --inventory-item-size: 5.5;
     --inventory-item-gap-size: calc((var(--inventory-panel-size-w) - 4 * var(--inventory-item-size)) / 3);
     --inventory-item-width: calc(var(--calculated-vw) * var(--inventory-item-size));
-    --inventory-2-item-width: calc(var(--calculated-vw) * (var(--inventory-item-size) * 2 + var(--inventory-item-gap-size)) + 2 * var(--inventory-item-border-width));
+    --inventory-2-item-width: calc(var(--calculated-vw) * (var(--inventory-item-size) * 2 + var(--inventory-item-gap-size)));
     --inventory-item-gap-width: calc(var(--calculated-vw) * (var(--inventory-item-size) + var(--inventory-item-gap-size)));
     --inventory-item-border-width: calc(var(--calculated-vw) * .08);
     --inventory-item-border: var(--inventory-item-border-width) solid white;
@@ -33,6 +33,8 @@
     --inventory-item-info-height: calc(var(--calculated-vw) * 1.5);
     --inventory-item-info-border-radius: calc(var(--calculated-vw) * .3);
     --inventory-focused-item-grey: #ccc;
+    --inventory-selected-item-border: var(--inventory-item-border-width) solid #1E90FF;
+    --inventory-selected-item-blue: #7DF9FF;
     --ecg-sweep-background-size: 100% calc(var(--calculated-vw) * 1.5);
     --ecg-sweep-animation: travel-up 2.5s infinite linear;
     --ecg-sweep-color-opacity: .2;
@@ -273,6 +275,10 @@
                 width: var(--inventory-2-item-width);
             }
 
+            .inv-item {
+                position: absolute;
+            }
+
             .item-img{
                 width: 100%;
                 height: 100%;
@@ -414,9 +420,18 @@
             }
 
             div.focused-slot {
+                position: absolute;
                 border: var(--inventory-item-border);
                 border-radius: var(--border-radius);
                 background-color: var(--inventory-focused-item-grey);
+                animation: breath 2s infinite linear;
+            }
+
+            div.shift-slot {
+                position: absolute;
+                border: var(--inventory-selected-item-border);
+                border-radius: var(--border-radius);
+                background-color: var(--inventory-selected-item-blue);
                 animation: breath 2s infinite linear;
             }
         }

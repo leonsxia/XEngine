@@ -135,13 +135,20 @@ function createInventory() {
 
     const focusedSlot = document.createElement('div');
     focusedSlot.classList.add('focused-slot', 'idx-0', 'item-size-1');
-    focusedSlot.style.position = 'absolute';
     operatePanel.append(focusedSlot);
+
+    const shiftSlot = document.createElement('div');
+    shiftSlot.classList.add('shift-slot', 'item-size-1', 'hide');
+    operatePanel.append(shiftSlot);
 
     inventoryPanel.append(slotsPanel, operatePanel, itemsPanel, descriptionPanel);
     inventoryContainer.appendChild(inventoryPanel);
 
-    return { inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, slotsDivList, itemsDivList, focusedSlot }
+    return { 
+        inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, 
+        slotsDivList, itemsDivList, 
+        focusedSlot, shiftSlot 
+    }
 
 }
 
@@ -151,7 +158,6 @@ function createInventoryItem(specs) {
 
     const itemDiv = document.createElement('div');
     itemDiv.classList.add('inv-item', `item-size-${itemSize}`);
-    itemDiv.style.position = 'absolute';
 
     const itemImg = document.createElement('img');
     itemImg.classList.add('item-img');
