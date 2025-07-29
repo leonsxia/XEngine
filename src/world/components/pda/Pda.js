@@ -402,15 +402,27 @@ class Pda {
 
     addInventoryItem(item) {
 
-        this._inventory.add(item);
-        this.doInventoryItemChangedEvents(item);
+        const result = this._inventory.add(item);
+        if (result) {
+
+            this.doInventoryItemChangedEvents(item);
+
+        }
+
+        return result;
 
     }
 
     removeInventoryItem(item) {
 
-        this._inventory.remove(item);        
-        this.doInventoryItemChangedEvents(item);
+        const result = this._inventory.remove(item);
+        if (result) {
+
+            this.doInventoryItemChangedEvents(item);
+
+        }
+
+        return result;
 
     }
 

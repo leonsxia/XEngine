@@ -137,7 +137,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     addPickableItem(item) {
 
-        this.pda.addInventoryItem(item);
+        const result = this.pda.addInventoryItem(item);
+
+        if (!result) return;
 
         if (item.isWeaponItem) {
 
@@ -1119,7 +1121,12 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                     this.#interactionLogger.log(`player: ${this.name} picked item: ${this.readyToPickItem.name}`);
                     this.addPickableItem(this.readyToPickItem);
-                    this.readyToPickItem = undefined;
+                    
+                    if (this.readyToPickItem.isPicked) {
+
+                        this.readyToPickItem = undefined;
+
+                    }
 
                 }
 

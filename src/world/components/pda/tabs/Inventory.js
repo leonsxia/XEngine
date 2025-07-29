@@ -73,12 +73,14 @@ class Inventory extends TabPanel {
         } else {
 
             this._shiftReady = false;
-            const matched = this.getMatchedItem(this._shiftIdx);
-            if (matched) {
+            
+            if (this._currentIdx !== this._shiftIdx) {
 
-                // todo
+                this.swapItems(this._currentIdx, this._shiftIdx);               
 
             }
+
+            this.focusedIndex = this._shiftIdx;
 
             addElementClass(this._html.shiftSlot, 'hide');
 
@@ -116,7 +118,7 @@ class Inventory extends TabPanel {
         const prevIdx = this._shiftIdx;
         const interval = val - prevIdx;
         let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
-        if (this._shiftSlotSize === 2 && tarIdx % 4 === 3){
+        if (this._shiftSlotSize === 2 && (tarIdx % 4 === 3 || tarIdx === this._size - 1)){
 
             if (interval > 0) {
 
@@ -219,6 +221,529 @@ class Inventory extends TabPanel {
 
     }
 
+    swapItems(sourceIdx, targetIdx) {
+
+        const source = this.getMatchedItem(sourceIdx);
+        let target = this.getMatchedItem(targetIdx);
+
+        if (target === source) target = undefined;
+
+        if (!source) return false;
+
+        if (target) {
+
+            if (source.itemSize === target.itemSize) {
+
+                if (source.itemSize === 2) {
+
+                    if (targetIdx === sourceIdx - 1) {
+
+                        this.changeItemSlot(source, targetIdx - 1);
+                        this.changeItemSlot(target, sourceIdx, false);
+
+                    } else {
+
+                        if (targetIdx === target.occupiedSlotIdx + 1) {
+
+                            const targetRightItem = this.getMatchedItem(targetIdx + 1);
+                            this.changeItemSlot(target, sourceIdx);
+                            this.changeItemSlot(source, targetIdx, false);
+                            if (targetRightItem) {
+
+                                if (targetRightItem.itemSize === 1) {
+
+                                    this.changeItemSlot(targetRightItem, targetIdx - 1, false);
+
+                                } else {
+
+                                    this.changeItemSlot(source, targetIdx - 1, false);
+
+                                }
+
+                            }
+
+                        } else {
+
+                            this.changeItemSlot(target, sourceIdx);
+                            this.changeItemSlot(source, targetIdx, false);
+
+                        } 
+
+                    }
+
+                } else {
+
+                    this.changeItemSlot(target, sourceIdx);
+                    this.changeItemSlot(source, targetIdx, false);
+
+                }
+
+            } else if (source.itemSize === 1) {
+
+                const insert2ndSlot = targetIdx === target.occupiedSlotIdx + 1;
+
+                if (sourceIdx % 4 === 0) {
+
+                    if (target.occupiedSlotIdx === sourceIdx + 1) {
+
+                        this.changeItemSlot(source, targetIdx);
+                        if (!insert2ndSlot) {
+
+                            const lastItem = this.getMatchedItem(sourceIdx + 3);
+                            if (lastItem) {
+
+                                this.changeItemSlot(lastItem, sourceIdx);
+
+                            }
+                            this.changeItemSlot(target, targetIdx + 1, false);
+
+                        } else {
+
+                            this.changeItemSlot(target, sourceIdx, false);
+
+                        }
+
+                    } else if (target.occupiedSlotIdx === sourceIdx + 2) {
+                        
+                        const rightItem = this.getMatchedItem(sourceIdx + 1);
+                        this.changeItemSlot(target, sourceIdx);
+                        this.changeItemSlot(source, targetIdx, false);
+                        if (rightItem) {
+
+                            this.changeItemSlot(rightItem, insert2ndSlot ? targetIdx - 1 : targetIdx + 1, false);
+
+                        }
+
+                    } else {
+                        
+                        const rightItem = this.getMatchedItem(sourceIdx + 1);
+                        this.changeItemSlot(target, sourceIdx);
+                        this.changeItemSlot(source, targetIdx, false);
+                        if (rightItem) {
+
+                            if (rightItem.itemSize === 1) {
+
+                                this.changeItemSlot(rightItem, insert2ndSlot ? targetIdx - 1 : targetIdx + 1, false);
+
+                            } else {
+
+                                this.changeItemSlot(rightItem, sourceIdx + 2, false);
+                                const lastItem = this.getMatchedItem(sourceIdx + 3);
+                                if (lastItem) {
+
+                                    this.changeItemSlot(lastItem, insert2ndSlot ? targetIdx - 1 : targetIdx + 1, false);
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                } else if (sourceIdx % 4 === 1) {
+
+                    if (target.occupiedSlotIdx === sourceIdx + 1) {
+
+                        if (targetIdx === sourceIdx + 1) {
+
+                            const leftItem = this.getMatchedItem(sourceIdx - 1);
+                            this.changeItemSlot(target, sourceIdx - 1);
+                            this.changeItemSlot(source, targetIdx, false);
+                            if (leftItem) {
+
+                                this.changeItemSlot(leftItem, targetIdx + 1, false);
+
+                            }
+
+                        } else {
+
+                            this.changeItemSlot(source, targetIdx);
+                            this.changeItemSlot(target, sourceIdx, false);
+
+                        }                                                                     
+
+                    } else {
+
+                        const leftItem = this.getMatchedItem(sourceIdx - 1);
+                        const rightItem = this.getMatchedItem(sourceIdx + 1);                        
+
+                        if (targetIdx === target.occupiedSlotIdx) {
+
+                            this.changeItemSlot(target, sourceIdx);
+                            this.changeItemSlot(source, targetIdx, false);
+                            if (rightItem) {
+
+                                if (rightItem.itemSize === 1) {
+
+                                    this.changeItemSlot(rightItem, targetIdx + 1, false);
+
+                                } else {
+
+                                    const firstItem = this.getMatchedItem(sourceIdx - 1);
+                                    if (firstItem) {
+
+                                        this.changeItemSlot(firstItem, targetIdx + 1, false);
+
+                                    }
+                                    this.changeItemSlot(target, sourceIdx - 1, false);
+
+                                }
+
+                            }
+
+                        } else {
+
+                            this.changeItemSlot(target, sourceIdx - 1);
+                            this.changeItemSlot(source, targetIdx, false);
+                            if (leftItem) {
+
+                                this.changeItemSlot(leftItem, targetIdx - 1, false);
+                            }
+
+                        }
+
+                    }
+
+                } else if (sourceIdx % 4 === 2) {
+                    
+                    const leftItem = this.getMatchedItem(sourceIdx - 1);
+                    const rightItem = this.getMatchedItem(sourceIdx + 1);
+
+                    if (targetIdx + 1 === sourceIdx) {
+
+                        this.changeItemSlot(target, sourceIdx);
+                        this.changeItemSlot(source, targetIdx, false);
+                        if (rightItem) {
+
+                            this.changeItemSlot(rightItem, targetIdx - 1, false);
+
+                        }
+
+                    } else if (target.occupiedSlotIdx === targetIdx) {
+
+                        this.changeItemSlot(target, sourceIdx);
+                        this.changeItemSlot(source, targetIdx, false);
+                        if (rightItem) {
+
+                            this.changeItemSlot(rightItem, targetIdx + 1, false);
+
+                        }
+
+                    } else {
+
+                        this.changeItemSlot(target, sourceIdx - 1);
+                        this.changeItemSlot(source, targetIdx, false);
+                        if (leftItem) {
+
+                            this.changeItemSlot(leftItem, targetIdx - 1, false);
+                        }
+
+                    }
+
+                } else if (sourceIdx % 4 === 3) {
+
+                    if (target.occupiedSlotIdx === sourceIdx - 2) {
+
+                        this.changeItemSlot(source, targetIdx);
+                        
+                        if (targetIdx === sourceIdx - 1) {
+
+                            const firstItem = this.getMatchedItem(sourceIdx - 3);
+                            this.changeItemSlot(target, sourceIdx - 3, false);    
+
+                            if (firstItem) {
+
+                                this.changeItemSlot(firstItem, sourceIdx, false);
+
+                            }
+
+                        } else {
+
+                            this.changeItemSlot(target, sourceIdx - 1, false);
+
+                        }
+
+                    } else {
+
+                        const leftItem = this.getMatchedItem(sourceIdx - 1);
+                        if (leftItem) {
+
+                            if (leftItem.itemSize === 1) {
+
+                                this.changeItemSlot(target, sourceIdx - 1);
+                                this.changeItemSlot(source, targetIdx, false);
+                                this.changeItemSlot(leftItem, insert2ndSlot ? targetIdx - 1 : targetIdx + 1, false);
+
+                            } else {
+
+                                this.changeItemSlot(target, sourceIdx - 1);
+                                this.changeItemSlot(source, targetIdx + 1, false);
+                                this.changeItemSlot(leftItem, sourceIdx - 3, false);
+                                const firstItem = this.getMatchedItem(sourceIdx - 3);
+                                if (firstItem) {
+
+                                    this.changeItemSlot(firstItem, insert2ndSlot ? targetIdx - 1 : targetIdx + 1, false);
+
+                                }
+
+                            }
+
+                        } else {
+
+                            this.changeItemSlot(target, sourceIdx - 1);
+                            this.changeItemSlot(source, targetIdx, false);
+
+                        }
+
+                    }
+
+                }
+
+            } else {
+
+                if (targetIdx % 4 === 0) {
+
+                    if (sourceIdx === targetIdx + 1) {
+                        
+                        this.changeItemSlot(source, targetIdx);
+                        this.changeItemSlot(target, sourceIdx + 1, false);
+
+                    } else if (sourceIdx === targetIdx + 2) {
+
+                        const targetRightItem = this.getMatchedItem(targetIdx + 1);
+                        this.changeItemSlot(source, targetIdx);
+                        this.changeItemSlot(target, sourceIdx, false);
+                        
+                        if (targetRightItem) {
+
+                            this.changeItemSlot(targetRightItem, sourceIdx + 1, false);
+
+                        }
+
+                    } else {
+                                                
+                        const targetRightItem = this.getMatchedItem(targetIdx + 1);
+                        if (targetRightItem) {
+
+                            if (targetRightItem.itemSize === 1) {
+                                
+                                this.changeItemSlot(source, targetIdx);
+                                this.changeItemSlot(target, sourceIdx, false);
+                                this.changeItemSlot(targetRightItem, sourceIdx + 1, false);
+
+                            } else {
+
+                                this.changeItemSlot(targetRightItem, sourceIdx);
+                                this.changeItemSlot(source, targetIdx, false);
+                                this.changeItemSlot(target, targetIdx + 2, false);
+
+                            }
+
+                        } else {
+                            
+                            this.changeItemSlot(target, sourceIdx);
+                            this.changeItemSlot(source, targetIdx, false);
+                            
+
+                        }
+
+                    }
+
+                } else if (targetIdx % 4 === 1) {
+
+                    if (sourceIdx === targetIdx + 1) {
+
+                        this.changeItemSlot(source, targetIdx);
+                        this.changeItemSlot(target, sourceIdx + 1, false);
+
+                    } else {
+                        
+                        const targetRightItem = this.getMatchedItem(targetIdx + 1);                        
+                        if (targetRightItem) {
+
+                            if (targetRightItem.itemSize === 1) {
+
+                                this.changeItemSlot(source, targetIdx);
+                                this.changeItemSlot(target, sourceIdx, false);
+                                this.changeItemSlot(targetRightItem, target.itemSize === 1 ? sourceIdx + 1 : targetIdx - 1, false);
+
+                            } else {
+
+                                this.changeItemSlot(targetRightItem, sourceIdx);
+                                this.changeItemSlot(source, targetIdx, false);
+                                this.changeItemSlot(target, targetIdx + 2, false);
+
+                            }
+
+                        } else {                            
+                            
+                            this.changeItemSlot(source, targetIdx);
+                            this.changeItemSlot(target, sourceIdx, false);                            
+
+                        }
+
+                    }
+
+                } else if (targetIdx % 4 === 2) {
+
+                    const targetRightItem = this.getMatchedItem(targetIdx + 1);
+                    this.changeItemSlot(source, targetIdx);
+                    this.changeItemSlot(target, sourceIdx, false);
+                    
+                    if (targetRightItem) {
+
+                        this.changeItemSlot(targetRightItem, sourceIdx + 1, false);
+
+                    }
+
+                } else if (targetIdx % 4 === 3) {
+                    
+                    const targetLeftItem = this.getMatchedItem(targetIdx - 1);
+                    this.changeItemSlot(source, targetIdx - 1);
+
+                    if (targetLeftItem) {
+
+                        if (targetLeftItem.itemSize === 1) {
+
+                            this.changeItemSlot(target, sourceIdx + 1, false);
+                            this.changeItemSlot(targetLeftItem, sourceIdx, false);
+
+                        } else {
+
+                            this.changeItemSlot(target, targetIdx - 2, false);
+                            this.changeItemSlot(targetLeftItem, sourceIdx, false);
+
+                        }
+
+                    } else {
+                        
+                        this.changeItemSlot(target, sourceIdx + 1, false);
+
+                    }
+
+                }
+
+            }
+
+        } else {
+
+            if (source.itemSize === 2) {
+
+                if (targetIdx % 4 === 3) {
+
+                    const targetLeftItem = this.getMatchedItem(targetIdx - 1);
+                    this.changeItemSlot(source, targetIdx - 1);
+
+                    if (targetLeftItem) {
+
+                        if (targetLeftItem.itemSize === 1) {
+
+                            this.changeItemSlot(targetLeftItem, sourceIdx, false);
+
+                        } else {
+
+                            this.changeItemSlot(targetLeftItem, sourceIdx);
+                            this.changeItemSlot(source, targetIdx - 1);
+
+                        }
+
+                    }
+
+                } else {
+
+                    const targetRightItem = this.getMatchedItem(targetIdx + 1);
+                    this.changeItemSlot(source, targetIdx);
+
+                    if (targetRightItem) {
+                        
+                        if (targetRightItem.itemSize === 1) {
+
+                            this.changeItemSlot(targetRightItem, sourceIdx + 1 === targetIdx ? sourceIdx : sourceIdx + 1, false);
+
+                        } else {
+
+                            this.changeItemSlot(targetRightItem, sourceIdx);
+                            this.changeItemSlot(source, targetIdx);
+                            if (sourceIdx + 1 === targetIdx) {
+
+                                this.changeItemSlot(source, targetIdx + 1, false);
+
+                            }                            
+
+                        }
+
+                    }
+
+                }
+
+            } else {
+
+                this.changeItemSlot(source, targetIdx);
+
+            }
+
+        }
+
+    }
+
+    changeItemSlot(item, targetIdx, clearSlot = true) {
+
+        if (clearSlot) {
+
+            this.setSlotOccupied(item.occupiedSlotIdx, false, item.itemSize);
+
+        }
+
+        item.occupiedSlotIdx = targetIdx;
+        item.removeHtmlClass('idx');
+        item.addHtmlClass(`idx-${targetIdx}`);
+        this.setSlotOccupied(targetIdx, true, item.itemSize);
+
+    }
+
+    setSlotOccupied(idx, occupied, itemSize = 1) {
+        
+        if (occupied) {
+
+            this._availableSlots = this._availableSlots.filter(s => s !== idx);
+            this._html.slotsDivList[idx].classList.add('occupied');
+            if (itemSize === 2) {
+
+                const nextIdx = idx + 1;
+                this._availableSlots = this._availableSlots.filter(s => s !== nextIdx);
+                this._html.slotsDivList[nextIdx].classList.add('occupied');
+
+            }
+
+        } else {
+
+            if (!this._availableSlots.includes(idx)) {
+
+                this._availableSlots.push(idx);
+
+            }
+
+            this._html.slotsDivList[idx].classList.remove('occupied');
+
+            if (itemSize === 2) {
+
+                const nextIdx = idx + 1;
+
+                if (!this._availableSlots.includes(nextIdx)) {
+
+                    this._availableSlots.push(nextIdx);
+
+                }
+
+                this._html.slotsDivList[nextIdx].classList.remove('occupied');
+
+            }
+
+        }
+
+    }
+
     focusLeft() {
 
         this.focusedIndex --;
@@ -289,9 +814,7 @@ class Inventory extends TabPanel {
 
                     const second = sorted[i + 1];
 
-                    if (itemSize === 2 && second === first + 1 && (
-                        first !== 3 && first !== 7 && first !== 11 && first !== 15 && first !== 19
-                    )) {
+                    if (itemSize === 2 && second === first + 1 && first % 4 !== 3 && first !== this._size - 1) {
 
                         idx = first;
                         slotIdx = this._availableSlots.findIndex(s => s === idx);
@@ -310,13 +833,13 @@ class Inventory extends TabPanel {
     }
 
     add(item) {
-
-        this.items.push(item);
-        item.isPicked = true;
-        item.belongTo = this._attachTo._owner.name;
-
-        const { idx, slotIdx } = this.firstAvailableSlot(item.itemSize);
+        
+        const { idx } = this.firstAvailableSlot(item.itemSize);
         if (idx >= 0) {
+
+            this.items.push(item);
+            item.isPicked = true;
+            item.belongTo = this._attachTo._owner.name;
 
             item.removeHtmlClass('idx');
             item.addHtmlClass(`idx-${idx}`);
@@ -325,14 +848,13 @@ class Inventory extends TabPanel {
             this._html.itemsDivList.push(item.itemHtml);
             this._html.itemsPanel.appendChild(item.itemHtml);
 
-            this._availableSlots.splice(slotIdx, 1);
-            this._html.slotsDivList[idx].classList.add('occupied');
-            if (item.itemSize === 2) {
+            this.setSlotOccupied(idx, true, item.itemSize);
 
-                this._availableSlots.splice(slotIdx, 1);
-                this._html.slotsDivList[idx + 1].classList.add('occupied');
+            return true;
 
-            }
+        } else {
+
+            return false;
 
         }
 
@@ -350,20 +872,19 @@ class Inventory extends TabPanel {
 
             if (item.isWeaponItem) item.isArmed = false;
 
-            this._availableSlots.push(item.occupiedSlotIdx);
-            this._html.slotsDivList[item.occupiedSlotIdx].classList.remove('occupied');
-            if (item.itemSize === 2) {
-
-                this._availableSlots.push(item.occupiedSlotIdx + 1);
-                this._html.slotsDivList[item.occupiedSlotIdx + 1].classList.remove('occupied');
-
-            }
+            this.setSlotOccupied(item.occupiedSlotIdx, false, item.itemSize);
             item.occupiedSlotIdx = -1;
             item.removeHtmlClass('idx');
 
             const itemDivIdx = this._html.itemsDivList.findIndex(div => div === item.itemHtml);
             this._html.itemsDivList.splice(itemDivIdx, 1);
             this._html.itemsPanel.removeChild(item.itemHtml);
+
+            return true;
+
+        } else {
+
+            return false;
 
         }
 
