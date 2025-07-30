@@ -9,7 +9,7 @@ class Inventory extends TabPanel {
     _availableSlots = [
         0, 1, 2, 3,
         4, 5, 6, 7,
-        8, 9, 10, 11, 
+        8, 9, 10, 11,
         12, 13, 14, 15,
         16, 17, 18, 19
     ];
@@ -32,6 +32,18 @@ class Inventory extends TabPanel {
 
         await this.ecg.init();
         this._html.inventoryContainer.appendChild(this.ecg.container);
+
+    }
+
+    get isFull() {
+
+        return this._availableSlots.length === 0;
+
+    }
+
+    get availableSlotsCount() {
+
+        return this._availableSlots.length;
 
     }
 

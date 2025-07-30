@@ -351,6 +351,12 @@ class Pda {
     // control events end
 
     // inventory
+    get inventory() {
+
+        return this._inventory;
+
+    }
+
     changeFirearm(weapon) {
 
         this._inventory.equipFirearm(weapon);

@@ -28,7 +28,8 @@ const intersect = 0xFF2400;
 const specular = 0x111111;
 
 // ui
-const labelBackground = 0x555555; 
+const labelBackground = 0x555555;
+const labelForbidden = 0xFF0800;
 
 // AI color codes
 const AI = {
@@ -123,6 +124,7 @@ export {
     intersect,
     specular,
     labelBackground,
+    labelForbidden,
     AI,
     colorStr,
     colorHex,

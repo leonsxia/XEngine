@@ -5,7 +5,7 @@ import { createOBBBox } from "../../../physics/collisionHelper";
 import { makeInteractiveLabelCanvas } from "../../../utils/canvasMaker";
 import { createSpriteMaterial } from "../../../basic/basicMaterial";
 import { GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
-import { hexToRGBA, labelBackground, white } from "../../../basic/colorBase";
+import { hexToRGBA, labelBackground, labelForbidden, white } from "../../../basic/colorBase";
 import { getImageUrl } from "../../../utils/imageHelper";
 import { addElementClass, removeElementClass } from "../../../utils/htmlHelper";
 
@@ -27,6 +27,7 @@ class PickableItem extends ObstacleBase {
     currentRoom;
 
     _xboxControllerConnected;
+    _pickForbidden = false;
 
     constructor(specs) {
 
@@ -113,7 +114,21 @@ class PickableItem extends ObstacleBase {
         this._itemSize = val;
         this.removeHtmlClass('item-size-');
         this.addHtmlClass('item-size-2');
-        
+
+    }
+
+    get pickForbidden() {
+
+        return this._pickForbidden;
+
+    }
+
+    set pickForbidden(val) {
+
+        if (this._pickForbidden === val) return;
+        this._pickForbidden = val;
+        this.updateLabelTip();
+
     }
 
     createItemHtml() {}
@@ -186,7 +201,15 @@ class PickableItem extends ObstacleBase {
         ctx.fillStyle = hexToRGBA(labelBackground, .5);
         ctx.arc(0, 0, (width - borderGap) / 2, 0, 2 * Math.PI);
         ctx.fill();
-        ctx.strokeStyle = hexToRGBA(white);
+        if (this._pickForbidden) {
+
+            ctx.strokeStyle = hexToRGBA(labelForbidden);
+
+        } else {
+
+            ctx.strokeStyle = hexToRGBA(white);
+
+        }
         ctx.lineWidth = 4;
         ctx.arc(0, 0, (width - borderGap) / 2, 0, 2 * Math.PI);
         ctx.stroke();
@@ -198,6 +221,17 @@ class PickableItem extends ObstacleBase {
             ctx.scale(scaleFactor, 1);
             ctx.fillStyle = hexToRGBA(white);
             ctx.fillText(content, 0, 0);
+
+        }
+
+        if (this._pickForbidden) {
+
+            ctx.beginPath();
+            ctx.lineWidth = 8;
+            ctx.strokeStyle = hexToRGBA(labelForbidden);
+            ctx.moveTo(- width * Math.cos(Math.PI / 4) / 2, width * Math.sin(Math.PI / 4) / 2);
+            ctx.lineTo(width * Math.cos(Math.PI / 4) / 2, - width * Math.sin(Math.PI / 4) / 2);
+            ctx.stroke();
 
         }
 
