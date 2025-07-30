@@ -327,8 +327,9 @@ class Inventory extends TabPanel {
 
                             } else {
 
-                                this.changeItemSlot(rightItem, sourceIdx + 2, false);
                                 const lastItem = this.getMatchedItem(sourceIdx + 3);
+                                this.changeItemSlot(rightItem, sourceIdx + 2, false);
+
                                 if (lastItem) {
 
                                     this.changeItemSlot(lastItem, insert2ndSlot ? targetIdx - 1 : targetIdx + 1, false);
@@ -380,10 +381,9 @@ class Inventory extends TabPanel {
 
                                 } else {
 
-                                    const firstItem = this.getMatchedItem(sourceIdx - 1);
-                                    if (firstItem) {
+                                    if (leftItem) {
 
-                                        this.changeItemSlot(firstItem, targetIdx + 1, false);
+                                        this.changeItemSlot(leftItem, targetIdx + 1, false);
 
                                     }
                                     this.changeItemSlot(target, sourceIdx - 1, false);
@@ -399,6 +399,7 @@ class Inventory extends TabPanel {
                             if (leftItem) {
 
                                 this.changeItemSlot(leftItem, targetIdx - 1, false);
+
                             }
 
                         }
@@ -437,6 +438,7 @@ class Inventory extends TabPanel {
                         if (leftItem) {
 
                             this.changeItemSlot(leftItem, targetIdx - 1, false);
+
                         }
 
                     }
@@ -478,7 +480,7 @@ class Inventory extends TabPanel {
                             } else {
 
                                 this.changeItemSlot(target, sourceIdx - 1);
-                                this.changeItemSlot(source, targetIdx + 1, false);
+                                this.changeItemSlot(source, targetIdx, false);
                                 this.changeItemSlot(leftItem, sourceIdx - 3, false);
                                 const firstItem = this.getMatchedItem(sourceIdx - 3);
                                 if (firstItem) {
@@ -565,7 +567,7 @@ class Inventory extends TabPanel {
 
                                 this.changeItemSlot(source, targetIdx);
                                 this.changeItemSlot(target, sourceIdx, false);
-                                this.changeItemSlot(targetRightItem, target.itemSize === 1 ? sourceIdx + 1 : targetIdx - 1, false);
+                                this.changeItemSlot(targetRightItem, sourceIdx + 1, false);
 
                             } else {
 
@@ -596,31 +598,6 @@ class Inventory extends TabPanel {
 
                     }
 
-                } else if (targetIdx % 4 === 3) {
-                    
-                    const targetLeftItem = this.getMatchedItem(targetIdx - 1);
-                    this.changeItemSlot(source, targetIdx - 1);
-
-                    if (targetLeftItem) {
-
-                        if (targetLeftItem.itemSize === 1) {
-
-                            this.changeItemSlot(target, sourceIdx + 1, false);
-                            this.changeItemSlot(targetLeftItem, sourceIdx, false);
-
-                        } else {
-
-                            this.changeItemSlot(target, targetIdx - 2, false);
-                            this.changeItemSlot(targetLeftItem, sourceIdx, false);
-
-                        }
-
-                    } else {
-                        
-                        this.changeItemSlot(target, sourceIdx + 1, false);
-
-                    }
-
                 }
 
             }
@@ -629,21 +606,25 @@ class Inventory extends TabPanel {
 
             if (source.itemSize === 2) {
 
-                if (targetIdx % 4 === 3) {
+                const targetRightItem = this.getMatchedItem(targetIdx + 1);
+                if (targetRightItem && targetRightItem !== source) {
 
-                    const targetLeftItem = this.getMatchedItem(targetIdx - 1);
-                    this.changeItemSlot(source, targetIdx - 1);
+                    if (targetRightItem.itemSize === 1) {
 
-                    if (targetLeftItem) {
+                        this.changeItemSlot(source, targetIdx);
+                        this.changeItemSlot(targetRightItem, sourceIdx + 1 === targetIdx ? sourceIdx : sourceIdx + 1, false);
 
-                        if (targetLeftItem.itemSize === 1) {
+                    } else {
 
-                            this.changeItemSlot(targetLeftItem, sourceIdx, false);
+                        this.changeItemSlot(targetRightItem, sourceIdx);
+
+                        if (sourceIdx + 1 === targetIdx) {
+
+                            this.changeItemSlot(source, targetIdx + 1, false);
 
                         } else {
 
-                            this.changeItemSlot(targetLeftItem, sourceIdx);
-                            this.changeItemSlot(source, targetIdx - 1);
+                            this.changeItemSlot(source, targetIdx, false);
 
                         }
 
@@ -651,28 +632,7 @@ class Inventory extends TabPanel {
 
                 } else {
 
-                    const targetRightItem = this.getMatchedItem(targetIdx + 1);
                     this.changeItemSlot(source, targetIdx);
-
-                    if (targetRightItem) {
-                        
-                        if (targetRightItem.itemSize === 1) {
-
-                            this.changeItemSlot(targetRightItem, sourceIdx + 1 === targetIdx ? sourceIdx : sourceIdx + 1, false);
-
-                        } else {
-
-                            this.changeItemSlot(targetRightItem, sourceIdx);
-                            this.changeItemSlot(source, targetIdx);
-                            if (sourceIdx + 1 === targetIdx) {
-
-                                this.changeItemSlot(source, targetIdx + 1, false);
-
-                            }                            
-
-                        }
-
-                    }
 
                 }
 
