@@ -542,9 +542,8 @@ class Inventory extends TabPanel {
 
                         } else {
                             
-                            this.changeItemSlot(target, sourceIdx);
-                            this.changeItemSlot(source, targetIdx, false);
-                            
+                            this.changeItemSlot(source, targetIdx);
+                            this.changeItemSlot(target, sourceIdx, false);
 
                         }
 
