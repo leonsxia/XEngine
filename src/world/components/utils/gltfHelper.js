@@ -142,7 +142,10 @@ async function initPickableModels() {
         BayonetItem.gltfModel.init(),
         PistolAmmoBox.gltfModel.init(),
         MagnumAmmoBox.gltfModel.init(),
-        SMGAmmoBox.gltfModel.init()
+        SMGAmmoBox.gltfModel.init(),
+        FirstAidKitSmall.gltfModel.init(),
+        FirstAidKitMedium.gltfModel.init(),
+        FirstAidKitLarge.gltfModel.init()
     ]);
 
 }
