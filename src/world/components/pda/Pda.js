@@ -199,13 +199,17 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (!this._inventory.shiftReady) {
+                if (this._inventory.operateMenuReady) {
 
-                    this._inventory.focusUp();
+                    this._inventory.operateMenuUp();
+
+                } else if (this._inventory.shiftReady) {
+
+                    this._inventory.shiftUp();
 
                 } else {
 
-                    this._inventory.shiftUp();
+                    this._inventory.focusUp();
 
                 }
 
@@ -223,13 +227,17 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (!this._inventory.shiftReady) {
+                if (this._inventory.operateMenuReady) {
 
-                    this._inventory.focusDown();
+                    this._inventory.operateMenuDown();
+
+                } else if (this._inventory.shiftReady) {
+
+                    this._inventory.shiftDown();
 
                 } else {
 
-                    this._inventory.shiftDown();
+                    this._inventory.focusDown();
 
                 }
 
@@ -247,13 +255,15 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (!this._inventory.shiftReady) {
+                if (this._inventory.operateMenuReady) return;
 
-                    this._inventory.focusLeft();
+                if (this._inventory.shiftReady) {
+
+                    this._inventory.shiftLeft();
 
                 } else {
 
-                    this._inventory.shiftLeft();
+                    this._inventory.focusLeft();
 
                 }
 
@@ -271,13 +281,15 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (!this._inventory.shiftReady) {
+                if (this._inventory.operateMenuReady) return;
 
-                    this._inventory.focusRight();
+                if (this._inventory.shiftReady) {
+
+                    this._inventory.shiftRight();
 
                 } else {
 
-                    this._inventory.shiftRight();
+                    this._inventory.focusRight();                    
 
                 }
 
@@ -289,12 +301,42 @@ class Pda {
 
     confirm(val) {
         this.#logger.func = this.confirm.name;
-        this.#logger.log(`confirm: ${val}`);
+        // this.#logger.log(`confirm: ${val}`);
+
+        if (val) {
+
+            if (this.currentTab === TABS.INVENTORY) {
+
+                if (!this._inventory.shiftReady) {
+
+                    this._inventory.operateMenuReady = true;
+
+                }
+
+            }
+
+        }
+
     }
 
     cancel(val) {
         this.#logger.func = this.cancel.name;
-        this.#logger.log(`cancel: ${val}`);
+        // this.#logger.log(`cancel: ${val}`);
+
+        if (val) {
+
+            if (this.currentTab === TABS.INVENTORY) {
+
+                if (this._inventory.operateMenuReady) {
+
+                    this._inventory.operateMenuReady = false;
+
+                }
+
+            }
+
+        }
+
     }
 
     shiftLeft(val) {
@@ -327,7 +369,15 @@ class Pda {
 
         if (val) {
 
-            this._inventory.shiftReady = !this._inventory.shiftReady;
+            if (this.currentTab === TABS.INVENTORY) {
+
+                if (!this._inventory.operateMenuReady) {
+
+                    this._inventory.shiftReady = !this._inventory.shiftReady;
+
+                }
+
+            }            
 
         }
 

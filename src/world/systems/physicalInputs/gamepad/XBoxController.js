@@ -649,6 +649,7 @@ class XBoxController extends InputBase {
         const btnRight = this.gamepad.buttons[15];
         const btnA = this.gamepad.buttons[0];
         const btnB = this.gamepad.buttons[1];
+        const btnX = this.gamepad.buttons[2];
         const btnLB = this.gamepad.buttons[4];
         const btnRB = this.gamepad.buttons[5];
 
@@ -815,6 +816,34 @@ class XBoxController extends InputBase {
                 eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#BPressed);
 
                 this.#logger.log(`cancel: ${this.#BPressed}`);
+
+            }
+
+        }
+
+        if (btnX.pressed) {
+
+            if (!this.#XPressed) {
+
+                this.#logger.log(`gamepad button X pressed: ${btnX.pressed}, value: ${btnX.value}`);
+
+                this.#XPressed = true;
+                eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#XPressed);
+
+                this.#logger.log(`move item: ${this.#XPressed}`);
+
+            }
+
+        } else {
+
+            if (this.#XPressed) {
+
+                this.#logger.log(`gamepad button X pressed: ${btnX.pressed}, value: ${btnX.value}`);
+
+                this.#XPressed = false;
+                eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#XPressed);
+
+                this.#logger.log(`move item: ${this.#XPressed}`);
 
             }
 

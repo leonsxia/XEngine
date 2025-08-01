@@ -1,4 +1,5 @@
 import { createInventory } from "../../../systems/htmlElements";
+import { PDA_OPERATE_MENU_LIST } from "../../../systems/ui/uiConstants";
 import { addElementClass, removeElementClass } from "../../utils/htmlHelper";
 import { ECG } from "./ECG";
 import { TabPanel } from "./TabPanel";
@@ -18,6 +19,10 @@ class Inventory extends TabPanel {
     _shiftReady = false;
     _shiftIdx = 0;
     _shiftSlotSize = 1;
+    _operateMenuReady = false;
+    _currentOperateMenuItems = [];
+    _currentOperateIdx = 0;
+    _currentItem;
 
     constructor(specs) {
 
@@ -44,6 +49,34 @@ class Inventory extends TabPanel {
     get availableSlotsCount() {
 
         return this._availableSlots.length;
+
+    }
+
+    get operateMenuReady() {
+
+        return this._operateMenuReady;
+
+    }
+
+    set operateMenuReady(val) {
+
+        if (this._operateMenuReady !== val) {
+            
+            if (val && this.acquireItemOperateMenu()) {
+
+                this._operateMenuReady = true;
+                removeElementClass(this._html.operateMenuList, 'hidden');
+                addElementClass(this._html.operateMenuList, 'visible');
+
+            } else {
+
+                this._operateMenuReady = false;
+                removeElementClass(this._html.operateMenuList, 'visible');
+                addElementClass(this._html.operateMenuList, 'hidden');
+
+            }
+
+        }        
 
     }
 
@@ -124,6 +157,111 @@ class Inventory extends TabPanel {
 
     }
 
+    get currentOperateIndex() {
+
+        return this._currentOperateIdx;
+
+    }
+
+    set currentOperateIndex(val) {
+
+        const menuLength = this._currentOperateMenuItems.length
+        this._currentOperateIdx = val > 0 ? val % menuLength : (menuLength + val) % menuLength;
+
+        for (let i = 0; i < menuLength; i++) {
+
+            const li = this._currentOperateMenuItems[i];
+            if (i === this._currentOperateIdx) {
+
+                addElementClass(li, 'selected');
+
+            } else {
+
+                removeElementClass(li, 'selected');
+
+            }
+
+        }
+
+    }
+
+    acquireItemOperateMenu() {
+
+        let acquired = false;
+        const item = this.getMatchedItem(this._currentIdx);
+        this._currentItem = item;
+        if (item) {
+
+            if (item.isWeaponItem) {
+                
+                removeElementClass(this._html.operateMenuItems.equipMenuItem, 'hide');
+                addElementClass(this._html.operateMenuItems.useMenuItem, 'hide');
+                addElementClass(this._html.operateMenuItems.combineMenuItem, 'hide');
+                addElementClass(this._html.operateMenuItems.discardMenuItem, 'hide');
+
+                if (item.isArmed) {
+
+                    this._html.operateMenuItems.equipMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.DISARM;
+                    addElementClass(this._html.operateMenuItems.equipMenuItem.querySelector('span'), 'disarm');
+
+                } else {
+
+                    this._html.operateMenuItems.equipMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.EQUIP;
+                    removeElementClass(this._html.operateMenuItems.equipMenuItem.querySelector('span'), 'disarm');
+                    
+                }
+
+                this._currentOperateMenuItems.length = 0;
+                this._currentOperateMenuItems.push(
+                    this._html.operateMenuItems.equipMenuItem,
+                    this._html.operateMenuItems.examineMenuItem
+                );
+                this.currentOperateIndex = 0;
+                this._html.operateMenuItems.equipMenuItem.classList.add('selected');
+
+            } else if (item.isHealingItem) {
+
+                addElementClass(this._html.operateMenuItems.equipMenuItem, 'hide');
+                removeElementClass(this._html.operateMenuItems.useMenuItem, 'hide');
+                removeElementClass(this._html.operateMenuItems.combineMenuItem, 'hide');
+                removeElementClass(this._html.operateMenuItems.discardMenuItem, 'hide');
+
+                this._currentOperateMenuItems.length = 0;
+                this._currentOperateMenuItems.push(
+                    this._html.operateMenuItems.useMenuItem,
+                    this._html.operateMenuItems.examineMenuItem,
+                    this._html.operateMenuItems.combineMenuItem,
+                    this._html.operateMenuItems.discardMenuItem
+                );
+                this.currentOperateIndex = 0;
+                this._html.operateMenuItems.useMenuItem.classList.add('selected');
+
+            } else if (item.isAmmoBoxItem) {
+
+                addElementClass(this._html.operateMenuItems.equipMenuItem, 'hide');
+                addElementClass(this._html.operateMenuItems.useMenuItem, 'hide');
+                removeElementClass(this._html.operateMenuItems.combineMenuItem, 'hide');
+                removeElementClass(this._html.operateMenuItems.discardMenuItem, 'hide');
+
+                this._currentOperateMenuItems.length = 0;
+                this._currentOperateMenuItems.push(
+                    this._html.operateMenuItems.examineMenuItem,
+                    this._html.operateMenuItems.combineMenuItem,
+                    this._html.operateMenuItems.discardMenuItem
+                );
+                this.currentOperateIndex = 0;
+                this._html.operateMenuItems.useMenuItem.classList.add('selected');
+
+            }
+
+            acquired = true;
+
+        }
+
+        return acquired;
+
+    }
+
     processShiftSlot(val) {
 
         const element = this._html.shiftSlot;
@@ -153,7 +291,7 @@ class Inventory extends TabPanel {
 
     processFocusedSlot(val) {
 
-        const element = this._html.focusedSlot;
+        const element = this._html.focusedDiv;
         const prevIdx = this._currentIdx;
         const interval = val - prevIdx;
         let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
@@ -760,6 +898,18 @@ class Inventory extends TabPanel {
     shiftDown() {
 
         this.shiftIndex += 4;
+
+    }
+
+    operateMenuUp() {
+
+        this.currentOperateIndex --;
+
+    }
+
+    operateMenuDown() {
+
+        this.currentOperateIndex ++;
 
     }
 

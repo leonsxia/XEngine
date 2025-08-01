@@ -1,4 +1,4 @@
-import { KEYS, PDA_MENU_NAMES } from "./ui/uiConstants";
+import { KEYS, PDA_MENU_NAMES, PDA_OPERATE_MENU_LIST } from "./ui/uiConstants";
 
 const container = document.querySelector('#scene-container');
 const header = document.querySelector('#sceneTitle');
@@ -133,9 +133,41 @@ function createInventory() {
 
     const itemsDivList = [];
 
+    const focusedDiv = document.createElement('div');
+    focusedDiv.classList.add('focused-item', 'idx-0', 'item-size-1');
+
     const focusedSlot = document.createElement('div');
-    focusedSlot.classList.add('focused-slot', 'idx-0', 'item-size-1');
-    operatePanel.append(focusedSlot);
+    focusedSlot.classList.add('focused-slot');
+
+    const operateMenuList = document.createElement('ul');
+    const equipMenuItem = document.createElement('li');
+    const useMenuItem = document.createElement('li');
+    const combineMenuItem = document.createElement('li');
+    const discardMenuItem = document.createElement('li');
+    const examineMenuItem = document.createElement('li');
+    operateMenuList.classList.add('operate-menu-list', 'popup-panel', 'hidden');
+    equipMenuItem.classList.add('operate-menu-item');
+    useMenuItem.classList.add('operate-menu-item');
+    combineMenuItem.classList.add('operate-menu-item');
+    discardMenuItem.classList.add('operate-menu-item');
+    examineMenuItem.classList.add('operate-menu-item');
+    equipMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.EQUIP;
+    useMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.USE;
+    examineMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.EXAMINE;
+    combineMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.COMBINE;
+    discardMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.DISCARD;    
+    operateMenuList.append(equipMenuItem, useMenuItem, examineMenuItem, combineMenuItem, discardMenuItem);
+
+    focusedDiv.append(focusedSlot, operateMenuList);
+    operatePanel.append(focusedDiv);
+
+    const operateMenuItems = {
+        equipMenuItem,
+        useMenuItem,
+        combineMenuItem,
+        discardMenuItem,
+        examineMenuItem
+    };
 
     const shiftSlot = document.createElement('div');
     shiftSlot.classList.add('shift-slot', 'item-size-1', 'hide');
@@ -147,7 +179,8 @@ function createInventory() {
     return { 
         inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, 
         slotsDivList, itemsDivList, 
-        focusedSlot, shiftSlot 
+        focusedDiv, focusedSlot, shiftSlot,
+        operateMenuList, operateMenuItems
     }
 
 }

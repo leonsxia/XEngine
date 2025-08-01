@@ -6,6 +6,7 @@ import { FirstAidKitSmall } from "./firstAidKit/FirstAidKitSmall";
 
 class FirstAidKitItem extends CombinableItem {  
     
+    isHealingItem = true;
     category = HEALTH_CATEGORY.FIRST_AID_KIT;
     count = 1;
 

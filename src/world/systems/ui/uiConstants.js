@@ -47,6 +47,24 @@ const PDA_MENU_NAMES = [
     'FILES'
 ];
 
+const PDA_OPERATE_MENU_NAMES = {
+    EQUIP: 'Equip',
+    DISARM: 'Disarm',
+    USE: 'Use',
+    COMBINE: 'Combine',
+    DISCARD: 'Discard',
+    EXAMINE: 'Examine'
+}
+
+const PDA_OPERATE_MENU_LIST = {
+    EQUIP: `<span><i class="fa-solid fa-gun"></i></span>${PDA_OPERATE_MENU_NAMES.EQUIP}`,
+    DISARM: `<span><i class="fa-solid fa-gun"></i></span>${PDA_OPERATE_MENU_NAMES.DISARM}`,
+    USE: `<span><i class="fa-solid fa-hand"></i></span>${PDA_OPERATE_MENU_NAMES.USE}`,
+    EXAMINE: `<span><i class="fa-solid fa-magnifying-glass"></i></span>${PDA_OPERATE_MENU_NAMES.EXAMINE}`,
+    COMBINE: `<span><i class="fa-solid fa-plus"></i></span>${PDA_OPERATE_MENU_NAMES.COMBINE}`,
+    DISCARD: `<span><i class="fa-solid fa-trash-can"></i></span>${PDA_OPERATE_MENU_NAMES.DISCARD}`
+}
+
 const KEYS = {
     Q: 'Q',
     E: 'E',
@@ -70,6 +88,8 @@ export {
     IMAGE_NAMES,
     IMAGES,
     PDA_MENU_NAMES,
+    PDA_OPERATE_MENU_NAMES,
+    PDA_OPERATE_MENU_LIST,
     KEYS,
     GAMEPAD_BUTTONS,
     ECG_STATE
