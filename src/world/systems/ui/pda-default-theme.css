@@ -472,7 +472,7 @@
                             content: "";
                             position: absolute;
                             left: calc(var(--inventory-operate-menu-item-label-width) * .56);
-                            top: calc(var(--inventory-operate-menu-item-label-width) * 1.085);
+                            top: calc(var(--inventory-operate-menu-item-label-width) * 1.095);
                             transform: rotate(-45deg);
                             width: var(--inventory-operate-menu-item-label-width);
                             height: calc(var(--calculated-vw) * .1);
@@ -481,7 +481,7 @@
                     }
 
                     .selected {
-                        background: radial-gradient(farthest-corner at center, rgba(204, 204, 204, .5) 27%, transparent 100%)
+                        background: radial-gradient(farthest-corner at calc(var(--calculated-vw) * 3) calc(var(--calculated-vw) * 1.25), rgba(204, 204, 204, .5) 27%, transparent 100%)
                     }                    
                 }
 
