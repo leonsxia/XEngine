@@ -67,12 +67,14 @@ class Inventory extends TabPanel {
                 this._operateMenuReady = true;
                 removeElementClass(this._html.operateMenuList, 'hidden');
                 addElementClass(this._html.operateMenuList, 'visible');
+                this._attachTo._hints.applyHintInventoryOperateMenu();
 
             } else {
 
                 this._operateMenuReady = false;
                 removeElementClass(this._html.operateMenuList, 'visible');
                 addElementClass(this._html.operateMenuList, 'hidden');
+                this._attachTo._hints.applyHintInventoryBase();
 
             }
 
@@ -112,6 +114,7 @@ class Inventory extends TabPanel {
                 this._shiftIdx = this._currentIdx;
                 removeElementClass(this._html.shiftSlot, 'idx');
                 addElementClass(this._html.shiftSlot, `idx-${this._currentIdx}`);
+                this._attachTo._hints.applyHintInventoryItemShift();
 
             }
 
@@ -126,8 +129,8 @@ class Inventory extends TabPanel {
             }
 
             this.focusedIndex = this._shiftIdx;
-
             addElementClass(this._html.shiftSlot, 'hide');
+            this._attachTo._hints.applyHintInventoryBase();
 
         }
 

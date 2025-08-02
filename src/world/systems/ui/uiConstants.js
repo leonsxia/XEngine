@@ -65,10 +65,29 @@ const PDA_OPERATE_MENU_LIST = {
     DISCARD: `<span><i class="fa-solid fa-trash-can"></i></span>${PDA_OPERATE_MENU_NAMES.DISCARD}`
 }
 
+const PDA_HINT_GROUP = {
+    CONFIRM: { text: 'Confirm', icon: `<i class="fa-solid fa-a"></i>` },
+    CANCEL: { text: 'Cancel', icon: `<i class="fa-solid fa-b"></i>` },
+    MOVE: { text: 'Move', icon: `<i class="fa-solid fa-x"></i>` },
+    CLOSE: { text: 'Close', icon: `<i class="fa-brands fa-xbox"></i>` },
+    UP: { text: 'Up', icon: `<i class="fa-solid fa-circle-chevron-up"></i>` },
+    DOWN: { text: 'Down', icon: `<i class="fa-solid fa-circle-chevron-down"></i>` },
+    LEFT: { text: 'Left', icon: '<i class="fa-solid fa-circle-chevron-left"></i>' },
+    RIGHT: { text: 'Right', icon: '<i class="fa-solid fa-circle-chevron-right"></i>' }
+}
+
 const KEYS = {
     Q: 'Q',
     E: 'E',
-    F: 'F'
+    F: 'F',
+    J: 'J',
+    K: 'K',
+    W: 'W',
+    A: 'A',
+    S: 'S',
+    D: 'D',
+    SHIFT: 'Shift',
+    TAB: 'Tab'
 };
 
 const GAMEPAD_BUTTONS = {
@@ -90,6 +109,7 @@ export {
     PDA_MENU_NAMES,
     PDA_OPERATE_MENU_NAMES,
     PDA_OPERATE_MENU_LIST,
+    PDA_HINT_GROUP,
     KEYS,
     GAMEPAD_BUTTONS,
     ECG_STATE

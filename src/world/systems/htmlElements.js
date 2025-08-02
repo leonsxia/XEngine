@@ -1,4 +1,4 @@
-import { KEYS, PDA_MENU_NAMES, PDA_OPERATE_MENU_LIST } from "./ui/uiConstants";
+import { KEYS, PDA_HINT_GROUP, PDA_MENU_NAMES, PDA_OPERATE_MENU_LIST } from "./ui/uiConstants";
 
 const container = document.querySelector('#scene-container');
 const header = document.querySelector('#sceneTitle');
@@ -244,6 +244,105 @@ function createECG(specs) {
 
 }
 
+function createPdaHintElements() {
+
+    const hintPanel = document.createElement('div');
+    hintPanel.toggleAttribute('pda-hints');
+
+    const closeHint = document.createElement('div');
+    const closeKey = document.createElement('span');
+    const closeBtn = document.createElement('span');
+    closeHint.classList.add('hint-group');
+    closeKey.classList.add('hint-key');
+    closeBtn.classList.add('hint-btn', 'btn-view', 'hide');
+    closeKey.innerText = KEYS.TAB;
+    closeBtn.innerHTML = PDA_HINT_GROUP.CLOSE.icon;
+    closeHint.append(closeKey, closeBtn, PDA_HINT_GROUP.CLOSE.text);
+
+    const confirmHint = document.createElement('div');
+    const confirmKey = document.createElement('span');
+    const confirmBtn = document.createElement('span');
+    confirmHint.classList.add('hint-group');
+    confirmKey.classList.add('hint-key');
+    confirmBtn.classList.add('hint-btn', 'btn-A', 'hide');
+    confirmKey.innerText = KEYS.J;
+    confirmBtn.innerHTML = PDA_HINT_GROUP.CONFIRM.icon;
+    confirmHint.append(confirmKey, confirmBtn, PDA_HINT_GROUP.CONFIRM.text);
+
+    const cancelHint = document.createElement('div');
+    const cancelKey = document.createElement('span');
+    const cancelBtn = document.createElement('span');
+    cancelHint.classList.add('hint-group');
+    cancelKey.classList.add('hint-key');
+    cancelBtn.classList.add('hint-btn', 'btn-B', 'hide');
+    cancelKey.innerText = KEYS.K;
+    cancelBtn.innerHTML = PDA_HINT_GROUP.CANCEL.icon;
+    cancelHint.append(cancelKey, cancelBtn, PDA_HINT_GROUP.CANCEL.text);
+
+    const moveHint = document.createElement('div');
+    const moveKey = document.createElement('span');
+    const moveBtn = document.createElement('span');
+    moveHint.classList.add('hint-group');
+    moveKey.classList.add('hint-key');
+    moveBtn.classList.add('hint-btn', 'btn-X', 'hide');
+    moveKey.innerText = KEYS.SHIFT;
+    moveBtn.innerHTML = PDA_HINT_GROUP.MOVE.icon;
+    moveHint.append(moveKey, moveBtn, PDA_HINT_GROUP.MOVE.text);
+
+    const upHint = document.createElement('div');
+    const upKey = document.createElement('span');
+    const upBtn = document.createElement('span');
+    upHint.classList.add('hint-group');
+    upKey.classList.add('hint-key');
+    upBtn.classList.add('hint-btn', 'btn-up', 'hide');
+    upKey.innerText = KEYS.W;
+    upBtn.innerHTML = PDA_HINT_GROUP.UP.icon;
+    upHint.append(upKey, upBtn, PDA_HINT_GROUP.UP.text);
+
+    const downHint = document.createElement('div');
+    const downKey = document.createElement('span');
+    const downBtn = document.createElement('span');
+    downHint.classList.add('hint-group');
+    downKey.classList.add('hint-key');
+    downBtn.classList.add('hint-btn', 'btn-up', 'hide');
+    downKey.innerText = KEYS.S;
+    downBtn.innerHTML = PDA_HINT_GROUP.DOWN.icon;
+    downHint.append(downKey, downBtn, PDA_HINT_GROUP.DOWN.text);
+
+    const leftHint = document.createElement('div');
+    const leftKey = document.createElement('span');
+    const leftBtn = document.createElement('span');
+    leftHint.classList.add('hint-group');
+    leftKey.classList.add('hint-key');
+    leftBtn.classList.add('hint-btn', 'btn-up', 'hide');
+    leftKey.innerText = KEYS.A;
+    leftBtn.innerHTML = PDA_HINT_GROUP.LEFT.icon;
+    leftHint.append(leftKey, leftBtn, PDA_HINT_GROUP.LEFT.text);
+
+    const rightHint = document.createElement('div');
+    const rightKey = document.createElement('span');
+    const rightBtn = document.createElement('span');
+    rightHint.classList.add('hint-group');
+    rightKey.classList.add('hint-key');
+    rightBtn.classList.add('hint-btn', 'btn-up', 'hide');
+    rightKey.innerText = KEYS.D;
+    rightBtn.innerHTML = PDA_HINT_GROUP.RIGHT.icon;
+    rightHint.append(rightKey, rightBtn, PDA_HINT_GROUP.RIGHT.text);
+
+    return {
+        hintPanel,
+        closeHint, closeKey, closeBtn,
+        confirmHint, confirmKey, confirmBtn,
+        cancelHint, cancelKey, cancelBtn,
+        moveHint, moveKey, moveBtn,
+        upHint, upKey, upBtn,
+        downHint, downKey, downBtn,
+        leftHint, leftKey, leftBtn,
+        rightHint, rightKey, rightBtn
+    };
+
+}
+
 function getScenePosition() {
     const sceneCanvas = container.querySelector('canvas');
     const rect = sceneCanvas.getBoundingClientRect();
@@ -266,5 +365,6 @@ export {
     createECG,
     createMap,
     createFiles,
+    createPdaHintElements,
     getScenePosition 
 }

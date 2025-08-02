@@ -2,6 +2,7 @@ import { container, createPdaContainer } from "../../systems/htmlElements";
 import { Logger } from "../../systems/Logger";
 import { ECG_STATE } from "../../systems/ui/uiConstants";
 import { CONTROL_TYPES } from "../utils/constants";
+import { PdaHint } from "./PdaHint";
 import { PdaMenu } from "./PdaMenu";
 import { Files } from "./tabs/Files";
 import { Inventory } from "./tabs/Inventory";
@@ -26,6 +27,7 @@ class Pda {
     _inventory;
     _maps;
     _files;
+    _hints;
 
     _xboxControllerConnected;
 
@@ -41,6 +43,7 @@ class Pda {
         this._inventory = new Inventory({ attachTo: this });        
         this._maps = new Maps({ attachTo: this });        
         this._files = new Files({ attachTo: this });
+        this._hints = new PdaHint({ attachTo: this });
                 
         this._owner = specs.owner;
 
@@ -55,6 +58,7 @@ class Pda {
         this._pdaContainer.appendChild(this._inventory._html.inventoryContainer);
         this._pdaContainer.appendChild(this._maps._html.mapsContainer);
         this._pdaContainer.appendChild(this._files._html.filesContainer);
+        this._pdaContainer.appendChild(this._hints.hintPanel);
 
         // initialize inventory as default panel
         this._pdaMenu.currentIndex = 1;
@@ -82,6 +86,7 @@ class Pda {
             }
 
             this.showElement(this._pdaContainer, true);
+            this._hints.applyHintInventoryBase();
 
         } else {
 
@@ -388,11 +393,13 @@ class Pda {
         if (val && !this._xboxControllerConnected) {
 
             this._pdaMenu.switchControlType(CONTROL_TYPES.XBOX);
+            this._hints.switchControlType(CONTROL_TYPES.XBOX);
             this._xboxControllerConnected = true;
 
         } else if (!val && this._xboxControllerConnected) {
 
             this._pdaMenu.switchControlType(CONTROL_TYPES.KEYBOARD);
+            this._hints.switchControlType(CONTROL_TYPES.KEYBOARD);
             this._xboxControllerConnected = false;
 
         }
