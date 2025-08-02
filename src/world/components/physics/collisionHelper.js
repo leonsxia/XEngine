@@ -174,6 +174,8 @@ function createBoundingBox(specs) {
     boundingBox.position.set(0, 0, 0);
     boundingBox.visible = showBB;
     boundingBox.geometry.computeBoundingBox();
+    boundingBox.material.transparent = true;
+    boundingBox.material.opacity = 0.6;
 
     // bounding volume on object level (this will reflect the current world transform)
     boundingBox.userData.obb = new OBB();

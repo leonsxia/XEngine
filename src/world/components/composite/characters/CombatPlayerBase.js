@@ -41,6 +41,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     _onMeleeHurtTargets = [];
     _cancelGunPoint = false;
     _cancelShoot = false;
+    _cancelMelee = false;
 
     isInteractiveReady = false;
     readyToPickItem;
@@ -847,7 +848,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     melee(val) {
 
-        if (this.gunPointing || this.dead) {
+        if (this.gunPointing || this.dead || !this._meleeWeapon) {
 
             return;
 
@@ -857,7 +858,15 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         if (val) {
 
+            if (this._meleeWeapon.isFiring) {
+
+                this._cancelMelee = false;
+                return;
+
+            }
+
             this.startAttackTimer();
+            this._meleeWeapon.isFiring = true;
 
             if (this.forward) {
 
@@ -874,26 +883,47 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             this.AWS.prepareCrossFade(this.AWS.activeAction, this.AWS.actions[this.meleeAttackAction.attack.nick], this._animationSettings.MELEE, 1);
             this.aimingRad = 0;
 
+            super.melee(val);
+            this.switchHelperComponents();
+
         } else if (this.meleeing) {
 
-            this.#logger.log(`cancel melee attack!`);
-            this.switchWeapon(this.armedWeapon);
+            if (!this.hurting && this._meleeWeapon.isFiring) {
 
-            const endAction = this.getMovingAction();
-
-            if (this.hurting) {
-
-                this.AWS.cachedAction = endAction;
+                this._cancelMelee = true;
 
             } else {
 
-                this.AWS.prepareCrossFade(this.AWS.activeAction, endAction, this._animationSettings.MELEE, endAction.weight);
+                this.cancelMelee();
 
             }
 
         }
 
-        super.melee(val);
+    }
+
+    cancelMelee() {
+
+        this.#logger.func = this.cancelMelee.name;
+        this.#logger.log(`cancel melee attack!`);
+
+        this.switchWeapon(this.armedWeapon);
+
+        const endAction = this.getMovingAction();
+
+        if (this.hurting) {
+
+            this.AWS.cachedAction = endAction;
+
+        } else {
+
+            this.AWS.prepareCrossFade(this.AWS.activeAction, endAction, this._animationSettings.MELEE, endAction.weight);
+
+        }
+
+        this._cancelMelee = false;
+        this._meleeWeapon.isFiring = false;
+        super.melee(false);
         this.switchHelperComponents();
 
     }
@@ -1187,6 +1217,24 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             }
 
+            if (this._cancelGunPoint) {
+
+                this.cancelGunPoint();
+
+            }
+
+            if (this._cancelShoot) {
+
+                this.cancelGunShoot();
+
+            }
+
+            if (this._cancelMelee) {
+
+                this.cancelMelee();
+
+            }
+
             const endCallback = () => {
 
                 super.hurt(false);
@@ -1317,6 +1365,12 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         }
 
+        if (this._meleeWeapon) {
+
+            this._meleeWeapon.isFiring = false;
+
+        }
+
         this.switchWeapon(this.armedWeapon);
 
     }
@@ -1421,10 +1475,15 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             } else if (this.meleeing) {
 
+                attackInterval = this._meleeWeapon.attackInterval * this._i;
                 let attackStartInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.startTime;
                 let attackEndInterval = this._meleeWeapon.attackInterval * this._i + this._meleeWeapon.endTime;
 
-                if (this._delta >= attackStartInterval && this._delta <= attackEndInterval) {
+                if (this._i > 0 && this._delta > attackInterval && this._cancelMelee) {
+
+                    this.cancelMelee();
+
+                } else if (this._delta >= attackStartInterval && this._delta <= attackEndInterval) {
 
                     // this.#weaponLogger.log(`melee attack on: ${this._i}`);
                     this._meleeWeapon.hittingBox.updateOBB(false);
