@@ -158,8 +158,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                     } else {
 
-                        this._meleeWeapon = matched;
-                        this.pda.changeMelee(matched);
+                        this.armMelee(matched);
 
                     }
 
@@ -235,6 +234,13 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     get armedWeaponAction() {
 
         return this.weaponActionMapping[this.armedWeapon.weaponType];
+
+    }
+
+    armMelee(weapon) {
+
+        this._meleeWeapon = weapon;
+        this.pda.changeMelee(weapon);
 
     }
 

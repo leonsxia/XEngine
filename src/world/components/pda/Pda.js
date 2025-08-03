@@ -318,7 +318,15 @@ class Pda {
 
                 if (!this._inventory.shiftReady) {
 
-                    this._inventory.operateMenuReady = true;
+                    if (this._inventory.operateMenuReady) {
+
+                        this._inventory.processItemOperation();
+
+                    } else {
+
+                        this._inventory.operateMenuReady = true;
+
+                    }
 
                 }
 

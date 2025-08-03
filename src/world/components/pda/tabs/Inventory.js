@@ -1,8 +1,11 @@
 import { createInventory } from "../../../systems/htmlElements";
+import { Logger } from "../../../systems/Logger";
 import { PDA_OPERATE_MENU_LIST } from "../../../systems/ui/uiConstants";
 import { addElementClass, removeElementClass } from "../../utils/htmlHelper";
 import { ECG } from "./ECG";
 import { TabPanel } from "./TabPanel";
+
+const DEBUG = true;
 
 class Inventory extends TabPanel {
 
@@ -23,6 +26,8 @@ class Inventory extends TabPanel {
     _currentOperateMenuItems = [];
     _currentOperateIdx = 0;
     _currentItem;
+
+    #logger = new Logger(DEBUG, 'Inventory');
 
     constructor(specs) {
 
@@ -268,6 +273,65 @@ class Inventory extends TabPanel {
         }
 
         return acquired;
+
+    }
+
+    processItemOperation() {
+
+        this.#logger.func = this.processItemOperation.name;
+
+        if (this._currentItem.isWeaponItem) {
+
+            const isMelee = this._currentItem.ammo.isMeleeWeapon;
+            const owner = this._attachTo._owner;
+            switch (this._currentOperateIdx) {
+
+                case 0:
+
+                    if (this._currentItem.isArmed) {
+
+                        this.#logger.log(`process disarm weapon: ${this._currentItem.name}`);
+                        if (isMelee) {
+
+                            owner.armMelee();
+
+                        } else {
+
+                            owner.armWeapon();
+
+                        }
+
+                    } else {
+
+                        this.#logger.log(`process equip weapon: ${this._currentItem.name}`);
+                        const findIdx = owner.weapons.findIndex(w => w.weaponType === this._currentItem.weaponType);
+                        if (findIdx > -1) {
+
+                            const matched = this._attachTo._owner.weapons[findIdx];
+                            if (isMelee) {
+
+                                owner.armMelee(matched);
+
+                            } else {
+
+                                owner.armWeapon(matched);
+
+                            }
+
+                        }
+
+                    }
+                    break;
+
+                case 1:
+                    this.#logger.log(`process examine weapon: ${this._currentItem.name}`);
+                    break;
+
+            }
+
+        }
+
+        this.operateMenuReady = false;
 
     }
 
@@ -1028,6 +1092,7 @@ class Inventory extends TabPanel {
                 if (!weapon) {
 
                     item.equipInfo.classList.add('hide');
+                    item.isArmed = false;
                     continue;
 
                 }
@@ -1035,10 +1100,12 @@ class Inventory extends TabPanel {
                 if (weapon.weaponType !== item.weaponType) {
 
                     item.equipInfo.classList.add('hide');
+                    item.isArmed = false;
 
                 } else {
 
                     item.equipInfo.classList.remove('hide');
+                    item.isArmed = true;
 
                 }
 
@@ -1058,6 +1125,7 @@ class Inventory extends TabPanel {
                 if (!weapon) {
 
                     item.equipInfo.classList.add('hide');
+                    item.isArmed = false;
                     continue;
 
                 }
@@ -1065,10 +1133,12 @@ class Inventory extends TabPanel {
                 if (weapon.weaponType !== item.weaponType) {
 
                     item.equipInfo.classList.add('hide');
+                    item.isArmed = false;
 
                 } else {
 
                     item.equipInfo.classList.remove('hide');
+                    item.isArmed = true;
 
                 }
 
