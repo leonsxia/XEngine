@@ -86,12 +86,11 @@ class Pda {
             }
 
             this.showElement(this._pdaContainer, true);
-            this._hints.applyHintInventoryBase();
 
         } else {
 
             this.showElement(this._pdaContainer, false);
-            this._inventory.resetShift();
+            this.resetInventory();
 
         }
 
@@ -175,6 +174,8 @@ class Pda {
         this.showElement(this._files._html.filesContainer, false);
         this.showElement(this._maps._html.mapsContainer, false);
 
+        this.resetInventory();
+
     }
 
     showPanel(panelIdx) {
@@ -183,12 +184,15 @@ class Pda {
 
             case 0:
                 this.showElement(this._maps._html.mapsContainer, true);
+                this._hints.applyHintMapsBase();
                 break;
             case 1:
                 this.showElement(this._inventory._html.inventoryContainer, true);
+                this._hints.applyHintInventoryBase();
                 break;
             case 2:
                 this.showElement(this._files._html.filesContainer, true);
+                this._hints.applyHintFilessBase();
                 break;
 
         }
@@ -411,6 +415,14 @@ class Pda {
     get inventory() {
 
         return this._inventory;
+
+    }
+
+    resetInventory() {
+
+        this._inventory.operateMenuReady = false;
+        this._inventory.resetShiftState();
+        this._inventory.focusedIndex = 0;
 
     }
 

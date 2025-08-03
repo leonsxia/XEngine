@@ -139,6 +139,26 @@ class PdaHint {
 
     }
 
+    applyHintMapsBase() {
+
+        this._hintGroup.length = 0;
+        this._hintGroup.push(this._html.closeHint);
+
+        this.clearHintPanel();
+        this.applyHintGroup();
+
+    }
+
+    applyHintFilessBase() {
+
+        this._hintGroup.length = 0;
+        this._hintGroup.push(this._html.closeHint);
+
+        this.clearHintPanel();
+        this.applyHintGroup();
+
+    }
+
 }
 
 export { PdaHint };

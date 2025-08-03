@@ -120,7 +120,7 @@ class Inventory extends TabPanel {
 
         } else {
 
-            this._shiftReady = false;
+            this.resetShiftState();
             
             if (this._currentIdx !== this._shiftIdx) {
 
@@ -129,7 +129,6 @@ class Inventory extends TabPanel {
             }
 
             this.focusedIndex = this._shiftIdx;
-            addElementClass(this._html.shiftSlot, 'hide');
             this._attachTo._hints.applyHintInventoryBase();
 
         }
@@ -186,6 +185,13 @@ class Inventory extends TabPanel {
 
         }
 
+    }
+
+    resetShiftState() {
+
+        this._shiftReady = false;
+        addElementClass(this._html.shiftSlot, 'hide');
+        
     }
 
     acquireItemOperateMenu() {
@@ -363,14 +369,6 @@ class Inventory extends TabPanel {
         }
 
         return matched;
-
-    }
-
-    resetShift() {
-
-        removeElementClass(this._html.shiftSlot, 'idx');
-        addElementClass(this._html.shiftSlot, 'hide');
-        this._shiftReady = false;
 
     }
 

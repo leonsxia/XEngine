@@ -2,7 +2,7 @@
     --border-radius: calc(var(--calculated-vw) * .5);
     --pda-font: sans-serif;
     --pda-fade-in-transition: display 0s .2s allow-discrete, opacity .2s linear;
-    --pda-fade-out-transition: display 0s .15s allow-discrete, opacity .15s linear;
+    --pda-fade-out-transition: display 0s .1s allow-discrete, opacity .1s linear;
     --pda-panel-fade-in-transition: scale .2s linear;
     --menu-margin: calc(var(--calculated-vw) * 3) 0 calc(var(--calculated-vw) * 1) 0;
     --menu-letter-spacing: calc(var(--calculated-vw) * -.05);
@@ -35,6 +35,7 @@
     --inventory-focused-item-grey: #ccc;
     --inventory-operate-menu-item-height: calc(var(--calculated-vw) * 2.5);
     --inventory-operate-menu-item-label-width: calc(var(--calculated-vw) * 1.8);
+    --inventory-operate-menu-fade-out-transition: display 0s .05s allow-discrete, opacity .05s linear;
     --inventory-shift-item-border: var(--inventory-item-border-width) solid #1E90FF;
     --inventory-shift-item-blue: #7DF9FF;
     --ecg-sweep-background-size: 100% calc(var(--calculated-vw) * 1.5);
@@ -486,9 +487,9 @@
                     }                    
                 }
 
-                .hidden {
-                    transition: var(--pda-fade-out-transition);
-                }
+                /* .hidden {
+                    transition: var(--inventory-operate-menu-fade-out-transition);
+                } */
             }
 
             .item-size-2.focused-item .operate-menu-list {
