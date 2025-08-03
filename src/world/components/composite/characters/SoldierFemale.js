@@ -184,7 +184,7 @@ class SoldierFemale extends CombatPlayerBase {
                 attackInterval: 0.4667,
                 fireRate: 1.8,
                 ammo: new Ammo({ count: 50, damage: 18, offset0: - 5, offset1: 10 }),
-                magzineCapacity: 50
+                magzineCapacity: 19
             }),
             new Revolver({
                 name: `${name}_magnum357`,

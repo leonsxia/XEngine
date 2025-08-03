@@ -7,6 +7,8 @@ import { FirstAidKitSmall } from "./firstAidKit/FirstAidKitSmall";
 class FirstAidKitItem extends CombinableItem {  
     
     isHealingItem = true;
+    isFastCombinableItem = true;
+
     category = HEALTH_CATEGORY.FIRST_AID_KIT;
     count = 1;
 
@@ -55,7 +57,84 @@ class FirstAidKitItem extends CombinableItem {
         this.updateLabelTip();
         this.showLabelTip(false);
 
-    }    
+    }
+
+    checkCombinable(target) {
+
+        let combinable = false;
+
+        if (!(target instanceof FirstAidKitItem) || target.itemType === FIRST_AID_KIT.FIRST_AID_KIT_LARGE) {
+
+            return combinable;
+
+        }
+
+        switch (this.itemType) {
+
+            case FIRST_AID_KIT.FIRST_AID_KIT_SMALL:
+
+                combinable = true;
+                break;
+
+            case FIRST_AID_KIT.FIRST_AID_KIT_MEDIUM:
+
+                if (target.itemType === FIRST_AID_KIT.FIRST_AID_KIT_SMALL) {
+
+                    combinable = true;
+
+                }
+                break;
+
+        }
+
+        return combinable;
+
+    }
+
+    // small + small = medium
+    // small + medium = large
+    // medium + small = large
+    combine(target) {
+
+        let result = false;
+
+        if (!(target instanceof FirstAidKitItem) || target.itemType === FIRST_AID_KIT.FIRST_AID_KIT_LARGE) {
+
+            return result;
+
+        }
+
+        switch (this.itemType) {
+
+            case FIRST_AID_KIT.FIRST_AID_KIT_SMALL:
+
+                if (target.itemType === FIRST_AID_KIT.FIRST_AID_KIT_SMALL) {
+
+                    this.switchItem(FIRST_AID_KIT.FIRST_AID_KIT_MEDIUM);
+
+                } else {
+
+                    this.switchItem(FIRST_AID_KIT.FIRST_AID_KIT_LARGE);
+
+                }
+                result = true;
+                break;
+
+            case FIRST_AID_KIT.FIRST_AID_KIT_MEDIUM:
+
+                if (target.itemType === FIRST_AID_KIT.FIRST_AID_KIT_SMALL) {
+
+                    this.switchItem(FIRST_AID_KIT.FIRST_AID_KIT_LARGE);
+                    result = true;
+
+                }
+                break;
+
+        }
+
+        return result;
+
+    }
 
 }
 

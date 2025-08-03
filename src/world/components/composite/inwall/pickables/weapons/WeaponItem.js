@@ -37,6 +37,12 @@ class WeaponItem extends PickableItem {
 
     }
 
+    get ammoType() {
+
+        return this.ammo.type;
+
+    }
+
     createItemHtml() {
 
         const { itemDiv, countInfo, equipInfo } = createInventoryItem({ imgUrl: this._imgUrl, itemSize: this.itemSize, isWeaponItem: true });
@@ -70,6 +76,20 @@ class WeaponItem extends PickableItem {
             }
 
         }
+
+    }
+
+    checkCombinable(target) {
+
+        let combinable = false;
+
+        if (target.isAmmoBoxItem && target.ammoType === this.ammoType) {
+
+            combinable = true;
+
+        }
+
+        return combinable;
 
     }
 

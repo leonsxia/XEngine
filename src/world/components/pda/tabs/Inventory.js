@@ -126,10 +126,21 @@ class Inventory extends TabPanel {
         } else {
 
             this.resetShiftState();
-            
+
             if (this._currentIdx !== this._shiftIdx) {
 
-                this.swapItems(this._currentIdx, this._shiftIdx);               
+                const source = this.getMatchedItem(this._currentIdx);
+                let target = this.getMatchedItem(this._shiftIdx);
+
+                if (this.checkCombinable(source, target)) {
+
+                    this.combineItems(source, target);
+
+                } else {
+
+                    this.swapItems(this._currentIdx, this._shiftIdx, source, target);
+
+                }
 
             }
 
@@ -304,10 +315,9 @@ class Inventory extends TabPanel {
                     } else {
 
                         this.#logger.log(`process equip weapon: ${this._currentItem.name}`);
-                        const findIdx = owner.weapons.findIndex(w => w.weaponType === this._currentItem.weaponType);
-                        if (findIdx > -1) {
+                        const matched = this.getWeapon(this._currentItem);
+                        if (matched) {
 
-                            const matched = this._attachTo._owner.weapons[findIdx];
                             if (isMelee) {
 
                                 owner.armMelee(matched);
@@ -436,10 +446,110 @@ class Inventory extends TabPanel {
 
     }
 
-    swapItems(sourceIdx, targetIdx) {
+    getWeapon(item) {
 
-        const source = this.getMatchedItem(sourceIdx);
-        let target = this.getMatchedItem(targetIdx);
+        const pda = this._attachTo;
+        const owner = pda._owner;
+        const findIdx = owner.weapons.findIndex(w => w.weaponType === item.weaponType);
+        let matched;
+        if (findIdx > -1) {
+
+            matched = this._attachTo._owner.weapons[findIdx];
+
+        }
+
+        return matched;
+
+    }
+
+    checkCombinable(source, target) {
+
+        let combinable = false;
+
+        if (
+            source && target && target !== source &&
+            source.isFastCombinableItem &&
+            source.itemType === target.itemType || 
+            (source.category ? source.category === target.category : false) ||
+            (source.isAmmoBoxItem && target.isWeaponItem)
+        ) {
+
+            if (target.isAmmoBoxItem && !target.isFull) {
+
+                combinable = true;
+
+            } else if (target.isHealingItem) {
+
+                combinable = target.checkCombinable(source);
+
+            } else if (target.isWeaponItem) {
+
+                combinable = target.checkCombinable(source);
+                if (combinable) {
+
+                    const matched = this.getWeapon(target);
+                    if (matched) {
+
+                        combinable = !matched.magzineFull;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return combinable;
+
+    }
+
+    combineItems(source, target) {
+
+        const pda = this._attachTo;
+        if (source.isAmmoBoxItem) {
+
+            let originCount;            
+            if (target.isWeaponItem) {
+
+                const matched = this.getWeapon(target);
+                if (matched) {
+
+                    originCount = matched.ammoCount;
+                    matched.fillMagzine(matched.ammoCount + source.count);
+                    source.count = source.count - (matched.ammoCount - originCount);
+
+                }
+
+            } else {
+
+                originCount = target.count;
+                target.count += source.count;
+                source.count = source.count - (target.count - originCount);
+
+            }
+
+            if (source.count === 0) {
+
+                pda.removeInventoryItem(source);
+
+            }
+
+        } else if (source.isHealingItem) {
+
+            const combined = target.combine(source);
+            if (combined) {
+
+                source.count = 0
+                pda.removeInventoryItem(source);
+
+            }
+
+        }
+
+    }
+
+    swapItems(sourceIdx, targetIdx, source, target) {
 
         if (target === source) target = undefined;
 

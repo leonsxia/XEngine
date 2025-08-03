@@ -2,6 +2,8 @@ import { getRandomFloat } from "../../utils/mathHelper";
 
 class Ammo {
 
+    onCountChanged = [];
+
     constructor(specs) {
 
         const { count = 0, type = 'normal', damage = 0, offset0 = 0, offset1 = offset0 } = specs;
@@ -26,6 +28,8 @@ class Ammo {
         this._offset0 = ammo._offset0;
         this._offset1 = ammo._offset1;
 
+        this.doCountChangedEvents();
+
     }
 
     get count() {
@@ -36,9 +40,8 @@ class Ammo {
 
     set count(val) {
 
-        if (val <= 0) val = 0;
-
-        this._count = val;
+        this._count = Math.max(val, 0);
+        this.doCountChangedEvents();
 
     }
 
@@ -95,6 +98,21 @@ class Ammo {
     set offset1(val) {
 
         this._offset1 = val;
+
+    }
+
+    doCountChangedEvents() {
+
+        for (let i = 0, il = this.onCountChanged.length; i < il; i++) {
+
+            const callback = this.onCountChanged[i];
+            if (typeof callback === 'function') {
+
+                callback(this);
+
+            }
+
+        }
 
     }
 

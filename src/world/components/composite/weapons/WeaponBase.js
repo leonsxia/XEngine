@@ -251,6 +251,12 @@ class WeaponBase {
 
     }
 
+    get magzineFull() {
+
+        return this._ammo.count === this._magzineCapacity;
+
+    }
+
     get isFiring() {
 
         return this._isFiring;
@@ -283,16 +289,7 @@ class WeaponBase {
 
     fillMagzine(fillCount = this._magzineCapacity) {
 
-        if (fillCount >= this._magzineCapacity) {
-
-            this._ammo.count = this._magzineCapacity;
-
-        } else {
-
-            this._ammo.count = fillCount;
-
-        }
-
+        this._ammo.count = Math.min(fillCount, this._magzineCapacity);
         this.resetWeaponEmpty();
         this.doAmmoChangedEvents();
 
@@ -357,6 +354,7 @@ class WeaponBase {
         if (item.ammo) {
 
             this._ammo.updateAmmoProperties(item.ammo);
+            this.doAmmoChangedEvents();
 
         }
 

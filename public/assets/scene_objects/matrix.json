@@ -352,7 +352,7 @@
                     "isPicked": true,
                     "isArmed": true,
                     "ammo": {
-                        "count": 30
+                        "count": 19
                     }
                 },
                 {
@@ -478,6 +478,30 @@
                     "isPicked": false,
                     "ammo": {
                         "count": 35
+                    }
+                },
+                {
+                    "type": "PistolAmmoBox",
+                    "src": "PISTOL_AMMO_BOX_ITEM",
+                    "name": "pistol_ammo_box_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        5,
+                        2,
+                        4.63
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": true,
+                    "belongTo": "jill",
+                    "ammo": {
+                        "count": 30
                     }
                 },
                 {

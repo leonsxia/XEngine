@@ -164,8 +164,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                 }
 
-                item.updateCountInfo(matched);
-
             }
 
         }

@@ -4,8 +4,9 @@ import { PickableItem } from "../PickableItem";
 class AmmoBoxItem extends PickableItem {
 
     isAmmoBoxItem = true;
+    isFastCombinableItem = true;
 
-    ammoBoxType;
+    itemType;
     ammo;
     capacity;
 
@@ -14,15 +15,21 @@ class AmmoBoxItem extends PickableItem {
         super(specs);
 
         const { ammoBoxType, ammoInstance, capacity } = specs;
-        this.ammoBoxType = ammoBoxType;
+        this.itemType = ammoBoxType;
         this.ammo = ammoInstance;
         this.capacity = capacity;
 
-         if (this.count > this.capacity) { 
+        if (this.count > this.capacity) {
 
             this.count = this.capacity;
 
         }
+
+        this.ammo.onCountChanged.push(() => {
+
+            this.updateCountInfo();
+
+        });
 
     }
 
@@ -34,13 +41,19 @@ class AmmoBoxItem extends PickableItem {
 
     set count(val) {
 
-        this.ammo.count = val > this.capacity ? this.capacity : val;
+        this.ammo.count = val > this.capacity ? this.capacity : Math.max(val, 0);
 
     }
 
     get ammoType() {
 
         return this.ammo.type;
+
+    }
+
+    get isFull() {
+
+        return this.count === this.capacity;
 
     }
 

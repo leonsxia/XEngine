@@ -121,6 +121,9 @@ class CombinableItem extends PickableItem {
 
     }
 
+    // inherited by child
+    checkCombinable() {}
+
 }
 
 export { CombinableItem };

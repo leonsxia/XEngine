@@ -1111,6 +1111,13 @@ class SceneBuilder {
 
                             }
 
+                            if (find.father.isHealingItem) {
+
+                                _origin.count = find.father.count;
+                                _origin.itemType = find.father.itemType;
+
+                            }
+
                         } else {
 
                             const { currentRoom = '', isPicked = false, belongTo } = _target;
@@ -1126,6 +1133,14 @@ class SceneBuilder {
                                 find.father.ammo.damage = damage ?? find.father.ammo.damage;
                                 find.father.ammo.offset0 = offset0 ?? find.father.ammo.offset0;
                                 find.father.ammo.offset1 = offset1 ?? find.father.ammo.offset1;
+
+                            }
+
+                            if (find.father.isHealingItem) {
+
+                                const { itemType, count = 1 } = _target;
+                                find.father.switchItem(itemType);
+                                find.father.count = count;
 
                             }
 
