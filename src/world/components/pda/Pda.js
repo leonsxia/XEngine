@@ -220,6 +220,10 @@ class Pda {
 
                     this._inventory.shiftUp();
 
+                } else if (this._inventory.selectReady) {
+
+                    this._inventory.selectUp();
+
                 } else {
 
                     this._inventory.focusUp();
@@ -252,6 +256,10 @@ class Pda {
 
                     this._inventory.shiftDown();
 
+                } else if (this._inventory.selectReady) {
+
+                    this._inventory.selectDown();
+
                 } else {
 
                     this._inventory.focusDown();
@@ -277,6 +285,10 @@ class Pda {
                 if (this._inventory.shiftReady) {
 
                     this._inventory.shiftLeft();
+
+                }  else if (this._inventory.selectReady) {
+
+                    this._inventory.selectLeft();
 
                 } else {
 
@@ -304,6 +316,10 @@ class Pda {
 
                     this._inventory.shiftRight();
 
+                } else if (this._inventory.selectReady) {
+
+                    this._inventory.selectRight();
+
                 } else {
 
                     this._inventory.focusRight();                    
@@ -326,7 +342,7 @@ class Pda {
 
                 if (!this._inventory.shiftReady) {
 
-                    if (this._inventory.operateMenuReady) {
+                    if (this._inventory.operateMenuReady || this._inventory.selectReady) {
 
                         this._inventory.processItemOperation();
 
@@ -371,6 +387,10 @@ class Pda {
                 } else if (this._inventory.shiftReady) {
 
                     this._inventory.resetShiftState();
+
+                } else if (this._inventory.selectReady) {
+
+                    this._inventory.selectReady = false;
 
                 }
 
@@ -455,6 +475,7 @@ class Pda {
         this._inventory.operateMenuReady = false;
         this._inventory.focusedIndex = 0;
         this._inventory.resetShift();
+        this._inventory.selectReady = false;
 
     }
 

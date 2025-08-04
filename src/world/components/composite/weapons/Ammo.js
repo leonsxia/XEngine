@@ -32,6 +32,12 @@ class Ammo {
 
     }
 
+    get type() {
+
+        return this._type;
+
+    }
+
     get count() {
 
         return this._count;

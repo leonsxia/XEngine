@@ -20,16 +20,22 @@ class Inventory extends TabPanel {
     _currentIdx = 0;
     _selectedTargetIdx = 0;
     _size = 20;
-    _shiftReady = false;
-    _shiftIdx = 0;
-    _shiftSlotSize = 1;
+    // for operate item menu
     _operateMenuReady = false;
     _currentOperateMenuItems = [];
     _currentOperateIdx = 0;
     _currentItem;
+    // for shift and fast combine items
+    _shiftReady = false;
+    _shiftIdx = 0;
+    _shiftSlotSize = 1;
     _shiftMenuReady = false;
     _shiftMenuItems = [];
     _shiftMenuIdx = 0;
+    // for combine items
+    _selectReady = false;
+    _selectIdx = 0;
+    _combinableIdxes = [];
 
     _source;
     _target;
@@ -135,27 +141,28 @@ class Inventory extends TabPanel {
         if (val) {
 
             const matched = this.getMatchedItem(this._currentIdx);
+            const element = this._html.shiftDiv;
             if (matched) {
                 
                 this._shiftReady = true;
-                removeElementClass(this._html.shiftDiv, 'hide');
-                removeElementClass(this._html.shiftDiv, 'item-size-');
+                removeElementClass(element, 'hide');
+                removeElementClass(element, 'item-size-');
 
                 if (matched.itemSize === 2) {
 
-                    addElementClass(this._html.shiftDiv, 'item-size-2');
+                    addElementClass(element, 'item-size-2');
                     this._shiftSlotSize = 2;
 
                 } else {
 
-                    addElementClass(this._html.shiftDiv, 'item-size-1');
+                    addElementClass(element, 'item-size-1');
                     this._shiftSlotSize = 1;
 
                 }
 
                 this._shiftIdx = this._currentIdx;
-                removeElementClass(this._html.shiftDiv, 'idx');
-                addElementClass(this._html.shiftDiv, `idx-${this._currentIdx}`);
+                removeElementClass(element, 'idx');
+                addElementClass(element, `idx-${this._currentIdx}`);
                 this._attachTo._hints.applyHintInventoryItemShift();
 
             }
@@ -190,6 +197,54 @@ class Inventory extends TabPanel {
 
     }
 
+    get selectReady() {
+
+        return this._selectReady;
+
+    }
+
+    set selectReady(val) {
+
+        if (val === this._selectReady) return;
+
+        if (val) {
+
+            const matched = this.getMatchedItem(this._currentIdx);
+            const element = this._html.selectDiv;
+            if (matched) {
+
+                this._selectReady = true;
+                removeElementClass(element, 'hide');
+                removeElementClass(element, 'item-size-');
+
+                if (matched.itemSize === 2) {
+
+                    addElementClass(element, 'item-size-2');
+
+                } else {
+
+                    addElementClass(element, 'item-size-1');
+
+                }
+
+                this._selectIdx = this._currentIdx;
+                removeElementClass(element, 'idx');
+                addElementClass(element, `idx-${this._currentIdx}`);
+                this._attachTo._hints.applyHintInventoryItemSelect();
+
+            }
+
+        } else {
+
+            this._selectReady = false;
+            addElementClass(this._html.selectDiv, 'hide');
+            this.resetSlots();
+            this._attachTo._hints.applyHintInventoryBase();
+
+        }
+
+    }
+
     get focusedIndex() {
         
         return this._currentIdx;
@@ -211,6 +266,18 @@ class Inventory extends TabPanel {
     set shiftIndex(val) {
 
         this.processShiftSlot(val);
+
+    }
+
+    get selectIndex() {
+
+        return this._selectIdx;
+
+    }
+
+    set selectIndex(val) {
+
+        this.processSelectSlot(val);
 
     }
 
@@ -380,6 +447,41 @@ class Inventory extends TabPanel {
 
     }
 
+    checkSlotCombinable() {
+
+        const slots = this._html.slotsDivList;
+        const source = this.getMatchedItem(this._currentIdx);
+        for (let i = 0, il = slots.length; i < il; i++) {
+
+            const slot = slots[i];
+            const item = this.getMatchedItem(i);
+            if (i !== this._currentIdx && item && this.checkCombinable(source, item)) {
+
+                this._combinableIdxes.push(i);
+
+            } else {
+
+                addElementClass(slot.firstChild, 'not-combinable');
+
+            }
+
+        }
+
+    }
+
+    resetSlots() {
+
+        const slots = this._html.slotsDivList;
+        for (let i = 0, il = slots.length; i < il; i++) {
+
+            const slot = slots[i];
+            removeElementClass(slot.firstChild, 'not-combinable');
+
+        }
+        this._combinableIdxes.length = 0;
+
+    }
+
     processItemOperation() {
 
         this.#logger.func = this.processItemOperation.name;
@@ -403,6 +505,18 @@ class Inventory extends TabPanel {
             }
 
             this.resetShift();
+
+        } else if (this.selectReady) {
+
+            if (this._combinableIdxes.includes(this._selectIdx)) {
+
+                const source = this.getMatchedItem(this._currentIdx);
+                const target = this.getMatchedItem(this._selectIdx);
+                this.combineItems(source, target);
+                this.focusedIndex = this._selectIdx;
+                this.selectReady = false;
+                
+            }
 
         } else if (this._currentItem.isWeaponItem) {
 
@@ -454,6 +568,28 @@ class Inventory extends TabPanel {
 
             this.operateMenuReady = false;
 
+        } else if (this._currentItem.isAmmoBoxItem) {
+
+            this.operateMenuReady = false;
+            switch (this._currentOperateIdx) {
+
+                case 0:
+                    this.#logger.log(`process examine ammo box: ${this._currentItem.name}`);
+                    break;
+                case 1:
+
+                    this.#logger.log(`process combine ammo box: ${this._currentItem.name}`);
+
+                    this.selectReady = true;
+                    this.checkSlotCombinable();
+
+                    break;
+
+                case 2:
+                    this.#logger.log(`process discard ammo box: ${this._currentItem.name}`);
+                    break;
+            }            
+
         }
 
     }
@@ -482,6 +618,34 @@ class Inventory extends TabPanel {
         addElementClass(element, `idx-${tarIdx}`);
 
         this._shiftIdx = tarIdx;
+
+    }
+
+    processSelectSlot(val) {
+
+        const element = this._html.selectDiv;
+        const lastSelectedItem = this.getMatchedItem(this._selectIdx);
+        let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
+        tarIdx = lastSelectedItem && lastSelectedItem.itemSize === 2 && lastSelectedItem.occupiedSlotIdx + 1 === tarIdx ? ++tarIdx : tarIdx;
+        const selectedItem = this.getMatchedItem(tarIdx);
+
+        if (selectedItem && selectedItem.itemSize === 2) {
+
+            tarIdx = selectedItem.occupiedSlotIdx + 1 === tarIdx ? --tarIdx : tarIdx;
+            removeElementClass(element, 'item-size-');
+            addElementClass(element, 'item-size-2');
+
+        } else {
+
+            removeElementClass(element, 'item-size-');
+            addElementClass(element, 'item-size-1');
+
+        }
+
+        removeElementClass(element, 'idx');
+        addElementClass(element, `idx-${tarIdx}`);
+
+        this._selectIdx = tarIdx;
 
     }
 
@@ -581,7 +745,7 @@ class Inventory extends TabPanel {
 
         if (
             source && target && target !== source &&
-            target.occupiedSlotIdx === this._selectedTargetIdx &&
+            (this.selectReady || target.occupiedSlotIdx === this._selectedTargetIdx || source.itemSize === 1) &&
             source.isFastCombinableItem && (
                 source.itemType === target.itemType ||
                 (source.category ? source.category === target.category : false) ||
@@ -1191,6 +1355,30 @@ class Inventory extends TabPanel {
     shiftDown() {
 
         this.shiftIndex += 4;
+
+    }
+
+    selectLeft() {
+
+        this.selectIndex --;
+
+    }
+
+    selectRight() {
+
+        this.selectIndex ++;
+
+    }
+
+    selectUp() {
+
+        this.selectIndex -= 4;
+
+    }
+
+    selectDown() {
+
+        this.selectIndex += 4;
 
     }
 

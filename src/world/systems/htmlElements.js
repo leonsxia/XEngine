@@ -193,13 +193,22 @@ function createInventory() {
     shiftDiv.append(shiftSlot, shiftMenuList);
     operatePanel.append(shiftDiv);
 
+    const selectDiv = document.createElement('div');
+    selectDiv.classList.add('select-item', 'idx-0', 'item-size-1', 'hide');
+
+    const selectSlot = document.createElement('div');
+    selectSlot.classList.add('select-slot');
+
+    selectDiv.append(selectSlot);
+    operatePanel.append(selectDiv);
+
     inventoryPanel.append(slotsPanel, operatePanel, itemsPanel, descriptionPanel);
     inventoryContainer.appendChild(inventoryPanel);
 
     return { 
         inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, 
         slotsDivList, itemsDivList, 
-        focusedDiv, focusedSlot, shiftDiv, shiftSlot,
+        focusedDiv, focusedSlot, shiftDiv, shiftSlot, selectDiv, selectSlot,
         operateMenuList, operateMenuItems, shiftMenuList, shiftMenuItems
     }
 

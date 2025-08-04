@@ -13,6 +13,7 @@ const hintIndex = {
     inventoryBase: 0,
     inventoryShift: 1,
     inventoryOperateMenu: 2,
+    inventorySelect: 3,
     mapsBase: 10,
     filesBase: 20
 }

@@ -127,7 +127,7 @@ class PdaHint {
         this._hintGroup.length = 0;
         this._hintGroup.push(
             this._html.leftHint, this._html.rightHint, this._html.upHint, this._html.downHint,
-            this._html.moveHint, this._html.cancelHint, this._html.closeHint);
+            this._html.moveHint, this._html.cancelHint);
 
         this.clearHintPanel();
         this.applyHintGroup();
@@ -150,6 +150,22 @@ class PdaHint {
         this.applyHintGroup();
 
         this._hintIdx = hintIndex.inventoryOperateMenu;
+
+    }
+
+    applyHintInventoryItemSelect() {
+
+        if (this._hintIdx === hintIndex.inventorySelect) return;
+
+        this._hintGroup.length = 0;
+        this._hintGroup.push(
+            this._html.leftHint, this._html.rightHint, this._html.upHint, this._html.downHint,
+            this._html.confirmHint, this._html.cancelHint);
+
+        this.clearHintPanel();
+        this.applyHintGroup();
+
+        this._hintIdx = hintIndex.inventorySelect;
 
     }
 
