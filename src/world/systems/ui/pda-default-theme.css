@@ -1,5 +1,6 @@
 :root {
     --border-radius: calc(var(--calculated-vw) * .5);
+    --border-white: rgba(200, 200, 200, 1);
     --pda-font: sans-serif;
     --pda-fade-in-transition: display 0s .2s allow-discrete, opacity .2s linear;
     --pda-fade-out-transition: display 0s .1s allow-discrete, opacity .1s linear;
@@ -12,7 +13,7 @@
     --menu-side-first-width: calc(var(--calculated-vw) * 6);
     --menu-side-first-margin: auto auto calc(var(--calculated-vw) * .75) auto;
     --menu-side-first-padding: calc(var(--calculated-vw) * .3) 0;
-    --menu-side-first-border: var(--menu-border-width) solid white;
+    --menu-side-first-border: var(--menu-border-width) solid var(--border-white);
     --menu-grey: #555;
     --inventory-panel-size-w: 24;
     --inventory-panel-size-h: 45;
@@ -26,7 +27,7 @@
     --inventory-2-item-width: calc(var(--calculated-vw) * (var(--inventory-item-size) * 2 + var(--inventory-item-gap-size)));
     --inventory-item-gap-width: calc(var(--calculated-vw) * (var(--inventory-item-size) + var(--inventory-item-gap-size)));
     --inventory-item-border-width: calc(var(--calculated-vw) * .1);
-    --inventory-item-border: var(--inventory-item-border-width) solid white;
+    --inventory-item-border: var(--inventory-item-border-width) solid var(--border-white);
     --inventory-item-transparent-border: var(--inventory-item-border-width) solid transparent;
     --inventory-item-grey: rgba(75, 75, 75, .5);
     --inventory-item-font-size: calc(var(--calculated-vw) * 1.02);
@@ -67,7 +68,7 @@
     --files-panel-size-h: 45;
     --files-panel-width: calc(var(--calculated-vw) * var(--files-panel-size-w));
     --files-panel-height: calc(var(--calculated-vw) * var(--files-panel-size-h));
-    --hints-border: calc(var(--calculated-vw) * .1) solid white;
+    --hints-border: calc(var(--calculated-vw) * .1) solid var(--border-white);
 }
 
 .default-theme {
