@@ -155,7 +155,7 @@ function createInventory() {
     useMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.USE;
     examineMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.EXAMINE;
     combineMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.COMBINE;
-    discardMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.DISCARD;    
+    discardMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.DISCARD;
     operateMenuList.append(equipMenuItem, useMenuItem, examineMenuItem, combineMenuItem, discardMenuItem);
 
     focusedDiv.append(focusedSlot, operateMenuList);
@@ -169,9 +169,29 @@ function createInventory() {
         examineMenuItem
     };
 
+    const shiftDiv = document.createElement('div');
+    shiftDiv.classList.add('shift-item', 'idx-0', 'item-size-1', 'hide');
+
     const shiftSlot = document.createElement('div');
-    shiftSlot.classList.add('shift-slot', 'item-size-1', 'hide');
-    operatePanel.append(shiftSlot);
+    shiftSlot.classList.add('shift-slot');
+
+    const shiftMenuList = document.createElement('ul');
+    const shiftCombineMenuItem = document.createElement('li');
+    const shiftSwapMenuItem = document.createElement('li');
+    shiftMenuList.classList.add('operate-menu-list', 'popup-panel', 'hidden');
+    shiftCombineMenuItem.classList.add('operate-menu-item');
+    shiftSwapMenuItem.classList.add('operate-menu-item');
+    shiftCombineMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.COMBINE;
+    shiftSwapMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.SWAP;
+    shiftMenuList.append(shiftCombineMenuItem, shiftSwapMenuItem);
+
+    const shiftMenuItems = {
+        shiftCombineMenuItem,
+        shiftSwapMenuItem
+    }
+
+    shiftDiv.append(shiftSlot, shiftMenuList);
+    operatePanel.append(shiftDiv);
 
     inventoryPanel.append(slotsPanel, operatePanel, itemsPanel, descriptionPanel);
     inventoryContainer.appendChild(inventoryPanel);
@@ -179,8 +199,8 @@ function createInventory() {
     return { 
         inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, 
         slotsDivList, itemsDivList, 
-        focusedDiv, focusedSlot, shiftSlot,
-        operateMenuList, operateMenuItems
+        focusedDiv, focusedSlot, shiftDiv, shiftSlot,
+        operateMenuList, operateMenuItems, shiftMenuList, shiftMenuItems
     }
 
 }

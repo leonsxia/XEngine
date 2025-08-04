@@ -18,6 +18,7 @@ class Inventory extends TabPanel {
         16, 17, 18, 19
     ];
     _currentIdx = 0;
+    _selectedTargetIdx = 0;
     _size = 20;
     _shiftReady = false;
     _shiftIdx = 0;
@@ -26,6 +27,12 @@ class Inventory extends TabPanel {
     _currentOperateMenuItems = [];
     _currentOperateIdx = 0;
     _currentItem;
+    _shiftMenuReady = false;
+    _shiftMenuItems = [];
+    _shiftMenuIdx = 0;
+
+    _source;
+    _target;
 
     #logger = new Logger(DEBUG, 'Inventory');
 
@@ -66,7 +73,7 @@ class Inventory extends TabPanel {
     set operateMenuReady(val) {
 
         if (this._operateMenuReady !== val) {
-            
+
             if (val && this.acquireItemOperateMenu()) {
 
                 this._operateMenuReady = true;
@@ -83,7 +90,37 @@ class Inventory extends TabPanel {
 
             }
 
-        }        
+        }
+
+    }
+
+    get shiftMenuReady() {
+
+        return this._shiftMenuReady;
+
+    }
+
+    set shiftMenuReady(val) {
+
+        if (this._shiftMenuReady !== val) {
+
+            if (val && this.acquireShiftItemMenu()) {
+
+                this._shiftMenuReady = true;
+                removeElementClass(this._html.shiftMenuList, 'hidden');
+                addElementClass(this._html.shiftMenuList, 'visible');
+                this._attachTo._hints.applyHintInventoryOperateMenu();
+
+            } else {
+
+                this._shiftMenuReady = false;
+                removeElementClass(this._html.shiftMenuList, 'visible');
+                addElementClass(this._html.shiftMenuList, 'hidden');
+                this._attachTo._hints.applyHintInventoryItemShift();
+
+            }
+
+        }
 
     }
 
@@ -101,51 +138,53 @@ class Inventory extends TabPanel {
             if (matched) {
                 
                 this._shiftReady = true;
-                removeElementClass(this._html.shiftSlot, 'hide');
-                removeElementClass(this._html.shiftSlot, 'item-size-');
+                removeElementClass(this._html.shiftDiv, 'hide');
+                removeElementClass(this._html.shiftDiv, 'item-size-');
 
                 if (matched.itemSize === 2) {
 
-                    addElementClass(this._html.shiftSlot, 'item-size-2');
+                    addElementClass(this._html.shiftDiv, 'item-size-2');
                     this._shiftSlotSize = 2;
 
                 } else {
 
-                    addElementClass(this._html.shiftSlot, 'item-size-1');
+                    addElementClass(this._html.shiftDiv, 'item-size-1');
                     this._shiftSlotSize = 1;
 
                 }
 
                 this._shiftIdx = this._currentIdx;
-                removeElementClass(this._html.shiftSlot, 'idx');
-                addElementClass(this._html.shiftSlot, `idx-${this._currentIdx}`);
+                removeElementClass(this._html.shiftDiv, 'idx');
+                addElementClass(this._html.shiftDiv, `idx-${this._currentIdx}`);
                 this._attachTo._hints.applyHintInventoryItemShift();
 
             }
 
         } else {
 
-            this.resetShiftState();
-
             if (this._currentIdx !== this._shiftIdx) {
 
-                const source = this.getMatchedItem(this._currentIdx);
-                let target = this.getMatchedItem(this._shiftIdx);
+                this._source = this.getMatchedItem(this._currentIdx);
+                this._target = this.getMatchedItem(this._shiftIdx);
+                this._selectedTargetIdx = this._shiftIdx;
 
-                if (this.checkCombinable(source, target)) {
+                if (this.checkCombinable(this._source, this._target)) {
 
-                    this.combineItems(source, target);
+                    this.shiftMenuReady = true;
 
                 } else {
 
-                    this.swapItems(this._currentIdx, this._shiftIdx, source, target);
+                    this.resetShiftState();
+                    this.swapItems(this._currentIdx, this._shiftIdx);
+                    this.focusedIndex = this._shiftIdx;
 
                 }
 
-            }
+            } else {
 
-            this.focusedIndex = this._shiftIdx;
-            this._attachTo._hints.applyHintInventoryBase();
+                this.resetShiftState();
+
+            }
 
         }
 
@@ -183,7 +222,7 @@ class Inventory extends TabPanel {
 
     set currentOperateIndex(val) {
 
-        const menuLength = this._currentOperateMenuItems.length
+        const menuLength = this._currentOperateMenuItems.length;
         this._currentOperateIdx = val > 0 ? val % menuLength : (menuLength + val) % menuLength;
 
         for (let i = 0; i < menuLength; i++) {
@@ -203,10 +242,39 @@ class Inventory extends TabPanel {
 
     }
 
+    get shiftMenuIndex() {
+
+        return this._shiftMenuIdx;
+
+    }
+
+    set shiftMenuIndex(val) {
+
+        const menuLength = this._shiftMenuItems.length;
+        this._shiftMenuIdx = val > 0 ? val % menuLength : (menuLength + val) % menuLength;
+
+        for (let i = 0; i < menuLength; i++) {
+
+            const li = this._shiftMenuItems[i];
+            if (i === this._shiftMenuIdx) {
+
+                addElementClass(li, 'selected');
+
+            } else {
+
+                removeElementClass(li, 'selected');
+
+            }
+
+        }
+
+    }
+
     resetShiftState() {
 
         this._shiftReady = false;
-        addElementClass(this._html.shiftSlot, 'hide');
+        addElementClass(this._html.shiftDiv, 'hide');
+        this._attachTo._hints.applyHintInventoryBase();
         
     }
 
@@ -242,7 +310,6 @@ class Inventory extends TabPanel {
                     this._html.operateMenuItems.examineMenuItem
                 );
                 this.currentOperateIndex = 0;
-                this._html.operateMenuItems.equipMenuItem.classList.add('selected');
 
             } else if (item.isHealingItem) {
 
@@ -259,7 +326,6 @@ class Inventory extends TabPanel {
                     this._html.operateMenuItems.discardMenuItem
                 );
                 this.currentOperateIndex = 0;
-                this._html.operateMenuItems.useMenuItem.classList.add('selected');
 
             } else if (item.isAmmoBoxItem) {
 
@@ -275,9 +341,29 @@ class Inventory extends TabPanel {
                     this._html.operateMenuItems.discardMenuItem
                 );
                 this.currentOperateIndex = 0;
-                this._html.operateMenuItems.useMenuItem.classList.add('selected');
 
             }
+
+            acquired = true;
+
+        }
+
+        return acquired;
+
+    }
+
+    acquireShiftItemMenu() {
+
+        let acquired = false;
+        const item = this.getMatchedItem(this._shiftIdx);
+        if (item) {
+
+            this._shiftMenuItems.length = 0;
+            this._shiftMenuItems.push(
+                this._html.shiftMenuItems.shiftCombineMenuItem,
+                this._html.shiftMenuItems.shiftSwapMenuItem
+            );
+            this.shiftMenuIndex = 0;
 
             acquired = true;
 
@@ -291,7 +377,28 @@ class Inventory extends TabPanel {
 
         this.#logger.func = this.processItemOperation.name;
 
-        if (this._currentItem.isWeaponItem) {
+        if (this.shiftMenuReady) {
+
+            switch (this._shiftMenuIdx) {
+
+                case 0:
+
+                    this.combineItems(this._source, this._target);
+                    this.focusedIndex = this._shiftIdx;
+                    break;
+
+                case 1:
+
+                    this.swapItems(this._currentIdx, this._shiftIdx);
+                    this.focusedIndex = this._shiftIdx;
+                    break;
+
+            }
+
+            this.shiftMenuReady = false;
+            this.resetShiftState();
+
+        } else if (this._currentItem.isWeaponItem) {
 
             const isMelee = this._currentItem.ammo.isMeleeWeapon;
             const owner = this._attachTo._owner;
@@ -339,15 +446,15 @@ class Inventory extends TabPanel {
 
             }
 
-        }
+            this.operateMenuReady = false;
 
-        this.operateMenuReady = false;
+        }
 
     }
 
     processShiftSlot(val) {
 
-        const element = this._html.shiftSlot;
+        const element = this._html.shiftDiv;
         const prevIdx = this._shiftIdx;
         const interval = val - prevIdx;
         let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
@@ -468,10 +575,12 @@ class Inventory extends TabPanel {
 
         if (
             source && target && target !== source &&
-            source.isFastCombinableItem &&
-            source.itemType === target.itemType || 
-            (source.category ? source.category === target.category : false) ||
-            (source.isAmmoBoxItem && target.isWeaponItem)
+            target.occupiedSlotIdx === this._selectedTargetIdx &&
+            source.isFastCombinableItem && (
+                source.itemType === target.itemType ||
+                (source.category ? source.category === target.category : false) ||
+                (source.isAmmoBoxItem && target.isWeaponItem)
+            )
         ) {
 
             if (target.isAmmoBoxItem && !target.isFull) {
@@ -549,7 +658,10 @@ class Inventory extends TabPanel {
 
     }
 
-    swapItems(sourceIdx, targetIdx, source, target) {
+    swapItems(sourceIdx, targetIdx) {
+
+        const source = this._source;
+        let target = this._target;
 
         if (target === source) target = undefined;
 
@@ -1085,6 +1197,18 @@ class Inventory extends TabPanel {
     operateMenuDown() {
 
         this.currentOperateIndex ++;
+
+    }
+
+    shiftMenuUp() {
+
+        this.shiftMenuIndex --;
+
+    }
+
+    shiftMenuDown() {
+
+        this.shiftMenuIndex ++;
 
     }
 

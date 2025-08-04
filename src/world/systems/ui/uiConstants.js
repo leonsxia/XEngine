@@ -53,7 +53,8 @@ const PDA_OPERATE_MENU_NAMES = {
     USE: 'Use',
     COMBINE: 'Combine',
     DISCARD: 'Discard',
-    EXAMINE: 'Examine'
+    EXAMINE: 'Examine',
+    SWAP: 'Swap'
 }
 
 const PDA_OPERATE_MENU_LIST = {
@@ -62,7 +63,8 @@ const PDA_OPERATE_MENU_LIST = {
     USE: `<span><i class="fa-solid fa-hand"></i></span>${PDA_OPERATE_MENU_NAMES.USE}`,
     EXAMINE: `<span><i class="fa-solid fa-magnifying-glass"></i></span>${PDA_OPERATE_MENU_NAMES.EXAMINE}`,
     COMBINE: `<span><i class="fa-solid fa-plus"></i></span>${PDA_OPERATE_MENU_NAMES.COMBINE}`,
-    DISCARD: `<span><i class="fa-solid fa-trash-can"></i></span>${PDA_OPERATE_MENU_NAMES.DISCARD}`
+    DISCARD: `<span><i class="fa-solid fa-trash-can"></i></span>${PDA_OPERATE_MENU_NAMES.DISCARD}`,
+    SWAP: `<span><i class="fa-solid fa-right-left"></i></span>${PDA_OPERATE_MENU_NAMES.SWAP}`
 }
 
 const PDA_HINT_GROUP = {

@@ -212,6 +212,10 @@ class Pda {
 
                     this._inventory.operateMenuUp();
 
+                } else if (this._inventory.shiftMenuReady) {
+
+                    this._inventory.shiftMenuUp();
+
                 } else if (this._inventory.shiftReady) {
 
                     this._inventory.shiftUp();
@@ -240,6 +244,10 @@ class Pda {
 
                     this._inventory.operateMenuDown();
 
+                } else if (this._inventory.shiftMenuReady) {
+
+                    this._inventory.shiftMenuDown();
+
                 } else if (this._inventory.shiftReady) {
 
                     this._inventory.shiftDown();
@@ -264,7 +272,7 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (this._inventory.operateMenuReady) return;
+                if (this._inventory.operateMenuReady || this._inventory.shiftMenuReady) return;
 
                 if (this._inventory.shiftReady) {
 
@@ -290,7 +298,7 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (this._inventory.operateMenuReady) return;
+                if (this._inventory.operateMenuReady || this._inventory.shiftMenuReady) return;
 
                 if (this._inventory.shiftReady) {
 
@@ -328,6 +336,14 @@ class Pda {
 
                     }
 
+                } else {
+
+                    if (this._inventory.shiftMenuReady) {
+
+                        this._inventory.processItemOperation();
+
+                    }
+
                 }
 
             }
@@ -347,6 +363,14 @@ class Pda {
                 if (this._inventory.operateMenuReady) {
 
                     this._inventory.operateMenuReady = false;
+
+                } else if (this._inventory.shiftMenuReady) {
+
+                    this._inventory.shiftMenuReady = false;
+
+                } else if (this._inventory.shiftReady) {
+
+                    this._inventory.resetShiftState();
 
                 }
 
@@ -388,7 +412,7 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (!this._inventory.operateMenuReady) {
+                if (!this._inventory.operateMenuReady && !this._inventory.shiftMenuReady) {
 
                     this._inventory.shiftReady = !this._inventory.shiftReady;
 
@@ -429,8 +453,9 @@ class Pda {
     resetInventory() {
 
         this._inventory.operateMenuReady = false;
-        this._inventory.resetShiftState();
         this._inventory.focusedIndex = 0;
+        this._inventory.shiftMenuReady = false;
+        this._inventory.resetShiftState();
 
     }
 

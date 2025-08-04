@@ -423,7 +423,7 @@
                 top: calc(var(--inventory-item-gap-width) * 4);
             }
 
-            .item-size-1.focused-item, .item-size-2.focused-item {
+            .item-size-1.focused-item, .item-size-2.focused-item, .item-size-1.shift-item, .item-size-2.shift-item {
                 position: absolute;
 
                 .focused-slot {
@@ -433,7 +433,16 @@
                     border-radius: var(--border-radius);
                     background-color: var(--inventory-focused-item-grey);
                     animation: breath 2s infinite linear;
-                }                
+                }
+                
+                .shift-slot {
+                    width: 100%;
+                    height: 100%;
+                    border: var(--inventory-shift-item-border);
+                    border-radius: var(--border-radius);
+                    background-color: var(--inventory-shift-item-blue);
+                    animation: breath 2s infinite linear;
+                }
 
                 .operate-menu-list {
                     position: relative;
@@ -492,17 +501,10 @@
                 } */
             }
 
-            .item-size-2.focused-item .operate-menu-list {
+            .item-size-2.focused-item .operate-menu-list, .item-size-2.shift-item .operate-menu-list {
                 left: calc(var(--inventory-2-item-width) + var(--inventory-item-border-width) * 2);
             }
-
-            div.shift-slot {
-                position: absolute;
-                border: var(--inventory-shift-item-border);
-                border-radius: var(--border-radius);
-                background-color: var(--inventory-shift-item-blue);
-                animation: breath 2s infinite linear;
-            }
+            
         }
 
         div.description-panel {
