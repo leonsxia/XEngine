@@ -588,7 +588,34 @@ class Inventory extends TabPanel {
                 case 2:
                     this.#logger.log(`process discard ammo box: ${this._currentItem.name}`);
                     break;
-            }            
+
+            }
+
+        } else if (this._currentItem.isHealingItem) {
+
+            this.operateMenuReady = false;
+            switch (this._currentOperateIdx) {
+
+                case 0:
+                    this.#logger.log(`process use healing item: ${this._currentItem.name}`);
+                    break;
+                case 1:
+                    this.#logger.log(`process examine healing item: ${this._currentItem.name}`);
+                    break;
+                case 2:
+
+                    this.#logger.log(`process combine healing item: ${this._currentItem.name}`);
+
+                    this.selectReady = true;
+                    this.checkSlotCombinable();
+
+                    break;
+
+                case 3:
+                    this.#logger.log(`process discard ammo box: ${this._currentItem.name}`);
+                    break;
+
+            }
 
         }
 
