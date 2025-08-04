@@ -278,6 +278,13 @@ class Inventory extends TabPanel {
         
     }
 
+    resetShift() {
+
+        this.shiftMenuReady = false;
+        this.resetShiftState();
+
+    }
+
     acquireItemOperateMenu() {
 
         let acquired = false;
@@ -395,8 +402,7 @@ class Inventory extends TabPanel {
 
             }
 
-            this.shiftMenuReady = false;
-            this.resetShiftState();
+            this.resetShift();
 
         } else if (this._currentItem.isWeaponItem) {
 

@@ -454,8 +454,7 @@ class Pda {
 
         this._inventory.operateMenuReady = false;
         this._inventory.focusedIndex = 0;
-        this._inventory.shiftMenuReady = false;
-        this._inventory.resetShiftState();
+        this._inventory.resetShift();
 
     }
 

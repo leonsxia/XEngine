@@ -9,4 +9,12 @@ const aimDirection = {
     forwardUp: 2
 }
 
-export { polarity, aimDirection };
+const hintIndex = {
+    inventoryBase: 0,
+    inventoryShift: 1,
+    inventoryOperateMenu: 2,
+    mapsBase: 10,
+    filesBase: 20
+}
+
+export { polarity, aimDirection, hintIndex };

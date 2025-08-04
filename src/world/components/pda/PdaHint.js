@@ -1,10 +1,12 @@
 import { createPdaHintElements } from "../../systems/htmlElements";
 import { CONTROL_TYPES } from "../utils/constants";
+import { hintIndex } from "../utils/enums";
 import { addElementClass, removeElementClass } from "../utils/htmlHelper";
 
 class PdaHint {
 
     _hintGroup = [];
+    _hintIdx = -1;
 
     constructor(specs) {
 
@@ -104,6 +106,8 @@ class PdaHint {
 
     applyHintInventoryBase() {
 
+        if (this._hintIdx === hintIndex.inventoryBase) return;
+
         this._hintGroup.length = 0;
         this._hintGroup.push(
             this._html.leftHint, this._html.rightHint, this._html.upHint, this._html.downHint,
@@ -112,21 +116,29 @@ class PdaHint {
         this.clearHintPanel();
         this.applyHintGroup();
 
+        this._hintIdx = hintIndex.inventoryBase;
+
     }
 
     applyHintInventoryItemShift() {
 
+        if (this._hintIdx === hintIndex.inventoryShift) return;
+
         this._hintGroup.length = 0;
         this._hintGroup.push(
             this._html.leftHint, this._html.rightHint, this._html.upHint, this._html.downHint,
-            this._html.moveHint, this._html.closeHint);
+            this._html.moveHint, this._html.cancelHint, this._html.closeHint);
 
         this.clearHintPanel();
         this.applyHintGroup();
 
+        this._hintIdx = hintIndex.inventoryShift;
+
     }
 
     applyHintInventoryOperateMenu() {
+
+        if (this._hintIdx === hintIndex.inventoryOperateMenu) return;
 
         this._hintGroup.length = 0;
         this._hintGroup.push(
@@ -137,25 +149,35 @@ class PdaHint {
         this.clearHintPanel();
         this.applyHintGroup();
 
+        this._hintIdx = hintIndex.inventoryOperateMenu;
+
     }
 
     applyHintMapsBase() {
+
+        if (this._hintIdx === hintIndex.mapsBase) return;
 
         this._hintGroup.length = 0;
         this._hintGroup.push(this._html.closeHint);
 
         this.clearHintPanel();
         this.applyHintGroup();
+
+        this._hintIdx = hintIndex.mapsBase;
 
     }
 
     applyHintFilessBase() {
 
+        if (this._hintIdx === hintIndex.filesBase) return;
+
         this._hintGroup.length = 0;
         this._hintGroup.push(this._html.closeHint);
 
         this.clearHintPanel();
         this.applyHintGroup();
+
+        this._hintIdx = hintIndex.filesBase;
 
     }
 
