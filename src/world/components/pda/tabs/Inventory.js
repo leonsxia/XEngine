@@ -1,6 +1,6 @@
 import { createInventory } from "../../../systems/htmlElements";
 import { Logger } from "../../../systems/Logger";
-import { PDA_OPERATE_MENU_LIST } from "../../../systems/ui/uiConstants";
+import { ELEMENT_CLASS, PDA_OPERATE_MENU_LIST } from "../../../systems/ui/uiConstants";
 import { addElementClass, removeElementClass } from "../../utils/htmlHelper";
 import { ECG } from "./ECG";
 import { TabPanel } from "./TabPanel";
@@ -83,15 +83,15 @@ class Inventory extends TabPanel {
             if (val && this.acquireItemOperateMenu()) {
 
                 this._operateMenuReady = true;
-                removeElementClass(this._html.operateMenuList, 'hidden');
-                addElementClass(this._html.operateMenuList, 'visible');
+                removeElementClass(this._html.operateMenuList, ELEMENT_CLASS.HIDDEN);
+                addElementClass(this._html.operateMenuList, ELEMENT_CLASS.VISIBLE);
                 this._attachTo._hints.applyHintInventoryOperateMenu();
 
             } else {
 
                 this._operateMenuReady = false;
-                removeElementClass(this._html.operateMenuList, 'visible');
-                addElementClass(this._html.operateMenuList, 'hidden');
+                removeElementClass(this._html.operateMenuList, ELEMENT_CLASS.VISIBLE);
+                addElementClass(this._html.operateMenuList, ELEMENT_CLASS.HIDDEN);
                 this._attachTo._hints.applyHintInventoryBase();
 
             }
@@ -113,15 +113,15 @@ class Inventory extends TabPanel {
             if (val && this.acquireShiftItemMenu()) {
 
                 this._shiftMenuReady = true;
-                removeElementClass(this._html.shiftMenuList, 'hidden');
-                addElementClass(this._html.shiftMenuList, 'visible');
+                removeElementClass(this._html.shiftMenuList, ELEMENT_CLASS.HIDDEN);
+                addElementClass(this._html.shiftMenuList, ELEMENT_CLASS.VISIBLE);
                 this._attachTo._hints.applyHintInventoryOperateMenu();
 
             } else {
 
                 this._shiftMenuReady = false;
-                removeElementClass(this._html.shiftMenuList, 'visible');
-                addElementClass(this._html.shiftMenuList, 'hidden');
+                removeElementClass(this._html.shiftMenuList, ELEMENT_CLASS.VISIBLE);
+                addElementClass(this._html.shiftMenuList, ELEMENT_CLASS.HIDDEN);
                 this._attachTo._hints.applyHintInventoryItemShift();
 
             }
@@ -145,24 +145,24 @@ class Inventory extends TabPanel {
             if (matched) {
                 
                 this._shiftReady = true;
-                removeElementClass(element, 'hide');
-                removeElementClass(element, 'item-size-');
+                removeElementClass(element, ELEMENT_CLASS.HIDE);
+                removeElementClass(element, ELEMENT_CLASS.ITEM_SIZE_PREFIX);
 
                 if (matched.itemSize === 2) {
 
-                    addElementClass(element, 'item-size-2');
+                    addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_2);
                     this._shiftSlotSize = 2;
 
                 } else {
 
-                    addElementClass(element, 'item-size-1');
+                    addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_1);
                     this._shiftSlotSize = 1;
 
                 }
 
                 this._shiftIdx = this._currentIdx;
-                removeElementClass(element, 'idx');
-                addElementClass(element, `idx-${this._currentIdx}`);
+                removeElementClass(element, ELEMENT_CLASS.IDX);
+                addElementClass(element, `${ELEMENT_CLASS.IDX}${this._currentIdx}`);
                 this._attachTo._hints.applyHintInventoryItemShift();
 
             }
@@ -214,22 +214,22 @@ class Inventory extends TabPanel {
             if (matched) {
 
                 this._selectReady = true;
-                removeElementClass(element, 'hide');
-                removeElementClass(element, 'item-size-');
+                removeElementClass(element, ELEMENT_CLASS.HIDE);
+                removeElementClass(element, ELEMENT_CLASS.ITEM_SIZE_PREFIX);
 
                 if (matched.itemSize === 2) {
 
-                    addElementClass(element, 'item-size-2');
+                    addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_2);
 
                 } else {
 
-                    addElementClass(element, 'item-size-1');
+                    addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_1);
 
                 }
 
                 this._selectIdx = this._currentIdx;
-                removeElementClass(element, 'idx');
-                addElementClass(element, `idx-${this._currentIdx}`);
+                removeElementClass(element, ELEMENT_CLASS.IDX);
+                addElementClass(element, `${ELEMENT_CLASS.IDX}${this._currentIdx}`);
                 this._attachTo._hints.applyHintInventoryItemSelect();
 
             }
@@ -237,7 +237,7 @@ class Inventory extends TabPanel {
         } else {
 
             this._selectReady = false;
-            addElementClass(this._html.selectDiv, 'hide');
+            addElementClass(this._html.selectDiv, ELEMENT_CLASS.HIDE);
             this.resetSlots();
             this._attachTo._hints.applyHintInventoryBase();
 
@@ -297,11 +297,11 @@ class Inventory extends TabPanel {
             const li = this._currentOperateMenuItems[i];
             if (i === this._currentOperateIdx) {
 
-                addElementClass(li, 'selected');
+                addElementClass(li, ELEMENT_CLASS.SELECTED);
 
             } else {
 
-                removeElementClass(li, 'selected');
+                removeElementClass(li, ELEMENT_CLASS.SELECTED);
 
             }
 
@@ -325,11 +325,11 @@ class Inventory extends TabPanel {
             const li = this._shiftMenuItems[i];
             if (i === this._shiftMenuIdx) {
 
-                addElementClass(li, 'selected');
+                addElementClass(li, ELEMENT_CLASS.SELECTED);
 
             } else {
 
-                removeElementClass(li, 'selected');
+                removeElementClass(li, ELEMENT_CLASS.SELECTED);
 
             }
 
@@ -340,7 +340,7 @@ class Inventory extends TabPanel {
     resetShiftState() {
 
         this._shiftReady = false;
-        addElementClass(this._html.shiftDiv, 'hide');
+        addElementClass(this._html.shiftDiv, ELEMENT_CLASS.HIDE);
         this._attachTo._hints.applyHintInventoryBase();
         
     }
@@ -361,20 +361,20 @@ class Inventory extends TabPanel {
 
             if (item.isWeaponItem) {
                 
-                removeElementClass(this._html.operateMenuItems.equipMenuItem, 'hide');
-                addElementClass(this._html.operateMenuItems.useMenuItem, 'hide');
-                addElementClass(this._html.operateMenuItems.combineMenuItem, 'hide');
-                addElementClass(this._html.operateMenuItems.discardMenuItem, 'hide');
+                removeElementClass(this._html.operateMenuItems.equipMenuItem, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.operateMenuItems.useMenuItem, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.operateMenuItems.combineMenuItem, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.operateMenuItems.discardMenuItem, ELEMENT_CLASS.HIDE);
 
                 if (item.isArmed) {
 
-                    this._html.operateMenuItems.equipMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.DISARM;
-                    addElementClass(this._html.operateMenuItems.equipMenuItem.querySelector('span'), 'disarm');
+                    this._html.operateMenuItems.equipMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.UNEQUIP;
+                    addElementClass(this._html.operateMenuItems.equipMenuItem.querySelector('span'), ELEMENT_CLASS.UNEQUIP);
 
                 } else {
 
                     this._html.operateMenuItems.equipMenuItem.innerHTML = PDA_OPERATE_MENU_LIST.EQUIP;
-                    removeElementClass(this._html.operateMenuItems.equipMenuItem.querySelector('span'), 'disarm');
+                    removeElementClass(this._html.operateMenuItems.equipMenuItem.querySelector('span'), ELEMENT_CLASS.UNEQUIP);
                     
                 }
 
@@ -387,10 +387,10 @@ class Inventory extends TabPanel {
 
             } else if (item.isHealingItem) {
 
-                addElementClass(this._html.operateMenuItems.equipMenuItem, 'hide');
-                removeElementClass(this._html.operateMenuItems.useMenuItem, 'hide');
-                removeElementClass(this._html.operateMenuItems.combineMenuItem, 'hide');
-                removeElementClass(this._html.operateMenuItems.discardMenuItem, 'hide');
+                addElementClass(this._html.operateMenuItems.equipMenuItem, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.operateMenuItems.useMenuItem, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.operateMenuItems.combineMenuItem, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.operateMenuItems.discardMenuItem, ELEMENT_CLASS.HIDE);
 
                 this._currentOperateMenuItems.length = 0;
                 this._currentOperateMenuItems.push(
@@ -403,10 +403,10 @@ class Inventory extends TabPanel {
 
             } else if (item.isAmmoBoxItem) {
 
-                addElementClass(this._html.operateMenuItems.equipMenuItem, 'hide');
-                addElementClass(this._html.operateMenuItems.useMenuItem, 'hide');
-                removeElementClass(this._html.operateMenuItems.combineMenuItem, 'hide');
-                removeElementClass(this._html.operateMenuItems.discardMenuItem, 'hide');
+                addElementClass(this._html.operateMenuItems.equipMenuItem, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.operateMenuItems.useMenuItem, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.operateMenuItems.combineMenuItem, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.operateMenuItems.discardMenuItem, ELEMENT_CLASS.HIDE);
 
                 this._currentOperateMenuItems.length = 0;
                 this._currentOperateMenuItems.push(
@@ -461,7 +461,7 @@ class Inventory extends TabPanel {
 
             } else {
 
-                addElementClass(slot.firstChild, 'not-combinable');
+                addElementClass(slot.firstChild, ELEMENT_CLASS.NOT_COMBINABLE);
 
             }
 
@@ -475,7 +475,7 @@ class Inventory extends TabPanel {
         for (let i = 0, il = slots.length; i < il; i++) {
 
             const slot = slots[i];
-            removeElementClass(slot.firstChild, 'not-combinable');
+            removeElementClass(slot.firstChild, ELEMENT_CLASS.NOT_COMBINABLE);
 
         }
         this._combinableIdxes.length = 0;
@@ -530,7 +530,7 @@ class Inventory extends TabPanel {
 
                     if (this._currentItem.isArmed) {
 
-                        this.#logger.log(`process disarm weapon: ${weaponItem.name}`);
+                        this.#logger.log(`process upequip weapon: ${weaponItem.name}`);
                         if (isMelee) {
 
                             owner.armMelee();
@@ -658,8 +658,8 @@ class Inventory extends TabPanel {
 
         }
 
-        removeElementClass(element, 'idx');
-        addElementClass(element, `idx-${tarIdx}`);
+        removeElementClass(element, ELEMENT_CLASS.IDX);
+        addElementClass(element, `${ELEMENT_CLASS.IDX}${tarIdx}`);
 
         this._shiftIdx = tarIdx;
 
@@ -676,18 +676,18 @@ class Inventory extends TabPanel {
         if (selectedItem && selectedItem.itemSize === 2) {
 
             tarIdx = selectedItem.occupiedSlotIdx + 1 === tarIdx ? --tarIdx : tarIdx;
-            removeElementClass(element, 'item-size-');
-            addElementClass(element, 'item-size-2');
+            removeElementClass(element, ELEMENT_CLASS.ITEM_SIZE_PREFIX);
+            addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_2);
 
         } else {
 
-            removeElementClass(element, 'item-size-');
-            addElementClass(element, 'item-size-1');
+            removeElementClass(element, ELEMENT_CLASS.ITEM_SIZE_PREFIX);
+            addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_1);
 
         }
 
-        removeElementClass(element, 'idx');
-        addElementClass(element, `idx-${tarIdx}`);
+        removeElementClass(element, ELEMENT_CLASS.IDX);
+        addElementClass(element, `${ELEMENT_CLASS.IDX}${tarIdx}`);
 
         this._selectIdx = tarIdx;
 
@@ -704,13 +704,13 @@ class Inventory extends TabPanel {
 
         if (matched && matched.itemSize === 2) {
 
-            removeElementClass(element, 'item-size-');
+            removeElementClass(element, ELEMENT_CLASS.ITEM_SIZE_PREFIX);
             if (tarIdx === matched.occupiedSlotIdx + 1) {
 
                 if (Math.abs(interval) > 1 || interval === -1) {
 
                     tarIdx = matched.occupiedSlotIdx;
-                    addElementClass(element, 'item-size-2');
+                    addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_2);
 
                 } else if (interval === 1) {
 
@@ -718,11 +718,11 @@ class Inventory extends TabPanel {
                     const next = this.getMatchedItem(tarIdx);
                     if (next && next.itemSize === 2) {
 
-                        addElementClass(element, 'item-size-2');
+                        addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_2);
 
                     } else {
 
-                        addElementClass(element, 'item-size-1');
+                        addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_1);
 
                     }
 
@@ -730,19 +730,19 @@ class Inventory extends TabPanel {
 
             } else {
 
-                addElementClass(element, 'item-size-2');
+                addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_2);
 
             }
 
         } else {
 
-            removeElementClass(element, 'item-size-');
-            addElementClass(element, 'item-size-1');
+            removeElementClass(element, ELEMENT_CLASS.ITEM_SIZE_PREFIX);
+            addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_1);
 
         }
         
-        removeElementClass(element, 'idx');
-        addElementClass(element, `idx-${tarIdx}`);
+        removeElementClass(element, ELEMENT_CLASS.IDX);
+        addElementClass(element, `${ELEMENT_CLASS.IDX}${tarIdx}`);
 
         this._currentIdx = tarIdx;
 
@@ -1305,8 +1305,8 @@ class Inventory extends TabPanel {
         }
 
         item.occupiedSlotIdx = targetIdx;
-        item.removeHtmlClass('idx');
-        item.addHtmlClass(`idx-${targetIdx}`);
+        item.removeHtmlClass(ELEMENT_CLASS.IDX);
+        item.addHtmlClass(`${ELEMENT_CLASS.IDX}${targetIdx}`);
         this.setSlotOccupied(targetIdx, true, item.itemSize);
 
     }
@@ -1498,8 +1498,8 @@ class Inventory extends TabPanel {
             item.isPicked = true;
             item.belongTo = this._attachTo._owner.name;
 
-            item.removeHtmlClass('idx');
-            item.addHtmlClass(`idx-${idx}`);
+            item.removeHtmlClass(ELEMENT_CLASS.IDX);
+            item.addHtmlClass(`${ELEMENT_CLASS.IDX}${idx}`);
             item.occupiedSlotIdx = idx;
 
             this._html.itemsDivList.push(item.itemHtml);
@@ -1531,7 +1531,7 @@ class Inventory extends TabPanel {
 
             this.setSlotOccupied(item.occupiedSlotIdx, false, item.itemSize);
             item.occupiedSlotIdx = -1;
-            item.removeHtmlClass('idx');
+            item.removeHtmlClass(ELEMENT_CLASS.IDX);
 
             const itemDivIdx = this._html.itemsDivList.findIndex(div => div === item.itemHtml);
             this._html.itemsDivList.splice(itemDivIdx, 1);
@@ -1562,7 +1562,7 @@ class Inventory extends TabPanel {
 
                 if (!weapon) {
 
-                    item.equipInfo.classList.add('hide');
+                    item.equipInfo.classList.add(ELEMENT_CLASS.HIDE);
                     item.isArmed = false;
                     continue;
 
@@ -1570,12 +1570,12 @@ class Inventory extends TabPanel {
 
                 if (weapon.weaponType !== item.weaponType) {
 
-                    item.equipInfo.classList.add('hide');
+                    item.equipInfo.classList.add(ELEMENT_CLASS.HIDE);
                     item.isArmed = false;
 
                 } else {
 
-                    item.equipInfo.classList.remove('hide');
+                    item.equipInfo.classList.remove(ELEMENT_CLASS.HIDE);
                     item.isArmed = true;
 
                 }
@@ -1595,7 +1595,7 @@ class Inventory extends TabPanel {
 
                 if (!weapon) {
 
-                    item.equipInfo.classList.add('hide');
+                    item.equipInfo.classList.add(ELEMENT_CLASS.HIDE);
                     item.isArmed = false;
                     continue;
 
@@ -1603,12 +1603,12 @@ class Inventory extends TabPanel {
 
                 if (weapon.weaponType !== item.weaponType) {
 
-                    item.equipInfo.classList.add('hide');
+                    item.equipInfo.classList.add(ELEMENT_CLASS.HIDE);
                     item.isArmed = false;
 
                 } else {
 
-                    item.equipInfo.classList.remove('hide');
+                    item.equipInfo.classList.remove(ELEMENT_CLASS.HIDE);
                     item.isArmed = true;
 
                 }

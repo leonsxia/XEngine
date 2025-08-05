@@ -1,4 +1,5 @@
 import { createPdaHintElements } from "../../systems/htmlElements";
+import { ELEMENT_CLASS } from "../../systems/ui/uiConstants";
 import { CONTROL_TYPES } from "../utils/constants";
 import { hintIndex } from "../utils/enums";
 import { addElementClass, removeElementClass } from "../utils/htmlHelper";
@@ -27,56 +28,56 @@ class PdaHint {
 
             case CONTROL_TYPES.KEYBOARD:
 
-                addElementClass(this._html.closeBtn, 'hide');
-                removeElementClass(this._html.closeKey, 'hide');
+                addElementClass(this._html.closeBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.closeKey, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.confirmBtn, 'hide');
-                removeElementClass(this._html.confirmKey, 'hide');
+                addElementClass(this._html.confirmBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.confirmKey, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.cancelBtn, 'hide');
-                removeElementClass(this._html.cancelKey, 'hide');
+                addElementClass(this._html.cancelBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.cancelKey, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.moveBtn, 'hide');
-                removeElementClass(this._html.moveKey, 'hide');
+                addElementClass(this._html.moveBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.moveKey, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.upBtn, 'hide');
-                removeElementClass(this._html.upKey, 'hide');
+                addElementClass(this._html.upBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.upKey, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.downBtn, 'hide');
-                removeElementClass(this._html.downKey, 'hide');
+                addElementClass(this._html.downBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.downKey, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.leftBtn, 'hide');
-                removeElementClass(this._html.leftKey, 'hide');
+                addElementClass(this._html.leftBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.leftKey, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.rightBtn, 'hide');
-                removeElementClass(this._html.rightKey, 'hide');
+                addElementClass(this._html.rightBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rightKey, ELEMENT_CLASS.HIDE);
                 break;
 
             case CONTROL_TYPES.XBOX:
 
-                addElementClass(this._html.closeKey, 'hide');
-                removeElementClass(this._html.closeBtn, 'hide');
+                addElementClass(this._html.closeKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.closeBtn, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.confirmKey, 'hide');
-                removeElementClass(this._html.confirmBtn, 'hide');
+                addElementClass(this._html.confirmKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.confirmBtn, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.cancelKey, 'hide');
-                removeElementClass(this._html.cancelBtn, 'hide');
+                addElementClass(this._html.cancelKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.cancelBtn, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.moveKey, 'hide');
-                removeElementClass(this._html.moveBtn, 'hide');
+                addElementClass(this._html.moveKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.moveBtn, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.upKey, 'hide');
-                removeElementClass(this._html.upBtn, 'hide');
+                addElementClass(this._html.upKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.upBtn, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.downKey, 'hide');
-                removeElementClass(this._html.downBtn, 'hide');
+                addElementClass(this._html.downKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.downBtn, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.leftKey, 'hide');
-                removeElementClass(this._html.leftBtn, 'hide');
+                addElementClass(this._html.leftKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.leftBtn, ELEMENT_CLASS.HIDE);
 
-                addElementClass(this._html.rightKey, 'hide');
-                removeElementClass(this._html.rightBtn, 'hide');
+                addElementClass(this._html.rightKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rightBtn, ELEMENT_CLASS.HIDE);
                 break;
 
         }

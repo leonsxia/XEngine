@@ -4,7 +4,7 @@ import { GLTFModel } from "../../../Models";
 import { createOBBBox } from "../../../physics/collisionHelper";
 import { makeInteractiveLabelCanvas } from "../../../utils/canvasMaker";
 import { createSpriteMaterial } from "../../../basic/basicMaterial";
-import { GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
+import { ELEMENT_CLASS, GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
 import { hexToRGBA, labelBackground, labelForbidden, white } from "../../../basic/colorBase";
 import { getImageUrl } from "../../../utils/imageHelper";
 import { addElementClass, removeElementClass } from "../../../utils/htmlHelper";
@@ -112,8 +112,21 @@ class PickableItem extends ObstacleBase {
     set itemSize(val) {
 
         this._itemSize = val;
-        this.removeHtmlClass('item-size-');
-        this.addHtmlClass('item-size-2');
+        this.removeHtmlClass(ELEMENT_CLASS.ITEM_SIZE_PREFIX);
+
+        switch (val) {
+
+            case 1:
+
+                this.addHtmlClass(ELEMENT_CLASS.ITEM_SIZE_1);
+                break;
+
+            case 2:
+
+                this.addHtmlClass(ELEMENT_CLASS.ITEM_SIZE_2);
+                break;
+
+        }
 
     }
 

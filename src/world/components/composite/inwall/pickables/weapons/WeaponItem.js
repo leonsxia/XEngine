@@ -1,4 +1,6 @@
 import { createInventoryItem } from "../../../../../systems/htmlElements";
+import { ELEMENT_CLASS } from "../../../../../systems/ui/uiConstants";
+import { addElementClass, removeElementClass } from "../../../../utils/htmlHelper";
 import { PickableItem } from "../PickableItem";
 
 class WeaponItem extends PickableItem {
@@ -52,7 +54,7 @@ class WeaponItem extends PickableItem {
 
         if (this.ammo.isMeleeWeapon) {
 
-            this.countInfo.classList.add('hide');
+            addElementClass(this.countInfo, ELEMENT_CLASS.HIDE);
 
         }
 
@@ -64,14 +66,14 @@ class WeaponItem extends PickableItem {
 
         if (weapon) {
 
-            this.countInfo.classList.remove('full', 'empty');
+            removeElementClass(this.countInfo, ELEMENT_CLASS.FULL, ELEMENT_CLASS.EMPTY);
             if (this.count >= weapon.magzineCapacity) {
 
-                this.countInfo.classList.add('full');
+                addElementClass(this.countInfo, ELEMENT_CLASS.FULL);
 
             } else if (this.count === 0) {
 
-                this.countInfo.classList.add('empty');
+                addElementClass(this.countInfo, ELEMENT_CLASS.EMPTY);
 
             }
 

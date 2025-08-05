@@ -494,7 +494,7 @@
                             border-radius: calc(var(--calculated-vw) * 1);
                         }
 
-                        span.disarm::after {
+                        span.unequip::after {
                             content: "";
                             position: absolute;
                             left: calc(var(--inventory-operate-menu-item-label-width) * .56);

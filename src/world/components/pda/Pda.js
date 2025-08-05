@@ -1,7 +1,8 @@
 import { container, createPdaContainer } from "../../systems/htmlElements";
 import { Logger } from "../../systems/Logger";
-import { ECG_STATE } from "../../systems/ui/uiConstants";
+import { ECG_STATE, ELEMENT_CLASS } from "../../systems/ui/uiConstants";
 import { CONTROL_TYPES } from "../utils/constants";
+import { addElementClass, removeElementClass } from "../utils/htmlHelper";
 import { PdaHint } from "./PdaHint";
 import { PdaMenu } from "./PdaMenu";
 import { Files } from "./tabs/Files";
@@ -432,7 +433,7 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (!this._inventory.operateMenuReady && !this._inventory.shiftMenuReady) {
+                if (!this._inventory.operateMenuReady && !this._inventory.shiftMenuReady && !this._inventory.selectReady) {
 
                     this._inventory.shiftReady = !this._inventory.shiftReady;
 
@@ -573,13 +574,13 @@ class Pda {
 
         if (show) {
 
-            element.classList.remove('hidden');
-            element.classList.add('visible');
+            removeElementClass(element, ELEMENT_CLASS.HIDDEN);
+            addElementClass(element, ELEMENT_CLASS.VISIBLE);
 
         } else {
 
-            element.classList.remove('visible');
-            element.classList.add('hidden');
+            removeElementClass(element, ELEMENT_CLASS.VISIBLE);
+            addElementClass(element, ELEMENT_CLASS.HIDDEN);
 
         }
 

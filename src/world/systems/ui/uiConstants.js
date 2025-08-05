@@ -41,6 +41,21 @@ const IMAGES = [{
     name: IMAGE_NAMES.ECG, src: 'assets/images/pda/ecg.svg'
 }];
 
+const ELEMENT_CLASS = {
+    HIDE: 'hide',
+    HIDDEN: 'hidden',
+    VISIBLE: 'visible',
+    SELECTED: 'selected',
+    NOT_COMBINABLE: 'not-combinable',
+    UNEQUIP: 'unequip',
+    IDX: 'idx-',
+    ITEM_SIZE_PREFIX: 'item-size-',
+    ITEM_SIZE_1: 'item-size-1',
+    ITEM_SIZE_2: 'item-size-2',
+    FULL: 'full',
+    EMPTY: 'empty'
+}
+
 const PDA_MENU_NAMES = [
     'MAP',
     'INVENTORY',
@@ -49,7 +64,7 @@ const PDA_MENU_NAMES = [
 
 const PDA_OPERATE_MENU_NAMES = {
     EQUIP: 'Equip',
-    DISARM: 'Disarm',
+    UNEQUIP: 'Unequip',
     USE: 'Use',
     COMBINE: 'Combine',
     DISCARD: 'Discard',
@@ -59,7 +74,7 @@ const PDA_OPERATE_MENU_NAMES = {
 
 const PDA_OPERATE_MENU_LIST = {
     EQUIP: `<span><i class="fa-solid fa-gun"></i></span>${PDA_OPERATE_MENU_NAMES.EQUIP}`,
-    DISARM: `<span><i class="fa-solid fa-gun"></i></span>${PDA_OPERATE_MENU_NAMES.DISARM}`,
+    UNEQUIP: `<span><i class="fa-solid fa-gun"></i></span>${PDA_OPERATE_MENU_NAMES.UNEQUIP}`,
     USE: `<span><i class="fa-solid fa-hand"></i></span>${PDA_OPERATE_MENU_NAMES.USE}`,
     EXAMINE: `<span><i class="fa-solid fa-magnifying-glass"></i></span>${PDA_OPERATE_MENU_NAMES.EXAMINE}`,
     COMBINE: `<span><i class="fa-solid fa-plus"></i></span>${PDA_OPERATE_MENU_NAMES.COMBINE}`,
@@ -108,6 +123,7 @@ export {
     LABEL_BASE_SCALE,
     IMAGE_NAMES,
     IMAGES,
+    ELEMENT_CLASS,
     PDA_MENU_NAMES,
     PDA_OPERATE_MENU_NAMES,
     PDA_OPERATE_MENU_LIST,
