@@ -20,7 +20,7 @@ class GlockItem extends WeaponItem {
         specs.src = specs.src ?? GLTF_SRC;
         specs.imgName = IMAGE_NAMES.GLOCK19;
 
-        const { count = 20, damage = 18, offset0 = - 5, offset1 = 10 } = specs.ammo ?? {};
+        const { count = 19, damage = 18, offset0 = - 5, offset1 = 10 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.PISTOL_9MM, count, damage, offset0, offset1 });
         super(specs);
 

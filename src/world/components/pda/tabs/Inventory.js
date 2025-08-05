@@ -589,7 +589,11 @@ class Inventory extends TabPanel {
                     break;
 
                 case 2:
+
                     this.#logger.log(`process discard ammo box: ${ammoBoxItem.name}`);
+
+                    this.discardItem(ammoBoxItem);
+
                     break;
 
             }
@@ -621,7 +625,11 @@ class Inventory extends TabPanel {
                     break;
 
                 case 3:
+
                     this.#logger.log(`process discard ammo box: ${healingItem.name}`);
+
+                    this.discardItem(healingItem);
+
                     break;
 
             }
@@ -1635,6 +1643,15 @@ class Inventory extends TabPanel {
 
         item.count = 0;
         this._attachTo.removeInventoryItem(item);
+
+    }
+
+    discardItem(item) {
+
+        const pda = this._attachTo;
+        const owner = pda._owner;
+        pda.removeInventoryItem(item);
+        item.setDiscardPosition(owner);
 
     }
 

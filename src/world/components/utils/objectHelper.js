@@ -23,6 +23,7 @@ import {
     SMGAmmoBox,
     FirstAidKitItem
 } from "../Models";
+import { ObstacleMoveable } from "../movement/ObstacleMoveable";
 
 function clone(target, source, ignore = []) {
 
@@ -240,6 +241,20 @@ function objectFilter4(object) {
 
 }
 
+function moveableObjectFilter(object) {
+
+    if (object instanceof ObstacleMoveable) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+}
+
 function resetObject3D(object) {
 
     object.position.set(0, 0, 0);
@@ -253,5 +268,6 @@ function resetObject3D(object) {
 export { 
     clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, 
     objectFilter, objectFilter2, objectFilter3, objectFilter4,
+    moveableObjectFilter,
     resetObject3D
 };

@@ -6,7 +6,7 @@ import {
     ROOM, INSPECTOR_ROOM, SCENE, WATER_CUBE,
 } from '../../components/utils/constants.js';
 import { colorStr, colorArr } from "../../components/basic/colorBase.js";
-import { objectFilter, objectFilter2, objectFilter3, objectFilter4 } from "../../components/utils/objectHelper.js";
+import { moveableObjectFilter, objectFilter, objectFilter2, objectFilter3, objectFilter4 } from "../../components/utils/objectHelper.js";
 import { ModelBuilder } from "./ModelBuilder.js";
 
 class SceneBuilder {
@@ -1147,6 +1147,12 @@ class SceneBuilder {
                         }
 
                     }
+
+                }
+
+                if (moveableObjectFilter(find.father) && find.father.movable) {
+
+                    find.father.resetFallingState();
 
                 }
 

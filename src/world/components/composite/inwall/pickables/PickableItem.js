@@ -1,4 +1,4 @@
-import { Sprite } from "three";
+import { Sprite, Vector3 } from "three";
 import { ObstacleBase } from "../ObstacleBase";
 import { GLTFModel } from "../../../Models";
 import { createOBBBox } from "../../../physics/collisionHelper";
@@ -236,6 +236,16 @@ class PickableItem extends ObstacleBase {
         }
 
         this.interactiveLabelTip.material.map.needsUpdate = true;
+
+    }
+
+    setDiscardPosition(owner) {
+
+        const local = new Vector3(0, 0, 0.5);
+        const worldPos = local.applyMatrix4(owner.group.matrixWorld);
+        this.group.position.copy(worldPos);
+        this.resetFallingState();
+        this.updateOBBs();
 
     }
 
