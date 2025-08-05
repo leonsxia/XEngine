@@ -111,6 +111,12 @@ class Health {
 
     }
 
+    get isFull() {
+
+        return this.#current === this.#max;
+
+    }
+
     /**
      * @param {boolean} val
      */

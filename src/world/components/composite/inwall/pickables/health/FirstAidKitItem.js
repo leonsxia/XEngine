@@ -59,6 +59,12 @@ class FirstAidKitItem extends CombinableItem {
 
     }
 
+    get healCapacity() {
+
+        return this.currentItem.healCapacity;
+
+    }
+
     checkCombinable(target) {
 
         let combinable = false;

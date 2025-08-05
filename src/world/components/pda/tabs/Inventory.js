@@ -486,6 +486,8 @@ class Inventory extends TabPanel {
 
         this.#logger.func = this.processItemOperation.name;
 
+        const pda = this._attachTo;
+        const owner = pda._owner;
         if (this.shiftMenuReady) {
 
             switch (this._shiftMenuIdx) {
@@ -521,14 +523,14 @@ class Inventory extends TabPanel {
         } else if (this._currentItem.isWeaponItem) {
 
             const isMelee = this._currentItem.ammo.isMeleeWeapon;
-            const owner = this._attachTo._owner;
+            const weaponItem = this._currentItem;
             switch (this._currentOperateIdx) {
 
                 case 0:
 
                     if (this._currentItem.isArmed) {
 
-                        this.#logger.log(`process disarm weapon: ${this._currentItem.name}`);
+                        this.#logger.log(`process disarm weapon: ${weaponItem.name}`);
                         if (isMelee) {
 
                             owner.armMelee();
@@ -541,8 +543,8 @@ class Inventory extends TabPanel {
 
                     } else {
 
-                        this.#logger.log(`process equip weapon: ${this._currentItem.name}`);
-                        const matched = this.getWeapon(this._currentItem);
+                        this.#logger.log(`process equip weapon: ${weaponItem.name}`);
+                        const matched = this.getWeapon(weaponItem);
                         if (matched) {
 
                             if (isMelee) {
@@ -561,7 +563,7 @@ class Inventory extends TabPanel {
                     break;
 
                 case 1:
-                    this.#logger.log(`process examine weapon: ${this._currentItem.name}`);
+                    this.#logger.log(`process examine weapon: ${weaponItem.name}`);
                     break;
 
             }
@@ -571,14 +573,15 @@ class Inventory extends TabPanel {
         } else if (this._currentItem.isAmmoBoxItem) {
 
             this.operateMenuReady = false;
+            const ammoBoxItem = this._currentItem;
             switch (this._currentOperateIdx) {
 
                 case 0:
-                    this.#logger.log(`process examine ammo box: ${this._currentItem.name}`);
+                    this.#logger.log(`process examine ammo box: ${ammoBoxItem.name}`);
                     break;
                 case 1:
 
-                    this.#logger.log(`process combine ammo box: ${this._currentItem.name}`);
+                    this.#logger.log(`process combine ammo box: ${ammoBoxItem.name}`);
 
                     this.selectReady = true;
                     this.checkSlotCombinable();
@@ -586,7 +589,7 @@ class Inventory extends TabPanel {
                     break;
 
                 case 2:
-                    this.#logger.log(`process discard ammo box: ${this._currentItem.name}`);
+                    this.#logger.log(`process discard ammo box: ${ammoBoxItem.name}`);
                     break;
 
             }
@@ -594,17 +597,23 @@ class Inventory extends TabPanel {
         } else if (this._currentItem.isHealingItem) {
 
             this.operateMenuReady = false;
+            const healingItem = this._currentItem;
             switch (this._currentOperateIdx) {
 
                 case 0:
-                    this.#logger.log(`process use healing item: ${this._currentItem.name}`);
+
+                    this.#logger.log(`process use healing item: ${healingItem.name}`);
+
+                    this.consumeHealingItem(healingItem);
+
                     break;
+
                 case 1:
-                    this.#logger.log(`process examine healing item: ${this._currentItem.name}`);
+                    this.#logger.log(`process examine healing item: ${healingItem.name}`);
                     break;
                 case 2:
 
-                    this.#logger.log(`process combine healing item: ${this._currentItem.name}`);
+                    this.#logger.log(`process combine healing item: ${healingItem.name}`);
 
                     this.selectReady = true;
                     this.checkSlotCombinable();
@@ -612,7 +621,7 @@ class Inventory extends TabPanel {
                     break;
 
                 case 3:
-                    this.#logger.log(`process discard ammo box: ${this._currentItem.name}`);
+                    this.#logger.log(`process discard ammo box: ${healingItem.name}`);
                     break;
 
             }
@@ -846,8 +855,7 @@ class Inventory extends TabPanel {
             const combined = target.combine(source);
             if (combined) {
 
-                source.count = 0
-                pda.removeInventoryItem(source);
+                this.emptyItem(source);
 
             }
 
@@ -1600,6 +1608,33 @@ class Inventory extends TabPanel {
             }
 
         }
+
+    }
+
+    consumeHealingItem(healingItem) {
+
+        this.#logger.func = this.consumeHealingItem.name;
+
+        const pda = this._attachTo;
+        const owner = pda._owner;
+        if (!owner.health.isFull) {
+
+            this.#logger.log(`process use healing item: current HP: ${owner.health.current}, healing up ${healingItem.healCapacity}`);
+            owner.health.current += healingItem.healCapacity;
+            this.emptyItem(healingItem);
+
+        } else {
+
+            this.#logger.log(`process use healing item: health is full`);
+
+        }
+
+    }
+
+    emptyItem(item) {
+
+        item.count = 0;
+        this._attachTo.removeInventoryItem(item);
 
     }
 
