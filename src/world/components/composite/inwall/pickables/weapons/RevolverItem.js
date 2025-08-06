@@ -1,5 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, WEAPONS } from "../../../../utils/constants";
+import { PICKABLE_ITEM_NAMES } from "../../../../utils/documentary";
 import { Ammo } from "../../../weapons/Ammo";
 import { WeaponItem } from "./WeaponItem";
 
@@ -19,6 +20,7 @@ class RevolverItem extends WeaponItem {
         specs.weaponType = WEAPONS.REVOLVER;
         specs.src = specs.src ?? GLTF_SRC;
         specs.imgName = IMAGE_NAMES.REVOLVER;
+        specs.descriptionJsonItem = PICKABLE_ITEM_NAMES.REVOLVER_ITEM;
 
         const { count = 6, damage = 60, offset0 = - 10, offset1 = 45 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.MAGNUM, count, damage, offset0, offset1 });

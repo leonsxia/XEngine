@@ -1,5 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, WEAPONS } from "../../../../utils/constants";
+import { PICKABLE_ITEM_NAMES } from "../../../../utils/documentary";
 import { Ammo } from "../../../weapons/Ammo";
 import { WeaponItem } from "./WeaponItem";
 
@@ -19,6 +20,7 @@ class GlockItem extends WeaponItem {
         specs.weaponType = WEAPONS.GLOCK;
         specs.src = specs.src ?? GLTF_SRC;
         specs.imgName = IMAGE_NAMES.GLOCK19;
+        specs.descriptionJsonItem = PICKABLE_ITEM_NAMES.GLOCK_ITEM;
 
         const { count = 19, damage = 18, offset0 = - 5, offset1 = 10 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.PISTOL_9MM, count, damage, offset0, offset1 });

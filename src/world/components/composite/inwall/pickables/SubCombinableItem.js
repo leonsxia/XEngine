@@ -1,5 +1,7 @@
 import { createOBBBox } from "../../../physics/collisionHelper";
+import { JSON_NAMES } from "../../../utils/documentary";
 import { getImageUrl } from "../../../utils/imageHelper";
+import { getJsonItem } from "../../../utils/jsonHelper";
 
 class SubCombinableItem {
 
@@ -7,6 +9,7 @@ class SubCombinableItem {
     box;
     type;
     imgUrl;
+    description;
     itemSize = 1;
 
     _scale = [1, 1, 1];
@@ -43,6 +46,7 @@ class SubCombinableItem {
 
         await this.gltf.init();
         this.imgUrl = await getImageUrl(this.specs.imgName);
+        this.description = await getJsonItem(JSON_NAMES.PICKABLE_DESCRIPTIONS, this.specs.descriptionJsonItem);
 
     }
 

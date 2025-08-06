@@ -1,5 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, AMMUNITION } from "../../../../utils/constants";
+import { PICKABLE_ITEM_NAMES } from "../../../../utils/documentary";
 import { Ammo } from "../../../weapons/Ammo";
 import { AmmoBoxItem } from "./AmmoBoxItem";
 
@@ -20,6 +21,7 @@ class PistolAmmoBox extends AmmoBoxItem {
         specs.src = specs.src ?? GLTF_SRC;
         specs.capacity = 60;
         specs.imgName = IMAGE_NAMES.PISTOL_AMMO_BOX;
+        specs.descriptionJsonItem = PICKABLE_ITEM_NAMES.PISTOL_AMMO_BOX_ITEM;
         
         const { count = specs.capacity, damage = 20, offset0 = - 5, offset1 = 5 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.PISTOL_9MM, count, damage, offset0, offset1 });

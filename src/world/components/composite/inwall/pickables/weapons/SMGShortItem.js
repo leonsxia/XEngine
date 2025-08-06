@@ -1,5 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, WEAPONS } from "../../../../utils/constants";
+import { PICKABLE_ITEM_NAMES } from "../../../../utils/documentary";
 import { Ammo } from "../../../weapons/Ammo";
 import { WeaponItem } from "./WeaponItem";
 
@@ -19,6 +20,7 @@ class SMGShortItem extends WeaponItem {
         specs.weaponType = WEAPONS.SMG_SHORT;
         specs.src = specs.src ?? GLTF_SRC;
         specs.imgName = IMAGE_NAMES.SMG_SHORT;
+        specs.descriptionJsonItem = PICKABLE_ITEM_NAMES.SMG_SHORT_ITEM;
 
         const { count = 35, damage = 7, offset0 = - - 2, offset1 = 2 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.SMG, count, damage, offset0, offset1 });

@@ -109,6 +109,7 @@ function createInventory() {
     const descriptionPanel = document.createElement('div');
     descriptionPanel.classList.add('description-panel');
 
+    // slot panel contents
     const slotsDivList = [];
     for (let i = 0; i < 20; i++) {
 
@@ -133,6 +134,7 @@ function createInventory() {
 
     const itemsDivList = [];
 
+    // operate panel contents
     const focusedDiv = document.createElement('div');
     focusedDiv.classList.add('focused-item', 'idx-0', 'item-size-1');
 
@@ -202,6 +204,15 @@ function createInventory() {
     selectDiv.append(selectSlot);
     operatePanel.append(selectDiv);
 
+    // description panel contents
+    const descriptionTitle = document.createElement('div');
+    descriptionTitle.classList.add('description-title');
+    const descriptionContent = document.createElement('div');
+    descriptionContent.classList.add('description-content');
+    const descriptionSeparater = document.createElement('div');
+    descriptionSeparater.classList.add('description-separater');
+    descriptionPanel.append(descriptionTitle, descriptionSeparater, descriptionContent);
+
     inventoryPanel.append(slotsPanel, operatePanel, itemsPanel, descriptionPanel);
     inventoryContainer.appendChild(inventoryPanel);
 
@@ -209,7 +220,8 @@ function createInventory() {
         inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, 
         slotsDivList, itemsDivList, 
         focusedDiv, focusedSlot, shiftDiv, shiftSlot, selectDiv, selectSlot,
-        operateMenuList, operateMenuItems, shiftMenuList, shiftMenuItems
+        operateMenuList, operateMenuItems, shiftMenuList, shiftMenuItems,
+        descriptionTitle, descriptionContent
     }
 
 }

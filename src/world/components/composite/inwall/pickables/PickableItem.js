@@ -8,6 +8,8 @@ import { ELEMENT_CLASS, GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../..
 import { hexToRGBA, labelBackground, labelForbidden, white } from "../../../basic/colorBase";
 import { getImageUrl } from "../../../utils/imageHelper";
 import { addElementClass, removeElementClass } from "../../../utils/htmlHelper";
+import { getJsonItem } from "../../../utils/jsonHelper";
+import { JSON_NAMES } from "../../../utils/documentary";
 
 class PickableItem extends ObstacleBase {
 
@@ -19,6 +21,8 @@ class PickableItem extends ObstacleBase {
     countInfo;
     occupiedSlotIdx = -1;
     _imgUrl;
+
+    description;
 
     isPickableItem = true;
     isPicked = false;
@@ -95,6 +99,7 @@ class PickableItem extends ObstacleBase {
         await this.gltf.init();
 
         this._imgUrl = await getImageUrl(this.specs.imgName);
+        this.description = await getJsonItem(JSON_NAMES.PICKABLE_DESCRIPTIONS, this.specs.descriptionJsonItem);
 
         // html
         this.createItemHtml();

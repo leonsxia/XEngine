@@ -741,6 +741,7 @@ class Inventory extends TabPanel {
 
         }
         
+        this.fillItemDescription(matched);
         removeElementClass(element, ELEMENT_CLASS.IDX);
         addElementClass(element, `${ELEMENT_CLASS.IDX}${tarIdx}`);
 
@@ -1652,6 +1653,27 @@ class Inventory extends TabPanel {
         const owner = pda._owner;
         pda.removeInventoryItem(item);
         item.setDiscardPosition(owner);
+
+    }
+
+    fillItemDescription(item) {
+
+        const descriptionEl = this._html.descriptionPanel;
+        const titleEl = this._html.descriptionTitle;
+        const contentEl = this._html.descriptionContent;
+        if (item) {
+
+            const { title, description } = item.description;
+            titleEl.innerText = title;
+            contentEl.innerText = description;
+
+            removeElementClass(descriptionEl, ELEMENT_CLASS.HIDE);
+
+        } else {
+
+            addElementClass(descriptionEl, ELEMENT_CLASS.HIDE);
+
+        }
 
     }
 

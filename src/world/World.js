@@ -25,6 +25,8 @@ import { InputBase } from "./systems/physicalInputs/InputBase";
 import { XBoxController } from "./systems/physicalInputs/gamepad/XBoxController";
 import { Keyboard } from "./systems/physicalInputs/Keyboard";
 import { Mouse } from "./systems/physicalInputs/Mouse";
+import { loadJsons } from "./components/utils/jsonHelper";
+import { JSONS } from "./components/utils/documentary";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix', 'Enemy Test Scene'],  // scene list for scene selector
@@ -108,7 +110,8 @@ class World {
             loadTextures(TEXTURES),
             loadGLTFModels(GLTFS),
             loadShaders(SHADERS),
-            loadImages(IMAGES)
+            loadImages(IMAGES),
+            loadJsons(JSONS)
         ]);
 
         const end = Date.now();

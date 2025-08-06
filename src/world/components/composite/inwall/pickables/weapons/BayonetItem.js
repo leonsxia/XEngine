@@ -1,5 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, WEAPONS } from "../../../../utils/constants";
+import { PICKABLE_ITEM_NAMES } from "../../../../utils/documentary";
 import { Ammo } from "../../../weapons/Ammo";
 import { WeaponItem } from "./WeaponItem";
 
@@ -20,6 +21,7 @@ class BayonetItem extends WeaponItem {
         specs.weaponType = WEAPONS.BAYONET;
         specs.src = specs.src ?? GLTF_SRC;
         specs.imgName = BayonetItem.imgName;
+        specs.descriptionJsonItem = PICKABLE_ITEM_NAMES.BAYONET_ITEM;
 
         const { damage = 30, offset0 = - 10, offset1 = 10 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.BAYONET, isMeleeWeapon: true, damage, offset0, offset1 });

@@ -75,6 +75,7 @@ class CombinableItem extends PickableItem {
             this.assignModels(this.currentItem);
 
             this.itemType = type;
+            this.description = this.currentItem.description;
 
             const imgTag = this.itemHtml.querySelector('img');
             imgTag.src = this.currentItem.imgUrl;

@@ -1,5 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../../systems/ui/uiConstants";
 import { FIRST_AID_KIT } from "../../../../../utils/constants";
+import { PICKABLE_ITEM_NAMES } from "../../../../../utils/documentary";
 import { FirstAidKitBase } from "./FirstAidKitBase";
 
 const GLTF_SRC = 'pickable_items/health/first_aid_kit_small.glb';
@@ -19,7 +20,8 @@ class FirstAidKitSmall extends FirstAidKitBase {
             gltfScale: [.2, .2, .2],
             healthType: FIRST_AID_KIT.FIRST_AID_KIT_SMALL,
             imgName: IMAGE_NAMES.FIRST_AID_KIT_SMALL,
-            smallSrc: GLTF_SRC
+            smallSrc: GLTF_SRC,
+            descriptionJsonItem: PICKABLE_ITEM_NAMES.FIRST_AID_KIT_SMALL
         }
         Object.assign(superSpecs, specs);
         

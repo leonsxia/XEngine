@@ -1,5 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, AMMUNITION } from "../../../../utils/constants";
+import { PICKABLE_ITEM_NAMES } from "../../../../utils/documentary";
 import { Ammo } from "../../../weapons/Ammo";
 import { AmmoBoxItem } from "./AmmoBoxItem";
 
@@ -19,6 +20,7 @@ class MagnumAmmoBox extends AmmoBoxItem {
         specs.src = specs.src ?? GLTF_SRC;
         specs.capacity = 12;
         specs.imgName = IMAGE_NAMES.MAGNUM_AMMO_BOX;
+        specs.descriptionJsonItem = PICKABLE_ITEM_NAMES.MAGNUM_AMMO_BOX_ITEM;
         
         const { count = specs.capacity, damage = 60, offset0 = - 10, offset1 = 45 } = specs.ammo ?? {};
         specs.ammoInstance = new Ammo({ type: AMMOS.MAGNUM, count, damage, offset0, offset1 });

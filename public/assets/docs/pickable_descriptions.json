@@ -1,0 +1,46 @@
+{
+    "GLOCK_ITEM": {
+        "title": "Glock 19",
+        "description": "A 19-shot 9mm handgun. Its quick rate of fire allows it to do a lot of damage in a shot time."
+    },
+    "PISTOL1_ITEM": {
+        "title": "9mm Pistol",
+        "description": "A 15-shot 9mm handgun. Medium rate of fire, a little enhancemant on damage."
+    },
+    "REVOLVER_ITEM": {
+        "title": "Magnum",
+        "description": "A 6-shot .357 revolver. Slow rate of fire, can do a lot damage per shot."
+    },
+    "SMG_SHORT_ITEM": {
+        "title": "Sub Machine Gun - Short",
+        "description": "A 35-shot sub machine gun without gunstock. Fast rate of fire, can do a lot of damage in a short time."
+    },
+    "BAYONET_ITEM": {
+        "title": "Combat Knife",
+        "description": "A sturdy and durable combat knife. Small damage but easy to use."
+    },
+    "PISTOL_AMMO_BOX_ITEM": {
+        "title": "9mm Pistol Ammo Box",
+        "description": "Ammo for 9mm pistol. Medium damage."
+    },
+    "MAGNUM_AMMO_BOX_ITEM": {
+        "title": ".357 Magnum Ammo Box",
+        "description": "Ammo for .357 magnum or revolver. Large damage."
+    },
+    "SMG_AMMO_BOX_ITEM": {
+        "title": "SMG Ammo Box",
+        "description": "Ammo for sub machine gun."
+    },
+    "FIRST_AID_KIT_SMALL": {
+        "title": "First Aid Kit - Small Pack",
+        "description": "A small pack of first aid kit. It contains basic healing stuff such as painkiller and bandage, can temporary heal up the wound."
+    },
+    "FIRST_AID_KIT_MEDIUM": {
+        "title": "First Aid Kit - Medium Pack",
+        "description": "A medium pack of first aid kit. It contains more healing stuff such as painkiller, medical alcohol, bandage and antibiotics, can heal up most of the wound."
+    },
+    "FIRST_AID_KIT_LARGE": {
+        "title": "First Aid Kit - Large Pack",
+        "description": "A large pack of first aid kit. It contains everything to treat the wound, it can completely heal up the wound and restore the body."
+    }
+}
