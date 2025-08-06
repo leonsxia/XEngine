@@ -1538,6 +1538,8 @@ class Inventory extends TabPanel {
             this._html.itemsDivList.splice(itemDivIdx, 1);
             this._html.itemsPanel.removeChild(item.itemHtml);
 
+            this.fillItemDescription();
+
             return true;
 
         } else {
