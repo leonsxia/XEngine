@@ -33,14 +33,14 @@ class Loop {
 
         this.#renderer.setAnimationLoop(() => {
 
-            stats.begin();
+            stats?.begin();
 
             // tell every animated object to tick forward one frame
             this.tick();
 
             if (this._paused) {
                 
-                stats.end();
+                stats?.end();
                 return;
 
             }
@@ -56,7 +56,7 @@ class Loop {
 
             }
 
-            stats.end();
+            stats?.end();
 
         });
 

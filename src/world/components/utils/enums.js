@@ -15,7 +15,8 @@ const hintIndex = {
     inventoryOperateMenu: 2,
     inventorySelect: 3,
     mapsBase: 10,
-    filesBase: 20
+    filesBase: 20,
+    itemViewer: 30
 }
 
 export { polarity, aimDirection, hintIndex };

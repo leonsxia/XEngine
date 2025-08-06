@@ -27,9 +27,9 @@ function createBasicLights(basicLightSpecsArr) {
             case AMBIENT_LIGHT:
 
                 {
-                    const { name, detail: { color, intensity } } = spec;
+                    const { name } = spec;
 
-                    spec.light = lights[name] = new AmbientLight(new Color(colorStr(...color)), intensity);
+                    spec.light = lights[name] = createAmbientLight(spec);
                 }
 
                 break;
@@ -110,6 +110,15 @@ function createDirectionalLight(lightSpecs) {
 
 }
 
+function createAmbientLight(lightSpecs) {
+    
+    const { detail: { color, intensity } } = lightSpecs;
+    const light = new AmbientLight(new Color(colorStr(...color)), intensity);
+
+    return light;
+
+}
+
 function createHemisphereLight(lightSpecs) {
 
     const { detail: { groundColor, skyColor, intensity, position } } = lightSpecs;
@@ -158,6 +167,7 @@ export {
     createPointLights, 
     createSpotLights,
     createDirectionalLight,
+    createAmbientLight,
     createHemisphereLight,
     createPointLight,
     createSpotLight

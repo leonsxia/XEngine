@@ -57,6 +57,7 @@ class Pda {
         await this._inventory.init();
         this._pdaContainer.appendChild(this._pdaMenu.menu);
         this._pdaContainer.appendChild(this._inventory._html.inventoryContainer);
+        this._pdaContainer.appendChild(this._inventory._html.itemViewerPanel);
         this._pdaContainer.appendChild(this._maps._html.mapsContainer);
         this._pdaContainer.appendChild(this._files._html.filesContainer);
         this._pdaContainer.appendChild(this._hints.hintPanel);
@@ -92,6 +93,7 @@ class Pda {
         } else {
 
             this.showElement(this._pdaContainer, false);
+            this._inventory.itemViewerEnabled = false;
 
         }
 
@@ -392,6 +394,10 @@ class Pda {
                 } else if (this._inventory.selectReady) {
 
                     this._inventory.selectReady = false;
+
+                } else if (this._inventory.itemViewerEnabled) {
+
+                    this._inventory.itemViewerEnabled = false;
 
                 }
 

@@ -676,6 +676,18 @@
         }
     }
 
+    /* pda-item-viewer */
+    [pda-item-viewer] {
+        position: absolute;
+        width: calc(var(--calculated-vw) * 100);
+        height: calc(var(--calculated-vh) * 100);
+    
+        canvas {
+            top: 0 !important;
+            left: 0 !important;
+        }
+    }
+
     /* pda-files */
     [pda-files] {
         position: relative;

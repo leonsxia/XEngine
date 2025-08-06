@@ -39,7 +39,7 @@ class Resizer {
 
     }
 
-    setSize() {
+    setSize(needSetCss = true) {
 
         const width = container.clientWidth;
         const height = container.clientHeight;
@@ -78,7 +78,7 @@ class Resizer {
 
         // Set the pixel ratio (for mobile devices)
         this.#renderer.setPixelRatio(this.#ratio);
-        this.#postProcessor.composer.setPixelRatio(this.#ratio);
+        this.#postProcessor?.composer.setPixelRatio(this.#ratio);
 
         // Update the size of the renderer and the canvas
         this.#renderer.setSize(targetWidth, targetHeight);
@@ -89,9 +89,10 @@ class Resizer {
         // this.#renderer.setScissor(0, 0, container.clientWidth / 2, container.clientHeight / 2);
         // this.#renderer.setViewport(0, 0, container.clientWidth / 2, container.clientHeight / 2);
 
-        this.#postProcessor.composer.setSize(targetWidth, targetHeight);
-        this.#postProcessor.reset();
+        this.#postProcessor?.composer.setSize(targetWidth, targetHeight);
+        this.#postProcessor?.reset();
 
+        if (!needSetCss) return;
         // set css calculated properties
         const documentEl = document.documentElement;
         documentEl.style.setProperty('--calculated-vh', `${Math.ceil(targetHeight) / 100}px`);

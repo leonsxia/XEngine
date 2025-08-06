@@ -373,4 +373,4 @@ function updateLightCamera(lights) {
 
 }
 
-export { setupShadowLight, updateSingleLightCamera };
+export { setupShadowLight, addShadow, updateSingleLightCamera };

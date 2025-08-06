@@ -109,6 +109,10 @@ function createInventory() {
     const descriptionPanel = document.createElement('div');
     descriptionPanel.classList.add('description-panel');
 
+    const itemViewerPanel = document.createElement('div');
+    itemViewerPanel.toggleAttribute('pda-item-viewer');
+    itemViewerPanel.classList.add('popup-panel', 'hidden');
+
     // slot panel contents
     const slotsDivList = [];
     for (let i = 0; i < 20; i++) {
@@ -216,6 +220,7 @@ function createInventory() {
 
     return { 
         inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, 
+        itemViewerPanel,
         slotsDivList,
         focusedDiv, focusedSlot, shiftDiv, shiftSlot, selectDiv, selectSlot,
         operateMenuList, operateMenuItems, shiftMenuList, shiftMenuItems,

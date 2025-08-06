@@ -98,20 +98,20 @@ async function initPickableModels() {
     BayonetItem.gltfModel.setScale([.25, .25, .25]);
 
     PistolAmmoBox.gltfModel = new GLTFModel({
-        name: `pistol_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.PISTOL1_ITEM], 
+        name: `pistol_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.PISTOL_AMMO_BOX_ITEM], 
         receiveShadow, castShadow
     });
     PistolAmmoBox.gltfModel.setScale([.1, .1, .1]);
     PistolAmmoBox.gltfModel.setRotation([0, Math.PI / 2, 0]);
 
     MagnumAmmoBox.gltfModel = new GLTFModel({
-        name: `magnum_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.PISTOL1_ITEM], 
+        name: `magnum_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.MAGNUM_AMMO_BOX_ITEM], 
         receiveShadow, castShadow
     });
     MagnumAmmoBox.gltfModel.setScale([1.13, 1.13, 1.13]);
 
     SMGAmmoBox.gltfModel = new GLTFModel({
-        name: `smg_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.PISTOL1_ITEM], 
+        name: `smg_ammo_box_view_model`, src: loadedGLTFModels[GLTF_NAMES.SMG_AMMO_BOX_ITEM], 
         receiveShadow, castShadow
     });
     SMGAmmoBox.gltfModel.setScale([0.08, 0.08, 0.08]);

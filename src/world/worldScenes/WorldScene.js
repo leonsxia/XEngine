@@ -16,6 +16,7 @@ import { AI } from '../components/updatables/AI.js';
 import { AnimeMixer } from '../components/updatables/AnimeMixer.js';
 import { independence } from '../components/basic/colorBase.js';
 import { InputBase } from '../systems/physicalInputs/InputBase.js';
+import { pdaItemViewer } from '../systems/ItemViewer.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -731,12 +732,14 @@ class WorldScene {
     changeResolution(ratio) {
 
         this.resizer.changeResolution(ratio);
+        pdaItemViewer._resizer.changeResolution(ratio);
 
     }
 
     changeScreenAspect(size) {
 
         this.resizer.changeScreenAspect(size);
+        pdaItemViewer._resizer.changeScreenAspect(size);
 
     }
 

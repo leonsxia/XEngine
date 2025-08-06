@@ -1,4 +1,5 @@
 import { createInventory } from "../../../systems/htmlElements";
+import { pdaItemViewer } from "../../../systems/ItemViewer";
 import { Logger } from "../../../systems/Logger";
 import { ELEMENT_CLASS, PDA_OPERATE_MENU_LIST } from "../../../systems/ui/uiConstants";
 import { addElementClass, removeElementClass } from "../../utils/htmlHelper";
@@ -36,6 +37,8 @@ class Inventory extends TabPanel {
     _selectReady = false;
     _selectIdx = 0;
     _combinableIdxes = [];
+    // for item viewer
+    _itemViewerEnabled = false;
 
     _source;
     _target;
@@ -240,6 +243,42 @@ class Inventory extends TabPanel {
             addElementClass(this._html.selectDiv, ELEMENT_CLASS.HIDE);
             this.resetSlots();
             this._attachTo._hints.applyHintInventoryBase();
+
+        }
+
+    }
+
+    get itemViewerEnabled() {
+
+        return this._itemViewerEnabled;
+
+    }
+
+    set itemViewerEnabled(val) {
+
+        if (val !== this._itemViewerEnabled) {
+
+            this._itemViewerEnabled = val;
+            const itemViwerEl = this._html.itemViewerPanel;
+            if (val) {
+                
+                pdaItemViewer.addItem(this._currentItem);
+                itemViwerEl.append(pdaItemViewer.canvas);
+                removeElementClass(itemViwerEl, ELEMENT_CLASS.HIDDEN);
+                addElementClass(itemViwerEl, ELEMENT_CLASS.VISIBLE);
+                pdaItemViewer.start();
+                this._attachTo._hints.applyHintItemViewr();
+
+            } else {
+
+                itemViwerEl.removeChild(pdaItemViewer.canvas);
+                removeElementClass(itemViwerEl, ELEMENT_CLASS.VISIBLE);
+                addElementClass(itemViwerEl, ELEMENT_CLASS.HIDDEN);
+                pdaItemViewer.removeItem();
+                pdaItemViewer.stop();
+                this._attachTo._hints.applyHintInventoryBase();
+
+            }
 
         }
 
@@ -522,6 +561,7 @@ class Inventory extends TabPanel {
 
         } else if (this._currentItem.isWeaponItem) {
 
+            this.operateMenuReady = false;
             const isMelee = this._currentItem.ammo.isMeleeWeapon;
             const weaponItem = this._currentItem;
             switch (this._currentOperateIdx) {
@@ -563,12 +603,14 @@ class Inventory extends TabPanel {
                     break;
 
                 case 1:
+
                     this.#logger.log(`process examine weapon: ${weaponItem.name}`);
+
+                    this.itemViewerEnabled = true;
+
                     break;
 
             }
-
-            this.operateMenuReady = false;
 
         } else if (this._currentItem.isAmmoBoxItem) {
 
@@ -577,8 +619,13 @@ class Inventory extends TabPanel {
             switch (this._currentOperateIdx) {
 
                 case 0:
+
                     this.#logger.log(`process examine ammo box: ${ammoBoxItem.name}`);
+
+                    this.itemViewerEnabled = true;
+
                     break;
+
                 case 1:
 
                     this.#logger.log(`process combine ammo box: ${ammoBoxItem.name}`);
@@ -613,8 +660,13 @@ class Inventory extends TabPanel {
                     break;
 
                 case 1:
+
                     this.#logger.log(`process examine healing item: ${healingItem.name}`);
+
+                    this.itemViewerEnabled = true;
+
                     break;
+
                 case 2:
 
                     this.#logger.log(`process combine healing item: ${healingItem.name}`);

@@ -170,6 +170,20 @@ class PdaHint {
 
     }
 
+    applyHintItemViewr() {
+
+        if (this._hintIdx === hintIndex.itemViewer) return;
+
+        this._hintGroup.length = 0;
+        this._hintGroup.push(this._html.cancelHint);
+
+        this.clearHintPanel();
+        this.applyHintGroup();
+
+        this._hintIdx = hintIndex.itemViewer;
+
+    }
+
     applyHintMapsBase() {
 
         if (this._hintIdx === hintIndex.mapsBase) return;
