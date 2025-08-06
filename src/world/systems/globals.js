@@ -1,5 +1,5 @@
 import { createRenderer } from "./renderer";
 
-const pdaRenderer = createRenderer();
+const modelRenderer = createRenderer();
 
-export { pdaRenderer };
+export { modelRenderer };

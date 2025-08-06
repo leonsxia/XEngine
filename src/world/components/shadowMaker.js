@@ -148,13 +148,13 @@ function setupShadowLight(scene, room, ...lights) {
 
 }
 
-function addShadow(light) {
+function addShadow(light, mapSize = { width: 1024, height: 1024 }) {
 
     light.castShadow = true;
-    light.shadow.mapSize.width = 1024; //2048;
-    light.shadow.mapSize.height = 1024; //2048;
+    light.shadow.mapSize.width = mapSize.width; //2048;
+    light.shadow.mapSize.height = mapSize.height; //2048;
 
-    switch (light.constructor.name) {
+    switch (light.type) {
 
         case DIRECTIONAL_LIGHT:
 
@@ -166,7 +166,7 @@ function addShadow(light) {
                 light.shadow.camera.height = h;
                 light.shadow.camera.near = 1;
                 light.shadow.camera.far = 70;
-                light.shadow.bias = 0.001;
+                // light.shadow.bias = 0.0001;
             }
 
             break;

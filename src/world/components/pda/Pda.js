@@ -343,7 +343,7 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (!this._inventory.shiftReady) {
+                if (!this._inventory.shiftReady && !this._inventory.itemViewerEnabled) {
 
                     if (this._inventory.operateMenuReady || this._inventory.selectReady) {
 
@@ -439,7 +439,9 @@ class Pda {
 
             if (this.currentTab === TABS.INVENTORY) {
 
-                if (!this._inventory.operateMenuReady && !this._inventory.shiftMenuReady && !this._inventory.selectReady) {
+                if (!this._inventory.operateMenuReady && !this._inventory.shiftMenuReady && !this._inventory.selectReady &&
+                    !this._inventory.itemViewerEnabled
+                ) {
 
                     this._inventory.shiftReady = !this._inventory.shiftReady;
 

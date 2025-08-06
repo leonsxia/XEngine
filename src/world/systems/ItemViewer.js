@@ -1,12 +1,12 @@
 import Stats from "stats.js";
-import { pdaRenderer } from "./globals";
+import { modelRenderer } from "./globals";
 import { Loop } from "./Loop";
 import { spaceCadet } from "../components/basic/colorBase";
 import { Camera } from "../components/cameras/Camera";
 import { createAmbientLight, createDirectionalLight, createPointLight } from "../components/lights";
 import { createScene } from "../components/scene";
 import { addShadow } from "../components/shadowMaker";
-import { BayonetItem, FirstAidKitLarge, FirstAidKitMedium, FirstAidKitSmall, GlockItem, MagnumAmmoBox, PistolAmmoBox, PistolItem, RevolverItem, SMGAmmoBox, SMGShortItem } from "../components/Models";
+import { BayonetItem, FirstAidKitItem, FirstAidKitLarge, FirstAidKitMedium, FirstAidKitSmall, GlockItem, MagnumAmmoBox, PistolAmmoBox, PistolItem, RevolverItem, SMGAmmoBox, SMGShortItem } from "../components/Models";
 import { ArcballControls } from "three/addons/controls/ArcballControls.js";
 import { Resizer } from "./Resizer";
 
@@ -15,30 +15,21 @@ const DIRECTIONAL_LIGHT_SPECS = {
     detail: {
         color: [255, 255, 255],
         intensity: 1,
-        position: [0, 10, 0],
+        position: [0, 0, -10],
         target: [0, 0, 0]
     }
 };
 const AMBIENT_LIGHT_SPECS = {
     detail: {
         color: [128, 128, 128],
-        intensity: 2
+        intensity: 1
     }
 };
-const POINT_LIGHT_SPECS_0 = {
+const POINT_LIGHT_SPECS = {
     detail: {
         color: [209, 244, 195],
-        position: [2, 2, 2],
-        intensity: 99.49,
-        distance: 0,
-        decay: 2
-    }
-};
-const POINT_LIGHT_SPECS_1 = {
-    detail: {
-        color: [209, 244, 195],
-        position: [2, 2, -2],
-        intensity: 99.49,
+        position: [1, 1, 1],
+        intensity: 40,
         distance: 0,
         decay: 2
     }
@@ -54,8 +45,7 @@ class ItemViewer {
     _resizer;
     _directionalLight;
     _ambientLight;
-    _pointLight0;
-    _pointLight1;
+    _pointLight;
     _stats = new Stats();
 
     _item;
@@ -65,7 +55,7 @@ class ItemViewer {
     constructor() {
 
         // renderer
-        this._renderer = pdaRenderer;
+        this._renderer = modelRenderer;
         this._renderer.shadowMap.enabled = true;
         // scene
         this._scene = createScene(spaceCadet);
@@ -97,7 +87,7 @@ class ItemViewer {
     setupControls() {
 
         this._controls = new ArcballControls( this._camera, this._renderer.domElement, this._scene );
-        this._controls.minDistance = .25;
+        this._controls.minDistance = .3;
         this._controls.maxDistance = .8;
         this._controls.setGizmosVisible(false);
         this._controls.saveState();
@@ -108,65 +98,67 @@ class ItemViewer {
 
         this._directionalLight = createDirectionalLight(DIRECTIONAL_LIGHT_SPECS);
         this._ambientLight = createAmbientLight(AMBIENT_LIGHT_SPECS);
-        this._pointLight0 = createPointLight(POINT_LIGHT_SPECS_0);
-        this._pointLight1 = createPointLight(POINT_LIGHT_SPECS_1);
+        this._pointLight = createPointLight(POINT_LIGHT_SPECS);
 
-        addShadow(this._directionalLight);
-        addShadow(this._pointLight0);
-        addShadow(this._pointLight1);
+        const mapSize = { width: 4096, height: 4096 };
+        addShadow(this._directionalLight, mapSize);
+        addShadow(this._pointLight, mapSize);
         this._directionalLight.shadow.camera.updateProjectionMatrix();
-        this._pointLight0.shadow.camera.updateProjectionMatrix();
-        this._pointLight1.shadow.camera.updateProjectionMatrix();
+        this._pointLight.shadow.camera.updateProjectionMatrix();
 
-        this._scene.add(this._directionalLight, this._ambientLight, this._pointLight0, this._pointLight1);
+        this._scene.add(this._directionalLight, this._ambientLight, this._pointLight);
 
     }
 
     addItem(item) {
 
-        switch (item.constructor.name) {
+        if (item instanceof GlockItem) {
 
-            case 'GlockItem':
-                this._item = GlockItem.gltfModel;
-                break;
-            case 'PistolItem':
-                this._item = PistolItem.gltfModel;
-                break;
-            case 'RevolverItem':
-                this._item = RevolverItem.gltfModel;
-                break;
-            case 'SMGShortItem':
-                this._item = SMGShortItem.gltfModel;
-                break;
-            case 'BayonetItem':
-                this._item = BayonetItem.gltfModel;
-                break;
-            case 'PistolAmmoBox':
-                this._item = PistolAmmoBox.gltfModel;
-                break;
-            case 'MagnumAmmoBox':
-                this._item = MagnumAmmoBox.gltfModel;
-                break;
-            case 'SMGAmmoBox':
-                this._item = SMGAmmoBox.gltfModel;
-                break;
-            case 'FirstAidKitItem':
-                {
-                    switch (item.currentItem.constructor.name) {
+            this._item = GlockItem.gltfModel;
 
-                        case 'FirstAidKitSmall':
-                            this._item = FirstAidKitSmall.gltfModel;
-                            break;
-                        case 'FirstAidKitMedium':
-                            this._item = FirstAidKitMedium.gltfModel;
-                            break;
-                        case 'FirstAidKitLarge':
-                            this._item = FirstAidKitLarge.gltfModel;
-                            break;
+        } else if (item instanceof PistolItem) {
 
-                    }
-                }
-                break;
+            this._item = PistolItem.gltfModel;
+
+        } else if (item instanceof RevolverItem) {
+
+            this._item = RevolverItem.gltfModel;
+
+        } else if (item instanceof SMGShortItem) {
+
+            this._item = SMGShortItem.gltfModel;
+
+        } else if (item instanceof BayonetItem) {
+
+            this._item = BayonetItem.gltfModel;
+
+        } else if (item instanceof PistolAmmoBox) {
+
+            this._item = PistolAmmoBox.gltfModel;
+
+        } else if (item instanceof MagnumAmmoBox) {
+
+            this._item = MagnumAmmoBox.gltfModel;
+
+        } else if (item instanceof SMGAmmoBox) {
+
+            this._item = SMGAmmoBox.gltfModel;
+
+        } else if (item instanceof FirstAidKitItem) {
+
+            if (item.currentItem instanceof FirstAidKitSmall) {
+
+                this._item = FirstAidKitSmall.gltfModel;
+
+            } else if (item.currentItem instanceof FirstAidKitMedium) {
+
+                this._item = FirstAidKitMedium.gltfModel;
+
+            } else if (item.currentItem instanceof FirstAidKitLarge) {
+
+                this._item = FirstAidKitLarge.gltfModel;
+
+            }
 
         }
 
