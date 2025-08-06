@@ -53,7 +53,8 @@ const ELEMENT_CLASS = {
     ITEM_SIZE_1: 'item-size-1',
     ITEM_SIZE_2: 'item-size-2',
     FULL: 'full',
-    EMPTY: 'empty'
+    EMPTY: 'empty',
+    OCCUPIED: 'occupied'
 }
 
 const PDA_MENU_NAMES = [

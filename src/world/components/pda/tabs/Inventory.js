@@ -1314,15 +1314,16 @@ class Inventory extends TabPanel {
 
     setSlotOccupied(idx, occupied, itemSize = 1) {
         
+        const slotEl = this._html.slotsDivList[idx];
         if (occupied) {
 
             this._availableSlots = this._availableSlots.filter(s => s !== idx);
-            this._html.slotsDivList[idx].classList.add('occupied');
+            addElementClass(slotEl, ELEMENT_CLASS.OCCUPIED);
             if (itemSize === 2) {
 
                 const nextIdx = idx + 1;
                 this._availableSlots = this._availableSlots.filter(s => s !== nextIdx);
-                this._html.slotsDivList[nextIdx].classList.add('occupied');
+                addElementClass(this._html.slotsDivList[nextIdx], ELEMENT_CLASS.OCCUPIED);
 
             }
 
@@ -1333,8 +1334,8 @@ class Inventory extends TabPanel {
                 this._availableSlots.push(idx);
 
             }
-
-            this._html.slotsDivList[idx].classList.remove('occupied');
+            
+            removeElementClass(slotEl, ELEMENT_CLASS.OCCUPIED);
 
             if (itemSize === 2) {
 
@@ -1346,7 +1347,7 @@ class Inventory extends TabPanel {
 
                 }
 
-                this._html.slotsDivList[nextIdx].classList.remove('occupied');
+                removeElementClass(this._html.slotsDivList[nextIdx], ELEMENT_CLASS.OCCUPIED);
 
             }
 
@@ -1503,7 +1504,6 @@ class Inventory extends TabPanel {
             item.addHtmlClass(`${ELEMENT_CLASS.IDX}${idx}`);
             item.occupiedSlotIdx = idx;
 
-            this._html.itemsDivList.push(item.itemHtml);
             this._html.itemsPanel.appendChild(item.itemHtml);
 
             this.setSlotOccupied(idx, true, item.itemSize);
@@ -1533,9 +1533,6 @@ class Inventory extends TabPanel {
             this.setSlotOccupied(item.occupiedSlotIdx, false, item.itemSize);
             item.occupiedSlotIdx = -1;
             item.removeHtmlClass(ELEMENT_CLASS.IDX);
-
-            const itemDivIdx = this._html.itemsDivList.findIndex(div => div === item.itemHtml);
-            this._html.itemsDivList.splice(itemDivIdx, 1);
             this._html.itemsPanel.removeChild(item.itemHtml);
 
             this.fillItemDescription();

@@ -132,8 +132,6 @@ function createInventory() {
     }
     slotsPanel.append(...slotsDivList);
 
-    const itemsDivList = [];
-
     // operate panel contents
     const focusedDiv = document.createElement('div');
     focusedDiv.classList.add('focused-item', 'idx-0', 'item-size-1');
@@ -218,7 +216,7 @@ function createInventory() {
 
     return { 
         inventoryContainer, inventoryPanel, slotsPanel, operatePanel, itemsPanel, descriptionPanel, 
-        slotsDivList, itemsDivList, 
+        slotsDivList,
         focusedDiv, focusedSlot, shiftDiv, shiftSlot, selectDiv, selectSlot,
         operateMenuList, operateMenuItems, shiftMenuList, shiftMenuItems,
         descriptionTitle, descriptionContent
