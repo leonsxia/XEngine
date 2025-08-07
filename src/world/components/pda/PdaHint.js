@@ -64,6 +64,9 @@ class PdaHint {
                 addElementClass(this._html.moveBtn, ELEMENT_CLASS.HIDE);
                 removeElementClass(this._html.moveKey, ELEMENT_CLASS.HIDE);
 
+                addElementClass(this._html.resetBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.resetKey, ELEMENT_CLASS.HIDE);
+
                 addElementClass(this._html.upBtn, ELEMENT_CLASS.HIDE);
                 removeElementClass(this._html.upKey, ELEMENT_CLASS.HIDE);
 
@@ -75,6 +78,16 @@ class PdaHint {
 
                 addElementClass(this._html.rightBtn, ELEMENT_CLASS.HIDE);
                 removeElementClass(this._html.rightKey, ELEMENT_CLASS.HIDE);
+
+                addElementClass(this._html.rotateBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rotateUpKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rotateDownKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rotateLeftKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rotateRightKey, ELEMENT_CLASS.HIDE);
+
+                addElementClass(this._html.zoomBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.zoomInKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.zoomOutKey, ELEMENT_CLASS.HIDE);
                 break;
 
             case CONTROL_TYPES.XBOX:
@@ -91,6 +104,9 @@ class PdaHint {
                 addElementClass(this._html.moveKey, ELEMENT_CLASS.HIDE);
                 removeElementClass(this._html.moveBtn, ELEMENT_CLASS.HIDE);
 
+                addElementClass(this._html.resetKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.resetBtn, ELEMENT_CLASS.HIDE);
+
                 addElementClass(this._html.upKey, ELEMENT_CLASS.HIDE);
                 removeElementClass(this._html.upBtn, ELEMENT_CLASS.HIDE);
 
@@ -102,6 +118,16 @@ class PdaHint {
 
                 addElementClass(this._html.rightKey, ELEMENT_CLASS.HIDE);
                 removeElementClass(this._html.rightBtn, ELEMENT_CLASS.HIDE);
+
+                removeElementClass(this._html.rotateBtn, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.rotateUpKey, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.rotateDownKey, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.rotateLeftKey, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.rotateRightKey, ELEMENT_CLASS.HIDE);
+
+                removeElementClass(this._html.zoomBtn, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.zoomInKey, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.zoomOutKey, ELEMENT_CLASS.HIDE);
                 break;
 
         }
@@ -136,7 +162,8 @@ class PdaHint {
         this._hintGroup.length = 0;
         this._hintGroup.push(
             this._html.leftHint, this._html.rightHint, this._html.upHint, this._html.downHint,
-            this._html.moveHint, this._html.confirmHint, this._html.closeHint);
+            this._html.moveHint, this._html.confirmHint, this._html.closeHint
+        );
 
         this.clearHintPanel();
         this.applyHintGroup();
@@ -152,7 +179,8 @@ class PdaHint {
         this._hintGroup.length = 0;
         this._hintGroup.push(
             this._html.leftHint, this._html.rightHint, this._html.upHint, this._html.downHint,
-            this._html.moveHint, this._html.cancelHint);
+            this._html.moveHint, this._html.cancelHint
+        );
 
         this.clearHintPanel();
         this.applyHintGroup();
@@ -185,7 +213,8 @@ class PdaHint {
         this._hintGroup.length = 0;
         this._hintGroup.push(
             this._html.leftHint, this._html.rightHint, this._html.upHint, this._html.downHint,
-            this._html.confirmHint, this._html.cancelHint);
+            this._html.confirmHint, this._html.cancelHint
+        );
 
         this.clearHintPanel();
         this.applyHintGroup();
@@ -199,7 +228,10 @@ class PdaHint {
         if (this._hintIdx === hintIndex.itemViewer) return;
 
         this._hintGroup.length = 0;
-        this._hintGroup.push(this._html.cancelHint);
+        this._hintGroup.push(
+            this._html.rotateHint, this._html.zoomHint, 
+            this._html.resetHint, this._html.cancelHint
+        );
 
         this.clearHintPanel();
         this.applyHintGroup();

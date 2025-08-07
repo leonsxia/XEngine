@@ -82,15 +82,23 @@ InputBase.CONTROL_ACTIONS = [
     {
         CATEGORY: 'pda',
         TYPES: {
-            UP: 'goUp',
-            DOWN: 'goDown',
-            LEFT: 'goLeft',
-            RIGHT: 'goRight',
-            CONFIRM: 'confirm',
-            CANCEL: 'cancel',
-            SHIFT_LEFT: 'shiftLeft',
-            SHIFT_RIGHT: 'shiftRight',
-            MOVE_ITEM: 'moveItem'
+            BTN_UP: 'btnUp',
+            BTN_DOWN: 'btnDown',
+            BTN_LEFT: 'btnLeft',
+            BTN_RIGHT: 'btnRight',
+            LSTICK_UP: 'lstickUp',
+            LSTICK_DOWN: 'lstickDown',
+            LSTICK_LEFT: 'lstickLeft',
+            LSTICK_RIGHT: 'lstickRight',
+            RSTICK_UP: 'rstickUp',
+            RSTICK_DOWN: 'rstickDown',
+            RSTICK_LEFT: 'rstickLeft',
+            RSTICK_RIGHT: 'rstickRight',
+            BTN_A: 'btnA',
+            BTN_B: 'btnB',
+            BTN_LB: 'btnLB',
+            BTN_RB: 'btnRB',
+            BTN_X: 'btnX'
         }
     },
     {

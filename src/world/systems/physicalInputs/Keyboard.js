@@ -22,15 +22,15 @@ class Keyboard extends InputBase {
     #inventory = false;
 
     // pda
-    #up = false;
-    #down = false;
-    #left = false;
-    #right = false;
-    #confirm = false;
-    #cancel = false;
-    #shiftLeft = false;
-    #shiftRight = false;
-    #moveItem = false;
+    #btnUp = false;
+    #btnDown = false;
+    #btnLeft = false;
+    #btnRight = false;
+    #btnA = false;
+    #btnB = false;
+    #btnLB = false;
+    #btnRB = false;
+    #btnX = false;
 
     #logger = new Logger(DEBUG, 'Keyboard');
 
@@ -736,15 +736,15 @@ class Keyboard extends InputBase {
 
                         if (!D.isDown) {
 
-                            this.#left = true;
+                            this.#btnLeft = true;
 
-                            eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#left);
+                            eventDispatcher.publish(messageType, actions.BTN_LEFT, world.current, this.#btnLeft);
 
                         } else {
 
-                            this.#right = false;
+                            this.#btnRight = false;
 
-                            eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#right);
+                            eventDispatcher.publish(messageType, actions.BTN_RIGHT, world.current, this.#btnRight);
 
                         }
 
@@ -762,15 +762,15 @@ class Keyboard extends InputBase {
 
                         if (!A.isDown) {
 
-                            this.#right = true;
+                            this.#btnRight = true;
 
-                            eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#right);
+                            eventDispatcher.publish(messageType, actions.BTN_RIGHT, world.current, this.#btnRight);
 
                         } else {
 
-                            this.#left = false;
+                            this.#btnLeft = false;
 
-                            eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#left);
+                            eventDispatcher.publish(messageType, actions.BTN_LEFT, world.current, this.#btnLeft);
 
                         }
 
@@ -788,15 +788,15 @@ class Keyboard extends InputBase {
 
                         if (!S.isDown) {
 
-                            this.#up = true;
+                            this.#btnUp = true;
 
-                            eventDispatcher.publish(messageType, actions.UP, world.current, this.#up);
+                            eventDispatcher.publish(messageType, actions.BTN_UP, world.current, this.#btnUp);
 
                         } else {
 
-                            this.#down = false;
+                            this.#btnDown = false;
 
-                            eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#down);
+                            eventDispatcher.publish(messageType, actions.BTN_DOWN, world.current, this.#btnDown);
 
                         }
 
@@ -814,15 +814,15 @@ class Keyboard extends InputBase {
 
                         if (!W.isDown) {
 
-                            this.#down = true;
+                            this.#btnDown = true;
 
-                            eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#down);
+                            eventDispatcher.publish(messageType, actions.BTN_DOWN, world.current, this.#btnDown);
 
                         } else {
 
-                            this.#up = false;
+                            this.#btnUp = false;
 
-                            eventDispatcher.publish(messageType, actions.UP, world.current, this.#up);
+                            eventDispatcher.publish(messageType, actions.BTN_UP, world.current, this.#btnUp);
 
                         }
 
@@ -839,15 +839,15 @@ class Keyboard extends InputBase {
 
                         if (!E.isDown) {
 
-                            this.#shiftLeft = true;
+                            this.#btnLB = true;
 
-                            eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#shiftLeft);
+                            eventDispatcher.publish(messageType, actions.BTN_LB, world.current, this.#btnLB);
 
                         } else {
 
-                            this.#shiftRight = false;
+                            this.#btnRB = false;
 
-                            eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#shiftRight);
+                            eventDispatcher.publish(messageType, actions.BTN_RB, world.current, this.#btnRB);
 
                         }
 
@@ -864,15 +864,15 @@ class Keyboard extends InputBase {
 
                         if (!Q.isDown) {
 
-                            this.#shiftRight = true;
+                            this.#btnRB = true;
 
-                            eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#shiftRight);
+                            eventDispatcher.publish(messageType, actions.BTN_RB, world.current, this.#btnRB);
 
                         } else {
 
-                            this.#shiftLeft = false;
+                            this.#btnLB = false;
 
-                            eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#shiftLeft);
+                            eventDispatcher.publish(messageType, actions.BTN_LB, world.current, this.#btnLB);
 
                         }
 
@@ -886,9 +886,9 @@ class Keyboard extends InputBase {
                     if (!J.isDown) {
 
                         J.isDown = true;
-                        this.#confirm = true;
+                        this.#btnA = true;
 
-                        eventDispatcher.publish(messageType, actions.CONFIRM, world.current, this.#confirm);
+                        eventDispatcher.publish(messageType, actions.BTN_A, world.current, this.#btnA);
 
                     }
 
@@ -900,9 +900,9 @@ class Keyboard extends InputBase {
                     if (!K.isDown) {
 
                         K.isDown = true;
-                        this.#cancel = true;
+                        this.#btnB = true;
 
-                        eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#cancel);
+                        eventDispatcher.publish(messageType, actions.BTN_B, world.current, this.#btnB);
 
                     }
 
@@ -924,9 +924,9 @@ class Keyboard extends InputBase {
                     if (!Shift.isDown) {
 
                         Shift.isDown = true;
-                        this.#moveItem = true;
+                        this.#btnX = true;
 
-                        eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#moveItem);
+                        eventDispatcher.publish(messageType, actions.BTN_X, world.current, this.#btnX);
 
                     }
 
@@ -946,15 +946,15 @@ class Keyboard extends InputBase {
 
                     if (D.isDown) {
 
-                        this.#right = true;
+                        this.#btnRight = true;
 
-                        eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#right);
+                        eventDispatcher.publish(messageType, actions.BTN_RIGHT, world.current, this.#btnRight);
 
                     } else {
 
-                        this.#left = false;
+                        this.#btnLeft = false;
 
-                        eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#left);
+                        eventDispatcher.publish(messageType, actions.BTN_LEFT, world.current, this.#btnLeft);
 
                     }
 
@@ -968,15 +968,15 @@ class Keyboard extends InputBase {
 
                     if (A.isDown) {
 
-                        this.#left = true;
+                        this.#btnLeft = true;
 
-                        eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#left);
+                        eventDispatcher.publish(messageType, actions.BTN_LEFT, world.current, this.#btnLeft);
 
                     } else {
 
-                        this.#right = false;
+                        this.#btnRight = false;
 
-                        eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#right);
+                        eventDispatcher.publish(messageType, actions.BTN_RIGHT, world.current, this.#btnRight);
 
                     }
 
@@ -990,15 +990,15 @@ class Keyboard extends InputBase {
 
                     if (S.isDown) {
 
-                        this.#down = true;
+                        this.#btnDown = true;
 
-                        eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#down);
+                        eventDispatcher.publish(messageType, actions.BTN_DOWN, world.current, this.#btnDown);
 
                     } else {
 
-                        this.#up = false;
+                        this.#btnUp = false;
 
-                        eventDispatcher.publish(messageType, actions.UP, world.current, this.#up);
+                        eventDispatcher.publish(messageType, actions.BTN_UP, world.current, this.#btnUp);
 
                     }
 
@@ -1012,15 +1012,15 @@ class Keyboard extends InputBase {
 
                     if (W.isDown) {
 
-                        this.#up = true;
+                        this.#btnUp = true;
 
-                        eventDispatcher.publish(messageType, actions.UP, world.current, this.#up);
+                        eventDispatcher.publish(messageType, actions.BTN_UP, world.current, this.#btnUp);
 
                     } else {
 
-                        this.#down = false;
+                        this.#btnDown = false;
 
-                        eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#down);
+                        eventDispatcher.publish(messageType, actions.BTN_DOWN, world.current, this.#btnDown);
 
                     }
 
@@ -1033,15 +1033,15 @@ class Keyboard extends InputBase {
 
                     if (E.isDown) {
 
-                        this.#shiftRight = true;
+                        this.#btnRB = true;
 
-                        eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#shiftRight);
+                        eventDispatcher.publish(messageType, actions.BTN_RB, world.current, this.#btnRB);
 
                     } else {
 
-                        this.#shiftLeft = false;
+                        this.#btnLB = false;
 
-                        eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#shiftLeft);
+                        eventDispatcher.publish(messageType, actions.BTN_LB, world.current, this.#btnLB);
 
                     }
 
@@ -1054,15 +1054,15 @@ class Keyboard extends InputBase {
 
                     if (Q.isDown) {
 
-                        this.#shiftLeft = true;
+                        this.#btnLB = true;
 
-                        eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#shiftLeft);
+                        eventDispatcher.publish(messageType, actions.BTN_LB, world.current, this.#btnLB);
 
                     } else {
 
-                        this.#shiftRight = false;
+                        this.#btnRB = false;
 
-                        eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#shiftRight);
+                        eventDispatcher.publish(messageType, actions.BTN_RB, world.current, this.#btnRB);
 
                     }
 
@@ -1074,9 +1074,9 @@ class Keyboard extends InputBase {
                 case J.upper:
 
                     J.isDown = false;
-                    this.#confirm = false;
+                    this.#btnA = false;
 
-                    eventDispatcher.publish(messageType, actions.CONFIRM, world.current, this.#confirm);
+                    eventDispatcher.publish(messageType, actions.BTN_A, world.current, this.#btnA);
 
                     break;
 
@@ -1084,9 +1084,9 @@ class Keyboard extends InputBase {
                 case K.upper:
 
                     K.isDown = false;
-                    this.#cancel = false;
+                    this.#btnB = false;
 
-                    eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#cancel);
+                    eventDispatcher.publish(messageType, actions.BTN_B, world.current, this.#btnB);
 
                     break;
 
@@ -1100,9 +1100,9 @@ class Keyboard extends InputBase {
                 case Shift.code:
 
                     Shift.isDown = false;
-                    this.#moveItem = false;
+                    this.#btnX = false;
 
-                    eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#moveItem);
+                    eventDispatcher.publish(messageType, actions.BTN_X, world.current, this.#btnX);
 
                     break;
 

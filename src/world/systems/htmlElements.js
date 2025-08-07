@@ -293,7 +293,7 @@ function createPdaHintElements(urls) {
     const { 
         btnViewUrl,
         btnDPadUpUrl, btnDPadDownUrl, btnDPadLeftUrl, btnDPadRightUrl,
-        // btnLStickClickUrl, btnRStickClickUrl
+        btnLStickClickUrl, btnRStickClickUrl
     } = urls;
     const hintPanel = document.createElement('div');
     hintPanel.toggleAttribute('pda-hints');
@@ -338,6 +338,16 @@ function createPdaHintElements(urls) {
     moveBtn.innerHTML = PDA_HINT_GROUP.MOVE.icon;
     moveHint.append(moveKey, moveBtn, PDA_HINT_GROUP.MOVE.text);
 
+    const resetHint = document.createElement('div');
+    const resetKey = document.createElement('span');
+    const resetBtn = document.createElement('span');
+    resetHint.classList.add('hint-group');
+    resetKey.classList.add('hint-key');
+    resetBtn.classList.add('hint-btn', 'btn-X', 'hide');
+    resetKey.innerText = KEYS.SHIFT;
+    resetBtn.innerHTML = PDA_HINT_GROUP.RESET.icon;
+    resetHint.append(resetKey, resetBtn, PDA_HINT_GROUP.RESET.text);
+
     const upHint = document.createElement('div');
     const upKey = document.createElement('span');
     const upBtn = document.createElement('img');
@@ -378,16 +388,51 @@ function createPdaHintElements(urls) {
     rightBtn.src = btnDPadRightUrl;
     rightHint.append(rightKey, rightBtn, PDA_HINT_GROUP.RIGHT.text);
 
+    const rotateHint = document.createElement('div');
+    const rotateUpKey = document.createElement('span');
+    const rotateDownKey = document.createElement('span');
+    const rotateLeftKey = document.createElement('span');
+    const rotateRightKey = document.createElement('span');
+    const rotateBtn = document.createElement('img');
+    rotateHint.classList.add('hint-group');
+    rotateUpKey.classList.add('hint-key');
+    rotateDownKey.classList.add('hint-key');
+    rotateLeftKey.classList.add('hint-key');
+    rotateRightKey.classList.add('hint-key');
+    rotateBtn.classList.add('hint-btn', 'btn-svg', 'hide');
+    rotateUpKey.innerText = KEYS.W;
+    rotateDownKey.innerText = KEYS.S;
+    rotateLeftKey.innerText = KEYS.A;
+    rotateRightKey.innerText = KEYS.D;
+    rotateBtn.src = btnLStickClickUrl;
+    rotateHint.append(rotateLeftKey, rotateRightKey, rotateUpKey, rotateDownKey, rotateBtn, PDA_HINT_GROUP.ROTATE.text);
+
+    const zoomHint = document.createElement('div');
+    const zoomInKey = document.createElement('span');
+    const zoomOutKey = document.createElement('span');
+    const zoomBtn = document.createElement('img');
+    zoomHint.classList.add('hint-group');
+    zoomInKey.classList.add('hint-key');
+    zoomOutKey.classList.add('hint-key');
+    zoomBtn.classList.add('hint-btn', 'btn-svg', 'hide');
+    zoomInKey.innerText = KEYS.E;
+    zoomOutKey.innerText = KEYS.Q;
+    zoomBtn.src = btnRStickClickUrl;
+    zoomHint.append(zoomOutKey, zoomInKey, zoomBtn, PDA_HINT_GROUP.ZOOM.text);
+
     return {
         hintPanel,
         closeHint, closeKey, closeBtn,
         confirmHint, confirmKey, confirmBtn,
         cancelHint, cancelKey, cancelBtn,
         moveHint, moveKey, moveBtn,
+        resetHint, resetKey, resetBtn,
         upHint, upKey, upBtn,
         downHint, downKey, downBtn,
         leftHint, leftKey, leftBtn,
-        rightHint, rightKey, rightBtn
+        rightHint, rightKey, rightBtn,
+        rotateHint, rotateLeftKey, rotateRightKey, rotateUpKey, rotateDownKey, rotateBtn,
+        zoomHint, zoomOutKey, zoomInKey, zoomBtn
     };
 
 }

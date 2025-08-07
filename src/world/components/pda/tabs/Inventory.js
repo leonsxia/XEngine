@@ -1502,6 +1502,66 @@ class Inventory extends TabPanel {
 
     }
 
+    /**
+     * @param {boolean} val
+     */
+    set itemRotateXClockwise(val) {
+
+        pdaItemViewer.rotateXClockwise = val;
+
+    }
+
+    /**
+     * @param {boolean} val
+     */
+    set itemRotateXCounterClockwise(val) {
+
+        pdaItemViewer.rotateXCounterClockwise = val;
+
+    }
+
+    /**
+     * @param {boolean} val
+     */
+    set itemRotateYClockwise(val) {
+
+        pdaItemViewer.rotateYClockwise = val;
+
+    }
+
+    /**
+     * @param {boolean} val
+     */
+    set itemRotateYCounterClockwise(val) {
+
+        pdaItemViewer.rotateYCounterClockwise = val;
+
+    }
+
+    /**
+     * @param {boolean} val
+     */
+    set itemZoomIn(val) {
+
+        pdaItemViewer.zoomIn = val;
+
+    }
+
+    /**
+     * @param {boolean} val
+     */
+    set itemZoomOut(val) {
+
+        pdaItemViewer.zoomOut = val;
+
+    }
+
+    resetItemViewerState() {
+
+        pdaItemViewer.resetState(true);
+
+    }
+
     firstAvailableSlot(itemSize = 1) {
 
         let idx, slotIdx;

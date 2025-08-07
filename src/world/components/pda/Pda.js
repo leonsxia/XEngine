@@ -206,9 +206,7 @@ class Pda {
     }
 
     // control events start
-    goUp(val) {
-        this.#logger.func = this.goUp.name;
-        // this.#logger.log(`goUp: ${val}`);
+    btnUp(val) {
 
         if (val) {
 
@@ -230,7 +228,7 @@ class Pda {
 
                     this._inventory.selectUp();
 
-                } else {
+                } else if (!this._inventory.itemViewerEnabled) {
 
                     this._inventory.focusUp();
 
@@ -240,11 +238,15 @@ class Pda {
 
         }
 
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateXClockwise = val;
+
+        }
+
     }
 
-    goDown(val) {
-        this.#logger.func = this.goDown.name;
-        // this.#logger.log(`goDown: ${val}`);
+    btnDown(val) {
 
         if (val) {
 
@@ -266,7 +268,7 @@ class Pda {
 
                     this._inventory.selectDown();
 
-                } else {
+                } else if (!this._inventory.itemViewerEnabled) {
 
                     this._inventory.focusDown();
 
@@ -276,11 +278,15 @@ class Pda {
 
         }
 
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateXCounterClockwise = val;
+
+        }
+
     }
 
-    goLeft(val) {
-        this.#logger.func = this.goLeft.name;
-        // this.#logger.log(`goLeft: ${val}`);
+    btnLeft(val) {
 
         if (val) {
 
@@ -296,7 +302,7 @@ class Pda {
 
                     this._inventory.selectLeft();
 
-                } else {
+                } else if (!this._inventory.itemViewerEnabled) {
 
                     this._inventory.focusLeft();
 
@@ -306,11 +312,15 @@ class Pda {
 
         }
 
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateYClockwise = val;
+
+        }
+
     }
 
-    goRight(val) {
-        this.#logger.func = this.goRight.name;
-        // this.#logger.log(`goRight: ${val}`);
+    btnRight(val) {
 
         if (val) {
 
@@ -326,7 +336,7 @@ class Pda {
 
                     this._inventory.selectRight();
 
-                } else {
+                } else if (!this._inventory.itemViewerEnabled) {
 
                     this._inventory.focusRight();                    
 
@@ -336,11 +346,89 @@ class Pda {
 
         }
 
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateYCounterClockwise = val;
+
+        }
+
     }
 
-    confirm(val) {
-        this.#logger.func = this.confirm.name;
-        // this.#logger.log(`confirm: ${val}`);
+    lstickUp(val) {
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateXClockwise = val;
+
+        }
+
+    }
+
+    lstickDown(val) {
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateXCounterClockwise = val;
+
+        }
+
+    }
+
+    lstickLeft(val) {
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateYClockwise = val;
+
+        }
+
+    }
+
+    lstickRight(val) {
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateYCounterClockwise = val;
+
+        }
+
+    }
+
+    rstickUp(val) {
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemZoomIn = val;
+
+        }
+
+    }
+
+    rstickDown(val) {
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemZoomOut = val;
+
+        }
+
+    }
+
+    rstickLeft(val) {
+
+        this.#logger.func = this.rstickLeft.name;
+        this.#logger.log(`right stick left: ${val}`);
+
+    }
+
+    rstickRight(val) {
+
+        this.#logger.func = this.rstickRight.name;
+        this.#logger.log(`right stick right: ${val}`);
+
+    }
+
+    btnA(val) {
 
         if (val) {
 
@@ -374,9 +462,7 @@ class Pda {
 
     }
 
-    cancel(val) {
-        this.#logger.func = this.cancel.name;
-        // this.#logger.log(`cancel: ${val}`);
+    btnB(val) {
 
         if (val) {
 
@@ -410,33 +496,47 @@ class Pda {
 
     }
 
-    shiftLeft(val) {
-        this.#logger.func = this.shiftLeft.name;
-        // this.#logger.log(`shiftLeft: ${val}`);
+    btnLB(val) {
 
         if (val) {
 
-            this._pdaMenu.shiftLeft();
+            if (!this._inventory.itemViewerEnabled) {
+
+                this._pdaMenu.shiftLeft();
+
+            }
+
+        }
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemZoomOut = val;
 
         }
 
     }
 
-    shiftRight(val) {
-        this.#logger.func = this.shiftRight.name;
-        // this.#logger.log(`shiftRight: ${val}`);
+    btnRB(val) {
 
         if (val) {
 
-            this._pdaMenu.shiftRight();
+            if (!this._inventory.itemViewerEnabled) {
+
+                this._pdaMenu.shiftRight();
+
+            }
+
+        }
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemZoomIn = val;
 
         }
 
     }
 
-    moveItem(val) {
-        this.#logger.func = this.moveItem.name;
-        // this.#logger.log(`moveItem: ${val}`);
+    btnX(val) {
 
         if (val) {
 
@@ -447,6 +547,12 @@ class Pda {
                 ) {
 
                     this._inventory.shiftReady = !this._inventory.shiftReady;
+
+                }
+
+                if (this._inventory.itemViewerEnabled) {
+
+                    this._inventory.resetItemViewerState();
 
                 }
 

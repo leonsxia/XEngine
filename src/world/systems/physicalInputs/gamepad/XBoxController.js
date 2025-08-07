@@ -17,6 +17,8 @@ class XBoxController extends InputBase {
     #LStickMoveDown = false;
     #RStickMoveLeft = false;
     #RStickMoveRight = false;
+    #RStickMoveUp = false;
+    #RStickMoveDown = false;
     #APressed = false;
     #BPressed = false;
     #XPressed = false;
@@ -111,6 +113,7 @@ class XBoxController extends InputBase {
         if (this.attachTo.currentScene.isPdaOn) {
 
             this.processPdaButtonEvents();
+            this.processPdaStickEvents();
 
         }
 
@@ -353,7 +356,7 @@ class XBoxController extends InputBase {
 
             this._triggered = true;
 
-            if (!this.#LStickMoveUp && !this.#LStickMoveDown) {
+            if (!this.#LStickMoveUp) {
 
                 this.#logger.log(`gamepad L stick moving forward: ${leftStickH}`);
 
@@ -383,7 +386,7 @@ class XBoxController extends InputBase {
 
             this._triggered = true;
 
-            if (!this.#LStickMoveDown && !this.#LStickMoveUp) {
+            if (!this.#LStickMoveDown) {
 
                 this.#logger.log(`gamepad L stick moving backward: ${leftStickH}`);
 
@@ -660,7 +663,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button up pressed: ${btnUp.pressed}, value: ${btnUp.value}`);
 
                 this.#UpPressed = true;
-                eventDispatcher.publish(messageType, actions.UP, world.current, this.#UpPressed);
+                eventDispatcher.publish(messageType, actions.BTN_UP, world.current, this.#UpPressed);
 
                 this.#logger.log(`up: ${this.#UpPressed}`);
 
@@ -673,7 +676,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button up pressed: ${btnUp.pressed}, value: ${btnUp.value}`);
 
                 this.#UpPressed = false;
-                eventDispatcher.publish(messageType, actions.UP, world.current, this.#UpPressed);
+                eventDispatcher.publish(messageType, actions.BTN_UP, world.current, this.#UpPressed);
 
                 this.#logger.log(`up: ${this.#UpPressed}`);
 
@@ -688,7 +691,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button down pressed: ${btnDown.pressed}, value: ${btnDown.value}`);
 
                 this.#DownPressed = true;
-                eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#DownPressed);
+                eventDispatcher.publish(messageType, actions.BTN_DOWN, world.current, this.#DownPressed);
 
                 this.#logger.log(`down: ${this.#DownPressed}`);
 
@@ -701,7 +704,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button down pressed: ${btnDown.pressed}, value: ${btnDown.value}`);
 
                 this.#DownPressed = false;
-                eventDispatcher.publish(messageType, actions.DOWN, world.current, this.#DownPressed);
+                eventDispatcher.publish(messageType, actions.BTN_DOWN, world.current, this.#DownPressed);
 
                 this.#logger.log(`down: ${this.#DownPressed}`);
 
@@ -716,7 +719,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button left pressed: ${btnLeft.pressed}, value: ${btnLeft.value}`);
 
                 this.#leftPressed = true;
-                eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#leftPressed);
+                eventDispatcher.publish(messageType, actions.BTN_LEFT, world.current, this.#leftPressed);
 
                 this.#logger.log(`left: ${this.#leftPressed}`);
 
@@ -729,7 +732,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button left pressed: ${btnLeft.pressed}, value: ${btnLeft.value}`);
 
                 this.#leftPressed = false;
-                eventDispatcher.publish(messageType, actions.LEFT, world.current, this.#leftPressed);
+                eventDispatcher.publish(messageType, actions.BTN_LEFT, world.current, this.#leftPressed);
 
                 this.#logger.log(`left: ${this.#leftPressed}`);
 
@@ -744,7 +747,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button right pressed: ${btnRight.pressed}, value: ${btnRight.value}`);
 
                 this.#rightPressed = true;
-                eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#rightPressed);
+                eventDispatcher.publish(messageType, actions.BTN_RIGHT, world.current, this.#rightPressed);
 
                 this.#logger.log(`right: ${this.#rightPressed}`);
 
@@ -757,7 +760,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button right pressed: ${btnRight.pressed}, value: ${btnRight.value}`);
 
                 this.#rightPressed = false;
-                eventDispatcher.publish(messageType, actions.RIGHT, world.current, this.#rightPressed);
+                eventDispatcher.publish(messageType, actions.BTN_RIGHT, world.current, this.#rightPressed);
 
                 this.#logger.log(`right: ${this.#rightPressed}`);
 
@@ -772,7 +775,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button A pressed: ${btnA.pressed}, value: ${btnA.value}`);
 
                 this.#APressed = true;
-                eventDispatcher.publish(messageType, actions.CONFIRM, world.current, this.#APressed);
+                eventDispatcher.publish(messageType, actions.BTN_A, world.current, this.#APressed);
 
                 this.#logger.log(`confirm: ${this.#APressed}`);
 
@@ -785,7 +788,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button A pressed: ${btnA.pressed}, value: ${btnA.value}`);
 
                 this.#APressed = false;
-                eventDispatcher.publish(messageType, actions.CONFIRM, world.current, this.#APressed);
+                eventDispatcher.publish(messageType, actions.BTN_A, world.current, this.#APressed);
 
                 this.#logger.log(`confirm: ${this.#APressed}`);
 
@@ -800,7 +803,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button B pressed: ${btnB.pressed}, value: ${btnB.value}`);
 
                 this.#BPressed = true;
-                eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#BPressed);
+                eventDispatcher.publish(messageType, actions.BTN_B, world.current, this.#BPressed);
 
                 this.#logger.log(`cancel: ${this.#BPressed}`);
 
@@ -813,7 +816,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button B pressed: ${btnB.pressed}, value: ${btnB.value}`);
 
                 this.#BPressed = false;
-                eventDispatcher.publish(messageType, actions.CANCEL, world.current, this.#BPressed);
+                eventDispatcher.publish(messageType, actions.BTN_B, world.current, this.#BPressed);
 
                 this.#logger.log(`cancel: ${this.#BPressed}`);
 
@@ -828,7 +831,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button X pressed: ${btnX.pressed}, value: ${btnX.value}`);
 
                 this.#XPressed = true;
-                eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#XPressed);
+                eventDispatcher.publish(messageType, actions.BTN_X, world.current, this.#XPressed);
 
                 this.#logger.log(`move item: ${this.#XPressed}`);
 
@@ -841,7 +844,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button X pressed: ${btnX.pressed}, value: ${btnX.value}`);
 
                 this.#XPressed = false;
-                eventDispatcher.publish(messageType, actions.MOVE_ITEM, world.current, this.#XPressed);
+                eventDispatcher.publish(messageType, actions.BTN_X, world.current, this.#XPressed);
 
                 this.#logger.log(`move item: ${this.#XPressed}`);
 
@@ -856,7 +859,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button LB pressed: ${btnLB.pressed}, value: ${btnLB.value}`);
 
                 this.#LBPressed = true;
-                eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#LBPressed);
+                eventDispatcher.publish(messageType, actions.BTN_LB, world.current, this.#LBPressed);
 
                 this.#logger.log(`shiftLeft: ${this.#LBPressed}`);
 
@@ -869,7 +872,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button LB pressed: ${btnLB.pressed}, value: ${btnLB.value}`);
 
                 this.#LBPressed = false;
-                eventDispatcher.publish(messageType, actions.SHIFT_LEFT, world.current, this.#LBPressed);
+                eventDispatcher.publish(messageType, actions.BTN_LB, world.current, this.#LBPressed);
 
                 this.#logger.log(`shiftLeft: ${this.#LBPressed}`);
 
@@ -884,7 +887,7 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button RB pressed: ${btnRB.pressed}, value: ${btnRB.value}`);
 
                 this.#RBPressed = true;
-                eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#RBPressed);
+                eventDispatcher.publish(messageType, actions.BTN_RB, world.current, this.#RBPressed);
 
                 this.#logger.log(`shiftRight: ${this.#RBPressed}`);
 
@@ -897,9 +900,239 @@ class XBoxController extends InputBase {
                 this.#logger.log(`gamepad button RB pressed: ${btnRB.pressed}, value: ${btnRB.value}`);
 
                 this.#RBPressed = false;
-                eventDispatcher.publish(messageType, actions.SHIFT_RIGHT, world.current, this.#RBPressed);
+                eventDispatcher.publish(messageType, actions.BTN_RB, world.current, this.#RBPressed);
 
                 this.#logger.log(`shiftRight: ${this.#RBPressed}`);
+
+            }
+
+        }
+
+    }
+
+    processPdaStickEvents() {
+        this.#logger.func = 'processPdaStickEvents';
+
+        const eventDispatcher = this.eventDispatcher;
+        const messageType = InputBase.CONTROL_TYPES.PDA;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const world = this.attachTo;
+
+        const leftStickH = this.gamepad.axes[0];
+        const leftStickV = this.gamepad.axes[1];
+        const rightStickH = this.gamepad.axes[2];
+        const rightStickV = this.gamepad.axes[3];
+        
+        const LStickHValidMin = 0.4;
+        const LStickVValidMin = 0.4;
+        const RStickHValidMin = 0.4;
+        const RStickVValidMin = 0.4;
+
+        // left stick events
+        if (leftStickH <= - LStickHValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#LStickMoveLeft) {
+
+                this.#logger.log(`gamepad L stick moving left: ${leftStickH}`);
+
+                this.#LStickMoveLeft = true;
+                eventDispatcher.publish(messageType, actions.LSTICK_LEFT, world.current, this.#LStickMoveLeft);
+
+            }
+
+        } else {
+
+            if (this.#LStickMoveLeft) {
+
+                this.#logger.log(`gamepad L stick moving left: ${leftStickH}`);
+
+                this.#LStickMoveLeft = false;
+                eventDispatcher.publish(messageType, actions.LSTICK_LEFT, world.current, this.#LStickMoveLeft);
+
+            }
+
+        }
+
+        if (leftStickH >= LStickHValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#LStickMoveRight) {
+
+                this.#logger.log(`gamepad L stick moving right: ${leftStickH}`);
+
+                this.#LStickMoveRight = true;
+                eventDispatcher.publish(messageType, actions.LSTICK_RIGHT, world.current, this.#LStickMoveRight);
+
+            }
+
+        } else {
+
+            if (this.#LStickMoveRight) {
+
+                this.#logger.log(`gamepad L stick moving right: ${leftStickH}`);
+
+                this.#LStickMoveRight = false;
+                eventDispatcher.publish(messageType, actions.LSTICK_RIGHT, world.current, this.#LStickMoveRight);
+
+            }
+
+        }
+
+        if (leftStickV <= - LStickVValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#LStickMoveUp) {
+
+                this.#logger.log(`gamepad L stick moving up: ${leftStickH}`);
+
+                this.#LStickMoveUp = true;
+                eventDispatcher.publish(messageType, actions.LSTICK_UP, world.current, this.#LStickMoveUp);
+
+            }
+
+        } else {
+
+            if (this.#LStickMoveUp) {
+
+                this.#logger.log(`gamepad L stick moving up: ${leftStickH}`);
+
+                this.#LStickMoveUp = false;
+                eventDispatcher.publish(messageType, actions.LSTICK_UP, world.current, this.#LStickMoveUp);
+
+            }
+
+        }
+
+        if (leftStickV >= LStickVValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#LStickMoveDown) {
+
+                this.#logger.log(`gamepad L stick moving down: ${leftStickH}`);
+
+                this.#LStickMoveDown = true;
+                eventDispatcher.publish(messageType, actions.LSTICK_DOWN, world.current, this.#LStickMoveDown);
+
+            }
+
+        } else {
+
+            if (this.#LStickMoveDown) {
+
+                this.#logger.log(`gamepad L stick moving down: ${leftStickH}`);
+
+                this.#LStickMoveDown = false;
+                eventDispatcher.publish(messageType, actions.LSTICK_DOWN, world.current, this.#LStickMoveDown);
+
+            }
+
+        }
+
+        // right stick events        
+        if (rightStickV <= - RStickVValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#RStickMoveUp) {
+
+                this.#logger.log(`gamepad R stick moving up: ${rightStickV}`);
+
+                this.#RStickMoveUp = true;
+                eventDispatcher.publish(messageType, actions.RSTICK_UP, world.current, this.#RStickMoveUp);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveUp) {
+
+                this.#logger.log(`gamepad R stick moving up: ${rightStickV}`);
+
+                this.#RStickMoveUp = false;
+                eventDispatcher.publish(messageType, actions.RSTICK_UP, world.current, this.#RStickMoveUp);
+
+            }
+
+        }
+
+        if (rightStickV >= RStickVValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#RStickMoveDown) {
+
+                this.#logger.log(`gamepad R stick moving down: ${rightStickH}`);
+
+                this.#RStickMoveDown = true;
+                eventDispatcher.publish(messageType, actions.RSTICK_DOWN, world.current, this.#RStickMoveDown);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveDown) {
+
+                this.#logger.log(`gamepad R stick moving down: ${rightStickH}`);
+
+                this.#RStickMoveDown = false;
+                eventDispatcher.publish(messageType, actions.RSTICK_DOWN, world.current, this.#RStickMoveDown);
+
+            }
+
+        }
+
+        if (rightStickH <= - RStickHValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#RStickMoveLeft) {
+
+                this.#logger.log(`gamepad R stick moving left: ${rightStickH}`);
+
+                this.#RStickMoveLeft = true;
+                eventDispatcher.publish(messageType, actions.RSTICK_LEFT, world.current, this.#RStickMoveLeft);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveLeft) {
+
+                this.#logger.log(`gamepad R stick moving left: ${rightStickH}`);
+
+                this.#RStickMoveLeft = false;
+                eventDispatcher.publish(messageType, actions.RSTICK_LEFT, world.current, this.#RStickMoveLeft);
+
+            }
+
+        }
+
+        if (rightStickH >= RStickHValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#RStickMoveRight) {
+
+                this.#logger.log(`gamepad R stick moving right: ${rightStickH}`);
+
+                this.#RStickMoveRight = true;
+                eventDispatcher.publish(messageType, actions.RSTICK_RIGHT, world.current, this.#RStickMoveRight);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveRight) {
+
+                this.#logger.log(`gamepad R stick moving right: ${rightStickH}`);
+
+                this.#RStickMoveRight = false;
+                eventDispatcher.publish(messageType, actions.RSTICK_RIGHT, world.current, this.#RStickMoveRight);
 
             }
 
