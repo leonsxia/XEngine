@@ -58,6 +58,7 @@ class Inventory extends TabPanel {
 
         await this.ecg.init();
         this._html.inventoryContainer.appendChild(this.ecg.container);
+        this._html.itemViewerPanel.append(pdaItemViewer.canvas);
 
     }
 
@@ -263,7 +264,6 @@ class Inventory extends TabPanel {
             if (val) {
                 
                 pdaItemViewer.addItem(this._currentItem);
-                itemViwerEl.append(pdaItemViewer.canvas);
                 removeElementClass(itemViwerEl, ELEMENT_CLASS.HIDDEN);
                 addElementClass(itemViwerEl, ELEMENT_CLASS.VISIBLE);
                 pdaItemViewer.start();
@@ -271,7 +271,6 @@ class Inventory extends TabPanel {
 
             } else {
 
-                itemViwerEl.removeChild(pdaItemViewer.canvas);
                 removeElementClass(itemViwerEl, ELEMENT_CLASS.VISIBLE);
                 addElementClass(itemViwerEl, ELEMENT_CLASS.HIDDEN);
                 pdaItemViewer.removeItem();

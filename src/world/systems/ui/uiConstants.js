@@ -41,6 +41,32 @@ const IMAGES = [{
     name: IMAGE_NAMES.ECG, src: 'assets/images/pda/ecg.svg'
 }];
 
+const XBOX_CONTROLLER_ICON_NAMES = {
+    VIEW: 'XBOX_VIEW',
+    DPAD_UP: 'XBOX_DPAD_UP',
+    DPAD_DOWN: 'XBOX_DPAD_DOWN',
+    DPAD_LEFT: 'XBOX_DPAD_LEFT',
+    DPAD_RIGHT: 'XBOX_DPAD_RIGHT',
+    LSTICK_CLICK: 'XBOX_LSTICK_CLICK',
+    RSTICK_CLICK: 'XBOX_RSTICK_CLICK'
+}
+
+const XBOX_CONTROLLER_ICONS = [{
+    name: XBOX_CONTROLLER_ICON_NAMES.VIEW, src: 'assets/images/xbox/xbox_view.svg'    
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.DPAD_UP, src: 'assets/images/xbox/xbox_dpad_up.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.DPAD_DOWN, src: 'assets/images/xbox/xbox_dpad_down.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.DPAD_LEFT, src: 'assets/images/xbox/xbox_dpad_left.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.DPAD_RIGHT, src: 'assets/images/xbox/xbox_dpad_right.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.LSTICK_CLICK, src: 'assets/images/xbox/xbox_lstick_click.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.RSTICK_CLICK, src: 'assets/images/xbox/xbox_rstick_click.svg'
+}];
+
 const ELEMENT_CLASS = {
     HIDE: 'hide',
     HIDDEN: 'hidden',
@@ -124,6 +150,8 @@ export {
     LABEL_BASE_SCALE,
     IMAGE_NAMES,
     IMAGES,
+    XBOX_CONTROLLER_ICON_NAMES,
+    XBOX_CONTROLLER_ICONS,
     ELEMENT_CLASS,
     PDA_MENU_NAMES,
     PDA_OPERATE_MENU_NAMES,

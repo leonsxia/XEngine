@@ -54,7 +54,10 @@ class Pda {
 
     async init() {
 
-        await this._inventory.init();
+        await Promise.all([
+            this._inventory.init(),
+            this._hints.init()
+        ]);
         this._pdaContainer.appendChild(this._pdaMenu.menu);
         this._pdaContainer.appendChild(this._inventory._html.inventoryContainer);
         this._pdaContainer.appendChild(this._inventory._html.itemViewerPanel);

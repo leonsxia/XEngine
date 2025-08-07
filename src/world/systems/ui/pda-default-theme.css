@@ -72,6 +72,12 @@
     --hints-border: calc(var(--calculated-vw) * .1) solid var(--border-white);
 }
 
+canvas.scene-canvas {
+    position: absolute;
+    top: calc(var(--calculated-v-top));
+    left: calc(var(--calculated-v-left));
+}
+
 .default-theme {
     position: absolute;
     top: calc(var(--calculated-v-top));
@@ -683,8 +689,8 @@
         height: calc(var(--calculated-vh) * 100);
     
         canvas {
-            top: 0 !important;
-            left: 0 !important;
+            top: 0;
+            left: 0;
         }
     }
 
@@ -758,6 +764,10 @@
 
         .btn-X {
             background: rgba(0, 0, 255, .5);
+        }
+
+        .btn-svg {
+            background: var(--font-white);
         }
 
         .hide {

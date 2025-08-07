@@ -1,8 +1,9 @@
 import { createPdaHintElements } from "../../systems/htmlElements";
-import { ELEMENT_CLASS } from "../../systems/ui/uiConstants";
+import { ELEMENT_CLASS, XBOX_CONTROLLER_ICON_NAMES } from "../../systems/ui/uiConstants";
 import { CONTROL_TYPES } from "../utils/constants";
 import { hintIndex } from "../utils/enums";
 import { addElementClass, removeElementClass } from "../utils/htmlHelper";
+import { getImageUrl } from "../utils/imageHelper";
 
 class PdaHint {
 
@@ -11,8 +12,31 @@ class PdaHint {
 
     constructor(specs) {
 
-        this._html = createPdaHintElements();
         this._attachTo = specs.attachTo;
+
+    }
+
+    async init() {
+
+        const [
+            btnViewUrl, 
+            btnDPadUpUrl, btnDPadDownUrl, btnDPadLeftUrl, btnDPadRightUrl,
+            btnLStickClickUrl, btnRStickClickUrl
+        ] = await Promise.all([
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.VIEW),
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.DPAD_UP),
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.DPAD_DOWN),
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.DPAD_LEFT),
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.DPAD_RIGHT),
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.LSTICK_CLICK),
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.RSTICK_CLICK),
+        ]);
+
+        this._html = createPdaHintElements({
+            btnViewUrl,
+            btnDPadUpUrl, btnDPadDownUrl, btnDPadLeftUrl, btnDPadRightUrl,
+            btnLStickClickUrl, btnRStickClickUrl
+        });
 
     }
 

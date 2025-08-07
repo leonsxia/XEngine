@@ -176,6 +176,7 @@ class ItemViewer {
 
             this._scene.remove(this._item.group);
             this._controls.reset();
+            this.render();
 
         }
 
@@ -192,6 +193,12 @@ class ItemViewer {
 
         document.body.removeChild(this._stats.dom);
         this._loop.stop();
+
+    }
+
+    render() {
+
+        this._renderer.render(this._scene, this._camera);
 
     }
 

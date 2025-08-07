@@ -67,8 +67,8 @@ class Resizer {
 
         }
 
-        this.#renderer.domElement.style.setProperty('top', top);
-        this.#renderer.domElement.style.setProperty('left', left);
+        // this.#renderer.domElement.style.setProperty('top', top);
+        // this.#renderer.domElement.style.setProperty('left', left);
 
         // Set the camera's aspect ratio
         this.#camera.aspect = targetSize;

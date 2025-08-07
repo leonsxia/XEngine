@@ -19,7 +19,7 @@ import { loadShaders } from "./components/utils/shaderHelper";
 import { loadImages } from "./components/utils/imageHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
 import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES } from "./components/utils/constants";
-import { IMAGES } from "./systems/ui/uiConstants";
+import { IMAGES, XBOX_CONTROLLER_ICONS } from "./systems/ui/uiConstants";
 import { Logger } from "./systems/Logger";
 import { InputBase } from "./systems/physicalInputs/InputBase";
 import { XBoxController } from "./systems/physicalInputs/gamepad/XBoxController";
@@ -66,6 +66,7 @@ class World {
 
         this.#renderer = createRenderer();
         this.#renderer.name = 'world_renderer';
+        this.#renderer.domElement.classList.add('scene-canvas');
 
         config.changeCallback = this.changeScene.bind(this);
 
@@ -111,6 +112,7 @@ class World {
             loadGLTFModels(GLTFS),
             loadShaders(SHADERS),
             loadImages(IMAGES),
+            loadImages(XBOX_CONTROLLER_ICONS),
             loadJsons(JSONS)
         ]);
 

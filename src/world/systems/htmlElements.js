@@ -288,19 +288,24 @@ function createECG(specs) {
 
 }
 
-function createPdaHintElements() {
+function createPdaHintElements(urls) {
 
+    const { 
+        btnViewUrl,
+        btnDPadUpUrl, btnDPadDownUrl, btnDPadLeftUrl, btnDPadRightUrl,
+        // btnLStickClickUrl, btnRStickClickUrl
+    } = urls;
     const hintPanel = document.createElement('div');
     hintPanel.toggleAttribute('pda-hints');
 
     const closeHint = document.createElement('div');
     const closeKey = document.createElement('span');
-    const closeBtn = document.createElement('span');
+    const closeBtn = document.createElement('img');
     closeHint.classList.add('hint-group');
     closeKey.classList.add('hint-key');
-    closeBtn.classList.add('hint-btn', 'btn-view', 'hide');
+    closeBtn.classList.add('hint-btn', 'btn-svg', 'hide');
     closeKey.innerText = KEYS.TAB;
-    closeBtn.innerHTML = PDA_HINT_GROUP.CLOSE.icon;
+    closeBtn.src = btnViewUrl;
     closeHint.append(closeKey, closeBtn, PDA_HINT_GROUP.CLOSE.text);
 
     const confirmHint = document.createElement('div');
@@ -335,42 +340,42 @@ function createPdaHintElements() {
 
     const upHint = document.createElement('div');
     const upKey = document.createElement('span');
-    const upBtn = document.createElement('span');
+    const upBtn = document.createElement('img');
     upHint.classList.add('hint-group');
     upKey.classList.add('hint-key');
-    upBtn.classList.add('hint-btn', 'btn-up', 'hide');
+    upBtn.classList.add('hint-btn', 'btn-svg', 'hide');
     upKey.innerText = KEYS.W;
-    upBtn.innerHTML = PDA_HINT_GROUP.UP.icon;
+    upBtn.src = btnDPadUpUrl;
     upHint.append(upKey, upBtn, PDA_HINT_GROUP.UP.text);
 
     const downHint = document.createElement('div');
     const downKey = document.createElement('span');
-    const downBtn = document.createElement('span');
+    const downBtn = document.createElement('img');
     downHint.classList.add('hint-group');
     downKey.classList.add('hint-key');
-    downBtn.classList.add('hint-btn', 'btn-up', 'hide');
+    downBtn.classList.add('hint-btn', 'btn-svg', 'hide');
     downKey.innerText = KEYS.S;
-    downBtn.innerHTML = PDA_HINT_GROUP.DOWN.icon;
+    downBtn.src = btnDPadDownUrl;
     downHint.append(downKey, downBtn, PDA_HINT_GROUP.DOWN.text);
 
     const leftHint = document.createElement('div');
     const leftKey = document.createElement('span');
-    const leftBtn = document.createElement('span');
+    const leftBtn = document.createElement('img');
     leftHint.classList.add('hint-group');
     leftKey.classList.add('hint-key');
-    leftBtn.classList.add('hint-btn', 'btn-up', 'hide');
+    leftBtn.classList.add('hint-btn', 'btn-svg', 'hide');
     leftKey.innerText = KEYS.A;
-    leftBtn.innerHTML = PDA_HINT_GROUP.LEFT.icon;
+    leftBtn.src = btnDPadLeftUrl;
     leftHint.append(leftKey, leftBtn, PDA_HINT_GROUP.LEFT.text);
 
     const rightHint = document.createElement('div');
     const rightKey = document.createElement('span');
-    const rightBtn = document.createElement('span');
+    const rightBtn = document.createElement('img');
     rightHint.classList.add('hint-group');
     rightKey.classList.add('hint-key');
-    rightBtn.classList.add('hint-btn', 'btn-up', 'hide');
+    rightBtn.classList.add('hint-btn', 'btn-svg', 'hide');
     rightKey.innerText = KEYS.D;
-    rightBtn.innerHTML = PDA_HINT_GROUP.RIGHT.icon;
+    rightBtn.src = btnDPadRightUrl;
     rightHint.append(rightKey, rightBtn, PDA_HINT_GROUP.RIGHT.text);
 
     return {
