@@ -219,7 +219,6 @@ class ItemViewer {
             this.resetState();
             this._scene.remove(this._item.group);
             this.resetControl();
-            this.render();
 
         }
 
