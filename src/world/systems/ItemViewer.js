@@ -117,6 +117,7 @@ class ItemViewer {
         this._controls.minDistance = this._minDistance;
         this._controls.maxDistance = this._maxDistance;
         this._controls.enablePan = false;
+        this._controls.enableDamping = true;
         this._controls.saveState();
 
         this._controls.addEventListener('change', () => {
