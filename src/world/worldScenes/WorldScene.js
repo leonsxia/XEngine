@@ -255,12 +255,12 @@ class WorldScene {
 
                         if (val) {
 
-                            this.loop.pause();
+                            this.loop.stop();
                             this.staticRendering = true;
 
                         } else {
 
-                            this.loop.unpause();
+                            this.loop.start(this.guiMaker.gui.stats);
                             this.staticRendering = false;
 
                         }
@@ -272,6 +272,7 @@ class WorldScene {
                         this.updatePickableItem(item);
 
                     });
+                    player.pda.stats = this.guiMaker.gui.stats;
 
                     const pickedItems = this.pickables.filter(p => p.isPicked && p.belongTo === player.name);
                     for (let j = 0, jl = pickedItems.length; j < jl; j++) {

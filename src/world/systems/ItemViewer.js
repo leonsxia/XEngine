@@ -1,4 +1,3 @@
-import Stats from "stats.js";
 import { modelRenderer } from "./globals";
 import { Loop } from "./Loop";
 import { spaceCadet } from "../components/basic/colorBase";
@@ -7,7 +6,7 @@ import { createAmbientLight, createDirectionalLight, createPointLight } from "..
 import { createScene } from "../components/scene";
 import { addShadow } from "../components/shadowMaker";
 import { BayonetItem, FirstAidKitItem, FirstAidKitLarge, FirstAidKitMedium, FirstAidKitSmall, GlockItem, MagnumAmmoBox, PistolAmmoBox, PistolItem, RevolverItem, SMGAmmoBox, SMGShortItem } from "../components/Models";
-import { ArcballControls } from "three/addons/controls/ArcballControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { Resizer } from "./Resizer";
 import { Quaternion, Vector3 } from "three";
 
@@ -41,9 +40,12 @@ const _yAxis = new Vector3(0, 1, 0);
 const _originPosition = new Vector3();
 const _originQuaternion = new Quaternion();
 const _originCameraPosition = new Vector3(0, 0, .5);
+const _originCameraTarget = new Vector3(0, 0, 0);
 const _forward = new Vector3(0, 0, -1);
 const _backward = new Vector3(0, 0, 1);
 const _v0 = new Vector3();
+const _v1 = new Vector3();
+const _v2 = new Vector3();
 
 class ItemViewer {
 
@@ -56,7 +58,7 @@ class ItemViewer {
     _directionalLight;
     _ambientLight;
     _pointLight;
-    _stats = new Stats();
+    stats;
 
     _item;
 
@@ -74,6 +76,7 @@ class ItemViewer {
     _maxDistance = .8;
 
     _lerpTick;
+    _controlChanged = false;
 
     constructor() {
 
@@ -110,12 +113,17 @@ class ItemViewer {
 
     setupControls() {
 
-        this._controls = new ArcballControls(this._camera, this._renderer.domElement, this._scene);
+        this._controls = new OrbitControls(this._camera, this._renderer.domElement);
         this._controls.minDistance = this._minDistance;
         this._controls.maxDistance = this._maxDistance;
         this._controls.enablePan = false;
-        this._controls.setGizmosVisible(false);
         this._controls.saveState();
+
+        this._controls.addEventListener('change', () => {
+
+            this._controlChanged = true;
+
+        });
 
     }
 
@@ -203,7 +211,7 @@ class ItemViewer {
 
             this.resetState();
             this._scene.remove(this._item.group);
-            this._controls.reset();
+            this.resetControl();
             this.render();
 
         }
@@ -212,14 +220,12 @@ class ItemViewer {
 
     start() {
 
-        document.body.appendChild(this._stats.dom);
-        this._loop.start(this._stats);
+        this._loop.start(this.stats);
 
     }
 
     stop() {
 
-        document.body.removeChild(this._stats.dom);
         this._loop.stop();
 
     }
@@ -227,6 +233,13 @@ class ItemViewer {
     render() {
 
         this._renderer.render(this._scene, this._camera);
+
+    }
+
+    resetControl() {
+
+        this._controls.reset();
+        this._controlChanged = false;
 
     }
 
@@ -243,14 +256,16 @@ class ItemViewer {
 
                 const itemPositionInterval = _v0.copy(_originPosition).sub(this._item.group.position).length();
                 const itemAngleTo = Math.abs(this._item.group.quaternion.angleTo(_originQuaternion));
+                const camPositionInterval = parseFloat(_v1.copy(_originCameraPosition).sub(this._camera.position).length().toFixed(3));
+                const camTargetInterval = _v2.copy(_originCameraTarget).sub(this._controls.target).length();
                 let alpha = 0;
 
-                const needLerp = Math.max(0, itemPositionInterval, itemAngleTo) > 0;
+                const needLerp = Math.max(0, itemPositionInterval, itemAngleTo, camPositionInterval, camTargetInterval) > 0;
 
                 if (!needLerp) {
 
                     this._lerpTick = undefined;
-                    this._controls.reset();
+                    this.resetControl();
                     return;
 
                 }
@@ -266,6 +281,20 @@ class ItemViewer {
 
                     alpha = Math.min(1, 10 * delta / itemAngleTo);
                     this._item.group.quaternion.slerp(_originQuaternion, alpha);
+
+                }
+
+                if (camPositionInterval) {
+
+                    alpha = Math.min(1, 2 * delta / camPositionInterval);
+                    this._camera.position.lerp(_originCameraPosition, alpha);
+
+                }
+
+                if (camTargetInterval) {
+
+                    alpha = Math.min(1, 2 * delta / camTargetInterval);
+                    this._controls.target.lerp(_originCameraTarget, alpha);
 
                 }
 
@@ -344,6 +373,8 @@ class ItemViewer {
     tick(delta) {
 
         if (!this._item) return;
+
+        this._controls.update(delta);
 
         if (this._lerpTick) {
 

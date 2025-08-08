@@ -6,7 +6,7 @@ import { GUI_CONFIG } from '../components/utils/constants';
 class Gui {
 
     #guis = [];
-    #stats = null;
+    #stats = new Stats();;
     #objects = {};
     #attachedTo;
     #guiLoaded = false;
@@ -52,7 +52,6 @@ class Gui {
         this.#initialRightPanel = this.#currentRightPanel = specs.initialRightPanel;
         this.showIntialRight(this.#initialRightPanel);
 
-        this.#stats = new Stats();
         this.#stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
         document.body.appendChild(this.#stats.dom);
 

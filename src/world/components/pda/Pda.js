@@ -34,6 +34,8 @@ class Pda {
 
     #logger = new Logger(DEBUG, 'Pda');
 
+    _stats;
+
     constructor(specs) {
 
         const { theme = 'default-theme' } = specs;
@@ -69,6 +71,19 @@ class Pda {
         this._pdaMenu.currentIndex = 1;
 
         this.addPdaToContainer();
+
+    }
+
+    get stats() {
+
+        return this._stats;
+
+    }
+
+    set stats(val) {
+
+        this._stats = val;
+        this._inventory.setStats();
 
     }
 

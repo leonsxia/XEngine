@@ -62,6 +62,12 @@ class Inventory extends TabPanel {
 
     }
 
+    setStats() {
+
+        pdaItemViewer.stats = this._attachTo.stats;
+
+    }
+
     get isFull() {
 
         return this._availableSlots.length === 0;
@@ -1785,7 +1791,7 @@ class Inventory extends TabPanel {
 
         }
 
-    }
+    }    
 
 }
 
