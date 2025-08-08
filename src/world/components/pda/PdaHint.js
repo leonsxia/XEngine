@@ -223,7 +223,7 @@ class PdaHint {
 
     }
 
-    applyHintItemViewr() {
+    applyHintItemViewer() {
 
         if (this._hintIdx === hintIndex.itemViewer) return;
 

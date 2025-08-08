@@ -257,6 +257,7 @@ class WorldScene {
 
                             this.loop.pause();
                             this.staticRendering = true;
+                            player.pda.stats = this.guiMaker.gui.stats;
 
                         } else {
 
@@ -272,7 +273,6 @@ class WorldScene {
                         this.updatePickableItem(item);
 
                     });
-                    player.pda.stats = this.guiMaker.gui.stats;
 
                     const pickedItems = this.pickables.filter(p => p.isPicked && p.belongTo === player.name);
                     for (let j = 0, jl = pickedItems.length; j < jl; j++) {

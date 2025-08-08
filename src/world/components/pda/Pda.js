@@ -105,13 +105,12 @@ class Pda {
 
             }
 
-            this.resetInventory();
             this.showElement(this._pdaContainer, true);
 
         } else {
 
             this.showElement(this._pdaContainer, false);
-            this._inventory.itemViewerEnabled = false;
+            this.resetInventory();
 
         }
 
@@ -605,10 +604,13 @@ class Pda {
 
     resetInventory() {
 
-        this._inventory.operateMenuReady = false;
+        const inventory = this._inventory;
+
         this._inventory.focusedIndex = 0;
-        this._inventory.resetShift();
-        this._inventory.selectReady = false;
+        if (inventory.operateMenuReady) inventory.operateMenuReady = false;        
+        if (inventory.shiftReady) inventory.resetShift();
+        if (inventory.selectReady) inventory.selectReady = false;
+        if (inventory.itemViewerEnabled) inventory.itemViewerEnabled = false;
 
     }
 

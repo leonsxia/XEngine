@@ -100,6 +100,12 @@ class ItemViewer {
 
     }
 
+    get scene() {
+
+        return this._scene;
+
+    }
+
     setupResizer() {
 
         this._resizer = new Resizer(this._camera, this._renderer);

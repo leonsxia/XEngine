@@ -124,7 +124,7 @@ class World {
         this.#textures = textures;
         this.#gltfs = gltfs;
 
-        pdaItemViewer._scene.background = itemViewerEnvironment;
+        pdaItemViewer.scene.background = itemViewerEnvironment;
 
         await initPickableModels();
 
