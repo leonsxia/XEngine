@@ -255,12 +255,12 @@ class WorldScene {
 
                         if (val) {
 
-                            this.loop.stop();
+                            this.loop.pause();
                             this.staticRendering = true;
 
                         } else {
 
-                            this.loop.start(this.guiMaker.gui.stats);
+                            this.loop.unpause(this.guiMaker.gui.stats);
                             this.staticRendering = false;
 
                         }

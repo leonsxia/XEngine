@@ -13,12 +13,12 @@ import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
 import { ControlEventDispatcher } from "./systems/ControlEventDispatcher";
 
-import { loadTextures } from "./components/utils/textureHelper";
+import { loadedTextures, loadTextures } from "./components/utils/textureHelper";
 import { initPickableModels, loadGLTFModels } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
 import { loadImages } from "./components/utils/imageHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
-import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES } from "./components/utils/constants";
+import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES, TEXTURE_NAMES } from "./components/utils/constants";
 import { IMAGES, XBOX_CONTROLLER_ICONS } from "./systems/ui/uiConstants";
 import { Logger } from "./systems/Logger";
 import { InputBase } from "./systems/physicalInputs/InputBase";
@@ -27,6 +27,7 @@ import { Keyboard } from "./systems/physicalInputs/Keyboard";
 import { Mouse } from "./systems/physicalInputs/Mouse";
 import { loadJsons } from "./components/utils/jsonHelper";
 import { JSONS } from "./components/utils/documentary";
+import { pdaItemViewer } from "./systems/ItemViewer";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix', 'Enemy Test Scene'],  // scene list for scene selector
@@ -115,12 +116,15 @@ class World {
             loadImages(XBOX_CONTROLLER_ICONS),
             loadJsons(JSONS)
         ]);
+        const itemViewerEnvironment = loadedTextures[TEXTURE_NAMES.METAL_241].clone();
 
         const end = Date.now();
         this.#systemLogger.log(`loading assests in ${(end - start) * .001} s`);
 
         this.#textures = textures;
         this.#gltfs = gltfs;
+
+        pdaItemViewer._scene.background = itemViewerEnvironment;
 
         await initPickableModels();
 

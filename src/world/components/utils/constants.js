@@ -198,6 +198,7 @@ const TEXTURE_NAMES = {
     METAL_290_NORMAL: 'METAL_290_NORMAL',
     METAL_292: 'METAL_292',
     METAL_292_NORMAL: 'METAL_292_NORMAL',
+    METAL_241: 'METAL_241',
     // water
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
@@ -261,6 +262,8 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.METAL_290, map: 'assets/textures/walls/Texturelabs_Metal_290M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_290L.jpg'
 }, {
     name: TEXTURE_NAMES.METAL_292, map: 'assets/textures/walls/Texturelabs_Metal_292M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_292L.jpg'
+}, {
+    name: TEXTURE_NAMES.METAL_241, map: 'assets/textures/walls/Texturelabs_Metal_241L.jpg'
 }, {
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {

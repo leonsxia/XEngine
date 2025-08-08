@@ -1,7 +1,7 @@
 :root {
     --font-white: rgba(220, 220, 220, 1);
     --border-radius: calc(var(--calculated-vw) * .5);
-    --border-white: rgba(200, 200, 200, 1);
+    --border-white: rgba(180, 180, 180, 1);
     --pda-font: sans-serif;
     --pda-fade-in-transition: display 0s .2s allow-discrete, opacity .2s linear;
     --pda-fade-out-transition: display 0s .1s allow-discrete, opacity .1s linear;
@@ -69,7 +69,7 @@
     --files-panel-size-h: 45;
     --files-panel-width: calc(var(--calculated-vw) * var(--files-panel-size-w));
     --files-panel-height: calc(var(--calculated-vw) * var(--files-panel-size-h));
-    --hints-border: calc(var(--calculated-vw) * .1) solid var(--border-white);
+    --hints-border: calc(var(--calculated-vw) * .11) solid var(--border-white);
 }
 
 canvas.scene-canvas {
@@ -717,7 +717,7 @@ canvas.scene-canvas {
         display: flex;
         justify-content: right;
         align-items: center;
-        background: rgba(85, 85, 85, .2);
+        background: rgba(85, 85, 85, .4);
 
         .hint-group {
             display: flex;
@@ -735,20 +735,18 @@ canvas.scene-canvas {
             line-height: calc(var(--calculated-vw) * 2.2);
             margin-right: calc(var(--calculated-vw) * .5);
             font-size: calc(var(--calculated-vw) * 1);
-            color: var(--font-white);
             text-align: center;
             border: var(--hints-border);
             background: rgba(85, 85, 85, .5);
         }
 
         .hint-btn {
-            display: inline-block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin-right: calc(var(--calculated-vw) * .5);
             width: calc(var(--calculated-vw) * 2.2);
             height: calc(var(--calculated-vw) * 2.2);
-            line-height: calc(var(--calculated-vw) * 2.2);
-            text-align: center;
-            color: var(--font-white);
             background: rgba(85, 85, 85, .5);
             border-radius: calc(var(--calculated-vw) * 1.5);
             border: var(--hints-border);
