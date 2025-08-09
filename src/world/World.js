@@ -28,6 +28,8 @@ import { Mouse } from "./systems/physicalInputs/Mouse";
 import { loadJsons } from "./components/utils/jsonHelper";
 import { JSONS } from "./components/utils/documentary";
 import { pdaItemViewer } from "./systems/ItemViewer";
+import { AnimationLoop } from "./systems/AnimationLoop";
+import { Loop } from "./systems/Loop";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix', 'Enemy Test Scene'],  // scene list for scene selector
@@ -57,6 +59,10 @@ class World {
 
     #systemLogger = new Logger(DEBUG, 'World');
 
+    _amimationLoop;
+    _worldLooper;
+    _onAnimationFrameCallback;
+
     _xboxController;
     _keyboard;
     _mouse;
@@ -76,6 +82,14 @@ class World {
         this.#sceneBuilder = new SceneBuilder();
         config.sceneBuilder = this.#sceneBuilder;
 
+        this._amimationLoop = new AnimationLoop();    
+        this._amimationLoop.setAnimationLoop((time) => {
+
+            if (this._onAnimationFrameCallback) this._onAnimationFrameCallback(time);
+
+        });
+        this._worldLooper = new Loop(this);
+
         const inputConifg = {
             dispatcher: controlEventDispatcher,
             controlTypes: controlTypes,
@@ -83,7 +97,6 @@ class World {
         }
         this._xboxController = new XBoxController(inputConifg);
         this._xboxController.bindGamepadEvents();
-        config.xboxController = this._xboxController;
 
         this._keyboard = new Keyboard(inputConifg);
         this._keyboard.bindAllMoves();
@@ -133,6 +146,7 @@ class World {
         await this.changeScene(name);
 
         this.bindResizer();
+        this._worldLooper.start();
 
     }
 
@@ -245,7 +259,15 @@ class World {
 
         return { objects, vertices, triangles };
 
-    } 
+    }
+
+    setAnimationLoop(callback) {
+
+        this._onAnimationFrameCallback = callback;
+
+        (callback === null) ? this._amimationLoop.stop() : this._amimationLoop.start();
+
+    }
 
     bindResizer() {
 

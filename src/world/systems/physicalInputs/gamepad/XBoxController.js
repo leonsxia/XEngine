@@ -53,6 +53,8 @@ class XBoxController extends InputBase {
             this.#logger.log(`Gamepad connected at index ${gp.index}: ${gp.id}. ${gp.buttons.length} buttons, ${gp.axes.length} axes.`);
 
             this.attachTo.switchInput(CONTROL_TYPES.XBOX);
+            this.attachTo._worldLooper.addUpdatables(this);
+            this.attachTo._worldLooper.start();
 
         });
 
@@ -64,7 +66,8 @@ class XBoxController extends InputBase {
 
             this.connected = false;
 
-            this.attachTo.switchInput(CONTROL_TYPES.XBOX);
+            this.attachTo.switchInput(CONTROL_TYPES.KEYBOARD);
+            this.attachTo._worldLooper.removeUpdatables(this);
 
         });
 

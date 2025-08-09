@@ -112,7 +112,7 @@ class WorldScene {
 
         Object.assign(this.setup, specs);
 
-        const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, xboxController, enableGui = false, controlEventDispatcher } = this.setup;
+        const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, enableGui = false, controlEventDispatcher } = this.setup;
 
         this.name = name;
 
@@ -120,22 +120,24 @@ class WorldScene {
 
         this.defaultCamera = new Camera();
         this.camera = this.defaultCamera.camera;
-        
+
         this.scene = createScene(backgroundColor);
         this.postProcessor = new PostProcessor(renderer, this.scene, this.camera);
-        this.loop = new Loop(this.camera, this.scene, this.renderer, this.postProcessor);
         this.controlEventDispatcher = controlEventDispatcher;
-
         this.picker = worldPicker;
         this.sceneBuilder = sceneBuilder;
-
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 
-        this.loop.updatables.push(this.controls.defControl, xboxController);
+        this.loop = new Loop(this.renderer);
+        this.loop.setCallbackAfterTick(() => {
+
+            this.render();
+
+        });
+        this.loop.addUpdatables(this.controls.defControl);
         // this.controls.defControl.listenToKeyEvents(window);
 
         this.resizer = new Resizer(this.camera, this.renderer, this.postProcessor);
-
         this.resizer.onResize = 
         (needRender = true) => {
 
@@ -235,7 +237,7 @@ class WorldScene {
         this.animeMixer = new AnimeMixer(this.players, this.enemies, this.pickables);
         this.updatableQueue.add(this.animeMixer);
         
-        this.loop.updatables.push(this.updatableQueue);
+        this.loop.addUpdatables(this.updatableQueue);
 
         // initialize player
         // no need to render at this time, so the change event of control won't do the rendering.
@@ -493,7 +495,6 @@ class WorldScene {
     enablePostProcessing(enable) {
 
         this.postProcessingEnabled = enable;
-        this.loop.enablePostProcessing(enable);
 
     }
 

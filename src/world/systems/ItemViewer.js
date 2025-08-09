@@ -93,8 +93,7 @@ class ItemViewer {
         // resizer
         this.setupResizer();
         // loop
-        this._loop = new Loop(this._camera, this._scene, this._renderer);
-        this._loop.updatables.push(this);
+        this.setupLoop();
         // lights
         this.setupLights();
 
@@ -147,6 +146,18 @@ class ItemViewer {
         this._pointLight.shadow.camera.updateProjectionMatrix();
 
         this._scene.add(this._directionalLight, this._ambientLight, this._pointLight);
+
+    }
+
+    setupLoop() {
+
+        this._loop = new Loop(this._renderer);
+        this._loop.addUpdatables(this);
+        this._loop.setCallbackAfterTick(() => {
+
+            this.render();
+
+        });
 
     }
 

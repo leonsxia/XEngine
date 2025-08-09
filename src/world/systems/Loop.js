@@ -3,40 +3,32 @@ import { Clock } from 'three';
 // let clock = new Clock();
 
 class Loop {
-    
-    #camera;
-    #scene;
-    #renderer;
-    #postProcessor;
-    #clock = new Clock();
-    #postProcessingEnabled = false;
 
+    _clock = new Clock();
     _paused = false;
+    _isLooping = false;
+    callbackAfterTick;
 
-    constructor(camera, scene, renderer, postProcessor) {
+    constructor(loopObject) {
 
-        this.#camera = camera;
-        this.#scene = scene;
-        this.#renderer = renderer;
-        this.#postProcessor = postProcessor;
+        this._loopObject = loopObject;
         this.updatables = [];
 
     }
 
-    // dispose() {
-    //     this.#camera = this.#scene = this.#renderer = null;
-    // }
+    setCallbackAfterTick(callback) {
+
+        this.callbackAfterTick = callback;
+
+    }
 
     start(stats) {
 
+        if (this._isLooping) return;
+
         this.reset();
 
-        this.#renderer.setAnimationLoop(() => {
-
-            if (!this._paused) stats?.begin();
-
-            // tell every animated object to tick forward one frame
-            this.tick();
+        this._loopObject.setAnimationLoop(() => {
 
             if (this._paused) {
 
@@ -44,26 +36,25 @@ class Loop {
 
             }
 
-            // render a frame
-            if (this.#postProcessingEnabled) {
+            stats?.begin();
 
-                this.#postProcessor.render();
+            // tell every animated object to tick forward one frame
+            this.tick();
 
-            } else {
-
-                this.#renderer.render(this.#scene, this.#camera);
-
-            }
+            if (this.callbackAfterTick) this.callbackAfterTick();
 
             stats?.end();
 
         });
 
+        this._isLooping = true;
+
     }
 
     stop() {
 
-        this.#renderer.setAnimationLoop(null);
+        this._loopObject.setAnimationLoop(null);
+        this._isLooping = false;
 
     }
 
@@ -82,20 +73,11 @@ class Loop {
     tick() {
 
         // only call the getDelta function once per frame
-        const delta = this.#clock.getDelta();
+        const delta = this._clock.getDelta();
 
         // console.log(
         //     `The last frame rendered in ${delta * 1000} milliseconds`,
         // );
-
-        if (this._paused) {
-            
-            const gamepad = this.updatables.find(u => u.isGamePad);
-            gamepad?.tick();
-
-            return;
-
-        }
 
         for (let i = 0, il = this.updatables.length; i < il; i++) {
 
@@ -109,13 +91,31 @@ class Loop {
 
     reset() {
 
-        this.#clock = new Clock();
+        this._clock = new Clock();
 
     }
 
-    enablePostProcessing(enable) {
+    addUpdatables(...objects) {
 
-        this.#postProcessingEnabled = enable;
+        this.updatables.push(...objects);
+
+    }
+
+    removeUpdatables(...objects) {
+
+        for (let i = 0, il = objects.length; i < il; i++) {
+
+            const obj = objects[i];
+            const idx = this.updatables.findIndex((u) => u === obj);
+            if (idx > -1) {
+
+                this.updatables.splice(idx, 1);
+
+            }
+
+        }
+
+        if (this.updatables.length === 0) this.stop();
 
     }
 

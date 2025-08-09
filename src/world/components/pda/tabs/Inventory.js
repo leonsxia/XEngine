@@ -269,18 +269,22 @@ class Inventory extends TabPanel {
             if (val) {
                 
                 pdaItemViewer.addItem(this._currentItem);
-                removeElementClass(itemViwerEl, ELEMENT_CLASS.HIDDEN);
-                addElementClass(itemViwerEl, ELEMENT_CLASS.VISIBLE);
                 pdaItemViewer.start();
+                setTimeout(() => {
 
-                if (!itemViwerEl.hasChildNodes()) {
+                    removeElementClass(itemViwerEl, ELEMENT_CLASS.HIDDEN);
+                    addElementClass(itemViwerEl, ELEMENT_CLASS.VISIBLE);
 
-                    itemViwerEl.append(pdaItemViewer.canvas);
+                    if (!itemViwerEl.hasChildNodes()) {
 
-                }
+                        itemViwerEl.append(pdaItemViewer.canvas);
+
+                    }
+
+                }, 0);
 
                 this._attachTo._hints.applyHintItemViewer();
-
+                
             } else {
 
                 removeElementClass(itemViwerEl, ELEMENT_CLASS.VISIBLE);
