@@ -257,13 +257,13 @@ class WorldScene {
 
                         if (val) {
 
-                            this.loop.pause();
+                            this.loop.stop();
                             this.staticRendering = true;
                             player.pda.stats = this.guiMaker.gui.stats;
 
                         } else {
 
-                            this.loop.unpause(this.guiMaker.gui.stats);
+                            this.loop.start(this.guiMaker.gui.stats);
                             this.staticRendering = false;
 
                         }
