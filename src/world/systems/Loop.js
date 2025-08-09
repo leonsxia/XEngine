@@ -97,7 +97,16 @@ class Loop {
 
     addUpdatables(...objects) {
 
-        this.updatables.push(...objects);
+        for (let i = 0, il = objects.length; i < il; i++) {
+
+            const obj = objects[i];
+            const idx = this.updatables.findIndex(u => u === obj);
+            if (idx === -1) {
+
+                this.updatables.push(obj);
+
+            }
+        }
 
     }
 
@@ -106,7 +115,7 @@ class Loop {
         for (let i = 0, il = objects.length; i < il; i++) {
 
             const obj = objects[i];
-            const idx = this.updatables.findIndex((u) => u === obj);
+            const idx = this.updatables.findIndex(u => u === obj);
             if (idx > -1) {
 
                 this.updatables.splice(idx, 1);

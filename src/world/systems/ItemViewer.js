@@ -139,7 +139,7 @@ class ItemViewer {
         this._ambientLight = createAmbientLight(AMBIENT_LIGHT_SPECS);
         this._pointLight = createPointLight(POINT_LIGHT_SPECS);
 
-        const mapSize = { width: 4096, height: 4096 };
+        const mapSize = { width: 2048, height: 2048 };
         addShadow(this._directionalLight, mapSize);
         addShadow(this._pointLight, mapSize);
         this._directionalLight.shadow.camera.updateProjectionMatrix();

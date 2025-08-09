@@ -76,8 +76,9 @@ class XBoxController extends InputBase {
     tick() {
 
         this.gamepad = navigator.getGamepads()[0];
+        const world = this.attachTo;
 
-        if (this.gamepad?.connected) {
+        if (this.gamepad?.connected && world.currentScene && !world.currentScene.isScenePaused()) {
 
             this.connected = true;
             this._triggered = false;
@@ -97,7 +98,7 @@ class XBoxController extends InputBase {
             this._triggered = !this._triggered ? this.gamepad.buttons.find(btn => btn.pressed) ? true : false : true;
             if (this._triggered) {
 
-                this.attachTo.switchInput(CONTROL_TYPES.XBOX);
+                world.switchInput(CONTROL_TYPES.XBOX);
 
             }
 
@@ -113,7 +114,8 @@ class XBoxController extends InputBase {
 
     pdaTick() {
 
-        if (this.attachTo.currentScene.isPdaOn) {
+        const world = this.attachTo;
+        if (world.currentScene.isPdaOn) {
 
             this.processPdaButtonEvents();
             this.processPdaStickEvents();
@@ -124,7 +126,8 @@ class XBoxController extends InputBase {
 
     tankmoveTick() {
 
-        if (!this.attachTo.currentScene.isPdaOn) {
+        const world = this.attachTo;
+        if (!world.currentScene.isPdaOn) {
 
             this.processTankmoveButtonEvents();
             this.processTankmoveStickEvents();
