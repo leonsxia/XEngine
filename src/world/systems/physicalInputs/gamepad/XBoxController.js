@@ -192,7 +192,7 @@ class XBoxController extends InputBase {
         // const rightStickV = this.gamepad.axes[3];
         
         const LStickHValidMin = 0.4;
-        const LStickForwardValidMin = 0.1;
+        const LStickForwardValidMin = 0.3;
         const LStickBackwardValidMin = 0.45;
         const RStickHValidMin = 0.4;
 
@@ -302,7 +302,7 @@ class XBoxController extends InputBase {
 
             this._triggered = true;
 
-            if (!this.#LStickMoveLeft) {
+            if (!this.#LStickMoveLeft && !this.#LStickMoveRight) {
 
                 this.#logger.log(`gamepad L stick moving left: ${leftStickH}`);
 
@@ -332,7 +332,7 @@ class XBoxController extends InputBase {
 
             this._triggered = true;
 
-            if (!this.#LStickMoveRight) {
+            if (!this.#LStickMoveRight && !this.#LStickMoveLeft) {
 
                 this.#logger.log(`gamepad L stick moving right: ${leftStickH}`);
 
@@ -362,7 +362,10 @@ class XBoxController extends InputBase {
 
             this._triggered = true;
 
-            if (!this.#LStickMoveUp) {
+            // left stick up and down must be false at the same time when at low frame
+            // otherwise the animation will be wrong due to down state hasn't set to false yet
+            // TEST: at low frame, press X -> lstick down -> lstick up quickly
+            if (!this.#LStickMoveUp && !this.#LStickMoveDown) {
 
                 this.#logger.log(`gamepad L stick moving forward: ${leftStickH}`);
 
@@ -392,7 +395,8 @@ class XBoxController extends InputBase {
 
             this._triggered = true;
 
-            if (!this.#LStickMoveDown) {
+            // left stick up and down must be false at the same time
+            if (!this.#LStickMoveDown && !this.#LStickMoveUp) {
 
                 this.#logger.log(`gamepad L stick moving backward: ${leftStickH}`);
 
