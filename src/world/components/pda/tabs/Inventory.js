@@ -1422,6 +1422,30 @@ class Inventory extends TabPanel {
 
     }
 
+    clearSlots() {
+
+        const availableSlots = [];
+        for (let i = 0, il = this._size; i < il; i++) {
+
+            const slotEl = this._html.slotsDivList[i];
+            removeElementClass(slotEl, ELEMENT_CLASS.OCCUPIED);
+            availableSlots.push(i);
+
+        }
+
+        for (let i = 0, il = this.items.length; i < il; i++) {
+
+            const item = this.items[i];
+            removeElementClass(item.itemHtml, ELEMENT_CLASS.IDX)
+            this._html.itemsPanel.removeChild(item.itemHtml);
+            
+        }
+
+        this.items.length = 0;
+        this._availableSlots = availableSlots;
+
+    }
+
     focusLeft() {
 
         this.focusedIndex --;
@@ -1620,8 +1644,18 @@ class Inventory extends TabPanel {
 
     add(item) {
         
-        const { idx } = this.firstAvailableSlot(item.itemSize);
-        if (idx >= 0) {
+        let idx = -1;
+        if (item.occupiedSlotIdx > -1) {
+
+            idx = item.occupiedSlotIdx;
+
+        } else {
+
+            idx = this.firstAvailableSlot(item.itemSize).idx;
+
+        }
+
+        if (idx >= -1) {
 
             this.items.push(item);
             item.isPicked = true;

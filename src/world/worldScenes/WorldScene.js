@@ -858,47 +858,18 @@ class WorldScene {
 
     updatePlayerInventoryItems() {
 
-        for (let i = 0, il = this.pickables.length; i < il; i++) {
+        for (let i = 0, il = this.players.length; i < il; i++) {
 
-            const item = this.pickables[i];
+            const player = this.players[i];
+            if (player.isCombatPlayer) {
 
-            for (let j = 0, jl = this.players.length; j < jl; j++) {
+                player.pda.inventory.clearSlots();
+                for (let j = 0, jl = this.pickables.length; j < jl; j++) {
 
-                const player = this.players[j];
-                if (player.isCombatPlayer) {
+                    const item = this.pickables[j];
+                    if (item.isPicked && item.belongTo === player.name) {
 
-                    const filter = player.pda.findInventoryItems(ii => ii === item);
-                    if (filter.length > 0) {
-
-                        const find = filter[0];
-                        if (item.isPicked && item.belongTo === player.name) {
-
-                            item.currentRoom = player.currentRoom;
-
-                            if (item.isWeaponItem) {
-
-                                const bindWeapon = player.weapons.find(w => w.weaponType === item.weaponType);
-                                if (bindWeapon) {
-
-                                    bindWeapon.updateWeaponProperties(item);
-
-                                }
-
-                            }
-
-                        } else {
-
-                            player.pda.removeInventoryItem(find);
-
-                        }
-
-                    } else {
-
-                        if (item.isPicked && item.belongTo === player.name) {
-
-                            player.addPickableItem(item);
-
-                        }
+                        player.addPickableItem(item);
 
                     }
 

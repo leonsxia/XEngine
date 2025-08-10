@@ -34,4 +34,22 @@ function addElementClass(element, ...clsnames) {
 
 }
 
-export { removeElementClass, addElementClass };
+function findClass(element, clsname) {
+
+    let find = [];
+    for (let i = 0, il = element.classList.length; i < il; i++) {
+
+        const cls = element.classList[i];
+        if (cls.includes(clsname)) {
+
+            find.push(cls);
+
+        }
+
+    }
+
+    return find;
+
+}
+
+export { removeElementClass, addElementClass, findClass };

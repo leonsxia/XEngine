@@ -503,6 +503,7 @@ class SceneBuilder {
 
     resetScene() {
 
+        this.worldScene.disablePlayerPda();
         this.updateScene(this.worldScene.sceneSetup, this.worldScene.sceneSetupCopy, true, true, true);
 
     }
@@ -1101,6 +1102,7 @@ class SceneBuilder {
                             _origin.currentRoom = find.father.currentRoom;
                             _origin.isPicked = find.father.isPicked;
                             _origin.belongTo = find.father.belongTo;
+                            _origin.occupiedSlotIdx = find.father.occupiedSlotIdx;
 
                             if (find.father.ammo) {
 
@@ -1120,10 +1122,11 @@ class SceneBuilder {
 
                         } else {
 
-                            const { currentRoom = '', isPicked = false, belongTo } = _target;
+                            const { currentRoom = '', isPicked = false, belongTo, occupiedSlotIdx = -1 } = _target;
                             find.father.currentRoom = currentRoom;
                             find.father.isPicked = isPicked;
                             find.father.belongTo = belongTo;
+                            find.father.occupiedSlotIdx = occupiedSlotIdx;
 
                             const _ammoSpecs = _target.ammo ?? _origin.ammo;
                             if (_ammoSpecs) {
