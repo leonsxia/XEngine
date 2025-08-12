@@ -644,7 +644,7 @@ class Pda {
 
         if (this._inventory.itemViewerEnabled) {
 
-            this._inventory.itemZoomOut = val;
+            this._inventory.itemZoomIn = val;
 
         }
 
@@ -656,7 +656,7 @@ class Pda {
 
         if (this._inventory.itemViewerEnabled) {
 
-            this._inventory.itemZoomIn = val;
+            this._inventory.itemZoomOut = val;
 
         }
 
