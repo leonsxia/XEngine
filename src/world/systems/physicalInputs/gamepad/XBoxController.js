@@ -665,6 +665,8 @@ class XBoxController extends InputBase {
         const btnX = this.gamepad.buttons[2];
         const btnLB = this.gamepad.buttons[4];
         const btnRB = this.gamepad.buttons[5];
+        const btnLT = this.gamepad.buttons[6];
+        const btnRT = this.gamepad.buttons[7];
 
         if (btnUp.pressed) {
 
@@ -913,6 +915,54 @@ class XBoxController extends InputBase {
                 eventDispatcher.publish(messageType, actions.BTN_RB, world.current, this.#RBPressed);
 
                 this.#logger.log(`shiftRight: ${this.#RBPressed}`);
+
+            }
+
+        }
+
+        if (btnLT.pressed) {
+
+            if (!this.#LTPressed) {
+
+                this.#logger.log(`gamepad button LT pressed: ${btnLT.pressed}, value: ${btnLT.value}`);
+
+                this.#LTPressed = true;
+                eventDispatcher.publish(messageType, actions.BTN_LT, world.current, this.#LTPressed);
+
+            }
+
+        } else {
+
+            if (this.#LTPressed) {
+
+                this.#logger.log(`gamepad button LT pressed: ${btnLT.pressed}, value: ${btnLT.value}`);
+
+                this.#LTPressed = false;
+                eventDispatcher.publish(messageType, actions.BTN_LT, world.current, this.#LTPressed);
+
+            }
+
+        }
+
+        if (btnRT.pressed) {
+
+            if (!this.#RTPressed) {
+
+                this.#logger.log(`gamepad button RT pressed: ${btnRT.pressed}, value: ${btnRT.value}`);
+
+                this.#RTPressed = true;
+                eventDispatcher.publish(messageType, actions.BTN_RT, world.current, this.#RTPressed);
+
+            }
+
+        } else {
+
+            if (this.#RTPressed) {
+
+                this.#logger.log(`gamepad button RT pressed: ${btnRT.pressed}, value: ${btnRT.value}`);
+
+                this.#RTPressed = false;
+                eventDispatcher.publish(messageType, actions.BTN_RT, world.current, this.#RTPressed);
 
             }
 

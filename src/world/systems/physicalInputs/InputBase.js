@@ -57,7 +57,8 @@ class InputBase {
 InputBase.CONTROL_TYPES = {
     TANKMOVE: 'tankmove',
     PDA: 'pda',
-    XBOX_CONTROLLER: 'xboxController'
+    XBOX_CONTROLLER: 'xboxController',
+    MOUSE: 'mouse'
 };
 
 InputBase.CONTROL_ACTIONS = [
@@ -98,13 +99,26 @@ InputBase.CONTROL_ACTIONS = [
             BTN_B: 'btnB',
             BTN_LB: 'btnLB',
             BTN_RB: 'btnRB',
-            BTN_X: 'btnX'
+            BTN_X: 'btnX',
+            BTN_LT: 'btnLT',
+            BTN_RT: 'btnRT'
         }
     },
     {
         CATEGORY: 'xboxController',
         TYPES: {
             CONNECTED: 'xboxControllerConnected'
+        }
+    },
+    {
+        CATEGORY: 'mouse',
+        TYPES: {
+            L_CLICK_LEFT: 'lclickLeft',
+            L_CLICK_RIGHT: 'lclickRight',
+            L_CLICK_UP: 'lclickUp',
+            L_CLICK_DOWN: 'lclickDown',
+            SCROLL_UP: 'scrollUp',
+            SCROLL_DOWN: 'scrollDown'
         }
     }
 ];

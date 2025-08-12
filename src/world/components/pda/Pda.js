@@ -576,6 +576,92 @@ class Pda {
 
     }
 
+    btnLT(val) {
+
+        this.#logger.func = this.btnLT.name;
+        this.#logger.log(`btn LT / key Z pressed: ${val}`);
+
+    }
+
+    btnRT(val) {
+
+        this.#logger.func = this.btnRT.name;
+        this.#logger.log(`btn RT / key C pressed: ${val}`);
+
+    }
+
+    lclickUp(val) {
+
+        if (!this.visible) return;
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateXClockwise = val;
+
+        }
+
+    }
+
+    lclickDown(val) {
+
+        if (!this.visible) return;
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateXCounterClockwise = val;
+
+        }
+
+    }
+
+    lclickLeft(val) {
+
+        if (!this.visible) return;
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateYClockwise = val;
+
+        }
+
+    }
+
+    lclickRight(val) {
+
+        if (!this.visible) return;
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemRotateYCounterClockwise = val;
+
+        }
+
+    }
+
+    scrollUp(val) {
+
+        if (!this.visible) return;
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemZoomOut = val;
+
+        }
+
+    }
+
+    scrollDown(val) {
+
+        if (!this.visible) return;
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.itemZoomIn = val;
+
+        }
+
+    }
+
     xboxControllerConnected(val) {
 
         if (val && !this._xboxControllerConnected) {

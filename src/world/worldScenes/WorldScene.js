@@ -781,7 +781,13 @@ class WorldScene {
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
                 this.disablePlayerPda();
-                if (this.player.pda) this.unsubscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.PDA);
+                if (this.player.pda) {
+                    
+                    this.unsubscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.PDA);
+                    this.unsubscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.XBOX_CONTROLLER);
+                    this.unsubscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.MOUSE);
+
+                }
 
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
 
@@ -811,6 +817,7 @@ class WorldScene {
 
                 this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.PDA);
                 this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.XBOX_CONTROLLER);
+                this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.MOUSE);
 
             }
 

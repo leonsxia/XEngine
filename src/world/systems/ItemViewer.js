@@ -131,6 +131,8 @@ class ItemViewer {
 
         });
 
+        this._controls.enabled = false;
+
     }
 
     setupLights() {
@@ -391,7 +393,7 @@ class ItemViewer {
 
         if (!this._item) return;
 
-        this._controls.update(delta);
+        if (this._controls.enabled) this._controls.update(delta);
 
         if (this._lerpTick) {
 
@@ -427,7 +429,7 @@ class ItemViewer {
 
         }
 
-        if (this._zoomIn) {
+        if (this._zoomIn && !this._zoomOut) {
 
             const dist = this._camera.position.length();
             if (dist > this._minDistance) {
@@ -447,7 +449,7 @@ class ItemViewer {
 
         }
 
-        if (this._zoomOut) {
+        if (this._zoomOut && !this._zoomIn) {
 
             const dist = this._camera.position.length();
             if (dist < this._maxDistance) {
