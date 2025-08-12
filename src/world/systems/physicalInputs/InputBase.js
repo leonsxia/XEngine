@@ -117,6 +117,7 @@ InputBase.CONTROL_ACTIONS = [
             L_CLICK_RIGHT: 'lclickRight',
             L_CLICK_UP: 'lclickUp',
             L_CLICK_DOWN: 'lclickDown',
+            L_BTN: 'lbtn',
             SCROLL_UP: 'scrollUp',
             SCROLL_DOWN: 'scrollDown'
         }

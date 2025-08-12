@@ -1596,6 +1596,15 @@ class Inventory extends TabPanel {
 
     }
 
+    /**
+     * @param {boolean} val
+     */
+    set useMouse(val) {
+
+        pdaItemViewer.useMouse = val;
+
+    }
+
     resetItemViewerState() {
 
         pdaItemViewer.resetState(true);

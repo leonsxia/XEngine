@@ -638,6 +638,18 @@ class Pda {
 
     }
 
+    lbtn(val) {
+
+        if (!this.visible) return;
+
+        if (this._inventory.itemViewerEnabled) {
+
+            this._inventory.useMouse = val;
+
+        }
+
+    }
+
     scrollUp(val) {
 
         if (!this.visible) return;

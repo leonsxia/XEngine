@@ -8,6 +8,8 @@ class Mouse extends InputBase {
 
     _mouseDown = false;
     _leftBtnDown = false;
+    _middleBtnDown = false;
+    _rightBtnDown = false;
 
     #logger = new Logger(DEBUG, 'Mouse');
 
@@ -45,7 +47,7 @@ class Mouse extends InputBase {
 
             this.attachTo.switchInput(CONTROL_TYPES.MOUSE);
 
-            if (!this.enabled) return;            
+            if (!this.enabled) return;
 
             clearTimeout(mouseStopTimer);
 
@@ -63,24 +65,26 @@ class Mouse extends InputBase {
 
             let xDirection = '';
             let yDirection = '';
+            const { width, height } = world.sceneClientSize;
+            const blind = .01;
 
-            if (e.pageX > oldX) {
+            if (e.pageX > oldX + width * blind) {
 
-                xDirection = 'right';                
+                xDirection = 'right';
 
-            } else if (e.pageX < oldX) {
+            } else if (e.pageX < oldX - width * blind) {
 
-                xDirection = 'left';                
+                xDirection = 'left';
 
             }
 
-            if (e.pageY > oldY) {
+            if (e.pageY > oldY + height * blind) {
 
-                yDirection = 'down';                
+                yDirection = 'down';
 
-            } else if (e.pageY < oldY) {
+            } else if (e.pageY < oldY - height * blind) {
 
-                yDirection = 'up';                
+                yDirection = 'up';
 
             }
 
@@ -121,14 +125,19 @@ class Mouse extends InputBase {
 
             }
 
-            oldX = e.pageX;
-            oldY = e.pageY;
+            oldX = xDirection ? e.pageX : oldX;
+            oldY = yDirection ? e.pageY : oldY;
 
         });
 
         window.addEventListener('mousedown', (e) => {
 
             if (!this.enabled) return;
+
+            const eventDispatcher = this.eventDispatcher;
+            const messageType = InputBase.CONTROL_TYPES.MOUSE;
+            const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+            const world = this.attachTo;
 
             this._mouseDown = true;
             this.#logger.log(`mouse is down`);
@@ -138,22 +147,40 @@ class Mouse extends InputBase {
 
                 this._leftBtnDown = true;
                 this.#logger.log(`mouse left button is down`);
+                eventDispatcher.publish(messageType, actions.L_BTN, world.current, true);
 
             }
 
         });
 
-        window.addEventListener('mouseup', () => {
+        window.addEventListener('mouseup', (e) => {
+
+            e.preventDefault();
 
             if (!this.enabled) return;
 
-            this._mouseDown = false;
-            this._leftBtnDown = false;
-            this.#logger.log(`mouse is up`);
-            eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
-            eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
-            eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
-            eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
+            const eventDispatcher = this.eventDispatcher;
+            const messageType = InputBase.CONTROL_TYPES.MOUSE;
+            const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+            const world = this.attachTo;
+
+            if (e.button === 0) {
+                
+                this._leftBtnDown = false;
+                this.#logger.log(`mouse is up`);
+                eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
+                eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
+                eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
+                eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
+                eventDispatcher.publish(messageType, actions.L_BTN, world.current, false);
+
+            }
+
+            if (!this._leftBtnDown && !this._rightBtnDown && !this._middleBtnDown) {
+
+                this._mouseDown = false;                
+
+            }
 
         });
 

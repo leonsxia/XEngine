@@ -224,6 +224,16 @@ class World {
 
     }
 
+    get sceneClientSize() {
+
+        const canvas = this.#renderer.domElement;
+        return {
+            width: canvas.clientWidth,
+            height: canvas.clientHeight
+        };
+
+    }
+
     countObjects(scene) {
 
         let objects = 0, vertices = 0, triangles = 0;

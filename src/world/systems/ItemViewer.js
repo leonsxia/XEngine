@@ -78,6 +78,8 @@ class ItemViewer {
     _lerpTick;
     _controlChanged = false;
 
+    _useMouse = false;
+
     constructor() {
 
         // renderer
@@ -102,6 +104,18 @@ class ItemViewer {
     get scene() {
 
         return this._scene;
+
+    }
+
+    get useMouse() {
+
+        return this._useMouse;
+
+    }
+
+    set useMouse(val) {
+
+        this._useMouse = val;
 
     }
 
@@ -402,7 +416,7 @@ class ItemViewer {
 
         }
 
-        const rotateSpeed = 2 * delta;
+        const rotateSpeed = (this._useMouse ? 5 : 2) * delta;
         const zoomSpeed = .5 * delta;
         const group = this._item.group;
         if (this._rotateXClockwise) {
