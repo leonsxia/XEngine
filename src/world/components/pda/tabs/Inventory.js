@@ -1834,7 +1834,7 @@ class Inventory extends TabPanel {
 
             const { title, description } = item.description;
             titleEl.innerText = title;
-            contentEl.innerText = description;
+            contentEl.innerHTML = description;
 
             removeElementClass(descriptionEl, ELEMENT_CLASS.HIDE);
 

@@ -105,12 +105,12 @@ class Pda {
 
             }
 
+            this.resetInventory();
             this.showElement(this._pdaContainer, true);
 
         } else {
 
             this.showElement(this._pdaContainer, false);
-            this.resetInventory();
 
         }
 
