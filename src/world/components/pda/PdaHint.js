@@ -21,7 +21,8 @@ class PdaHint {
         const [
             btnViewUrl, 
             btnDPadUpUrl, btnDPadDownUrl, btnDPadLeftUrl, btnDPadRightUrl,
-            btnLStickClickUrl, btnRStickClickUrl
+            btnLStickClickUrl, btnRStickClickUrl,
+            btnLTUrl, btnRTUrl
         ] = await Promise.all([
             getImageUrl(XBOX_CONTROLLER_ICON_NAMES.VIEW),
             getImageUrl(XBOX_CONTROLLER_ICON_NAMES.DPAD_UP),
@@ -30,12 +31,15 @@ class PdaHint {
             getImageUrl(XBOX_CONTROLLER_ICON_NAMES.DPAD_RIGHT),
             getImageUrl(XBOX_CONTROLLER_ICON_NAMES.LSTICK_CLICK),
             getImageUrl(XBOX_CONTROLLER_ICON_NAMES.RSTICK_CLICK),
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.LT),
+            getImageUrl(XBOX_CONTROLLER_ICON_NAMES.RT),
         ]);
 
         this._html = createPdaHintElements({
             btnViewUrl,
             btnDPadUpUrl, btnDPadDownUrl, btnDPadLeftUrl, btnDPadRightUrl,
-            btnLStickClickUrl, btnRStickClickUrl
+            btnLStickClickUrl, btnRStickClickUrl,
+            btnLTUrl, btnRTUrl
         });
 
     }
@@ -88,6 +92,16 @@ class PdaHint {
                 addElementClass(this._html.zoomBtn, ELEMENT_CLASS.HIDE);
                 removeElementClass(this._html.zoomInKey, ELEMENT_CLASS.HIDE);
                 removeElementClass(this._html.zoomOutKey, ELEMENT_CLASS.HIDE);
+
+                addElementClass(this._html.leftFileGroupBtn, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.rightFileGroupBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.leftFileGroupKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rightFileGroupKey, ELEMENT_CLASS.HIDE);
+
+                addElementClass(this._html.leftFlipPageBtn, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.rightFlipPageBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.leftFlipPageKey, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rightFlipPageKey, ELEMENT_CLASS.HIDE);
                 break;
 
             case CONTROL_TYPES.XBOX:
@@ -128,6 +142,16 @@ class PdaHint {
                 removeElementClass(this._html.zoomBtn, ELEMENT_CLASS.HIDE);
                 addElementClass(this._html.zoomInKey, ELEMENT_CLASS.HIDE);
                 addElementClass(this._html.zoomOutKey, ELEMENT_CLASS.HIDE);
+
+                removeElementClass(this._html.leftFileGroupBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rightFileGroupBtn, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.leftFileGroupKey, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.rightFileGroupKey, ELEMENT_CLASS.HIDE);
+
+                removeElementClass(this._html.leftFlipPageBtn, ELEMENT_CLASS.HIDE);
+                removeElementClass(this._html.rightFlipPageBtn, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.leftFlipPageKey, ELEMENT_CLASS.HIDE);
+                addElementClass(this._html.rightFlipPageKey, ELEMENT_CLASS.HIDE);
                 break;
 
         }
@@ -259,7 +283,7 @@ class PdaHint {
         if (this._hintIdx === hintIndex.filesBase) return;
 
         this._hintGroup.length = 0;
-        this._hintGroup.push(this._html.closeHint);
+        this._hintGroup.push(this._html.changeFileGroupHint, this._html.flipPageHint, this._html.closeHint);
 
         this.clearHintPanel();
         this.applyHintGroup();

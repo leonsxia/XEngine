@@ -12,13 +12,24 @@ const PICKABLE_ITEM_NAMES = {
     FIRST_AID_KIT_LARGE: 'FIRST_AID_KIT_LARGE',
 }
 
+const FIELS_NAMES = {
+    USER_OPERATION: 'User Operation',
+    PDA_OPERARATION: 'PDA Operation',
+    ITEM_OPERATION: 'Item Operation',
+    JILLS_REPORT: `Jill's Report`,
+    INVESTIGATION_NOTES: 'Investigation Notes'
+}
+
 const JSON_NAMES = {
-    PICKABLE_DESCRIPTIONS: 'PICKABLE_DESCRIPTIONS'
+    PICKABLE_DESCRIPTIONS: 'PICKABLE_DESCRIPTIONS',
+    FILES: 'FILES'
 }
 
 // json files
 const JSONS = [{
-    name: JSON_NAMES.PICKABLE_DESCRIPTIONS,  src: 'assets/docs/pickable_descriptions.json'
-}];
+    name: JSON_NAMES.PICKABLE_DESCRIPTIONS,  src: 'assets/docs/pickable_descriptions.json'    
+ }, {
+    name: JSON_NAMES.FILES, src: 'assets/docs/files.json'
+ }];
 
-export { PICKABLE_ITEM_NAMES, JSON_NAMES, JSONS };
+export { PICKABLE_ITEM_NAMES, FIELS_NAMES, JSON_NAMES, JSONS };

@@ -1,0 +1,126 @@
+{
+    "fileGroups": [
+        {
+            "category": "Tutorial",
+            "files": [
+                {
+                    "title": "User Manuals",
+                    "pages": [
+                        {
+                            "index": 0,
+                            "content": "Use <span class='tip-key'>W</span> <span class='tip-key'>A</span> <span class='tip-key'>S</span> <span class='tip-key'>D</span> or <img class='tip-btn-img tip-svg' src={0}> to move.",
+                            "placeholder": [
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_LSTICK_CLICK"
+                                }
+                            ]
+                        },
+                        {
+                            "index": 1,
+                            "content": "<span class='tip-key'>W</span> or <img class='tip-trigger tip-svg' src={0}> to aim, <span class='tip-key'>K</span> or <img class='tip-trigger tip-svg' src={1}> to fire.<br><span class='tip-key'>P</span> or <img class='tip-trigger tip-svg' src={2}> to change aim target.<br><span class='tip-key'>L</span> or <img class='tip-trigger tip-svg' src={3}> to melee.",
+                            "placeholder": [
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_LT"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_RT"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_LB"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_RB"
+                                }
+                            ]
+                        },
+                        {
+                            "index": 2,
+                            "content": "<span class='tip-key'>F</span> or <span class='tip-btn btn-A'><i class='fa-solid fa-a'></i></span> to interact.<br><span class='tip-key'>W</span> or <img class='tip-btn-img tip-svg' src={0}> up + <span class='tip-key'>Space</span> or <span class='tip-btn btn-Y'><i class='fa-solid fa-y'></i></span> to climb.",
+                            "placeholder": [
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_LSTICK_CLICK"
+                                }
+                            ]
+                        }
+                    ],
+                    "order": 0,
+                    "background-img": ""
+                },
+                {
+                    "title": "PDA Operation",
+                    "pages": [{
+                        "index": 0,
+                        "content": "",
+                        "placeholder": []
+
+                    }],
+                    "order": 1,
+                    "background-img": ""
+                },
+                {
+                    "title": "Item Operation",
+                    "pages": [{
+                        "index": 0,
+                        "content": "",
+                        "placeholder": []
+
+                    }],
+                    "order": 2,
+                    "background-img": ""
+                }
+            ]
+        },
+        {
+            "category": "Apartment Building",
+            "files": [
+                {
+                    "title": "Jill's Report",
+                    "pages": [{
+                        "index": 0,
+                        "content": "",
+                        "placeholder": []
+
+                    }],
+                    "order": 0,
+                    "background-img": ""
+                }
+            ]
+        },
+        {
+            "category": "Downtown",
+            "files": [
+                {
+                    "title": "Jill's Report",
+                    "pages": [{
+                        "index": 0,
+                        "content": "",
+                        "placeholder": []
+
+                    }],
+                    "order": 0,
+                    "background-img": ""
+                },
+                {
+                    "title": "Investigation Notes",
+                    "pages": [{
+                        "index": 0,
+                        "content": "",
+                        "placeholder": []
+                    }],
+                    "order": 1,
+                    "background-img": ""
+                }
+            ]
+        },
+        {
+            "category": "Outskirts of Raccoon City",
+            "files": []
+        }
+    ]
+}

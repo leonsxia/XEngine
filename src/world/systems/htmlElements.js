@@ -3,11 +3,9 @@ import { KEYS, PDA_HINT_GROUP, PDA_MENU_NAMES, PDA_OPERATE_MENU_LIST } from "./u
 const container = document.querySelector('#scene-container');
 const header = document.querySelector('#sceneTitle');
 const msg = document.querySelector('#msg');
-const manual = document.querySelector('#manual');
 const infosDomElements = {
     header,
-    msg,
-    manual
+    msg
 };
 
 function createPdaContainer(theme) {
@@ -85,7 +83,67 @@ function createFiles() {
     const filesContainer = document.createElement('div');
     filesContainer.toggleAttribute('pda-files');
 
-    return { filesContainer };
+    const fileNavigatorBar = document.createElement('ul');
+    const navLeft = document.createElement('li');
+    const navCenter = document.createElement('li');
+    const navRight = document.createElement('li');
+    const navLeftBtn = document.createElement('div');
+    const navRightBtn = document.createElement('div');
+    const categoryList = [];
+
+    for (let i = 0; i < 3; i++) {
+
+        const categorySpan = document.createElement('span');
+        if (i === 1) categorySpan.classList.add('center');
+        categoryList.push(categorySpan);
+
+    }
+
+    fileNavigatorBar.classList.add('file-top-nav');
+    navLeft.classList.add('file-top-nav-left');
+    navCenter.classList.add('file-top-nav-center');
+    navRight.classList.add('file-top-nav-right');
+
+    navLeftBtn.innerText = KEYS.Z;
+    navRightBtn.innerText = KEYS.C;
+
+    navLeft.appendChild(navLeftBtn);
+    navRight.appendChild(navRightBtn);
+    navCenter.append(...categoryList);
+    fileNavigatorBar.append(navLeft, navCenter, navRight);
+
+    const filePanel = document.createElement('div');
+    const fileLeftNav = document.createElement('ul');
+    const fileContent = document.createElement('div');
+    const mainContent = document.createElement('p');
+    const footer = document.createElement('div');
+    filePanel.classList.add('file-panel');
+    fileLeftNav.classList.add('file-left-nav');
+    fileContent.classList.add('file-content');
+    mainContent.classList.add('main-content');
+    footer.classList.add('footer');
+    fileContent.append(mainContent, footer);
+    filePanel.append(fileLeftNav, fileContent);
+
+    const separator = document.createElement('div');
+    separator.classList.add('separator');
+    filesContainer.append(fileNavigatorBar, separator, filePanel);
+
+    return {
+        filesContainer,
+        fileNavigatorBar, navLeftBtn, navRightBtn, categoryList,
+        filePanel, fileLeftNav, fileContent, mainContent, footer
+    };
+
+}
+
+function createFileLeftNavList(title, category) {
+
+    const titleLi = document.createElement('li');
+    titleLi.innerText = title;
+    titleLi.setAttribute('category', category);
+
+    return titleLi;
 
 }
 
@@ -293,7 +351,8 @@ function createPdaHintElements(urls) {
     const { 
         btnViewUrl,
         btnDPadUpUrl, btnDPadDownUrl, btnDPadLeftUrl, btnDPadRightUrl,
-        btnLStickClickUrl, btnRStickClickUrl
+        btnLStickClickUrl, btnRStickClickUrl,
+        btnLTUrl, btnRTUrl
     } = urls;
     const hintPanel = document.createElement('div');
     hintPanel.toggleAttribute('pda-hints');
@@ -420,6 +479,38 @@ function createPdaHintElements(urls) {
     zoomBtn.src = btnRStickClickUrl;
     zoomHint.append(zoomOutKey, zoomInKey, zoomBtn, PDA_HINT_GROUP.ZOOM.text);
 
+    const changeFileGroupHint = document.createElement('div');
+    const leftFileGroupKey = document.createElement('span');
+    const rightFileGroupKey = document.createElement('span');
+    const leftFileGroupBtn = document.createElement('img');
+    const rightFileGroupBtn = document.createElement('img');
+    changeFileGroupHint.classList.add('hint-group');
+    leftFileGroupKey.classList.add('hint-key');
+    rightFileGroupKey.classList.add('hint-key');
+    leftFileGroupBtn.classList.add('hint-btn', 'btn-svg', 'hide');
+    rightFileGroupBtn.classList.add('hint-btn', 'btn-svg', 'hide');
+    leftFileGroupKey.innerText = KEYS.Z;
+    rightFileGroupKey.innerText = KEYS.C;
+    leftFileGroupBtn.src = btnLTUrl;
+    rightFileGroupBtn.src = btnRTUrl;
+    changeFileGroupHint.append(leftFileGroupKey, rightFileGroupKey, leftFileGroupBtn, rightFileGroupBtn, PDA_HINT_GROUP.CHANGE_FILE_GROUP.text);
+
+    const flipPageHint = document.createElement('div');
+    const leftFlipPageKey = document.createElement('span');
+    const rightFlipPageKey = document.createElement('span');
+    const leftFlipPageBtn = document.createElement('img');
+    const rightFlipPageBtn = document.createElement('img');
+    flipPageHint.classList.add('hint-group');
+    leftFlipPageKey.classList.add('hint-key');
+    rightFlipPageKey.classList.add('hint-key');
+    leftFlipPageBtn.classList.add('hint-btn', 'btn-svg', 'hide');
+    rightFlipPageBtn.classList.add('hint-btn', 'btn-svg', 'hide');
+    leftFlipPageKey.innerText = KEYS.A;
+    rightFlipPageKey.innerText = KEYS.D;
+    leftFlipPageBtn.src = btnDPadLeftUrl;
+    rightFlipPageBtn.src = btnDPadRightUrl;
+    flipPageHint.append(leftFlipPageKey, rightFlipPageKey, leftFlipPageBtn, rightFlipPageBtn, PDA_HINT_GROUP.FLIP_PAGES.text);
+
     return {
         hintPanel,
         closeHint, closeKey, closeBtn,
@@ -432,7 +523,9 @@ function createPdaHintElements(urls) {
         leftHint, leftKey, leftBtn,
         rightHint, rightKey, rightBtn,
         rotateHint, rotateLeftKey, rotateRightKey, rotateUpKey, rotateDownKey, rotateBtn,
-        zoomHint, zoomOutKey, zoomInKey, zoomBtn
+        zoomHint, zoomOutKey, zoomInKey, zoomBtn,
+        changeFileGroupHint, leftFileGroupKey, rightFileGroupKey, leftFileGroupBtn, rightFileGroupBtn,
+        flipPageHint, leftFlipPageKey, rightFlipPageKey, leftFlipPageBtn, rightFlipPageBtn
     };
 
 }
@@ -459,6 +552,7 @@ export {
     createECG,
     createMap,
     createFiles,
+    createFileLeftNavList,
     createPdaHintElements,
     getScenePosition 
 }

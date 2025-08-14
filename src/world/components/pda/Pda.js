@@ -58,6 +58,7 @@ class Pda {
 
         await Promise.all([
             this._inventory.init(),
+            this._files.init(),
             this._hints.init()
         ]);
         this._pdaContainer.appendChild(this._pdaMenu.menu);
@@ -106,6 +107,7 @@ class Pda {
             }
 
             this.resetInventory();
+            this.resetFiles();
             this.showElement(this._pdaContainer, true);
 
         } else {
@@ -195,6 +197,7 @@ class Pda {
         this.showElement(this._maps._html.mapsContainer, false);
 
         this.resetInventory();
+        this.resetFiles();
 
     }
 
@@ -250,6 +253,13 @@ class Pda {
 
             }
 
+            if (this.currentTab === TABS.FIELS) {
+
+                this._files.filesNavIndex --;
+                this._files.currentFileIndex --;
+
+            }
+
         }
 
         if (this._inventory.itemViewerEnabled) {
@@ -290,6 +300,13 @@ class Pda {
 
             }
 
+            if (this.currentTab === TABS.FIELS) {
+
+                this._files.filesNavIndex ++;
+                this._files.currentFileIndex ++;
+
+            }
+
         }
 
         if (this._inventory.itemViewerEnabled) {
@@ -324,6 +341,12 @@ class Pda {
 
             }
 
+            if (this.currentTab === TABS.FIELS) {
+
+                this._files.currentPageIndex --;
+
+            }
+
         }
 
         if (this._inventory.itemViewerEnabled) {
@@ -355,6 +378,12 @@ class Pda {
                     this._inventory.focusRight();                    
 
                 }
+
+            }
+
+            if (this.currentTab === TABS.FIELS) {
+
+                this._files.currentPageIndex ++;
 
             }
 
@@ -578,15 +607,33 @@ class Pda {
 
     btnLT(val) {
 
-        this.#logger.func = this.btnLT.name;
-        this.#logger.log(`btn LT / key Z pressed: ${val}`);
+        if (val) {
+
+            if (this.currentTab === TABS.FIELS) {
+
+                this._files.categoryTabIndex --;
+                this._files.currentCategoryIndex --;
+                this.#logger.log(`currentCategoryIndex: ${this._files.currentCategoryIndex}`);
+
+            }
+
+        }
 
     }
 
     btnRT(val) {
 
-        this.#logger.func = this.btnRT.name;
-        this.#logger.log(`btn RT / key C pressed: ${val}`);
+        if (val) {
+
+            if (this.currentTab === TABS.FIELS) {
+
+                this._files.categoryTabIndex ++;
+                this._files.currentCategoryIndex ++;
+                this.#logger.log(`currentCategoryIndex: ${this._files.currentCategoryIndex}`);
+
+            }
+
+        }
 
     }
 
@@ -680,12 +727,14 @@ class Pda {
 
             this._pdaMenu.switchControlType(CONTROL_TYPES.XBOX);
             this._hints.switchControlType(CONTROL_TYPES.XBOX);
+            this._files.switchControlType(CONTROL_TYPES.XBOX);
             this._xboxControllerConnected = true;
 
         } else if (!val && this._xboxControllerConnected) {
 
             this._pdaMenu.switchControlType(CONTROL_TYPES.KEYBOARD);
             this._hints.switchControlType(CONTROL_TYPES.KEYBOARD);
+            this._files.switchControlType(CONTROL_TYPES.KEYBOARD);
             this._xboxControllerConnected = false;
 
         }
@@ -799,6 +848,14 @@ class Pda {
             }
 
         }
+
+    }
+
+    // files
+    resetFiles() {
+
+        this._files.categoryTabIndex = 0;
+        this._files.currentCategoryIndex = 0;
 
     }
 

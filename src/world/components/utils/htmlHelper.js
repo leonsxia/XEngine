@@ -52,4 +52,14 @@ function findClass(element, clsname) {
 
 }
 
-export { removeElementClass, addElementClass, findClass };
+function clearChildren(element) {
+
+    while (element.firstChild) {
+
+        element.removeChild(element.lastChild);
+
+    }
+
+}
+
+export { removeElementClass, addElementClass, findClass, clearChildren };

@@ -196,16 +196,6 @@ class World {
                 
                 infosDomElements.msg.textContent = 'render complete!';
 
-                if (loadScene.setup?.showManual) {
-
-                    infosDomElements.manual.classList.remove('hide');
-
-                } else {
-
-                    infosDomElements.manual.classList.add('hide');
-
-                }
-                
             }
 
         }, 0);
@@ -308,12 +298,6 @@ class World {
             const info = infosDomElements[i];
 
             if (show) {
-
-                if (info === infosDomElements.manual && !this.#currentScene.setup?.showManual) {
-
-                    continue;
-
-                }
 
                 if (info.classList.contains('hide')) {
 

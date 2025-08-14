@@ -66,7 +66,6 @@
             ]
         ],
         "resolution": 0.8,
-        "showManual": true,
         "defaultPlayer": "jill",
         "actions": [
             "start",

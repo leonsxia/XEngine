@@ -48,7 +48,11 @@ const XBOX_CONTROLLER_ICON_NAMES = {
     DPAD_LEFT: 'XBOX_DPAD_LEFT',
     DPAD_RIGHT: 'XBOX_DPAD_RIGHT',
     LSTICK_CLICK: 'XBOX_LSTICK_CLICK',
-    RSTICK_CLICK: 'XBOX_RSTICK_CLICK'
+    RSTICK_CLICK: 'XBOX_RSTICK_CLICK',
+    LT: 'XBOX_LT',
+    RT: 'XBOX_RT',
+    LB: 'XBOX_LB',
+    RB: 'XBOX_RB'
 }
 
 const XBOX_CONTROLLER_ICONS = [{
@@ -65,6 +69,14 @@ const XBOX_CONTROLLER_ICONS = [{
     name: XBOX_CONTROLLER_ICON_NAMES.LSTICK_CLICK, src: 'assets/images/xbox/xbox_lstick_click.svg'
 }, {
     name: XBOX_CONTROLLER_ICON_NAMES.RSTICK_CLICK, src: 'assets/images/xbox/xbox_rstick_click.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.LT, src: 'assets/images/xbox/xbox_lt.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.RT, src: 'assets/images/xbox/xbox_rt.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.LB, src: 'assets/images/xbox/xbox_lb.svg'
+}, {
+    name: XBOX_CONTROLLER_ICON_NAMES.RB, src: 'assets/images/xbox/xbox_rb.svg'
 }];
 
 const ELEMENT_CLASS = {
@@ -120,12 +132,16 @@ const PDA_HINT_GROUP = {
     UP: { text: 'Up', icon: `<i class="fa-solid fa-circle-chevron-up"></i>` },
     DOWN: { text: 'Down', icon: `<i class="fa-solid fa-circle-chevron-down"></i>` },
     LEFT: { text: 'Left', icon: '<i class="fa-solid fa-circle-chevron-left"></i>' },
-    RIGHT: { text: 'Right', icon: '<i class="fa-solid fa-circle-chevron-right"></i>' }
+    RIGHT: { text: 'Right', icon: '<i class="fa-solid fa-circle-chevron-right"></i>' },
+    CHANGE_FILE_GROUP: { text: 'Change File Group' },
+    FLIP_PAGES: { text: 'Flip Pages' }
 }
 
 const KEYS = {
     Q: 'Q',
     E: 'E',
+    Z: 'Z',
+    C: 'C',
     F: 'F',
     J: 'J',
     K: 'K',
@@ -140,6 +156,8 @@ const KEYS = {
 const GAMEPAD_BUTTONS = {
     LB: 'LB',
     RB: 'RB',
+    LT: 'LT',
+    RT: 'RT',
     A: 'A'
 };
 

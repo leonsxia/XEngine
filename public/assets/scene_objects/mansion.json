@@ -36,7 +36,6 @@
             ]
         ],
         "resolution": 0.5,
-        "showManual": true,
         "defaultPlayer": "jill"
     },
     "players": [
