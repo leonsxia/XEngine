@@ -1,6 +1,7 @@
 :root {
     --font-white: rgba(220, 220, 220, 1);
     --font-grey: #555;
+    --font-yellow: rgba(255, 200, 0, 1);
     --border-radius: calc(var(--calculated-vw) * .5);
     --border-white: rgba(180, 180, 180, 1);
     --border-grey: #555;
@@ -833,7 +834,7 @@ canvas.scene-canvas {
 
             .file-content {
                 position: relative;
-                width: calc(var(--calculated-vw) * 40);
+                width: calc(var(--calculated-vw) * 50);
                 height: 100%;
                 display: flex;
                 flex-flow: column nowrap;
@@ -842,9 +843,10 @@ canvas.scene-canvas {
                 text-align: left;
 
                 .main-content {
+                    width: 80%;
                     height: 98%;
                     line-height: calc(var(--calculated-vw) * 2.5);
-                    padding: calc(var(--calculated-vw) * 4);
+                    padding: calc(var(--calculated-vw) * 4) calc(var(--calculated-vw) * 4) 0 calc(var(--calculated-vw) * 4);
                     font-size: calc(var(--calculated-vw) * 1.4);
                     
                     .tip-key {
@@ -872,6 +874,7 @@ canvas.scene-canvas {
                         position: relative;
                         top: calc(var(--calculated-vw) * .2);
                         display: inline-block;
+                        margin-top: calc(var(--calculated-vw) * .6);
                         width: calc(var(--calculated-vw) * 2.2);
                         height: calc(var(--calculated-vw) * 2.2);
                         line-height: calc(var(--calculated-vw) * 2.2);
@@ -904,11 +907,21 @@ canvas.scene-canvas {
                     }
 
                     .btn-Y {
-                        background: rgba(255, 255, 0, .5);
+                        background: rgba(255, 200, 0, .8);
                     }
 
                     .tip-svg {
                         background: var(--font-white);
+                    }
+
+                    a {
+                        text-decoration: none;
+                        font-style: italic;
+                        color: var(--font-white);
+                    }
+
+                    a:hover {
+                        color: var(--font-yellow);
                     }
                 }
 

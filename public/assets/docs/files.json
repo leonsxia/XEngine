@@ -54,24 +54,183 @@
                 },
                 {
                     "title": "PDA Operation",
-                    "pages": [{
-                        "index": 0,
-                        "content": "",
-                        "placeholder": []
-
-                    }],
+                    "pages": [
+                        {
+                            "index": 0,
+                            "content": "Use <span class='tip-key'>Tab</span> or <img class='tip-btn-img tip-svg' src={0}> to open/close PDA.<br>Use <span class='tip-key'>Q</span> <span class='tip-key'>E</span> or <img class='tip-trigger tip-svg' src={1}> <img class='tip-trigger tip-svg' src={2}> to switch between Maps(<i>not finished yet</i>), Inventory and Files.",
+                            "placeholder": [
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_VIEW"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_LB"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_RB"
+                                }
+                            ]
+                        },
+                        {
+                            "index": 1,
+                            "content": "Inventory:<br>Use <span class='tip-key'>W</span> <span class='tip-key'>A</span> <span class='tip-key'>S</span> <span class='tip-key'>D</span> or <img class='tip-btn-img tip-svg' src={0}> <img class='tip-btn-img tip-svg' src={1}> <img class='tip-btn-img tip-svg' src={2}> <img class='tip-btn-img tip-svg' src={3}> to navigate items.",
+                            "placeholder": [
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_UP"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_DOWN"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_LEFT"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_RIGHT"
+                                }
+                            ]
+                        },
+                        {
+                            "index": 2,
+                            "content": "Inventory:<br>Use <span class='tip-key'>Shift</span> or <span class='tip-btn btn-X'><i class='fa-solid fa-x'></i></span> to move a item.<br><span class='tip-key'>J</span> or <span class='tip-btn btn-A'><i class='fa-solid fa-a'></i></span> to confirm. <span class='tip-key'>K</span> or <span class='tip-btn btn-B'><i class='fa-solid fa-x'></i></span> to cancel.",
+                            "placeholder": [
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_UP"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_DOWN"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_LEFT"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_RIGHT"
+                                }
+                            ]
+                        },
+                        {
+                            "index": 3,
+                            "content": "Files:<br>Use <span class='tip-key'>Z</span> <span class='tip-key'>C</span> or <img class='tip-trigger tip-svg' src={0}> <img class='tip-trigger tip-svg' src={1}> to change file group.<br>Use <span class='tip-key'>W</span> <span class='tip-key'>S</span> or <img class='tip-btn-img tip-svg' src={2}> <img class='tip-btn-img tip-svg' src={3}> to navigate files,<br><span class='tip-key'>A</span> <span class='tip-key'>D</span> or <img class='tip-btn-img tip-svg' src={4}> <img class='tip-btn-img tip-svg' src={5}> to flip pages",
+                            "placeholder": [
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_LT"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_RT"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_UP"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_DOWN"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_LEFT"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "XBOX_DPAD_RIGHT"
+                                }
+                            ]
+                        }
+                    ],
                     "order": 1,
+                    "background-img": ""
+                }                
+            ]
+        },
+        {
+            "category": "About",
+            "files": [
+                {
+                    "title": "About This Demo",
+                    "pages": [
+                        {
+                            "index": 0,
+                            "content": "Please visit my work at:<br><b>Website</b> <i class='fa-solid fa-globe'></i> : <a href={0} target='_blank'>leonsxia.github.io/XEngine</a><br><b>Git</b> <i class='fa-brands fa-github'></i> : <a href={1} target='_blank'>github.com/leonsxia/XEngine</a><br><b>Forum</b> <i class='fa-brands fa-discourse'></i> : <a href={2} target='_blank'>discourse.threejs.org/t/xengine-a-scene-manager-and-simple-physics-simulator-based-on-old-school-resident-evil</a>",
+                            "placeholder": [
+                                {
+                                    "type": "link",
+                                    "src": "https://leonsxia.github.io/XEngine/"
+                                },
+                                {
+                                    "type": "link",
+                                    "src": "https://github.com/leonsxia/XEngine"
+                                },
+                                {
+                                    "type": "link",
+                                    "src": "https://discourse.threejs.org/t/xengine-a-scene-manager-and-simple-physics-simulator-based-on-old-school-resident-evil/70135"
+                                }
+                            ]
+                        }
+                    ],
+                    "order": 0,
                     "background-img": ""
                 },
                 {
-                    "title": "Item Operation",
-                    "pages": [{
-                        "index": 0,
-                        "content": "",
-                        "placeholder": []
-
-                    }],
-                    "order": 2,
+                    "title": "About Author",
+                    "pages": [
+                        {
+                            "index": 0,
+                            "content": "Hi buddy,<br>I'm really happy you found this file.<br>I'm <b>LeonSXia</b>, a individual front-end/game developer, game designer from China, Zhejiang Province, Hangzhou.<br>This is my first indie web platform game based on Threejs.<br>For now it's still in progress, still a lot of stuff need to be added.<br>I hope you enjoy it...<i class='fa-solid fa-face-smile-wink'></i>",
+                            "placeholder": []
+                        },
+                        {
+                            "index": 1,
+                            "content": "If you like this game, please feel free to make a donation. I'll be very happy...<i class='fa-solid fa-face-kiss'></i><br><div style='display:flex;justify-content:center;'><img width='35%' src={0}>&nbsp<img width='35%' src={1}></div>",
+                            "placeholder": [
+                                {
+                                    "type": "image",
+                                    "src": "WECHAT_PAY"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "ALIPAY"
+                                }
+                            ]
+                        },
+                        {
+                            "index": 2,
+                            "content": "Please contact me if you have any thoughts.<br><i class='fa-solid fa-envelope'></i>: <a href=mailto:{0}>leon_s_xia@126.com</a>&nbsp<i class='fa-brands fa-google'></i>: <a href=mailto:{1}>leon.s.xia@gmail.com</a><br><i class='fa-brands fa-weixin'></i>: LeonPontifex&nbsp<i class='fa-brands fa-bilibili'></i>: <a href={2} target='_blank'>【LeonPontifex的个人空间-哔哩哔哩】</a><br><div style='display:flex;justify-content:center;'><img width='35%' src={3}>&nbsp<img width='35%' src={4}></div>",
+                            "placeholder": [
+                                {
+                                    "type": "link",
+                                    "src": "leon_s_xia@126.com"
+                                },
+                                {
+                                    "type": "link",
+                                    "src": "leon.s.xia@gmail.com"
+                                },
+                                {
+                                    "type": "link",
+                                    "src": "https://b23.tv/NLVBo1S"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "WECHAT"
+                                },
+                                {
+                                    "type": "image",
+                                    "src": "BILIBILI"
+                                }
+                            ]
+                        }
+                    ],
+                    "order": 1,
                     "background-img": ""
                 }
             ]

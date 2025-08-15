@@ -12,7 +12,11 @@ const IMAGE_NAMES = {
     FIRST_AID_KIT_SMALL: 'FIRST_AID_KIT_SMALL',
     FIRST_AID_KIT_MEDIUM: 'FIRST_AID_KIT_MEDIUM',
     FIRST_AID_KIT_LARGE: 'FIRST_AID_KIT_LARGE',    
-    ECG: 'ECG'
+    ECG: 'ECG',
+    WECHAT_PAY: 'WECHAT_PAY',
+    ALIPAY: 'ALIPAY',
+    WECHAT: 'WECHAT',
+    BILIBILI: 'BILIBILI'
 };
 
 const IMAGES = [{
@@ -39,6 +43,14 @@ const IMAGES = [{
     name: IMAGE_NAMES.FIRST_AID_KIT_LARGE, src: 'assets/images/item_snapshots/health/first_aid_kit_large.png'
 }, {
     name: IMAGE_NAMES.ECG, src: 'assets/images/pda/ecg.svg'
+}, {
+    name: IMAGE_NAMES.WECHAT_PAY, src: 'assets/images/others/wechat_pay.JPG'
+}, {
+    name: IMAGE_NAMES.ALIPAY, src: 'assets/images/others/alipay.JPG'
+}, {
+    name: IMAGE_NAMES.WECHAT, src: 'assets/images/others/wechat.JPG'
+}, {
+    name: IMAGE_NAMES.BILIBILI, src: 'assets/images/others/bilibili.JPG'
 }];
 
 const XBOX_CONTROLLER_ICON_NAMES = {

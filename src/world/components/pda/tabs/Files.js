@@ -284,11 +284,18 @@ class Files extends TabPanel {
             const { type, src } = placeholder[i];
             switch (type) {
                 case "image":
+
                     {
                         const url = loadedImages[src];
                         placeholderList.push(url);
                     }
                     break;
+
+                default:
+
+                    placeholderList.push(src);
+                    break;
+
             }
 
         }

@@ -15,7 +15,6 @@ const PICKABLE_ITEM_NAMES = {
 const FIELS_NAMES = {
     USER_OPERATION: 'User Operation',
     PDA_OPERARATION: 'PDA Operation',
-    ITEM_OPERATION: 'Item Operation',
     JILLS_REPORT: `Jill's Report`,
     INVESTIGATION_NOTES: 'Investigation Notes'
 }
