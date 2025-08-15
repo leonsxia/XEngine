@@ -3,6 +3,7 @@ import { pdaItemViewer } from "../../../systems/ItemViewer";
 import { Logger } from "../../../systems/Logger";
 import { ELEMENT_CLASS, PDA_OPERATE_MENU_LIST } from "../../../systems/ui/uiConstants";
 import { addElementClass, removeElementClass } from "../../utils/htmlHelper";
+import { getLoopIndex } from "../../utils/mathHelper";
 import { ECG } from "./ECG";
 import { TabPanel } from "./TabPanel";
 
@@ -710,7 +711,8 @@ class Inventory extends TabPanel {
         const element = this._html.shiftDiv;
         const prevIdx = this._shiftIdx;
         const interval = val - prevIdx;
-        let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
+        let tarIdx = getLoopIndex(val, this._size, 4);
+
         if (this._shiftSlotSize === 2 && (tarIdx % 4 === 3 || tarIdx === this._size - 1)){
 
             if (interval > 0) {
@@ -736,7 +738,7 @@ class Inventory extends TabPanel {
 
         const element = this._html.selectDiv;
         const lastSelectedItem = this.getMatchedItem(this._selectIdx);
-        let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
+        let tarIdx = getLoopIndex(val, this._size, 4);
         tarIdx = lastSelectedItem && lastSelectedItem.itemSize === 2 && lastSelectedItem.occupiedSlotIdx + 1 === tarIdx ? ++tarIdx : tarIdx;
         const selectedItem = this.getMatchedItem(tarIdx);
 
@@ -765,8 +767,7 @@ class Inventory extends TabPanel {
         const element = this._html.focusedDiv;
         const prevIdx = this._currentIdx;
         const interval = val - prevIdx;
-        let tarIdx = val > 0 ? val % this._size : (this._size + val) % this._size;
-
+        let tarIdx = getLoopIndex(val, this._size, 4);
         const matched = this.getMatchedItem(tarIdx);
 
         if (matched && matched.itemSize === 2) {

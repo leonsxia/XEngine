@@ -13,4 +13,45 @@ function getRandomInt(min, max) {
 
 }
 
-export { getRandomFloat, getRandomInt };
+function getLoopIndex(idx, size, step) {
+
+    let tarIdx;
+    const multiple = Math.ceil(size / step);
+    const maxLen = multiple * step;
+
+    if (idx > 0) {
+
+        if (idx < size) {
+
+            tarIdx = idx;
+
+        } else if (idx >= size && idx < maxLen){
+
+            tarIdx = idx % size;
+
+        } else {
+
+            tarIdx = idx % maxLen;
+
+        }
+
+    } else {
+
+        const plus = idx + maxLen;
+        if (plus < 0) {
+
+            tarIdx = getLoopIndex(plus, size, step);
+
+        } else {
+
+            tarIdx = Math.min(plus % maxLen, size - 1);
+
+        }
+
+    }
+
+    return tarIdx;
+
+}
+
+export { getRandomFloat, getRandomInt, getLoopIndex };
