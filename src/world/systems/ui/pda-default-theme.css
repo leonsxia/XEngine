@@ -848,6 +848,7 @@ canvas.scene-canvas {
                     line-height: calc(var(--calculated-vw) * 2.5);
                     padding: calc(var(--calculated-vw) * 4) calc(var(--calculated-vw) * 4) 0 calc(var(--calculated-vw) * 4);
                     font-size: calc(var(--calculated-vw) * 1.4);
+                    overflow: scroll;
                     
                     .tip-key {
                         display: inline-block;

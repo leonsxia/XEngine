@@ -119,7 +119,7 @@
                         },
                         {
                             "index": 3,
-                            "content": "Files:<br>Use <span class='tip-key'>Z</span> <span class='tip-key'>C</span> or <img class='tip-trigger tip-svg' src={0}> <img class='tip-trigger tip-svg' src={1}> to change file group.<br>Use <span class='tip-key'>W</span> <span class='tip-key'>S</span> or <img class='tip-btn-img tip-svg' src={2}> <img class='tip-btn-img tip-svg' src={3}> to navigate files,<br><span class='tip-key'>A</span> <span class='tip-key'>D</span> or <img class='tip-btn-img tip-svg' src={4}> <img class='tip-btn-img tip-svg' src={5}> to flip pages",
+                            "content": "Files:<br>Use <span class='tip-key'>Z</span> <span class='tip-key'>C</span> or <img class='tip-trigger tip-svg' src={0}> <img class='tip-trigger tip-svg' src={1}> to change file group.<br>Use <span class='tip-key'>W</span> <span class='tip-key'>S</span> or <img class='tip-btn-img tip-svg' src={2}> <img class='tip-btn-img tip-svg' src={3}> to navigate files,<br><span class='tip-key'>A</span> <span class='tip-key'>D</span> or <img class='tip-btn-img tip-svg' src={4}> <img class='tip-btn-img tip-svg' src={5}> to flip pages.",
                             "placeholder": [
                                 {
                                     "type": "image",
@@ -205,7 +205,7 @@
                         },
                         {
                             "index": 2,
-                            "content": "Please contact me if you have any thoughts.<br><i class='fa-solid fa-envelope'></i>: <a href=mailto:{0}>leon_s_xia@126.com</a>&nbsp<i class='fa-brands fa-google'></i>: <a href=mailto:{1}>leon.s.xia@gmail.com</a><br><i class='fa-brands fa-weixin'></i>: LeonPontifex&nbsp<i class='fa-brands fa-bilibili'></i>: <a href={2} target='_blank'>【LeonPontifex的个人空间-哔哩哔哩】</a><br><div style='display:flex;justify-content:center;'><img width='35%' src={3}>&nbsp<img width='35%' src={4}></div>",
+                            "content": "Please contact me if you have any thoughts.<br><i class='fa-solid fa-envelope'></i>: <a href=mailto:{0}>leon_s_xia@126.com</a>&nbsp<i class='fa-brands fa-google'></i>: <a href=mailto:{1}>leon.s.xia@gmail.com</a><br><i class='fa-brands fa-weixin'></i>: LeonPontifex&nbsp<i class='fa-brands fa-bilibili'></i>: <a href={2} target='_blank'>【LeonPontifex的个人空间-哔哩哔哩】</a><br><div style='display:flex;justify-content:center;'><img width='34%' src={3}>&nbsp<img width='34%' src={4}></div>",
                             "placeholder": [
                                 {
                                     "type": "link",
