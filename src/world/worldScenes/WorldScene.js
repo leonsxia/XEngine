@@ -908,7 +908,7 @@ class WorldScene {
 
     setPickableItemVisible(item) {
 
-        if (item.count === 0 || item.currentRoom !== this.currentRoom.name || item.isPicked) {
+        if (!item.available || item.currentRoom !== this.currentRoom.name || item.isPicked) {
 
             item.setModelVisible(false);
 

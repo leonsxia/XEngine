@@ -42,6 +42,7 @@ class AmmoBoxItem extends PickableItem {
     set count(val) {
 
         this.ammo.count = val > this.capacity ? this.capacity : Math.max(val, 0);
+        this._available = this.count > 0 ? true : false;
 
     }
 

@@ -32,6 +32,7 @@ class PickableItem extends ObstacleBase {
 
     _xboxControllerConnected;
     _pickForbidden = false;
+    _available = true;
 
     constructor(specs) {
 
@@ -105,6 +106,18 @@ class PickableItem extends ObstacleBase {
         this.createItemHtml();
 
         this.setPickLayers();
+
+    }
+
+    get available() {
+
+        return this._available;
+
+    }
+
+    set available(val) {
+
+        this._available = val;
 
     }
 

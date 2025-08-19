@@ -10,7 +10,7 @@ class FirstAidKitItem extends CombinableItem {
     isFastCombinableItem = true;
 
     category = HEALTH_CATEGORY.FIRST_AID_KIT;
-    count = 1;
+    _count = 1;
 
     constructor(specs) {
 
@@ -56,6 +56,19 @@ class FirstAidKitItem extends CombinableItem {
 
         this.updateLabelTip();
         this.showLabelTip(false);
+
+    }
+
+    get count() {
+
+        return this._count;
+
+    }
+
+    set count(val) {
+
+        this._count = Math.max(0, val);
+        this._available = this.count > 0 ? true : false;
 
     }
 

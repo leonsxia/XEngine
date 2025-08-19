@@ -33,7 +33,7 @@ class Interaction {
             for (let j = 0, jl = this.interactives.length; j < jl; j++) {
 
                 const item = this.interactives[j];
-                if (item.isPickableItem && !item.isPicked) {
+                if (item.isPickableItem && !item.isPicked && item.available) {
 
                     item.showLabelTip(false);
                     const result = player.checkTargetInPickRange(item);
