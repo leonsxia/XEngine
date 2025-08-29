@@ -6,11 +6,14 @@ import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
 import { aimDirection, polarity } from '../../utils/enums';
 import { Pda } from '../../pda/Pda';
 import { resetObject3D } from '../../utils/objectHelper';
+import { SOUND_NAMES } from '../../utils/audioConstants';
+import { AudioWorkstation } from '../../audio/AudioWorkstation';
 
 const DEBUG = false;
 const DEBUG_WEAPON = true;
 const DEBUG_DAMAGE = true;
 const DEBUG_INTERACTION = true;
+const DEBUG_SOUND = false;
 
 const _m1 = new Matrix4();
 
@@ -24,11 +27,15 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     #weaponLogger = new Logger(DEBUG_WEAPON, 'CombatPlayerBase');
     #damageLogger = new Logger(DEBUG_DAMAGE, 'CombatPlayerBase');
     #interactionLogger = new Logger(DEBUG_INTERACTION, 'CombatPlayerBase');
+    #soundLogger = new Logger(DEBUG_SOUND, 'CombatPlayerBase');
 
-    AWS;    
+    AWS;
+    DAW;   
 
     _clips = {};
     _animationSettings = {};
+
+    _soundSettings = {};
 
     armedWeapon;
     _meleeWeapon;
@@ -55,6 +62,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         const { collisionSize = { width, depth, height } } = specs;
         const { rotateR = .9, vel = 1.34, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, aimVel = 3 * Math.PI, aimTime = .05 } = specs;
         const { clips, animationSetting } = specs;
+        const { soundSetting } = specs;
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
         const { showBS = false } = specs;
         const { createDefaultBoundingObjects = true, enableCollision = true } = specs;
@@ -74,6 +82,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
+
+        Object.assign(this._soundSettings, soundSetting);
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, hasBones };
@@ -110,6 +120,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
 
+        this.DAW = new AudioWorkstation();
+
         this.trackResources();
 
     }
@@ -133,6 +145,28 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         }
 
         return loadPromises;
+
+    }
+
+    addSoundsToGroup(soundName) {
+
+        const sound = this.DAW.getSound(soundName);
+        if (sound) {
+
+            this.group.add(sound);
+
+        }
+
+    }
+
+    setupSounds(camera) {
+
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT);
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT);
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT);
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT);
+
+        this.DAW.changeCamera(camera);
 
     }
 
@@ -929,6 +963,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this._meleeWeapon.isFiring = false;
         super.melee(false);
         this.switchHelperComponents();
+        this._soundSettings.MELEE_SOUND_PLAYED = false;
 
     }
 
@@ -1041,6 +1076,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 if (this.armedWeapon.magzineEmpty) {
 
                     this.armedWeapon.weaponEmpty();
+                    this.DAW.play(this.armedWeapon.emptySound);
                     return;
 
                 }
@@ -1451,6 +1487,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                             this.cancelGunShoot();
                             this.#weaponLogger.log(`${this.armedWeapon.weaponType} magzine empty`);
                             this.armedWeapon.weaponEmpty();
+                            this.DAW.play(this.armedWeapon.emptySound);
 
                         } else {
 
@@ -1469,6 +1506,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                             }
 
                             this.armedWeapon.shoot();
+                            this.DAW.play(this.armedWeapon.fireSound);
 
                         }
 
@@ -1519,11 +1557,19 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                     }
 
+                    if (!this._soundSettings.MELEE_SOUND_PLAYED) {
+
+                        this.DAW.play(this._meleeWeapon.fireSound);
+                        this._soundSettings.MELEE_SOUND_PLAYED = true;
+
+                    }
+
                 } else if (this._delta > attackEndInterval) {
 
                     this._i++;
                     this._onMeleeHurtTargets.length = 0;
                     this.#weaponLogger.log(`melee attack: ${this._i}`);
+                    this._soundSettings.MELEE_SOUND_PLAYED = false;
 
                 }
 
@@ -1619,7 +1665,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     }
 
-    mixerTick(delta) {
+    animationMixerTick(delta) {
 
         this.AWS.mixer.update(delta);
 
@@ -1630,6 +1676,87 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             if (!weapon.visible) continue;
             
             weapon.AWS?.mixer.update(delta);
+
+        }        
+
+    }
+
+    audioMixerTick() {
+
+        this.#soundLogger.func = this.audioMixerTick.name;
+        const daw = this.DAW;
+
+        const walkAction = this.AWS.actions[this._clips.WALK.nick].action;
+        // console.log(`time: ${this.AWS.actions[this._clips.WALK.nick].action.time}, timeScale: ${this.AWS.actions[this._clips.WALK.nick].action.timeScale}`);
+        if (walkAction.isRunning()) {
+
+            if (walkAction.time < this._soundSettings.WALKING_STEP_INTERVAL) {
+
+                if (!this._soundSettings.WALK_LEFT_PLAYED) {
+
+                    this.#soundLogger.log(`walk: left`);
+                    this._soundSettings.WALK_LEFT_PLAYED = true;
+                    this._soundSettings.WALK_RIGHT_PLAYED = false;
+                    daw.play(SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT);
+
+                }                
+
+            } else {
+
+                if (!this._soundSettings.WALK_RIGHT_PLAYED) {
+
+                    this.#soundLogger.log(`walk: right`);
+                    this._soundSettings.WALK_LEFT_PLAYED = false;
+                    this._soundSettings.WALK_RIGHT_PLAYED = true;
+                    daw.play(SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT);
+
+                }
+
+            }
+
+        } else {
+
+            this._soundSettings.WALK_LEFT_PLAYED = false;
+            this._soundSettings.WALK_RIGHT_PLAYED = false;
+            daw.stop(SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT);
+            daw.stop(SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT);
+
+        }
+
+        const runAction = this.AWS.actions[this._clips.RUN.nick].action;
+        if (runAction.isRunning()) {
+
+            if (runAction.time < this._soundSettings.RUNNING_STEP_INTERVAL) {
+
+                if (!this._soundSettings.RUN_RIGHT_PLAYED) {
+
+                    this.#soundLogger.log(`run: right`);
+                    this._soundSettings.RUN_LEFT_PLAYED = false;
+                    this._soundSettings.RUN_RIGHT_PLAYED = true;
+                    daw.play(SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT);
+
+                }
+
+            } else {
+
+                if (!this._soundSettings.RUN_LEFT_PLAYED) {
+
+                    this.#soundLogger.log(`run: left`);
+                    this._soundSettings.RUN_LEFT_PLAYED = true;
+                    this._soundSettings.RUN_RIGHT_PLAYED = false;
+                    daw.play(SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT);
+
+                }
+                
+
+            }
+
+        } else {
+
+            this._soundSettings.RUN_LEFT_PLAYED = false;
+            this._soundSettings.RUN_RIGHT_PLAYED = false;
+            daw.stop(SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT);
+            daw.stop(SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT);
 
         }
 

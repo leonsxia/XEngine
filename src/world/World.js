@@ -30,6 +30,8 @@ import { JSONS } from "./components/utils/documentary";
 import { pdaItemViewer } from "./systems/ItemViewer";
 import { AnimationLoop } from "./systems/AnimationLoop";
 import { Loop } from "./systems/Loop";
+import { loadSounds } from "./components/utils/audioHelper";
+import { SOUNDS } from "./components/utils/audioConstants";
 
 const config = { 
     scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix', 'Enemy Test Scene'],  // scene list for scene selector
@@ -127,7 +129,8 @@ class World {
             loadShaders(SHADERS),
             loadImages(IMAGES),
             loadImages(XBOX_CONTROLLER_ICONS),
-            loadJsons(JSONS)
+            loadJsons(JSONS),
+            loadSounds(SOUNDS)
         ]);
         const itemViewerEnvironment = loadedTextures[TEXTURE_NAMES.METAL_241].clone();
 

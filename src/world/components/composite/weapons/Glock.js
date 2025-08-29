@@ -1,4 +1,5 @@
 import { WeaponBase } from '../../Models';
+import { SOUND_NAMES } from '../../utils/audioConstants';
 import { AMMOS, GLOCK_CLIPS as CLIPS, GLTF_NAMES, WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
@@ -29,7 +30,8 @@ class Glock extends WeaponBase {
             ammo: new Ammo({ type: AMMOS.PISTOL_9MM, count: 20, damage: 18, offset: - 5, offset1: 10 }),
             magzineCapacity: 20,
             isSemiAutomatic: true,
-            clips: CLIPS, animationSetting: ANIMATION_SETTINGS
+            clips: CLIPS, animationSetting: ANIMATION_SETTINGS,
+            soundFire: SOUND_NAMES.GLOCK_FIRE
         };
 
         Object.assign(superSpecs, specs);

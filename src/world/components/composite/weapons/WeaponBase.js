@@ -5,6 +5,7 @@ import { Logger } from '../../../systems/Logger';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { CAMERA_RAY_LAYER } from '../../utils/constants';
 import { Ammo } from './Ammo';
+import { SOUND_NAMES } from '../../utils/audioConstants';
 
 const DEBUG = false;
 
@@ -38,6 +39,9 @@ class WeaponBase {
     _magzineCapacity;
     _ammo;
 
+    _soundFire;
+    _soundEmpty;
+
     _shootNick;
     _emptyNick = 'empty';
     _animateMapping = {};
@@ -56,7 +60,8 @@ class WeaponBase {
             prepareInterval = 0, attackInterval = 1, startTime = 0, endTime = 1, fireRate = 1, 
             damageRange = 0, damageRadius = Math.PI, armedHeight = 0,
             magzineCapacity = 0, ammo = new Ammo(), 
-            isSemiAutomatic = true, isDefault = false
+            isSemiAutomatic = true, isDefault = false,
+            soundFire = undefined, soundEmpty = SOUND_NAMES.GUN_EMPTY
         } = specs;
         const { clips, animationSetting } = specs;
         let { src } = specs;
@@ -78,6 +83,9 @@ class WeaponBase {
         this._isSemiAutomatic = isSemiAutomatic;
         this._magzineCapacity = magzineCapacity;
         this._ammo = ammo;
+
+        this._soundFire = soundFire;
+        this._soundEmpty = soundEmpty;
 
         this.isDefault = isDefault;
 
@@ -285,6 +293,18 @@ class WeaponBase {
 
         return this.AWS ? true: false;
         
+    }
+
+    get fireSound() {
+
+        return this._soundFire;
+
+    }
+
+    get emptySound() {
+
+        return this._soundEmpty;
+
     }
 
     fillMagzine(fillCount = this._magzineCapacity) {

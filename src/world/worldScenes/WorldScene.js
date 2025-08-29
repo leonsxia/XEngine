@@ -17,6 +17,7 @@ import { AnimeMixer } from '../components/updatables/AnimeMixer.js';
 import { independence } from '../components/basic/colorBase.js';
 import { InputBase } from '../systems/physicalInputs/InputBase.js';
 import { pdaItemViewer } from '../systems/ItemViewer.js';
+import { AudioMixer } from '../components/updatables/AudioMixer.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -83,6 +84,7 @@ class WorldScene {
     interaction = null;
     ai = null;
     animeMixer = null;
+    audioMixer = null;
     // updatable modules
     
     postProcessor;
@@ -236,6 +238,11 @@ class WorldScene {
         // anime mixer
         this.animeMixer = new AnimeMixer(this.players, this.enemies, this.pickables);
         this.updatableQueue.add(this.animeMixer);
+
+        // audio mixer
+        this.audioMixer = new AudioMixer(this.players, this.enemies);
+        this.audioMixer.setAudioWorkstation(this.camera);
+        this.updatableQueue.add(this.audioMixer);
         
         this.loop.addUpdatables(this.updatableQueue);
 

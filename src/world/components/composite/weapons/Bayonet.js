@@ -1,5 +1,6 @@
 import { WeaponBase } from '../../Models';
 import { createOBBBox } from '../../physics/collisionHelper';
+import { SOUND_NAMES } from '../../utils/audioConstants';
 import { AMMOS, GLTF_NAMES, WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
@@ -23,7 +24,8 @@ class Bayonet extends WeaponBase {
             damageRange: 1,
             prepareInterval: 0.5,
             fireRate: 1.25,
-            ammo: new Ammo({ type: AMMOS.BAYONET, isMeleeWeapon: true, damage: 30, offset0: - 10, offset1: 10 })
+            ammo: new Ammo({ type: AMMOS.BAYONET, isMeleeWeapon: true, damage: 30, offset0: - 10, offset1: 10 }),
+            soundFire: SOUND_NAMES.KNIFE_SLASH
         };
 
         Object.assign(superSpecs, specs);

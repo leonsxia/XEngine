@@ -1,4 +1,5 @@
 import { WeaponBase } from '../../Models';
+import { SOUND_NAMES } from '../../utils/audioConstants';
 import { AMMOS, GLTF_NAMES, WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
@@ -23,7 +24,8 @@ class Pistol extends WeaponBase {
             fireRate: 1.2,
             ammo: new Ammo({ type: AMMOS.PISTOL_9MM, count: 15, damage: 20, offset0: - 5, offset1: 5 }),
             magzineCapacity: 15,
-            isSemiAutomatic: true
+            isSemiAutomatic: true,
+            soundFire: SOUND_NAMES.PISTOL_FIRE
         };
 
         Object.assign(superSpecs, specs);

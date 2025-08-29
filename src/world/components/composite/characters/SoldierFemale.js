@@ -27,6 +27,16 @@ const ANIMATION_SETTINGS = {
     DIE: 0.1
 }
 
+const SOUND_STATES = {
+    WALK_LEFT_PLAYED: false,
+    WALK_RIGHT_PLAYED: false,
+    RUN_LEFT_PLAYED: false,
+    RUN_RIGHT_PLAYED: false,
+    MELEE_SOUND_PLAYED: false,
+    WALKING_STEP_INTERVAL: 0.8,
+    RUNNING_STEP_INTERVAL: 0.4
+}
+
 const WEAPON_ACTION_MAPPING = {
     [WEAPONS.NONE]: new WeaponActionMapping({
         name: 'emptyhand',
@@ -239,6 +249,7 @@ class SoldierFemale extends CombatPlayerBase {
             vel, velEnlarge, rotateR, aimVel, aimTime,
             scale,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,
+            soundSetting: SOUND_STATES,
             sovRadius, showBS, enableCollision, createDefaultBoundingObjects,
             weaponActionMapping, initialWeaponType, weapons,
             HPMax

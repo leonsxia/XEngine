@@ -1,4 +1,5 @@
 import { WeaponBase } from '../../Models';
+import { SOUND_NAMES } from '../../utils/audioConstants';
 import { AMMOS, GLTF_NAMES, WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
@@ -23,7 +24,8 @@ class SMGShort extends WeaponBase {
             fireRate: 10.2,
             ammo: new Ammo({ type: AMMOS.SMG, count: 35, damage: 7, offset: - 2, offset1: 2 }),
             magzineCapacity: 35,
-            isSemiAutomatic: false
+            isSemiAutomatic: false,
+            soundFire: SOUND_NAMES.SMG_FIRE
         };
 
         Object.assign(superSpecs, specs);

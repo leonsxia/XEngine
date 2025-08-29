@@ -1,6 +1,7 @@
 import { Logger } from "../../../systems/Logger";
 import { CustomizedCreatureTofu, GLTFModel } from "../../Models";
 import { AnimateWorkstation } from "../../animation/AnimateWorkstation";
+import { AudioWorkstation } from "../../audio/AudioWorkstation";
 import { BS, AI as AICodes } from "../../basic/colorBase";
 import { CAMERA_RAY_LAYER } from "../../utils/constants";
 import { polarity } from "../../utils/enums";
@@ -22,6 +23,7 @@ class CreatureBase extends CustomizedCreatureTofu {
     #attackLogger = new Logger(DEBUG_ATTACK, 'CreatureBase');
 
     AWS;
+    DAW;
 
     _clips = {};
     _animationSettings = {};
@@ -97,6 +99,8 @@ class CreatureBase extends CustomizedCreatureTofu {
         this.AWS = new AnimateWorkstation({ model: this.gltf, clipConfigs: this._clips });
         this.AWS.init();
 
+        this.DAW = new AudioWorkstation();
+
         this.trackResources();
         
     }
@@ -106,6 +110,23 @@ class CreatureBase extends CustomizedCreatureTofu {
         super.trackResources();
 
         this.track(this.gltf?.skeleton);
+
+    }
+
+    addSoundsToGroup(soundName) {
+
+        const sound = this.DAW.getSound(soundName);
+        if (sound) {
+
+            this.group.add(sound);
+
+        }
+
+    }
+
+    setupSounds(camera) {
+
+        this.DAW.changeCamera(camera);
 
     }
 
@@ -662,7 +683,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
-    mixerTick(delta) {
+    animationMixerTick(delta) {
 
         this.AWS.mixer.update(delta);
 

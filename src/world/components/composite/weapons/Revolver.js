@@ -1,4 +1,5 @@
 import { WeaponBase } from '../../Models';
+import { SOUND_NAMES } from '../../utils/audioConstants';
 import { AMMOS, GLTF_NAMES, WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
@@ -23,7 +24,8 @@ class Revolver extends WeaponBase {
             fireRate: 0.8,
             ammo:new Ammo({ type: AMMOS.MAGNUM, count: 6, damage: 60, offset: - 10, offset1: 45 }),
             magzineCapacity: 6,
-            isSemiAutomatic: true
+            isSemiAutomatic: true,
+            soundFire: SOUND_NAMES.BRETTA_FIRE
         };
 
         Object.assign(superSpecs, specs);
