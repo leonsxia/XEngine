@@ -1,6 +1,7 @@
 import { AudioListener, PositionalAudio } from 'three';
 import { loadedSounds } from '../utils/audioHelper';
 import { Logger } from '../../systems/Logger';
+import { SOUNDS } from '../utils/audioConstants';
 
 const DEBUG = false;
 
@@ -22,14 +23,21 @@ class AudioWorkstation {
 
     init() {
 
-        for (const key in loadedSounds) {
+        const sources = SOUNDS;
+        for (let i = 0, il = sources.length; i < il; i++) {
 
-            const buffer = loadedSounds[key];
+            const sconfig = sources[i];
+            const { name, loop = false, refDistance = 5 } = sconfig;
+            const buffer = loadedSounds[name];
+
+            if (!buffer) continue;
+
             const sound = new PositionalAudio(this._listener);
             sound.setBuffer(buffer);
-            sound.setRefDistance(5);
+            sound.setRefDistance(refDistance);
+            sound.setLoop(loop);
 
-            this._sounds[key] = { buffer, sound };
+            this._sounds[name] = { buffer, sound };
 
         }
 

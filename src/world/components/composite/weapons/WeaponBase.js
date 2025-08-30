@@ -41,6 +41,9 @@ class WeaponBase {
 
     _soundFire;
     _soundEmpty;
+    _soundMelee = {
+        flesh_hit: SOUND_NAMES.KNIFE_FLESH_HIT
+    }
 
     _shootNick;
     _emptyNick = 'empty';
@@ -86,6 +89,7 @@ class WeaponBase {
 
         this._soundFire = soundFire;
         this._soundEmpty = soundEmpty;
+        Object.assign(this._soundMelee, specs.soundMelee);
 
         this.isDefault = isDefault;
 
@@ -304,6 +308,12 @@ class WeaponBase {
     get emptySound() {
 
         return this._soundEmpty;
+
+    }
+
+    get meleeSound() {
+
+        return this._soundMelee;
 
     }
 

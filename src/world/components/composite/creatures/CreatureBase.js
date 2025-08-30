@@ -124,6 +124,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
+    // inherited by child classes
     setupSounds(camera) {
 
         this.DAW.changeCamera(camera);

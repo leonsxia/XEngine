@@ -3,6 +3,7 @@ import { SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 import { WeaponActionMapping } from './WeaponActionMapping';
 import { Ammo } from '../weapons/Ammo';
+import { SOUND_NAMES } from '../../utils/audioConstants';
 
 const GLTF_SRC = 'characters/soldier_female.glb';
 const ANIMATION_SETTINGS = {
@@ -27,14 +28,18 @@ const ANIMATION_SETTINGS = {
     DIE: 0.1
 }
 
-const SOUND_STATES = {
+const SOUND_SETTINGS = {
     WALK_LEFT_PLAYED: false,
     WALK_RIGHT_PLAYED: false,
     RUN_LEFT_PLAYED: false,
     RUN_RIGHT_PLAYED: false,
     MELEE_SOUND_PLAYED: false,
     WALKING_STEP_INTERVAL: 0.8,
-    RUNNING_STEP_INTERVAL: 0.4
+    RUNNING_STEP_INTERVAL: 0.4,
+    WALK_LEFT: SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT,
+    WALK_RIGHT: SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT,
+    RUN_LEFT: SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT,
+    RUN_RIGHT: SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT
 }
 
 const WEAPON_ACTION_MAPPING = {
@@ -249,7 +254,7 @@ class SoldierFemale extends CombatPlayerBase {
             vel, velEnlarge, rotateR, aimVel, aimTime,
             scale,
             clips: CLIPS,  animationSetting: ANIMATION_SETTINGS,
-            soundSetting: SOUND_STATES,
+            soundSetting: SOUND_SETTINGS,
             sovRadius, showBS, enableCollision, createDefaultBoundingObjects,
             weaponActionMapping, initialWeaponType, weapons,
             HPMax
@@ -272,6 +277,17 @@ class SoldierFemale extends CombatPlayerBase {
         this.attachWeapons(holdingHand);
         this.armWeapon();
         
+    }
+
+    setupSounds(camera) {
+
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT);
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT);
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT);
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT);
+
+        super.setupSounds(camera);
+
     }
 
 }

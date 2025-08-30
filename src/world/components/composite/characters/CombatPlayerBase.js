@@ -6,7 +6,6 @@ import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
 import { aimDirection, polarity } from '../../utils/enums';
 import { Pda } from '../../pda/Pda';
 import { resetObject3D } from '../../utils/objectHelper';
-import { SOUND_NAMES } from '../../utils/audioConstants';
 import { AudioWorkstation } from '../../audio/AudioWorkstation';
 
 const DEBUG = false;
@@ -159,12 +158,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     }
 
+    // inherited by child classes
     setupSounds(camera) {
-
-        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT);
-        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT);
-        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT);
-        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT);
 
         this.DAW.changeCamera(camera);
 
@@ -273,6 +268,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this._meleeWeapon = weapon;
         this.pda.changeMelee(weapon);
+        weapon?.group.add(this.DAW.getSound(weapon.meleeSound.flesh_hit));
 
     }
 
@@ -1541,6 +1537,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                             on.push(enemy);
                             this._onMeleeHurtTargets.push(enemy);
+                            this.DAW.play(this._meleeWeapon.meleeSound.flesh_hit);
 
                         }
 
@@ -1697,7 +1694,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     this.#soundLogger.log(`walk: left`);
                     this._soundSettings.WALK_LEFT_PLAYED = true;
                     this._soundSettings.WALK_RIGHT_PLAYED = false;
-                    daw.play(SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT);
+                    daw.play(this._soundSettings.WALK_LEFT);
 
                 }                
 
@@ -1708,7 +1705,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     this.#soundLogger.log(`walk: right`);
                     this._soundSettings.WALK_LEFT_PLAYED = false;
                     this._soundSettings.WALK_RIGHT_PLAYED = true;
-                    daw.play(SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT);
+                    daw.play(this._soundSettings.WALK_RIGHT);
 
                 }
 
@@ -1718,8 +1715,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             this._soundSettings.WALK_LEFT_PLAYED = false;
             this._soundSettings.WALK_RIGHT_PLAYED = false;
-            daw.stop(SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT);
-            daw.stop(SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT);
+            daw.stop(this._soundSettings.WALK_LEFT);
+            daw.stop(this._soundSettings.WALK_RIGHT);
 
         }
 
@@ -1733,7 +1730,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     this.#soundLogger.log(`run: right`);
                     this._soundSettings.RUN_LEFT_PLAYED = false;
                     this._soundSettings.RUN_RIGHT_PLAYED = true;
-                    daw.play(SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT);
+                    daw.play(this._soundSettings.RUN_LEFT);
 
                 }
 
@@ -1744,7 +1741,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     this.#soundLogger.log(`run: left`);
                     this._soundSettings.RUN_LEFT_PLAYED = true;
                     this._soundSettings.RUN_RIGHT_PLAYED = false;
-                    daw.play(SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT);
+                    daw.play(this._soundSettings.RUN_RIGHT);
 
                 }
                 
@@ -1755,8 +1752,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             this._soundSettings.RUN_LEFT_PLAYED = false;
             this._soundSettings.RUN_RIGHT_PLAYED = false;
-            daw.stop(SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT);
-            daw.stop(SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT);
+            daw.stop(this._soundSettings.RUN_LEFT);
+            daw.stop(this._soundSettings.RUN_RIGHT);
 
         }
 
