@@ -32,12 +32,12 @@ class Combat {
 
                 if (!player.isActive || player.dead) continue;
 
-                const { onTarget: attackOn, damage } = enemy.attackTick?.({ delta, target: player }) ?? {};
+                const { onTarget: attackOn, attackBy, damage } = enemy.attackTick?.({ delta, target: player }) ?? {};
 
                 if (attackOn) {
                     
                     this.#logger.log(`${enemy.name} put damge: ${damage} on ${attackOn.name}`);
-                    attackOn.damageReceiveTick({ damage });
+                    attackOn.damageReceiveTick({ damage, attackBy });
 
                     if (attackOn.health.isEmpty) {
 
@@ -66,7 +66,7 @@ class Combat {
 
             if (!player.isActive || player.dead) continue;
 
-            const { onTarget: attackOn, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children, enemies: this.enemies.filter(e => e.isActive && !e.dead) }) ?? {};
+            const { onTarget: attackOn, attackBy, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children, enemies: this.enemies.filter(e => e.isActive && !e.dead) }) ?? {};
 
             if (attackOn) {
 
@@ -95,7 +95,7 @@ class Combat {
 
                     if (realTarget.isCreature && realTarget.isActive && !realTarget.dead) {
 
-                        realTarget.damageReceiveTick({ damage });
+                        realTarget.damageReceiveTick({ damage, attackBy });
 
                         if (realTarget.health.isEmpty) {
 

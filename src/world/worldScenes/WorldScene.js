@@ -491,6 +491,15 @@ class WorldScene {
         this.loop.stop();
         this.#paused = true;
 
+        this.player.DAW.stopAll();
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            enemy.DAW.stopAll();
+
+        }
+
     }
 
     isScenePaused() {
@@ -785,6 +794,8 @@ class WorldScene {
                 this.scene.remove(this.player.group);
 
                 this.player.resetAnimation?.();
+                this.player.DAW?.stopAll();
+
                 this.unsubscribeEvents(this.player, this.setup.moveType);
 
                 this.disablePlayerPda();
@@ -844,6 +855,7 @@ class WorldScene {
             this.player.clearInSightTargets();
             this.player.reloadAllWeapons?.();
             this.player.setAllBoundingBoxLayers(true);
+            this.player.DAW?.stopAll();
 
         }
 
@@ -859,7 +871,7 @@ class WorldScene {
             enemy.resetAnimation();
             enemy.clearInSightTargets();
             enemy.setAllBoundingBoxLayers(true);
-
+            enemy.DAW.stopAll();
         }
 
     }

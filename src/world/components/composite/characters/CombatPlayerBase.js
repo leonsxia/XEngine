@@ -81,7 +81,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
-
         Object.assign(this._soundSettings, soundSetting);
 
         // basic gltf model
@@ -120,6 +119,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.AWS.init();
 
         this.DAW = new AudioWorkstation();
+        this.onDisposed.push(() => {
+            this.DAW.stopAll();
+        });
 
         this.trackResources();
 
@@ -158,10 +160,17 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     }
 
-    // inherited by child classes
     setupSounds(camera) {
 
         this.DAW.changeCamera(camera);
+        return this;
+
+    }
+
+    // inherited by child classes
+    registerSounds() {
+
+        return this;
 
     }
 
@@ -268,7 +277,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this._meleeWeapon = weapon;
         this.pda.changeMelee(weapon);
-        weapon?.group.add(this.DAW.getSound(weapon.meleeSound.flesh_hit));
+        weapon?.registerSounds(
+            this.DAW.getSound(weapon.fireSound)
+        );
 
     }
 
@@ -283,6 +294,10 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             const { shoot: { nick } } = this.weaponActionMapping[weapon.weaponType];
             const fireRate = weapon.fireRate;
             this.AWS.setActionEffectiveTimeScale(nick, fireRate);
+            weapon.registerSounds(
+                this.DAW.getSound(weapon.fireSound),
+                this.DAW.getSound(weapon.emptySound)
+            )
 
         } else {
 
@@ -1357,11 +1372,12 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         this.#damageLogger.func = this.damageReceiveTick.name;
 
-        const { damage, /*hitPart*/ } = params;
+        const { damage, attackBy /*hitPart*/ } = params;
 
         this.health.current -= damage;
 
         this.setStateAfterDamageReceived();
+        this.processDamageSound(attackBy);
 
     }
 
@@ -1389,6 +1405,21 @@ class CombatPlayerBase extends CustomizedCombatTofu {
             this.setAllBoundingBoxLayers(false);
 
         }
+
+    }
+
+    processDamageSound(attackBy) {
+
+        switch (attackBy) {
+
+            case WEAPONS.ZOMBIE_CLAW:
+
+                this.DAW.play(this._soundSettings.CLAW_HIT);
+                break;
+
+        }
+
+        this.DAW.play(this._soundSettings.HURT);
 
     }
 
@@ -1451,7 +1482,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.#weaponLogger.func = this.attackTick.name;
         const result = {
             damage: 0,
-            onTarget: null
+            onTarget: null,
+            attackBy: null
         };
 
         if (this.shooting || this.meleeing || this.armedWeapon?.isFiring) {
@@ -1498,6 +1530,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                             if (intersects.length > 0) {
 
                                 result.onTarget = [intersects[0]];
+                                result.attackBy = this.armedWeapon.weaponType;
 
                             }
 
@@ -1537,13 +1570,13 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                             on.push(enemy);
                             this._onMeleeHurtTargets.push(enemy);
-                            this.DAW.play(this._meleeWeapon.meleeSound.flesh_hit);
 
                         }
 
                     }
 
                     result.onTarget = on;
+                    result.attackBy = this._meleeWeapon.weaponType;
 
                     const damage = this._meleeWeapon.ammo.realDamage;
                     result.damage = damage;

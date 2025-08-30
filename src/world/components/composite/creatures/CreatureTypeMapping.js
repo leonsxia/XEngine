@@ -31,6 +31,8 @@ class CreatureTypeMapping {
 
     weapon;
 
+    sounds;
+
     gltfScale;
     offset;
 
@@ -43,6 +45,7 @@ class CreatureTypeMapping {
         const { idleBoundingBoxSize, walkBoundingBoxSize, attackBoundingBoxSize } = specs;
         const { pushingBoxSize } = specs;
         const { weapon } = specs;
+        const { sounds } = specs;
         const { gltfScale = [1, 1, 1], offset = [0, 0, 0] } = specs;
 
         this.name = name;
@@ -72,6 +75,8 @@ class CreatureTypeMapping {
         this.pushingBoxSize = pushingBoxSize;
 
         this.weapon = weapon;
+
+        this.sounds = sounds;
 
         this.gltfScale = gltfScale;
         this.offset = offset;

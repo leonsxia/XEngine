@@ -18,14 +18,14 @@ class AudioMixer {
         for (let i = 0, il = this.players.length; i < il; i++) {
 
             const player = this.players[i];
-            player.setupSounds(camera);
+            player.setupSounds?.(camera).registerSounds();
 
         }
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];
-            enemy.setupSounds(camera);
+            enemy.setupSounds(camera).registerSounds();
 
         }
     }

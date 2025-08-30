@@ -3,7 +3,7 @@ import { CustomizedCreatureTofu, GLTFModel } from "../../Models";
 import { AnimateWorkstation } from "../../animation/AnimateWorkstation";
 import { AudioWorkstation } from "../../audio/AudioWorkstation";
 import { BS, AI as AICodes } from "../../basic/colorBase";
-import { CAMERA_RAY_LAYER } from "../../utils/constants";
+import { CAMERA_RAY_LAYER, WEAPONS } from "../../utils/constants";
 import { polarity } from "../../utils/enums";
 
 const DEBUG = false;
@@ -28,6 +28,8 @@ class CreatureBase extends CustomizedCreatureTofu {
     _clips = {};
     _animationSettings = {};
 
+    _soundSettings = {};
+
     isCreature = true;
 
     _meleeWeapon;
@@ -46,6 +48,7 @@ class CreatureBase extends CustomizedCreatureTofu {
         const { collisionSize = { width, depth, height } } = specs;
         const { rotateR = .9, vel = 0.7, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5 } = specs;
         const { clips, animationSetting } = specs;
+        const { soundSetting } = specs;
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
         const { isActive = true, showBS = false, enableCollision = true, typeMapping = {} } = specs;
         const { createDefaultBoundingObjects = true } = specs;
@@ -65,6 +68,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
+        Object.assign(this._soundSettings, soundSetting);
         
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, offsetX, offsetY, offsetZ, receiveShadow, castShadow, hasBones };
@@ -87,6 +91,22 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
+    set isNoticed(val) {
+
+        if (val) {
+
+            this.DAW.play(this._soundSettings.NOTICED);
+
+        } else {
+
+            this.DAW.stop(this._soundSettings.NOTICED);
+
+        }
+
+        this._isNoticed = val;
+
+    }
+
     async init() {
         
         await Promise.all([this.gltf.init()]);
@@ -100,6 +120,9 @@ class CreatureBase extends CustomizedCreatureTofu {
         this.AWS.init();
 
         this.DAW = new AudioWorkstation();
+        this.onDisposed.push(() => {
+            this.DAW.stopAll();
+        });
 
         this.trackResources();
         
@@ -124,10 +147,17 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
-    // inherited by child classes
     setupSounds(camera) {
 
         this.DAW.changeCamera(camera);
+        return this;
+
+    }
+
+    // inherited by child classes
+    registerSounds() {
+
+        return this;
 
     }
 
@@ -414,11 +444,12 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         this.#logger.func = this.damageReceiveTick.name;
 
-        const { damage } = params;
+        const { damage, attackBy } = params;
 
         this.health.current -= damage;
 
         this.setStateAfterDamageReceived();
+        this.processDamageSound(attackBy);
 
     }
 
@@ -453,6 +484,32 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
+    processDamageSound(attackBy) {
+
+        this.DAW.stop(this._soundSettings.NOTICED);
+        this.DAW.stop(this._meleeWeapon.fireSound);
+
+        switch(attackBy) {
+
+            case WEAPONS.BAYONET:
+
+                this.DAW.play(this._soundSettings.KNIFE_HIT);
+                break;
+
+            case WEAPONS.GLOCK:
+            case WEAPONS.PISTOL1:
+            case WEAPONS.REVOLVER:
+            case WEAPONS.SMG_SHORT:
+
+                this.DAW.play(this._soundSettings.BULLET_HIT);
+                break;
+
+        }
+
+        this.DAW.play(this._soundSettings.HURT);
+
+    }
+
     attackTick(params) {
 
         this.#attackLogger.func = this.attackTick.name;
@@ -462,7 +519,8 @@ class CreatureBase extends CustomizedCreatureTofu {
         const { delta, target } = params;
         const result = {
             damage: 0,
-            onTarget: null
+            onTarget: null,
+            attackBy: null
         }
         
         if (this.checkTargetInDamageRange(target, true).in) {
@@ -477,8 +535,11 @@ class CreatureBase extends CustomizedCreatureTofu {
 
                 this.melee(true);
                 this.setAiming();
+                this.DAW.stop(this._soundSettings.NOTICED);
+                this.DAW.play(this._soundSettings.ATTACK, false);
+                this.DAW.play(this._meleeWeapon.fireSound);                
 
-            }            
+            }
 
         } else {
 
@@ -487,6 +548,7 @@ class CreatureBase extends CustomizedCreatureTofu {
                 this._i = 0;
                 this._target = null;
                 this._attacked = false;
+                this.DAW.play(this._soundSettings.NOTICED, false);
 
             }
 
@@ -507,6 +569,7 @@ class CreatureBase extends CustomizedCreatureTofu {
                     if (this.checkTargetInDamageRange(target, true).in) {
 
                         result.onTarget = target;
+                        result.attackBy = this._meleeWeapon.weaponType;
                         result.damage = this._meleeWeapon.ammo.realDamage;
                         this.#attackLogger.log(`right in the face!`);
 
@@ -647,7 +710,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         if (this._inSightTargets.length === 1) {
 
-            this._isNoticed = true;
+            this.isNoticed = true;
             this.sovBoundingSphereMesh.material.color.setHex(AICodes.targetInRange);
 
         }
@@ -661,7 +724,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         if (this._inSightTargets.length === 0) {
 
-            this._isNoticed = false;
+            this.isNoticed = false;
             this.sovBoundingSphereMesh.material.color.setHex(BS);
 
         }
@@ -670,7 +733,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     onInSightTargetsCleared() {
 
-        this._isNoticed = false;
+        this.isNoticed = false;
 
     }
 
@@ -678,7 +741,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         if (this._inSightTargets.length === 0) {
 
-            this._isNoticed = false;
+            this.isNoticed = false;
 
         }
 

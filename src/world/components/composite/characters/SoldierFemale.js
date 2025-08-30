@@ -39,7 +39,9 @@ const SOUND_SETTINGS = {
     WALK_LEFT: SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT,
     WALK_RIGHT: SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT,
     RUN_LEFT: SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT,
-    RUN_RIGHT: SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT
+    RUN_RIGHT: SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT,
+    CLAW_HIT: SOUND_NAMES.CLAW_FLESH_HIT,
+    HURT: SOUND_NAMES.SOLDIER_FEMALE_HURT
 }
 
 const WEAPON_ACTION_MAPPING = {
@@ -279,14 +281,16 @@ class SoldierFemale extends CombatPlayerBase {
         
     }
 
-    setupSounds(camera) {
+    registerSounds() {
 
         this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_WALK_LEFT);
         this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT);
         this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT);
         this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT);
+        this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_HURT);
+        this.addSoundsToGroup(SOUND_NAMES.CLAW_FLESH_HIT);
 
-        super.setupSounds(camera);
+        return this;
 
     }
 

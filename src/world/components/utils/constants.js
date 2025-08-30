@@ -33,7 +33,8 @@ const WEAPONS = {
     GLOCK: 'Glock',
     BAYONET: 'Bayonet',
     REVOLVER: 'Revolver',
-    SMG_SHORT: 'SMGShort'
+    SMG_SHORT: 'SMGShort',
+    ZOMBIE_CLAW: 'ZombieClaw'
 };
 
 const AMMOS = {

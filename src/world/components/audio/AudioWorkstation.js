@@ -1,4 +1,4 @@
-import { AudioListener, PositionalAudio } from 'three';
+import { Audio, AudioListener, PositionalAudio } from 'three';
 import { loadedSounds } from '../utils/audioHelper';
 import { Logger } from '../../systems/Logger';
 import { SOUNDS } from '../utils/audioConstants';
@@ -27,14 +27,14 @@ class AudioWorkstation {
         for (let i = 0, il = sources.length; i < il; i++) {
 
             const sconfig = sources[i];
-            const { name, loop = false, refDistance = 5 } = sconfig;
+            const { name, loop = false, refDistance = 5, isPositionalAudio = true } = sconfig;
             const buffer = loadedSounds[name];
 
             if (!buffer) continue;
 
-            const sound = new PositionalAudio(this._listener);
+            const sound = isPositionalAudio ? new PositionalAudio(this._listener) : new Audio(this._listener);
             sound.setBuffer(buffer);
-            sound.setRefDistance(refDistance);
+            if (isPositionalAudio) sound.setRefDistance(refDistance);
             sound.setLoop(loop);
 
             this._sounds[name] = { buffer, sound };
@@ -55,7 +55,7 @@ class AudioWorkstation {
 
     }
 
-    play(soundName) {
+    play(soundName, needStop = true) {
 
         this._logger.func = 'play';
 
@@ -65,10 +65,12 @@ class AudioWorkstation {
 
         const { sound } = soundObj;
 
-        if (sound.isPlaying) sound.stop();
-        sound.play();
+        if (sound.isPlaying && needStop) sound.stop();
+        if (!sound.isPlaying) sound.play();
 
         this._logger.log(`play sound: ${soundName}`);
+
+        return this;
 
     }
 
@@ -82,6 +84,22 @@ class AudioWorkstation {
 
         if (sound.isPlaying) sound.stop();
 
+        return this;
+
+    }
+
+    pause(soundName) {
+        
+        if (!soundName) return;
+        const soundObj = this._sounds[soundName];
+        if (!soundObj) return;
+
+        const { sound } = soundObj;
+        
+        if (sound.isPlaying) sound.pause();
+
+        return this;
+
     }
 
     setLoop(soundName, isLoop) {
@@ -92,6 +110,8 @@ class AudioWorkstation {
 
         const { sound } = soundObj;
         sound.setLoop(isLoop);
+
+        return this;
 
     }
 
@@ -105,6 +125,8 @@ class AudioWorkstation {
             if (sound.isPlaying) sound.stop();
 
         }
+
+        return this;
 
     }
 
