@@ -265,12 +265,14 @@ class WorldScene {
                         if (val) {
 
                             this.loop.stop();
+                            this.pauseAudio();
                             this.staticRendering = true;
                             player.pda.stats = this.guiMaker.gui.stats;
 
                         } else {
 
                             this.loop.start(this.guiMaker.gui.stats);
+                            this.unpauseAudio();
                             this.staticRendering = false;
 
                         }
@@ -491,12 +493,44 @@ class WorldScene {
         this.loop.stop();
         this.#paused = true;
 
+        this.stopAudio();
+
+    }
+
+    stopAudio() {
+
         this.player.DAW.stopAll();
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];
             enemy.DAW.stopAll();
+
+        }
+
+    }
+
+    pauseAudio() {
+
+        this.player.DAW.pauseAll();
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            enemy.DAW.pauseAll();
+
+        }
+
+    }
+
+    unpauseAudio() {
+
+        this.player.DAW.unpauseAll();
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            enemy.DAW.unpauseAll();
 
         }
 

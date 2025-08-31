@@ -10,6 +10,7 @@ class AudioWorkstation {
     _listener = new AudioListener();
     _camera = undefined;
     _sounds = {};
+    _pausedSounds = [];
 
     _logger = new Logger(DEBUG, 'AudioWorkstation');
 
@@ -126,6 +127,41 @@ class AudioWorkstation {
             if (sound.isPlaying) sound.stop();
 
         }
+
+        return this;
+
+    }
+
+    pauseAll() {
+
+        for (const key in this._sounds) {
+
+            const soundObj = this._sounds[key];
+            const { sound } = soundObj;
+
+            if (sound.isPlaying) {
+
+                this._pausedSounds.push(sound);
+                sound.pause();
+
+            }
+
+        }
+
+        return this;
+
+    }
+
+    unpauseAll() {
+
+        for (let i = 0, il = this._pausedSounds.length; i < il; i++) {
+
+            const sound = this._pausedSounds[i];
+            sound.play();
+
+        }
+
+        this._pausedSounds.length = 0;
 
         return this;
 
