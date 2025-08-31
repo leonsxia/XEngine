@@ -487,6 +487,7 @@ class CreatureBase extends CustomizedCreatureTofu {
     processDamageSound(attackBy) {
 
         this.DAW.stop(this._soundSettings.NOTICED);
+        this.DAW.stop(this._soundSettings.ATTACK);
         this.DAW.stop(this._meleeWeapon.fireSound);
 
         switch(attackBy) {

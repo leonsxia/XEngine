@@ -5,8 +5,11 @@ const SOUND_NAMES = {
     SOLDIER_FEMALE_RUN_RIGHT: 'SOLDIER_FEMALE_RUN_RIGHT',
     SOLDIER_FEMALE_HURT: 'SOLDIER_FEMALE_HURT',
     MALE_ZOMBIE_MOAN: 'MALE_ZOMBIE_MOAN',
+    MALE_ZOMBIE_FAST_BREATH: 'MALE_ZOMBIE_FAST_BREATH',
     MALE_ZOMBIE_HURT: 'MALE_ZOMBIE_HURT',
+    MALE_ZOMBIE_SCREAM_HURT: 'MALE_ZOMBIE_SCREAM_HURT',
     MALE_ZOMBIE_ATTACK: 'MALE_ZOMBIE_ATTACK',
+    MALE_ZOMBIE_SCREAM_ATTACK: 'MALE_ZOMBIE_SCREAM_ATTACK',
     MALE_ZOMBIE_WALK_LEFT: 'MALE_ZOMBIE_WALK_LEFT',
     MALE_ZOMBIE_WALK_RIGHT: 'MALE_ZOMBIE_WALK_RIGHT',
     GUN_EMPTY: 'GUN_EMPTY',
@@ -26,23 +29,29 @@ const SOUNDS = [{
 }, {
     name: SOUND_NAMES.SOLDIER_FEMALE_WALK_RIGHT, src: 'characters/soldier_female/walk_right.mp3'
 }, {
-    name: SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT, src: 'characters/soldier_female/run_left.mp3'
+    name: SOUND_NAMES.SOLDIER_FEMALE_RUN_LEFT, src: 'characters/soldier_female/run_left.mp3', volume: 0.8
 }, {
-    name: SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT, src: 'characters/soldier_female/run_right.mp3'
+    name: SOUND_NAMES.SOLDIER_FEMALE_RUN_RIGHT, src: 'characters/soldier_female/run_right.mp3', volume: 0.8
 }, {
     name: SOUND_NAMES.SOLDIER_FEMALE_HURT, src: 'characters/soldier_female/female_hurt.mp3'
 }, {
     name: SOUND_NAMES.CLAW_FLESH_HIT, src: 'characters/claw_flesh_hit.mp3'
 }, {
-    name: SOUND_NAMES.MALE_ZOMBIE_MOAN, src: 'creatures/zombie_male/male_zombie_moan.mp3', loop: true
+    name: SOUND_NAMES.MALE_ZOMBIE_MOAN, src: 'creatures/zombie_male/male_zombie_moan.mp3', loop: true, volume: 0.6
+}, {
+    name: SOUND_NAMES.MALE_ZOMBIE_FAST_BREATH, src: 'creatures/zombie_male/male_zombie_fast_breath.mp3', loop: true, volume: 1.2
 }, {
     name: SOUND_NAMES.MALE_ZOMBIE_HURT, src: 'creatures/zombie_male/male_zombie_hurt.mp3'
 }, {
+    name: SOUND_NAMES.MALE_ZOMBIE_SCREAM_HURT, src: 'creatures/zombie_male/male_zombie_scream_hurt.mp3', volume: 1.2
+}, {
     name: SOUND_NAMES.MALE_ZOMBIE_ATTACK, src: 'creatures/zombie_male/male_zombie_attack.mp3'
 }, {
-    name: SOUND_NAMES.MALE_ZOMBIE_WALK_LEFT, src: 'creatures/zombie_male/male_zombie_walk_left.mp3'
+    name: SOUND_NAMES.MALE_ZOMBIE_SCREAM_ATTACK, src: 'creatures/zombie_male/male_zombie_scream_attack.mp3', volume: 1.2
 }, {
-    name: SOUND_NAMES.MALE_ZOMBIE_WALK_RIGHT, src: 'creatures/zombie_male/male_zombie_walk_right.mp3'
+    name: SOUND_NAMES.MALE_ZOMBIE_WALK_LEFT, src: 'creatures/zombie_male/male_zombie_walk_left.mp3', volume: 0.5
+}, {
+    name: SOUND_NAMES.MALE_ZOMBIE_WALK_RIGHT, src: 'creatures/zombie_male/male_zombie_walk_right.mp3', volume: 0.5
 }, {
     name: SOUND_NAMES.GUN_EMPTY, src: 'weapons/gun_empty.mp3'
 }, {

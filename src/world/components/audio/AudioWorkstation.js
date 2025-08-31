@@ -27,7 +27,7 @@ class AudioWorkstation {
         for (let i = 0, il = sources.length; i < il; i++) {
 
             const sconfig = sources[i];
-            const { name, loop = false, refDistance = 5, isPositionalAudio = true } = sconfig;
+            const { name, loop = false, volume = 1, refDistance = 5, isPositionalAudio = true } = sconfig;
             const buffer = loadedSounds[name];
 
             if (!buffer) continue;
@@ -36,6 +36,7 @@ class AudioWorkstation {
             sound.setBuffer(buffer);
             if (isPositionalAudio) sound.setRefDistance(refDistance);
             sound.setLoop(loop);
+            sound.setVolume(volume);
 
             this._sounds[name] = { buffer, sound };
 
