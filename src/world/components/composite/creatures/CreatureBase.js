@@ -525,7 +525,7 @@ class CreatureBase extends CustomizedCreatureTofu {
             attackBy: null
         }
         
-        if (this.checkTargetInDamageRange(target, true).in) {
+        if (this.checkTargetInDamageRange(target).in) {
 
             if (!this.meleeing) {
 
@@ -568,7 +568,7 @@ class CreatureBase extends CustomizedCreatureTofu {
                     this.#attackLogger.log(`${this.name} attacks on ${target.name}: ${this._i}`);
                     this._attacked = true;
 
-                    if (this.checkTargetInDamageRange(target, true).in) {
+                    if (this.checkTargetInDamageRange(target).in) {
 
                         result.onTarget = target;
                         result.attackBy = this._meleeWeapon.weaponType;
@@ -710,7 +710,7 @@ class CreatureBase extends CustomizedCreatureTofu {
         this.#eventsLogger.func = this.onSovSphereTriggerEnter.name;
         this.#eventsLogger.log(`${this.name} sov sphere trigger entered by ${target.name}`);
 
-        if (this._inSightTargets.length === 1) {
+        if (this._inSightTargets.length > 0) {
 
             this.isNoticed = true;
             this.sovBoundingSphereMesh.material.color.setHex(AICodes.targetInRange);

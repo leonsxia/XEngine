@@ -60,7 +60,7 @@ class Tofu extends TofuBase {
         let isInSight = false;
         const distance = this.getWorldPosition(_v1).distanceTo(target.getWorldPosition(_v2));
 
-        if (distance < this.sightOfView) {
+        if (distance < this.sightOfView && this.checkTargetInHeight(target)) {
 
             isInSight = true;
 
@@ -252,7 +252,7 @@ class Tofu extends TofuBase {
 
     }
 
-    checkTargetInDamageRange(target, fullCheck = false) {
+    checkTargetInDamageRange(target) {
 
         const { angle } = this.getTargetDirectionAngle(target);
         
@@ -261,25 +261,36 @@ class Tofu extends TofuBase {
         _v3.copy(_v2);
         _v2.y = _v1.y;
         const distance = _v1.distanceTo(_v2) - target.depth * .5;
+        let result = angle < this.damageRadius * .5 && distance < this.damageRange;
 
-        const targetBottomY = _v3.y - target.height * .5;
-        const thisBottomY = _v1.y - this.height * .5;
-        const thisTopY = _v1.y + this.height * .5;
-        let result = angle < this.damageRadius * .5 && distance < this.damageRange && (
-            targetBottomY >= thisBottomY && targetBottomY <= thisTopY
-        );
+        if (result) {
 
-        if (fullCheck && !result) {
-            // full check for target top Y
-            const targetTopY = _v3.y + target.height * .5;
-            result = angle < this.damageRadius * .5 && distance < this.damageRange && (
-                targetTopY >= thisBottomY && targetTopY <= thisTopY
-            );
+            result = this.checkTargetInHeight(target);
+
         }
 
         this.#logger.log(`target: ${target.name} is ${result ? 'in' : 'out of'} damage range.`);
 
         return { in: result, distance, target };
+
+    }
+
+    checkTargetInHeight(target) {
+
+        this.getWorldPosition(_v1);
+        target.getWorldPosition(_v2);
+
+        const targetBottomY = _v2.y - target.height * .5;
+        const targetTopY = _v2.y + target.height * .5;
+        const thisBottomY = _v1.y - this.height * .5;
+        const thisTopY = _v1.y + this.height * .5;
+        const thisCenterY = _v1.y;
+
+        const result = (thisBottomY <= targetTopY && thisBottomY >= targetBottomY )||
+            (thisTopY <= targetTopY && thisTopY >= targetBottomY) ||
+            (thisCenterY <= targetTopY && thisCenterY >= targetBottomY);
+
+        return result;
 
     }
 
