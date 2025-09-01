@@ -119,8 +119,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.AWS.init();
 
         this.DAW = new AudioWorkstation();
+        // stop and dispose all sounds when disposed
         this.onDisposed.push(() => {
-            this.DAW.stopAll();
+            this.DAW.dispose();
         });
 
         this.trackResources();
@@ -130,6 +131,13 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     trackResources() {
 
         super.trackResources();
+
+        // track weapons
+        for (let i = 0, il = this.weapons.length; i < il; i++) {
+
+            this.track(this.weapons[i].group);
+
+        }
 
         this.track(this.gltf?.skeleton);
 
@@ -151,7 +159,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     addSoundsToGroup(soundName) {
 
-        const sound = this.DAW.getSound(soundName);
+        const sound = this.DAW.registerSound(soundName);
         if (sound) {
 
             this.group.add(sound);
@@ -224,7 +232,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
         for (let i = 0, il = this.weapons.length; i < il; i++) {
 
-            hand.attach(this.weapons[i].group);            
+            hand.attach(this.weapons[i].group);
 
         }
 

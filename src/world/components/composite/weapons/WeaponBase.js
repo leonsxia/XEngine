@@ -111,7 +111,7 @@ class WeaponBase {
         this.gltf.group.isWeapon = true;
 
         this.group = new Group();
-
+        this.group.name = name;
         this.group.add(this.gltf.group);
 
     }

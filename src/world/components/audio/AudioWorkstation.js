@@ -2,6 +2,7 @@ import { Audio, AudioListener, PositionalAudio } from 'three';
 import { loadedSounds } from '../utils/audioHelper';
 import { Logger } from '../../systems/Logger';
 import { SOUNDS } from '../utils/audioConstants';
+import { ResourceTracker } from '../../systems/ResourceTracker';
 
 const DEBUG = false;
 
@@ -10,7 +11,11 @@ class AudioWorkstation {
     _listener = new AudioListener();
     _camera = undefined;
     _sounds = {};
+
+    _registeredSounds = [];
     _pausedSounds = [];
+
+    _resTracker = new ResourceTracker();
 
     _logger = new Logger(DEBUG, 'AudioWorkstation');
 
@@ -40,6 +45,8 @@ class AudioWorkstation {
             sound.setVolume(volume);
 
             this._sounds[name] = { buffer, sound };
+
+            this._resTracker.track(sound);
 
         }
 
@@ -173,6 +180,42 @@ class AudioWorkstation {
         if (!soundObj) return null;
 
         return soundObj.sound;
+
+    }
+
+    registerSound(soundName) {
+
+        const sound = this.getSound(soundName);
+        if (sound) this._registeredSounds.push(sound);
+
+        return sound;
+
+    }
+
+    unregisterSound(soundName) {
+
+        const sound = this.getSound(soundName);
+        if (sound) {
+
+            const findIdx = this._registeredSounds.findIndex(sound);
+            if (findIdx > -1) {
+
+                this._registeredSounds.splice(findIdx, 1);
+
+            }
+
+        }
+
+        return sound;
+
+    }
+
+    dispose() {
+
+        this.stopAll();
+        this._pausedSounds.length = 0;
+        this._registeredSounds.length = 0;
+        this._resTracker.dispose();        
 
     }
 

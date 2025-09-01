@@ -120,8 +120,9 @@ class CreatureBase extends CustomizedCreatureTofu {
         this.AWS.init();
 
         this.DAW = new AudioWorkstation();
+        // stop and dispose all sounds when disposed
         this.onDisposed.push(() => {
-            this.DAW.stopAll();
+            this.DAW.dispose();
         });
 
         this.trackResources();
@@ -138,7 +139,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     addSoundsToGroup(soundName) {
 
-        const sound = this.DAW.getSound(soundName);
+        const sound = this.DAW.registerSound(soundName);
         if (sound) {
 
             this.group.add(sound);
