@@ -499,12 +499,12 @@ class WorldScene {
 
     stopAudio() {
 
-        this.player.DAW.stopAll();
+        this.player?.DAW?.stopAll();
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];
-            enemy.DAW.stopAll();
+            enemy.DAW?.stopAll();
 
         }
 
@@ -512,12 +512,12 @@ class WorldScene {
 
     pauseAudio() {
 
-        this.player.DAW.pauseAll();
+        this.player?.DAW?.pauseAll();
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];
-            enemy.DAW.pauseAll();
+            enemy.DAW?.pauseAll();
 
         }
 
@@ -525,12 +525,12 @@ class WorldScene {
 
     unpauseAudio() {
 
-        this.player.DAW.unpauseAll();
+        this.player?.DAW?.unpauseAll();
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];
-            enemy.DAW.unpauseAll();
+            enemy.DAW?.unpauseAll();
 
         }
 
@@ -905,7 +905,7 @@ class WorldScene {
             enemy.resetAnimation();
             enemy.clearInSightTargets();
             enemy.setAllBoundingBoxLayers(true);
-            enemy.DAW.stopAll();
+            enemy.DAW?.stopAll();
         }
 
     }
@@ -1952,6 +1952,24 @@ class WorldScene {
                 box.visible = s;
 
             }
+
+        }
+
+    }
+
+    changeVolume(level) {
+
+        for (let i = 0, il = this.players.length; i < il; i++) {
+
+            const player = this.players[i];
+            player.DAW?.changeMasterLevel(level);
+
+        }
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            enemy.DAW?.changeMasterLevel(level);
 
         }
 

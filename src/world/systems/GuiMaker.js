@@ -157,6 +157,22 @@ class GuiMaker {
             }));
         }
 
+        // audio
+        {
+            const volume = { level: 1 };
+            const folder = makeFolderGuiConfig({ folder: 'Audio', parent: null, close: true });
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'level',
+                prop: 'Master Volume',
+                value: volume,
+                params: [0, 5],
+                type: 'number',
+                changeFn: $scene.changeVolume.bind($scene)
+            }));
+
+            this.guiLeftSpecs.details.push(folder);
+        }
+
         if (!$scene.picker.isUnavailable) {
            
             const pickerActions = {

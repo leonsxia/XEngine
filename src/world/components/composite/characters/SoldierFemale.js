@@ -290,6 +290,14 @@ class SoldierFemale extends CombatPlayerBase {
         this.addSoundsToGroup(SOUND_NAMES.SOLDIER_FEMALE_HURT);
         this.addSoundsToGroup(SOUND_NAMES.CLAW_FLESH_HIT);
 
+        for (let i = 0, il = this.weapons.length; i < il; i++) {
+
+            const w = this.weapons[i];
+            this.addSoundsToGroup(w.fireSound);
+            this.addSoundsToGroup(w.emptySound);
+
+        }
+
         return this;
 
     }

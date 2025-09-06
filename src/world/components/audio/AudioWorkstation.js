@@ -186,7 +186,16 @@ class AudioWorkstation {
     registerSound(soundName) {
 
         const sound = this.getSound(soundName);
-        if (sound) this._registeredSounds.push(sound);
+        if (sound) {
+            
+            const findIdx = this._registeredSounds.findIndex(s => s.sound === sound);
+            if (findIdx === -1) {
+
+                this._registeredSounds.push({ name: soundName, sound, originLevel: sound.getVolume() });
+
+            }
+
+        }
 
         return sound;
 
@@ -197,7 +206,7 @@ class AudioWorkstation {
         const sound = this.getSound(soundName);
         if (sound) {
 
-            const findIdx = this._registeredSounds.findIndex(sound);
+            const findIdx = this._registeredSounds.findIndex(s => s.sound === sound);
             if (findIdx > -1) {
 
                 this._registeredSounds.splice(findIdx, 1);
@@ -207,6 +216,17 @@ class AudioWorkstation {
         }
 
         return sound;
+
+    }
+
+    changeMasterLevel(level) {
+
+        for (let i = 0, il = this._registeredSounds.length; i < il; i++) {
+
+            const { sound, originLevel } = this._registeredSounds[i];
+            sound.setVolume(originLevel * level);
+
+        }
 
     }
 
