@@ -55,19 +55,27 @@ class Tofu extends TofuBase {
     // inherited by children
     setAllBoundingBoxLayers() {}
 
-    checkSightOfView(target) {
+    checkSightOfView(target, objects) {
 
         let isInSight = false;
-        const distance = this.getWorldPosition(_v1).distanceTo(target.getWorldPosition(_v2));
+        const distance = this.getWorldPosition(_v1).distanceTo(target.getWorldPosition(_v2));        
 
-        if (distance < this.sightOfView && this.checkTargetInHeight(target)) {
+        if (distance < this.sightOfView) {
 
-            isInSight = true;
+            if (this._needFocusRay) {
 
-        } else {
+                this._focusTarget = target;
+                this.updateFocusRay(true);
 
-            isInSight = false;
+            }
+            let intersects = objects ? this.checkFocusRayIntersect(objects) : [];
 
+            if (intersects.length === 0 || intersects.length > 0 && intersects[0].object === target.boundingBoxMesh) {
+
+                isInSight = true;
+
+            }
+            
         }
 
         const dirAngle = this.getTargetDirectionAngle(target);
@@ -133,9 +141,9 @@ class Tofu extends TofuBase {
 
     }
 
-    checkTargetInSight(target) {
-
-        const checkResult = this.checkSightOfView(target);
+    checkTargetInSight(target, objects) {
+        
+        const checkResult = this.checkSightOfView(target, objects);
 
         if (checkResult.isInSight) {
 
@@ -187,6 +195,7 @@ class Tofu extends TofuBase {
 
         this._inSightTargets.length = 0;
         this._target = null;
+        this._focusTarget = null;
         this.onInSightTargetsCleared();
 
     }
@@ -356,6 +365,12 @@ class Tofu extends TofuBase {
     checkAimRayIntersect(objects) {
 
         return this.aimRay.intersectObjects(objects);
+
+    }
+
+    checkFocusRayIntersect(objects) {
+
+        return this.focusRay.intersectObjects(objects);
 
     }
 

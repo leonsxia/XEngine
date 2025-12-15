@@ -1,5 +1,5 @@
 import { Group, MathUtils } from 'three';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 import { Logger } from '../../../systems/Logger';
 import { BasicObject } from '../../basic/BasicObject';
@@ -130,6 +130,7 @@ class InWallObjectBase {
             obj.setLayers(CAMERA_RAY_LAYER);
             obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
             obj.setLayers(TOFU_AIM_LAYER);
+            obj.setLayers(TOFU_FOCUS_LAYER);
 
             const { transparent = true } = obj.specs;
 

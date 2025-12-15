@@ -225,7 +225,7 @@ class WorldScene {
         this.updatableQueue.add(this.physics);
 
         // ai
-        this.ai = new AI(this.players, this.enemies);
+        this.ai = new AI(this.players, this.enemies, this.scene);
         this.updatableQueue.add(this.ai);
 
         // combat
@@ -1400,6 +1400,7 @@ class WorldScene {
                 this.scene.add(enemy.rightArrow);
                 this.scene.add(enemy.backLeftArrow);
                 this.scene.add(enemy.backRightArrow);
+                this.scene.add(enemy.focusArrow);
 
             } else {
 
@@ -1407,6 +1408,7 @@ class WorldScene {
                 this.scene.remove(enemy.rightArrow);
                 this.scene.remove(enemy.backLeftArrow);
                 this.scene.remove(enemy.backRightArrow);
+                this.scene.remove(enemy.focusArrow);
 
             }
 

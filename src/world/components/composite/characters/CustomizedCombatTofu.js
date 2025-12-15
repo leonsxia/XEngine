@@ -2,7 +2,7 @@ import { Logger } from "../../../systems/Logger";
 import { BF, BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
 import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
-import { TOFU_AIM_LAYER, WEAPONS } from "../../utils/constants";
+import { TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, WEAPONS } from "../../utils/constants";
 
 const DEBUG = false;
 
@@ -233,7 +233,17 @@ class CustomizedCombatTofu extends Tofu {
 
             for (const bb of bboxes) {
 
-                enable ? bb.boundingBox.layers.enable(TOFU_AIM_LAYER) : bb.boundingBox.layers.disable(TOFU_AIM_LAYER);
+                if (enable) {
+
+                    bb.boundingBox.layers.enable(TOFU_AIM_LAYER);
+                    bb.boundingBox.layers.enable(TOFU_FOCUS_LAYER);
+
+                } else {
+
+                    bb.boundingBox.layers.disable(TOFU_AIM_LAYER);
+                    bb.boundingBox.layers.disable(TOFU_FOCUS_LAYER);
+
+                }
 
             }
 

@@ -1,8 +1,8 @@
 import { Group, Box3, Box3Helper, Raycaster, ArrowHelper, Vector3 } from 'three';
 import { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
-import { orange, BF, BF2, green } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, TOFU_AIM_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
+import { orange, BF, BF2, green, yellow } from '../../basic/colorBase';
+import { CAMERA_RAY_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
 import { CollisionBox } from '../../Models';
 import { ResourceTracker } from '../../../systems/ResourceTracker';
 import { Logger } from '../../../systems/Logger';
@@ -54,6 +54,7 @@ class TofuBase extends Moveable2D {
     backLeftRay;
     backRightRay;
     aimRay;
+    focusRay;
     rays = [];
     
     leftArrow;
@@ -61,8 +62,10 @@ class TofuBase extends Moveable2D {
     backLeftArrow;
     backRightArrow;
     aimArrow;
+    focusArrow;
 
     _needAimRay;
+    _needFocusRay;
 
     intersectSlope;
 
@@ -81,6 +84,7 @@ class TofuBase extends Moveable2D {
     _showArrows = false;
 
     _target = null;
+    _focusTarget = null;
     _inSightTargets = [];
 
     #w;
@@ -109,6 +113,7 @@ class TofuBase extends Moveable2D {
     #damageRadius = 0;
     #armedHeight = 0;
     #aimDirection = aimDirection.forward;
+    #focusHeight = 0;
 
     #pickRange = .8;
     #pickRadius = Math.PI / 3;
@@ -148,7 +153,7 @@ class TofuBase extends Moveable2D {
         const { collisionSize = { width, depth, height } } = specs;
         const { createDefaultBoundingObjects = true } = specs;
         const { enableDefaultCBox = false } = specs;
-        const { needAimRay = true } = specs;
+        const { needAimRay = true, needFocusRay = false, focusHeight = 0 } = specs;
 
         this._size = { width, width2, depth, depth2, height, sovRadius };
         this._collisionSize = collisionSize;
@@ -173,6 +178,8 @@ class TofuBase extends Moveable2D {
         this.#aimTime = aimTime;
         this.aimingTime = aimTime;  // set Moveable2D default aimingTime
         this._needAimRay = needAimRay;
+        this._needFocusRay = needFocusRay;
+        this.#focusHeight = focusHeight;
 
         this.name = name;
         this.group = new Group();
@@ -835,9 +842,19 @@ class TofuBase extends Moveable2D {
         if (this._needAimRay) {
 
             fromVec3 = new Vector3(0, this.#armedHeight, 0);
-            this.aimRay = new Raycaster(fromVec3, _forward.clone(), this.#damageRange);
+            this.aimRay = new Raycaster(fromVec3, _forward.clone(), 0, this.#damageRange);
             this.aimRay.layers.set(TOFU_AIM_LAYER);
             this.aimArrow = new ArrowHelper(_forward, fromVec3, this.#damageRange, green, HEAD_LENGTH, HEAD_WIDTH);
+
+        }
+
+        // focusRay
+        if (this._needFocusRay) {
+
+            fromVec3 = new Vector3(0, this.#focusHeight, 0);
+            this.focusRay = new Raycaster(fromVec3, _forward.clone(), 0, this.sightOfView);
+            this.focusRay.layers.set(TOFU_FOCUS_LAYER);
+            this.focusArrow = new ArrowHelper(_forward, fromVec3, this.sightOfView, yellow, HEAD_LENGTH, HEAD_WIDTH);
 
         }
 
@@ -881,6 +898,41 @@ class TofuBase extends Moveable2D {
         this.aimArrow.position.copy(_v1);
         this.aimArrow.setDirection(_v2);
         this.aimArrow.setLength(this.damageRange, HEAD_LENGTH, HEAD_WIDTH);
+
+        return this;
+
+    }
+
+    updateFocusRay(needUpdateMatrixWorld = true) {
+        
+        if (!this._needFocusRay) return;
+
+        if (needUpdateMatrixWorld) {
+            
+            this.group.updateWorldMatrix(true, false);  
+
+        }
+
+        _v1.set(0, this.#focusHeight, 0).applyMatrix4(this.group.matrixWorld);
+
+        if (this._focusTarget) {
+
+            this._focusTarget.getWorldPosition(_v2);
+            _v2.y += this.#focusHeight;
+            _v2.sub(_v1).normalize();
+
+        } else {
+
+            _v2.copy(_forward);
+            _v2.applyQuaternion(this.group.quaternion).normalize();
+
+        }
+
+        this.focusRay.set(_v1, _v2);
+        this.focusRay.far = this.sightOfView;
+        this.focusArrow.position.copy(_v1);
+        this.focusArrow.setDirection(_v2);
+        this.focusArrow.setLength(this.sightOfView, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
 
@@ -932,6 +984,7 @@ class TofuBase extends Moveable2D {
         this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         this.updateAimRay(false);
+        if (this._inSightTargets.length === 0) this.updateFocusRay(false);
 
         return this;
 

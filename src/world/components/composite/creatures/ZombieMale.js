@@ -209,7 +209,8 @@ class ZombieMale extends CreatureBase {
             isActive, sovRadius, showBS, enableCollision,
             typeMapping,
             createDefaultBoundingObjects,
-            HPMax
+            HPMax,
+            focusHeight: .4
         };
 
         super(setup);

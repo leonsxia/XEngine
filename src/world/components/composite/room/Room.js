@@ -1,7 +1,7 @@
 import { Object3D, Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
-import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER } from '../../utils/constants';
+import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 
 const DEBUG = false;
@@ -176,6 +176,7 @@ class Room {
             wall.setLayers(PLAYER_CAMERA_RAY_LAYER);
             wall.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
             wall.setLayers(TOFU_AIM_LAYER);
+            wall.setLayers(TOFU_FOCUS_LAYER);
 
         };
 

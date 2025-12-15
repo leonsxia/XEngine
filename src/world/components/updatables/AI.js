@@ -9,10 +9,11 @@ class AI {
     // eslint-disable-next-line no-unused-private-class-members
     #logger = new Logger(true, 'AI');
 
-    constructor(players = [], enemies = []) {
+    constructor(players = [], enemies = [], scene) {
 
         this.players = players;
         this.enemies = enemies;
+        this.scene = scene;
 
     }
 
@@ -48,7 +49,7 @@ class AI {
 
                 if (!player.isActive || player.dead) continue;
 
-                enemy.checkTargetInSight(player);
+                enemy.checkTargetInSight(player, this.scene.children);
 
             }
 
