@@ -9,11 +9,12 @@ class Interaction {
     isActive = true;
 
     _inRangePickItems = [];
+    _inRangeEntries = [];
 
     // eslint-disable-next-line no-unused-private-class-members
     #logger = new Logger(DEBUG, 'Interaction');
 
-    constructor(players = [], interactives = []) {
+    constructor(players = [], ...interactives) {
 
         this.players = players;
         this.interactives = interactives;
@@ -30,6 +31,8 @@ class Interaction {
             if (!player.isActive || player.dead || !player.isCombatPlayer) continue;
 
             this._inRangePickItems.length = 0;
+            this._inRangeEntries.length = 0;
+
             for (let j = 0, jl = this.interactives.length; j < jl; j++) {
 
                 const item = this.interactives[j];
@@ -44,6 +47,17 @@ class Interaction {
 
                     }
 
+                } else if (item.isEntry) {
+
+                    item.showLabelTip(false);
+                    const result = player.checkTargetInEntryRange(item);
+
+                    if (result.in) {
+
+                        this._inRangeEntries.push(result);
+
+                    }
+
                 }
 
             }
@@ -54,30 +68,63 @@ class Interaction {
 
             });
 
-            if (this._inRangePickItems.length > 0 && !player.isInteracting) {
+            this._inRangeEntries.sort((a, b) => {
 
-                const nearestInRangeItem = this._inRangePickItems[0].target;
-                if (player.pda.inventory.availableSlotsCount < nearestInRangeItem.itemSize) {
+                return a.distance - b.distance
 
-                    nearestInRangeItem.pickForbidden = true;
+            });
+
+            player.isInteractiveReady = false;
+
+            if (!player.isInteracting) {
+
+                if (this._inRangePickItems.length > 0) {
+
+                    const nearestInRangeItem = this._inRangePickItems[0].target;
+                    if (player.pda.inventory.availableSlotsCount < nearestInRangeItem.itemSize) {
+
+                        nearestInRangeItem.pickForbidden = true;
+
+                    } else {
+
+                        nearestInRangeItem.pickForbidden = false;
+
+                    }
+                    nearestInRangeItem.showLabelTip(true);
+
+                    if (!nearestInRangeItem.pickForbidden) {
+
+                        player.isInteractiveReady = true;
+                        player.readyToPickItem = nearestInRangeItem;
+
+                    }
 
                 } else {
 
-                    nearestInRangeItem.pickForbidden = false;
+                    player.readyToPickItem = undefined;
 
                 }
-                nearestInRangeItem.showLabelTip(true);
+                
+                if (this._inRangeEntries.length > 0) {
 
-                if (!nearestInRangeItem.pickForbidden) {
+                    const nearestInRangeEntry = this._inRangeEntries[0].target;
 
-                    player.isInteractiveReady = true;
-                    player.readyToPickItem = nearestInRangeItem;
+                    // todo: check if entry is forbidden
+                    nearestInRangeEntry.setLableTip(player);
+                    nearestInRangeEntry.showLabelTip(true);
 
-                }                
+                    if (!nearestInRangeEntry.forbidden) {
 
-            } else {
+                        player.isInteractiveReady = true;
+                        player.readyToEnter = nearestInRangeEntry;
 
-                player.isInteractiveReady = false;
+                    }
+
+                } else {
+
+                    player.readyToEnter = undefined;
+
+                }
 
             }
 

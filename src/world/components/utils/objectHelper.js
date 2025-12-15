@@ -13,6 +13,7 @@ import {
     PaintedWoodenNightstand,
     PaintedWoodenTable,
     WoodenSmallTable,
+    WoodenDoor1,
     GlockItem,
     PistolItem,
     RevolverItem,
@@ -174,6 +175,7 @@ function objectFilter(object) {
         object instanceof PaintedWoodenNightstand ||
         object instanceof PaintedWoodenTable ||
         object instanceof WoodenSmallTable ||
+        object instanceof WoodenDoor1 ||
         object instanceof GlockItem ||
         object instanceof PistolItem ||
         object instanceof RevolverItem ||

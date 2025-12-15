@@ -246,7 +246,7 @@
                         "position": [
                             0,
                             0.2699999999999999,
-                            0.18
+                            0.270000000000003
                         ],
                         "intensity": 12.5,
                         "distance": 18,
@@ -262,6 +262,35 @@
                     "attachTo": "room1_security_light_1",
                     "turnOn": true,
                     "alwaysOn": true,
+                    "room": "room1"
+                },
+                {
+                    "name": "room1_pointLight3",
+                    "display": "Ceiling Lamp Safe Room",
+                    "detail": {
+                        "color": [
+                            246,
+                            186,
+                            53
+                        ],
+                        "position": [
+                            0,
+                            -0.480000000000001,
+                            0
+                        ],
+                        "intensity": 65.55,
+                        "distance": 0,
+                        "decay": 2,
+                        "shadowCameraAspect": 1
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "room1_modern_ceiling_lamp_01_safe_room",
+                    "turnOn": true,
                     "room": "room1"
                 }
             ],
@@ -368,7 +397,7 @@
                     "position": [
                         5,
                         2,
-                        4.89
+                        10.89
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -393,7 +422,7 @@
                     "position": [
                         4.5,
                         2,
-                        4.89
+                        10.89
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -418,7 +447,7 @@
                     "position": [
                         4,
                         2,
-                        4.89
+                        10.89
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -443,7 +472,7 @@
                     "position": [
                         6,
                         2,
-                        4.89
+                        10.89
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -470,7 +499,7 @@
                     "position": [
                         6.3,
                         2,
-                        4.63
+                        10.63
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -493,7 +522,7 @@
                     "position": [
                         5,
                         2,
-                        4.63
+                        10.63
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -517,7 +546,7 @@
                     "position": [
                         6.6,
                         2,
-                        4.63
+                        10.63
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -540,7 +569,7 @@
                     "position": [
                         6.9,
                         2,
-                        4.63
+                        10.63
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -566,7 +595,7 @@
                     "position": [
                         6,
                         2,
-                        4.63
+                        10.63
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -589,7 +618,7 @@
                     "position": [
                         5.7,
                         2,
-                        4.63
+                        10.63
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -612,7 +641,7 @@
                     "position": [
                         5.3,
                         2,
-                        4.63
+                        10.63
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
@@ -757,7 +786,7 @@
                     "position": [
                         5.5,
                         -1.901,
-                        4.89513
+                        10.89513
                     ],
                     "rotationY": 0,
                     "transparent": false
@@ -893,22 +922,22 @@
                 },
                 {
                     "type": "LWall",
-                    "thicknessS": 0.8,
-                    "thicknessT": 0.3,
+                    "thicknessS": 0.016,
+                    "thicknessT": 0.024,
                     "scale": [
                         4,
                         3.58,
-                        5
+                        7
                     ],
                     "baseSize": 4.6,
                     "outTMap": "BRICK_159",
                     "outTNormal": "BRICK_159_NORMAL",
                     "outSMap": "BRICK_159",
                     "outSNormal": "BRICK_159_NORMAL",
-                    "inTMap": "BRICK_159",
-                    "inTNormal": "BRICK_159_NORMAL",
-                    "inSMap": "BRICK_159",
-                    "inSNormal": "BRICK_159_NORMAL",
+                    "inTMap": "METAL_272",
+                    "inTNormal": "METAL_272_NORMAL",
+                    "inSMap": "METAL_272",
+                    "inSNormal": "METAL_272_NORMAL",
                     "sideTMap": "BRICK_159",
                     "sideTNormal": "BRICK_159_NORMAL",
                     "sideSMap": "BRICK_159",
@@ -918,19 +947,94 @@
                     "bottomMap": "BRICK_159",
                     "bottomNormal": "BRICK_159_NORMAL",
                     "mapRatio": 1.5,
-                    "name": "room1_LWall1",
+                    "name": "room1_saferoom_LWall1",
                     "showArrow": false,
                     "enableWallOBBs": true,
                     "enableOBBs": true,
                     "isObstacle": true,
                     "climbable": true,
                     "position": [
-                        5.5,
+                        5.47,
                         -0.710000000000001,
                         8
                     ],
                     "rotationY": 0,
                     "transparent": false
+                },
+                {
+                    "type": "LWall",
+                    "thicknessS": 0.016,
+                    "thicknessT": 0.024,
+                    "scale": [
+                        4,
+                        3.58,
+                        7
+                    ],
+                    "baseSize": 4.6,
+                    "outTMap": "BRICK_159",
+                    "outTNormal": "BRICK_159_NORMAL",
+                    "outSMap": "BRICK_159",
+                    "outSNormal": "BRICK_159_NORMAL",
+                    "inTMap": "METAL_272",
+                    "inTNormal": "METAL_272_NORMAL",
+                    "inSMap": "METAL_272",
+                    "inSNormal": "METAL_272_NORMAL",
+                    "sideTMap": "BRICK_159",
+                    "sideTNormal": "BRICK_159_NORMAL",
+                    "sideSMap": "BRICK_159",
+                    "sideSNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room1_saferoom_LWall2",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "enableOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [
+                        5.47,
+                        -0.710000000000001,
+                        8
+                    ],
+                    "rotationY": 3.1416,
+                    "transparent": false
+                },
+                {
+                    "type": "SquarePillar",
+                    "scale": [
+                        4,
+                        0.3,
+                        7
+                    ],
+                    "baseSize": 4.6,
+                    "enableOBBs": true,
+                    "frontMap": "BRICK_159",
+                    "frontNormal": "BRICK_159_NORMAL",
+                    "backMap": "BRICK_159",
+                    "backNormal": "BRICK_159_NORMAL",
+                    "leftMap": "BRICK_159",
+                    "leftNormal": "BRICK_159_NORMAL",
+                    "rightMap": "BRICK_159",
+                    "rightNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room1_square_pillar_safe_room_roof",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [
+                        5.47,
+                        1.23,
+                        8
+                    ],
+                    "rotationY": 0
                 },
                 {
                     "type": "LWall",
@@ -1093,6 +1197,21 @@
                     "rotationY": 0
                 },
                 {
+                    "type": "ModernCeilingLamp01",
+                    "src": "MODERN_CEILING_LAMP_01",
+                    "name": "room1_modern_ceiling_lamp_01_safe_room",
+                    "scale": [
+                        1,
+                        0.78
+                    ],
+                    "position": [
+                        5.47,
+                        0.9,
+                        8
+                    ],
+                    "rotationY": 0
+                },
+                {
                     "type": "SecurityLight",
                     "src": "SECURITY_LIGHT",
                     "name": "room1_security_light_1",
@@ -1102,11 +1221,11 @@
                         1
                     ],
                     "position": [
-                        5.5,
-                        0.829999999999998,
-                        5.31
+                        3.29,
+                        0.56,
+                        6.98
                     ],
-                    "rotationY": 3.141592653589793
+                    "rotationY": -1.5708
                 }
             ],
             "floors": [
@@ -1166,6 +1285,29 @@
                         0
                     ],
                     "flowSpeed": 0.01
+                }
+            ],
+            "entries": [
+                {
+                    "type": "WoodenDoor1",
+                    "src": "WOODEN_DOOR_1",
+                    "name": "room1_wooden_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        3.48,
+                        -1.4053,
+                        6.98
+                    ],
+                    "rotationY": 1.5708,
+                    "ignoreTPC": true
                 }
             ]
         }

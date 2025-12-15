@@ -79,6 +79,7 @@ class WorldScene {
 
     currentRoom;
     pickables = [];
+    entries = [];
 
     combat = null;
     interaction = null;
@@ -232,7 +233,7 @@ class WorldScene {
         this.updatableQueue.add(this.combat);
 
         // interaction
-        this.interaction = new Interaction(this.players, this.pickables);
+        this.interaction = new Interaction(this.players, ...this.pickables, ...this.entries);
         this.updatableQueue.add(this.interaction);
 
         // anime mixer
@@ -339,6 +340,17 @@ class WorldScene {
 
             }
 
+        }
+
+        // initialize entries
+        {
+
+            for (let i = 0, il = this.entries.length; i < il; i++) {
+
+                const entry = this.entries[i];
+                this.subscribeEvents(entry, InputBase.CONTROL_TYPES.XBOX_CONTROLLER);
+
+            }
         }
 
         // setup cameras, must after player setup complete

@@ -316,6 +316,7 @@ class SceneBuilder {
             const insideWalls = [];
             const airWalls = [];
             const waters = [];
+            const entries = []
 
             for (let j = 0, jl = roomSpec.groups.length; j < jl; j++) {
 
@@ -427,6 +428,25 @@ class SceneBuilder {
             }
 
             room.addAirWalls(airWalls);
+
+            if (roomSpec.entries) {
+
+                for (let j = 0, jl = roomSpec.entries.length; j < jl; j++) {
+
+                    const spec = roomSpec.entries[j];
+
+                    spec.updateOBBs = false;
+                    const entry = this.buildObject(spec);
+                    entries.push(entry);
+
+                    // push entry to worldScene for global access
+                    this.worldScene.entries.push(entry);
+
+                }
+
+                room.addGroups(entries);
+
+            }
 
             room.updateOBBnRay();
             room.updateAreasOBBBox?.(false);
@@ -672,6 +692,18 @@ class SceneBuilder {
                     const water = room.waters[j];
                     const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).waters.find(f => f.type === water.type && f.name === water.name);
                     this.updateObject(water, _target, updateSetupOnly);
+
+                }
+
+            }
+
+            if (room.entries) {
+
+                for (let j = 0, jl = room.entries.length; j < jl; j++) {
+
+                    const entry = room.entries[j];
+                    const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).entries.find(f => f.type === entry.type && f.name === entry.name);
+                    this.updateObject(entry, _target, updateSetupOnly);
 
                 }
 

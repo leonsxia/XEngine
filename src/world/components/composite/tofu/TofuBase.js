@@ -113,6 +113,9 @@ class TofuBase extends Moveable2D {
     #pickRange = .8;
     #pickRadius = Math.PI / 3;
 
+    #entryRange = .8;
+    #entryRadius = Math.PI / 2;
+
     _cachedWidth;
     _cachedHeight;
     _cachedDepth;
@@ -669,6 +672,18 @@ class TofuBase extends Moveable2D {
     get pickRadius() {
 
         return this.#pickRadius;
+
+    }
+
+    get entryRange() {
+
+        return this.#entryRange * this.group.scale.z;
+
+    }
+
+    get entryRadius() {
+
+        return this.#entryRadius;
 
     }
 

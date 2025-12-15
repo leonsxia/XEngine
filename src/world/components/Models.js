@@ -91,3 +91,4 @@ export { ModernCeilingLamp01 } from './composite/inwall/lighting/ModernCeilingLa
 export { SecurityLight } from './composite/inwall/lighting/SecurityLight.js';
 export { FancyPictureFrame01 } from './composite/inwall/decorative/FancyPictureFrame01.js';
 export { VintageGrandfatherClock } from './composite/inwall/decorative/VintageGrandFatherClock.js';
+export { WoodenDoor1 } from './composite/inwall/entries/WoodenDoor1.js';

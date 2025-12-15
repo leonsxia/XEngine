@@ -51,6 +51,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
     isInteractiveReady = false;
     readyToPickItem;
+    readyToEnter;
 
     currentRoom;
 
@@ -1206,14 +1207,22 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             const endCallback = () => {
 
-                if (!this.hurting && !this.dead && this.readyToPickItem) {
+                if (!this.hurting && !this.dead) {
 
-                    this.#interactionLogger.log(`player: ${this.name} picked item: ${this.readyToPickItem.name}`);
-                    this.addPickableItem(this.readyToPickItem);
-                    
-                    if (this.readyToPickItem.isPicked) {
+                    if (this.readyToPickItem) {
 
-                        this.readyToPickItem = undefined;
+                        this.#interactionLogger.log(`player: ${this.name} picked item: ${this.readyToPickItem.name}`);
+                        this.addPickableItem(this.readyToPickItem);
+
+                        if (this.readyToPickItem.isPicked) {
+
+                            this.readyToPickItem = undefined;
+
+                        }
+
+                    } else if (this.readyToEnter) {
+
+                        this.readyToEnter.setTargetPositionOrientation(this);
 
                     }
 
