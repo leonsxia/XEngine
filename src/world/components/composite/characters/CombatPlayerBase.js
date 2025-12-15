@@ -5,7 +5,7 @@ import { Logger } from '../../../systems/Logger';
 import { CAMERA_RAY_LAYER, WEAPONS } from '../../utils/constants';
 import { aimDirection, polarity } from '../../utils/enums';
 import { Pda } from '../../pda/Pda';
-import { resetObject3D } from '../../utils/objectHelper';
+import { getIntersectionTarget, resetObject3D } from '../../utils/objectHelper';
 import { AudioWorkstation } from '../../audio/AudioWorkstation';
 
 const DEBUG = false;
@@ -1577,16 +1577,39 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     this._meleeWeapon.hittingBox.updateOBB(false);
 
                     const on = [];
-                    for (let i = 0, il = enemies.length; i < il; i++) {
+                    const intersects = this.checkAimRayIntersect(aimObjects);
+                    let realTarget = null;
 
-                        const enemy = enemies[i];
+                    if (intersects.length > 0) {
 
-                        if (this._onMeleeHurtTargets.indexOf(enemy) > -1) continue;
+                        const { object } = intersects[0];
+                        realTarget = getIntersectionTarget(object);
+                        
+                    }
 
-                        if (this._meleeWeapon.hittingBox.obb.intersectsOBB(enemy.obb)) {
+                    if (realTarget && !realTarget.isCreature) {
 
-                            on.push(enemy);
-                            this._onMeleeHurtTargets.push(enemy);
+                        if (this._onMeleeHurtTargets.indexOf(intersects[0].object) === -1) {
+
+                            on.push(intersects[0]);
+                            this._onMeleeHurtTargets.push(intersects[0].object);
+
+                        }
+
+                    } else {
+
+                        for (let i = 0, il = enemies.length; i < il; i++) {
+
+                            const enemy = enemies[i];
+
+                            if (this._onMeleeHurtTargets.indexOf(enemy) > -1) continue;
+
+                            if (this._meleeWeapon.hittingBox.obb.intersectsOBB(enemy.obb)) {
+
+                                on.push(enemy);
+                                this._onMeleeHurtTargets.push(enemy);
+
+                            }
 
                         }
 

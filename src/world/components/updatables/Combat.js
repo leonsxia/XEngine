@@ -1,4 +1,5 @@
 import { Logger } from "../../systems/Logger";
+import { getIntersectionTarget } from "../utils/objectHelper";
 
 const DEBUG = false;
 
@@ -82,14 +83,7 @@ class Combat {
                     } else {
 
                         const { object } = on;
-                        const objectFather = object.parent.father;
-                        realTarget = objectFather ?
-                            (
-                                objectFather.isCreature ?
-                                    objectFather :      // CreatureBase
-                                    object.father       // plane
-
-                            ) : object;    // gltf mesh
+                        realTarget = getIntersectionTarget(object);
 
                     }
 
@@ -114,7 +108,7 @@ class Combat {
 
                     }
 
-                    this.#logger.log(`player: ${player.name} attack on ${realTarget.name}`);
+                    this.#logger.log(`player: ${player.name} attack on ${realTarget.name}, damage: ${damage}`);
 
                 }
 

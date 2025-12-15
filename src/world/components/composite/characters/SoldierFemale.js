@@ -239,7 +239,7 @@ class SoldierFemale extends CombatPlayerBase {
                 attackInterval: 1.03,
                 damageRange: 1.55,
                 damageRadius: 1.75, // 100 degree
-                armedHeight: 0,
+                armedHeight,
                 startTime: 0.15,
                 endTime: 0.49,
                 fireRate: 1.25,

@@ -267,9 +267,26 @@ function resetObject3D(object) {
 
 }
 
+function getIntersectionTarget(object) {
+
+    let realTarget = null;
+    const objectFather = object.parent.father;
+    realTarget = objectFather ?
+        (
+            objectFather.isCreature ?
+                objectFather :      // CreatureBase
+                object.father       // plane
+
+        ) : object;    // gltf mesh
+
+    return realTarget;
+
+}
+
 export { 
     clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, 
     objectFilter, objectFilter2, objectFilter3, objectFilter4,
     moveableObjectFilter,
-    resetObject3D
+    resetObject3D,
+    getIntersectionTarget
 };
