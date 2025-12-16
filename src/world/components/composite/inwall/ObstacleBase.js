@@ -339,7 +339,7 @@ class ObstacleBase extends ObstacleMoveable {
             this.#logger.log(`${gltf.name}: ${event.message}`);
             gltf.setLayers(CAMERA_RAY_LAYER);
             if (!this.specs.ignoreTPC) gltf.setLayers(PLAYER_CAMERA_RAY_LAYER);
-            gltf.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
+            if (!this.specs.ignoreTPC) gltf.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
             gltf.setLayers(TOFU_AIM_LAYER);
             gltf.setLayers(TOFU_FOCUS_LAYER);
 

@@ -38,7 +38,9 @@ class Room {
     lights = [];
     directionalLightTarget = new Object3D();
     spotLightTarget = new Object3D();
-    
+
+    sequence = 0;
+
     specs;
 
     #logger = new Logger(DEBUG, 'Room');
@@ -47,7 +49,7 @@ class Room {
 
         this.specs = specs;
 
-        const { name, width, depth, height, showArrow = false, enableWallOBBs = false } = specs;
+        const { name, sequence = 0, width, depth, height, showArrow = false, enableWallOBBs = false } = specs;
         const { frontMap, backMap, leftMap, rightMap } = this.specs;
         const { frontNormal, backNormal, leftNormal, rightNormal } = this.specs;
 
@@ -62,9 +64,9 @@ class Room {
         this.group.isRoom = true;
         this.group.father = this;
         this.group.name = name;
+        this.sequence = sequence;
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
-
         
         if (!this.ignoreWall('back')) {
 

@@ -1,23 +1,78 @@
 import { Logger } from "../../systems/Logger";
+import { entryType } from "../utils/enums";
 
 const DEBUG = true;
 
 class Interaction {
 
     players = [];
-    interactives = [];
+    pickables = [];
+    entries = [];
     isActive = true;
+
+    delegates = {};
 
     _inRangePickItems = [];
     _inRangeEntries = [];
 
-    // eslint-disable-next-line no-unused-private-class-members
+    _cachedEntry = null;
+
     #logger = new Logger(DEBUG, 'Interaction');
 
-    constructor(players = [], ...interactives) {
+    constructor(players = [], pickables = [], entries = []) {
 
         this.players = players;
-        this.interactives = interactives;
+        this.pickables = pickables;
+        this.entries = entries;
+
+        this.initEntries();
+
+    }
+
+    initEntries() {
+
+        this.#logger.func = this.initEntries.name;
+
+        for (let i = 0, il = this.entries.length; i < il; i++) {
+
+            const thisEntry = this.entries[i];
+            if (thisEntry.transportType === entryType.separate) {
+
+                const targetEntry = this.getTargetEntryByName(thisEntry.linkTo);
+                if (targetEntry) {
+
+                    if (targetEntry.roomSequence !== thisEntry.roomSequence) {
+
+                        thisEntry.onEntryChanged.push(() => {
+
+                            this.delegates['changeRoom']?.(thisEntry.roomSequence);
+                            this.delegates['changeCamera']?.(thisEntry.roomSequence);
+
+                        });
+
+                    }
+
+                } else {
+
+                    this.#logger.log(`Cannot find target entry: ${thisEntry.linkTo} for entry: ${thisEntry.name}`);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    getTargetEntryByName(name) {
+
+        if (!this._cachedEntry || this._cachedEntry.name !== name) {
+
+            this._cachedEntry = this.entries.find(e => e.name === name);
+
+        }
+
+        return this._cachedEntry;
 
     }
 
@@ -33,9 +88,9 @@ class Interaction {
             this._inRangePickItems.length = 0;
             this._inRangeEntries.length = 0;
 
-            for (let j = 0, jl = this.interactives.length; j < jl; j++) {
+            for (let j = 0, jl = this.pickables.length; j < jl; j++) {
 
-                const item = this.interactives[j];
+                const item = this.pickables[j];
                 if (item.isPickableItem && !item.isPicked && item.available) {
 
                     item.showLabelTip(false);
@@ -47,7 +102,14 @@ class Interaction {
 
                     }
 
-                } else if (item.isEntry) {
+                }
+
+            }
+
+            for (let j = 0, jl = this.entries.length; j < jl; j++) {
+
+                const item = this.entries[j];
+                if (item.isEntry) {
 
                     item.showLabelTip(false);
                     const result = player.checkTargetInEntryRange(item);
@@ -116,7 +178,21 @@ class Interaction {
                     if (!nearestInRangeEntry.forbidden) {
 
                         player.isInteractiveReady = true;
-                        player.readyToEnter = nearestInRangeEntry;
+
+                        if (nearestInRangeEntry.transportType === entryType.separate) {
+
+                            const targetEntry = this.getTargetEntryByName(nearestInRangeEntry.linkTo);
+                            if (targetEntry) {
+
+                                player.readyToEnter = targetEntry;
+                                
+                            }
+
+                        } else {
+
+                            player.readyToEnter = nearestInRangeEntry;
+
+                        }
 
                     }
 

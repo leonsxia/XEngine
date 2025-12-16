@@ -1139,9 +1139,19 @@ class TofuBase extends Moveable2D {
 
     }
 
-    setPosition(pos) {
+    setPosition(pos, resetState = false) {
 
         this.group.position.set(...pos);
+
+        if (resetState) {
+
+            this.updateAccessories();
+
+            this.setSlopeIntersection();
+
+            this.resetFallingState();
+
+        }
 
         return this;
 

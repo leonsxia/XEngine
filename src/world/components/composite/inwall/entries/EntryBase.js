@@ -18,17 +18,27 @@ class EntryBase extends ObstacleBase {
 
     isEntry = true;
 
-    type = entryType.self;
-    _transportTo = entrySide.back;
+    transportType = entryType.self;
+    linkTo = '';
+    roomSequence = 0;
+    transportTo = entrySide.back;
 
     _xboxControllerConnected;
     _forbidden = false;
 
-    _labelSide = entrySide.front;
+    _labelSide = undefined;
+    
+    onEntryChanged = [];
 
     constructor(specs) {
 
         super(specs);
+
+        const { transportType = entryType.self, linkTo = specs.name, roomSequence = 0, transportTo = entrySide.back } = specs;
+        this.transportType = transportType;
+        this.linkTo = linkTo;
+        this.roomSequence = roomSequence;
+        this.transportTo = transportTo;
 
         // interaction label
         this.labelCanvas = makeInteractiveLabelCanvas({ baseWidth: 15, borderHeight: 15, size: 10, borderSize: 2 });
@@ -40,18 +50,6 @@ class EntryBase extends ObstacleBase {
 
         this.updateLabelTip();
         this.showLabelTip(false);
-
-    }
-
-    get transportTo() {
-
-        return this._transportTo;
-
-    }
-
-    set transportTo(val) {
-
-        this._transportTo = val;
 
     }
 
@@ -125,23 +123,38 @@ class EntryBase extends ObstacleBase {
 
     setTargetPositionOrientation(target) {
 
-        const targetDirection = this.getTargetDirection(target);
-        this.group.getWorldQuaternion(_q1);
+        if (this.transportType === entryType.self) {
 
-        if (targetDirection === entrySide.front) {
+            const targetDirection = this.getTargetDirection(target);
+            this.group.getWorldQuaternion(_q1);
 
-            this._transportTo = entrySide.back;
-            _q1.premultiply(_q2.setFromAxisAngle(_up, Math.PI));
-            console.log(`front to back`);
+            if (targetDirection === entrySide.front) {
+
+                this.transportTo = entrySide.back;
+                _q1.premultiply(_q2.setFromAxisAngle(_up, Math.PI));
+
+            } else {
+
+                this.transportTo = entrySide.front;
+
+            }            
 
         } else {
 
-            this._transportTo = entrySide.front;
+            this.doEntryChangedEvents();
+
+            this.group.getWorldQuaternion(_q1);
+            if (this.transportTo === entrySide.back) {
+
+                _q1.premultiply(_q2.setFromAxisAngle(_up, Math.PI));
+
+            }
 
         }
 
         const targetPos = this.destinationPosition;
-        target.position.set(targetPos.x, target.position.y, targetPos.z);
+        const tarPosY = targetPos.y - this.height / 2 + target.height / 2;
+        target.setPosition([targetPos.x, tarPosY, targetPos.z], true);
         target.group.setRotationFromQuaternion(_q1);
 
     }
@@ -246,6 +259,17 @@ class EntryBase extends ObstacleBase {
 
             this._xboxControllerConnected = false;
             this.updateLabelTip();
+
+        }
+
+    }
+
+    doEntryChangedEvents() {
+
+        for (let i = 0, il = this.onEntryChanged.length; i < il; i++) {
+
+            const event = this.onEntryChanged[i];
+            event.call(this);
 
         }
 

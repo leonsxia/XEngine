@@ -604,6 +604,7 @@
             "enableWallOBBs": true,
             "position": [0, 2.3, 15],
             "rotationY": -0.5236,
+            "sequence": 0,
             "groups": [
                 {
                     "type": "SquarePillar",
@@ -795,7 +796,59 @@
             ],
             "ceilings": [],
             "walls": [],
-            "insideWalls": []
+            "insideWalls": [],
+            "entries": [
+                {
+                    "type": "WoodenDoor1",
+                    "src": "WOODEN_DOOR_1",
+                    "name": "room1_wooden_door_1",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        1.5,
+                        -0.8861,
+                        2.5
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true,
+                    "roomSequence": 0,
+                    "transportType": 1,
+                    "linkTo": "room2_wooden_door_1",
+                    "transportTo": -1
+                },
+                {
+                    "type": "WoodenDoor1",
+                    "src": "WOODEN_DOOR_1",
+                    "name": "room1_wooden_door_2",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -0.8861,
+                        4
+                    ],
+                    "rotationY": 1.5708,
+                    "ignoreTPC": true,
+                    "roomSequence": 0,
+                    "transportType": 1,
+                    "linkTo": "room3_wooden_door_2",
+                    "transportTo": -1
+                }
+            ]
         },
         {
             "type": "Room",
@@ -816,6 +869,7 @@
             "showArrow": false,
             "position": [0, 2.3, -13],
             "rotationY": 2.618,
+            "sequence": 1,
             "groups": [
                 {
                     "type": "SquarePillar",
@@ -941,7 +995,59 @@
             ],
             "ceilings": [],
             "walls": [],
-            "insideWalls": []
+            "insideWalls": [],
+            "entries": [
+                {
+                    "type": "WoodenDoor1",
+                    "src": "WOODEN_DOOR_1",
+                    "name": "room2_wooden_door_1",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -0.8861,
+                        10
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true,
+                    "roomSequence": 1,
+                    "transportType": 1,
+                    "linkTo": "room1_wooden_door_1",
+                    "transportTo": -1
+                },
+                {
+                    "type": "WoodenDoor1",
+                    "src": "WOODEN_DOOR_1",
+                    "name": "room2_wooden_door_2",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -5,
+                        -0.8861,
+                        4
+                    ],
+                    "rotationY": 1.5708,
+                    "ignoreTPC": true,
+                    "roomSequence": 1,
+                    "transportType": 1,
+                    "linkTo": "room3_wooden_door_1",
+                    "transportTo": 1
+                }
+            ]
         },
         {
             "type": "InspectorRoom",
@@ -965,6 +1071,7 @@
             "showArrow": false,
             "position": [30, 4.6, 4.3],
             "rotationY": -0.5236,
+            "sequence": 2,
             "areas": [
                 {
                     "name": "front_left",
@@ -1287,6 +1394,58 @@
                     "castShadow": true,
                     "position": [-4.18, -4, 5.74],
                     "rotationY": -0.9076
+                }
+            ],
+            "entries": [
+                {
+                    "type": "WoodenDoor1",
+                    "src": "WOODEN_DOOR_1",
+                    "name": "room3_wooden_door_1",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -10,
+                        -3.1861,
+                        -5
+                    ],
+                    "rotationY": 1.5708,
+                    "ignoreTPC": true,
+                    "roomSequence": 2,
+                    "transportType": 1,
+                    "linkTo": "room2_wooden_door_2",
+                    "transportTo": 1
+                },
+                {
+                    "type": "WoodenDoor1",
+                    "src": "WOODEN_DOOR_1",
+                    "name": "room3_wooden_door_2",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -10,
+                        -3.1861,
+                        5
+                    ],
+                    "rotationY": 1.5708,
+                    "ignoreTPC": true,
+                    "roomSequence": 2,
+                    "transportType": 1,
+                    "linkTo": "room1_wooden_door_2",
+                    "transportTo": 1
                 }
             ]
         }

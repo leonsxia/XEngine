@@ -233,7 +233,9 @@ class WorldScene {
         this.updatableQueue.add(this.combat);
 
         // interaction
-        this.interaction = new Interaction(this.players, ...this.pickables, ...this.entries);
+        this.interaction = new Interaction(this.players, this.pickables, this.entries);
+        this.interaction.delegates.changeRoom = this.changeRoom.bind(this);
+        this.interaction.delegates.changeCamera = this.changeCamera.bind(this);
         this.updatableQueue.add(this.interaction);
 
         // anime mixer
@@ -660,11 +662,16 @@ class WorldScene {
 
     }
 
-    focusNext(forceStaticRender = true) {
+    changeRoom(roomSequence) {
 
-        this.focusNextProcess(forceStaticRender);
+        const { allPlayerPos } = this.setup;
+        const targetRoom = this.rooms.find(r => r.sequence === roomSequence);
 
-        this.currentRoom = this.rooms[this.loadSequence];
+        this.loadSequence = roomSequence;
+
+        if (!targetRoom) return;
+
+        this.currentRoom = targetRoom;
         this.player.updateRoomInfo?.(this.currentRoom);
         this.physics.initPhysics(this.currentRoom);
         this.updatePickables();
@@ -673,7 +680,7 @@ class WorldScene {
 
             const room = this.rooms[i];
 
-            if (i === this.loadSequence) {
+            if (i === roomSequence) {
 
                 room.setLightsVisible(true);
                 room.visible = true;    
@@ -687,25 +694,36 @@ class WorldScene {
 
         }
 
+        if (this.player) {
+
+            this.player.setPosition(allPlayerPos[roomSequence], true);
+            
+        }
+
+    }
+
+    changeCamera(roomSequence) {
+
+        const { allTargets, allCameraPos } = this.setup;
+        this.controls.defControl.target.copy(allTargets[roomSequence]);
+        this.camera.position.copy(allCameraPos[roomSequence]);
+        this.controls.defControl.update();
+
+    }
+
+    focusNext(forceStaticRender = true) {
+
+        this.focusNextProcess(forceStaticRender);
+
+        this.changeRoom(this.loadSequence);
+
     }
 
     focusNextProcess(forceStaticRender = true) {
 
-        const { allTargets, allCameraPos, allPlayerPos } = this.setup;
+        const { allTargets, allCameraPos } = this.setup;
 
-        this.loadSequence = ++this.loadSequence % allTargets.length;
-
-        if (this.player) {
-
-            this.player.setPosition(allPlayerPos[this.loadSequence]);
-
-            this.player.updateAccessories();
-
-            this.player.setSlopeIntersection?.();
-
-            this.player.resetFallingState?.();
-            
-        }
+        this.loadSequence = ++this.loadSequence % allTargets.length;        
 
         if (this.staticRendering) {
 
