@@ -294,6 +294,12 @@ class WorldScene {
 
                     }
 
+                    if (player.name !== defaultPlayer) {
+
+                        player.isActive = false;
+
+                    }
+
                 }
 
             }

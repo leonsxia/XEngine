@@ -175,7 +175,8 @@ class SoldierFemale extends CombatPlayerBase {
         const { scale = [1, 1, 1] } = specs;
         const { sovRadius = 10, showBS = false, enableCollision = true } = specs;
         const { createDefaultBoundingObjects = false } = specs;    
-        const { HPMax = 100 } = specs;    
+        const { HPMax = 100 } = specs;
+        const { isActive = true } = specs;
 
         const armedHeight = .4;
         const weapons = [
@@ -259,7 +260,8 @@ class SoldierFemale extends CombatPlayerBase {
             soundSetting: SOUND_SETTINGS,
             sovRadius, showBS, enableCollision, createDefaultBoundingObjects,
             weaponActionMapping, initialWeaponType, weapons,
-            HPMax
+            HPMax,
+            isActive
         };
 
         super(setup);
@@ -272,8 +274,9 @@ class SoldierFemale extends CombatPlayerBase {
 
         await super.init();
 
-        this._meleeWeapon = this.weapons.find(w => w.weaponType === WEAPONS.BAYONET);
-        this.AWS.setActionEffectiveTimeScale(this.meleeAttackAction.attack.nick, this._meleeWeapon.fireRate);
+        // no need to arm melee weapon this time.
+        // this._meleeWeapon = this.weapons.find(w => w.weaponType === WEAPONS.BAYONET);
+        // this.AWS.setActionEffectiveTimeScale(this.meleeAttackAction.attack.nick, this._meleeWeapon.fireRate);
 
         const holdingHand = this.gltf.getChildByName('WristR');
         this.attachWeapons(holdingHand);

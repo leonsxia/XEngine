@@ -23,8 +23,8 @@ class BayonetItem extends WeaponItem {
         specs.imgName = BayonetItem.imgName;
         specs.descriptionJsonItem = PICKABLE_ITEM_NAMES.BAYONET_ITEM;
 
-        const { damage = 30, offset0 = - 10, offset1 = 10 } = specs.ammo ?? {};
-        specs.ammoInstance = new Ammo({ type: AMMOS.BAYONET, isMeleeWeapon: true, damage, offset0, offset1 });
+        const { damage = 30, offset0 = - 10, offset1 = 10, count = 1 } = specs.ammo ?? {};
+        specs.ammoInstance = new Ammo({ type: AMMOS.BAYONET, isMeleeWeapon: true, damage, offset0, offset1, count });
         super(specs);
 
     }

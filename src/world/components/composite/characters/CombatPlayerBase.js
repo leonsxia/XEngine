@@ -64,7 +64,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         const { clips, animationSetting } = specs;
         const { soundSetting } = specs;
         const { scale = [1, 1, 1], gltfScale = [1, 1, 1] } = specs;
-        const { showBS = false } = specs;
+        const { isActive = true, showBS = false } = specs;
         const { createDefaultBoundingObjects = true, enableCollision = true } = specs;
         const { weaponActionMapping = {}, initialWeaponType, weapons = [] } = specs;
         const { HPMax = 100 } = specs;
@@ -79,6 +79,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         });
 
         this.specs = specs;
+        this.isActive = isActive;
         
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
@@ -285,6 +286,12 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     armMelee(weapon) {
 
         this._meleeWeapon = weapon;
+        if (weapon) {
+
+            this.AWS.setActionEffectiveTimeScale(this.meleeAttackAction.attack.nick, this._meleeWeapon.fireRate);
+
+        }
+
         this.pda.changeMelee(weapon);
         weapon?.registerSounds(
             this.DAW.getSound(weapon.fireSound)
