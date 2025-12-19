@@ -813,7 +813,7 @@
                     "climbable": false,
                     "position": [
                         1.5,
-                        -0.8861,
+                        -0.75416,
                         2.5
                     ],
                     "rotationY": 0,
@@ -838,7 +838,7 @@
                     "climbable": false,
                     "position": [
                         0,
-                        -0.8861,
+                        -0.75416,
                         4
                     ],
                     "rotationY": 1.5708,
@@ -1012,7 +1012,7 @@
                     "climbable": false,
                     "position": [
                         0,
-                        -0.8861,
+                        -0.75416,
                         10
                     ],
                     "rotationY": 0,
@@ -1037,7 +1037,7 @@
                     "climbable": false,
                     "position": [
                         -5,
-                        -0.8861,
+                        -0.75416,
                         4
                     ],
                     "rotationY": 1.5708,
@@ -1412,7 +1412,7 @@
                     "climbable": false,
                     "position": [
                         -10,
-                        -3.1861,
+                        -3.05416,
                         -5
                     ],
                     "rotationY": 1.5708,
@@ -1437,7 +1437,7 @@
                     "climbable": false,
                     "position": [
                         -10,
-                        -3.1861,
+                        -3.05416,
                         5
                     ],
                     "rotationY": 1.5708,

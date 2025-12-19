@@ -89,6 +89,7 @@ const SECURITY_LIGHT = 'SecurityLight';
 const FANCY_PICTURE_FRAME_01 = 'FancyPictureFrame01';
 const VINTAGE_GRANDFATHER_CLOCK = 'VintageGrandfatherClock';
 const WOODEN_DOOR_1 = 'WoodenDoor1';
+const WOODEN_GLASS_DOOR_1 = 'WoodenGlassDoor1';
 
 // pickable items
 const AMMUNITION = {
@@ -318,7 +319,8 @@ const GLTF_NAMES = {
     FANCY_PICTURE_FRAME_01: 'FANCY_PICTURE_FRAME_01',
     VINTAGE_GRANDFATHER_CLOCK: 'VINTAGE_GRANDFATHER_CLOCK',
     // entries
-    WOODEN_DOOR_1: 'WOODEN_DOOR_1'
+    WOODEN_DOOR_1: 'WOODEN_DOOR_1',
+    WOODEN_GLASS_DOOR_1: 'WOODEN_GLASS_DOOR_1'
 };
 
 const GLTFS = [{
@@ -385,6 +387,8 @@ const GLTFS = [{
     name: GLTF_NAMES.FIRST_AID_KIT_LARGE, src: 'pickable_items/health/first_aid_kit_large.glb'
 }, {
     name: GLTF_NAMES.WOODEN_DOOR_1, src: 'in_room/entries/wooden_door_1.glb'
+}, {
+    name: GLTF_NAMES.WOODEN_GLASS_DOOR_1, src: 'in_room/entries/wooden_glass_door_1.glb'
 }];
 
 const SHADER_NAMES = {
@@ -561,6 +565,7 @@ export {
     FANCY_PICTURE_FRAME_01,
     VINTAGE_GRANDFATHER_CLOCK,
     WOODEN_DOOR_1,
+    WOODEN_GLASS_DOOR_1,
 
     CAMERAS,
 

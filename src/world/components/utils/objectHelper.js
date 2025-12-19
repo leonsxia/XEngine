@@ -22,7 +22,8 @@ import {
     PistolAmmoBox,
     MagnumAmmoBox,
     SMGAmmoBox,
-    FirstAidKitItem
+    FirstAidKitItem,
+    WoodenGlassDoor1
 } from "../Models";
 import { ObstacleMoveable } from "../movement/ObstacleMoveable";
 
@@ -176,6 +177,7 @@ function objectFilter(object) {
         object instanceof PaintedWoodenTable ||
         object instanceof WoodenSmallTable ||
         object instanceof WoodenDoor1 ||
+        object instanceof WoodenGlassDoor1 ||
         object instanceof GlockItem ||
         object instanceof PistolItem ||
         object instanceof RevolverItem ||

@@ -8,7 +8,7 @@ import {
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
     Television01,
     FancyPictureFrame01, VintageGrandfatherClock,
-    WoodenDoor1,
+    WoodenDoor1, WoodenGlassDoor1,
     ModernCeilingLamp01, SecurityLight,
     GlockItem, BayonetItem, PistolItem, RevolverItem, SMGShortItem,
     PistolAmmoBox, MagnumAmmoBox, SMGAmmoBox,
@@ -24,7 +24,7 @@ import {
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
     TELEVISION_01,
     FANCY_PICTURE_FRAME_01, VINTAGE_GRANDFATHER_CLOCK,
-    WOODEN_DOOR_1,
+    WOODEN_DOOR_1, WOODEN_GLASS_DOOR_1,
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
     TEXTURE_NAMES, GLTF_NAMES,
     WEAPONS, AMMUNITION, HEALTH_CATEGORY
@@ -106,6 +106,7 @@ class ModelBuilder {
         this.objectCreationMapping[FANCY_PICTURE_FRAME_01] = this.createFancyPictureFrame01;
         this.objectCreationMapping[VINTAGE_GRANDFATHER_CLOCK] = this.createVintageGrandfatherClock;
         this.objectCreationMapping[WOODEN_DOOR_1] = this.createWoodenDoor1;
+        this.objectCreationMapping[WOODEN_GLASS_DOOR_1] = this.createWoodenGlassDoor1;
 
     }
 
@@ -1043,6 +1044,22 @@ class ModelBuilder {
         this.setupObjectGLTF({ src }, specs);
 
         object = new WoodenDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createWoodenGlassDoor1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new WoodenGlassDoor1(specs);
         object.setPosition(position)
             .setRotationY(rotationY);
 

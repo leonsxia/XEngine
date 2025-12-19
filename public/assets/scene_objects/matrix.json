@@ -1222,7 +1222,7 @@
                     ],
                     "position": [
                         3.29,
-                        0.56,
+                        0.84,
                         6.98
                     ],
                     "rotationY": -1.5708
@@ -1303,10 +1303,31 @@
                     "climbable": false,
                     "position": [
                         3.48,
-                        -1.4053,
+                        -1.2953,
                         6.98
                     ],
                     "rotationY": 1.5708,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "WoodenGlassDoor1",
+                    "src": "WOODEN_GLASS_DOOR_1",
+                    "name": "room1_wooden_glass_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        5.47,
+                        -1.2987,
+                        4.5
+                    ],
+                    "rotationY": 0,
                     "ignoreTPC": true
                 }
             ]
