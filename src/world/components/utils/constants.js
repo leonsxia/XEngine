@@ -89,7 +89,25 @@ const SECURITY_LIGHT = 'SecurityLight';
 const FANCY_PICTURE_FRAME_01 = 'FancyPictureFrame01';
 const VINTAGE_GRANDFATHER_CLOCK = 'VintageGrandfatherClock';
 const WOODEN_DOOR_1 = 'WoodenDoor1';
+const WOODEN_DOOR_2 = 'WoodenDoor2';
 const WOODEN_GLASS_DOOR_1 = 'WoodenGlassDoor1';
+const WOODEN_GLASS_DOOR_2 = 'WoodenGlassDoor2';
+const WOODEN_GLASS_DOOR_3 = 'WoodenGlassDoor3';
+const WOODEN_WHITE_DOOR_1 = 'WoodenWhiteDoor1';
+const WOODEN_WHITE_DOOR_2 = 'WoodenWhiteDoor2';
+const WOODEN_PINK_DOOR_1 = 'WoodenPinkDoor1';
+const IRON_PLATE_GLASS_DOOR_1 = 'IronPlateGlassDoor1';
+const IRON_PLATE_GLASS_DOOR_2 = 'IronPlateGlassDoor2';
+const IRON_PLATE_DOOR_1 = 'IronPlateDoor1';
+const OFFICE_DOOR_1 = 'OfficeDoor1';
+const CLASSIC_WOODEN_DOUBLE_DOOR_1 = 'ClassicWoodenDoubleDoor1';
+const CLASSIC_WOODEN_DOOR_1 = 'ClassicWoodenDoor1';
+const CLASSIC_WOODEN_DOOR_2 = 'ClassicWoodenDoor2';
+const CLASSIC_WOODEN_DOOR_3 = 'ClassicWoodenDoor3';
+const CLASSIC_WOODEN_DOOR_4 = 'ClassicWoodenDoor4';
+const CLASSIC_WOODEN_DOOR_5 = 'ClassicWoodenDoor5';
+const CLASSIC_WOODEN_DOOR_6 = 'ClassicWoodenDoor6';
+const DUNGEON_GATE_1 = 'DungeonGate1';
 
 // pickable items
 const AMMUNITION = {
@@ -320,7 +338,25 @@ const GLTF_NAMES = {
     VINTAGE_GRANDFATHER_CLOCK: 'VINTAGE_GRANDFATHER_CLOCK',
     // entries
     WOODEN_DOOR_1: 'WOODEN_DOOR_1',
-    WOODEN_GLASS_DOOR_1: 'WOODEN_GLASS_DOOR_1'
+    WOODEN_DOOR_2: 'WOODEN_DOOR_2',
+    WOODEN_GLASS_DOOR_1: 'WOODEN_GLASS_DOOR_1',
+    WOODEN_GLASS_DOOR_2: 'WOODEN_GLASS_DOOR_2',
+    WOODEN_GLASS_DOOR_3: 'WOODEN_GLASS_DOOR_3',
+    WOODEN_WHITE_DOOR_1: 'WOODEN_WHITE_DOOR_1',
+    WOODEN_WHITE_DOOR_2: 'WOODEN_WHITE_DOOR_2',
+    WOODEN_PINK_DOOR_1: 'WOODEN_PINK_DOOR_1',
+    IRON_PLATE_GLASS_DOOR_1: 'IRON_PLATE_GLASS_DOOR_1',
+    IRON_PLATE_GLASS_DOOR_2: 'IRON_PLATE_GLASS_DOOR_2',
+    IRON_PLATE_DOOR_1: 'IRON_PLATE_DOOR_1',
+    OFFICE_DOOR_1: 'OFFICE_DOOR_1',
+    CLASSIC_WOODEN_DOUBLE_DOOR_1: 'CLASSIC_WOODEN_DOUBLE_DOOR_1',
+    CLASSIC_WOODEN_DOOR_1: 'CLASSIC_WOODEN_DOOR_1',
+    CLASSIC_WOODEN_DOOR_2: 'CLASSIC_WOODEN_DOOR_2',
+    CLASSIC_WOODEN_DOOR_3: 'CLASSIC_WOODEN_DOOR_3',
+    CLASSIC_WOODEN_DOOR_4: 'CLASSIC_WOODEN_DOOR_4',
+    CLASSIC_WOODEN_DOOR_5: 'CLASSIC_WOODEN_DOOR_5',
+    CLASSIC_WOODEN_DOOR_6: 'CLASSIC_WOODEN_DOOR_6',
+    DUNGEON_GATE_1: 'DUNGEON_GATE_1'
 };
 
 const GLTFS = [{
@@ -388,7 +424,41 @@ const GLTFS = [{
 }, {
     name: GLTF_NAMES.WOODEN_DOOR_1, src: 'in_room/entries/wooden_door_1.glb'
 }, {
+    name: GLTF_NAMES.WOODEN_DOOR_2, src: 'in_room/entries/wooden_door_2.glb'
+}, {
     name: GLTF_NAMES.WOODEN_GLASS_DOOR_1, src: 'in_room/entries/wooden_glass_door_1.glb'
+}, {
+    name: GLTF_NAMES.WOODEN_GLASS_DOOR_2, src: 'in_room/entries/wooden_glass_door_2.glb'
+}, {
+    name: GLTF_NAMES.WOODEN_GLASS_DOOR_3, src: 'in_room/entries/wooden_glass_door_3.glb'
+}, {
+    name: GLTF_NAMES.WOODEN_WHITE_DOOR_1, src: 'in_room/entries/wooden_white_door_1.glb'
+}, {
+    name: GLTF_NAMES.WOODEN_WHITE_DOOR_2, src: 'in_room/entries/wooden_white_door_2.glb'
+}, {
+    name: GLTF_NAMES.WOODEN_PINK_DOOR_1, src: 'in_room/entries/wooden_pink_door_1.glb'
+}, {
+    name: GLTF_NAMES.IRON_PLATE_GLASS_DOOR_1, src: 'in_room/entries/iron_plate_glass_door_1.glb'
+}, {
+    name: GLTF_NAMES.IRON_PLATE_GLASS_DOOR_2, src: 'in_room/entries/iron_plate_glass_door_2.glb'
+}, {
+    name: GLTF_NAMES.IRON_PLATE_DOOR_1, src: 'in_room/entries/iron_plate_door_1.glb'
+}, {
+    name: GLTF_NAMES.CLASSIC_WOODEN_DOUBLE_DOOR_1, src: 'in_room/entries/classic_wooden_double_door_1.glb'
+}, {
+    name: GLTF_NAMES.CLASSIC_WOODEN_DOOR_1, src: 'in_room/entries/classic_wooden_door_1.glb'
+}, {
+    name: GLTF_NAMES.CLASSIC_WOODEN_DOOR_2, src: 'in_room/entries/classic_wooden_door_2.glb'
+}, {
+    name: GLTF_NAMES.CLASSIC_WOODEN_DOOR_3, src: 'in_room/entries/classic_wooden_door_3.glb'
+}, {
+    name: GLTF_NAMES.CLASSIC_WOODEN_DOOR_4, src: 'in_room/entries/classic_wooden_door_4.glb'
+}, {
+    name: GLTF_NAMES.CLASSIC_WOODEN_DOOR_5, src: 'in_room/entries/classic_wooden_door_5.glb'
+}, {
+    name: GLTF_NAMES.CLASSIC_WOODEN_DOOR_6, src: 'in_room/entries/classic_wooden_door_6.glb'
+}, {
+    name: GLTF_NAMES.DUNGEON_GATE_1, src: 'in_room/entries/dungeon_gate_1.glb'
 }];
 
 const SHADER_NAMES = {
@@ -565,7 +635,25 @@ export {
     FANCY_PICTURE_FRAME_01,
     VINTAGE_GRANDFATHER_CLOCK,
     WOODEN_DOOR_1,
+    WOODEN_DOOR_2,
     WOODEN_GLASS_DOOR_1,
+    WOODEN_GLASS_DOOR_2,
+    WOODEN_GLASS_DOOR_3,
+    WOODEN_WHITE_DOOR_1,
+    WOODEN_WHITE_DOOR_2,
+    WOODEN_PINK_DOOR_1,
+    IRON_PLATE_GLASS_DOOR_1,
+    IRON_PLATE_GLASS_DOOR_2,
+    IRON_PLATE_DOOR_1,
+    OFFICE_DOOR_1,
+    CLASSIC_WOODEN_DOUBLE_DOOR_1,
+    CLASSIC_WOODEN_DOOR_1,
+    CLASSIC_WOODEN_DOOR_2,
+    CLASSIC_WOODEN_DOOR_3,
+    CLASSIC_WOODEN_DOOR_4,
+    CLASSIC_WOODEN_DOOR_5,
+    CLASSIC_WOODEN_DOOR_6,
+    DUNGEON_GATE_1,
 
     CAMERAS,
 

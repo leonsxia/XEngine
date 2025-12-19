@@ -8,7 +8,11 @@ import {
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
     Television01,
     FancyPictureFrame01, VintageGrandfatherClock,
-    WoodenDoor1, WoodenGlassDoor1,
+    WoodenDoor1, WoodenDoor2, 
+    WoodenGlassDoor1, WoodenGlassDoor2, WoodenGlassDoor3, WoodenWhiteDoor1, WoodenWhiteDoor2, WoodenPinkDoor1,
+    IronPlateGlassDoor1, IronPlateGlassDoor2, IronPlateDoor1, OfficeDoor1,
+    ClassicWoodenDoubleDoor1, ClassicWoodenDoor1, ClassicWoodenDoor2, ClassicWoodenDoor3, ClassicWoodenDoor4, ClassicWoodenDoor5, ClassicWoodenDoor6,
+    DungeonGate1,
     ModernCeilingLamp01, SecurityLight,
     GlockItem, BayonetItem, PistolItem, RevolverItem, SMGShortItem,
     PistolAmmoBox, MagnumAmmoBox, SMGAmmoBox,
@@ -24,7 +28,11 @@ import {
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
     TELEVISION_01,
     FANCY_PICTURE_FRAME_01, VINTAGE_GRANDFATHER_CLOCK,
-    WOODEN_DOOR_1, WOODEN_GLASS_DOOR_1,
+    WOODEN_DOOR_1, WOODEN_DOOR_2, 
+    WOODEN_GLASS_DOOR_1, WOODEN_GLASS_DOOR_2, WOODEN_GLASS_DOOR_3, WOODEN_WHITE_DOOR_1, WOODEN_WHITE_DOOR_2, WOODEN_PINK_DOOR_1,
+    IRON_PLATE_GLASS_DOOR_1, IRON_PLATE_GLASS_DOOR_2, IRON_PLATE_DOOR_1, OFFICE_DOOR_1,
+    CLASSIC_WOODEN_DOUBLE_DOOR_1, CLASSIC_WOODEN_DOOR_1, CLASSIC_WOODEN_DOOR_2, CLASSIC_WOODEN_DOOR_3, CLASSIC_WOODEN_DOOR_4, CLASSIC_WOODEN_DOOR_5, CLASSIC_WOODEN_DOOR_6,
+    DUNGEON_GATE_1,
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
     TEXTURE_NAMES, GLTF_NAMES,
     WEAPONS, AMMUNITION, HEALTH_CATEGORY
@@ -106,7 +114,25 @@ class ModelBuilder {
         this.objectCreationMapping[FANCY_PICTURE_FRAME_01] = this.createFancyPictureFrame01;
         this.objectCreationMapping[VINTAGE_GRANDFATHER_CLOCK] = this.createVintageGrandfatherClock;
         this.objectCreationMapping[WOODEN_DOOR_1] = this.createWoodenDoor1;
+        this.objectCreationMapping[WOODEN_DOOR_2] = this.createWoodenDoor2;
         this.objectCreationMapping[WOODEN_GLASS_DOOR_1] = this.createWoodenGlassDoor1;
+        this.objectCreationMapping[WOODEN_GLASS_DOOR_2] = this.createWoodenGlassDoor2;
+        this.objectCreationMapping[WOODEN_GLASS_DOOR_3] = this.createWoodenGlassDoor3;
+        this.objectCreationMapping[WOODEN_WHITE_DOOR_1] = this.createWoodenWhiteDoor1;
+        this.objectCreationMapping[WOODEN_WHITE_DOOR_2] = this.createWoodenWhiteDoor2;
+        this.objectCreationMapping[WOODEN_PINK_DOOR_1] = this.createWoodenPinkDoor1;
+        this.objectCreationMapping[IRON_PLATE_GLASS_DOOR_1] = this.createIronPlateGlassDoor1;
+        this.objectCreationMapping[IRON_PLATE_GLASS_DOOR_2] = this.createIronPlateGlassDoor2;
+        this.objectCreationMapping[IRON_PLATE_DOOR_1] = this.createIronPlateDoor1;
+        this.objectCreationMapping[OFFICE_DOOR_1] = this.createOfficeDoor1;
+        this.objectCreationMapping[CLASSIC_WOODEN_DOUBLE_DOOR_1] = this.createClassicWoodenDoubleDoor1;
+        this.objectCreationMapping[CLASSIC_WOODEN_DOOR_1] = this.createClassicWoodenDoor1;
+        this.objectCreationMapping[CLASSIC_WOODEN_DOOR_2] = this.createClassicWoodenDoor2;
+        this.objectCreationMapping[CLASSIC_WOODEN_DOOR_3] = this.createClassicWoodenDoor3;
+        this.objectCreationMapping[CLASSIC_WOODEN_DOOR_4] = this.createClassicWoodenDoor4;
+        this.objectCreationMapping[CLASSIC_WOODEN_DOOR_5] = this.createClassicWoodenDoor5;
+        this.objectCreationMapping[CLASSIC_WOODEN_DOOR_6] = this.createClassicWoodenDoor6;
+        this.objectCreationMapping[DUNGEON_GATE_1] = this.createDungeonGate1;
 
     }
 
@@ -1051,6 +1077,22 @@ class ModelBuilder {
 
     }
 
+    createWoodenDoor2(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new WoodenDoor2(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
     createWoodenGlassDoor1(specs) {
 
         let object;
@@ -1060,6 +1102,278 @@ class ModelBuilder {
         this.setupObjectGLTF({ src }, specs);
 
         object = new WoodenGlassDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createWoodenGlassDoor2(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new WoodenGlassDoor2(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createWoodenGlassDoor3(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new WoodenGlassDoor3(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createWoodenWhiteDoor1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new WoodenWhiteDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createWoodenWhiteDoor2(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new WoodenWhiteDoor2(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }    
+
+    createWoodenPinkDoor1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new WoodenPinkDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createIronPlateGlassDoor1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new IronPlateGlassDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createIronPlateGlassDoor2(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new IronPlateGlassDoor2(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createIronPlateDoor1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new IronPlateDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createOfficeDoor1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new OfficeDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createClassicWoodenDoubleDoor1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new ClassicWoodenDoubleDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createClassicWoodenDoor1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new ClassicWoodenDoor1(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createClassicWoodenDoor2(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new ClassicWoodenDoor2(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createClassicWoodenDoor3(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new ClassicWoodenDoor3(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createClassicWoodenDoor4(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new ClassicWoodenDoor4(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createClassicWoodenDoor5(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new ClassicWoodenDoor5(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createClassicWoodenDoor6(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new ClassicWoodenDoor6(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY);
+
+        return object;
+
+    }
+
+    createDungeonGate1(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new DungeonGate1(specs);
         object.setPosition(position)
             .setRotationY(rotationY);
 

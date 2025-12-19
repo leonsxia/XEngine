@@ -23,7 +23,25 @@ import {
     MagnumAmmoBox,
     SMGAmmoBox,
     FirstAidKitItem,
-    WoodenGlassDoor1
+    WoodenGlassDoor1,
+    WoodenGlassDoor2,
+    WoodenGlassDoor3,
+    WoodenWhiteDoor1,
+    WoodenWhiteDoor2,
+    WoodenPinkDoor1,
+    WoodenDoor2,
+    IronPlateGlassDoor1,
+    IronPlateGlassDoor2,
+    OfficeDoor1,
+    IronPlateDoor1,
+    ClassicWoodenDoubleDoor1,
+    ClassicWoodenDoor1,
+    ClassicWoodenDoor2,
+    ClassicWoodenDoor3,
+    ClassicWoodenDoor4,
+    ClassicWoodenDoor5,
+    ClassicWoodenDoor6,
+    DungeonGate1
 } from "../Models";
 import { ObstacleMoveable } from "../movement/ObstacleMoveable";
 
@@ -177,7 +195,25 @@ function objectFilter(object) {
         object instanceof PaintedWoodenTable ||
         object instanceof WoodenSmallTable ||
         object instanceof WoodenDoor1 ||
+        object instanceof WoodenDoor2 ||
         object instanceof WoodenGlassDoor1 ||
+        object instanceof WoodenGlassDoor2 ||
+        object instanceof WoodenGlassDoor3 ||
+        object instanceof WoodenWhiteDoor1 ||
+        object instanceof WoodenWhiteDoor2 ||
+        object instanceof WoodenPinkDoor1 ||
+        object instanceof IronPlateGlassDoor1 ||
+        object instanceof IronPlateGlassDoor2 ||
+        object instanceof IronPlateDoor1 ||
+        object instanceof OfficeDoor1 ||
+        object instanceof ClassicWoodenDoubleDoor1 ||
+        object instanceof ClassicWoodenDoor1 ||
+        object instanceof ClassicWoodenDoor2 ||
+        object instanceof ClassicWoodenDoor3 ||
+        object instanceof ClassicWoodenDoor4 ||
+        object instanceof ClassicWoodenDoor5 ||
+        object instanceof ClassicWoodenDoor6 ||
+        object instanceof DungeonGate1 ||
         object instanceof GlockItem ||
         object instanceof PistolItem ||
         object instanceof RevolverItem ||

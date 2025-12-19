@@ -9,6 +9,7 @@ class Door extends EntryBase {
     _depth = 1;
 
     _gltfScale = [1, 1, 1];
+    _gltfRotation = [0, 0, 0];
 
     _cBox;
     _gltfSrc;

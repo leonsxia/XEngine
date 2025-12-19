@@ -387,7 +387,10 @@
                         -2
                     ],
                     "rotationY": 0,
-                    "ignoreTPC": true
+                    "ignoreTPC": true,
+                    "transportType": 1,
+                    "linkTo": "room1_wooden_glass_door_1",
+                    "transportTo": -1
                 },
                 {
                     "type": "WoodenGlassDoor1",
@@ -406,6 +409,387 @@
                         -3,
                         -1.2987,
                         2
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true,
+                    "transportType": 1,
+                    "linkTo": "room1_wooden_door_1",
+                    "transportTo": 1
+                },
+                {
+                    "type": "WoodenGlassDoor2",
+                    "src": "WOODEN_GLASS_DOOR_2",
+                    "name": "room1_wooden_glass_door_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -1.2987,
+                        2
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "WoodenGlassDoor3",
+                    "src": "WOODEN_GLASS_DOOR_3",
+                    "name": "room1_wooden_glass_door_3",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        3,
+                        -1.2953,
+                        2
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "WoodenWhiteDoor1",
+                    "src": "WOODEN_WHITE_DOOR_1",
+                    "name": "room1_wooden_white_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        6,
+                        -1.2987,
+                        2
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "WoodenPinkDoor1",
+                    "src": "WOODEN_PINK_DOOR_1",
+                    "name": "room1_wooden_pink_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        9,
+                        -1.2987,
+                        2
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "WoodenDoor2",
+                    "src": "WOODEN_DOOR_2",
+                    "name": "room1_wooden_door_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        12,
+                        -1.2987,
+                        2
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "IronPlateGlassDoor1",
+                    "src": "IRON_PLATE_GLASS_DOOR_1",
+                    "name": "room1_iron_plate_glass_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -3,
+                        -1.36815,
+                        5
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "IronPlateGlassDoor2",
+                    "src": "IRON_PLATE_GLASS_DOOR_2",
+                    "name": "room1_iron_plate_glass_door_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -1.36815,
+                        5
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "OfficeDoor1",
+                    "src": "OFFICE_DOOR_1",
+                    "name": "room1_office_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        3,
+                        -1.2987,
+                        5
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "IronPlateDoor1",
+                    "src": "IRON_PLATE_DOOR_1",
+                    "name": "room1_iron_plate_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        6,
+                        -1.351,
+                        5
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "WoodenWhiteDoor2",
+                    "src": "WOODEN_WHITE_DOOR_2",
+                    "name": "room1_wooden_white_door_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        9,
+                        -1.351,
+                        5
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "ClassicWoodenDoor1",
+                    "src": "CLASSIC_WOODEN_DOOR_1",
+                    "name": "room1_classic_wooden_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -3,
+                        -1.351,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "ClassicWoodenDoor2",
+                    "src": "CLASSIC_WOODEN_DOOR_2",
+                    "name": "room1_classic_wooden_door_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -1.351,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "ClassicWoodenDoor3",
+                    "src": "CLASSIC_WOODEN_DOOR_3",
+                    "name": "room1_classic_wooden_door_3",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        3,
+                        -1.351,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "ClassicWoodenDoor4",
+                    "src": "CLASSIC_WOODEN_DOOR_4",
+                    "name": "room1_classic_wooden_door_4",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        6,
+                        -1.351,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "ClassicWoodenDoor5",
+                    "src": "CLASSIC_WOODEN_DOOR_5",
+                    "name": "room1_classic_wooden_door_5",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        9,
+                        -1.351,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "ClassicWoodenDoor6",
+                    "src": "CLASSIC_WOODEN_DOOR_6",
+                    "name": "room1_classic_wooden_door_6",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        12,
+                        -1.351,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "ClassicWoodenDoubleDoor1",
+                    "src": "CLASSIC_WOODEN_DOUBLE_DOOR_1",
+                    "name": "room1_classic_wooden_double_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -3,
+                        -1.2953,
+                        11
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true
+                },
+                {
+                    "type": "DungeonGate1",
+                    "src": "DUNGEON_GATE_1",
+                    "name": "room1_dungeon_gate_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -1.02745,
+                        11
                     ],
                     "rotationY": 0,
                     "ignoreTPC": true
