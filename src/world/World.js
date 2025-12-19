@@ -6,6 +6,7 @@ import { WorldScene4 } from "./worldScenes/WorldScene4";
 import { WaterRoom } from "./worldScenes/WaterRoom";
 import { Mansion } from "./worldScenes/Mansion";
 import { WorldScene5 } from "./worldScenes/WorldScene5";
+import { WorldScene6 } from "./worldScenes/WorldScene6";
 import { WorldMatrix } from "./worldScenes/Matrix";
 import { EnemyTestScene } from "./worldScenes/EnemyTestScene";
 
@@ -34,7 +35,18 @@ import { loadSounds } from "./components/utils/audioHelper";
 import { SOUNDS } from "./components/utils/audioConstants";
 
 const config = { 
-    scenes: ['BasicObjects', 'RunningTrain', 'Birds', 'Simple Physics', 'Water Room', 'Mansion', 'Animated Characters', 'Matrix', 'Enemy Test Scene'],  // scene list for scene selector
+    scenes: [
+        'BasicObjects', 
+        'RunningTrain', 
+        'Birds', 
+        'Simple Physics', 
+        'Water Room', 
+        'Mansion', 
+        'Animated Characters', 
+        'Entries Test',  
+        'Matrix', 
+        'Enemy Test Scene'
+    ],  // scene list for scene selector
 };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
 const controlActions = InputBase.CONTROL_ACTIONS.map(actions => {
@@ -112,6 +124,7 @@ class World {
         this.worldScenes.push(new WorldScene3(this.#renderer, config));
         this.worldScenes.push(new WorldScene4(this.#renderer, config));
         this.worldScenes.push(new WorldScene5(this.#renderer, config));
+        this.worldScenes.push(new WorldScene6(this.#renderer, config));
         this.worldScenes.push(new WaterRoom(this.#renderer, config));
         this.worldScenes.push(new Mansion(this.#renderer, config));
         this.worldScenes.push(new WorldMatrix(this.#renderer, config));
