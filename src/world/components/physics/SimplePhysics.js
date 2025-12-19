@@ -1,6 +1,7 @@
-import { Matrix4, Object3D, Vector3 } from 'three';
+import { MathUtils, Matrix4, Object3D, Vector3 } from 'three';
 import * as Color from '../basic/colorBase.js';
 import { groupHasChild, resetObject3D } from '../utils/objectHelper.js';
+import { entrySide } from '../utils/enums.js';
 
 const DEBUG = true;
 const COR_DEF = ['leftCor', 'rightCor', 'leftBackCor', 'rightBackCor'];
@@ -17,6 +18,8 @@ const _rv = new Vector3();
 const _blv = new Vector3();
 const _brv = new Vector3();
 const _v1 = new Vector3();
+const _v2 = new Vector3();
+const _v3 = new Vector3();
 
 class SimplePhysics {
 
@@ -547,7 +550,20 @@ class SimplePhysics {
         }
 
         return inRange;
-        
+
+    }
+
+    getToWallDirection(avatar, wall) {
+
+        const wallDir = wall.mesh.getWorldDirection(_v1);
+        avatar.getWorldPosition(_v2);
+        wall.getWorldPosition(_v3);
+        _v2.y = _v3.y = 0;
+        const toWallDir = _v2.sub(_v3);
+        const angle = wallDir.angleTo(toWallDir);
+
+        return Math.abs(MathUtils.radToDeg(angle)) <= 90 ? entrySide.front : entrySide.back;
+
     }
 
     checkWallClimbable(avatar, wall) {
@@ -557,10 +573,14 @@ class SimplePhysics {
         const wallBottom = wallPosY - wall.height * .5;
         const wallTop = wallPosY + wall.height * .5;
 
-        // if wall is lower than half avatar height, and not below avatar, it will be climbable
-        if (avatar.bottomY >= wallBottom - avatar.height * .5 && avatar.bottomY < wallTop) {
+        if (this.getToWallDirection(avatar, wall) === entrySide.front) {
 
-            climbable = true;
+            // if wall is lower than half avatar height, and not below avatar, it will be climbable
+            if (avatar.bottomY >= wallBottom - avatar.height * .5 && avatar.bottomY < wallTop) {
+
+                climbable = true;
+
+            }
 
         }
 
