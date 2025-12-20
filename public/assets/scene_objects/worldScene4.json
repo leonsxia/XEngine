@@ -925,8 +925,8 @@
                     "showArrow": false,
                     "enableWallOBBs": true,
                     "isObstacle": true,
-                    "climbable": true,
-                    "position": [0, 0, 0]
+                    "climbable": false,
+                    "position": [0, 0.1, 0]
                 },
                 {
                     "type": "HexCylinderPillar",
@@ -942,7 +942,7 @@
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
-                    "climbable": true,
+                    "climbable": false,
                     "position": [2.5, 0.5, -3.5]
                 },
                 {
@@ -971,8 +971,31 @@
                     "showArrow": false,
                     "enableWallOBBs": true,
                     "isObstacle": true,
-                    "climbable": true,
+                    "climbable": false,
                     "position": [-1.5, -1, -5]
+                },
+                {
+                    "type": "VerticalLadder",
+                    "scale": [1, 4.6, 1],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": true,
+                    "name": "room2_vertical_ladder_1",
+                    "position": [0, 0.1, -1.26],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
                 }
             ],
             "floors": [
