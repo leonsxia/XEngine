@@ -310,8 +310,8 @@ class ObstacleBase extends ObstacleMoveable {
             this.#logger.log(`${obj.name}: ${event.message}`);
             obj.setLayers(CAMERA_RAY_LAYER);
             obj.setLayers(PLAYER_CAMERA_RAY_LAYER);
-            obj.setLayers(TOFU_AIM_LAYER);
-            obj.setLayers(TOFU_FOCUS_LAYER);
+            if (!this.specs.ignoreAimTest) obj.setLayers(TOFU_AIM_LAYER);
+            if (!this.specs.ignoreFocusTest) obj.setLayers(TOFU_FOCUS_LAYER);
             
             const { transparent = true } = obj.specs;
 

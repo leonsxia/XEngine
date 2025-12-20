@@ -1201,7 +1201,9 @@
                     "name": "room1_vertical_ladder_1",
                     "position": [2.5, -0.696, -2.46],
                     "rotationY": 0,
-                    "transparent": false
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
                 },
                 {
                     "type": "VerticalLadder",
@@ -1222,7 +1224,9 @@
                     "name": "room1_vertical_ladder_2",
                     "position": [3.415, -0.561, 10],
                     "rotationY": 1.5708,
-                    "transparent": false
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
                 },
                 {
                     "type": "ModernCeilingLamp01",

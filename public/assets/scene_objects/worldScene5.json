@@ -499,7 +499,9 @@
                     "name": "room1_vertical_ladder_1",
                     "position": [2.5, -0.696, -2.46],
                     "rotationY": 0,
-                    "transparent": false
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
                 },
                 {
                     "type": "ModernCeilingLamp01",
