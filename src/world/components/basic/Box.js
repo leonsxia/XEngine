@@ -85,6 +85,13 @@ class Box extends BasicObject {
 
     }
 
+    updateTexScale() {
+
+        this.setConfig({ texScale: [this.scale.x, this.scale.y] })
+            .updateTextures();
+
+    }
+
 }
 
 export { Box };

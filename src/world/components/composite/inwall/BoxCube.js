@@ -20,17 +20,16 @@ class BoxCube extends ObstacleBase {
         super(specs);
 
         this.specs = specs;
-        const { name, lines = false } = specs;
+        const { name } = specs;
         const { showArrow = false, freeTexture = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1, 1] } = specs;
-        const { transparent = true } = specs;
 
         this._scale = new Array(...scale);
 
-        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap, lines, transparent };
+        const boxSpecs = this.makeBoxConfig({ size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap});
 
         const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: frontMap, normalMap: frontNormal })
         const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal });
@@ -123,6 +122,19 @@ class BoxCube extends ObstacleBase {
 
     }
 
+    makeBoxConfig(specs) {
+        
+        const { baseSize = this._height, mapRatio, lines = false, transparent = true } = this.specs;
+
+        specs.lines = lines;
+        specs.mapRatio = mapRatio;
+        specs.baseSize = baseSize;
+        specs.transparent = transparent;
+
+        return specs;
+
+    }
+
     update(needToUpdateOBBnRay = true, needToUpdateFaceTrigger = true) {
 
         const width = this._width * this.scale[0];
@@ -148,7 +160,7 @@ class BoxCube extends ObstacleBase {
             .setPosition([0, - height * .5, 0]);
 
         // update box scale
-        this.box.setScale(this.scale);
+        this.box.setScaleWithTexUpdate(this.scale);
 
         if (needToUpdateFaceTrigger) {
 

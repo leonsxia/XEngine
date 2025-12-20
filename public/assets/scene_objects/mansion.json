@@ -1496,7 +1496,7 @@
                 {
                     "type": "BoxCube",
                     "scale": [1.5, 1.5, 1.5],
-                    "baseSize": 1,
+                    "baseSize": 1.5,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
                     "mapRatio": 1,
@@ -1514,7 +1514,7 @@
                 {
                     "type": "BoxCube",
                     "scale": [1.5, 1.5, 1.5],
-                    "baseSize": 1,
+                    "baseSize": 1.5,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
                     "mapRatio": 1,

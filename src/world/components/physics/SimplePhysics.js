@@ -561,8 +561,9 @@ class SimplePhysics {
         _v2.y = _v3.y = 0;
         const toWallDir = _v2.sub(_v3);
         const angle = wallDir.angleTo(toWallDir);
+        const { climbAngle = 90 } = wall;
 
-        return Math.abs(MathUtils.radToDeg(angle)) <= 90 ? entrySide.front : entrySide.back;
+        return Math.abs(MathUtils.radToDeg(angle)) <= climbAngle ? entrySide.front : entrySide.back;
 
     }
 
@@ -1193,7 +1194,7 @@ class SimplePhysics {
 
                             const w = obs.walls[k];
 
-                            if (w.isOBB) {
+                            if (w.isOBB && !w.ignoreOBBTest) {
 
                                 if (avatar.pushingObb.intersectsOBB(w.obb) && this.checkWallClimbable(avatar, w)) {
                                     

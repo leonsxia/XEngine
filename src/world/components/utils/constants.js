@@ -108,6 +108,7 @@ const CLASSIC_WOODEN_DOOR_4 = 'ClassicWoodenDoor4';
 const CLASSIC_WOODEN_DOOR_5 = 'ClassicWoodenDoor5';
 const CLASSIC_WOODEN_DOOR_6 = 'ClassicWoodenDoor6';
 const DUNGEON_GATE_1 = 'DungeonGate1';
+const VERTICAL_LADDER = 'VerticalLadder';
 
 // pickable items
 const AMMUNITION = {
@@ -221,6 +222,8 @@ const TEXTURE_NAMES = {
     METAL_292: 'METAL_292',
     METAL_292_NORMAL: 'METAL_292_NORMAL',
     METAL_241: 'METAL_241',
+    METAL_168: 'METAL_168',
+    METAL_168_NORMAL: 'METAL_168_NORMAL',
     // water
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
@@ -286,6 +289,8 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.METAL_292, map: 'assets/textures/walls/Texturelabs_Metal_292M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_292L.jpg'
 }, {
     name: TEXTURE_NAMES.METAL_241, map: 'assets/textures/walls/Texturelabs_Metal_241L.jpg'
+}, {
+    name: TEXTURE_NAMES.METAL_168, map: 'assets/textures/walls/Texturelabs_Metal_168M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_168L.jpg'
 }, {
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {
@@ -654,6 +659,7 @@ export {
     CLASSIC_WOODEN_DOOR_5,
     CLASSIC_WOODEN_DOOR_6,
     DUNGEON_GATE_1,
+    VERTICAL_LADDER,
 
     CAMERAS,
 

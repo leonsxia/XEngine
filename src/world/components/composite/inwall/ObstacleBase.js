@@ -917,6 +917,10 @@ class ObstacleBase extends ObstacleMoveable {
 
             this.cylinder.visible = show;
             
+        } else if (this.isLadder) {
+            
+            this.ladderItem.visible = show;
+
         }
 
     }

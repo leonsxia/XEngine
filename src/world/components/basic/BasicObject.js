@@ -457,7 +457,6 @@ class BasicObject extends EventDispatcher {
                 switch(this.type) {
                     case PLANE:
                     case WATER_PLANE:
-                    case BOX:
                     case TRIANGLE:
                     case STAIRS_SIDE:
                     case STAIRS_FRONT:
@@ -466,6 +465,23 @@ class BasicObject extends EventDispatcher {
                         {
                             const { texScale = [1, 1] } = this.specs;
                             let { width, height } = this.specs;
+                            width *= texScale[0];
+                            height *= texScale[1];
+
+                            const { baseSize = height } = this.specs;
+
+                            w = width;
+                            h = height;
+                            basic = baseSize;
+                        }
+
+                        break;
+
+                    case BOX:
+
+                        {
+                            const { texScale = [1, 1] } = this.specs;
+                            let { size: { width, height } } = this.specs;
                             width *= texScale[0];
                             height *= texScale[1];
 

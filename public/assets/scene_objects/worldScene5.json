@@ -320,7 +320,7 @@
                     "bottomNormal": "CRATE_NORMAL",
                     "mapRatio": 1,
                     "freeTexture": false,
-                    "noRepeat": true,
+                    "noRepeat": false,
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
@@ -399,8 +399,9 @@
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
-                    "climbable": true,
-                    "position": [2.5, 0.5, -3.5]
+                    "climbable": false,
+                    "position": [2.5, 0.5, -3.5],
+                    "transparent": false
                 },
                 {
                     "type": "SquarePillar",
@@ -478,6 +479,27 @@
                     "climbable": true,
                     "position": [5, -1.2, 8],
                     "rotationY": 0
+                },
+                {
+                    "type": "VerticalLadder",
+                    "scale": [1, 3.61, 1],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_vertical_ladder_1",
+                    "position": [2.5, -0.696, -2.46],
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "ModernCeilingLamp01",
