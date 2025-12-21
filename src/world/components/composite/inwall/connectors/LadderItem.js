@@ -17,6 +17,7 @@ class LadderItem {
     _sticks = [];
 
     _scale = [1, 1, 1];
+    _initialScale = [1, 1, 1];
 
     group;
 
@@ -26,7 +27,7 @@ class LadderItem {
 
         this.specs = specs;
         const { name, scale = [1, 1, 1] } = this.specs;
-        this._scale = new Array(...scale);
+        this._scale = this._initialScale = new Array(...scale);
 
         const { bodyMap, bodyNormalMap, castShadow = true, receiveShadow = true} = this.specs;
         const bodyConfig = { 
@@ -43,12 +44,15 @@ class LadderItem {
         this.group.add(this._bodyLeft.mesh, this._bodyRight.mesh);
 
         const { segments = 8, map, normalMap } = this.specs;
+        const {stickGap = .24} = this.specs;
         const stickConfig = {
             radius: this.#stickRadius, height: this._width - .001, segments,
             map, normalMap
         };
+        this._stickGap = stickGap;
         const totalGap = this._stickGap + this.#stickRadius * 2;
-        this._stickNum = Math.ceil(this._height * this.scale[1] / totalGap);
+        this._stickNum = Math.floor(this._height * this.scale[1] / totalGap);
+
         for (let i = 0, il = this._stickNum; i < il; i++) {
 
             const lconfig = this.makeCylinderConfig(Object.assign({name: `${name}_stick_${i}`}, stickConfig), i);
@@ -140,10 +144,11 @@ class LadderItem {
     update() {
 
         const width = this._width * this.scale[0];
-        const height = this._height * this.scale[1]
+        const height = this._height * this.scale[1];
         const halfHeight = height * .5;
-        const totalGap = this._stickGap + this.#stickRadius * 2;
-        const startY = (height - this._stickNum * totalGap + this._stickGap) * .5;
+        const heightRatio = this._scale[1] / this._initialScale[1];
+        const totalGap = (this._stickGap + this.#stickRadius * 2) * heightRatio;
+        const startY = (height - this._stickNum * totalGap + this._stickGap * heightRatio) * .5;
 
         this._bodyLeft.setScaleWithTexUpdate(this.scale)
             .setPosition([width * .5 - this.#bodyWidth * .5, 0, 0]);

@@ -1203,7 +1203,8 @@
                     "rotationY": 0,
                     "transparent": false,
                     "ignoreAimTest": true,
-                    "ignoreFocusTest": true
+                    "ignoreFocusTest": true,
+                    "stickGap": 0.15
                 },
                 {
                     "type": "VerticalLadder",
