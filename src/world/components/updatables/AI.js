@@ -1,6 +1,7 @@
 import { Logger } from "../../systems/Logger";
+import { UpdatableBase } from "./UpdatableBase";
 
-class AI {
+class AI extends UpdatableBase {
 
     players = [];
     enemies = [];
@@ -9,11 +10,52 @@ class AI {
     // eslint-disable-next-line no-unused-private-class-members
     #logger = new Logger(true, 'AI');
 
-    constructor(players = [], enemies = [], scene) {
+    constructor(players = [], enemies = []) {
 
+        super();
         this.players = players;
         this.enemies = enemies;
-        this.scene = scene;
+
+    }
+
+    get currentRoom() {
+
+        return this.attachTo.currentRoom;
+
+    }
+
+    get sceneObjects() {
+
+        const objects = [];
+        for (let i = 0, il = this.attachTo.sceneObjects.length; i < il; i++) {
+
+            const obj = this.attachTo.sceneObjects[i];
+            const { mesh, group } = obj;
+
+            if (mesh) objects.push(mesh);
+            else if (group) objects.push(group);
+
+        }
+
+        return objects;
+
+    }
+
+    get playerObjects() {
+
+        const objects = [];
+        for (let i = 0, il = this.players.length; i < il; i++) {
+
+            const player = this.players[i];
+            if (player.isActive && !player.dead) {
+
+                objects.push(player.group);
+
+            }
+
+        }
+
+        return objects;
 
     }
 
@@ -49,7 +91,8 @@ class AI {
 
                 if (!player.isActive || player.dead) continue;
 
-                enemy.checkTargetInSight(player, this.scene.children);
+                this.concatObjects(this.currentRoom.group, ...this.sceneObjects, ...this.playerObjects);
+                enemy.checkTargetInSight(player, this._concats);
 
             }
 

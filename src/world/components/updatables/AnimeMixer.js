@@ -1,15 +1,22 @@
-class AnimeMixer {
+import { UpdatableBase } from "./UpdatableBase";
+
+class AnimeMixer extends UpdatableBase {
 
     players = [];
     enemies = [];
-    others = [];
     isActive = true;
     
-    constructor(players = [], enemies = [], others = []) {
+    constructor(players = [], enemies = []) {
 
+        super();
         this.players = players;
         this.enemies = enemies;
-        this.others = others;
+
+    }
+
+    get pickables() {
+
+        return this.attachTo.pickables;
 
     }
 
@@ -31,9 +38,9 @@ class AnimeMixer {
 
         }
 
-        for (let i = 0, il = this.others.length; i < il; i++) {
+        for (let i = 0, il = this.pickables.length; i < il; i++) {
 
-            const obj = this.others[i];
+            const obj = this.pickables[i];
 
             if (obj.isPickableItem && !obj.isPicked) obj.tick(delta);
 

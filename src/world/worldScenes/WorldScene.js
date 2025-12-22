@@ -78,6 +78,7 @@ class WorldScene {
     showRoleSelector = false;
 
     currentRoom;
+    sceneObjects = [];
     pickables = [];
     entries = [];
 
@@ -225,26 +226,31 @@ class WorldScene {
         this.updatableQueue.add(this.physics);
 
         // ai
-        this.ai = new AI(this.players, this.enemies, this.scene);
+        this.ai = new AI(this.players, this.enemies);
+        this.ai.attachTo = this;
         this.updatableQueue.add(this.ai);
 
         // combat
-        this.combat = new Combat(this.players, this.enemies, this.scene);
+        this.combat = new Combat(this.players, this.enemies);
+        this.combat.attachTo = this;
         this.updatableQueue.add(this.combat);
 
         // interaction
-        this.interaction = new Interaction(this.players, this.pickables, this.entries);
+        this.interaction = new Interaction(this.players);
+        this.interaction.attachTo = this;
         this.interaction.delegates.changeRoom = this.changeRoom.bind(this);
         this.interaction.delegates.changeCamera = this.changeCamera.bind(this);
         this.updatableQueue.add(this.interaction);
 
         // anime mixer
-        this.animeMixer = new AnimeMixer(this.players, this.enemies, this.pickables);
+        this.animeMixer = new AnimeMixer(this.players, this.enemies);
+        this.animeMixer.attachTo = this;
+        
         this.updatableQueue.add(this.animeMixer);
 
         // audio mixer
         this.audioMixer = new AudioMixer(this.players, this.enemies);
-        this.audioMixer.setAudioWorkstation(this.camera);
+        this.audioMixer.attachTo = this;
         this.updatableQueue.add(this.audioMixer);
         
         this.loop.addUpdatables(this.updatableQueue);

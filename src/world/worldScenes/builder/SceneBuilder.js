@@ -72,6 +72,8 @@ class SceneBuilder {
 
                 }
 
+                worldScene.sceneObjects.push(obj);
+
             }
 
             let basicLightGuiSpecsArr = [];

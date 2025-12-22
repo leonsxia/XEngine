@@ -1,9 +1,10 @@
 import { Logger } from "../../systems/Logger";
 import { getIntersectionTarget } from "../utils/objectHelper";
+import { UpdatableBase } from "./UpdatableBase";
 
 const DEBUG = false;
 
-class Combat {
+class Combat extends UpdatableBase {
 
     players = [];
     enemies = [];
@@ -11,11 +12,52 @@ class Combat {
 
     #logger = new Logger(DEBUG, 'Combat');
 
-    constructor(players = [], enemies = [], scene) {
+    constructor(players = [], enemies = []) {
 
+        super();
         this.players = players;
         this.enemies = enemies;
-        this.scene = scene;
+
+    }
+
+    get currentRoom() {
+
+        return this.attachTo.currentRoom;
+
+    }
+
+    get sceneObjects() {
+
+        const objects = [];
+        for (let i = 0, il = this.attachTo.sceneObjects.length; i < il; i++) {
+
+            const obj = this.attachTo.sceneObjects[i];
+            const { mesh, group } = obj;
+
+            if (mesh) objects.push(mesh);
+            else if (group) objects.push(group);
+
+        }
+
+        return objects;
+
+    }
+
+    get enemyObjects() {
+
+        const objects = [];
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            if (enemy.isActive && !enemy.dead) {
+
+                objects.push(enemy.group);
+
+            }            
+
+        }
+
+        return objects;
 
     }
 
@@ -67,7 +109,8 @@ class Combat {
 
             if (!player.isActive || player.dead) continue;
 
-            const { onTarget: attackOn, attackBy, damage } = player.attackTick?.({ delta, aimObjects: this.scene.children, enemies: this.enemies.filter(e => e.isActive && !e.dead) }) ?? {};
+            this.concatObjects(this.currentRoom.group, ...this.enemyObjects, ...this.sceneObjects);
+            const { onTarget: attackOn, attackBy, damage } = player.attackTick?.({ delta, aimObjects: this._concats, enemies: this.enemies.filter(e => e.isActive && !e.dead) }) ?? {};
 
             if (attackOn) {
 

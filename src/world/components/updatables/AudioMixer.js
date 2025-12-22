@@ -1,17 +1,24 @@
-class AudioMixer {
+import { UpdatableBase } from "./UpdatableBase";
+
+class AudioMixer extends UpdatableBase {
 
     players = [];
     enemies = [];
-    others = [];
     isActive = true;
-    
-    constructor(players = [], enemies = [], others = []) {
 
+    constructor(players = [], enemies = []) {
+
+        super();
         this.players = players;
         this.enemies = enemies;
-        this.others = others;
 
-    }    
+    }
+
+    init() {
+
+        this.setAudioWorkstation(this.attachTo.camera);
+
+    }
 
     setAudioWorkstation(camera) {
 
@@ -28,6 +35,7 @@ class AudioMixer {
             enemy.setupSounds(camera).registerSounds();
 
         }
+
     }
 
     tick(delta) {

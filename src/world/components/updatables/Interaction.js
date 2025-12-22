@@ -1,13 +1,12 @@
 import { Logger } from "../../systems/Logger";
 import { entryType } from "../utils/enums";
+import { UpdatableBase } from "./UpdatableBase";
 
 const DEBUG = true;
 
-class Interaction {
+class Interaction extends UpdatableBase {
 
     players = [];
-    pickables = [];
-    entries = [];
     isActive = true;
 
     delegates = {};
@@ -19,11 +18,26 @@ class Interaction {
 
     #logger = new Logger(DEBUG, 'Interaction');
 
-    constructor(players = [], pickables = [], entries = []) {
+    constructor(players = []) {
 
+        super();
         this.players = players;
-        this.pickables = pickables;
-        this.entries = entries;
+
+    }
+
+    get pickables() {
+
+        return this.attachTo.pickables;
+
+    }
+
+    get entries() {
+
+        return this.attachTo.entries;
+
+    }
+
+    init() {
 
         this.initEntries();
 
