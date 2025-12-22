@@ -150,7 +150,7 @@ class RotatableLadder extends ObstacleBase {
 
         const side = this._height * this.scale[1];
         const height = this.height;
-        const bottom = Math.sqrt(side * side / (height * height));
+        const bottom = Math.sqrt(side * side - height * height);
 
         return bottom / side;
 
