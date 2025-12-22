@@ -289,8 +289,9 @@ class RotatableLadder extends ObstacleBase {
 
         }
 
+        const targetPosY = target.getWorldPosition(_v1).y;
         const side = this._height * this.scale[1];
-        const height = target ? Math.min(target.height - this.bottomY, this.height) : this.height;
+        const height = target ? Math.min(Math.max(targetPosY + target.height * .5 - this.bottomY, 0), this.height) : this.height;
         const width = this._width * this.scale[0] - this.#edge * 2;
         const depth = side * this.slopeRatio;
         const tan = this.height / depth;
