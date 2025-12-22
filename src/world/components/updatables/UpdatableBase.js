@@ -24,13 +24,7 @@ class UpdatableBase {
     concatObjects(...objects) {
 
         this._concats.length = 0;
-
-        for (let i = 0, il = objects.length; i < il; i++) {
-
-            const obj = objects[i];
-            this._concats.push(obj);
-
-        }
+        this._concats.push(...objects);
 
     }
 
