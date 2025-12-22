@@ -151,10 +151,10 @@ class LadderItem {
         const startY = (height - this._stickNum * totalGap + this._stickGap * heightRatio) * .5;
 
         this._bodyLeft.setScaleWithTexUpdate(this.scale)
-            .setPosition([width * .5 - this.#bodyWidth * .5, 0, 0]);
+            .setPosition([width * .5 - this.#bodyWidth * this.scale[0] * .5, 0, 0]);
         
         this._bodyRight.setScaleWithTexUpdate(this.scale)
-            .setPosition([- width * .5 + this.#bodyWidth * .5, 0, 0]);
+            .setPosition([- width * .5 + this.#bodyWidth * this.scale[0] * .5, 0, 0]);
        
         for (let i = 0, il = this._sticks.length; i < il; i++) {
 

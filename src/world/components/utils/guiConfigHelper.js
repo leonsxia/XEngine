@@ -819,7 +819,8 @@ function makeObjectsGuiConfig(objects) {
         if (!object.isTofu && !object.isWeapon &&
             !object.father.isFloor && !object.father.isCeiling && 
             !object.father.isArea &&
-            !object.father.isWater && !object.father.isWaterCube
+            !object.father.isWater && !object.father.isWaterCube &&
+            !object.father.isRotatableLadder
         ) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -1193,6 +1194,36 @@ function makeObjectsGuiConfig(objects) {
                 value: object.father,
                 params: [-1, 1, PICKED_NUMBER_STEPS],
                 type: 'number'
+            }));
+
+        }
+
+        if (object.father.isRotatableLadder) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'rotationXDegree',
+                prop: 'rotation.x',
+                value: object.father,
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                type: 'object-angle',
+                changeFn: () => {
+
+                    object.father.update();
+
+                }
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'rotationYDegree',
+                prop: 'rotation.y',
+                value: object.father,
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                type: 'object-angle',
+                changeFn: () => {
+
+                    object.father.update();
+
+                }
             }));
 
         }

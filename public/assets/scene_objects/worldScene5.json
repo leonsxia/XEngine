@@ -504,6 +504,38 @@
                     "ignoreFocusTest": true
                 },
                 {
+                    "type": "RotatableLadder",
+                    "scale": [
+                        2.33,
+                        4.6,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room2_rotatable_ladder_1",
+                    "position": [
+                        3.29,
+                        -1.173404442771849,
+                        2.06
+                    ],
+                    "rotationX": -1.1309733552923256,
+                    "rotationY": -0.9773843811168246,
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
+                },
+                {
                     "type": "ModernCeilingLamp01",
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room1_modern_ceiling_lamp_01_1",

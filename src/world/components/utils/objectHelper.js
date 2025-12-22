@@ -42,7 +42,8 @@ import {
     ClassicWoodenDoor5,
     ClassicWoodenDoor6,
     DungeonGate1,
-    VerticalLadder
+    VerticalLadder,
+    RotatableLadder
 } from "../Models";
 import { ObstacleMoveable } from "../movement/ObstacleMoveable";
 
@@ -216,6 +217,7 @@ function objectFilter(object) {
         object instanceof ClassicWoodenDoor6 ||
         object instanceof DungeonGate1 ||
         object instanceof VerticalLadder ||
+        object instanceof RotatableLadder ||
         object instanceof GlockItem ||
         object instanceof PistolItem ||
         object instanceof RevolverItem ||

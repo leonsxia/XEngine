@@ -112,3 +112,4 @@ export { ClassicWoodenDoor5 } from './composite/inwall/entries/ClassicWoodenDoor
 export { ClassicWoodenDoor6 } from './composite/inwall/entries/ClassicWoodenDoor6.js';
 export { DungeonGate1 } from './composite/inwall/entries/DungeonGate1.js';
 export { VerticalLadder } from './composite/inwall/connectors/VerticalLadder.js';
+export { RotatableLadder } from './composite/inwall/connectors/RotatableLadder.js';

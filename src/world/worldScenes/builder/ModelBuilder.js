@@ -13,7 +13,7 @@ import {
     IronPlateGlassDoor1, IronPlateGlassDoor2, IronPlateDoor1, OfficeDoor1,
     ClassicWoodenDoubleDoor1, ClassicWoodenDoor1, ClassicWoodenDoor2, ClassicWoodenDoor3, ClassicWoodenDoor4, ClassicWoodenDoor5, ClassicWoodenDoor6,
     DungeonGate1,
-    VerticalLadder,
+    VerticalLadder, RotatableLadder,
     ModernCeilingLamp01, SecurityLight,
     GlockItem, BayonetItem, PistolItem, RevolverItem, SMGShortItem,
     PistolAmmoBox, MagnumAmmoBox, SMGAmmoBox,
@@ -34,7 +34,7 @@ import {
     IRON_PLATE_GLASS_DOOR_1, IRON_PLATE_GLASS_DOOR_2, IRON_PLATE_DOOR_1, OFFICE_DOOR_1,
     CLASSIC_WOODEN_DOUBLE_DOOR_1, CLASSIC_WOODEN_DOOR_1, CLASSIC_WOODEN_DOOR_2, CLASSIC_WOODEN_DOOR_3, CLASSIC_WOODEN_DOOR_4, CLASSIC_WOODEN_DOOR_5, CLASSIC_WOODEN_DOOR_6,
     DUNGEON_GATE_1,
-    VERTICAL_LADDER,
+    VERTICAL_LADDER, ROTATABLE_LADDER,
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
     TEXTURE_NAMES, GLTF_NAMES,
     WEAPONS, AMMUNITION, HEALTH_CATEGORY
@@ -136,6 +136,7 @@ class ModelBuilder {
         this.objectCreationMapping[CLASSIC_WOODEN_DOOR_6] = this.createClassicWoodenDoor6;
         this.objectCreationMapping[DUNGEON_GATE_1] = this.createDungeonGate1;
         this.objectCreationMapping[VERTICAL_LADDER] = this.createVerticalLadder;
+        this.objectCreationMapping[ROTATABLE_LADDER] = this.createRotatableLadder;
 
     }
 
@@ -1397,6 +1398,28 @@ class ModelBuilder {
 
         object = new VerticalLadder(specs);
         object.setPosition(position)
+            .setRotationY(rotationY);
+
+        if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
+    createRotatableLadder(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY = 0, rotationX = 0, updateOBBs = true } = specs;
+        const { map, bodyMap } = specs;
+        const { normalMap, bodyNormalMap } = specs;
+
+        const maps = [{ map }, { normalMap }, { bodyMap }, { bodyNormalMap }];
+
+        this.setupObjectTextures(maps, specs);
+
+        object = new RotatableLadder(specs);
+        object.setPosition(position)
+            .rotateOnLocalAxisX(rotationX)
             .setRotationY(rotationY);
 
         if (updateOBBs) object.updateOBBs();

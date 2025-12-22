@@ -109,6 +109,7 @@ const CLASSIC_WOODEN_DOOR_5 = 'ClassicWoodenDoor5';
 const CLASSIC_WOODEN_DOOR_6 = 'ClassicWoodenDoor6';
 const DUNGEON_GATE_1 = 'DungeonGate1';
 const VERTICAL_LADDER = 'VerticalLadder';
+const ROTATABLE_LADDER = 'RotatableLadder';
 
 // pickable items
 const AMMUNITION = {
@@ -660,6 +661,7 @@ export {
     CLASSIC_WOODEN_DOOR_6,
     DUNGEON_GATE_1,
     VERTICAL_LADDER,
+    ROTATABLE_LADDER,
 
     CAMERAS,
 

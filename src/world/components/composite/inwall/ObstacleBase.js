@@ -843,7 +843,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         let result = false;
 
-        if (this.isPickableItem) {
+        if (this.isPickableItem || this.isRotatableLadder) {
 
             result = this.box.obb.intersectsOBB(obb);
 

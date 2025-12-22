@@ -339,6 +339,13 @@ class SceneBuilder {
 
                 // }
 
+                // for debug RotatableLadder boundingbox
+                // if (group.isRotatableLadder) {
+
+                //     this.worldScene.scene.add(group.boundingBoxHelper);
+
+                // }
+
             }
 
             room.addGroups(groups);
@@ -1065,6 +1072,23 @@ class SceneBuilder {
 
                     }
 
+                } else if (find.father.isRotatableLadder) {
+
+                    if (updateSetupOnly) {
+
+                        _origin.scale = new Array(...find.father.scale);
+                        _origin.rotationY = find.father.rotationY;
+                        _origin.rotationX = find.father.rotationX;
+
+                    } else {
+
+                        const { scale = [1, 1, 1], rotationY = 0, rotationX = 0 } = _target;
+
+                        find.father.setRotationY(rotationY)
+                            .rotateOnLocalAxisX(rotationX);
+                        find.father.scale = scale; // this will do final update
+
+                    }
                 } else {
 
                     if (updateSetupOnly) {

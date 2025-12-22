@@ -1192,8 +1192,8 @@ class TofuBase extends Moveable2D {
 
         else {
 
-            const { depth, height } = slope;
-            const cosTheta = depth / Math.sqrt(depth * depth + height * height);
+            const { slopeRatio, depth, height } = slope;
+            const cosTheta = slopeRatio ?? depth / Math.sqrt(depth * depth + height * height);
 
             this.slopeCoefficient = cosTheta * SLOPE_COEFFICIENT;
 

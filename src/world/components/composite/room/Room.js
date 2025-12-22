@@ -32,6 +32,9 @@ class Room {
     stairsSides = [];
     stairsStepFronts = [];
     stairsStepTops = [];
+    connectors = [];
+    connectorFaces = [];
+    connectorSideFaces = [];
     waterCubes = [];
     cObjects = [];
 
@@ -349,6 +352,14 @@ class Room {
                 this.slopeSideOBBWalls.push(...g.sideOBBWalls);
             
             };
+
+            if (g.isRotatableLadder) {
+
+                this.connectors.push(g);
+                this.connectorFaces.push(...g.slopes);
+                this.connectorSideFaces.push(...g.sideFaces);
+
+            }
 
             if (g.isStairs) {
 

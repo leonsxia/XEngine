@@ -33,6 +33,10 @@ class SimplePhysics {
     obstacleBottoms = [];
     slopes = [];
     slopeSideOBBWalls = [];
+    connectors = [];
+    connectorFaces = [];
+    connectorSideFaces = [];
+    connectorObbs = [];
     waterCubes = [];
     obstacleCollisionOBBWalls = [];
     interactiveObs = [];
@@ -148,7 +152,13 @@ class SimplePhysics {
 
     initPhysics(room) {
 
-        const { walls, insideWalls, airWalls, floors, ceilings, topOBBs, bottomOBBs, obstacles, slopes, slopeSideOBBWalls, waterCubes } = room;
+        const {
+            walls, insideWalls, airWalls,
+            floors, ceilings, topOBBs, bottomOBBs,
+            obstacles, slopes, slopeSideOBBWalls,
+            connectors, connectorFaces, connectorSideFaces,
+            waterCubes
+        } = room;
 
         this.walls = walls.concat(insideWalls, airWalls);
         this.floors = floors;
@@ -158,6 +168,10 @@ class SimplePhysics {
         this.obstacles = obstacles;
         this.slopes = slopes;
         this.slopeSideOBBWalls = slopeSideOBBWalls;
+        this.connectors = connectors;
+        this.connectorFaces = connectorFaces;
+        this.connectorSideFaces = connectorSideFaces;
+        this.connectorObbs.push(...connectorFaces, ...connectorSideFaces);
         this.waterCubes = waterCubes;        
 
         this.interactiveObs = this.obstacles.filter(obs => 
@@ -170,7 +184,7 @@ class SimplePhysics {
 
         this.sortFloorTops();
 
-        this.collisionPlanes = this.walls.concat(this.slopes).map(plane => plane.mesh || plane.slope.mesh);
+        // this.collisionPlanes = this.walls.concat(this.slopes).map(plane => plane.mesh || plane.slope.mesh);
 
         this._currentRoom = room.name;
 
@@ -654,13 +668,37 @@ class SimplePhysics {
 
         });
 
-        const movingObs = this.obstacles.filter(obs => obs.isMoving);
+        const movingObs = this.obstacles.filter(obs => obs.isMoving);        
     
         for (let i = 0, il = movingObs.length; i < il; i++) {
 
             const obs = movingObs[i];
-
             obs.resetBlockStatus();
+
+            const testBoundingFace = (bf) => {
+
+                if (obs.testFrontFace(bf)) {
+
+                    obs.forwardBlock = true;
+                    // console.log(`forward block`);
+
+                } else if (obs.testBackFace(bf)) {
+
+                    obs.backwardBlock = true;
+                    // console.log(`backward block`);
+
+                } else if (obs.testLeftFace(bf)) {
+
+                    obs.leftBlock = true;
+                    // console.log(`left block`);
+
+                } else if (obs.testRightFace(bf)) {
+
+                    obs.rightBlock = true;
+                    // console.log(`right block`);
+
+                }
+            }
 
             for (let j = 0, jl = this.obstacleCollisionOBBWalls.length; j < jl; j++) {
 
@@ -676,27 +714,28 @@ class SimplePhysics {
 
                         if (bf.obb.intersectsOBB(wall.obb)) {
 
-                            if (obs.testFrontFace(bf)) {
+                            testBoundingFace(bf);
 
-                                obs.forwardBlock = true;
-                                // console.log(`forward block`);
+                        }
 
-                            } else if (obs.testBackFace(bf)) {
+                    }
 
-                                obs.backwardBlock = true;
-                                // console.log(`backward block`);
+                }
 
-                            } else if (obs.testLeftFace(bf)) {
+            }
 
-                                obs.leftBlock = true;
-                                // console.log(`left block`);
+            for (let j = 0, jl = this.connectorObbs.length; j < jl; j++) {
 
-                            } else if (obs.testRightFace(bf)) {
+                const face = this.connectorObbs[j];
+                if (obs.intersectsOBB(face.obb)) {
 
-                                obs.rightBlock = true;
-                                // console.log(`right block`);
+                    for (let k = 0, kl = obs.boundingFaces.length; k < kl; k++) {
 
-                            }
+                        const bf = obs.boundingFaces[k];
+
+                        if (bf.obb.intersectsOBB(face.obb)) {
+
+                            testBoundingFace(bf);
 
                         }
 
@@ -715,6 +754,7 @@ class SimplePhysics {
         const onWaterObs = [];
         const onTopsObs = [];
         const onSlopesObs = [];
+        const onConnectorFaceObs = [];
 
         for (let i = 0, il = movableObs.length; i < il; i++) {
 
@@ -774,6 +814,23 @@ class SimplePhysics {
 
             }
 
+            if (!obs.hittingGround) {
+
+                
+                for (let j = 0, jl = this.connectorFaces.length; j < jl; j++) {
+
+                    const cf = this.connectorFaces[j];
+
+                    if ((!obs.isRotatableLadder || !obs.slopes.find(s => s === cf)) && obs.intersectsOBB(cf.obb)) {
+
+                        onConnectorFaceObs.push({ obs, hittingGround: cf });
+
+                    }
+
+                }
+
+            }
+
         }
 
         if (onWaterObs.length > 0) {
@@ -806,6 +863,18 @@ class SimplePhysics {
 
                 const obs = onSlopesObs[i];
 
+                obs.onSlope();
+
+            }
+
+        }
+
+        if (onConnectorFaceObs.length > 0) {
+
+            for (let i = 0, il = onConnectorFaceObs.length; i < il; i++) {
+
+                const { obs, hittingGround } = onConnectorFaceObs[i];
+                obs.hittingGround = hittingGround;
                 obs.onSlope();
 
             }
@@ -1083,20 +1152,64 @@ class SimplePhysics {
 
             }
 
+            // check connector collision
+            const collisionConnectors = [];
+            for (let i = 0, il = this.connectors.length; i < il; i++) {
+
+                const connector = this.connectors[i];
+                for (let j = 0, jl = connector.slopes.length; j < jl; j++) {
+
+                    const s = connector.slopes[j];
+                    if (avatar.obb.intersectsOBB(s.obb)) {
+
+                        collisionConnectors.push({ connector, face: s });
+
+                    }
+
+                }
+
+            }
+
+            let isLanded = false;
+
             if (collisionBottoms.length > 0) {
 
                 avatar.tickOnHittingBottom(collisionBottoms[0]);
+                isLanded = true;
 
-            } else if (collisionTops.length > 0 && collisionSlopes.length === 0) {
+            }
+            
+            if (collisionTops.length > 0 && collisionSlopes.length === 0) {
 
                 avatar.onGround(collisionTops[0]);
+                isLanded = true;
 
-            } else if (collisionSlopes.length > 0) {
+            }
+            
+            if (collisionSlopes.length > 0) {
 
                 avatar.tickOnSlope(collisionSlopes[0]);
+                isLanded = true;
 
-            } else {
+            }
 
+            if (collisionConnectors.length > 0) {
+
+                for (let i = 0, il = collisionConnectors.length; i < il; i++) {
+
+                    const { face, connector } = collisionConnectors[i];
+                    avatar.setSlopeIntersection?.(connector);
+                    avatar.tickOnSlope(face.mesh);
+
+                }
+
+                isLanded = true;
+
+            }
+            
+            if (!isLanded) {
+
+                avatar.setSlopeIntersection?.();
                 avatar.isInAir = true;
                 // console.log(`is in air`);
 

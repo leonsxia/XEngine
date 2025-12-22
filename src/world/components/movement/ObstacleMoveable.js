@@ -158,7 +158,7 @@ class ObstacleMoveable {
         const onGroundPadding = 0.001;
 
         const dir = floor.getWorldPosition(_v1);
-        dir.y += obstacle.box.height * .5 - onGroundPadding;
+        dir.y += obstacle.height * .5 - onGroundPadding;
         obstacle.group.position.y = obstacle.group.parent ? dir.applyMatrix4(_m1.copy(obstacle.group.parent.matrixWorld).invert()).y : dir.y;
 
         this.resetFallingState();
