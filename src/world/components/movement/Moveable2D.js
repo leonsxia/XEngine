@@ -418,6 +418,7 @@ class Moveable2D {
 
     onSlopeTick(params) {
 
+        let onSlope = false;
         const { slope, $self } = params;
 
         const intersects = [];
@@ -443,7 +444,11 @@ class Moveable2D {
 
             this.resetFallingState();
 
+            onSlope = true;
+
         }
+
+        return onSlope;
 
     }
 

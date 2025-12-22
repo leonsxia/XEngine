@@ -52,6 +52,8 @@
             "position": [0, 0, 0]
         }
     ],
+    "enemies": [
+    ],
     "lights": [
         {
             "room": "room1",
@@ -431,7 +433,7 @@
                 },
                 {
                     "type": "CylinderPillar",
-                    "scale": [1, 1],
+                    "scale": [1.5, 1],
                     "baseSize": 4.6,
                     "enableOBBs": true,
                     "map": "BRICK_159",
@@ -445,8 +447,8 @@
                     "showArrow": false,
                     "enableWallOBBs": true,
                     "isObstacle": true,
-                    "climbable": true,
-                    "position": [0, -2, 5]
+                    "climbable": false,
+                    "position": [-2, -2, 8]
                 },
                 {
                     "type": "LWall",
@@ -476,7 +478,7 @@
                     "enableWallOBBs": true,
                     "enableOBBs": true,
                     "isObstacle": true,
-                    "climbable": true,
+                    "climbable": false,
                     "position": [5, -1.2, 8],
                     "rotationY": 0
                 },
@@ -525,12 +527,76 @@
                     "climbable": true,
                     "name": "room2_rotatable_ladder_1",
                     "position": [
-                        3.29,
-                        -1.173404442771849,
-                        2.06
+                        5,
+                        -1.1997663696707481,
+                        3.51
                     ],
-                    "rotationX": -1.1309733552923256,
-                    "rotationY": -0.9773843811168246,
+                    "rotationX": -0.9913470151327791,
+                    "rotationY": 3.1416,
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
+                },
+                {
+                    "type": "RotatableLadder",
+                    "scale": [
+                        1.5,
+                        2,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room2_rotatable_ladder_2",
+                    "position": [
+                        -2,
+                        -1.950380178375256,
+                        5.31
+                    ],
+                    "rotationX": -1.038470904936626,
+                    "rotationY": 3.141592653589793,
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
+                },
+                {
+                    "type": "RotatableLadder",
+                    "scale": [
+                        1,
+                        4.2,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room2_rotatable_ladder_3",
+                    "position": [
+                        1.7,
+                        -0.6377804337409438,
+                        8
+                    ],
+                    "rotationX": -1.171115928088195,
+                    "rotationY": -1.5707963267948966,
                     "transparent": false,
                     "ignoreAimTest": true,
                     "ignoreFocusTest": true

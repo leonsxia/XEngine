@@ -19,6 +19,11 @@ const aimDirection = {
     forwardUp: 2
 };
 
+const ladderPolarity = {
+    up: 1,
+    down: -1
+}
+
 const hintIndex = {
     inventoryBase: 0,
     inventoryShift: 1,
@@ -29,4 +34,10 @@ const hintIndex = {
     itemViewer: 30
 };
 
-export { polarity, entrySide, entryType, aimDirection, hintIndex };
+export {
+    polarity,
+    entrySide, entryType,
+    aimDirection,
+    ladderPolarity,
+    hintIndex
+};

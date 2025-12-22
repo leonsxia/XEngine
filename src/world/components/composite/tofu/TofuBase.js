@@ -1330,9 +1330,11 @@ class TofuBase extends Moveable2D {
 
     tickOnSlope(slope) {
 
-        this.onSlopeTick({ slope, $self: this });
+        let onSlope = this.onSlopeTick({ slope, $self: this });
 
         this.updateAccessories();
+
+        return onSlope;
 
     }
 

@@ -342,6 +342,20 @@ class SimplePhysics {
 
     }
 
+    checkOutOfRotatableLadderRangeLocal(avatar, plane) {
+
+        let result = false;
+        const rotatableLadder = plane.belongTo;
+        const { box } = rotatableLadder;
+        
+        result = !avatar.obb.intersectsOBB(box.obb) || 
+            this.getToWallDirection(avatar, plane) === entrySide.back ||
+            !rotatableLadder.testWallAvailable(plane);
+
+        return result;
+
+    }
+
     checkIntersection(avatar, plane, delta) {
 
         let intersect = false;
@@ -393,6 +407,12 @@ class SimplePhysics {
         if (plane.isTriangle && this.checkOutOfTriangleWallRangeLocal(dummyObject, plane, halfAvatarWidth, halfAvatarHeight)) {
 
             return { intersect, borderReach: false};
+
+        }
+
+        if (plane.belongTo && this.checkOutOfRotatableLadderRangeLocal(avatar, plane)) {
+
+            return { intersect, borderReach: false };
 
         }
 
@@ -990,7 +1010,8 @@ class SimplePhysics {
             const wallsInScope = this.walls.filter(w => {
 
                 // get in scope walls and get rid of walls inside itself
-                return this.getObject2WallDistance(avatar, w) <= avatar.detectScopeMin &&
+                return (w.belongTo && w.belongTo.isRotatableLadder) || 
+                    this.getObject2WallDistance(avatar, w) <= avatar.detectScopeMin &&
                     w.father?.father !== avatar
 
             });
@@ -1008,6 +1029,13 @@ class SimplePhysics {
             for (let i = 0, il = wallsInScope.length; i < il; i++) {
 
                 const wall = wallsInScope[i];
+
+                if (wall.belongTo && wall.belongTo.isRotatableLadder) {
+
+                    const rotatableLadder = wall.belongTo;
+                    rotatableLadder.lazyUpdate(avatar);                    
+
+                }
                 const checkResult = this.checkIntersection(avatar, wall, delta);
 
                 if (checkResult.intersect) {
@@ -1199,11 +1227,13 @@ class SimplePhysics {
 
                     const { face, connector } = collisionConnectors[i];
                     avatar.setSlopeIntersection?.(connector);
-                    avatar.tickOnSlope(face.mesh);
+                    if (avatar.tickOnSlope(face.mesh)) {
+
+                        isLanded = true;
+
+                    }
 
                 }
-
-                isLanded = true;
 
             }
             

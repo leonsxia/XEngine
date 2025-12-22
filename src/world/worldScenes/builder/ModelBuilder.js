@@ -1420,7 +1420,8 @@ class ModelBuilder {
         object = new RotatableLadder(specs);
         object.setPosition(position)
             .rotateOnLocalAxisX(rotationX)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY)
+            .update();
 
         if (updateOBBs) object.updateOBBs();
 
