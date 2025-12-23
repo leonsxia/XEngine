@@ -33,7 +33,7 @@ class GLTFModel extends EventDispatcher {
 
     async init() {
 
-        const { src, receiveShadow = false, castShadow = false, hasBones = false } = this.specs;
+        const { src, receiveShadow = false, castShadow = false, hasBones = false, needCloneTexture = false } = this.specs;
         let { offsetX, offsetY, offsetZ } = this.specs;
 
         let model;
@@ -75,6 +75,8 @@ class GLTFModel extends EventDispatcher {
             this.group.add(modelGroup);
 
             this.getMeshes(this.group);
+
+            this.cloneMaterial(needCloneTexture);
 
             this.castShadow(receiveShadow)
                 .receiveShadow(castShadow);
@@ -222,6 +224,75 @@ class GLTFModel extends EventDispatcher {
         }
 
         return this;
+
+    }
+
+    cloneMaterial(needCloneTexture = false) {
+
+        this.traverse((child) => {
+
+            child.material = child.material.clone();
+
+            if (!needCloneTexture) return;
+
+            // Optionally, clone the texture if you need to modify its properties uniquely
+            if (child.material.map) {
+
+                child.material.map = child.material.map.clone();
+                child.material.map.needsUpdate = true;
+
+            }
+
+            if (child.material.normalMap) {
+
+                child.material.normalMap = child.material.normalMap.clone();
+                child.material.normalMap.needsUpdate = true;
+
+            }
+
+            if (child.material.specularMap) {
+
+                child.material.specularMap = child.material.specularMap.clone();
+                child.material.specularMap.needsUpdate = true;
+
+            }
+
+            if (child.material.alphaMap) {
+
+                child.material.alphaMap = child.material.alphaMap.clone();
+                child.material.alphaMap.needsUpdate = true;
+
+            }
+
+            if (child.material.aoMap) {
+
+                child.material.aoMap = child.material.aoMap.clone();
+                child.material.aoMap.needsUpdate = true;
+
+            }
+
+            if (child.material.bumpMap) {
+
+                child.material.bumpMap = child.material.bumpMap.clone();
+                child.material.bumpMap.needsUpdate = true;
+
+            }
+
+            if (child.material.envMap) {
+
+                child.material.envMap = child.material.envMap.clone();
+                child.material.envMap.needsUpdate = true;
+
+            }
+
+            if (child.material.lightMap) {
+
+                child.material.lightMap = child.material.lightMap.clone();
+                child.material.lightMap.needsUpdate = true;
+
+            }
+
+        });
 
     }
 
