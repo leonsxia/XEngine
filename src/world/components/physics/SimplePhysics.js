@@ -648,7 +648,8 @@ class SimplePhysics {
 
     getObject2WallDistance(obj, wall) {
 
-        const objLocalPos = wall.mesh.worldToLocal(obj.position.clone());
+        _v1.copy(obj.position);
+        const objLocalPos = wall.mesh.worldToLocal(_v1);
 
         return Math.abs(objLocalPos.z);
 
@@ -981,7 +982,13 @@ class SimplePhysics {
 
             const avatar = activeAvatars[i];
 
-            if (!avatar.isInAir) avatar.tickRotateActions(delta);
+            let rotationTicked = false;
+            if (!avatar.isInAir) {
+                
+                avatar.tickRotateActions(delta);
+                rotationTicked = true;
+
+            }
 
             // console.log(`is in air: ${avatar.isInAir}`);
 
@@ -1009,9 +1016,10 @@ class SimplePhysics {
 
             const wallsInScope = this.walls.filter(w => {
 
+                const toWallDist = this.getObject2WallDistance(avatar, w);
                 // get in scope walls and get rid of walls inside itself
                 return (w.belongTo && w.belongTo.isRotatableLadder) || 
-                    this.getObject2WallDistance(avatar, w) <= avatar.detectScopeMin &&
+                    toWallDist <= avatar.detectScopeMin &&
                     w.father?.father !== avatar
 
             });
@@ -1216,8 +1224,11 @@ class SimplePhysics {
             
             if (collisionSlopes.length > 0) {
 
-                avatar.tickOnSlope(collisionSlopes[0]);
-                isLanded = true;
+                if (avatar.tickOnSlope(collisionSlopes[0])) {
+
+                    isLanded = true;
+
+                }
 
             }
 
@@ -1236,12 +1247,23 @@ class SimplePhysics {
                 }
 
             }
-            
+
             if (!isLanded) {
 
-                avatar.setSlopeIntersection?.();
                 avatar.isInAir = true;
                 // console.log(`is in air`);
+
+            }
+
+            if (collisionSlopes.length === 0 && collisionConnectors.length === 0) {
+
+                avatar.setSlopeIntersection?.();
+
+            }
+
+            if (!rotationTicked && (collisionSlopes.length > 0 || collisionConnectors.length > 0)) {
+
+                avatar.tickRotateActions(delta);
 
             }
 

@@ -1,5 +1,5 @@
 import { Box3, Box3Helper, Group, MathUtils, Vector3 } from 'three';
-import { createCollisionPlane, createOBBBox, createOBBPlane } from '../../../physics/collisionHelper';
+import { createCollisionPlane, createCollisionTrianglePlane, createOBBBox, createOBBPlane } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { LadderItem } from './LadderItem';
 import { green, khaki, orange, yankeesBlue } from '../../../basic/colorBase';
@@ -28,8 +28,11 @@ class RotatableLadder extends ObstacleBase {
     slopes = [];
     sideFaces = [];
 
-    _leftWall;
-    _rightWall;
+    _leftLHWall;
+    _leftRHWall;
+    _rightLHWall;
+    _rightRHWall;
+
     _frontWall;
     _backWall;
 
@@ -80,12 +83,21 @@ class RotatableLadder extends ObstacleBase {
         this.slopes.push(this._front, this._back);
         this.sideFaces.push(this._left, this._right);
 
-        const sideWallSpecs = { width: 1, height: 1, color: orange};
-        this._leftWall = createCollisionPlane(sideWallSpecs, `${name}_left_wall`, [0, 0, 0], Math.PI * .5, receiveShadow, castShadow);
-        this._rightWall = createCollisionPlane(sideWallSpecs, `${name}_right_wall`, [0, 0, 0], - Math.PI * .5, receiveShadow, castShadow);
-        this._leftWall.belongTo = this;
-        this._rightWall.belongTo = this;
-        this.walls.push(this._leftWall, this._rightWall);
+        const sideLHTriangleSpecs = { width: 1, height: 1, color: orange, leftHanded: true };
+        const sideRHTriangleSpecs = { width: 1, height: 1, leftHanded: false };
+        this._leftLHWall = createCollisionTrianglePlane(sideLHTriangleSpecs, `${name}_left_wall_lefthanded`, [0, 0, 0], Math.PI * .5, receiveShadow, castShadow);
+        this._leftRHWall = createCollisionTrianglePlane(sideRHTriangleSpecs, `${name}_left_wall_righthanded`, [0, 0, 0], Math.PI * .5, receiveShadow, castShadow);
+        this._rightRHWall = createCollisionTrianglePlane(sideRHTriangleSpecs, `${name}_right_wall_righthanded`, [0, 0, 0], - Math.PI * .5, receiveShadow, castShadow);
+        this._rightLHWall = createCollisionTrianglePlane(sideLHTriangleSpecs, `${name}_right_wall_lefthanded`, [0, 0, 0], - Math.PI * .5, receiveShadow, castShadow);
+        this._leftLHWall.belongTo = this;
+        this._leftRHWall.belongTo = this;
+        this._rightLHWall.belongTo = this;
+        this._rightRHWall.belongTo = this;
+        this._leftLHWall.needTest = this;
+        this._leftRHWall.needTest = this;
+        this._rightLHWall.needTest = this;
+        this._rightRHWall.needTest = this;
+        this.walls.push(this._leftLHWall, this._leftRHWall, this._rightLHWall, this._rightRHWall);
 
         const fbWallSpecs = {width: 1, height: 1}
         this._frontWall = createCollisionPlane(fbWallSpecs, `${name}_front_wall`, [0, 0, 0], 0, receiveShadow, castShadow);
@@ -102,8 +114,10 @@ class RotatableLadder extends ObstacleBase {
             this._back.visible = false;
             this._left.visible = false;
             this._right.visible = false;
-            this._leftWall.visible = false;
-            this._rightWall.visible = false;
+            this._leftLHWall.visible = false;
+            this._leftRHWall.visible = false;
+            this._rightLHWall.visible = false;
+            this._rightRHWall.visible = false;
             this._frontWall.visible = false;
             this._backWall.visible = false;
 
@@ -124,8 +138,10 @@ class RotatableLadder extends ObstacleBase {
         this.group.add(            
             this.ladderItem.group,
             this.subGroup,
-            this._leftWall.mesh,
-            this._rightWall.mesh,
+            this._leftLHWall.mesh,
+            this._leftRHWall.mesh,
+            this._rightLHWall.mesh,
+            this._rightRHWall.mesh,
             this._frontWall.mesh,
             this._backWall.mesh
         );
@@ -215,7 +231,7 @@ class RotatableLadder extends ObstacleBase {
 
         } else if (this.polarity === ladderPolarity.up) {
 
-            if (wall === this._backWall) {
+            if (wall === this._backWall || wall === this._leftLHWall || wall === this._rightRHWall) {
 
                 result = true;
 
@@ -223,7 +239,7 @@ class RotatableLadder extends ObstacleBase {
 
         } else {
 
-            if (wall === this._frontWall) {
+            if (wall === this._frontWall || wall === this._leftRHWall || wall === this._rightLHWall) {
 
                 result = true;
 
@@ -273,8 +289,10 @@ class RotatableLadder extends ObstacleBase {
         this.box.updateOBB(needToUpdateOBBnRay);
         this.updateBoundingBox();
 
-        this._leftWall.setPosition([width * .5 - this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
-        this._rightWall.setPosition([- width * .5 + this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
+        this._leftLHWall.setPosition([width * .5 - this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
+        this._leftRHWall.setPosition([width * .5 - this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
+        this._rightLHWall.setPosition([- width * .5 + this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
+        this._rightRHWall.setPosition([- width * .5 + this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
 
         this.updateOBBs(needToUpdateOBBnRay);
         
@@ -301,6 +319,23 @@ class RotatableLadder extends ObstacleBase {
 
         this._frontWall.setPosition([0, posY, frontPosZ]).setScale([width, height, 1]);
         this._backWall.setPosition([0, posY, backPosZ]).setScale([width, height, 1]);
+
+        const sideWidth = height / tan;
+        if (this.polarity === ladderPolarity.up) {
+
+            this._leftLHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, depth * .5 - sideWidth * .5]).setScale([sideWidth, height, 1]);
+            this._leftRHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, depth * .5 - sideWidth * .5]).setScale([sideWidth, height, 1]);
+            this._rightLHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, depth * .5 - sideWidth * .5]).setScale([sideWidth, height, 1]);
+            this._rightRHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, depth * .5 - sideWidth * .5]).setScale([sideWidth, height, 1]);
+
+        } else {
+
+            this._leftLHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, - depth * .5 + sideWidth * .5]).setScale([sideWidth, height, 1]);
+            this._leftRHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, - depth * .5 + sideWidth * .5]).setScale([sideWidth, height, 1]);
+            this._rightLHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, - depth * .5 + sideWidth * .5]).setScale([sideWidth, height, 1]);
+            this._rightRHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, - depth * .5 + sideWidth * .5]).setScale([sideWidth, height, 1]);
+
+        }
 
         if (!this.movable) {
 
