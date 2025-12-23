@@ -996,6 +996,70 @@
                     "transparent": false,
                     "ignoreAimTest": true,
                     "ignoreFocusTest": true
+                },
+                {
+                    "type": "RotatableLadder",
+                    "scale": [
+                        1,
+                        3.44,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room2_rotatable_ladder_1",
+                    "position": [
+                        -1.87,
+                        1.4019552852592727,
+                        -1.78
+                    ],
+                    "rotationX": -0.9040805525330626,
+                    "rotationY": -2.4486969405480448,
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
+                },
+                {
+                    "type": "RotatableLadder",
+                    "scale": [
+                        1,
+                        3.05,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room2_rotatable_ladder_2",
+                    "position": [
+                        1.11,
+                        0.9068787678312842,
+                        -5.32
+                    ],
+                    "rotationX": -1.1938052083641215,
+                    "rotationY": -2.4975661596038856,
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true
                 }
             ],
             "floors": [

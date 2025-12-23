@@ -525,7 +525,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "name": "room2_rotatable_ladder_1",
+                    "name": "room1_rotatable_ladder_1",
                     "position": [
                         5,
                         -1.1997663696707481,
@@ -557,7 +557,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "name": "room2_rotatable_ladder_2",
+                    "name": "room1_rotatable_ladder_2",
                     "position": [
                         -2,
                         -1.950380178375256,
@@ -589,7 +589,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": true,
-                    "name": "room2_rotatable_ladder_3",
+                    "name": "room1_rotatable_ladder_3",
                     "position": [
                         1.7,
                         -0.6377804337409438,
