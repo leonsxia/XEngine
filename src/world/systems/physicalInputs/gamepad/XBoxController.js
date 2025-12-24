@@ -95,6 +95,12 @@ class XBoxController extends InputBase {
 
             }
 
+            if (this.controlTypes.includes(InputBase.CONTROL_TYPES.TPC)) {
+
+                this.tpcTick();
+
+            }
+
             this._triggered = !this._triggered ? this.gamepad.buttons.find(btn => btn.pressed) ? true : false : true;
             if (this._triggered) {
 
@@ -119,6 +125,17 @@ class XBoxController extends InputBase {
 
             this.processPdaButtonEvents();
             this.processPdaStickEvents();
+
+        }
+
+    }
+
+    tpcTick() {
+
+        const world = this.attachTo;
+        if (!world.currentScene.isPdaOn) {
+
+            this.processTpcStickEvents();
 
         }
 
@@ -188,14 +205,15 @@ class XBoxController extends InputBase {
 
         const leftStickH = this.gamepad.axes[0];
         const leftStickV = this.gamepad.axes[1];
-        const rightStickH = this.gamepad.axes[2];
+        // const rightStickH = this.gamepad.axes[2];
         // const rightStickV = this.gamepad.axes[3];
         
         const LStickHValidMin = 0.4;
         const LStickForwardValidMin = 0.3;
         const LStickBackwardValidMin = 0.45;
-        const RStickHValidMin = 0.4;
+        // const RStickHValidMin = 0.4;
 
+        /* disable tankmove rstick events
         // if right stick valid, clear left stick events first
         if (Math.abs(rightStickH) >= RStickHValidMin) {
 
@@ -296,6 +314,7 @@ class XBoxController extends InputBase {
             return;
 
         }
+        */
 
         // if right stick not activated, process left stick events
         if (leftStickH <= - LStickHValidMin) {
@@ -1092,6 +1111,128 @@ class XBoxController extends InputBase {
             }
 
         }
+
+        // right stick events        
+        if (rightStickV <= - RStickVValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#RStickMoveUp) {
+
+                this.#logger.log(`gamepad R stick moving up: ${rightStickV}`);
+
+                this.#RStickMoveUp = true;
+                eventDispatcher.publish(messageType, actions.RSTICK_UP, world.current, this.#RStickMoveUp);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveUp) {
+
+                this.#logger.log(`gamepad R stick moving up: ${rightStickV}`);
+
+                this.#RStickMoveUp = false;
+                eventDispatcher.publish(messageType, actions.RSTICK_UP, world.current, this.#RStickMoveUp);
+
+            }
+
+        }
+
+        if (rightStickV >= RStickVValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#RStickMoveDown) {
+
+                this.#logger.log(`gamepad R stick moving down: ${rightStickH}`);
+
+                this.#RStickMoveDown = true;
+                eventDispatcher.publish(messageType, actions.RSTICK_DOWN, world.current, this.#RStickMoveDown);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveDown) {
+
+                this.#logger.log(`gamepad R stick moving down: ${rightStickH}`);
+
+                this.#RStickMoveDown = false;
+                eventDispatcher.publish(messageType, actions.RSTICK_DOWN, world.current, this.#RStickMoveDown);
+
+            }
+
+        }
+
+        if (rightStickH <= - RStickHValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#RStickMoveLeft) {
+
+                this.#logger.log(`gamepad R stick moving left: ${rightStickH}`);
+
+                this.#RStickMoveLeft = true;
+                eventDispatcher.publish(messageType, actions.RSTICK_LEFT, world.current, this.#RStickMoveLeft);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveLeft) {
+
+                this.#logger.log(`gamepad R stick moving left: ${rightStickH}`);
+
+                this.#RStickMoveLeft = false;
+                eventDispatcher.publish(messageType, actions.RSTICK_LEFT, world.current, this.#RStickMoveLeft);
+
+            }
+
+        }
+
+        if (rightStickH >= RStickHValidMin) {
+
+            this._triggered = true;
+
+            if (!this.#RStickMoveRight) {
+
+                this.#logger.log(`gamepad R stick moving right: ${rightStickH}`);
+
+                this.#RStickMoveRight = true;
+                eventDispatcher.publish(messageType, actions.RSTICK_RIGHT, world.current, this.#RStickMoveRight);
+
+            }
+
+        } else {
+
+            if (this.#RStickMoveRight) {
+
+                this.#logger.log(`gamepad R stick moving right: ${rightStickH}`);
+
+                this.#RStickMoveRight = false;
+                eventDispatcher.publish(messageType, actions.RSTICK_RIGHT, world.current, this.#RStickMoveRight);
+
+            }
+
+        }
+
+    }
+
+    processTpcStickEvents() {
+
+        this.#logger.func = 'processTpcStickEvents';
+
+        const eventDispatcher = this.eventDispatcher;
+        const messageType = InputBase.CONTROL_TYPES.TPC;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const world = this.attachTo;
+
+        const rightStickH = this.gamepad.axes[2];
+        const rightStickV = this.gamepad.axes[3];
+
+        const RStickHValidMin = 0.4;
+        const RStickVValidMin = 0.4;
 
         // right stick events        
         if (rightStickV <= - RStickVValidMin) {

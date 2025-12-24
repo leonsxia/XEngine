@@ -370,8 +370,10 @@ class WorldScene {
         // setup cameras, must after player setup complete
         if (enableTPC) {
 
-            this.thirdPersonCamera = new ThirdPersonCamera({ defaultCamera: this.defaultCamera });
-            this.thirdPersonCamera.setup({ player: this.player, control: this.controls.defControl, scene: this.scene });
+            this.thirdPersonCamera = new ThirdPersonCamera({ defaultCamera: this.defaultCamera, attachTo: this });
+            this.thirdPersonCamera.setup({ player: this.player, control: this.controls.defControl });
+            this.subscribeEvents(this.thirdPersonCamera, InputBase.CONTROL_TYPES.XBOX_CONTROLLER);
+            this.subscribeEvents(this.thirdPersonCamera, InputBase.CONTROL_TYPES.TPC);
 
         }
 
@@ -705,6 +707,8 @@ class WorldScene {
             this.player.setPosition(allPlayerPos[roomSequence], true);
             
         }
+
+        this.thirdPersonCamera?.updateObjectsNeedChecked();
 
     }
 
@@ -1917,6 +1921,9 @@ class WorldScene {
             this.thirdPersonCamera.resetInterectObjects();
 
         }
+
+        this.thirdPersonCamera.enabled = e;
+
     }
 
     enableIC(e) {

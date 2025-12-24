@@ -1,6 +1,8 @@
 import { Vector3, Raycaster, ArrowHelper, Object3D } from 'three';
 import { blue, green, red, yellow } from '../basic/colorBase';
 import { PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../utils/constants';
+import { container } from '../../systems/htmlElements';
+import { Logger } from '../../systems/Logger';
 
 const PADDING = .1;
 const HEADLENGTH = .5;
@@ -9,6 +11,13 @@ const HEADWIDTH = .1;
 const _v1 = new Vector3();
 const _obj0 = new Object3D();
 
+const DEBUG = true;
+
+// const _euler = new Euler(0, 0, 0, 'YXZ');
+const _MOUSE_SENSITIVITY = 0.008;
+const _STICK_SPEED = 6;
+// const _PI_2 = Math.PI / 2;
+
 class ThirdPersonCamera {
 
     camera;
@@ -16,7 +25,6 @@ class ThirdPersonCamera {
 
     #player;
     #control;
-    #scene;
 
     _camV1 = new Vector3(- 1, 0.8, - 1.5);
     _camV2 = new Vector3(0, 0.3, 3);
@@ -66,12 +74,134 @@ class ThirdPersonCamera {
     playerBottomBackLeft = new Vector3();
     playerBottomBackRight = new Vector3();
 
+    _targetObject3D = new Object3D();
+    _pointerObject3D = new Object3D();
+
+    minPolarAngle = 0;
+    maxPolarAngle = Math.PI;
+    pointerSpeed = 1.0;
+    pointerMaxPositiveX = 2.5;
+    pointerMaxNegativeX = 1;
+    pointerMaxY = 2;
+
+    _enabled = false;
+
+    attachTo;
+
+    _objectsNeedChecked = [];
+
+    _xboxControllerConnected;
+    _rstickIsUp = false;
+    _rstickIsDown = false;
+    _rstickIsLeft = false;
+    _rstickIsRight = false;
+
+    #logger = new Logger(DEBUG, 'ThirdPersonCamera');
+
     constructor(specs) {
 
-        const { defaultCamera } = specs;
+        const { defaultCamera, attachTo } = specs;
 
         this.camera = defaultCamera.camera;
         this.target = defaultCamera.target;
+        this.attachTo = attachTo;
+
+        this._targetObject3D.add(this._pointerObject3D);
+
+        this.bindEvents();
+
+    }
+
+    get enabled() {
+
+        return this._enabled;
+
+    }
+
+    set enabled(val) {
+
+        if (val) {
+
+            this._pointerObject3D.position.set(0, 0, 0);
+            this.updateObjectsNeedChecked();
+
+        }
+
+        this._enabled = val;
+
+    }
+
+    get currentRoom() {
+
+        return this.attachTo.currentRoom;
+
+    }
+
+    get sceneObjects() {
+
+        const objects = [];
+        for (let i = 0, il = this.attachTo.sceneObjects.length; i < il; i++) {
+
+            const obj = this.attachTo.sceneObjects[i];
+            const { mesh, group } = obj;
+
+            if (mesh) objects.push(mesh);
+            else if (group) objects.push(group);
+
+        }
+
+        return objects;
+
+    }
+
+    updateObjectsNeedChecked() {
+
+        this._objectsNeedChecked.length = 0;
+        this._objectsNeedChecked.push(this.currentRoom.group, ...this.sceneObjects);
+
+    }
+
+    bindEvents() {
+
+        const mousedownEvent = () => {
+
+            if (!this._enabled) return;
+            container.requestPointerLock();
+            this._mousedown = true;
+
+        };
+        container.addEventListener('mousemove', this.mousemoveEvent.bind(this));
+        container.addEventListener('mousedown', mousedownEvent);
+
+    }
+
+    mousemoveEvent(event) {
+
+        if (!this.enabled || document.pointerLockElement !== container) return;
+
+        this.#logger.func = this.mousemoveEvent.name;        
+
+        const movementX = event.movementX;
+        const movementY = event.movementY;
+
+        /* fps mouse movement
+        _euler.setFromQuaternion(this.camera.quaternion);
+
+        _euler.y -= movementX * _MOUSE_SENSITIVITY * this.pointerSpeed;
+        _euler.x -= movementY * _MOUSE_SENSITIVITY * this.pointerSpeed;
+
+        _euler.x = Math.max(_PI_2 - this.maxPolarAngle, Math.min(_PI_2 - this.minPolarAngle, _euler.x));
+
+        this.camera.quaternion.setFromEuler( _euler );
+        */
+
+        this._pointerObject3D.position.x -= movementX * _MOUSE_SENSITIVITY * this.pointerSpeed;
+        this._pointerObject3D.position.y -= movementY * _MOUSE_SENSITIVITY * this.pointerSpeed;
+        
+        this._pointerObject3D.position.x = Math.max(- this.pointerMaxNegativeX, Math.min(this._pointerObject3D.position.x, this.pointerMaxPositiveX));
+        this._pointerObject3D.position.y = Math.max(- this.pointerMaxY, Math.min(this._pointerObject3D.position.y, this.pointerMaxY));
+
+        // this.#logger.log(`mouse movementX: ${movementX}, movementY: ${movementY}`);        
 
     }
 
@@ -98,11 +228,10 @@ class ThirdPersonCamera {
 
     setup(specs) {
 
-        const { player, control, scene } = specs;
+        const { player, control } = specs;
 
         this.#player = player;
         this.#control = control;
-        this.#scene = scene;
 
         this.updateCameraParams();
         this.setupRays();
@@ -209,7 +338,7 @@ class ThirdPersonCamera {
             const a = this.rayArrows[i];
 
             a.visible = false;
-            // this.#scene.add(a);
+            // this.attachTo.scene.add(a);
 
         }
 
@@ -276,8 +405,11 @@ class ThirdPersonCamera {
         const collisionCamPosWorld = this.#collisionCamPosLocal.clone().applyMatrix4(dummyObject.matrixWorld);
 
         this.camera.position.copy(camPosWorld);
-        this.camera.lookAt(camTarWorld);
-        this.target = camTarWorld;
+        this._targetObject3D.position.copy(camTarWorld);
+        this._targetObject3D.rotation.copy(dummyObject.rotation);
+        this._pointerObject3D.getWorldPosition(_v1);
+        this.camera.lookAt(_v1);
+        this.target.copy(_v1);
 
         this.updateRays(dummyObject, camPosWorld, collisionCamPosWorld);
 
@@ -298,11 +430,11 @@ class ThirdPersonCamera {
 
             const ray = this.rays[i];
 
-            intersects.push(...ray.intersectObjects(this.#scene.children));
+            intersects.push(...ray.intersectObjects(this._objectsNeedChecked));
 
         }
 
-        collisionRayIntersects.push(...this.#collisionRay.intersectObjects(this.#scene.children));
+        collisionRayIntersects.push(...this.#collisionRay.intersectObjects(this._objectsNeedChecked));
 
         this.resetInterectObjects();
 
@@ -399,10 +531,81 @@ class ThirdPersonCamera {
 
     }
 
-    tick() {
+    // events
+    xboxControllerConnected(val) {
+
+        if (val && !this._xboxControllerConnected) {
+
+            this._xboxControllerConnected = true;
+
+        } else if (!val && this._xboxControllerConnected) {
+
+            this._xboxControllerConnected = false;
+
+        }
+
+    }
+
+    rstickUp(val) {
+
+        this._rstickIsUp = val;
+
+    }
+
+    rstickDown(val) {
+
+        this._rstickIsDown = val;
+
+    }
+
+    rstickLeft(val) {
+
+        this._rstickIsLeft = val;
+
+    }
+
+    rstickRight(val) {
+
+        this._rstickIsRight = val;
+
+    }
+
+    handleStickEvents(delta) {
+
+        if (!this._xboxControllerConnected) return;
+
+        if (this._rstickIsLeft) {
+
+            this._pointerObject3D.position.x += _STICK_SPEED * delta * this.pointerSpeed;
+
+        } else if (this._rstickIsRight) {
+
+            this._pointerObject3D.position.x -= _STICK_SPEED * delta * this.pointerSpeed;
+
+        }
+
+        if (this._rstickIsUp) {
+
+            this._pointerObject3D.position.y += _STICK_SPEED * delta * this.pointerSpeed;
+
+        } else if (this._rstickIsDown) {
+
+            this._pointerObject3D.position.y -= _STICK_SPEED * delta * this.pointerSpeed;
+
+        }
+
+        this._pointerObject3D.position.x = Math.max(- this.pointerMaxNegativeX, Math.min(this._pointerObject3D.position.x, this.pointerMaxPositiveX));
+        this._pointerObject3D.position.y = Math.max(- this.pointerMaxY, Math.min(this._pointerObject3D.position.y, this.pointerMaxY));
+    }
+
+    // events
+
+    tick(delta) {
 
         this.setPositionFromPlayer();
         this.checkRayIntersection();
+
+        this.handleStickEvents(delta);
 
         this.#control.target.copy(this.target);
 

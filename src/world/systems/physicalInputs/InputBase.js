@@ -58,7 +58,8 @@ InputBase.CONTROL_TYPES = {
     TANKMOVE: 'tankmove',
     PDA: 'pda',
     XBOX_CONTROLLER: 'xboxController',
-    MOUSE: 'mouse'
+    MOUSE: 'mouse',
+    TPC: 'tpc'
 };
 
 InputBase.CONTROL_ACTIONS = [
@@ -120,6 +121,15 @@ InputBase.CONTROL_ACTIONS = [
             L_BTN: 'lbtn',
             SCROLL_UP: 'scrollUp',
             SCROLL_DOWN: 'scrollDown'
+        }
+    },
+    {
+        CATEGORY: 'tpc',
+        TYPES: {
+            RSTICK_UP: 'rstickUp',
+            RSTICK_DOWN: 'rstickDown',
+            RSTICK_LEFT: 'rstickLeft',
+            RSTICK_RIGHT: 'rstickRight',
         }
     }
 ];
