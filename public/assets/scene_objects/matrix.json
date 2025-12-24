@@ -776,7 +776,7 @@
                     "bottomNormal": "CRATE_NORMAL",
                     "mapRatio": 1,
                     "freeTexture": true,
-                    "noRepeat": true,
+                    "noRepeat": false,
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
