@@ -171,7 +171,7 @@ class SimplePhysics {
         this.connectors = connectors;
         this.connectorFaces = connectorFaces;
         this.connectorSideFaces = connectorSideFaces;
-        this.connectorObbs.push(...connectorFaces, ...connectorSideFaces);
+        this.connectorObbs.push(...connectorSideFaces);
         this.waterCubes = waterCubes;        
 
         this.interactiveObs = this.obstacles.filter(obs => 
@@ -587,10 +587,10 @@ class SimplePhysics {
 
     }
 
-    getToWallDirection(avatar, wall) {
+    getToWallDirection(object, wall) {
 
         const wallDir = wall.mesh.getWorldDirection(_v1);
-        avatar.getWorldPosition(_v2);
+        object.getWorldPosition(_v2);
         wall.getWorldPosition(_v3);
         _v2.y = _v3.y = 0;
         const toWallDir = _v2.sub(_v3);
@@ -725,7 +725,25 @@ class SimplePhysics {
 
                 const wall = this.obstacleCollisionOBBWalls[j];
 
-                if (!obs.walls.find(w => w === wall) && this.checkObstacleInWallRangeT(obs, wall) && obs.intersectsOBB(wall.obb)) {
+                if (wall.belongTo && wall.belongTo.isRotatableLadder) {
+
+                    if (wall.belongTo.testWallAvailable(wall)) {
+
+                        const rotatableLadder = wall.belongTo;
+                        rotatableLadder.lazyUpdate(obs);
+
+                    } else {
+
+                        continue;
+
+                    }
+
+                }
+
+                if (!obs.walls.find(w => w === wall) &&
+                    this.getToWallDirection(obs, wall) === entrySide.front &&
+                    this.checkObstacleInWallRangeT(obs, wall) && obs.intersectsOBB(wall.obb)
+                ) {
 
                     // console.log(`${wall.name} intersets`);
 
@@ -748,7 +766,7 @@ class SimplePhysics {
             for (let j = 0, jl = this.connectorObbs.length; j < jl; j++) {
 
                 const face = this.connectorObbs[j];
-                if (obs.intersectsOBB(face.obb)) {
+                if (this.getToWallDirection(obs, face) === entrySide.front && obs.intersectsOBB(face.obb)) {
 
                     for (let k = 0, kl = obs.boundingFaces.length; k < kl; k++) {
 
@@ -1041,7 +1059,7 @@ class SimplePhysics {
                 if (wall.belongTo && wall.belongTo.isRotatableLadder) {
 
                     const rotatableLadder = wall.belongTo;
-                    rotatableLadder.lazyUpdate(avatar);                    
+                    rotatableLadder.lazyUpdate(avatar);
 
                 }
                 const checkResult = this.checkIntersection(avatar, wall, delta);

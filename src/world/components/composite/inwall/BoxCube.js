@@ -124,12 +124,13 @@ class BoxCube extends ObstacleBase {
 
     makeBoxConfig(specs) {
         
-        const { baseSize = this._height, mapRatio, lines = false, transparent = true } = this.specs;
+        const { baseSize = this._height, mapRatio, lines = false, transparent = true, noRepeat = false } = this.specs;
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;
         specs.baseSize = baseSize;
         specs.transparent = transparent;
+        specs.noRepeat = noRepeat;
 
         return specs;
 

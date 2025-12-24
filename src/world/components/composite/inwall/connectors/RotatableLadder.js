@@ -1,5 +1,5 @@
 import { Box3, Box3Helper, Group, MathUtils, Vector3 } from 'three';
-import { createCollisionPlane, createCollisionTrianglePlane, createOBBBox, createOBBPlane } from '../../../physics/collisionHelper';
+import { createCollisionOBBPlane, createCollisionTrianglePlane, createOBBBox, createOBBPlane } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { LadderItem } from './LadderItem';
 import { green, khaki, orange, yankeesBlue } from '../../../basic/colorBase';
@@ -100,8 +100,8 @@ class RotatableLadder extends ObstacleBase {
         this.walls.push(this._leftLHWall, this._leftRHWall, this._rightLHWall, this._rightRHWall);
 
         const fbWallSpecs = {width: 1, height: 1}
-        this._frontWall = createCollisionPlane(fbWallSpecs, `${name}_front_wall`, [0, 0, 0], 0, receiveShadow, castShadow);
-        this._backWall = createCollisionPlane(fbWallSpecs, `${name}_back_wall`, [0, 0, 0], Math.PI, receiveShadow, castShadow);
+        this._frontWall = createCollisionOBBPlane(fbWallSpecs, `${name}_front_wall`, [0, 0, 0], 0, receiveShadow, castShadow);
+        this._backWall = createCollisionOBBPlane(fbWallSpecs, `${name}_back_wall`, [0, 0, 0], Math.PI, receiveShadow, castShadow);
         this._frontWall.belongTo = this;
         this._frontWall.needTest = true;
         this._backWall.belongTo = this;

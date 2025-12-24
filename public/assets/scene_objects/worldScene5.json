@@ -106,9 +106,9 @@
                     "name": "room1_pointLight1",
                     "display": "Ceiling Lamp Main",
                     "detail": {
-                        "color": [255, 255, 255],
+                        "color": [249, 190, 26],
                         "position": [0, 0, 0],
-                        "intensity": 120,
+                        "intensity": 242,
                         "distance": 0,
                         "decay": 2
                     },
@@ -127,14 +127,10 @@
                     "name": "room1_spotLight1",
                     "display": "TV Spot Light",
                     "detail": {
-                        "color": [
-                            106,
-                            251,
-                            183
-                        ],
+                        "color": [194, 255, 226],
                         "position": [0, 0, 0],
                         "target": [0, 0, 0],
-                        "intensity": 26,
+                        "intensity": 16,
                         "distance": 10,
                         "decay": 0.33,
                         "penumbra": 0.35,
@@ -304,8 +300,8 @@
             "groups": [
                 {
                     "type": "BoxCube",
-                    "scale": [1.2, 1.2, 1.2],
-                    "baseSize": 1.2,
+                    "scale": [1, 1, 1],
+                    "baseSize": 1,
                     "map": "CRATE",
                     "normalMap": "CRATE_NORMAL",
                     "frontMap": "CRATE",
@@ -322,7 +318,7 @@
                     "bottomNormal": "CRATE_NORMAL",
                     "mapRatio": 1,
                     "freeTexture": false,
-                    "noRepeat": false,
+                    "noRepeat": true,
                     "isObstacle": true,
                     "enableWallOBBs": true,
                     "movable": true,
@@ -560,10 +556,10 @@
                     "name": "room1_rotatable_ladder_2",
                     "position": [
                         -2,
-                        -1.950380178375256,
-                        5.31
+                        -1.9799003834525237,
+                        5.285
                     ],
-                    "rotationX": -1.038470904936626,
+                    "rotationX": -1.0733774899765127,
                     "rotationY": 3.141592653589793,
                     "transparent": false,
                     "ignoreAimTest": true,
