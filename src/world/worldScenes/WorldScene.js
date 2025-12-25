@@ -877,6 +877,7 @@ class WorldScene {
                 this.player.DAW?.stopAll();
 
                 this.unsubscribeEvents(this.player, this.setup.moveType);
+                this.unsubscribeEvents(this.player, InputBase.CONTROL_TYPES.MOUSE);
 
                 this.disablePlayerPda();
                 if (this.player.pda) {
@@ -911,6 +912,7 @@ class WorldScene {
             }
 
             this.subscribeEvents(this.player, this.setup.moveType);
+            this.subscribeEvents(this.player, InputBase.CONTROL_TYPES.MOUSE);
             if (this.player.pda) {
 
                 this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.PDA);

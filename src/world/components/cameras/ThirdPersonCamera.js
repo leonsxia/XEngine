@@ -96,6 +96,17 @@ class ThirdPersonCamera {
     _rstickIsLeft = false;
     _rstickIsRight = false;
 
+    _keyADownEvent = new KeyboardEvent('keydown', {key: 'a'});
+    _keyAUpEvent = new KeyboardEvent('keyup', {key: 'a'});
+    _keyDDownEvent = new KeyboardEvent('keydown', {key: 'd'});
+    _keyDUpEvent = new KeyboardEvent('keyup', {key: 'd'});
+
+    #KeyAIsDown = false;
+    #KeyDIsDown = false;
+
+    // chrome has 1s delay to re-lock the pointer after exit lock, if click too fast the console will throw error
+    _pointerLockDeactivateAt = performance.now();
+
     #logger = new Logger(DEBUG, 'ThirdPersonCamera');
 
     constructor(specs) {
@@ -166,12 +177,43 @@ class ThirdPersonCamera {
         const mousedownEvent = () => {
 
             if (!this._enabled) return;
-            container.requestPointerLock();
-            this._mousedown = true;
+
+            const now = performance.now();
+            if (!document.pointerLockElement) {
+
+                if (this._pointerLockDeactivateAt && now - this._pointerLockDeactivateAt > 1000) {
+
+                    container.requestPointerLock();
+                    this._mousedown = true;
+
+                } else {
+
+                    this.#logger.log(`pinter lock not ready`);
+
+                }
+
+            } else {
+
+                this.#logger.log(`pointer locked`);
+
+            }  
 
         };
+
+        const pointerLockChangeEvent = () => {
+
+            const now = performance.now();
+            if (!document.pointerLockElement) {
+
+                this._pointerLockDeactivateAt = now;
+
+            }
+
+        };
+
         container.addEventListener('mousemove', this.mousemoveEvent.bind(this));
         container.addEventListener('mousedown', mousedownEvent);
+        document.addEventListener('pointerlockchange', pointerLockChangeEvent);
 
     }
 
@@ -200,6 +242,50 @@ class ThirdPersonCamera {
         
         this._pointerObject3D.position.x = Math.max(- this.pointerMaxNegativeX, Math.min(this._pointerObject3D.position.x, this.pointerMaxPositiveX));
         this._pointerObject3D.position.y = Math.max(- this.pointerMaxY, Math.min(this._pointerObject3D.position.y, this.pointerMaxY));
+
+        if (this.attachTo.player && (this.attachTo.player.isMeleeing || this.attachTo.player.isGunReady)) {
+
+            if (this._pointerObject3D.position.x === - this.pointerMaxNegativeX) {
+
+                if (!this.#KeyDIsDown) {
+
+                    window.dispatchEvent(this._keyDDownEvent);
+                    this.#KeyDIsDown = true;
+
+                }
+
+            } else {
+
+                if (this.#KeyDIsDown) {
+
+                    window.dispatchEvent(this._keyDUpEvent);
+                    this.#KeyDIsDown = false;
+
+                }
+
+            }
+
+            if (this._pointerObject3D.position.x === this.pointerMaxPositiveX) {
+
+                if (!this.#KeyAIsDown) {
+
+                    window.dispatchEvent(this._keyADownEvent);
+                    this.#KeyAIsDown = true;
+
+                }
+
+            } else {
+
+                if (this.#KeyAIsDown) {
+
+                    window.dispatchEvent(this._keyAUpEvent);
+                    this.#KeyAIsDown = false;
+
+                }
+
+            }
+
+        }
 
         // this.#logger.log(`mouse movementX: ${movementX}, movementY: ${movementY}`);        
 

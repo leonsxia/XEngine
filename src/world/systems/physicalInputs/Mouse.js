@@ -21,8 +21,9 @@ class Mouse extends InputBase {
 
     get enabled() {
 
-        const world = this.attachTo;
-        return world.currentScene && !world.currentScene.isScenePaused() && world.currentScene.isPdaOn;
+        const currentScene = this.attachTo.currentScene;
+        return currentScene && !currentScene.isScenePaused() && 
+            (currentScene.isPdaOn || currentScene.thirdPersonCamera?.enabled);
 
     }
 
@@ -148,6 +149,23 @@ class Mouse extends InputBase {
                 this._leftBtnDown = true;
                 this.#logger.log(`mouse left button is down`);
                 eventDispatcher.publish(messageType, actions.L_BTN, world.current, true);
+                eventDispatcher.publish(messageType, actions.SHOOT, world.current, true);
+
+            }
+
+            if (e.button === 1) {
+
+                this._middleBtnDown = true;
+                this.#logger.log(`mouse middle button is down`);
+                eventDispatcher.publish(messageType, actions.MELEE, world.current, true);
+
+            }
+
+            if (e.button === 2) {
+
+                this._middleBtnDown = true;
+                this.#logger.log(`mouse right button is down`);
+                eventDispatcher.publish(messageType, actions.GUN_POINT, world.current, true);
 
             }
 
@@ -167,12 +185,29 @@ class Mouse extends InputBase {
             if (e.button === 0) {
                 
                 this._leftBtnDown = false;
-                this.#logger.log(`mouse is up`);
+                this.#logger.log(`mouse left button is up`);
                 eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
                 eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
                 eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
                 eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
                 eventDispatcher.publish(messageType, actions.L_BTN, world.current, false);
+                eventDispatcher.publish(messageType, actions.SHOOT, world.current, false);
+
+            }
+
+            if (e.button === 1) {
+
+                this._middleBtnDown = false;
+                this.#logger.log(`mouse middle button is up`);
+                eventDispatcher.publish(messageType, actions.MELEE, world.current, false);
+
+            }
+
+            if (e.button === 2) {
+
+                this._rightBtnDown = false;
+                this.#logger.log(`mouse right button is up`);
+                eventDispatcher.publish(messageType, actions.GUN_POINT, world.current, false);
 
             }
 
