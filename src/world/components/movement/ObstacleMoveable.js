@@ -1,3 +1,4 @@
+import { animate, spring } from 'animejs';
 import { Matrix4, Vector3 } from 'three';
 
 const _m1 = new Matrix4();
@@ -28,6 +29,9 @@ class ObstacleMoveable {
     hittingGround;
     // falling water
     hittingWater;
+
+    inWaterAnimateBegin = false;
+    inWaterAnimateEnd = false;
 
     constructor() {}
 
@@ -87,6 +91,13 @@ class ObstacleMoveable {
     resetInwaterState() {
 
         this.#verticalForceSpeed = 0;
+
+    }
+
+    resetInwaterAnimeState() {
+
+        this.inWaterAnimateBegin = false;
+        this.inWaterAnimateEnd = false;
 
     }
 
@@ -210,6 +221,46 @@ class ObstacleMoveable {
         if (this.verticalAcceleratedSpeed === 0) {
 
             this.resetFallingState();
+
+        }
+
+    }
+
+    onWaterWithAnimeTick(params) {
+
+        // inwaterHeight * obstacle.width * obstacle.depth * waterCube.waterDensity === obstacle.weight
+        const { waterCube, obstacle } = params;
+        const inwaterHeight = obstacle.weight / (obstacle.width * obstacle.depth * waterCube.waterDensity);  
+        const dropHeight = waterCube.topY - obstacle.bottomY;            
+
+        // no animate
+        if (inwaterHeight >= obstacle.height || dropHeight >= obstacle.height) {
+
+            this.onWaterTick(params);
+
+        } else if (!this.inWaterAnimateBegin) {
+
+            const targetWorldPosY = waterCube.topY - inwaterHeight + obstacle.height * .5;
+            const targetLocalPosY = obstacle.group.parent ? targetWorldPosY - obstacle.group.parent.position.y : targetWorldPosY;
+
+            animate(obstacle.group.position, {
+                y: targetLocalPosY,
+                ease: spring({
+                    stiffness: 260.5,
+                    damping: 6.5,
+                    mass: obstacle.weight,
+                    velocity: 0
+                }),
+                onBegin: () => { this.inWaterAnimateBegin = true; },
+                onComplete: () => { 
+                    this.inWaterAnimateEnd = true; 
+                    obstacle.group.position.y = targetLocalPosY;
+                }
+            });
+
+        } else if (this.inWaterAnimateEnd) {
+
+            this.#verticalForceSpeed = - this.#g;
 
         }
 

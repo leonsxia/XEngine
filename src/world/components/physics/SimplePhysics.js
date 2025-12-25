@@ -921,9 +921,10 @@ class SimplePhysics {
         }
 
         const fallingObs = movableObs.filter(
-            obs => obs.verticalAcceleratedSpeed !== 0 &&
-            !onTopsObs.find(t => t === obs) && 
-            !onSlopesObs.find(s => s === obs)
+            obs => 
+                (obs.verticalAcceleratedSpeed !== 0 && (!obs.inWaterAnimateBegin || obs.inWaterAnimateEnd)) &&
+                !onTopsObs.find(t => t === obs) &&
+                !onSlopesObs.find(s => s === obs)
         );
 
         // check obstacles falling on floors

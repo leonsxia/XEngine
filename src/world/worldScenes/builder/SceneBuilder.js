@@ -1214,6 +1214,7 @@ class SceneBuilder {
                 if (moveableObjectFilter(find.father) && find.father.movable) {
 
                     find.father.resetFallingState();
+                    find.father.resetInwaterAnimeState();
 
                 }
 

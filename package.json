@@ -6,6 +6,7 @@
     "previewhost": "vite preview --host"
   },
   "dependencies": {
+    "animejs": "^4.2.2",
     "lil-gui": "^0.21.0",
     "stats.js": "^0.17.0",
     "three": "^0.181.0"

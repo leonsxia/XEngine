@@ -119,6 +119,7 @@ class Picker {
 
             selectedObject.isPicked = true;
             selectedObject.father?.resetFallingState?.();
+            selectedObject.father?.resetInwaterAnimeState?.();
 
             this.#postProcessor.addOutlineObjects([selectedObject]);
 

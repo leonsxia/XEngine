@@ -962,7 +962,7 @@ class ObstacleBase extends ObstacleMoveable {
 
     onWater() {
 
-        this.onWaterTick({ waterCube: this.hittingWater, obstacle: this });
+        this.onWaterWithAnimeTick({ waterCube: this.hittingWater, obstacle: this });
 
         this.updateOBBs();
         this.updateRay(false);
