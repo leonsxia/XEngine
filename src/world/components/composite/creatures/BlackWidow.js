@@ -1,7 +1,8 @@
 import { CreatureBase, WeaponBase } from '../../Models.js';
-import { BLACK_WIDOW_CLIPS as CLIPS } from '../../utils/constants.js';
+import { BLACK_WIDOW_CLIPS as CLIPS, WEAPONS } from '../../utils/constants.js';
 import { CreatureTypeMapping } from './CreatureTypeMapping';
 import { Ammo } from '../weapons/Ammo.js';
+import { SOUND_NAMES } from '../../utils/audioConstants.js';
 
 const GLTF_SRC = 'creatures/black_widow.glb';
 
@@ -18,7 +19,12 @@ const ANIMATION_SETTINGS = {
     ATTACK: 0.2,
     HURT: 0.1,
     DIE: 0.2,
-}
+};
+
+const SOUND_SETTINGS = {
+    KNIFE_HIT: SOUND_NAMES.KNIFE_FLESH_HIT,
+    BULLET_HIT: SOUND_NAMES.BULLET_FLESH_HIT
+};
 
 const BLACK_WIDOW_TYPES_MAPPING = {
     STANDARD: new CreatureTypeMapping({
@@ -37,6 +43,7 @@ const BLACK_WIDOW_TYPES_MAPPING = {
         pushingBoxSize: { height: .75, depth: .8 },
         weapon: new WeaponBase({
             name: `black_widow_standard_claw`,
+            weaponType: WEAPONS.SPIDER_CLAW,
             fireRate: .6,
             prepareInterval: .53,
             damageRange: .65,
@@ -63,6 +70,7 @@ const BLACK_WIDOW_TYPES_MAPPING = {
         pushingBoxSize: { height: .75, depth: .5 },
         weapon: new WeaponBase({
             name: `black_widow_standard_claw`,
+            weaponType: WEAPONS.SPIDER_CLAW,
             fireRate: .6,
             prepareInterval: .53,
             damageRange: .45,
@@ -91,6 +99,7 @@ class BlackWidow extends CreatureBase {
         let { offsetY } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
+        const soundSetting = Object.assign({}, SOUND_SETTINGS);
 
         const typeMapping = BLACK_WIDOW_TYPES_MAPPING[variant.toUpperCase()] ?? BLACK_WIDOW_TYPES_MAPPING.STANDARD;
         animationSetting.IDLE_TO_WALK = typeMapping.idleToWalk;
@@ -108,6 +117,7 @@ class BlackWidow extends CreatureBase {
             vel, rotateR,
             scale, gltfScale,
             clips: CLIPS,  animationSetting: animationSetting,
+            soundSetting,
             isActive, sovRadius, showBS, enableCollision,
             typeMapping,
             createDefaultBoundingObjects,
@@ -137,6 +147,15 @@ class BlackWidow extends CreatureBase {
         this.AWS.setActionEffectiveTimeScale(this.typeMapping.walk.nick, this._animationSettings.WALK_TIMESCALE);
         this.AWS.setActionEffectiveTimeScale(this.typeMapping.hurt.nick, this._animationSettings.HURT_TIMESCALE);
         this.AWS.setActionEffectiveTimeScale(this.typeMapping.attack.nick, this._meleeWeapon.fireRate);
+
+    }
+
+    registerSounds() {
+
+        this.addSoundsToGroup(SOUND_NAMES.KNIFE_FLESH_HIT);
+        this.addSoundsToGroup(SOUND_NAMES.BULLET_FLESH_HIT);
+
+        return this;
 
     }
 

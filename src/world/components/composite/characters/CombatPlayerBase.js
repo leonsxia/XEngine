@@ -1441,6 +1441,11 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                 this.DAW.play(this._soundSettings.CLAW_HIT);
                 break;
 
+            case WEAPONS.SPIDER_CLAW:
+
+                this.DAW.play(this._soundSettings.CLAW_HIT);
+                break;
+
         }
 
         this.DAW.play(this._soundSettings.HURT);
