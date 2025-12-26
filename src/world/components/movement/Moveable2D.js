@@ -419,16 +419,14 @@ class Moveable2D {
     onSlopeTick(params) {
 
         let onSlope = false;
-        const { slope, $self } = params;
+        const { slopes, $self } = params;
 
-        const intersects = [];
+        let intersects = [];
 
         for (let i = 0, il = $self.rays.length; i < il; i++) {
 
             const ray = $self.rays[i];
-            const intersect = ray.intersectObject(slope);
-
-            if (intersect.length > 0) intersects.push(intersect[0]);
+            intersects.push(...ray.intersectObjects(slopes));
 
         }
 

@@ -2,9 +2,10 @@ import { Box3, Box3Helper, Group, MathUtils, Vector3 } from 'three';
 import { createCollisionOBBPlane, createCollisionTrianglePlane, createOBBBox, createOBBPlane } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
 import { LadderItem } from './LadderItem';
-import { green, khaki, orange, yankeesBlue } from '../../../basic/colorBase';
+import { green, intersect, khaki, orange, yankeesBlue } from '../../../basic/colorBase';
 import { OBSTACLE_RAY_LAYER, TOFU_RAY_LAYER } from '../../../utils/constants';
 import { ladderPolarity } from '../../../utils/enums';
+import { Plane } from '../../../Models';
 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
@@ -25,6 +26,8 @@ class RotatableLadder extends ObstacleBase {
     _back;
     _left;
     _right;
+    topBuffer;
+    bottomBuffer;
     slopes = [];
     sideFaces = [];
 
@@ -36,10 +39,15 @@ class RotatableLadder extends ObstacleBase {
     _frontWall;
     _backWall;
 
+    _endPlane0;
+    _endPlane1;
+
     boundingBox = new Box3();
     boundingBoxHelper;
 
     subGroup = new Group();
+
+    areaBox;
 
     #edge = .05;
 
@@ -64,22 +72,25 @@ class RotatableLadder extends ObstacleBase {
         this.box.visible = false;
         this.box.mesh.geometry.computeBoundingBox();
 
+        const areaboxSpecs = { size: { width: 1, depth: 1, height: 1 }, lines };
+        this.areaBox = createOBBBox(areaboxSpecs, `${name}_area_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
+        this.areaBox.visible = false;
+
         const frontSpecs = { width: this._width, height: this._height, color: yankeesBlue };
         const backSpecs = { width: this._width, height: this._height };
         const leftSpecs = { width: this._depth, height: this._height, color: khaki };
         const rightSpecs = { width: this._depth, height: this._height };
+        const topBottomSpecs = { width: this._width, height: 1 };
         this._front = createOBBPlane(frontSpecs, `${name}_front_obb`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this._back = createOBBPlane(backSpecs, `${name}_back_obb`, [0, 0, 0], [0, Math.PI, 0], receiveShadow, castShadow);
         this._left = createOBBPlane(leftSpecs, `${name}_left_obb`, [0, 0, 0], [0, Math.PI * .5, 0], receiveShadow, castShadow);
         this._right = createOBBPlane(rightSpecs, `${name}_right_obb`, [0, 0, 0], [0, - Math.PI * .5, 0], receiveShadow, castShadow);
+        this.topBuffer = createOBBPlane(topBottomSpecs, `${name}_top_obb`, [0, 0, 0], [- Math.PI * .5, 0, 0], receiveShadow, castShadow);
+        this.bottomBuffer = createOBBPlane(topBottomSpecs, `${name}_bottom_obb`, [0, 0, 0], [Math.PI * .5, 0, 0], receiveShadow, castShadow);
         this._front.mesh.layers.enable(TOFU_RAY_LAYER);
         this._back.mesh.layers.enable(TOFU_RAY_LAYER);
-        this._left.mesh.layers.enable(TOFU_RAY_LAYER);
-        this._right.mesh.layers.enable(TOFU_RAY_LAYER);
         this._front.mesh.layers.enable(OBSTACLE_RAY_LAYER);
         this._back.mesh.layers.enable(OBSTACLE_RAY_LAYER);
-        this._left.mesh.layers.enable(OBSTACLE_RAY_LAYER);
-        this._right.mesh.layers.enable(OBSTACLE_RAY_LAYER);
         this.slopes.push(this._front, this._back);
         this.sideFaces.push(this._left, this._right);
 
@@ -108,18 +119,30 @@ class RotatableLadder extends ObstacleBase {
         this._backWall.needTest = true;
         this.walls.push(this._frontWall, this._backWall);
 
+        const endPlaneSpecs = { width: 1, height: 1 };
+        this._endPlane0 = new Plane(Object.assign({name: `${name}_end_plane_0`, color: intersect}, endPlaneSpecs));
+        this._endPlane1 = new Plane(Object.assign({name: `${name}_end_plane_1`}, endPlaneSpecs));
+        this._endPlane0.setRotation([- Math.PI * .5, 0, 0]);
+        this._endPlane1.setRotation([- Math.PI * .5, 0, 0]);
+        this._endPlane0.mesh.layers.enable(TOFU_RAY_LAYER);
+        this._endPlane0.mesh.layers.enable(OBSTACLE_RAY_LAYER);
+
         if (!DEBUG) {
 
             this._front.visible = false;
             this._back.visible = false;
             this._left.visible = false;
             this._right.visible = false;
+            this.topBuffer.visible = false;
+            this.bottomBuffer.visible = false;
             this._leftLHWall.visible = false;
             this._leftRHWall.visible = false;
             this._rightLHWall.visible = false;
             this._rightRHWall.visible = false;
             this._frontWall.visible = false;
             this._backWall.visible = false;
+            this._endPlane0.visible = false;
+            this._endPlane1.visible = false;
 
         }
 
@@ -133,9 +156,12 @@ class RotatableLadder extends ObstacleBase {
             this._front.mesh,
             this._back.mesh,
             this._left.mesh,
-            this._right.mesh
+            this._right.mesh,
+            this.topBuffer.mesh,
+            this.bottomBuffer.mesh
         );
-        this.group.add(            
+        this.group.add(
+            this.areaBox.mesh,       
             this.ladderItem.group,
             this.subGroup,
             this._leftLHWall.mesh,
@@ -143,7 +169,9 @@ class RotatableLadder extends ObstacleBase {
             this._rightLHWall.mesh,
             this._rightRHWall.mesh,
             this._frontWall.mesh,
-            this._backWall.mesh
+            this._backWall.mesh,
+            this._endPlane0.mesh,
+            this._endPlane1.mesh
         );
 
     }
@@ -167,6 +195,18 @@ class RotatableLadder extends ObstacleBase {
         this.subGroup.rotation.x = rad;
 
         return this;
+
+    }
+
+    get endPlane0() {
+
+        return this._endPlane0;
+
+    }
+
+    get endPlane1() {
+
+        return this._endPlane1;
 
     }
 
@@ -206,7 +246,7 @@ class RotatableLadder extends ObstacleBase {
 
         const side = this._height * this.scale[1];
         const height = this.height;
-        const bottom = Math.sqrt(side * side - height * height);
+        const bottom = Math.sqrt(Math.max(side * side - height * height, 0));
 
         return bottom / side;
 
@@ -221,6 +261,12 @@ class RotatableLadder extends ObstacleBase {
 
     }
 
+    get polarityCos() {
+
+        return Math.cos(this.rotationX) >= 0 ? 1 : - 1;
+
+    }
+
     testWallAvailable(wall) {
 
         let result = false;
@@ -231,17 +277,41 @@ class RotatableLadder extends ObstacleBase {
 
         } else if (this.polarity === ladderPolarity.up) {
 
-            if (wall === this._backWall || wall === this._leftLHWall || wall === this._rightRHWall) {
+            if (this.polarityCos > 0) {
+                
+                if (wall === this._backWall || wall === this._leftLHWall || wall === this._rightRHWall) {
 
-                result = true;
+                    result = true;
+
+                }
+
+            } else {
+
+                if (wall === this._frontWall || wall === this._leftRHWall || wall === this._rightLHWall) {
+
+                    result = true;
+
+                }
 
             }
 
         } else {
 
-            if (wall === this._frontWall || wall === this._leftRHWall || wall === this._rightLHWall) {
+            if (this.polarityCos > 0) {
 
-                result = true;
+                if (wall === this._frontWall || wall === this._leftRHWall || wall === this._rightLHWall) {
+
+                    result = true;
+
+                }
+
+            } else {
+
+                if (wall === this._backWall || wall === this._leftLHWall || wall === this._rightRHWall) {
+
+                    result = true;
+
+                }
 
             }
 
@@ -258,6 +328,9 @@ class RotatableLadder extends ObstacleBase {
         this._back.updateOBB();
         this._left.updateOBB();
         this._right.updateOBB();
+        this.topBuffer.updateOBB();
+        this.bottomBuffer.updateOBB();
+        this.areaBox.updateOBB();
 
         this.updateBoundingBox();
 
@@ -284,10 +357,15 @@ class RotatableLadder extends ObstacleBase {
         this._front.setPosition([0, 0, depth * .5]).setScale(this.scale);
         this._back.setPosition([0, 0, - depth * .5]).setScale(this.scale);
         this._left.setPosition([width * .5, 0, 0]).setScale([this.scale[2], this.scale[1], 1]);
-        this._right.setPosition([- width * .5, 0, 0]).setScale([this.scale[2], this.scale[1], 1]);        
+        this._right.setPosition([- width * .5, 0, 0]).setScale([this.scale[2], this.scale[1], 1]); 
+        this.topBuffer.setPosition([0, height * .5, 0]).setScale([this.scale[0], .5, 1]);
+        this.bottomBuffer.setPosition([0, - height * .5, 0]).setScale([this.scale[0], .5, 1]);
 
         this.box.updateOBB(needToUpdateOBBnRay);
         this.updateBoundingBox();
+
+        // update area box
+        this.areaBox.setScale([width, this.height, height * this.slopeRatio]);
 
         this._leftLHWall.setPosition([width * .5 - this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
         this._leftRHWall.setPosition([width * .5 - this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
@@ -295,6 +373,11 @@ class RotatableLadder extends ObstacleBase {
         this._rightRHWall.setPosition([- width * .5 + this.#edge, 0, 0]).setScale([height * this.slopeRatio, this.height, 1]);
 
         this.updateOBBs(needToUpdateOBBnRay);
+
+        const _posY = this.polarity === ladderPolarity.up ? this.height * .5 : - this.height * .5;
+        const _posZ = height * this.slopeRatio * .5 + .5;
+        this._endPlane0.setPosition([0,  _posY, - _posZ * this.polarityCos]).setScale([width, 1]);
+        this._endPlane1.setPosition([0, - _posY, _posZ * this.polarityCos]).setScale([width, 1]);
         
     }
 
@@ -323,17 +406,19 @@ class RotatableLadder extends ObstacleBase {
         const sideWidth = height / tan;
         if (this.polarity === ladderPolarity.up) {
 
-            this._leftLHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, depth * .5 - sideWidth * .5]).setScale([sideWidth, height, 1]);
-            this._leftRHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, depth * .5 - sideWidth * .5]).setScale([sideWidth, height, 1]);
-            this._rightLHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, depth * .5 - sideWidth * .5]).setScale([sideWidth, height, 1]);
-            this._rightRHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, depth * .5 - sideWidth * .5]).setScale([sideWidth, height, 1]);
+            const posZ = this.polarityCos > 0 ? depth * .5 - sideWidth * .5 : - depth * .5 + sideWidth * .5;
+            this._leftLHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, posZ]).setScale([sideWidth, height, 1]);
+            this._leftRHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, posZ]).setScale([sideWidth, height, 1]);
+            this._rightLHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, posZ]).setScale([sideWidth, height, 1]);
+            this._rightRHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, posZ]).setScale([sideWidth, height, 1]);
 
         } else {
 
-            this._leftLHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, - depth * .5 + sideWidth * .5]).setScale([sideWidth, height, 1]);
-            this._leftRHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, - depth * .5 + sideWidth * .5]).setScale([sideWidth, height, 1]);
-            this._rightLHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, - depth * .5 + sideWidth * .5]).setScale([sideWidth, height, 1]);
-            this._rightRHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, - depth * .5 + sideWidth * .5]).setScale([sideWidth, height, 1]);
+            const posZ = this.polarityCos > 0 ? - depth * .5 + sideWidth * .5 : depth * .5 - sideWidth * .5;
+            this._leftLHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, posZ]).setScale([sideWidth, height, 1]);
+            this._leftRHWall.setPosition([width * .5 - this.#edge, - this.height * .5 + height * .5, posZ]).setScale([sideWidth, height, 1]);
+            this._rightLHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, posZ]).setScale([sideWidth, height, 1]);
+            this._rightRHWall.setPosition([- width * .5 + this.#edge, - this.height * .5 + height * .5, posZ]).setScale([sideWidth, height, 1]);
 
         }
 

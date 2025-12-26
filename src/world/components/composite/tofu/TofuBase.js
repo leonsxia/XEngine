@@ -13,8 +13,9 @@ const ENLARGE = 2.5;
 const ENABLE_QUICK_TURN = true;
 const ENABLE_CLIMBING = true;
 const SLOWDOWN_COEFFICIENT = .78;
-const SLOPE_COEFFICIENT = .8;
+const SLOPE_COEFFICIENT = .75;
 const DETECT_SCOPE_MIN = 1;
+const RAY_PADDING = .11;
 
 const HEAD_LENGTH = .5;
 const HEAD_WIDTH = .1;
@@ -102,7 +103,7 @@ class TofuBase extends Moveable2D {
     #recoverCoefficient = .01;
     #quickRecoverCoefficient = .03;
     #climbingVel = 1.34;
-    #rayPadding = .2;
+    #rayPadding = RAY_PADDING;
     #slopeCoefficient = 1;
     #slowDownCoefficient = 1;
     #backwardSlowdownCoefficient = .7;
@@ -146,7 +147,7 @@ class TofuBase extends Moveable2D {
             sovRadius: sovRadius = Math.max(width, width2, depth, depth2, height)
         }} = specs;
         const { 
-            rotateR = .9, vel = 1.34, stoodTurningVel = 1.5, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = .2, 
+            rotateR = .9, vel = 1.34, stoodTurningVel = 1.5, turnbackVel = 2.5 * Math.PI, velEnlarge = 2.5, rotateREnlarge = 2.5, climbingVel = 1.34, rayPaddiing = RAY_PADDING,
             recoverCt = .01, quickRecoverCt = .03, slopeCt = 1, slowdownCt = 1, backwardSlowdownCt = .7, backwardRotatingRCt = .7,
             aimVel = 3 * Math.PI, aimTime = .05
         } = specs;
@@ -808,8 +809,8 @@ class TofuBase extends Moveable2D {
 
         this.hasRays = true;
  
-        const length = this.height;
-        const posY = this.height * .5;
+        const length = this.height * 2;
+        const posY = 0;
         const posX = this.width * .5 - this.#rayPadding;
         const posZ = this.depth * .5 - this.#rayPadding;
         let fromVec3;
@@ -946,8 +947,8 @@ class TofuBase extends Moveable2D {
 
         }
 
-        const length = this.height;
-        const posY = this.#h * .5;
+        const length = this.height * 2;
+        const posY = 0;
         const posX = this.#w * .5 - this.#rayPadding;
         const posZ = this.#d * .5 - this.#rayPadding;
 
@@ -1328,9 +1329,9 @@ class TofuBase extends Moveable2D {
         
     }
 
-    tickOnSlope(slope) {
+    tickOnSlope(slopes) {
 
-        let onSlope = this.onSlopeTick({ slope, $self: this });
+        let onSlope = this.onSlopeTick({ slopes, $self: this });
 
         this.updateAccessories();
 

@@ -2,6 +2,7 @@ import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createCo
 import { InWallObjectBase } from './InWallObjectBase';
 import { yankeesBlue, basic, green, red } from '../../basic/colorBase';
 import { TOFU_RAY_LAYER, OBSTACLE_RAY_LAYER } from '../../utils/constants';
+import { Plane } from '../../Models';
 
 const DEFAULT_STEP_HEIGHT = .25;
 
@@ -19,6 +20,7 @@ class Slope extends InWallObjectBase {
     topBoxBuffer;
 
     slope;
+    topPlane;
     leftFace;
     rightFace;
     backFace;
@@ -46,6 +48,7 @@ class Slope extends InWallObjectBase {
         const bufferSpecs = { size: { width: this._width, depth: .2, height: .1 }, color: yankeesBlue };
 
         const slopeSpecs = this.makePlaneConfig({ width: this._width, height: this._slopeHeight, color: yankeesBlue, map: slopeMap, normalMap: slopeNormal });
+        const topPlaneSpecs = this.makePlaneConfig({ width: this._width, height: 1 });
         const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, leftHanded: true, color: basic, map: leftMap, normalMap: leftNormal });
         const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, leftHanded: false, color: basic, map: rightMap, normalMap: rightNormal });
         const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal });
@@ -57,6 +60,8 @@ class Slope extends InWallObjectBase {
         this.bottomBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_bottom_buffer`, [0, 0, 0], [0, 0, 0], false, false);
         this.topBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_top_buffer`, [0, 0, 0], [0, 0, 0], false, false);
 
+        this.topPlane = new Plane(Object.assign({ name: `${name}_top_plane` }, topPlaneSpecs));
+        this.topPlane.setRotation([- Math.PI * .5, 0, 0]);
         this.slope = createOBBPlane(slopeSpecs, `${name}_slope`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.leftFace = createCollisionTrianglePlane(leftSpecs, `${name}_left`, [0, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
         this.rightFace = createCollisionTrianglePlane(rightSpecs, `${name}_right`, [0, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
@@ -69,6 +74,8 @@ class Slope extends InWallObjectBase {
         this.box.visible = false;
         this.bottomBoxBuffer.visible = false;
         this.topBoxBuffer.visible = false;
+        this.topPlane.mesh.layers.enable(TOFU_RAY_LAYER);
+        this.topPlane.visible = false;
 
         if (!this.enableOBBs) {
 
@@ -99,6 +106,7 @@ class Slope extends InWallObjectBase {
             this.bottomBoxBuffer.mesh,
             this.topBoxBuffer.mesh,
             this.slope.mesh,
+            this.topPlane.mesh,
             this.leftFace.mesh,
             this.rightFace.mesh,
             this.backFace.mesh,
@@ -216,11 +224,14 @@ class Slope extends InWallObjectBase {
         this.topBoxBuffer.setScale([this.scale[0], 1, 1])
             .setPosition([0, height * .5 + bufferSize.height * .5, - depth * .5 - bufferSize.depth * .5]);
 
-        // update slope
+        // update slope & top plane
         const slopeHeight = Math.sqrt(depth * depth + height * height);
 
         this.slope.setScaleWithTexUpdate([this.scale[0], slopeHeight / this._slopeHeight, 1])
             .setRotation([- Math.atan(depth / height), 0, 0]);
+
+        this.topPlane.setScale([this.scale[0], 1, 1])
+            .setPosition([0, height * .5, - depth * .5 - this.topPlane.height * .5]);
 
         // update faces
         this.leftFace.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])

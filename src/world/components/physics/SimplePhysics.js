@@ -1197,9 +1197,15 @@ class SimplePhysics {
 
                 }
 
-                if (avatarIntersectSlope) {
+                if (avatar.intersectSlope === s) {
 
-                    collisionSlopes.push(s.slope.mesh);
+                    const checkFaces = [s.slope.mesh];
+                    if (avatar.bottomY + STAIR_OFFSET_MAX > s.topPlane.getWorldPosition(_v1).y) {
+
+                        checkFaces.push(s.topPlane.mesh);
+
+                    }
+                    collisionSlopes.push(checkFaces);
 
                     break;
 
@@ -1212,12 +1218,44 @@ class SimplePhysics {
             for (let i = 0, il = this.connectors.length; i < il; i++) {
 
                 const connector = this.connectors[i];
+                const avatarIntersectAreaBox = avatar.obb.intersectsOBB(connector.areaBox.obb);
+
                 for (let j = 0, jl = connector.slopes.length; j < jl; j++) {
 
                     const s = connector.slopes[j];
-                    if (avatar.obb.intersectsOBB(s.obb)) {
+                    const avatarIntersectSlope = avatar.obb.intersectsOBB(s.obb);
 
-                        collisionConnectors.push({ connector, face: s });
+                    if (!avatarIntersectAreaBox && (avatar.intersectSlope === connector || !avatar.intersectSlope)) {
+
+                        avatar.setSlopeIntersection?.();
+
+                    } else if (avatar.isInAir && avatarIntersectSlope) {
+
+                        avatar.setSlopeIntersection?.(connector);
+
+                    } else if (avatarIntersectSlope && (avatar.obb.intersectsOBB(connector.topBuffer.obb) || avatar.obb.intersectsOBB(connector.bottomBuffer.obb))) {
+
+                        avatar.setSlopeIntersection?.(connector);
+
+                    }
+
+                    if (avatar.intersectSlope === connector) {
+
+                        const checkFaces = [s.mesh];
+
+                        if (avatar.bottomY + STAIR_OFFSET_MAX > connector.endPlane0.getWorldPosition(_v1).y) {
+
+                            checkFaces.push(connector.endPlane0.mesh);
+
+                        }
+
+                        if (avatar.bottomY + STAIR_OFFSET_MAX > connector.endPlane1.getWorldPosition(_v1).y) {
+
+                            checkFaces.push(connector.endPlane1.mesh);
+
+                        }
+
+                        collisionConnectors.push({ faces: checkFaces });
 
                     }
 
@@ -1230,7 +1268,6 @@ class SimplePhysics {
             if (collisionBottoms.length > 0) {
 
                 avatar.tickOnHittingBottom(collisionBottoms[0]);
-                isLanded = true;
 
             }
             
@@ -1240,12 +1277,14 @@ class SimplePhysics {
                 isLanded = true;
 
             }
-            
+
+            let isOnSlope = false;
             if (collisionSlopes.length > 0) {
 
                 if (avatar.tickOnSlope(collisionSlopes[0])) {
 
                     isLanded = true;
+                    isOnSlope = true;
 
                 }
 
@@ -1255,11 +1294,11 @@ class SimplePhysics {
 
                 for (let i = 0, il = collisionConnectors.length; i < il; i++) {
 
-                    const { face, connector } = collisionConnectors[i];
-                    avatar.setSlopeIntersection?.(connector);
-                    if (avatar.tickOnSlope(face.mesh)) {
+                    const { faces } = collisionConnectors[i];
+                    if (avatar.tickOnSlope(faces)) {
 
                         isLanded = true;
+                        isOnSlope = true;
 
                     }
 
@@ -1274,7 +1313,7 @@ class SimplePhysics {
 
             }
 
-            if (collisionSlopes.length === 0 && collisionConnectors.length === 0) {
+            if (!isOnSlope) {
 
                 avatar.setSlopeIntersection?.();
 
