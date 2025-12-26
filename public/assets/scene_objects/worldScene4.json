@@ -948,7 +948,7 @@
                 {
                     "type": "LWall",
                     "scale": [4, 2.6, 5],
-                    "thicknessS": 1,
+                    "thicknessS": 1.2,
                     "thicknessT": 1.2,
                     "baseSize": 4.6,
                     "enableOBBs": true,
@@ -1000,7 +1000,7 @@
                 {
                     "type": "RotatableLadder",
                     "scale": [
-                        1,
+                        1.6,
                         3.44,
                         1
                     ],
@@ -1024,7 +1024,7 @@
                         -1.78
                     ],
                     "rotationX": -0.9040805525330626,
-                    "rotationY": -2.4486969405480448,
+                    "rotationY": -2.405063709248186,
                     "transparent": false,
                     "ignoreAimTest": true,
                     "ignoreFocusTest": true

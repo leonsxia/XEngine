@@ -109,6 +109,7 @@ class WorldScene {
     jsonFileName;
 
     loaded = false;
+    isRunning = false;
 
     #paused = true;
 
@@ -475,9 +476,10 @@ class WorldScene {
             }
 
             this.initContainer();
-            return;
 
         }
+
+        this.isRunning = true;
 
     }
 
@@ -667,6 +669,8 @@ class WorldScene {
 
         // must disable current scene default control, otherwise it will jump backward to last scene
         this.controls.enableDefControl(false);
+
+        this.isRunning = false;
 
     }
 

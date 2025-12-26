@@ -176,7 +176,7 @@ class ThirdPersonCamera {
 
         const mousedownEvent = () => {
 
-            if (!this._enabled) return;
+            if (!this.attachTo.isRunning || !this._enabled) return;
 
             const now = performance.now();
             if (!document.pointerLockElement) {
