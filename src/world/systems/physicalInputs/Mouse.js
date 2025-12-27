@@ -19,11 +19,28 @@ class Mouse extends InputBase {
 
     }
 
+    get currentScene() {
+
+        return this.attachTo.currentScene;
+
+    }
+
+    get isPdaOn() {
+
+        return this.currentScene.isPdaOn;
+
+    }
+
+    get isTPCEnabled() {
+
+        return this.currentScene.thirdPersonCamera?.enabled ?? false;
+
+    }
+
     get enabled() {
 
-        const currentScene = this.attachTo.currentScene;
-        return currentScene && !currentScene.isScenePaused() && 
-            (currentScene.isPdaOn || currentScene.thirdPersonCamera?.enabled);
+        return this.currentScene && !this.currentScene.isScenePaused() && 
+            (this.isPdaOn || this.isTPCEnabled);
 
     }
 
@@ -35,6 +52,25 @@ class Mouse extends InputBase {
     }
 
     bindMouseEvent() {
+
+        this.setupMousemoveEvents();
+        this.setupMousedownEvents();
+        this.setupMouseupEvents();
+        this.setupMousewheelEvents();
+
+    }
+
+    bindTouchEvent() {
+
+        window.addEventListener('touchstart', () => {
+
+            this.attachTo.switchInput(CONTROL_TYPES.MOUSE);
+
+        });
+
+    }
+
+    setupMousemoveEvents() {
 
         let oldX = 0;
         let oldY = 0;
@@ -50,86 +86,94 @@ class Mouse extends InputBase {
 
             if (!this.enabled) return;
 
-            clearTimeout(mouseStopTimer);
+            if (this.currentScene.isPdaOn) {
 
-            // Set a new timer to detect when the mousemove stops
-            mouseStopTimer = setTimeout(() => {
+                clearTimeout(mouseStopTimer);
 
-                // This code will execute if no new 'mousemove' events occur for delay time
-                this.#logger.log('mouse move activity has stopped!');
-                eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
-                eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
-                eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
-                eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
+                // Set a new timer to detect when the mousemove stops
+                mouseStopTimer = setTimeout(() => {
 
-            }, 50);
+                    // This code will execute if no new 'mousemove' events occur for delay time
+                    this.#logger.log('mouse move activity has stopped!');
+                    eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
+                    eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
+                    eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
+                    eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
 
-            let xDirection = '';
-            let yDirection = '';
-            const { width, height } = world.sceneClientSize;
-            const blind = .01;
+                }, 50);
 
-            if (e.pageX > oldX + width * blind) {
+                let xDirection = '';
+                let yDirection = '';
+                const { width, height } = world.sceneClientSize;
+                const blind = .01;
 
-                xDirection = 'right';
+                if (e.pageX > oldX + width * blind) {
 
-            } else if (e.pageX < oldX - width * blind) {
+                    xDirection = 'right';
 
-                xDirection = 'left';
+                } else if (e.pageX < oldX - width * blind) {
 
-            }
-
-            if (e.pageY > oldY + height * blind) {
-
-                yDirection = 'down';
-
-            } else if (e.pageY < oldY - height * blind) {
-
-                yDirection = 'up';
-
-            }
-
-            if (this._mouseDown && this._leftBtnDown) {
-
-                this.#logger.log(`mouse moving: X: ${xDirection}, Y: ${yDirection}`);
-                switch (xDirection) {
-
-                    case 'right':
-
-                        eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
-                        eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, true);
-                        break;
-
-                    case 'left':
-
-                        eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
-                        eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, true);
-                        break;
+                    xDirection = 'left';
 
                 }
 
-                switch (yDirection) {
+                if (e.pageY > oldY + height * blind) {
 
-                    case 'down':
+                    yDirection = 'down';
 
-                        eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
-                        eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, true);
-                        break;
+                } else if (e.pageY < oldY - height * blind) {
 
-                    case 'up':
-
-                        eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
-                        eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, true);
-                        break;
+                    yDirection = 'up';
 
                 }
 
-            }
+                if (this._mouseDown && this._leftBtnDown) {
 
-            oldX = xDirection ? e.pageX : oldX;
-            oldY = yDirection ? e.pageY : oldY;
+                    this.#logger.log(`mouse moving: X: ${xDirection}, Y: ${yDirection}`);
+                    switch (xDirection) {
+
+                        case 'right':
+
+                            eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
+                            eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, true);
+                            break;
+
+                        case 'left':
+
+                            eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
+                            eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, true);
+                            break;
+
+                    }
+
+                    switch (yDirection) {
+
+                        case 'down':
+
+                            eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
+                            eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, true);
+                            break;
+
+                        case 'up':
+
+                            eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
+                            eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, true);
+                            break;
+
+                    }
+
+                }
+
+                oldX = xDirection ? e.pageX : oldX;
+                oldY = yDirection ? e.pageY : oldY;
+
+            }
 
         });
+
+    }
+
+    setupMousedownEvents() {
 
         window.addEventListener('mousedown', (e) => {
 
@@ -138,6 +182,8 @@ class Mouse extends InputBase {
             const eventDispatcher = this.eventDispatcher;
             const messageType = InputBase.CONTROL_TYPES.MOUSE;
             const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+            const tankmoveMsgType = InputBase.CONTROL_TYPES.TANKMOVE;
+            const tankmoveActions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === tankmoveMsgType).TYPES;
             const world = this.attachTo;
 
             this._mouseDown = true;
@@ -148,8 +194,16 @@ class Mouse extends InputBase {
 
                 this._leftBtnDown = true;
                 this.#logger.log(`mouse left button is down`);
-                eventDispatcher.publish(messageType, actions.L_BTN, world.current, true);
-                eventDispatcher.publish(messageType, actions.SHOOT, world.current, true);
+
+                if (this.isPdaOn) {
+
+                    eventDispatcher.publish(messageType, actions.L_BTN, world.current, true);
+
+                } else if (this.isTPCEnabled) {
+
+                    eventDispatcher.publish(tankmoveMsgType, tankmoveActions.SHOOT, world.current, true);
+
+                }
 
             }
 
@@ -157,19 +211,33 @@ class Mouse extends InputBase {
 
                 this._middleBtnDown = true;
                 this.#logger.log(`mouse middle button is down`);
-                eventDispatcher.publish(messageType, actions.MELEE, world.current, true);
+
+                if (!this.isPdaOn && this.isTPCEnabled) {
+
+                    eventDispatcher.publish(tankmoveMsgType, tankmoveActions.MELEE, world.current, true);
+
+                }
 
             }
 
             if (e.button === 2) {
 
-                this._middleBtnDown = true;
+                this._rightBtnDown = true;
                 this.#logger.log(`mouse right button is down`);
-                eventDispatcher.publish(messageType, actions.GUN_POINT, world.current, true);
+
+                if (!this.isPdaOn && this.isTPCEnabled) {
+
+                    eventDispatcher.publish(tankmoveMsgType, tankmoveActions.GUN_POINT, world.current, true);
+
+                }
 
             }
 
         });
+
+    }
+
+    setupMouseupEvents() {
 
         window.addEventListener('mouseup', (e) => {
 
@@ -180,18 +248,28 @@ class Mouse extends InputBase {
             const eventDispatcher = this.eventDispatcher;
             const messageType = InputBase.CONTROL_TYPES.MOUSE;
             const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+            const tankmoveMsgType = InputBase.CONTROL_TYPES.TANKMOVE;
+            const tankmoveActions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === tankmoveMsgType).TYPES;
             const world = this.attachTo;
 
             if (e.button === 0) {
-                
+
                 this._leftBtnDown = false;
                 this.#logger.log(`mouse left button is up`);
-                eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
-                eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
-                eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
-                eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
-                eventDispatcher.publish(messageType, actions.L_BTN, world.current, false);
-                eventDispatcher.publish(messageType, actions.SHOOT, world.current, false);
+
+                if (this.isPdaOn) {
+
+                    eventDispatcher.publish(messageType, actions.L_CLICK_LEFT, world.current, false);
+                    eventDispatcher.publish(messageType, actions.L_CLICK_RIGHT, world.current, false);
+                    eventDispatcher.publish(messageType, actions.L_CLICK_UP, world.current, false);
+                    eventDispatcher.publish(messageType, actions.L_CLICK_DOWN, world.current, false);
+                    eventDispatcher.publish(messageType, actions.L_BTN, world.current, false);
+
+                } else if (this.isTPCEnabled) {
+
+                    eventDispatcher.publish(tankmoveMsgType, tankmoveActions.SHOOT, world.current, false);
+
+                }
 
             }
 
@@ -199,7 +277,26 @@ class Mouse extends InputBase {
 
                 this._middleBtnDown = false;
                 this.#logger.log(`mouse middle button is up`);
-                eventDispatcher.publish(messageType, actions.MELEE, world.current, false);
+
+                if (!this.isPdaOn && this.isTPCEnabled) {
+
+                    const tpc = this.currentScene.thirdPersonCamera;
+
+                    eventDispatcher.publish(tankmoveMsgType, tankmoveActions.MELEE, world.current, false);
+                    
+                    if (tpc.keyAIsDown) {
+
+                        tpc.keyAIsDown = false;
+
+                    }
+
+                    if (tpc.keyDIsDown) {
+
+                        tpc.keyDIsDown = false;
+
+                    }
+
+                }
 
             }
 
@@ -207,46 +304,32 @@ class Mouse extends InputBase {
 
                 this._rightBtnDown = false;
                 this.#logger.log(`mouse right button is up`);
-                eventDispatcher.publish(messageType, actions.GUN_POINT, world.current, false);
+
+                if (!this.isPdaOn && this.isTPCEnabled) {
+
+                    const tpc = this.currentScene.thirdPersonCamera;
+
+                    eventDispatcher.publish(tankmoveMsgType, tankmoveActions.GUN_POINT, world.current, false);
+                   
+                    if (tpc.keyAIsDown) {
+
+                        tpc.keyAIsDown = false;
+
+                    }
+
+                    if (tpc.keyDIsDown) {
+
+                        tpc.keyDIsDown = false;
+
+                    }
+
+                }                
 
             }
 
             if (!this._leftBtnDown && !this._rightBtnDown && !this._middleBtnDown) {
 
-                this._mouseDown = false;                
-
-            }
-
-        });
-
-        let wheelStopTimer;
-        window.addEventListener('wheel', (e) => {
-
-            if (!this.enabled) return;
-
-            clearTimeout(wheelStopTimer);
-
-            // Set a new timer to detect when the wheel stops
-            wheelStopTimer = setTimeout(() => {
-
-                // This code will execute if no new 'wheel' events occur for delay time
-                this.#logger.log('wheel activity has stopped!');
-                eventDispatcher.publish(messageType, actions.SCROLL_UP, world.current, false);
-                eventDispatcher.publish(messageType, actions.SCROLL_DOWN, world.current, false);
-
-            }, 50);
-
-            if (e.deltaY > 0) {
-
-                this.#logger.log('scrolled down');
-                eventDispatcher.publish(messageType, actions.SCROLL_UP, world.current, false);
-                eventDispatcher.publish(messageType, actions.SCROLL_DOWN, world.current, true);
-
-            } else {
-
-                this.#logger.log('scrolled up');
-                eventDispatcher.publish(messageType, actions.SCROLL_DOWN, world.current, false);
-                eventDispatcher.publish(messageType, actions.SCROLL_UP, world.current, true);
+                this._mouseDown = false;
 
             }
 
@@ -254,11 +337,47 @@ class Mouse extends InputBase {
 
     }
 
-    bindTouchEvent() {
+    setupMousewheelEvents() {
 
-        window.addEventListener('touchstart', () => {
+        const eventDispatcher = this.eventDispatcher;
+        const messageType = InputBase.CONTROL_TYPES.MOUSE;
+        const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
+        const world = this.attachTo;
+        let wheelStopTimer;
 
-            this.attachTo.switchInput(CONTROL_TYPES.MOUSE);
+        window.addEventListener('wheel', (e) => {
+
+            if (!this.enabled) return;
+
+            if (this.isPdaOn) {
+
+                clearTimeout(wheelStopTimer);
+
+                // Set a new timer to detect when the wheel stops
+                wheelStopTimer = setTimeout(() => {
+
+                    // This code will execute if no new 'wheel' events occur for delay time
+                    this.#logger.log('wheel activity has stopped!');
+                    eventDispatcher.publish(messageType, actions.SCROLL_UP, world.current, false);
+                    eventDispatcher.publish(messageType, actions.SCROLL_DOWN, world.current, false);
+
+                }, 50);
+
+                if (e.deltaY > 0) {
+
+                    this.#logger.log('scrolled down');
+                    eventDispatcher.publish(messageType, actions.SCROLL_UP, world.current, false);
+                    eventDispatcher.publish(messageType, actions.SCROLL_DOWN, world.current, true);
+
+                } else {
+
+                    this.#logger.log('scrolled up');
+                    eventDispatcher.publish(messageType, actions.SCROLL_DOWN, world.current, false);
+                    eventDispatcher.publish(messageType, actions.SCROLL_UP, world.current, true);
+
+                }
+
+            }
 
         });
 

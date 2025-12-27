@@ -120,10 +120,7 @@ InputBase.CONTROL_ACTIONS = [
             L_CLICK_DOWN: 'lclickDown',
             L_BTN: 'lbtn',
             SCROLL_UP: 'scrollUp',
-            SCROLL_DOWN: 'scrollDown',
-            GUN_POINT: 'gunPoint',
-            SHOOT: 'shoot',
-            MELEE: 'melee'
+            SCROLL_DOWN: 'scrollDown'
         }
     },
     {

@@ -142,6 +142,50 @@ class ThirdPersonCamera {
 
     }
 
+    get keyAIsDown() {
+
+        return this.#KeyAIsDown;
+
+    }
+
+    set keyAIsDown(val) {
+
+        if (val && !this.#KeyAIsDown) {
+
+            window.dispatchEvent(this._keyADownEvent);
+
+        } else if (!val && this.#KeyAIsDown) {
+
+            window.dispatchEvent(this._keyAUpEvent);
+
+        }
+
+        this.#KeyAIsDown = val;
+
+    }
+
+    get keyDIsDown() {
+
+        return this.#KeyDIsDown;
+
+    }
+
+    set keyDIsDown(val) {
+
+        if (val && !this.#KeyDIsDown) {
+
+            window.dispatchEvent(this._keyDDownEvent);
+
+        } else if (!val && this.#KeyDIsDown) {
+
+            window.dispatchEvent(this._keyDUpEvent);
+
+        }
+
+        this.#KeyDIsDown = val;
+
+    }
+
     get currentRoom() {
 
         return this.attachTo.currentRoom;
@@ -172,31 +216,45 @@ class ThirdPersonCamera {
 
     }
 
+    disablePointerLock() {
+
+        const now = performance.now();        
+        this._pointerLockDeactivateAt = now;
+        document.exitPointerLock();
+
+    }
+
+    enablePointerLock() {
+
+        const now = performance.now();
+        if (!document.pointerLockElement) {
+
+            if (this._pointerLockDeactivateAt && now - this._pointerLockDeactivateAt > 1000) {
+
+                container.requestPointerLock();
+                this._mousedown = true;
+
+            } else {
+
+                this.#logger.log(`pinter lock not ready`);
+
+            }
+
+        } else {
+
+            this.#logger.log(`pointer locked`);
+
+        }
+
+    }
+
     bindEvents() {
 
         const mousedownEvent = () => {
 
-            if (!this.attachTo.isRunning || !this._enabled) return;
+            if (!this.attachTo.isRunning || !this._enabled || this.attachTo.isPdaOn) return;
 
-            const now = performance.now();
-            if (!document.pointerLockElement) {
-
-                if (this._pointerLockDeactivateAt && now - this._pointerLockDeactivateAt > 1000) {
-
-                    container.requestPointerLock();
-                    this._mousedown = true;
-
-                } else {
-
-                    this.#logger.log(`pinter lock not ready`);
-
-                }
-
-            } else {
-
-                this.#logger.log(`pointer locked`);
-
-            }  
+            this.enablePointerLock();
 
         };
 
@@ -219,7 +277,7 @@ class ThirdPersonCamera {
 
     mousemoveEvent(event) {
 
-        if (!this.enabled || document.pointerLockElement !== container) return;
+        if (!this.attachTo.isRunning || !this.enabled || document.pointerLockElement !== container || this.attachTo.isPdaOn) return;
 
         this.#logger.func = this.mousemoveEvent.name;        
 
@@ -247,41 +305,21 @@ class ThirdPersonCamera {
 
             if (this._pointerObject3D.position.x === - this.pointerMaxNegativeX) {
 
-                if (!this.#KeyDIsDown) {
-
-                    window.dispatchEvent(this._keyDDownEvent);
-                    this.#KeyDIsDown = true;
-
-                }
+                this.keyDIsDown = true;
 
             } else {
 
-                if (this.#KeyDIsDown) {
-
-                    window.dispatchEvent(this._keyDUpEvent);
-                    this.#KeyDIsDown = false;
-
-                }
+                this.keyDIsDown = false;
 
             }
 
             if (this._pointerObject3D.position.x === this.pointerMaxPositiveX) {
 
-                if (!this.#KeyAIsDown) {
-
-                    window.dispatchEvent(this._keyADownEvent);
-                    this.#KeyAIsDown = true;
-
-                }
+                this.keyAIsDown = true;
 
             } else {
 
-                if (this.#KeyAIsDown) {
-
-                    window.dispatchEvent(this._keyAUpEvent);
-                    this.#KeyAIsDown = false;
-
-                }
+                this.keyAIsDown = false;
 
             }
 

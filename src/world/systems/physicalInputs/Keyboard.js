@@ -209,11 +209,13 @@ class Keyboard extends InputBase {
         const messageType = InputBase.CONTROL_TYPES.TANKMOVE;
         const actions = InputBase.CONTROL_ACTIONS.find(f => f.CATEGORY === messageType).TYPES;
         const { I, Tab } = Keyboard.KEYS;
-        const world = this.attachTo;
+        const world = this.attachTo;        
 
          window.addEventListener('keydown', e => {
 
             if (!world.currentScene || world.currentScene.isScenePaused()) return;
+
+            const tpc = world.currentScene.thirdPersonCamera;
 
             switch (e.key) {
 
@@ -228,6 +230,20 @@ class Keyboard extends InputBase {
                         // this.#logger.log('pda');
                         eventDispatcher.publish(messageType, actions.INVENTORY_INFO, world.current, this.#inventory);
 
+                        if (tpc?.enabled) {
+
+                            if (world.currentScene.isPdaOn) {
+
+                                tpc.disablePointerLock();
+
+                            } else {
+
+                                tpc.enablePointerLock();
+
+                            }
+
+                        }
+
                     }
 
                     break;
@@ -241,6 +257,20 @@ class Keyboard extends InputBase {
 
                         // this.#logger.log('tab');
                         eventDispatcher.publish(messageType, actions.PDA_INFO, world.current, true);
+
+                        if (tpc?.enabled) {
+
+                            if (world.currentScene.isPdaOn) {
+
+                                tpc.disablePointerLock();
+
+                            } else {
+
+                                tpc.enablePointerLock();
+
+                            }
+
+                        }
 
                      }
 
