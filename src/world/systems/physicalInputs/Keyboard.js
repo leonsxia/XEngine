@@ -239,6 +239,12 @@ class Keyboard extends InputBase {
                             } else {
 
                                 tpc.enablePointerLock();
+                                setTimeout(()=> {
+                                    
+                                    tpc.enablePointerLock();
+                                
+                                }, 1000);
+                                
 
                             }
 
@@ -267,6 +273,11 @@ class Keyboard extends InputBase {
                             } else {
 
                                 tpc.enablePointerLock();
+                                setTimeout(()=> {
+                                    
+                                    tpc.enablePointerLock();
+                                
+                                }, 1000);
 
                             }
 
