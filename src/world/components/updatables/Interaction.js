@@ -105,6 +105,9 @@ class Interaction extends UpdatableBase {
             for (let j = 0, jl = this.pickables.length; j < jl; j++) {
 
                 const item = this.pickables[j];
+
+                if (item.currentRoom !== this.currentRoom.name) continue;
+
                 if (item.isPickableItem && !item.isPicked && item.available) {
 
                     item.showLabelTip(false);
@@ -123,6 +126,9 @@ class Interaction extends UpdatableBase {
             for (let j = 0, jl = this.entries.length; j < jl; j++) {
 
                 const item = this.entries[j];
+
+                if (item.roomSequence !== this.currentRoom.sequence) continue;
+
                 if (item.isEntry) {
 
                     item.showLabelTip(false);

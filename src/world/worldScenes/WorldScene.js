@@ -324,13 +324,8 @@ class WorldScene {
 
                 if (enemy.isActive) {
 
-                    this.scene.add(enemy.group);
-                    // enemy.showTofu(false);
-
                     enemy.onBeforeCollisionBoxChanged.push(this.onBeforeEnemyCBoxChanged.bind(this));
                     enemy.onCollisionBoxChanged.push(this.onEnemyCBoxChanged.bind(this));
-
-                    this.physics.addActiveEnemies(enemy.name);
 
                 }
 
@@ -684,7 +679,6 @@ class WorldScene {
         if (!targetRoom) return;
 
         this.currentRoom = targetRoom;
-        this.player.updateRoomInfo?.(this.currentRoom);
         this.physics.initPhysics(this.currentRoom);
         this.updatePickables();
 
@@ -708,11 +702,15 @@ class WorldScene {
 
         if (this.player) {
 
+            this.player.updateRoomInfo?.(this.currentRoom);
             this.player.setPosition(allPlayerPos[roomSequence], true);
+            this.player.clearInSightTargets();
             
         }
 
         this.thirdPersonCamera?.updateObjectsNeedChecked();
+
+        this.updateEnemies();
 
     }
 
@@ -922,6 +920,40 @@ class WorldScene {
                 this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.PDA);
                 this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.XBOX_CONTROLLER);
                 this.subscribeEvents(this.player.pda, InputBase.CONTROL_TYPES.MOUSE);
+
+            }
+
+        }
+
+    }
+
+    updateEnemies() {
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            const oldBoxHelper = this.scene.getObjectByName(enemy.boundingBoxHelper.name);
+            if (enemy.currentRoom === this.currentRoom.name) {
+
+                this.physics.addActiveEnemies(enemy.name);
+                this.scene.add(enemy.group);
+                enemy.isActive = true;
+
+                if (enemy._showBBHelper) {
+
+                    this.scene.add(enemy.boundingBoxHelper);
+
+                }
+
+            } else {
+
+                this.physics.removeActiveEnemies(enemy.name);
+                this.scene.remove(enemy.group);
+                enemy.isActive = false;
+                enemy.clearInSightTargets();
+                enemy.DAW.stopAll();
+
+                if (oldBoxHelper) this.scene.remove(oldBoxHelper);
 
             }
 

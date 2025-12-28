@@ -53,8 +53,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
     readyToPickItem;
     readyToEnter;
 
-    currentRoom;
-
     constructor(specs) {
 
         const { name, src, receiveShadow = true, castShadow = true, hasBones = true } = specs;

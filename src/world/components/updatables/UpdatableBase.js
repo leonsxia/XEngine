@@ -18,6 +18,12 @@ class UpdatableBase {
 
     }
 
+    get currentRoom() {
+
+        return this.attachTo.currentRoom;
+
+    }
+
     // for inheritation
     init() { };
 

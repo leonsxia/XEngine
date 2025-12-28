@@ -88,7 +88,7 @@ class Picker {
 
         this.#raycaster.setFromCamera(this.#mouse, this.#camera);
 
-        const intersects = this.#raycaster.intersectObjects(this.#scene.children);
+        const intersects = this.#raycaster.intersectObjects(this.#scene.children.filter(c => c.visible));
 
         this.clearPicked();
 

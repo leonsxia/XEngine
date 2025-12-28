@@ -200,8 +200,8 @@ class ThirdPersonCamera {
             const obj = this.attachTo.sceneObjects[i];
             const { mesh, group } = obj;
 
-            if (mesh) objects.push(mesh);
-            else if (group) objects.push(group);
+            if (mesh && mesh.visible) objects.push(mesh);
+            else if (group && group.visible) objects.push(group);
 
         }
 

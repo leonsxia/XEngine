@@ -134,6 +134,8 @@ class TofuBase extends Moveable2D {
     isActive = true;
     disposed = false;
 
+    currentRoom;
+
     #logger = new Logger(DEBUG, 'TofuBase');
 
     constructor(specs) {
@@ -261,6 +263,12 @@ class TofuBase extends Moveable2D {
         this.group.add(this.health.strip);        
         this.health.strip.position.y = height / 2 + .2;
         this.health.showStrip(false);
+
+    }
+
+    updateRoomInfo(room) {
+
+        this.currentRoom = room.name;
 
     }
 

@@ -18,12 +18,6 @@ class AI extends UpdatableBase {
 
     }
 
-    get currentRoom() {
-
-        return this.attachTo.currentRoom;
-
-    }
-
     get sceneObjects() {
 
         const objects = [];
@@ -32,8 +26,8 @@ class AI extends UpdatableBase {
             const obj = this.attachTo.sceneObjects[i];
             const { mesh, group } = obj;
 
-            if (mesh) objects.push(mesh);
-            else if (group) objects.push(group);
+            if (mesh && mesh.visible) objects.push(mesh);
+            else if (group && group.visible) objects.push(group);
 
         }
 
@@ -71,7 +65,7 @@ class AI extends UpdatableBase {
 
                 const enemy = this.enemies[j];
 
-                if (!enemy.isActive || enemy.dead) continue;
+                if (!enemy.isActive || enemy.dead || enemy.currentRoom !== this.currentRoom.name) continue;
 
                 player.checkTargetInSight(enemy);
 
@@ -83,7 +77,7 @@ class AI extends UpdatableBase {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.isActive || enemy.dead) continue;
+            if (!enemy.isActive || enemy.dead || enemy.currentRoom !== this.currentRoom.name) continue;
 
             for (let j = 0, jl = this.players.length; j < jl; j++) {
                 

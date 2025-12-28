@@ -87,7 +87,7 @@ class BlackWidow extends CreatureBase {
 
     constructor(specs) {
 
-        const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true } = specs;
+        const { name, src = GLTF_SRC, receiveShadow = true, castShadow = true, hasBones = true, currentRoom } = specs;
         const { vel = 1.2, rotateR = 1.1 } = specs;
         const { scale = [1, 1, 1] } = specs;
         const { isActive = true, sovRadius = 6.5, showBS = false, enableCollision = true } = specs;
@@ -112,7 +112,7 @@ class BlackWidow extends CreatureBase {
         offsetY = typeMapping.offset[1];
 
         const setup = { 
-            name, src, receiveShadow, castShadow, hasBones, 
+            name, src, receiveShadow, castShadow, hasBones, currentRoom,
             offsetY, width, width2, depth, depth2, height,
             vel, rotateR,
             scale, gltfScale,

@@ -41,7 +41,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     constructor(specs) {
 
-        const { name } = specs;
+        const { name, currentRoom } = specs;
         const { src, receiveShadow = true, castShadow = true, hasBones = true } = specs;
         const { offsetX, offsetY, offsetZ } = specs;
         const { width = .9, width2 = .9, depth = .9, depth2 = .9, height = 1.8, sovRadius = Math.max(width, width2, depth, depth2, height) } = specs;
@@ -65,6 +65,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         this.specs = specs;
         this.isActive = isActive;
+        this.currentRoom = currentRoom;
 
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);

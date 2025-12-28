@@ -19,6 +19,11 @@
                 "x": 0,
                 "y": 0,
                 "z": 0
+            },
+            {
+                "x": 0,
+                "y": 0,
+                "z": 0
             }
         ],
         "allCameraPos": [
@@ -26,9 +31,19 @@
                 "x": 3,
                 "y": 7,
                 "z": 8
+            },
+            {
+                "x": 1.12,
+                "y": 2.957,
+                "z": 2.278
             }
         ],
         "allPlayerPos": [
+            [
+                0,
+                1.8,
+                0
+            ],
             [
                 0,
                 1.8,
@@ -65,6 +80,7 @@
             "name": "zombie1",
             "type": "ZombieMale",
             "src": "ZOMBIE_MALE",
+            "currentRoom": "room1",
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1, 1, 1],
@@ -81,6 +97,7 @@
             "name": "zombie2",
             "type": "ZombieMale",
             "src": "ZOMBIE_MALE",
+            "currentRoom": "room1",
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1, 1, 1],
@@ -97,6 +114,7 @@
             "name": "zombie3",
             "type": "ZombieMale",
             "src": "ZOMBIE_MALE",
+            "currentRoom": "room1",
             "castShadow": true,
             "receiveShadow": true,
             "scale": [0.98, 0.98, 0.98],
@@ -113,6 +131,7 @@
             "name": "zombie4",
             "type": "ZombieMale",
             "src": "ZOMBIE_MALE",
+            "currentRoom": "room1",
             "castShadow": true,
             "receiveShadow": true,
             "scale": [0.98, 0.98, 0.98],
@@ -263,35 +282,6 @@
                     "turnOn": true,
                     "alwaysOn": true,
                     "room": "room1"
-                },
-                {
-                    "name": "room1_pointLight3",
-                    "display": "Ceiling Lamp Safe Room",
-                    "detail": {
-                        "color": [
-                            246,
-                            186,
-                            53
-                        ],
-                        "position": [
-                            0,
-                            -0.480000000000001,
-                            0
-                        ],
-                        "intensity": 65.55,
-                        "distance": 0,
-                        "decay": 2,
-                        "shadowCameraAspect": 1
-                    },
-                    "debug": true,
-                    "shadow": true,
-                    "shadow_debug": true,
-                    "helper_show": false,
-                    "shadow_cam_show": false,
-                    "visible": true,
-                    "attachTo": "room1_modern_ceiling_lamp_01_safe_room",
-                    "turnOn": true,
-                    "room": "room1"
                 }
             ],
             "spotLightSpecs": [
@@ -333,6 +323,58 @@
                     "room": "room1"
                 }
             ]
+        },
+        {
+            "room": "safe_room_1",
+            "basicLightSpecs": [
+                {
+                    "name": "safe_room_1_ambientLight",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [
+                            88,
+                            249,
+                            187
+                        ],
+                        "intensity": 0.13
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true,
+                    "room": "safe_room_1"
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "safe_room_1_pointLight_1",
+                    "display": "Ceiling Lamp Safe Room",
+                    "detail": {
+                        "color": [
+                            246,
+                            186,
+                            53
+                        ],
+                        "position": [
+                            0,
+                            -0.480000000000001,
+                            0
+                        ],
+                        "intensity": 65.55,
+                        "distance": 0,
+                        "decay": 2,
+                        "shadowCameraAspect": 1
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "safe_room_1_modern_ceiling_lamp_01",
+                    "turnOn": true,
+                    "room": "safe_room_1"
+                }
+            ]
         }
     ],
     "objects": [
@@ -370,12 +412,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        5.5,
+                        0.03,
                         2,
-                        4.89
+                        2.89
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "belongTo": "jill",
                     "isPicked": true,
                     "isArmed": true,
@@ -395,12 +437,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        5,
+                        -0.47,
                         2,
-                        10.89
+                        2.89
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "belongTo": "jill",
                     "isPicked": true,
                     "isArmed": false,
@@ -420,12 +462,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        4.5,
+                        -0.97,
                         2,
-                        10.89
+                        2.89
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "belongTo": "jill",
                     "isPicked": true,
                     "isArmed": false,
@@ -445,12 +487,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        4,
+                        -1.47,
                         2,
-                        10.89
+                        2.89
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "belongTo": "jill",
                     "isPicked": true,
                     "isArmed": false,
@@ -470,12 +512,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        6,
+                        0.53,
                         2,
-                        10.89
+                        2.89
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "belongTo": "jill",
                     "isPicked": true,
                     "isArmed": true,
@@ -497,12 +539,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        6.3,
+                        0.83,
                         2,
-                        10.63
+                        2.63
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "isPicked": false,
                     "ammo": {
                         "count": 35
@@ -525,7 +567,7 @@
                         10.63
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "isPicked": true,
                     "belongTo": "jill",
                     "ammo": {
@@ -544,12 +586,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        6.6,
+                        1.13,
                         2,
-                        10.63
+                        2.63
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "isPicked": false,
                     "ammo": {
                         "count": 10
@@ -567,12 +609,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        6.9,
+                        1.43,
                         2,
-                        10.63
+                        2.63
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "isPicked": false,
                     "ammo": {
                         "count": 90
@@ -593,12 +635,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        6,
+                        0.53,
                         2,
-                        10.63
+                        2.63
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "isPicked": false
                 },
                 {
@@ -616,12 +658,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        5.7,
+                        0.23,
                         2,
-                        10.63
+                        2.63
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "isPicked": false
                 },
                 {
@@ -639,12 +681,12 @@
                     "isObstacle": true,
                     "movable": true,
                     "position": [
-                        5.3,
+                        -0.17,
                         2,
-                        10.63
+                        2.63
                     ],
                     "rotationY": 0,
-                    "currentRoom": "room1",
+                    "currentRoom": "safe_room_1",
                     "isPicked": false
                 }
             ]
@@ -748,45 +790,6 @@
                         -1.9528935184633294,
                         -1.901,
                         -1.0240740740878715
-                    ],
-                    "rotationY": 0,
-                    "transparent": false
-                },
-                {
-                    "type": "BoxCube",
-                    "scale": [
-                        3.6,
-                        1.2,
-                        1.2
-                    ],
-                    "baseSize": 1.2,
-                    "map": "CRATE",
-                    "normalMap": "CRATE_NORMAL",
-                    "frontMap": "CRATE",
-                    "frontNormal": "CRATE_NORMAL",
-                    "backMap": "CRATE",
-                    "backNormal": "CRATE_NORMAL",
-                    "leftMap": "CRATE",
-                    "leftNormal": "CRATE_NORMAL",
-                    "rightMap": "CRATE",
-                    "rightNormal": "CRATE_NORMAL",
-                    "topMap": "CRATE",
-                    "topNormal": "CRATE_NORMAL",
-                    "bottomMap": "CRATE",
-                    "bottomNormal": "CRATE_NORMAL",
-                    "mapRatio": 1,
-                    "freeTexture": true,
-                    "noRepeat": false,
-                    "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": true,
-                    "climbable": true,
-                    "pushable": false,
-                    "name": "room1_CubeBox3",
-                    "position": [
-                        5.5,
-                        -1.901,
-                        10.89513
                     ],
                     "rotationY": 0,
                     "transparent": false
@@ -1245,21 +1248,6 @@
                     "rotationY": 0
                 },
                 {
-                    "type": "ModernCeilingLamp01",
-                    "src": "MODERN_CEILING_LAMP_01",
-                    "name": "room1_modern_ceiling_lamp_01_safe_room",
-                    "scale": [
-                        1,
-                        0.78
-                    ],
-                    "position": [
-                        5.47,
-                        0.9,
-                        8
-                    ],
-                    "rotationY": 0
-                },
-                {
                     "type": "SecurityLight",
                     "src": "SECURITY_LIGHT",
                     "name": "room1_security_light_1",
@@ -1355,7 +1343,11 @@
                         6.98
                     ],
                     "rotationY": 1.5708,
-                    "ignoreTPC": true
+                    "ignoreTPC": true,
+                    "roomSequence": 0,
+                    "transportType": 1,
+                    "linkTo": "safe_room_1_wooden_door_1",
+                    "transportTo": -1
                 },
                 {
                     "type": "WoodenGlassDoor1",
@@ -1376,7 +1368,284 @@
                         4.5
                     ],
                     "rotationY": 0,
-                    "ignoreTPC": true
+                    "ignoreTPC": true,
+                    "roomSequence": 0,
+                    "transportType": 1,
+                    "linkTo": "safe_room_1_wooden_glass_door_1",
+                    "transportTo": -1
+                }
+            ]
+        },
+        {
+            "type": "Room",
+            "width": 15,
+            "height": 5,
+            "depth": 15,
+            "baseSize": 9,
+            "ignoreWalls": [0, 1, 2, 3],
+            "mapRatio": 1.5,
+            "name": "safe_room_1",
+            "showArrow": false,
+            "enableWallOBBs": true,
+            "position": [
+                0,
+                2.5,
+                0
+            ],
+            "rotationY": 0,
+            "sequence": 1,
+            "groups": [
+                {
+                    "type": "LWall",
+                    "thicknessS": 0.016,
+                    "thicknessT": 0.024,
+                    "scale": [
+                        4,
+                        3.58,
+                        7
+                    ],
+                    "baseSize": 4.6,
+                    "outTMap": "BRICK_159",
+                    "outTNormal": "BRICK_159_NORMAL",
+                    "outSMap": "BRICK_159",
+                    "outSNormal": "BRICK_159_NORMAL",
+                    "inTMap": "METAL_272",
+                    "inTNormal": "METAL_272_NORMAL",
+                    "inSMap": "METAL_272",
+                    "inSNormal": "METAL_272_NORMAL",
+                    "sideTMap": "BRICK_159",
+                    "sideTNormal": "BRICK_159_NORMAL",
+                    "sideSMap": "BRICK_159",
+                    "sideSNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "safe_room_1_saferoom_LWall1",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "enableOBBs": true,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -0.710000000000001,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false
+                },
+                {
+                    "type": "LWall",
+                    "thicknessS": 0.016,
+                    "thicknessT": 0.024,
+                    "scale": [
+                        4,
+                        3.58,
+                        7
+                    ],
+                    "baseSize": 4.6,
+                    "outTMap": "BRICK_159",
+                    "outTNormal": "BRICK_159_NORMAL",
+                    "outSMap": "BRICK_159",
+                    "outSNormal": "BRICK_159_NORMAL",
+                    "inTMap": "METAL_272",
+                    "inTNormal": "METAL_272_NORMAL",
+                    "inSMap": "METAL_272",
+                    "inSNormal": "METAL_272_NORMAL",
+                    "sideTMap": "BRICK_159",
+                    "sideTNormal": "BRICK_159_NORMAL",
+                    "sideSMap": "BRICK_159",
+                    "sideSNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "safe_room_1_saferoom_LWall2",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "enableOBBs": true,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -0.710000000000001,
+                        0
+                    ],
+                    "rotationY": 3.1416,
+                    "transparent": false
+                },
+                {
+                    "type": "SquarePillar",
+                    "scale": [
+                        4,
+                        0.3,
+                        7
+                    ],
+                    "baseSize": 7,
+                    "enableOBBs": true,
+                    "frontMap": "BRICK_159",
+                    "frontNormal": "BRICK_159_NORMAL",
+                    "backMap": "BRICK_159",
+                    "backNormal": "BRICK_159_NORMAL",
+                    "leftMap": "BRICK_159",
+                    "leftNormal": "BRICK_159_NORMAL",
+                    "rightMap": "BRICK_159",
+                    "rightNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "FABRIC_190",
+                    "bottomNormal": "FABRIC_190_NORMAL",
+                    "mapRatio": 1,
+                    "name": "safe_room_1_square_pillar_safe_room_roof",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        1.23,
+                        0
+                    ],
+                    "rotationY": 0
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        3.6,
+                        1.2,
+                        1.2
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "frontMap": "CRATE",
+                    "frontNormal": "CRATE_NORMAL",
+                    "backMap": "CRATE",
+                    "backNormal": "CRATE_NORMAL",
+                    "leftMap": "CRATE",
+                    "leftNormal": "CRATE_NORMAL",
+                    "rightMap": "CRATE",
+                    "rightNormal": "CRATE_NORMAL",
+                    "topMap": "CRATE",
+                    "topNormal": "CRATE_NORMAL",
+                    "bottomMap": "CRATE",
+                    "bottomNormal": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": true,
+                    "noRepeat": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "pushable": false,
+                    "name": "safe_room_1_CubeBox1",
+                    "position": [
+                        0.03,
+                        -1.901,
+                        2.89513
+                    ],
+                    "rotationY": 0,
+                    "transparent": false
+                },
+                {
+                    "type": "ModernCeilingLamp01",
+                    "src": "MODERN_CEILING_LAMP_01",
+                    "name": "safe_room_1_modern_ceiling_lamp_01",
+                    "scale": [
+                        1,
+                        0.78
+                    ],
+                    "position": [
+                        0,
+                        0.9,
+                        0
+                    ],
+                    "rotationY": 0
+                }
+            ],
+            "floors": [
+                {
+                    "type": "OBBPlane",
+                    "width": 15,
+                    "height": 15,
+                    "scale": [1, 1, 1],
+                    "map": "STONE_165",
+                    "normalMap": "STONE_165_NORMAL",
+                    "name": "safe_room1_floor1",
+                    "repeatU": 1.33,
+                    "repeatV": 2,
+                    "repeatModeU": 1002,
+                    "repeatModeV": 1002,
+                    "rotationT": 1.5708,
+                    "receiveShadow": true,
+                    "position": [
+                        0,
+                        -2.5,
+                        0
+                    ],
+                    "rotation": [
+                        -1.5708,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "ceilings": [],
+            "walls": [],
+            "insideWalls": [],
+            "entries": [
+                {
+                    "type": "WoodenDoor1",
+                    "src": "WOODEN_DOOR_1",
+                    "name": "safe_room_1_wooden_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -1.99,
+                        -1.2953,
+                        -1.02
+                    ],
+                    "rotationY": 1.5708,
+                    "ignoreTPC": true,
+                    "roomSequence": 1,
+                    "transportType": 1,
+                    "linkTo": "room1_wooden_door_1",
+                    "transportTo": 1
+                },
+                {
+                    "type": "WoodenGlassDoor1",
+                    "src": "WOODEN_GLASS_DOOR_1",
+                    "name": "safe_room_1_wooden_glass_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -1.2987,
+                        -3.5
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true,
+                    "roomSequence": 1,
+                    "transportType": 1,
+                    "linkTo": "room1_wooden_glass_door_1",
+                    "transportTo": 1
                 }
             ]
         }

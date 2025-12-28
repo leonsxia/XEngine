@@ -34,8 +34,8 @@ class Combat extends UpdatableBase {
             const obj = this.attachTo.sceneObjects[i];
             const { mesh, group } = obj;
 
-            if (mesh) objects.push(mesh);
-            else if (group) objects.push(group);
+            if (mesh && mesh.visible) objects.push(mesh);
+            else if (group && group.visible) objects.push(group);
 
         }
 
@@ -49,7 +49,7 @@ class Combat extends UpdatableBase {
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];
-            if (enemy.isActive && !enemy.dead) {
+            if (enemy.isActive && !enemy.dead && enemy.currentRoom === this.currentRoom.name) {
 
                 objects.push(enemy.group);
 

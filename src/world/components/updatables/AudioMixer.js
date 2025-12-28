@@ -44,7 +44,7 @@ class AudioMixer extends UpdatableBase {
 
             const player = this.players[i];
 
-            if (!player.disposed) player.audioMixerTick?.(delta);
+            if (player.isActive && !player.disposed) player.audioMixerTick?.(delta);
 
         }
 
@@ -52,7 +52,11 @@ class AudioMixer extends UpdatableBase {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.disposed) enemy.audioMixerTick?.(delta);
+            if (enemy.isActive && !enemy.disposed && enemy.currentRoom === this.currentRoom.name) {
+                
+                enemy.audioMixerTick?.(delta);
+
+            }
 
         }
 
