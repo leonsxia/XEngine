@@ -20,12 +20,6 @@ class Combat extends UpdatableBase {
 
     }
 
-    get currentRoom() {
-
-        return this.attachTo.currentRoom;
-
-    }
-
     get sceneObjects() {
 
         const objects = [];

@@ -34,7 +34,7 @@ class AnimeMixer extends UpdatableBase {
 
             const enemy = this.enemies[i];
 
-            if (!enemy.disposed) enemy.animationMixerTick?.(delta);
+            if (!enemy.disposed && enemy.currentRoom === this.currentRoom.name) enemy.animationMixerTick?.(delta);
 
         }
 
@@ -42,7 +42,7 @@ class AnimeMixer extends UpdatableBase {
 
             const obj = this.pickables[i];
 
-            if (obj.isPickableItem && !obj.isPicked) obj.tick(delta);
+            if (obj.isPickableItem && !obj.isPicked && obj.currentRoom === this.currentRoom.name) obj.tick(delta);
 
         }
 
