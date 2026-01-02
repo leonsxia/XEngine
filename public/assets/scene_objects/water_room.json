@@ -182,7 +182,9 @@
                     "name": "room1_modern_ceiling_lamp_01_1",
                     "scale": [1.2, 1.3],
                     "position": [0, 3.84, 0],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false
                 },
                 {
                     "type": "SquarePillar",

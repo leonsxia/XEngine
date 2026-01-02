@@ -1252,7 +1252,9 @@
                         3.75,
                         7.5
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false
                 },
                 {
                     "type": "ModernCeilingLamp01",
@@ -1260,7 +1262,9 @@
                     "name": "room1_modern_ceiling_lamp_01_2",
                     "scale": [1.2, 1.3],
                     "position": [5, 3.98, -7.5],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false
                 },
                 {
                     "type": "ModernCeilingLamp01",
@@ -1268,7 +1272,9 @@
                     "name": "room1_modern_ceiling_lamp_01_3",
                     "scale": [1.2, 1.3],
                     "position": [-5, 3.98, -7.5],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false
                 },
                 {
                     "type": "SecurityLight",
@@ -1276,7 +1282,9 @@
                     "name": "room1_security_light_1",
                     "scale": [1.2, 1.3, 1.1],
                     "position": [0, -0.95, -14.78],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false
                 },
                 {
                     "type": "SecurityLight",
@@ -1284,7 +1292,9 @@
                     "name": "room1_security_light_2",
                     "scale": [1.2, 1.3, 1.1],
                     "position": [-14.8055, 3.8, 0],
-                    "rotationY": 1.5708
+                    "rotationY": 1.5708,
+                    "castShadow": false,
+                    "receiveShadow": false
                 },
                 {
                     "type": "SecurityLight",
@@ -1292,7 +1302,9 @@
                     "name": "room1_security_light_3",
                     "scale": [1.2, 1.3, 1.1],
                     "position": [14.8055, 3.8, 0],
-                    "rotationY": -1.5708
+                    "rotationY": -1.5708,
+                    "castShadow": false,
+                    "receiveShadow": false
                 },
 
                 {

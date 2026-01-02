@@ -1245,7 +1245,9 @@
                         2.35,
                         0
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false
                 },
                 {
                     "type": "SecurityLight",
@@ -1261,7 +1263,9 @@
                         0.84,
                         6.98
                     ],
-                    "rotationY": -1.5708
+                    "rotationY": -1.5708,
+                    "castShadow": false,
+                    "receiveShadow": false
                 }
             ],
             "floors": [
@@ -1563,7 +1567,9 @@
                         0.9,
                         0
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false
                 }
             ],
             "floors": [
