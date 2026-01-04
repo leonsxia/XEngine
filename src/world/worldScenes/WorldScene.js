@@ -689,7 +689,7 @@ class WorldScene {
             if (i === roomSequence) {
 
                 room.setLightsVisible(true);
-                room.visible = true;    
+                room.visible = true;
 
             } else {
 
