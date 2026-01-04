@@ -331,11 +331,7 @@
                     "name": "safe_room_1_ambientLight",
                     "display": "Ambient Light",
                     "detail": {
-                        "color": [
-                            88,
-                            249,
-                            187
-                        ],
+                        "color": [255, 221, 173],
                         "intensity": 0.13
                     },
                     "type": "AmbientLight",
@@ -349,17 +345,13 @@
                     "name": "safe_room_1_pointLight_1",
                     "display": "Ceiling Lamp Safe Room",
                     "detail": {
-                        "color": [
-                            246,
-                            186,
-                            53
-                        ],
+                        "color": [255, 226, 163],
                         "position": [
                             0,
                             -0.480000000000001,
                             0
                         ],
-                        "intensity": 65.55,
+                        "intensity": 41.55,
                         "distance": 0,
                         "decay": 2,
                         "shadowCameraAspect": 1
