@@ -152,7 +152,7 @@ class ObstacleMoveable {
         const { delta, obstacle } = params;
 
         const now = this.#fallingTime + delta;
-        const deltaY = .5 * this.verticalAcceleratedSpeed * (now * now - this.#fallingTime * this.#fallingTime);
+        const deltaY = .5 * this.verticalAcceleratedSpeed * (now ** 2 - this.#fallingTime ** 2);
         obstacle.group.position.y -= deltaY;
 
         this.#lastFrameFallingDist = deltaY;

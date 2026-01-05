@@ -374,7 +374,7 @@ class Moveable2D {
         if (!this.#isClimbingUp && !this.#isClimbingForward) {
             
             const now = this.#fallingTime + delta;
-            const deltaY = .5 * this.#g * (now * now - this.#fallingTime * this.#fallingTime);
+            const deltaY = .5 * this.#g * (now ** 2 - this.#fallingTime ** 2);
             $self.group.position.y -= deltaY;
 
             this.#lastFrameFallingDist = deltaY;
