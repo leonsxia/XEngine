@@ -560,9 +560,9 @@ class ModelBuilder {
 
         let object;
         const { position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
-        const { map, normalMap } = specs;
+        const { map, normalMap, aoMap } = specs;
 
-        const maps = [{ map }, { normalMap }];
+        const maps = [{ map }, { normalMap }, { aoMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new Terrain(specs);

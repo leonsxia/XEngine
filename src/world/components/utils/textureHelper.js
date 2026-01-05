@@ -53,7 +53,7 @@ async function loadTextures(mapsArr) {
     for (let i = 0, il = mapsArr.length; i < il; i++) {
 
         const m = mapsArr[i];
-        const { name, map, normalMap } = m;
+        const { name, map, normalMap, aoMap } = m;
 
         if (map) {
 
@@ -69,6 +69,13 @@ async function loadTextures(mapsArr) {
 
         }
 
+        if (aoMap) {
+
+            loaded[`${name}_AO`] = null;
+            loadPromises.push(loader.loadAsync(aoMap));
+
+        }
+
     }   
 
     const results = await Promise.all(loadPromises);
@@ -78,7 +85,7 @@ async function loadTextures(mapsArr) {
 
         const m = mapsArr[j];
 
-        const { name, map, normalMap } = m;
+        const { name, map, normalMap, aoMap } = m;
 
         if (map) {
 
@@ -94,7 +101,14 @@ async function loadTextures(mapsArr) {
             i++;
 
         }
-        
+
+        if (aoMap) {
+
+            loaded[`${name}_AO`] = results[i];
+            i++;
+
+        }
+
     }
 
     Object.assign(loadedTextures, loaded);

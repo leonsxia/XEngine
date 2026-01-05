@@ -27,7 +27,29 @@ class Terrain extends BasicObject {
 
     async init () {
 
-        await this.initBasic();
+        const initPromises = [];
+        initPromises.push(this.initBasic());
+
+        const { aoMap } = this.specs;
+
+        if (aoMap?.isTexture) {
+
+            const _map = aoMap.clone();
+            this.setTexture(_map);
+            this.material.aoMap = _map;
+
+        }
+
+        initPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
+
+        const [ , ao] = await Promise.all(initPromises);
+
+        if (ao) {
+
+            this.setTexture(ao);
+            this.material.aoMap = ao;
+
+        }
         
     }
 

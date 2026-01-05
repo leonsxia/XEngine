@@ -52,6 +52,25 @@
             "position": [0, 0, 0]
         }
     ],
+    "enemies": [
+        {
+            "name": "zombie1",
+            "type": "ZombieMale",
+            "src": "ZOMBIE_MALE",
+            "currentRoom": "room1",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [3, 3, 5],
+            "rotation": [0, 3.1416, 0],
+            "isActive": true,
+            "sovRadius": 6.5,
+            "showBS": false,
+            "variant": "standard",
+            "vel": 0.37,
+            "rotateR": 1
+        }
+    ],
     "lights": [
         {
             "room": "room1",
@@ -523,14 +542,14 @@
                     "height": 0.5,
                     "segmentW": 20,
                     "segmentD": 20,
-                    "map": "SOIL_125",
-                    "normalMap": "SOIL_125_NORMAL",
+                    "map": "FOREST_LEAVES_02",
+                    "normalMap": "FOREST_LEAVES_02_NORMAL",
+                    "aoMap": "FOREST_LEAVES_02_AO",
                     "name": "room1_terrain1",
                     "repeatU": 2,
                     "repeatV": 3,
-                    "repeatModeU": 1002,
-                    "repeatModeV": 1002,
-                    "rotationT": 0,
+                    "repeatModeU": 1000,
+                    "repeatModeV": 1000,
                     "receiveShadow": true,
                     "position": [0, -2.5, 0],
                     "rotation": [0, 0, 0]
