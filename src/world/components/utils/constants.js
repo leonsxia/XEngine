@@ -226,6 +226,13 @@ const TEXTURE_NAMES = {
     METAL_241: 'METAL_241',
     METAL_168: 'METAL_168',
     METAL_168_NORMAL: 'METAL_168_NORMAL',
+    // terrain
+    SOIL_125: 'SOIL_125',
+    SOIL_125_NORMAL: 'SOIL_125_NORMAL',
+    SOIL_135: 'SOIL_135',
+    SOIL_135_NORMAL: 'SOIL_135_NORMAL',
+    SOIL_144: 'SOIL_144',
+    SOIL_144_NORMAL: 'SOIL_144_NORMAL',
     // water
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
@@ -293,6 +300,12 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.METAL_241, map: 'assets/textures/walls/Texturelabs_Metal_241L.jpg'
 }, {
     name: TEXTURE_NAMES.METAL_168, map: 'assets/textures/walls/Texturelabs_Metal_168M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_168L.jpg'
+}, {
+    name: TEXTURE_NAMES.SOIL_125, map: 'assets/textures/terrain/Texturelabs_Soil_125M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Soil_125L.jpg'
+}, {
+    name: TEXTURE_NAMES.SOIL_135, map: 'assets/textures/terrain/Texturelabs_Soil_135M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Soil_135L.jpg'
+}, {
+    name: TEXTURE_NAMES.SOIL_144, map: 'assets/textures/terrain/Texturelabs_Soil_144M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Soil_144L.jpg'
 }, {
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {

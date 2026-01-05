@@ -9,6 +9,7 @@ import { WorldScene5 } from "./worldScenes/WorldScene5";
 import { WorldScene6 } from "./worldScenes/WorldScene6";
 import { WorldMatrix } from "./worldScenes/Matrix";
 import { EnemyTestScene } from "./worldScenes/EnemyTestScene";
+import { WorldTerrain } from "./worldScenes/WorldTerrain";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
@@ -45,7 +46,8 @@ const config = {
         'Animated Characters', 
         'Entries Test',  
         'Matrix', 
-        'Enemy Test Scene'
+        'Enemy Test Scene',
+        'World Terrain'
     ],  // scene list for scene selector
 };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
@@ -119,16 +121,19 @@ class World {
         this._mouse.bindAllEvents();
 
         this.worldScenes = [];
-        this.worldScenes.push(new WorldScene1(this.#renderer, config));
-        this.worldScenes.push(new WorldScene2(this.#renderer, config));
-        this.worldScenes.push(new WorldScene3(this.#renderer, config));
-        this.worldScenes.push(new WorldScene4(this.#renderer, config));
-        this.worldScenes.push(new WorldScene5(this.#renderer, config));
-        this.worldScenes.push(new WorldScene6(this.#renderer, config));
-        this.worldScenes.push(new WaterRoom(this.#renderer, config));
-        this.worldScenes.push(new Mansion(this.#renderer, config));
-        this.worldScenes.push(new WorldMatrix(this.#renderer, config));
-        this.worldScenes.push(new EnemyTestScene(this.#renderer, config));
+        this.worldScenes.push(
+            new WorldScene1(this.#renderer, config),
+            new WorldScene2(this.#renderer, config),
+            new WorldScene3(this.#renderer, config),
+            new WorldScene4(this.#renderer, config),
+            new WorldScene5(this.#renderer, config), 
+            new WorldScene6(this.#renderer, config), 
+            new WaterRoom(this.#renderer, config), 
+            new Mansion(this.#renderer, config), 
+            new WorldMatrix(this.#renderer, config), 
+            new EnemyTestScene(this.#renderer, config),
+            new WorldTerrain(this.#renderer, config)
+        );
 
     }
 

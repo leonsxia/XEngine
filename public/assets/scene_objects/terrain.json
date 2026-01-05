@@ -1,0 +1,298 @@
+{
+    "settings": {
+        "name": "World Terrain",
+        "camera": {
+            "position": [
+                -1.5,
+                4.5,
+                6.5
+            ]
+        },
+        "moveType": "tankmove",
+        "enableTPC": true,
+        "enableIC": true,
+        "enableGui": true,
+        "enableShadow": true,
+        "enablePicker": true,
+        "allTargets": [
+            {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        ],
+        "allCameraPos": [
+            {
+                "x": 3,
+                "y": 7,
+                "z": 8
+            }
+        ],
+        "allPlayerPos": [
+            [
+                0,
+                3,
+                0
+            ]
+        ],
+        "defaultPlayer": "jill",
+        "postProcessing": {
+            "bloomStrength": 1.68,
+            "bloomRadius": 0.74
+        }
+    },
+    "players": [
+        {
+            "name": "jill",
+            "type": "SoldierFemale",
+            "src": "SOLDIER_FEMALE",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [0, 0, 0]
+        }
+    ],
+    "lights": [
+        {
+            "room": "room1",
+            "basicLightSpecs": [
+                {
+                    "name": "room1_mainLight",
+                    "display": "Directional Light",
+                    "detail": {
+                        "color": [251, 216, 142],
+                        "intensity": 0.5,
+                        "position": [0, 20, 28],
+                        "target": [0, 0, 0]
+                    },
+                    "type": "DirectionalLight",
+                    "debug": true,
+                    "shadow": false,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                },
+                {
+                    "name": "room1_ambientLight",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [255, 235, 102],
+                        "intensity": 0.1
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true
+                },
+                {
+                    "name": "room1_hemisphereLight",
+                    "display": "Hemisphere Light",
+                    "detail": {
+                        "groundColor": [103, 210, 96],
+                        "skyColor": [255, 255, 255],
+                        "intensity": 0.15,
+                        "position": [0, 4.6, 0]
+                    },
+                    "type": "HemisphereLight",
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "room1_pointLight1",
+                    "display": "top point light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "position": [0, 3, 0],
+                        "intensity": 120,
+                        "distance": 0,
+                        "decay": 2
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "turnOn": true
+                }
+            ],
+            "spotLightSpecs": []
+        }
+    ],
+    "objects": [
+        {
+            "type": "Scene",
+            "children": [
+                {
+                    "type": "Axes",
+                    "size": 3,
+                    "position": [-50.5, 0, -50.5]
+                },
+                {
+                    "type": "Grid",
+                    "size": 100,
+                    "divisions": 100,
+                    "position": [0, 0.01, 0]
+                },
+                {
+                    "type": "Glock",
+                    "src": "GLOCK_ITEM",
+                    "name": "glock",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
+                },
+                {
+                    "type": "Pistol1",
+                    "src": "PISTOL1_ITEM",
+                    "name": "pistol",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "Revolver",
+                    "src": "REVOLVER_ITEM",
+                    "name": "revolver",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "SMGShort",
+                    "src": "SMG_SHORT_ITEM",
+                    "name": "smg_short",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "Bayonet",
+                    "src": "BAYONET_ITEM",
+                    "name": "bayonet",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
+                }
+            ]
+        },
+        {
+            "type": "Room",
+            "width": 30,
+            "height": 5,
+            "depth": 30,
+            "baseSize": 9,
+            "frontMap": "CONCRETE_132",
+            "frontNormal": "CONCRETE_132_NORMAL",
+            "backMap": "CONCRETE_132",
+            "backNormal": "CONCRETE_132_NORMAL",
+            "leftMap": "CONCRETE_132",
+            "leftNormal": "CONCRETE_132_NORMAL",
+            "rightMap": "CONCRETE_132",
+            "rightNormal": "CONCRETE_132_NORMAL",
+            "mapRatio": 1.5,
+            "name": "room1",
+            "showArrow": false,
+            "enableWallOBBs": true,
+            "position": [0, 2.5, 0],
+            "rotationY": 0,
+            "groups": [],
+            "floors": [
+                {
+                    "type": "OBBPlane",
+                    "width": 30,
+                    "height": 30,
+                    "map": "SOIL_144",
+                    "normalMap": "SOIL_144_NORMAL",
+                    "name": "room1_floor1",
+                    "repeatU": 1,
+                    "repeatV": 1.5,
+                    "repeatModeU": 1002,
+                    "repeatModeV": 1002,
+                    "rotationT": 0,
+                    "receiveShadow": true,
+                    "position": [0, -2.5, 0],
+                    "rotation": [-1.5708, 0, 0]
+                }
+            ],
+            "ceilings": [],
+            "walls": [],
+            "insideWalls": [],
+            "waters": [],
+            "entries": []
+        }
+    ]
+}
