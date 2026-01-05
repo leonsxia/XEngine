@@ -47,7 +47,7 @@ const config = {
         'Entries Test',  
         'Matrix', 
         'Enemy Test Scene',
-        'World Terrain'
+        'Terrain'
     ],  // scene list for scene selector
 };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);

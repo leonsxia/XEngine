@@ -20,6 +20,9 @@ const RAY_PADDING = .11;
 const HEAD_LENGTH = .5;
 const HEAD_WIDTH = .1;
 
+const SLOPE_RAY_LENGTH = 2;
+const TERRAIN_RAY_LENGTH = .6;
+
 const _v1 = new Vector3();
 const _v2 = new Vector3();
 const _down = new Vector3(0, -1, 0);
@@ -817,7 +820,7 @@ class TofuBase extends Moveable2D {
 
         this.hasRays = true;
  
-        const length = this.height * 2;
+        const length = this.height * SLOPE_RAY_LENGTH;
         const posY = 0;
         const posX = this.width * .5 - this.#rayPadding;
         const posZ = this.depth * .5 - this.#rayPadding;
@@ -955,7 +958,7 @@ class TofuBase extends Moveable2D {
 
         }
 
-        const length = this.height * 2;
+        // const length = this.height * SLOPE_RAY_LENGTH;
         const posY = 0;
         const posX = this.#w * .5 - this.#rayPadding;
         const posZ = this.#d * .5 - this.#rayPadding;
@@ -963,37 +966,66 @@ class TofuBase extends Moveable2D {
         // left
         _v1.set(posX, posY, posZ).applyMatrix4(this.group.matrixWorld);
         this.leftRay.set(_v1, _down);
-        this.leftRay.far = length;
+        // this.leftRay.far = length;
         this.leftArrow.position.copy(_v1);
         this.leftArrow.setDirection(_down);
-        this.leftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+        // this.leftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // right
         _v1.set(- posX, posY, posZ).applyMatrix4(this.group.matrixWorld);
         this.rightRay.set(_v1, _down);
-        this.rightRay.far = length;
+        // this.rightRay.far = length;
         this.rightArrow.position.copy(_v1);
         this.rightArrow.setDirection(_down);
-        this.rightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+        // this.rightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backLeft
         _v1.set(posX, posY, - posZ).applyMatrix4(this.group.matrixWorld);
         this.backLeftRay.set(_v1, _down);
-        this.backLeftRay.far = length;
+        // this.backLeftRay.far = length;
         this.backLeftArrow.position.copy(_v1);
         this.backLeftArrow.setDirection(_down);
-        this.backLeftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+        // this.backLeftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         // backRight
         _v1.set(- posX, posY, - posZ).applyMatrix4(this.group.matrixWorld);
         this.backRightRay.set(_v1, _down);
-        this.backRightRay.far = length;
+        // this.backRightRay.far = length;
         this.backRightArrow.position.copy(_v1);
         this.backRightArrow.setDirection(_down);
-        this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+        // this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         this.updateAimRay(false);
         if (this._inSightTargets.length === 0) this.updateFocusRay(false);
+
+        return this;
+
+    }
+
+    updateRayLength(type) {
+
+        let length;
+        switch (type) {
+
+            case 'terrain':
+                length = this.height * TERRAIN_RAY_LENGTH;
+                break;
+
+            default:
+                length = this.height * SLOPE_RAY_LENGTH;
+                break;
+
+        }
+
+        this.leftRay.far = length;
+        this.rightRay.far = length;
+        this.backLeftRay.far = length;
+        this.backRightRay.far = length;
+
+        this.leftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+        this.rightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+        this.backLeftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+        this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
 
@@ -1339,27 +1371,19 @@ class TofuBase extends Moveable2D {
 
     tickOnSlope(slopes) {
 
-        let onSlope = this.onSlopeTick({ slopes, $self: this });
+        let result = this.onSlopeTick({ slopes, $self: this });
 
         this.updateAccessories();
 
-        return onSlope;
+        return result;
 
     }
 
-    tickOnSurface(surface, point) {
+    tickOnSlopePointsAdjust(points) {
 
-        const result = this.onSurfaceTick({ surface, point, $self: this });
+        this.setOnSlopePoint({points, $self: this});
 
-        if (surface) {
-
-            return result;
-
-        } else {
-
-            this.updateAccessories();
-
-        }
+        this.updateAccessories();
 
     }
 

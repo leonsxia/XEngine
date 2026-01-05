@@ -1,6 +1,6 @@
 import {
     Train, Tofu, SoldierFemale, CreatureBase, ZombieMale, BlackWidow,
-    Plane, WaterPlane, OBBPlane, CollisionPlane, CollisionOBBPlane, 
+    Plane, WaterPlane, OBBPlane, CollisionPlane, CollisionOBBPlane, Terrain,
     Room, InspectorRoom, 
     SquarePillar, LWall, CylinderPillar, HexCylinderPillar, BoxCube, WaterCube, Slope, Stairs,
     WoodenPicnicTable, WoodenSmallTable, RoundWoodenTable, PaintedWoodenTable, PaintedWoodenNightstand,
@@ -21,7 +21,7 @@ import {
 } from '../../components/Models.js';
 import {
     AXES, GRID, TRAIN, TOFU, SOLDIER_FEMALE, CREATURE_BASE, ZOMBIE_MALE, BLACK_WIDOW,
-    PLANE, WATER_PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE,
+    PLANE, WATER_PLANE, OBBPLANE, COLLISIONPLANE, COLLISIONOBBPLANE, TERRAIN,
     ROOM, INSPECTOR_ROOM,
     SQUARE_PILLAR, LWALL, CYLINDER_PILLAR, HEX_CYLINDER_PILLAR, BOX_CUBE, WATER_CUBE, SLOPE, STAIRS,
     WOODEN_PICNIC_TABLE, WOODEN_SMALL_TABLE, ROUND_WOODEN_TABLE, PAINTED_WOODEN_TABLE, PAINTED_WOODEN_NIGHTSTAND,
@@ -88,6 +88,7 @@ class ModelBuilder {
         this.objectCreationMapping[OBBPLANE] = this.createOBBPlane;
         this.objectCreationMapping[COLLISIONPLANE] = this.createCollisionPlane;
         this.objectCreationMapping[COLLISIONOBBPLANE] = this.createCollisionOBBPlane;
+        this.objectCreationMapping[TERRAIN] = this.createTerrain;
         this.objectCreationMapping[ROOM] = this.createRoom;
         this.objectCreationMapping[INSPECTOR_ROOM] = this.createInspectorRoom;
         this.objectCreationMapping[SQUARE_PILLAR] = this.createSquarePillar;
@@ -550,6 +551,25 @@ class ModelBuilder {
 
         if (updateOBB) object.updateOBB();
         if (updateRay) object.updateRay();
+
+        return object;
+
+    }
+
+    createTerrain(specs) {
+
+        let object;
+        const { position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
+        const { map, normalMap } = specs;
+
+        const maps = [{ map }, { normalMap }];
+        this.setupObjectTextures(maps, specs);
+
+        object = new Terrain(specs);
+        object.setScaleWithTexUpdate(scale)
+            .setPosition(position)
+            .receiveShadow(receiveShadow)
+            .castShadow(castShadow);
 
         return object;
 

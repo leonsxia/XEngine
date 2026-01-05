@@ -1,4 +1,6 @@
+import { PlaneGeometry } from 'three';
 import { BufferGeometry, Float32BufferAttribute } from 'three';
+import { getRandomFloat } from './mathHelper';
 
 function createGeometryFromIndex(vertices, index) {
 
@@ -220,9 +222,43 @@ function createStairsTopGeometry(specs) {
 
 }
 
+function generateTerrainGeometry(width, depth, height, segmentW, segmentD) {
+
+	const geometry = new PlaneGeometry(width, depth, segmentW, segmentD);
+	geometry.rotateX(- Math.PI / 2);
+
+	const position = geometry.getAttribute('position');
+	const dx = width / segmentW;
+	const dy = depth / segmentD;
+	// store height data in map row-column map
+	const rowColumns = new Map();
+	for (let i = 0, il = position.count; i < il; i++) {
+
+		const row = Math.floor(position.getZ(i) / dy + 0.5) + segmentD * 0.5;
+		const column = Math.floor(position.getX(i) / dx + 0.5) + segmentW * 0.5;
+		const randomHeight = getRandomFloat(- height * .5, height * .5);
+		position.setY(i, randomHeight);
+
+		if (!rowColumns.has(row)) {
+
+			rowColumns.set(row, new Map());
+
+		}
+
+		rowColumns.get(row).set(column, randomHeight);
+
+	}
+
+	geometry.computeVertexNormals();
+
+	return { geometry, rowColumns };
+
+}
+
 export { 
 	createTriangleGeometry,
 	createStairsSideGeometry,
 	createStairsFrontGeometry,
-	createStairsTopGeometry
+	createStairsTopGeometry,
+	generateTerrainGeometry
 };

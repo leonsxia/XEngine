@@ -2,7 +2,7 @@
 import { WorldScene } from './WorldScene.js';
 
 const worldSceneSpecs = {
-    name: "World Terrain",
+    name: "Terrain",
     src: 'assets/scene_objects/terrain.json',
     enableGui: true
 };

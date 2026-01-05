@@ -1,12 +1,12 @@
 import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher } from 'three';
 // eslint-disable-next-line no-unused-vars
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
-import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry } from '../utils/geometryHelper';
+import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, generateTerrainGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
 import { basicMateraials } from './basicMaterial';
 import { white } from './colorBase';
 import { REPEAT_WRAPPING } from '../utils/constants';
-import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP, WATER_PLANE } from '../utils/constants';
+import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP, WATER_PLANE, TERRAIN } from '../utils/constants';
 
 class BasicObject extends EventDispatcher {
     
@@ -84,6 +84,12 @@ class BasicObject extends EventDispatcher {
                     this.geometry = createStairsTopGeometry(specs);
                 }
                 break;
+            case TERRAIN:
+                {
+                    const { width, height, depth, segmentW, segmentD } = specs;
+                    const { geometry } = generateTerrainGeometry(width, depth, height, segmentW, segmentD);
+                    this.geometry = geometry;
+                }
         }
 
         this.setupMaterials('material');

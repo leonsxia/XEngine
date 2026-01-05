@@ -38,6 +38,7 @@ class SimplePhysics {
     connectorSideFaces = [];
     connectorObbs = [];
     waterCubes = [];
+    terrains = [];
     obstacleCollisionOBBWalls = [];
     interactiveObs = [];
     activePlayers = [];
@@ -157,7 +158,7 @@ class SimplePhysics {
             floors, ceilings, topOBBs, bottomOBBs,
             obstacles, slopes, slopeSideOBBWalls,
             connectors, connectorFaces, connectorSideFaces,
-            waterCubes
+            waterCubes, terrains
         } = room;
 
         this.walls = walls.concat(insideWalls, airWalls);
@@ -172,7 +173,8 @@ class SimplePhysics {
         this.connectorFaces = connectorFaces;
         this.connectorSideFaces = connectorSideFaces;
         this.connectorObbs.push(...connectorSideFaces);
-        this.waterCubes = waterCubes;        
+        this.waterCubes = waterCubes;
+        this.terrains = terrains;
 
         this.interactiveObs = this.obstacles.filter(obs => 
                     
@@ -681,6 +683,7 @@ class SimplePhysics {
                 
                 obs.hittingGround = null;   // reset hitting ground
                 obs.hittingWater = null;    // reset hitting water
+                obs.hittingSlopes.length = 0; // reset hitting slopes
                 obs.resetInwaterState();
 
             }
@@ -792,8 +795,7 @@ class SimplePhysics {
 
         const onWaterObs = [];
         const onTopsObs = [];
-        const onSlopesObs = [];
-        const onConnectorFaceObs = [];
+        const onSlopeMaps = [];
 
         for (let i = 0, il = movableObs.length; i < il; i++) {
 
@@ -842,10 +844,8 @@ class SimplePhysics {
 
                     if (obs.intersectsOBB(s.slope.obb)) {
 
-                        onSlopesObs.push(obs);
-                        obs.hittingGround = s.slope;
-
-                        break;
+                        onSlopeMaps.push({ obs, points: [] });
+                        obs.hittingSlopes.push(s.slope.mesh);
 
                     }
 
@@ -862,7 +862,43 @@ class SimplePhysics {
 
                     if ((!obs.isRotatableLadder || !obs.slopes.find(s => s === cf)) && obs.intersectsOBB(cf.obb)) {
 
-                        onConnectorFaceObs.push({ obs, hittingGround: cf });
+                        if (onSlopeMaps.findIndex(o => o === obs) === - 1) {
+
+                            onSlopeMaps.push({ obs, points: [] });
+
+                        }
+
+                        obs.hittingSlopes.push(cf.mesh);
+
+                    }
+
+                }
+
+            }
+
+            if (!obs.hittingGround) {
+
+                for (let j = 0, jl = this.terrains.length; j < jl; j++) {
+
+                    const terrain = this.terrains[j];
+                    obs.hittingSlopes.push(terrain.mesh);
+                    const { onSlope, point } = obs.onSlope();
+                    if (onSlope) {
+
+                        if (onSlopeMaps.findIndex(o => o === obs) === - 1) {
+
+                            onSlopeMaps.push({ obs, points: [] });
+
+                        }
+
+                        onSlopeMaps.find(m => m.obs === obs).points.push(point);
+
+                    }
+
+                    const idx = obs.hittingSlopes.findIndex(s => s === terrain.mesh);
+                    if (idx !== -1) {
+
+                        obs.hittingSlopes.splice(idx, 1);
 
                     }
 
@@ -895,26 +931,24 @@ class SimplePhysics {
             }
 
         }
+        
+        if (onSlopeMaps.length > 0) {
 
-        if (onSlopesObs.length > 0) {
+            for (let i = 0, il = onSlopeMaps.length; i < il; i++) {
 
-            for (let i = 0, il = onSlopesObs.length; i < il; i++) {
+                const { obs, points } = onSlopeMaps[i];
+                const { onSlope, point } = obs.onSlope();
+                if (onSlope) {
 
-                const obs = onSlopesObs[i];
+                    points.push(point);
 
-                obs.onSlope();
+                }
 
-            }
+                if (points.length > 0) {
 
-        }
+                    obs.onSlopePointsAdjust(points);
 
-        if (onConnectorFaceObs.length > 0) {
-
-            for (let i = 0, il = onConnectorFaceObs.length; i < il; i++) {
-
-                const { obs, hittingGround } = onConnectorFaceObs[i];
-                obs.hittingGround = hittingGround;
-                obs.onSlope();
+                }
 
             }
 
@@ -924,7 +958,7 @@ class SimplePhysics {
             obs => 
                 (obs.verticalAcceleratedSpeed !== 0 && (!obs.inWaterAnimateBegin || obs.inWaterAnimateEnd)) &&
                 !onTopsObs.find(t => t === obs) &&
-                !onSlopesObs.find(s => s === obs)
+                !onSlopeMaps.find(m => m.obs === obs)
         );
 
         // check obstacles falling on floors
@@ -1187,11 +1221,11 @@ class SimplePhysics {
 
                     avatar.setSlopeIntersection?.();
 
-                } else if (avatar.isInAir && avatarIntersectSlope) {
+                } else if (avatarIntersectSlope) {
 
                     avatar.setSlopeIntersection?.(s);
 
-                } else if (avatarIntersectSlope && (avatar.obb.intersectsOBB(s.topBoxBuffer.obb) || avatar.obb.intersectsOBB(s.bottomBoxBuffer.obb))) {
+                } else if (avatar.obb.intersectsOBB(s.topBoxBuffer.obb) || avatar.obb.intersectsOBB(s.bottomBoxBuffer.obb)) {
 
                     avatar.setSlopeIntersection?.(s);
 
@@ -1229,11 +1263,11 @@ class SimplePhysics {
 
                         avatar.setSlopeIntersection?.();
 
-                    } else if (avatar.isInAir && avatarIntersectSlope) {
+                    } else if (avatarIntersectSlope) {
 
                         avatar.setSlopeIntersection?.(connector);
 
-                    } else if (avatarIntersectSlope && (avatar.obb.intersectsOBB(connector.topBuffer.obb) || avatar.obb.intersectsOBB(connector.bottomBuffer.obb))) {
+                    } else if (avatar.obb.intersectsOBB(connector.topBuffer.obb) || avatar.obb.intersectsOBB(connector.bottomBuffer.obb)) {
 
                         avatar.setSlopeIntersection?.(connector);
 
@@ -1279,10 +1313,21 @@ class SimplePhysics {
             }
 
             let isOnSlope = false;
+
+            if (collisionSlopes.length > 0 || collisionConnectors.length > 0) {
+
+                avatar.updateRayLength();
+
+            }
+
+            // collect on slope points and return the highest one
+            const onSlopePoints = [];
             if (collisionSlopes.length > 0) {
 
-                if (avatar.tickOnSlope(collisionSlopes[0])) {
+                const { onSlope, point } = avatar.tickOnSlope(collisionSlopes[0]);
+                if (onSlope) {
 
+                    onSlopePoints.push(point);
                     isLanded = true;
                     isOnSlope = true;
 
@@ -1295,14 +1340,40 @@ class SimplePhysics {
                 for (let i = 0, il = collisionConnectors.length; i < il; i++) {
 
                     const { faces } = collisionConnectors[i];
-                    if (avatar.tickOnSlope(faces)) {
+                    const { onSlope, point } = avatar.tickOnSlope(faces);
+                    if (onSlope) {
 
+                        onSlopePoints.push(point);
                         isLanded = true;
                         isOnSlope = true;
 
                     }
 
                 }
+
+            }
+
+            if (this.terrains.length > 0) {
+
+                avatar.updateRayLength('terrain');
+                for (let i = 0, il = this.terrains.length; i < il; i++) {
+
+                    const terrain = this.terrains[i];
+                    const { onSlope, point } = avatar.tickOnSlope([terrain.mesh]);
+                    if (onSlope) {
+
+                        onSlopePoints.push(point);
+                        isLanded = true;
+
+                    }
+
+                }
+
+            }
+
+            if (onSlopePoints.length > 0) {
+
+                avatar.tickOnSlopePointsAdjust(onSlopePoints);
 
             }
 

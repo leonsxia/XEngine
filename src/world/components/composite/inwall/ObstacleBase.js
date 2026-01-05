@@ -953,7 +953,18 @@ class ObstacleBase extends ObstacleMoveable {
 
     onSlope() {
 
-        this.onSlopeTick({ slope: this.hittingGround, obstacle: this });
+        const result = this.onSlopeTick({ obstacle: this });
+
+        this.updateOBBs();
+        this.updateRay(false);
+
+        return result;
+
+    }
+
+    onSlopePointsAdjust(points) {
+
+        this.setOnSlopePoint({ points, obstacle: this });
 
         this.updateOBBs();
         this.updateRay(false);

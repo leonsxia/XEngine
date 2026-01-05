@@ -29,6 +29,8 @@ class ObstacleMoveable {
     hittingGround;
     // falling water
     hittingWater;
+    // slopes
+    hittingSlopes = [];
 
     inWaterAnimateBegin = false;
     inWaterAnimateEnd = false;
@@ -178,15 +180,15 @@ class ObstacleMoveable {
 
     onSlopeTick(params) {
 
-        const { slope, obstacle } = params;
+        const result = { onSlope: false, point: null };
+        const { obstacle } = params;
 
         const intersects = [];
 
         for (let i = 0, il = obstacle.rays.length; i < il; i++) {
 
             const ray = obstacle.rays[i];
-            const intersect = ray.intersectObject(slope.mesh);
-            if (intersect.length > 0) intersects.push(intersect[0]);
+            intersects.push(...ray.intersectObjects(this.hittingSlopes));
 
         }
 
@@ -196,14 +198,30 @@ class ObstacleMoveable {
                 return b.point.y - a.point.y;
             });
 
-            const dir = intersects[0].point.clone();
-            dir.y += obstacle.height * .5;
-            obstacle.group.position.y = obstacle.group.parent ? dir.applyMatrix4(_m1.copy(obstacle.group.parent.matrixWorld).invert()).y : dir.y;
-
             this.resetFallingState();
 
+            result.onSlope = true;
+            result.point = intersects[0].point;
+
         }
+
+        return result;
         
+    }
+
+    setOnSlopePoint(params) {
+
+        const { points, obstacle } = params;
+
+        // descending order;
+        points.sort((a, b) => {
+            return b.y - a.y;
+        });
+
+        const dir = _v1.copy(points[0]);
+        dir.y += obstacle.height * .5;
+        obstacle.group.position.y = obstacle.group.parent ? dir.applyMatrix4(_m1.copy(obstacle.group.parent.matrixWorld).invert()).y : dir.y;
+
     }
 
     onWaterTick(params) {

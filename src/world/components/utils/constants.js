@@ -59,6 +59,7 @@ const STAIRS_SIDE = 'StairsSide';
 const STAIRS_FRONT = 'StairsFront';
 const STAIRS_TOP = 'StairsTop';
 const WATER_PLANE = 'WaterPlane';
+const TERRAIN = 'Terrain';
 
 // composite objects
 const SCENE = 'Scene';
@@ -625,6 +626,7 @@ export {
     STAIRS_FRONT,
     STAIRS_TOP,
     WATER_PLANE,
+    TERRAIN,
 
     SCENE,
     ROOM,

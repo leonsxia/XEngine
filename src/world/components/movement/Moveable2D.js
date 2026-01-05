@@ -418,7 +418,7 @@ class Moveable2D {
 
     onSlopeTick(params) {
 
-        let onSlope = false;
+        const result = { onSlope: false, point: null };
         const { slopes, $self } = params;
 
         let intersects = [];
@@ -432,65 +432,34 @@ class Moveable2D {
 
         if (intersects.length > 0) {
 
+            // descending order
             intersects.sort((a, b) => {
                 return b.point.y - a.point.y;
-            });
-
-            const dir = _v1.copy(intersects[0].point);
-            dir.y += $self.height * .5;
-            $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
+            });            
 
             this.resetFallingState();
 
-            onSlope = true;
+            result.onSlope = true;
+            result.point = intersects[0].point;
 
         }
 
-        return onSlope;
+        return result;
 
     }
 
-    onSurfaceTick(params) {
+    setOnSlopePoint(params) {
 
-        const { surface, $self, point } = params;
-        let result = { isOnSurface: false, point: null };
+        const { points, $self } = params;
 
-        if (surface) {
+        // descending order;
+        points.sort((a, b) => {
+            return b.y - a.y;
+        });
 
-            const intersects = [];
-
-            for (let i = 0, il = $self.rays.length; i < il; i++) {
-
-                const ray = $self.rays[i];
-                const intersect = ray.intersectObject(surface);
-
-                if (intersect.length > 0) intersects.push(intersect[0]);
-
-            }
-
-            if (intersects.length > 0) {
-
-                intersects.sort((a, b) => {
-                    return b.point.y - a.point.y;
-                });
-
-                result.isOnSurface = true;
-                result.point = intersects[0].point;
-
-            }
-
-            return result;
-
-        } else {
-
-            const dir = _v1.copy(point);
-            const onGroundPadding = .001;
-            dir.y += $self.height * .5 - onGroundPadding;;
-            $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
-
-            this.resetFallingState();
-
-        }
+        const dir = _v1.copy(points[0]);
+        dir.y += $self.height * .5;
+        $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
 
     }
 

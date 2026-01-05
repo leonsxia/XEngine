@@ -318,7 +318,8 @@ class SceneBuilder {
             const insideWalls = [];
             const airWalls = [];
             const waters = [];
-            const entries = []
+            const entries = [];
+            const terrains = [];
 
             for (let j = 0, jl = roomSpec.groups.length; j < jl; j++) {
 
@@ -454,6 +455,20 @@ class SceneBuilder {
                 }
 
                 room.addGroups(entries);
+
+            }
+
+            if (roomSpec.terrains) {
+
+                for (let j = 0, jl = roomSpec.terrains.length; j < jl; j++) {
+
+                    const spec = roomSpec.terrains[j];
+                    const terrain = this.buildObject(spec);
+                    terrains.push(terrain);
+
+                }
+
+                room.addTerrains(terrains);
 
             }
 
