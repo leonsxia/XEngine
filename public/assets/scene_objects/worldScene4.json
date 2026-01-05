@@ -943,7 +943,7 @@
                     "enableWallOBBs": true,
                     "movable": true,
                     "climbable": false,
-                    "position": [2.5, 0.5, -3.5]
+                    "position": [2.5, -0.401, -3.5]
                 },
                 {
                     "type": "LWall",

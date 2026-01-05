@@ -1206,97 +1206,6 @@ class SimplePhysics {
 
             }
 
-            // check slope collision
-            const collisionSlopes = [];
-
-            for (let i = 0, il = this.slopes.length; i < il; i++) {
-
-                const s = this.slopes[i];
-
-                // check if avatar is on slope, and slow it down
-                const avatarIntersectSlopeBox = avatar.obb.intersectsOBB(s.box.obb);
-                const avatarIntersectSlope = avatar.obb.intersectsOBB(s.slope.obb);
-
-                if (!avatarIntersectSlopeBox && (avatar.intersectSlope === s || !avatar.intersectSlope)) {
-
-                    avatar.setSlopeIntersection?.();
-
-                } else if (avatarIntersectSlope) {
-
-                    avatar.setSlopeIntersection?.(s);
-
-                } else if (avatar.obb.intersectsOBB(s.topBoxBuffer.obb) || avatar.obb.intersectsOBB(s.bottomBoxBuffer.obb)) {
-
-                    avatar.setSlopeIntersection?.(s);
-
-                }
-
-                if (avatar.intersectSlope === s) {
-
-                    const checkFaces = [s.slope.mesh];
-                    if (avatar.bottomY + STAIR_OFFSET_MAX > s.topPlane.getWorldPosition(_v1).y) {
-
-                        checkFaces.push(s.topPlane.mesh);
-
-                    }
-                    collisionSlopes.push(checkFaces);
-
-                    break;
-
-                }
-
-            }
-
-            // check connector collision
-            const collisionConnectors = [];
-            for (let i = 0, il = this.connectors.length; i < il; i++) {
-
-                const connector = this.connectors[i];
-                const avatarIntersectAreaBox = avatar.obb.intersectsOBB(connector.areaBox.obb);
-
-                for (let j = 0, jl = connector.slopes.length; j < jl; j++) {
-
-                    const s = connector.slopes[j];
-                    const avatarIntersectSlope = avatar.obb.intersectsOBB(s.obb);
-
-                    if (!avatarIntersectAreaBox && (avatar.intersectSlope === connector || !avatar.intersectSlope)) {
-
-                        avatar.setSlopeIntersection?.();
-
-                    } else if (avatarIntersectSlope) {
-
-                        avatar.setSlopeIntersection?.(connector);
-
-                    } else if (avatar.obb.intersectsOBB(connector.topBuffer.obb) || avatar.obb.intersectsOBB(connector.bottomBuffer.obb)) {
-
-                        avatar.setSlopeIntersection?.(connector);
-
-                    }
-
-                    if (avatar.intersectSlope === connector) {
-
-                        const checkFaces = [s.mesh];
-
-                        if (avatar.bottomY + STAIR_OFFSET_MAX > connector.endPlane0.getWorldPosition(_v1).y) {
-
-                            checkFaces.push(connector.endPlane0.mesh);
-
-                        }
-
-                        if (avatar.bottomY + STAIR_OFFSET_MAX > connector.endPlane1.getWorldPosition(_v1).y) {
-
-                            checkFaces.push(connector.endPlane1.mesh);
-
-                        }
-
-                        collisionConnectors.push({ faces: checkFaces });
-
-                    }
-
-                }
-
-            }
-
             let isLanded = false;
 
             if (collisionBottoms.length > 0) {
@@ -1305,23 +1214,141 @@ class SimplePhysics {
 
             }
             
-            if (collisionTops.length > 0 && collisionSlopes.length === 0) {
+            if (collisionTops.length > 0) {
 
                 avatar.onGround(collisionTops[0]);
                 isLanded = true;
 
             }
 
-            let isOnSlope = false;
+            // check slope collision
+            const collisionSlopes = [];
+            // check connector collision
+            const collisionConnectors = [];
+            // collect on slope points and return the highest one
+            const onSlopePoints = [];
+
+            let isOnSlope = false;     
+
+            if (!avatar.isClimbingUp) {
+
+                // slope check
+                for (let i = 0, il = this.slopes.length; i < il; i++) {
+
+                    const s = this.slopes[i];
+
+                    // check if avatar is on slope, and slow it down
+                    const avatarIntersectSlopeBox = avatar.obb.intersectsOBB(s.box.obb);
+                    const avatarIntersectSlope = avatar.obb.intersectsOBB(s.slope.obb);
+
+                    if (!avatarIntersectSlopeBox && (avatar.intersectSlope === s || !avatar.intersectSlope)) {
+
+                        avatar.setSlopeIntersection?.();
+
+                    } else if (avatarIntersectSlope) {
+
+                        avatar.setSlopeIntersection?.(s);
+
+                    } else if (avatar.obb.intersectsOBB(s.topBoxBuffer.obb) || avatar.obb.intersectsOBB(s.bottomBoxBuffer.obb)) {
+
+                        avatar.setSlopeIntersection?.(s);
+
+                    }
+
+                    // slope ray should always be checked only if avatar left the slop area box
+                    if (avatar.intersectSlope === s) {
+
+                        const checkFaces = [s.slope.mesh];
+                        if (avatar.bottomY + STAIR_OFFSET_MAX > s.topPlane.getWorldPosition(_v1).y) {
+
+                            checkFaces.push(s.topPlane.mesh);
+
+                        }
+                        collisionSlopes.push(checkFaces);
+
+                        break;
+
+                    }
+
+                }
+
+                // connector check
+                for (let i = 0, il = this.connectors.length; i < il; i++) {
+
+                    const connector = this.connectors[i];
+                    const avatarIntersectAreaBox = avatar.obb.intersectsOBB(connector.areaBox.obb);
+
+                    for (let j = 0, jl = connector.slopes.length; j < jl; j++) {
+
+                        const s = connector.slopes[j];
+                        const avatarIntersectSlope = avatar.obb.intersectsOBB(s.obb);
+
+                        if (!avatarIntersectAreaBox && (avatar.intersectSlope === connector || !avatar.intersectSlope)) {
+
+                            avatar.setSlopeIntersection?.();
+
+                        } else if (avatarIntersectSlope) {
+
+                            avatar.setSlopeIntersection?.(connector);
+
+                        } else if (avatar.obb.intersectsOBB(connector.topBuffer.obb) || avatar.obb.intersectsOBB(connector.bottomBuffer.obb)) {
+
+                            avatar.setSlopeIntersection?.(connector);
+
+                        }
+
+                        if (avatar.intersectSlope === connector) {
+
+                            const checkFaces = [s.mesh];
+
+                            if (avatar.bottomY + STAIR_OFFSET_MAX > connector.endPlane0.getWorldPosition(_v1).y) {
+
+                                checkFaces.push(connector.endPlane0.mesh);
+
+                            }
+
+                            if (avatar.bottomY + STAIR_OFFSET_MAX > connector.endPlane1.getWorldPosition(_v1).y) {
+
+                                checkFaces.push(connector.endPlane1.mesh);
+
+                            }
+
+                            collisionConnectors.push({ faces: checkFaces });
+
+                        }
+
+                    }
+
+                }
+                
+                // terrain check
+                if (this.terrains.length > 0) {
+
+                    avatar.updateRayLength('terrain');
+                    for (let i = 0, il = this.terrains.length; i < il; i++) {
+
+                        const terrain = this.terrains[i];
+                        const { onSlope, point } = avatar.tickOnSlope([terrain.mesh]);
+                        if (onSlope) {
+
+                            onSlopePoints.push(point);
+                            isLanded = true;
+
+                        }
+
+                    }
+
+                }
+            
+            }
+       
 
             if (collisionSlopes.length > 0 || collisionConnectors.length > 0) {
 
                 avatar.updateRayLength();
 
             }
-
-            // collect on slope points and return the highest one
-            const onSlopePoints = [];
+            
             if (collisionSlopes.length > 0) {
 
                 const { onSlope, point } = avatar.tickOnSlope(collisionSlopes[0]);
@@ -1346,24 +1373,6 @@ class SimplePhysics {
                         onSlopePoints.push(point);
                         isLanded = true;
                         isOnSlope = true;
-
-                    }
-
-                }
-
-            }
-
-            if (this.terrains.length > 0) {
-
-                avatar.updateRayLength('terrain');
-                for (let i = 0, il = this.terrains.length; i < il; i++) {
-
-                    const terrain = this.terrains[i];
-                    const { onSlope, point } = avatar.tickOnSlope([terrain.mesh]);
-                    if (onSlope) {
-
-                        onSlopePoints.push(point);
-                        isLanded = true;
 
                     }
 
@@ -1396,7 +1405,7 @@ class SimplePhysics {
 
             }
 
-            if (collisionTops.length === 0 && avatar.isInAir) {
+            if (avatar.isInAir) {
 
                 const collisionFloors = [];
 
@@ -1509,6 +1518,8 @@ class SimplePhysics {
 
                     const wall = climbWalls[0];
 
+                    // slope should be cleared when climbing on the slope
+                    avatar.setSlopeIntersection?.();
                     // console.log(`${climbWalls[0].name} is climbed`);
                     avatar.tickClimb(delta, wall);
 
