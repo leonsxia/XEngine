@@ -885,7 +885,7 @@ class SimplePhysics {
                     const { onSlope, point } = obs.onSlope();
                     if (onSlope) {
 
-                        if (onSlopeMaps.findIndex(o => o === obs) === - 1) {
+                        if (onSlopeMaps.findIndex(m => m.obs === obs) === - 1) {
 
                             onSlopeMaps.push({ obs, points: [] });
 
