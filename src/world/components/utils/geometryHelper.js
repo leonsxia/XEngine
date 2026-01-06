@@ -1,6 +1,7 @@
 import { PlaneGeometry } from 'three';
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 import { getRandomFloat } from './mathHelper';
+import { makeCanvasFromImage } from './canvasMaker';
 
 function createGeometryFromIndex(vertices, index) {
 
@@ -250,8 +251,77 @@ function generateTerrainGeometry(width, depth, height, segmentW, segmentD) {
 	}
 
 	geometry.computeVertexNormals();
+	geometry.computeBoundingBox();
+	geometry.computeBoundingSphere();
 
 	return { geometry, rowColumns };
+
+}
+
+function getPixelValue(material, canvas, u, v) {
+
+	const ctx = canvas.getContext('2d');
+	// Map UV coordinates (0 to 1) to pixel coordinates
+	const x = Math.floor(Math.max(0, u * canvas.width - 1));
+	const y = Math.floor(Math.max(0, v * canvas.height - 1));
+
+	// Get the pixel data (RGBA values)
+	const imageData = ctx.getImageData(x, y, 1, 1).data;
+	// For a grayscale displacement map, R, G, and B are usually the same.
+	// The red channel value gives the height information.
+	const heightValue = imageData[0]; // R channel (0-255)
+
+	// The raw value needs to be mapped to the actual displacement scale and bias
+	// The default range for a displacement map in three.js is [0, displacementScale]
+	// unless displacementBias is used to offset it.
+	const scale = material.displacementScale || 1;
+	const bias = material.displacementBias || 0;
+	const normalizedValue = heightValue / 255.0;
+	const actualDisplacement = normalizedValue * scale + bias;
+
+	return actualDisplacement;
+
+}
+
+function updateTerrainGeometry(geometry, heightmap, material, texScale = [1, 1]) {
+
+	geometry.rotateX(- Math.PI / 2);
+	const position = geometry.getAttribute('position');
+	const { width, height, widthSegments, heightSegments } = geometry.parameters;
+	const dx = width / widthSegments;
+	const dy = height / heightSegments;
+	const unitWidth = width / texScale[0];
+	const unitHeight = height / texScale[1];
+	// store height data in map row-column map
+	const rowColumns = new Map();
+	// get canvas from heightmap image
+	const canvas = makeCanvasFromImage(heightmap.image);
+
+	for (let i = 0, il = position.count; i < il; i++) {
+
+		const row = Math.floor(position.getZ(i) / dy + 0.5) + heightSegments * 0.5;
+		const column = Math.floor(position.getX(i) / dx + 0.5) + widthSegments * 0.5;
+		// for canvas uv is flipped in y axis
+		const u = column * dx % unitWidth / unitWidth;
+		const v = (unitHeight - (heightSegments - row) * dy % unitHeight) / unitHeight;
+		const calcHeight = getPixelValue(material, canvas, u, v) || 0;
+		position.setY(i, calcHeight);
+
+		if (!rowColumns.has(row)) {
+
+			rowColumns.set(row, new Map());
+
+		}
+
+		rowColumns.get(row).set(column, calcHeight);
+
+	}
+
+	geometry.computeVertexNormals();
+	geometry.computeBoundingBox();
+	geometry.computeBoundingSphere();
+
+	return rowColumns;
 
 }
 
@@ -260,5 +330,6 @@ export {
 	createStairsSideGeometry,
 	createStairsFrontGeometry,
 	createStairsTopGeometry,
-	generateTerrainGeometry
+	generateTerrainGeometry,
+	updateTerrainGeometry
 };

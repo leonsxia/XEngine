@@ -728,6 +728,12 @@ class ObstacleBase extends ObstacleMoveable {
         this.backRightRay.layers.set(OBSTACLE_RAY_LAYER);
         this.backRightArrow = new ArrowHelper(_down, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
 
+        // center
+        fromVec3 = new Vector3(0, posY, 0);
+        this.centerRay = new Raycaster(fromVec3, _down, 0, length);
+        this.centerRay.layers.set(OBSTACLE_RAY_LAYER);
+        this.centerArrow = new ArrowHelper(_down, fromVec3, length, red, HEAD_LENGTH, HEAD_WIDTH);
+
         this.rays.push(this.leftRay, this.rightRay, this.backLeftRay, this.backRightRay);
 
         return this;
@@ -783,6 +789,15 @@ class ObstacleBase extends ObstacleMoveable {
         this.backRightArrow.position.copy(_v1);
         this.backRightArrow.setDirection(_down);
         this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+
+        // center
+        _v1.set(0, posY, 0).applyMatrix4(this.group.matrixWorld);
+        this.centerRay.set(_v1, _down);
+        this.centerRay.far = length;
+
+        this.centerArrow.position.copy(_v1);
+        this.centerArrow.setDirection(_down);
+        this.centerArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
 
@@ -951,9 +966,9 @@ class ObstacleBase extends ObstacleMoveable {
         
     }
 
-    onSlope() {
+    onSlope(type = 'normal') {
 
-        const result = this.onSlopeTick({ obstacle: this });
+        const result = this.onSlopeTick({ obstacle: this, type });
 
         this.updateOBBs();
         this.updateRay(false);

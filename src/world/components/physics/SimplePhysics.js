@@ -838,6 +838,7 @@ class SimplePhysics {
 
             if (!obs.hittingGround) {
 
+                // slope check
                 for (let j = 0, jl = this.slopes.length; j < jl; j++) {
 
                     const s = this.slopes[j];
@@ -855,7 +856,7 @@ class SimplePhysics {
 
             if (!obs.hittingGround) {
 
-                
+                // connector check
                 for (let j = 0, jl = this.connectorFaces.length; j < jl; j++) {
 
                     const cf = this.connectorFaces[j];
@@ -878,11 +879,12 @@ class SimplePhysics {
 
             if (!obs.hittingGround) {
 
+                // terrain check
                 for (let j = 0, jl = this.terrains.length; j < jl; j++) {
 
                     const terrain = this.terrains[j];
                     obs.hittingSlopes.push(terrain.mesh);
-                    const { onSlope, point } = obs.onSlope();
+                    const { onSlope, point } = obs.onSlope('terrain');
                     if (onSlope) {
 
                         if (onSlopeMaps.findIndex(m => m.obs === obs) === - 1) {
@@ -1328,7 +1330,7 @@ class SimplePhysics {
                     for (let i = 0, il = this.terrains.length; i < il; i++) {
 
                         const terrain = this.terrains[i];
-                        const { onSlope, point } = avatar.tickOnSlope([terrain.mesh]);
+                        const { onSlope, point } = avatar.tickOnSlope([terrain.mesh], 'terrain');
                         if (onSlope) {
 
                             onSlopePoints.push(point);

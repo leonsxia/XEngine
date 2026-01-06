@@ -80,7 +80,7 @@
                     "display": "Directional Light",
                     "detail": {
                         "color": [251, 216, 142],
-                        "intensity": 0.5,
+                        "intensity": 0.1,
                         "position": [0, 20, 28],
                         "target": [0, 0, 0]
                     },
@@ -109,7 +109,7 @@
                     "detail": {
                         "groundColor": [103, 210, 96],
                         "skyColor": [255, 255, 255],
-                        "intensity": 0.15,
+                        "intensity": 0,
                         "position": [0, 4.6, 0]
                     },
                     "type": "HemisphereLight",
@@ -540,19 +540,21 @@
                     "width": 30,
                     "depth": 30,
                     "height": 0.5,
-                    "segmentW": 20,
-                    "segmentD": 20,
+                    "segmentW": 50,
+                    "segmentD": 50,
                     "map": "FOREST_LEAVES_02",
                     "normalMap": "FOREST_LEAVES_02_NORMAL",
                     "aoMap": "FOREST_LEAVES_02_AO",
+                    "dispMap": "FOREST_LEAVES_02_DISP",
                     "name": "room1_terrain1",
-                    "repeatU": 2,
-                    "repeatV": 3,
+                    "repeatU": 1.7,
+                    "repeatV": 1.7,
                     "repeatModeU": 1000,
                     "repeatModeV": 1000,
                     "receiveShadow": true,
-                    "position": [0, -2.5, 0],
-                    "rotation": [0, 0, 0]
+                    "position": [0, -2.8, 0],
+                    "rotation": [0, 0, 0],
+                    "useHeightmap": true
                 }
             ]
         }

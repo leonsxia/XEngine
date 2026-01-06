@@ -181,14 +181,22 @@ class ObstacleMoveable {
     onSlopeTick(params) {
 
         const result = { onSlope: false, point: null };
-        const { obstacle } = params;
+        const { obstacle, type } = params;
 
         const intersects = [];
 
-        for (let i = 0, il = obstacle.rays.length; i < il; i++) {
+        if (type === 'terrain') {
 
-            const ray = obstacle.rays[i];
-            intersects.push(...ray.intersectObjects(this.hittingSlopes));
+            intersects.push(...obstacle.centerRay.intersectObjects(this.hittingSlopes));
+
+        } else {
+
+            for (let i = 0, il = obstacle.rays.length; i < il; i++) {
+
+                const ray = obstacle.rays[i];
+                intersects.push(...ray.intersectObjects(this.hittingSlopes));
+
+            }
 
         }
 

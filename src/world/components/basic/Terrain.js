@@ -2,6 +2,7 @@ import { Mesh, Vector3 } from 'three';
 import { BasicObject } from './BasicObject';
 import { TERRAIN } from '../utils/constants';
 import { Logger } from '../../systems/Logger';
+import { updateTerrainGeometry } from '../utils/geometryHelper';
 
 const DEBUG = false;
 const _v1 = new Vector3();
@@ -30,7 +31,7 @@ class Terrain extends BasicObject {
         const initPromises = [];
         initPromises.push(this.initBasic());
 
-        const { aoMap } = this.specs;
+        const { aoMap, dispMap, displacementScale = 1, useHeightmap = false, repeatU = 1, repeatV = 1 } = this.specs;
 
         if (aoMap?.isTexture) {
 
@@ -40,9 +41,25 @@ class Terrain extends BasicObject {
 
         }
 
-        initPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
+        if (dispMap?.isTexture) {
 
-        const [ , ao] = await Promise.all(initPromises);
+            const _map = dispMap.clone();
+            // this.setTexture(dispMap);
+            // this.material.displacementMap = _map;
+            this.material.displacementScale = displacementScale;
+
+            if (useHeightmap) {
+
+                updateTerrainGeometry(this.geometry, _map, this.material, [repeatU, repeatV]);
+
+            }
+
+        }
+
+        initPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
+        initPromises.push(dispMap && !dispMap.isTexture ? this.loader.loadAsync(dispMap) : Promise.resolve(null));
+
+        const [, ao, disp] = await Promise.all(initPromises);
 
         if (ao) {
 
@@ -50,6 +67,22 @@ class Terrain extends BasicObject {
             this.material.aoMap = ao;
 
         }
+
+        if (disp) {
+
+            // this.setTexture(disp);
+            // this.material.displacementMap = disp;
+            this.material.displacementScale = displacementScale;
+
+            if (useHeightmap) {
+
+                updateTerrainGeometry(this.geometry, disp, this.material, [repeatU, repeatV]);
+
+            }
+
+        }
+
+        
         
     }
 

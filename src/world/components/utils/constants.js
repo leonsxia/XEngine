@@ -237,6 +237,7 @@ const TEXTURE_NAMES = {
     FOREST_LEAVES_02: 'FOREST_LEAVES_02',
     FOREST_LEAVES_02_NORMAL: 'FOREST_LEAVES_02_NORMAL',
     FOREST_LEAVES_02_AO: 'FOREST_LEAVES_02_AO',
+    FOREST_LEAVES_02_DISP: 'FOREST_LEAVES_02_DISP',
     // water
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
@@ -312,9 +313,10 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.SOIL_144, map: 'assets/textures/terrain/Texturelabs_Soil_144M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Soil_144L.jpg'
 }, {
     name: TEXTURE_NAMES.FOREST_LEAVES_02, 
-    map: 'assets/textures/terrain/forest_leaves_02_diffuse_2k.jpg', 
-    normalMap: 'assets/textures/normals/forest_leaves_02_nor_gl_2k.jpg',
-    aoMap: 'assets/textures/ao/forest_leaves_02_ao_2k.jpg'
+    map: 'assets/textures/terrain/forest_leaves_02_diffuse_4k.jpg', 
+    normalMap: 'assets/textures/normals/forest_leaves_02_nor_gl_4k.jpg',
+    aoMap: 'assets/textures/ao/forest_leaves_02_ao_4k.jpg',
+    dispMap: 'assets/textures/disp/forest_leaves_02_disp_2k.png'
 },{
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {

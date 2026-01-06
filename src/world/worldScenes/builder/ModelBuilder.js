@@ -559,15 +559,16 @@ class ModelBuilder {
     createTerrain(specs) {
 
         let object;
-        const { position = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
-        const { map, normalMap, aoMap } = specs;
+        const { position = [0, 0, 0], scale = [1, 1, 1], rotation = [0, 0, 0], receiveShadow = false, castShadow = false } = specs;
+        const { map, normalMap, aoMap, dispMap } = specs;
 
-        const maps = [{ map }, { normalMap }, { aoMap }];
+        const maps = [{ map }, { normalMap }, { aoMap }, { dispMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new Terrain(specs);
         object.setScaleWithTexUpdate(scale)
             .setPosition(position)
+            .setRotation(rotation)
             .receiveShadow(receiveShadow)
             .castShadow(castShadow);
 

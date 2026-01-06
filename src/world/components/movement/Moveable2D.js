@@ -419,14 +419,22 @@ class Moveable2D {
     onSlopeTick(params) {
 
         const result = { onSlope: false, point: null };
-        const { slopes, $self } = params;
+        const { slopes, type, $self } = params;
 
         let intersects = [];
 
-        for (let i = 0, il = $self.rays.length; i < il; i++) {
+        if (type === 'terrain') {
 
-            const ray = $self.rays[i];
-            intersects.push(...ray.intersectObjects(slopes));
+            intersects.push(...$self.centerRay.intersectObjects(slopes));
+
+        } else {
+
+            for (let i = 0, il = $self.rays.length; i < il; i++) {
+
+                const ray = $self.rays[i];
+                intersects.push(...ray.intersectObjects(slopes));
+
+            }
 
         }
 

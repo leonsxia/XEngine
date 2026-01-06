@@ -57,6 +57,7 @@ class TofuBase extends Moveable2D {
     rightRay;
     backLeftRay;
     backRightRay;
+    centerRay;
     aimRay;
     focusRay;
     rays = [];
@@ -65,6 +66,7 @@ class TofuBase extends Moveable2D {
     rightArrow;
     backLeftArrow;
     backRightArrow;
+    centerArrow;
     aimArrow;
     focusArrow;
 
@@ -850,6 +852,12 @@ class TofuBase extends Moveable2D {
         this.backRightRay.layers.set(TOFU_RAY_LAYER);
         this.backRightArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
 
+        // center
+        fromVec3 = new Vector3(0, posY, 0);
+        this.centerRay = new Raycaster(fromVec3, _down, 0, length);
+        this.centerRay.layers.set(TOFU_RAY_LAYER);
+        this.centerArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
+
         // aimRay
         if (this._needAimRay) {
 
@@ -995,6 +1003,14 @@ class TofuBase extends Moveable2D {
         this.backRightArrow.setDirection(_down);
         // this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
+        // center
+        _v1.set(0, posY, 0).applyMatrix4(this.group.matrixWorld);
+        this.centerRay.set(_v1, _down);
+        // this.centerRay.far = length;
+        this.centerArrow.position.copy(_v1);
+        this.centerArrow.setDirection(_down);
+        // this.centerArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+
         this.updateAimRay(false);
         if (this._inSightTargets.length === 0) this.updateFocusRay(false);
 
@@ -1021,11 +1037,13 @@ class TofuBase extends Moveable2D {
         this.rightRay.far = length;
         this.backLeftRay.far = length;
         this.backRightRay.far = length;
+        this.centerRay.far = length;
 
         this.leftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
         this.rightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
         this.backLeftArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
         this.backRightArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+        this.centerArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
 
         return this;
 
@@ -1369,9 +1387,9 @@ class TofuBase extends Moveable2D {
         
     }
 
-    tickOnSlope(slopes) {
+    tickOnSlope(slopes, type = 'normal') {
 
-        let result = this.onSlopeTick({ slopes, $self: this });
+        let result = this.onSlopeTick({ slopes, type, $self: this });
 
         this.updateAccessories();
 

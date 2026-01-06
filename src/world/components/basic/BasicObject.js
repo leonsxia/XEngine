@@ -86,8 +86,10 @@ class BasicObject extends EventDispatcher {
                 break;
             case TERRAIN:
                 {
-                    const { width, height, depth, segmentW, segmentD } = specs;
-                    const { geometry } = generateTerrainGeometry(width, depth, height, segmentW, segmentD);
+                    const { width, depth, height = 1, segmentW, segmentD, useHeightmap = false } = specs;
+                    const geometry = !useHeightmap ? 
+                        generateTerrainGeometry(width, depth, height, segmentW, segmentD).geometry : 
+                        new PlaneGeometry(width, depth, segmentW, segmentD);
                     this.geometry = geometry;
                 }
         }

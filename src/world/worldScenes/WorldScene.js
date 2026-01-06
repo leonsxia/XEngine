@@ -1240,6 +1240,7 @@ class WorldScene {
             this.scene.add(this.player.rightArrow);
             this.scene.add(this.player.backLeftArrow);
             this.scene.add(this.player.backRightArrow);
+            this.scene.add(this.player.centerArrow);
             this.scene.add(this.player.aimArrow);
 
         } else {
@@ -1248,6 +1249,7 @@ class WorldScene {
             this.scene.remove(this.player.rightArrow);
             this.scene.remove(this.player.backLeftArrow);
             this.scene.remove(this.player.backRightArrow);
+            this.scene.remove(this.player.centerArrow);
             this.scene.remove(this.player.aimArrow);
 
         }
