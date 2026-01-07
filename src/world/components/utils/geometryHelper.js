@@ -229,36 +229,45 @@ function generateTerrainGeometry(width, depth, height, segmentW, segmentD) {
 	geometry.rotateX(- Math.PI / 2);
 
 	const position = geometry.getAttribute('position');
-	const dx = width / segmentW;
-	const dy = depth / segmentD;
-	// store height data in map row-column map
-	const rowColumns = new Map();
+	const columnNum = segmentW + 1;
+	// store height data in matrix
+	/*
+		this is a row-major matrix, order follow geometry position stored sequence
+		0          1         2 ...       w
+		w + 1                  ...   2 * w
+		2 * w + 1              ...   3 * w
+		.
+		h * w + 1              ...   h * (w + 1)
+	*/
+	const matrix = new Map();
 	for (let i = 0, il = position.count; i < il; i++) {
 
-		const row = Math.floor(position.getZ(i) / dy + 0.5) + segmentD * 0.5;
-		const column = Math.floor(position.getX(i) / dx + 0.5) + segmentW * 0.5;
+		const row = Math.floor(i / columnNum);
+		const column = (i - row * columnNum) % columnNum;
 		const randomHeight = getRandomFloat(- height * .5, height * .5);
 		position.setY(i, randomHeight);
 
-		if (!rowColumns.has(row)) {
+		if (!matrix.has(row)) {
 
-			rowColumns.set(row, new Map());
+			matrix.set(row, new Map());
 
 		}
 
-		rowColumns.get(row).set(column, randomHeight);
+		matrix.get(row).set(column, randomHeight);
 
 	}
 
 	geometry.computeVertexNormals();
-	geometry.computeBoundingBox();
-	geometry.computeBoundingSphere();
+	// geometry.computeBoundingBox();
+	// geometry.computeBoundingSphere();
 
-	return { geometry, rowColumns };
+	geometry.userData.heights = generateRapierHeights(matrix, segmentW, segmentD);
+
+	return { geometry };
 
 }
 
-function getPixelValue(material, canvas, u, v) {
+function getHeightValue(material, canvas, u, v) {
 
 	const ctx = canvas.getContext('2d');
 	// Map UV coordinates (0 to 1) to pixel coordinates
@@ -283,6 +292,31 @@ function getPixelValue(material, canvas, u, v) {
 
 }
 
+/*
+	transfrom from row-major to column-major
+	0    h + 1   2 * h + 1   ...   w * h + 1
+	1
+	2
+	.
+	h    2 * h   3 * h       ...   (w + 1) * h
+*/
+function generateRapierHeights(matrixMap, width, depth) {
+
+	const heights = [];
+	for (let i = 0, il = width; i <= il; i++) {
+
+		for (let j = 0, jl = depth; j <= jl; j++) {
+
+			heights.push(matrixMap.get(j).get(i));
+
+		}
+
+	}
+
+	return heights;
+
+}
+
 function updateTerrainGeometry(geometry, heightmap, material, texScale = [1, 1]) {
 
 	geometry.rotateX(- Math.PI / 2);
@@ -292,36 +326,47 @@ function updateTerrainGeometry(geometry, heightmap, material, texScale = [1, 1])
 	const dy = height / heightSegments;
 	const unitWidth = width / texScale[0];
 	const unitHeight = height / texScale[1];
-	// store height data in map row-column map
-	const rowColumns = new Map();
+	const columnNum = widthSegments + 1;
+	// store height data in matrix
+	/*
+		this is a row-major matrix, order follow geometry position stored sequence
+		0          1         2 ...       w
+		w + 1                  ...   2 * w
+		2 * w + 1              ...   3 * w
+		.
+		h * w + 1              ...   h * (w + 1)
+	*/
+	const matrix = new Map();
 	// get canvas from heightmap image
 	const canvas = makeCanvasFromImage(heightmap.image);
 
 	for (let i = 0, il = position.count; i < il; i++) {
-
-		const row = Math.floor(position.getZ(i) / dy + 0.5) + heightSegments * 0.5;
-		const column = Math.floor(position.getX(i) / dx + 0.5) + widthSegments * 0.5;
+	
+		const row = Math.floor(i / columnNum);
+		const column = (i - row * columnNum) % columnNum;
 		// for canvas uv is flipped in y axis
 		const u = column * dx % unitWidth / unitWidth;
 		const v = (unitHeight - (heightSegments - row) * dy % unitHeight) / unitHeight;
-		const calcHeight = getPixelValue(material, canvas, u, v) || 0;
+		const calcHeight = getHeightValue(material, canvas, u, v) || 0;
 		position.setY(i, calcHeight);
 
-		if (!rowColumns.has(row)) {
+		if (!matrix.has(row)) {
 
-			rowColumns.set(row, new Map());
+			matrix.set(row, new Map());
 
 		}
 
-		rowColumns.get(row).set(column, calcHeight);
+		matrix.get(row).set(column, calcHeight);
 
 	}
 
 	geometry.computeVertexNormals();
-	geometry.computeBoundingBox();
-	geometry.computeBoundingSphere();
+	// geometry.computeBoundingBox();
+	// geometry.computeBoundingSphere();
 
-	return rowColumns;
+	geometry.userData.heights = generateRapierHeights(matrix, widthSegments, heightSegments);
+
+	return geometry;
 
 }
 
