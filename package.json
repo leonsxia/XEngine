@@ -6,10 +6,13 @@
     "previewhost": "vite preview --host"
   },
   "dependencies": {
+    "@dimforge/rapier3d": "0.17",
     "animejs": "^4.2.2",
     "lil-gui": "^0.21.0",
     "stats.js": "^0.17.0",
-    "three": "^0.181.0"
+    "three": "^0.181.0",
+    "vite-plugin-top-level-await": "^1.6.0",
+    "vite-plugin-wasm": "^3.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
