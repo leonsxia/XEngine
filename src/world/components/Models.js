@@ -18,9 +18,9 @@ export { Terrain } from './basic/Terrain.js';
 export { GLTFModel } from './basic/GLTFModel.js';
 
 // collision objects
-export { CollisionBase } from './physics/collisionObjects/CollisionBase.js';
-export { CollisionBox } from './physics/collisionObjects/CollisionBox.js';
-export { CollisionHexCylinder } from './physics/collisionObjects/CollisionHexCylinder.js';
+export { CollisionBase } from './physics/primitives/collisionObjects/CollisionBase.js';
+export { CollisionBox } from './physics/primitives/collisionObjects/CollisionBox.js';
+export { CollisionHexCylinder } from './physics/primitives/collisionObjects/CollisionHexCylinder.js';
 
 // Weapons
 export { WeaponBase } from './composite/weapons/WeaponBase.js';
@@ -57,12 +57,12 @@ export { ZombieMale } from './composite/creatures/ZombieMale.js';
 export { BlackWidow } from './composite/creatures/BlackWidow.js';
 
 // physics
-export { CollisionPlane } from './physics/CollisionPlane.js';
-export { CollisionOctagon } from './physics/CollisionOctagon.js';
-export { CollisionCylinder } from './physics/CollisionCylinder.js';
-export { CollisionOBBPlane } from './physics/CollisionOBBPlane.js';
-export { OBBPlane } from './physics/OBBPlane.js';
-export { OBBBox } from './physics/OBBBox.js';
+export { CollisionPlane } from './physics/primitives/CollisionPlane.js';
+export { CollisionOctagon } from './physics/primitives/CollisionOctagon.js';
+export { CollisionCylinder } from './physics/primitives/CollisionCylinder.js';
+export { CollisionOBBPlane } from './physics/primitives/CollisionOBBPlane.js';
+export { OBBPlane } from './physics/primitives/OBBPlane.js';
+export { OBBBox } from './physics/primitives/OBBBox.js';
 
 // room/inwall
 export { Room } from './composite/room/Room.js';

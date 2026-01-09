@@ -1,16 +1,15 @@
 import { EdgesGeometry, LineSegments, LineBasicMaterial } from "three";
-import { Circle } from "../Models";
-import { white } from "../basic/colorBase";
+import { Cylinder } from "../../Models";
+import { white } from "../../basic/colorBase";
 
-class CollisionOctagon extends Circle {
-    
+class CollisionCylinder extends Cylinder {
+
     isOBB = false;
 
     constructor(specs) {
 
-        specs.segments = 8;
         super(specs);
-        
+
         const { lines = false } = specs;
 
         if (lines) {
@@ -19,9 +18,9 @@ class CollisionOctagon extends Circle {
             this.line = new LineSegments(this.edges, new LineBasicMaterial({ color: white }));
             this.mesh.add(this.line);
             this.line.visible = false;
-            
-        }
+
+        }   
     }
 }
 
-export { CollisionOctagon };
+export { CollisionCylinder };

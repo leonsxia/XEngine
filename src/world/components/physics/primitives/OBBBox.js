@@ -1,7 +1,7 @@
 import { EdgesGeometry, LineSegments, LineBasicMaterial, Vector3 } from 'three';
 import { OBB } from 'three/addons/math/OBB.js';
-import { Box } from '../Models';
-import { white } from '../basic/colorBase';
+import { Box } from '../../Models';
+import { white } from '../../basic/colorBase';
 
 class OBBBox extends Box {
 

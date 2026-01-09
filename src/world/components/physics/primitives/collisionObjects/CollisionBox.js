@@ -1,5 +1,5 @@
-import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane } from '../collisionHelper';
-import { yankeesBlue, green } from '../../basic/colorBase';
+import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane } from '../../collisionHelper';
+import { yankeesBlue, green } from '../../../basic/colorBase';
 import { CollisionBase } from './CollisionBase';
 
 class CollisionBox extends CollisionBase {

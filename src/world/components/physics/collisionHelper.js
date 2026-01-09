@@ -1,12 +1,12 @@
 import { BoxGeometry, EdgesGeometry, Mesh, LineSegments, Vector3, SphereGeometry } from 'three';
 import { OBB } from 'three/addons/math/OBB.js';
 import { basicMateraials, createBasicMaterial } from '../basic/basicMaterial';
-import { CollisionPlane } from './CollisionPlane';
-import { CollisionOctagon } from './CollisionOctagon';
-import { CollisionOBBPlane } from './CollisionOBBPlane';
-import { CollisionTrianglePlane } from './CollisionTrianglePlane';
-import { OBBPlane } from './OBBPlane';
-import { OBBBox } from './OBBBox';
+import { CollisionPlane } from './primitives/CollisionPlane';
+import { CollisionOctagon } from './primitives/CollisionOctagon';
+import { CollisionOBBPlane } from './primitives/CollisionOBBPlane';
+import { CollisionTrianglePlane } from './primitives/CollisionTrianglePlane';
+import { OBBPlane } from './primitives/OBBPlane';
+import { OBBBox } from './primitives/OBBBox';
 import { BF2, violetBlue } from '../basic/colorBase';
 import { CORNOR_RAY_LAYER } from '../utils/constants';
 

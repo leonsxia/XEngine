@@ -1,7 +1,7 @@
 import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, ArrowHelper, MathUtils } from "three";
-import { Plane } from "../Models";
-import { white, red, green } from "../basic/colorBase";
-import { CORNOR_RAY_LAYER } from "../utils/constants";
+import { Plane } from "../../Models";
+import { white, red, green } from "../../basic/colorBase";
+import { CORNOR_RAY_LAYER } from "../../utils/constants";
 
 const DEFAULT_RAY_LENGTH = 20;
 const HEAD_LENGTH = 1;
