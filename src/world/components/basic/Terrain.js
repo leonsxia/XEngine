@@ -82,8 +82,6 @@ class Terrain extends BasicObject {
 
         }
 
-        
-        
     }
 
     bindEvents() {

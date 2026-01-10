@@ -1,4 +1,4 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher } from 'three';
 // eslint-disable-next-line no-unused-vars
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, generateTerrainGeometry } from '../utils/geometryHelper';
@@ -6,7 +6,7 @@ import { worldTextureLoader } from '../utils/textureHelper';
 import { basicMateraials } from './basicMaterial';
 import { white } from './colorBase';
 import { REPEAT_WRAPPING } from '../utils/constants';
-import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP, WATER_PLANE, TERRAIN } from '../utils/constants';
+import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP, WATER_PLANE, TERRAIN, CAPSULE } from '../utils/constants';
 
 class BasicObject extends EventDispatcher {
     
@@ -92,6 +92,13 @@ class BasicObject extends EventDispatcher {
                         new PlaneGeometry(width, depth, segmentW, segmentD);
                     this.geometry = geometry;
                 }
+                break;
+            case CAPSULE:
+                {
+                    const { radius, height, capSegments = 4, radialSegments = 8 } = specs;
+                    this.geometry = new CapsuleGeometry(radius, height, capSegments, radialSegments);
+                }
+                break;
         }
 
         this.setupMaterials('material');

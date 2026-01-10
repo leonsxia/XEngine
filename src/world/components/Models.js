@@ -13,6 +13,7 @@ export { StairsStepPlane } from './basic/StairsStepPlane.js';
 export { BirdsGroup } from './composite/birds/Birds.js';
 export { Train } from './composite/train/Train.js';
 export { Terrain } from './basic/Terrain.js';
+export { Capsule } from './basic/Capsule.js';
 
 // GLTF
 export { GLTFModel } from './basic/GLTFModel.js';
