@@ -1,56 +1,67 @@
-import { Vector3, Quaternion, Matrix4 } from 'three';
+import { Vector3, Quaternion, Matrix4, BufferGeometry } from 'three';
 import * as RAPIER from '@dimforge/rapier3d';
 
 // const RAPIER_PATH = 'https://cdn.skypack.dev/@dimforge/rapier3d-compat@0.17.3';
 
 const _scale = new Vector3(1, 1, 1);
 const ZERO = new Vector3();
+const _geometry = new BufferGeometry();
+const _v1 = new Vector3();
+const _q1 = new Quaternion();
+const _q2 = new Quaternion();
+const _m1 = new Matrix4();
 
-function getShape(geometry) {
+function getShape(geometry, scale = new Vector3(1, 1, 1)) {
 
     const parameters = geometry.parameters;
+    const { x, y, z } = scale;
 
     if (geometry.type === 'RoundedBoxGeometry') {
 
-        const sx = parameters.width !== undefined ? parameters.width / 2 : 0.5;
-        const sy = parameters.height !== undefined ? parameters.height / 2 : 0.5;
-        const sz = parameters.depth !== undefined ? parameters.depth / 2 : 0.5;
+        const sx = parameters.width !== undefined ? parameters.width * x / 2 : 0.5;
+        const sy = parameters.height !== undefined ? parameters.height * y / 2 : 0.5;
+        const sz = parameters.depth !== undefined ? parameters.depth * z / 2 : 0.5;
         const radius = parameters.radius !== undefined ? parameters.radius : 0.1;
 
         return RAPIER.ColliderDesc.roundCuboid(sx - radius, sy - radius, sz - radius, radius);
 
     } else if (geometry.type === 'BoxGeometry') {
 
-        const sx = parameters.width !== undefined ? parameters.width / 2 : 0.5;
-        const sy = parameters.height !== undefined ? parameters.height / 2 : 0.5;
-        const sz = parameters.depth !== undefined ? parameters.depth / 2 : 0.5;
+        const sx = parameters.width !== undefined ? parameters.width * x / 2 : 0.5;
+        const sy = parameters.height !== undefined ? parameters.height * y / 2 : 0.5;
+        const sz = parameters.depth !== undefined ? parameters.depth * z / 2 : 0.5;
 
         return RAPIER.ColliderDesc.cuboid(sx, sy, sz);
 
     } else if (geometry.type === 'SphereGeometry' || geometry.type === 'IcosahedronGeometry') {
 
-        const radius = parameters.radius !== undefined ? parameters.radius : 1;
+        // scale.x === scale.y === scale.z
+        const radius = parameters.radius !== undefined ? parameters.radius * x : 1;
         return RAPIER.ColliderDesc.ball(radius);
 
     } else if (geometry.type === 'CylinderGeometry') {
 
-        const radius = parameters.radiusBottom !== undefined ? parameters.radiusBottom : 0.5;
-        const length = parameters.height !== undefined ? parameters.height : 0.5;
+        // scale.x === scale.z
+        const radius = parameters.radiusBottom !== undefined ? parameters.radiusBottom * x : 0.5;
+        const length = parameters.height !== undefined ? parameters.height * y : 0.5;
 
         return RAPIER.ColliderDesc.cylinder(length / 2, radius);
 
     } else if (geometry.type === 'CapsuleGeometry') {
 
-        const radius = parameters.radius !== undefined ? parameters.radius : 0.5;
-        const length = parameters.height !== undefined ? parameters.height : 0.5;
+        // scale.x === scale.z
+        const radius = parameters.radius !== undefined ? parameters.radius * x : 0.5;
+        const length = parameters.height !== undefined ? parameters.height * y : 0.5;
 
         return RAPIER.ColliderDesc.capsule(length / 2, radius);
 
     } else if (geometry.type === 'BufferGeometry') {
 
+        _geometry.copy(geometry);
+        _geometry.scale(...scale);
         const vertices = [];
         const vertex = new Vector3();
-        const position = geometry.getAttribute('position');
+        const position = _geometry.getAttribute('position');
 
         for (let i = 0; i < position.count; i++) {
 
@@ -60,9 +71,9 @@ function getShape(geometry) {
         }
 
         // if the buffer is non-indexed, generate an index buffer
-        const indices = geometry.getIndex() === null
+        const indices = _geometry.getIndex() === null
             ? Uint32Array.from(Array(parseInt(vertices.length / 3)).keys())
-            : geometry.getIndex().array;
+            : _geometry.getIndex().array;
 
         return RAPIER.ColliderDesc.trimesh(vertices, indices);
 
@@ -89,10 +100,8 @@ class RapierPhysics {
 
     ready = false;
    
-    constructor() {}
+    constructor() {
 
-    async init() {
-        
         this.world = new RAPIER.World(this.gravity);
         this.ready = true;
 
@@ -120,16 +129,23 @@ class RapierPhysics {
 
     addMesh(mesh, mass = 0, restitution = 0) {
 
-        const shape = getShape(mesh.geometry);
+        const shape = getShape(mesh.geometry, mesh.scale);
 
         if (shape === null) return;
 
         shape.setMass(mass);
         shape.setRestitution(restitution);
 
+        if (!mesh.isInstancedMesh) {
+
+            mesh.updateWorldMatrix(true, false);
+            mesh.matrixWorld.decompose(_v1, _q1, _vector);
+
+        }
+
         const { body, collider } = mesh.isInstancedMesh
             ? this.createInstancedBody(mesh, mass, shape)
-            : this.createBody(mesh.position, mesh.quaternion, mass, shape);
+            : this.createBody(_v1, _q1, mass, shape);
 
         if (!mesh.userData.physics) mesh.userData.physics = {};
 
@@ -149,54 +165,65 @@ class RapierPhysics {
 
     }
 
-    addCompoundMesh(compoundMeshes = [], body, group) {
+    addCompoundMesh(group) {
 
         let totalMass = 0;
         const colliders = [];
-        for (let i = 0, il = compoundMeshes.length; i < il; i++) {
+        group.traverse((child) => {
 
-            const mesh = compoundMeshes[i];
-            const { mass = 0, restitution = 0 } = mesh.userData.physics;
+            if (child.userData.physics) {
 
-            const shape = getShape(mesh.geometry);
-            const { x, y, z } = mesh.position;
-            shape.setTranslation(x, y, z);
+                const { mass } = child.userData.physics;
+                totalMass += mass;
+
+            }
+
+        });
+
+        group.updateWorldMatrix(true, false);
+        group.matrixWorld.decompose(_v1, _q1, _vector);
+        const body = this.createRigidBody(_v1, _q1, totalMass ? 'dynamic' : 'fixed');
+
+        for (let i = 0, il = group.children.length; i < il; i++) {
+
+            const mesh = group.children[i];
+            const physics = mesh.userData.physics;
+            if (!physics) continue;
+
+            const { mass = 0, restitution = 0 } = physics;
+
+            const shape = getShape(mesh.geometry, mesh.scale);
+            shape.setTranslation(...mesh.position);
             shape.setRotation(mesh.quaternion);
 
-            if (shape === null) return;
+            if (shape === null) continue;
 
             shape.setMass(mass);
             shape.setRestitution(restitution);
 
             const collider = this.world.createCollider(shape, body);
 
-            if (!mesh.userData.physics) mesh.userData.physics = {};
-
-            mesh.userData.physics.body = body;
-            mesh.userData.physics.collider = collider;
+            physics.body = body;
+            physics.collider = collider;
             colliders.push(collider);
 
             totalMass += mass;
 
         }
 
-        if (group) {
+        if (!group.userData.physics) group.userData.physics = {};
 
-            if (!group.userData.physics) group.userData.physics = {};
+        group.userData.physics.body = body;
+        group.userData.physics.collider = colliders;
 
-            group.userData.physics.body = body;
-            group.userData.physics.collider = colliders;
+        if (totalMass > 0) {
 
-            if (totalMass > 0) {
+            this.meshes.push(group);
+            this.meshMap.set(group, { body });
 
-                this.meshes.push(group);
-                this.meshMap.set(group, { body });
+        } else {
 
-            } else {
-
-                this.fixedMeshes.push(group);
-
-            }
+            this.fixedMeshes.push(group);
 
         }
 
@@ -268,7 +295,9 @@ class RapierPhysics {
 
         for (let i = 0; i < mesh.count; i++) {
 
+            mesh.updateWorldMatrix(true, false);
             const position = _vector.fromArray(array, i * 16 + 12);
+            position.applyMatrix4(mesh.matrixWorld);
             const { body, collider } = this.createBody(position, null, mass, shape);
             bodies.push(body);
             colliders.push(collider);
@@ -398,8 +427,10 @@ class RapierPhysics {
         const shape = RAPIER.ColliderDesc.heightfield(width, depth, heights, scale);
 
         const bodyDesc = RAPIER.RigidBodyDesc.fixed();
-        bodyDesc.setTranslation(mesh.position.x, mesh.position.y, mesh.position.z);
-        bodyDesc.setRotation(mesh.quaternion);
+        mesh.updateWorldMatrix(true, false);
+        mesh.matrixWorld.decompose(_v1, _q1, _vector);
+        bodyDesc.setTranslation(..._v1);
+        bodyDesc.setRotation(_q1);
 
         const body = this.world.createRigidBody(bodyDesc);
         const collider = this.world.createCollider(shape, body);
@@ -446,8 +477,12 @@ class RapierPhysics {
 
                 const { body } = this.meshMap.get(mesh);
 
-                mesh.position.copy(body.translation());
-                mesh.quaternion.copy(body.rotation());
+                (mesh.parent ?? mesh).getWorldQuaternion(_q1).invert();
+                _m1.copy((mesh.parent ?? mesh).matrixWorld).invert();
+                _v1.copy(body.translation()).applyMatrix4(_m1);
+                _q2.copy(body.rotation()).premultiply(_q1);
+                mesh.position.copy(_v1);
+                mesh.quaternion.copy(_q2);
 
             }
 
