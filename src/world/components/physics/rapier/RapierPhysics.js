@@ -16,72 +16,79 @@ function getShape(geometry, scale = new Vector3(1, 1, 1)) {
     const parameters = geometry.parameters;
     const { x, y, z } = scale;
 
-    if (geometry.type === 'RoundedBoxGeometry') {
+    switch(geometry.type) {
 
-        const sx = parameters.width !== undefined ? parameters.width * x / 2 : 0.5;
-        const sy = parameters.height !== undefined ? parameters.height * y / 2 : 0.5;
-        const sz = parameters.depth !== undefined ? parameters.depth * z / 2 : 0.5;
-        const radius = parameters.radius !== undefined ? parameters.radius : 0.1;
+        case 'RoundedBoxGeometry':
+            {
+                const sx = parameters.width !== undefined ? parameters.width * x / 2 : 0.5;
+                const sy = parameters.height !== undefined ? parameters.height * y / 2 : 0.5;
+                const sz = parameters.depth !== undefined ? parameters.depth * z / 2 : 0.5;
+                const radius = parameters.radius !== undefined ? parameters.radius : 0.1;
 
-        return RAPIER.ColliderDesc.roundCuboid(sx - radius, sy - radius, sz - radius, radius);
+                return RAPIER.ColliderDesc.roundCuboid(sx - radius, sy - radius, sz - radius, radius);
+            }
+        case 'BoxGeometry':
+            {
+                const sx = parameters.width !== undefined ? parameters.width * x / 2 : 0.5;
+                const sy = parameters.height !== undefined ? parameters.height * y / 2 : 0.5;
+                const sz = parameters.depth !== undefined ? parameters.depth * z / 2 : 0.5;
 
-    } else if (geometry.type === 'BoxGeometry') {
+                return RAPIER.ColliderDesc.cuboid(sx, sy, sz);
+            }
+        case 'SphereGeometry':
+        case 'IcosahedronGeometry':
+            {
+                // scale.x === scale.y === scale.z
+                const radius = parameters.radius !== undefined ? parameters.radius * x : 1;
+                return RAPIER.ColliderDesc.ball(radius);
+            }
+        case 'CylinderGeometry':
+            {
+                // scale.x === scale.z
+                const radius = parameters.radiusBottom !== undefined ? parameters.radiusBottom * x : 0.5;
+                const length = parameters.height !== undefined ? parameters.height * y : 0.5;
 
-        const sx = parameters.width !== undefined ? parameters.width * x / 2 : 0.5;
-        const sy = parameters.height !== undefined ? parameters.height * y / 2 : 0.5;
-        const sz = parameters.depth !== undefined ? parameters.depth * z / 2 : 0.5;
+                return RAPIER.ColliderDesc.cylinder(length / 2, radius);
+            }
+        case 'CapsuleGeometry':
+            {
+                // scale.x === scale.z
+                const radius = parameters.radius !== undefined ? parameters.radius * x : 0.5;
+                const length = parameters.height !== undefined ? parameters.height * y : 0.5;
 
-        return RAPIER.ColliderDesc.cuboid(sx, sy, sz);
+                return RAPIER.ColliderDesc.capsule(length / 2, radius);
+            }
+        case 'PlaneGeometry':
+        case 'BufferGeometry':
+            {
+                _geometry.copy(geometry);
+                _geometry.scale(...scale);
+                const vertices = [];
+                const vertex = new Vector3();
+                const position = _geometry.getAttribute('position');
 
-    } else if (geometry.type === 'SphereGeometry' || geometry.type === 'IcosahedronGeometry') {
+                for (let i = 0; i < position.count; i++) {
 
-        // scale.x === scale.y === scale.z
-        const radius = parameters.radius !== undefined ? parameters.radius * x : 1;
-        return RAPIER.ColliderDesc.ball(radius);
+                    vertex.fromBufferAttribute(position, i);
+                    vertices.push(vertex.x, vertex.y, vertex.z);
 
-    } else if (geometry.type === 'CylinderGeometry') {
+                }
 
-        // scale.x === scale.z
-        const radius = parameters.radiusBottom !== undefined ? parameters.radiusBottom * x : 0.5;
-        const length = parameters.height !== undefined ? parameters.height * y : 0.5;
+                // if the buffer is non-indexed, generate an index buffer
+                const indices = _geometry.getIndex() === null
+                    ? Uint32Array.from(Array(parseInt(vertices.length / 3)).keys())
+                    : _geometry.getIndex().array;
 
-        return RAPIER.ColliderDesc.cylinder(length / 2, radius);
+                return RAPIER.ColliderDesc.trimesh(vertices, indices);
+            }
+        default:
+            {
+                console.error('RapierPhysics: Unsupported geometry type:', geometry.type);
 
-    } else if (geometry.type === 'CapsuleGeometry') {
+                return null;
+            }
 
-        // scale.x === scale.z
-        const radius = parameters.radius !== undefined ? parameters.radius * x : 0.5;
-        const length = parameters.height !== undefined ? parameters.height * y : 0.5;
-
-        return RAPIER.ColliderDesc.capsule(length / 2, radius);
-
-    } else if (geometry.type === 'BufferGeometry') {
-
-        _geometry.copy(geometry);
-        _geometry.scale(...scale);
-        const vertices = [];
-        const vertex = new Vector3();
-        const position = _geometry.getAttribute('position');
-
-        for (let i = 0; i < position.count; i++) {
-
-            vertex.fromBufferAttribute(position, i);
-            vertices.push(vertex.x, vertex.y, vertex.z);
-
-        }
-
-        // if the buffer is non-indexed, generate an index buffer
-        const indices = _geometry.getIndex() === null
-            ? Uint32Array.from(Array(parseInt(vertices.length / 3)).keys())
-            : _geometry.getIndex().array;
-
-        return RAPIER.ColliderDesc.trimesh(vertices, indices);
-
-    }
-
-    console.error('RapierPhysics: Unsupported geometry type:', geometry.type);
-
-    return null;
+    }    
 
 }
 
