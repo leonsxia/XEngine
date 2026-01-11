@@ -23,6 +23,11 @@ export { CollisionBase } from './physics/primitives/collisionObjects/CollisionBa
 export { CollisionBox } from './physics/primitives/collisionObjects/CollisionBox.js';
 export { CollisionHexCylinder } from './physics/primitives/collisionObjects/CollisionHexCylinder.js';
 
+// Rapier physics helpers
+export { GeometryDesc } from './physics/rapier/helpers/GeometryDesc.js';
+export { MeshDesc } from './physics/rapier/helpers/MeshDesc.js';
+export { RapierContainer } from './physics/rapier/helpers/RapierContainer.js';
+
 // Weapons
 export { WeaponBase } from './composite/weapons/WeaponBase.js';
 export { Pistol } from './composite/weapons/Pistol.js';

@@ -16,7 +16,7 @@ function getShape(geometry, scale = new Vector3(1, 1, 1)) {
     const parameters = geometry.parameters;
     const { x, y, z } = scale;
 
-    switch(geometry.type) {
+    switch (geometry.type) {
 
         case 'RoundedBoxGeometry':
             {
@@ -88,7 +88,7 @@ function getShape(geometry, scale = new Vector3(1, 1, 1)) {
                 return null;
             }
 
-    }    
+    }
 
 }
 
@@ -106,7 +106,7 @@ class RapierPhysics {
     fixedMeshes = [];
 
     ready = false;
-   
+
     constructor() {
 
         this.world = new RAPIER.World(this.gravity);
@@ -172,31 +172,30 @@ class RapierPhysics {
 
     }
 
-    addCompoundMesh(group) {
+    addCompoundMesh(group, meshesDesc = []) {
 
         let totalMass = 0;
         const colliders = [];
-        group.traverse((child) => {
+        const children = meshesDesc.length > 0 ? meshesDesc : group.children;
+        for (let i = 0, il = children.length; i < il; i++) {
 
-            if (child.userData.physics) {
+            const mesh = children[i];
+            if (!mesh.userData.physics) mesh.userData.physics = {};
+            const { mass = 0 } = mesh.userData.physics;
+            totalMass += mass;
 
-                const { mass } = child.userData.physics;
-                totalMass += mass;
-
-            }
-
-        });
+        }
 
         group.updateWorldMatrix(true, false);
         group.matrixWorld.decompose(_v1, _q1, _vector);
         const body = this.createRigidBody(_v1, _q1, totalMass ? 'dynamic' : 'fixed');
 
-        for (let i = 0, il = group.children.length; i < il; i++) {
+        for (let i = 0, il = children.length; i < il; i++) {
 
-            const mesh = group.children[i];
+            const mesh = children[i];
             const physics = mesh.userData.physics;
-            if (!physics) continue;
 
+            if (!physics) continue;
             const { mass = 0, restitution = 0 } = physics;
 
             const shape = getShape(mesh.geometry, mesh.scale);
