@@ -231,10 +231,13 @@ const TEXTURE_NAMES = {
     // terrain
     SOIL_125: 'SOIL_125',
     SOIL_125_NORMAL: 'SOIL_125_NORMAL',
+    SOIL_125_DISP: 'SOIL_125_DISP',
     SOIL_135: 'SOIL_135',
     SOIL_135_NORMAL: 'SOIL_135_NORMAL',
+    SOIL_135_DISP: 'SOIL_135_DISP',
     SOIL_144: 'SOIL_144',
     SOIL_144_NORMAL: 'SOIL_144_NORMAL',
+    SOIL_144_DISP: 'SOIL_144_DISP',
     FOREST_LEAVES_02: 'FOREST_LEAVES_02',
     FOREST_LEAVES_02_NORMAL: 'FOREST_LEAVES_02_NORMAL',
     FOREST_LEAVES_02_AO: 'FOREST_LEAVES_02_AO',
@@ -307,11 +310,20 @@ const TEXTURES = [{
 }, {
     name: TEXTURE_NAMES.METAL_168, map: 'assets/textures/walls/Texturelabs_Metal_168M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_168L.jpg'
 }, {
-    name: TEXTURE_NAMES.SOIL_125, map: 'assets/textures/terrain/Texturelabs_Soil_125M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Soil_125L.jpg'
+    name: TEXTURE_NAMES.SOIL_125, 
+    map: 'assets/textures/terrain/Texturelabs_Soil_125M.jpg', 
+    normalMap: 'assets/textures/normals/Texturelabs_Soil_125L.jpg',
+    dispMap: 'assets/textures/disp/Texturelabs_Soil_125L.png'
 }, {
-    name: TEXTURE_NAMES.SOIL_135, map: 'assets/textures/terrain/Texturelabs_Soil_135M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Soil_135L.jpg'
+    name: TEXTURE_NAMES.SOIL_135, 
+    map: 'assets/textures/terrain/Texturelabs_Soil_135M.jpg', 
+    normalMap: 'assets/textures/normals/Texturelabs_Soil_135L.jpg',
+    dispMap: 'assets/textures/disp/Texturelabs_Soil_135L.png'
 }, {
-    name: TEXTURE_NAMES.SOIL_144, map: 'assets/textures/terrain/Texturelabs_Soil_144M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Soil_144L.jpg'
+    name: TEXTURE_NAMES.SOIL_144, 
+    map: 'assets/textures/terrain/Texturelabs_Soil_144M.jpg', 
+    normalMap: 'assets/textures/normals/Texturelabs_Soil_144L.jpg',
+    dispMap: 'assets/textures/disp/Texturelabs_Soil_144L.png'
 }, {
     name: TEXTURE_NAMES.FOREST_LEAVES_02, 
     map: 'assets/textures/terrain/forest_leaves_02_diffuse_4k.jpg', 
