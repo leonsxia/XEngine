@@ -1,5 +1,5 @@
-import { CreatureBase, WeaponBase } from "../../Models.js";
-import { ZOMBIE_MALE_CLIPS as CLIPS, WEAPONS } from "../../utils/constants";
+import { CreatureBase, GeometryDesc, MeshDesc, WeaponBase } from "../../Models.js";
+import { BOX_GEOMETRY, CAPSULE_GEOMETRY, ZOMBIE_MALE_CLIPS as CLIPS, WEAPONS } from "../../utils/constants";
 import { Logger } from '../../../systems/Logger';
 import { CreatureTypeMapping } from "./CreatureTypeMapping";
 import { Ammo } from "../weapons/Ammo";
@@ -168,6 +168,11 @@ const ZOMBIE_TYPES_MAPPING = {
     }),
 };
 
+const RAPIER_INSTANCES = {
+    CHARACTER_CONTROLLER: 'characterController',
+    DEAD_BODY: 'deadBody'
+};
+
 class ZombieMale extends CreatureBase {
 
     // eslint-disable-next-line no-unused-private-class-members
@@ -210,12 +215,15 @@ class ZombieMale extends CreatureBase {
             typeMapping,
             createDefaultBoundingObjects,
             HPMax,
-            focusHeight: .4
+            focusHeight: .4,
+            variant
         };
 
         super(setup);
 
         this.showTofu(false);
+
+        this.addRapierInstances();
 
     }
 
@@ -295,6 +303,46 @@ class ZombieMale extends CreatureBase {
             daw.stop(this._soundSettings.WALK_RIGHT);
 
         }
+
+    }
+
+    addRapierInstances() {
+
+        const { width, depth, height, variant } = this.specs;
+
+        if (variant === ZOMBIE_TYPES_MAPPING.VARIANT2.name || variant === ZOMBIE_TYPES_MAPPING.VARIANT3.name) {
+
+            const { width, depth, height } = ZOMBIE_TYPES_MAPPING[variant.toUpperCase()].walkBoundingBoxSize;
+            const diameter = Math.max(width, depth);
+            const capRadius = diameter / 2;
+            const capHeight = height - diameter;
+            const capsuleGeometryDesc = new GeometryDesc({ type: CAPSULE_GEOMETRY, radius: capRadius, height: capHeight });
+            const capsuleMeshDesc = new MeshDesc(capsuleGeometryDesc);
+            capsuleMeshDesc.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
+
+            this.rapierContainer.add(capsuleMeshDesc);
+
+        } else {
+
+            const diameter = Math.max(width, depth);
+            const capRadius = diameter / 2;
+            const capHeight = height - diameter;
+            const capsuleGeometryDesc = new GeometryDesc({ type: CAPSULE_GEOMETRY, radius: capRadius, height: capHeight });
+            const capsuleMeshDesc = new MeshDesc(capsuleGeometryDesc);
+            capsuleMeshDesc.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
+
+            this.rapierContainer.add(capsuleMeshDesc);
+
+        }
+
+        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height, });
+        const deadMeshDesc = new MeshDesc(deadGeometryDesc);
+        deadMeshDesc.name = RAPIER_INSTANCES.DEAD_BODY;
+
+        this.rapierContainer.add(deadMeshDesc);
+        this.rapierInstances = RAPIER_INSTANCES;
+
+        this.rapierContainer.setActiveInstances([RAPIER_INSTANCES.CHARACTER_CONTROLLER]);
 
     }
 

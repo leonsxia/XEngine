@@ -3,7 +3,7 @@ import { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSpher
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2, green, yellow } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
-import { CollisionBox, GeometryDesc, MeshDesc, RapierContainer } from '../../Models';
+import { CollisionBox, RapierContainer } from '../../Models';
 import { ResourceTracker } from '../../../systems/ResourceTracker';
 import { Logger } from '../../../systems/Logger';
 import { Health } from '../../mechanism/Health';
@@ -134,6 +134,7 @@ class TofuBase extends Moveable2D {
     _cornors = [];
 
     rapierContainer;
+    rapierInstances;
 
     resTracker = new ResourceTracker();
     track = this.resTracker.track.bind(this.resTracker);
@@ -271,14 +272,7 @@ class TofuBase extends Moveable2D {
         this.health.strip.position.y = height / 2 + .2;
         this.health.showStrip(false);
 
-        const diameter = Math.max(width, depth);
-        const capRadius = diameter / 2;
-        const capHeight = height - diameter;
-
         this.rapierContainer = new RapierContainer();
-        const capsuleGeometryDesc = new GeometryDesc({ radius: capRadius, height: capHeight });
-        const capsuleMeshDesc = new MeshDesc(capsuleGeometryDesc);
-        this.rapierContainer.add(capsuleMeshDesc);
 
     }
 

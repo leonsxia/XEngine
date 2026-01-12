@@ -4,6 +4,14 @@ import { RepeatWrapping, MirroredRepeatWrapping } from 'three';
 const REPEAT_WRAPPING = RepeatWrapping;
 const MIRRORED_REPEAT_WRAPPING = MirroredRepeatWrapping;
 
+// geometry
+const BUFFER_GEOMETRY = 'BufferGeometry';
+const PLANE_GEOMETRY = 'PlaneGeometry';
+const BOX_GEOMETRY = 'BoxGeometry';
+const SPHERE_GEOMETRY = 'SphereGeometry';
+const CYLINDER_GEOMETRY = 'CylinderGeometry';
+const CAPSULE_GEOMETRY = 'CapsuleGeometry';
+
 // light
 const DIRECTIONAL_LIGHT = 'DirectionalLight';
 const AMBIENT_LIGHT = 'AmbientLight';
@@ -611,6 +619,13 @@ const CONTROL_TYPES = {
 export { 
     REPEAT_WRAPPING,
     MIRRORED_REPEAT_WRAPPING,
+
+    BUFFER_GEOMETRY,
+    PLANE_GEOMETRY,
+    BOX_GEOMETRY,
+    SPHERE_GEOMETRY,
+    CYLINDER_GEOMETRY,
+    CAPSULE_GEOMETRY,
 
     DIRECTIONAL_LIGHT,
     AMBIENT_LIGHT,

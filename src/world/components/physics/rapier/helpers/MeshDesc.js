@@ -5,6 +5,8 @@ class MeshDesc {
 
     isMeshDesc = true;
 
+    name = '';
+
     geometry;
     position = new Vector3();
     rotation = new Euler();

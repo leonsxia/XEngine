@@ -1,5 +1,5 @@
-import { CombatPlayerBase, Pistol, Bayonet, Revolver, SMGShort, Glock } from '../../Models';
-import { SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
+import { CombatPlayerBase, Pistol, Bayonet, Revolver, SMGShort, Glock, GeometryDesc, MeshDesc } from '../../Models';
+import { BOX_GEOMETRY, CAPSULE_GEOMETRY, SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 import { WeaponActionMapping } from './WeaponActionMapping';
 import { Ammo } from '../weapons/Ammo';
@@ -155,7 +155,12 @@ const WEAPON_ACTION_MAPPING = {
         ignoreBoundingBox: true,
         ignorePushingBox: true
     })
-}
+};
+
+const RAPIER_INSTANCES = {
+    CHARACTER_CONTROLLER: 'characterController',
+    DEAD_BODY: 'deadBody'
+};
 
 const DEBUG = true;
 
@@ -268,6 +273,8 @@ class SoldierFemale extends CombatPlayerBase {
         
         this.showTofu(false);
 
+        this.addRapierInstances();
+
     }
 
     async init() {
@@ -302,6 +309,27 @@ class SoldierFemale extends CombatPlayerBase {
         }
 
         return this;
+
+    }
+    
+    addRapierInstances() {
+
+        const { width, depth, height } = this.specs;
+        const diameter = Math.max(width, depth);
+        const capRadius = diameter / 2;
+        const capHeight = height - diameter;
+        const capsuleGeometryDesc = new GeometryDesc({ type: CAPSULE_GEOMETRY, radius: capRadius, height: capHeight });
+        const capsuleMeshDesc = new MeshDesc(capsuleGeometryDesc);
+        capsuleMeshDesc.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
+
+        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height, });
+        const deadMeshDesc = new MeshDesc(deadGeometryDesc);
+        deadMeshDesc.name = RAPIER_INSTANCES.DEAD_BODY;
+
+        this.rapierContainer.add(capsuleMeshDesc, deadMeshDesc);
+        this.rapierInstances = RAPIER_INSTANCES;
+
+        this.rapierContainer.setActiveInstances([RAPIER_INSTANCES.CHARACTER_CONTROLLER]);
 
     }
 

@@ -1,5 +1,5 @@
-import { CreatureBase, WeaponBase } from '../../Models.js';
-import { BLACK_WIDOW_CLIPS as CLIPS, WEAPONS } from '../../utils/constants.js';
+import { CreatureBase, GeometryDesc, MeshDesc, WeaponBase } from '../../Models.js';
+import { BOX_GEOMETRY, BLACK_WIDOW_CLIPS as CLIPS, SPHERE_GEOMETRY, WEAPONS } from '../../utils/constants.js';
 import { CreatureTypeMapping } from './CreatureTypeMapping';
 import { Ammo } from '../weapons/Ammo.js';
 import { SOUND_NAMES } from '../../utils/audioConstants.js';
@@ -83,6 +83,11 @@ const BLACK_WIDOW_TYPES_MAPPING = {
     })
 };
 
+const RAPIER_INSTANCES = {
+    CHARACTER_CONTROLLER: 'characterController',
+    DEAD_BODY: 'deadBody'
+};
+
 class BlackWidow extends CreatureBase {
 
     constructor(specs) {
@@ -128,6 +133,8 @@ class BlackWidow extends CreatureBase {
 
         this.showTofu(false);
 
+        this.addRapierInstances();
+
     }
 
     async init() {
@@ -156,6 +163,24 @@ class BlackWidow extends CreatureBase {
         this.addSoundsToGroup(SOUND_NAMES.BULLET_FLESH_HIT);
 
         return this;
+
+    }
+
+    addRapierInstances() {
+
+        const { width, depth, height } = this.specs;
+        const capsuleGeometryDesc = new GeometryDesc({ type: SPHERE_GEOMETRY, radius: height / 2 });
+        const capsuleMeshDesc = new MeshDesc(capsuleGeometryDesc);
+        capsuleMeshDesc.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
+
+        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height, });
+        const deadMeshDesc = new MeshDesc(deadGeometryDesc);
+        deadMeshDesc.name = RAPIER_INSTANCES.DEAD_BODY;
+
+        this.rapierContainer.add(capsuleMeshDesc, deadMeshDesc);
+        this.rapierInstances = RAPIER_INSTANCES;
+
+        this.rapierContainer.setActiveInstances([RAPIER_INSTANCES.CHARACTER_CONTROLLER]);
 
     }
 

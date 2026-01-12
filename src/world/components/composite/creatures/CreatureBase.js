@@ -465,6 +465,7 @@ class CreatureBase extends CustomizedCreatureTofu {
           
             this.clearInSightTargets();
             this.die(true);
+            this.rapierContainer.setActiveInstances([this.rapierInstances.DEAD_BODY]);
 
         }
 
@@ -704,6 +705,7 @@ class CreatureBase extends CustomizedCreatureTofu {
         super.movingForward(false);
         this.switchHelperComponents();
         this.AWS.resetAllActions();
+        this.rapierContainer.setActiveInstances([this.rapierInstances.CHARACTER_CONTROLLER]);
 
     }
 

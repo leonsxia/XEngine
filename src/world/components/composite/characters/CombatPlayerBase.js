@@ -1413,6 +1413,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             this.clearInSightTargets();
             this.die(true);
+            this.rapierContainer.setActiveInstances([this.rapierInstances.DEAD_BODY]);
 
         }
 
@@ -1742,6 +1743,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.AWS.resetAllActions();
         this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 1);
         this.AWS.activeAction = this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
+        this.rapierContainer.setActiveInstances([this.rapierInstances.CHARACTER_CONTROLLER]);
 
     }
 
