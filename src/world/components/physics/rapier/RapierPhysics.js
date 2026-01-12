@@ -156,6 +156,9 @@ class RapierPhysics {
 
         if (!mesh.userData.physics) mesh.userData.physics = {};
 
+        const { enableX = true, enableY = true, enableZ = true } = mesh.userData.physics;
+        body.setEnabledRotations(enableX, enableY, enableZ, true);
+
         mesh.userData.physics.body = body;
         mesh.userData.physics.collider = collider;
 
@@ -218,6 +221,9 @@ class RapierPhysics {
         }
 
         if (!group.userData.physics) group.userData.physics = {};
+
+        const { enableX = true, enableY = true, enableZ = true } = group.userData.physics;
+        body.setEnabledRotations(enableX, enableY, enableZ, true);
 
         group.userData.physics.body = body;
         group.userData.physics.collider = colliders;
