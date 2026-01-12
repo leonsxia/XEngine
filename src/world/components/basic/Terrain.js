@@ -31,7 +31,7 @@ class Terrain extends BasicObject {
         const initPromises = [];
         initPromises.push(this.initBasic());
 
-        const { aoMap, dispMap, displacementScale = 1, useHeightmap = false, repeatU = 1, repeatV = 1 } = this.specs;
+        const { aoMap, dispMap, displacementScale = 1, useHeightmap = false, repeatU = 1, repeatV = 1, height = 1 } = this.specs;
 
         if (aoMap?.isTexture) {
 
@@ -50,7 +50,7 @@ class Terrain extends BasicObject {
 
             if (useHeightmap) {
 
-                updateTerrainGeometry(this.geometry, _map, this.material, [repeatU, repeatV]);
+                updateTerrainGeometry(this.geometry, _map, this.material, [repeatU, repeatV], height);
 
             }
 
@@ -76,7 +76,7 @@ class Terrain extends BasicObject {
 
             if (useHeightmap) {
 
-                updateTerrainGeometry(this.geometry, disp, this.material, [repeatU, repeatV]);
+                updateTerrainGeometry(this.geometry, disp, this.material, [repeatU, repeatV], height);
 
             }
 

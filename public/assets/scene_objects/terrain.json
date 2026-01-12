@@ -539,7 +539,7 @@
                     "type": "Terrain",
                     "width": 30,
                     "depth": 30,
-                    "height": 0.5,
+                    "height": 0.8,
                     "segmentW": 50,
                     "segmentD": 50,
                     "map": "FOREST_LEAVES_02",
