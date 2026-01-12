@@ -169,15 +169,15 @@ class BlackWidow extends CreatureBase {
     addRapierInstances() {
 
         const { width, depth, height } = this.specs;
-        const capsuleGeometryDesc = new GeometryDesc({ type: SPHERE_GEOMETRY, radius: height / 2 });
-        const capsuleMeshDesc = new MeshDesc(capsuleGeometryDesc);
-        capsuleMeshDesc.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
+        const sphereGeometryDesc = new GeometryDesc({ type: SPHERE_GEOMETRY, radius: height / 2 });
+        const characterInstance = new MeshDesc(sphereGeometryDesc);
+        characterInstance.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
 
         const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height, });
         const deadMeshDesc = new MeshDesc(deadGeometryDesc);
         deadMeshDesc.name = RAPIER_INSTANCES.DEAD_BODY;
 
-        this.rapierContainer.add(capsuleMeshDesc, deadMeshDesc);
+        this.rapierContainer.add(characterInstance, deadMeshDesc);
         this.rapierInstances = RAPIER_INSTANCES;
 
         this.rapierContainer.setActiveInstances([RAPIER_INSTANCES.CHARACTER_CONTROLLER]);

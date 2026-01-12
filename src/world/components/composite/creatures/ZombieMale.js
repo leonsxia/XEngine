@@ -1,9 +1,10 @@
 import { CreatureBase, GeometryDesc, MeshDesc, WeaponBase } from "../../Models.js";
-import { BOX_GEOMETRY, CAPSULE_GEOMETRY, ZOMBIE_MALE_CLIPS as CLIPS, WEAPONS } from "../../utils/constants";
+import { BOX_GEOMETRY, ZOMBIE_MALE_CLIPS as CLIPS, WEAPONS } from "../../utils/constants";
 import { Logger } from '../../../systems/Logger';
 import { CreatureTypeMapping } from "./CreatureTypeMapping";
 import { Ammo } from "../weapons/Ammo";
 import { SOUND_NAMES } from "../../utils/audioConstants.js";
+import { generateRapierCharacterInstance } from "../../physics/rapier/helpers/rapierHelper.js";
 
 const GLTF_SRC = 'creatures/zombie_male.glb';
 
@@ -310,28 +311,15 @@ class ZombieMale extends CreatureBase {
 
         const { width, depth, height, variant } = this.specs;
 
+        let characterInstance;
         if (variant === ZOMBIE_TYPES_MAPPING.VARIANT2.name || variant === ZOMBIE_TYPES_MAPPING.VARIANT3.name) {
 
             const { width, depth, height } = ZOMBIE_TYPES_MAPPING[variant.toUpperCase()].walkBoundingBoxSize;
-            const diameter = Math.max(width, depth);
-            const capRadius = diameter / 2;
-            const capHeight = height - diameter;
-            const capsuleGeometryDesc = new GeometryDesc({ type: CAPSULE_GEOMETRY, radius: capRadius, height: capHeight });
-            const capsuleMeshDesc = new MeshDesc(capsuleGeometryDesc);
-            capsuleMeshDesc.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
-
-            this.rapierContainer.add(capsuleMeshDesc);
+            characterInstance = generateRapierCharacterInstance(RAPIER_INSTANCES.CHARACTER_CONTROLLER, { width, depth, height });
 
         } else {
 
-            const diameter = Math.max(width, depth);
-            const capRadius = diameter / 2;
-            const capHeight = height - diameter;
-            const capsuleGeometryDesc = new GeometryDesc({ type: CAPSULE_GEOMETRY, radius: capRadius, height: capHeight });
-            const capsuleMeshDesc = new MeshDesc(capsuleGeometryDesc);
-            capsuleMeshDesc.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
-
-            this.rapierContainer.add(capsuleMeshDesc);
+            characterInstance = generateRapierCharacterInstance(RAPIER_INSTANCES.CHARACTER_CONTROLLER, { width, depth, height });
 
         }
 
@@ -339,7 +327,7 @@ class ZombieMale extends CreatureBase {
         const deadMeshDesc = new MeshDesc(deadGeometryDesc);
         deadMeshDesc.name = RAPIER_INSTANCES.DEAD_BODY;
 
-        this.rapierContainer.add(deadMeshDesc);
+        this.rapierContainer.add(characterInstance, deadMeshDesc);
         this.rapierInstances = RAPIER_INSTANCES;
 
         this.rapierContainer.setActiveInstances([RAPIER_INSTANCES.CHARACTER_CONTROLLER]);
