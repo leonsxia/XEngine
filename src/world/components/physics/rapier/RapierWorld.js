@@ -385,7 +385,7 @@ class RapierWorld {
 
     tick(delta) {
 
-        if (this._rapierHelper) this._rapierHelper.update();
+        if (this._rapierHelper && this._debug) this._rapierHelper.update();
 
         this.playerTick(delta);
 
