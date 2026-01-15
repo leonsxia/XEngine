@@ -1,4 +1,4 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher, Quaternion } from 'three';
 // eslint-disable-next-line no-unused-vars
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, generateTerrainGeometry } from '../utils/geometryHelper';
@@ -7,6 +7,10 @@ import { basicMateraials } from './basicMaterial';
 import { white } from './colorBase';
 import { REPEAT_WRAPPING } from '../utils/constants';
 import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP, WATER_PLANE, TERRAIN, CAPSULE } from '../utils/constants';
+
+const _v1 = new Vector3();
+const _v2 = new Vector3();
+const _q1 = new Quaternion();
 
 class BasicObject extends EventDispatcher {
     
@@ -656,6 +660,27 @@ class BasicObject extends EventDispatcher {
     receiveShadow(receive) {
 
         this.mesh.receiveShadow = receive;
+
+        return this;
+
+    }
+
+    syncRapierWorld() {
+
+        if (this.mesh.userData.physics) {
+
+            const { body } = this.mesh.userData.physics;
+
+            if (body) {
+
+                this.mesh.updateWorldMatrix(true, false);
+                this.mesh.matrixWorld.decompose(_v1, _q1, _v2);
+                body.setTranslation(_v1);
+                body.setRotation(_q1);
+
+            }
+
+        }
 
         return this;
 

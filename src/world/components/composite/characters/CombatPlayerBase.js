@@ -747,6 +747,11 @@ class CombatPlayerBase extends CustomizedCombatTofu {
                     this.#logger.log(`idle to left turn`);
                     this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.idle.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
 
+                } else {
+
+                    // clear aim target
+                    this._target = null;
+
                 }
 
                 this.AWS.setActionEffectiveTimeScale(this.currentActionType.walk.nick, 1);
@@ -791,6 +796,11 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
                     this.#logger.log(`idle to right turn`);
                     this.AWS.prepareCrossFade(this.AWS.actions[this.currentActionType.idle.nick], this.AWS.actions[this.currentActionType.walk.nick], this._animationSettings.IDLE_TO_TURN, this._animationSettings.TURN_WEIGHT);
+
+                } else {
+
+                    // clear aim target
+                    this._target = null;
 
                 }
 
@@ -1074,6 +1084,9 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this._cancelShoot = false;
         super.gunPoint(false);
         this.switchHelperComponents();
+
+        // clear aim target
+        this._target = null;
 
     }
 
@@ -1373,14 +1386,17 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             const endCallback = () => {
 
-                this.isActive = false;
+                // this.isActive = false;
                 hurtAction.ignoreFinishedEvent = undefined;
                 hurtAction.ignoreFadeOut = undefined;
                 interactAction.ignoreFadeOut = undefined;
                 this.AWS.isLooping = false;
 
+                this.adjustDeadInstance();
+
             }
 
+            this.isActive = false;
             dieAction.ignoreFadeOut = true;
             this.AWS.prepareCrossFade(null, dieAction, this._animationSettings.DIE, 1, false, false, 0, endCallback);
 
@@ -1413,7 +1429,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             this.clearInSightTargets();
             this.die(true);
-            this.rapierContainer.setActiveInstances([this.rapierInstances.DEAD_BODY]);
 
         }
 
@@ -1743,7 +1758,8 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.AWS.resetAllActions();
         this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 1);
         this.AWS.activeAction = this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
-        this.rapierContainer.setActiveInstances([this.rapierInstances.CHARACTER_CONTROLLER]);
+
+        this.adjustCharacterControllerInstance();
 
     }
 

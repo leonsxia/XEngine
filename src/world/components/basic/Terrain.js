@@ -9,6 +9,8 @@ const _v1 = new Vector3();
 
 class Terrain extends BasicObject {
 
+    isTerrain = true;
+
     _cachedWidth;
     _cachedHeight;
 

@@ -162,6 +162,7 @@ const RAPIER_INSTANCES = {
     CHARACTER_CONTROLLER: 'characterController',
     DEAD_BODY: 'deadBody'
 };
+const DEAD_BODY_MASS = 5000;
 
 const DEBUG = true;
 
@@ -274,8 +275,6 @@ class SoldierFemale extends CombatPlayerBase {
         
         this.showTofu(false);
 
-        this.addRapierInstances();
-
     }
 
     async init() {
@@ -316,16 +315,24 @@ class SoldierFemale extends CombatPlayerBase {
     addRapierInstances() {
 
         const { width, depth, height } = this.specs;
-        const characterInstance = generateRapierCharacterInstance(RAPIER_INSTANCES.CHARACTER_CONTROLLER, { width, depth, height });
+        const mass = 55;
 
-        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height, });
+        const characterInstance = generateRapierCharacterInstance(RAPIER_INSTANCES.CHARACTER_CONTROLLER, { width, depth, height });
+        characterInstance.userData.physics.mass = mass;
+
+        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height: height * .2 });
         const deadMeshDesc = new MeshDesc(deadGeometryDesc);
+        deadMeshDesc.attachTo = this.group;
         deadMeshDesc.name = RAPIER_INSTANCES.DEAD_BODY;
+        deadMeshDesc.userData.physics.mass = DEAD_BODY_MASS;
+        deadMeshDesc.userData.physics.enableX = false;
+        deadMeshDesc.userData.physics.enableZ = false;
 
         this.rapierContainer.add(characterInstance, deadMeshDesc);
+        this.rapierContainer.scale = this.scale;
         this.rapierInstances = RAPIER_INSTANCES;
 
-        this.rapierContainer.setActiveInstances([RAPIER_INSTANCES.CHARACTER_CONTROLLER]);
+        this.rapierContainer.actives.push(characterInstance);
 
     }
 

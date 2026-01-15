@@ -424,16 +424,19 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             const endCallback = () => {
 
-                this.isActive = false;
+                // this.isActive = false;
                 hurtAction.ignoreFinishedEvent = undefined;
                 hurtAction.ignoreFadeOut = undefined;
                 attackAction.ignoreFinishedEvent = undefined;
                 attackAction.ignoreFadeOut = undefined;
                 this.AWS.isLooping = false;
 
+                this.adjustDeadInstance();
+
             }
             dieAction.ignoreFadeOut = true;
 
+            this.isActive = false;
             this.AWS.prepareCrossFade(null, dieAction, this._animationSettings.DIE, 1, false, false, 0, endCallback);
 
         }        
@@ -465,7 +468,6 @@ class CreatureBase extends CustomizedCreatureTofu {
           
             this.clearInSightTargets();
             this.die(true);
-            this.rapierContainer.setActiveInstances([this.rapierInstances.DEAD_BODY]);
 
         }
 
@@ -705,7 +707,8 @@ class CreatureBase extends CustomizedCreatureTofu {
         super.movingForward(false);
         this.switchHelperComponents();
         this.AWS.resetAllActions();
-        this.rapierContainer.setActiveInstances([this.rapierInstances.CHARACTER_CONTROLLER]);
+        
+        this.adjustCharacterControllerInstance();
 
     }
 

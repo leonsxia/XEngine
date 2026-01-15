@@ -106,6 +106,7 @@ class RapierPhysics {
     fixedMeshes = [];
 
     ready = false;
+    isRapierPhysics = true;
 
     constructor() {
 
@@ -145,8 +146,9 @@ class RapierPhysics {
 
         if (!mesh.isInstancedMesh) {
 
-            mesh.updateWorldMatrix(true, false);
-            mesh.matrixWorld.decompose(_v1, _q1, _vector);
+            const _mesh = mesh.attachTo ?? mesh;
+            _mesh.updateWorldMatrix(true, false);
+            _mesh.matrixWorld.decompose(_v1, _q1, _vector);
 
         }
 
@@ -466,6 +468,8 @@ class RapierPhysics {
 
             const mesh = this.meshes[i];
 
+            if (mesh.isPicked) continue;
+
             if (mesh.isInstancedMesh) {
 
                 const array = mesh.instanceMatrix.array;
@@ -489,12 +493,16 @@ class RapierPhysics {
 
                 const { body } = this.meshMap.get(mesh);
 
-                (mesh.parent ?? mesh).getWorldQuaternion(_q1).invert();
-                _m1.copy((mesh.parent ?? mesh).matrixWorld).invert();
+                const _mesh1 = (mesh.attachTo ?? mesh);
+                const _mesh2 = _mesh1.parent ?? _mesh1;
+                _mesh2.getWorldQuaternion(_q1).invert();
+                _m1.copy(_mesh2.matrixWorld).invert();
                 _v1.copy(body.translation()).applyMatrix4(_m1);
                 _q2.copy(body.rotation()).premultiply(_q1);
-                mesh.position.copy(_v1);
-                mesh.quaternion.copy(_q2);
+                _mesh1.position.copy(_v1);
+                _mesh1.quaternion.copy(_q2);
+
+                _mesh1.father?.onRapierUpdated?.();
 
             }
 
@@ -504,4 +512,4 @@ class RapierPhysics {
 
 }
 
-export { RapierPhysics };
+export { RapierPhysics, getShape };

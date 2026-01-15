@@ -52,7 +52,7 @@ const BLACK_WIDOW_TYPES_MAPPING = {
             isDefault: true
         }),
         gltfScale: [.4, .4, .4],
-        offset: [0, -0.925, 0]
+        // offset: [0, -0.925, 0]
     }),
     DESCENDANT: new CreatureTypeMapping({
         name: 'descendant',
@@ -87,6 +87,7 @@ const RAPIER_INSTANCES = {
     CHARACTER_CONTROLLER: 'characterController',
     DEAD_BODY: 'deadBody'
 };
+const DEAD_BODY_MASS = 5000;
 
 class BlackWidow extends CreatureBase {
 
@@ -133,8 +134,6 @@ class BlackWidow extends CreatureBase {
 
         this.showTofu(false);
 
-        this.addRapierInstances();
-
     }
 
     async init() {
@@ -168,19 +167,26 @@ class BlackWidow extends CreatureBase {
 
     addRapierInstances() {
 
-        const { width, depth, height } = this.specs;
+        const { width, depth, height, variant, typeMapping } = this.specs;
+        const mass = variant === BLACK_WIDOW_TYPES_MAPPING.STANDARD.name ? 50 : 25;
         const sphereGeometryDesc = new GeometryDesc({ type: SPHERE_GEOMETRY, radius: height / 2 });
         const characterInstance = new MeshDesc(sphereGeometryDesc);
         characterInstance.name = RAPIER_INSTANCES.CHARACTER_CONTROLLER;
+        characterInstance.userData.physics.mass = mass;
 
-        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height, });
+        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height: height * typeMapping.gltfScale[1] });
         const deadMeshDesc = new MeshDesc(deadGeometryDesc);
+        deadMeshDesc.attachTo = this.group;
         deadMeshDesc.name = RAPIER_INSTANCES.DEAD_BODY;
+        deadMeshDesc.userData.physics.mass = DEAD_BODY_MASS;
+        // deadMeshDesc.userData.physics.enableX = false;
+        // deadMeshDesc.userData.physics.enableZ = false;
 
         this.rapierContainer.add(characterInstance, deadMeshDesc);
+        this.rapierContainer.scale = this.scale;
         this.rapierInstances = RAPIER_INSTANCES;
 
-        this.rapierContainer.setActiveInstances([RAPIER_INSTANCES.CHARACTER_CONTROLLER]);
+        this.rapierContainer.actives.push(characterInstance);
 
     }
 

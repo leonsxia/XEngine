@@ -173,6 +173,7 @@ const RAPIER_INSTANCES = {
     CHARACTER_CONTROLLER: 'characterController',
     DEAD_BODY: 'deadBody'
 };
+const DEAD_BODY_MASS = 1000;
 
 class ZombieMale extends CreatureBase {
 
@@ -223,8 +224,6 @@ class ZombieMale extends CreatureBase {
         super(setup);
 
         this.showTofu(false);
-
-        this.addRapierInstances();
 
     }
 
@@ -310,6 +309,7 @@ class ZombieMale extends CreatureBase {
     addRapierInstances() {
 
         const { width, depth, height, variant } = this.specs;
+        const mass = 65;
 
         let characterInstance;
         if (variant === ZOMBIE_TYPES_MAPPING.VARIANT2.name || variant === ZOMBIE_TYPES_MAPPING.VARIANT3.name) {
@@ -323,14 +323,21 @@ class ZombieMale extends CreatureBase {
 
         }
 
-        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height, });
+        characterInstance.userData.physics.mass = mass;
+
+        const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height: .15 * height});
         const deadMeshDesc = new MeshDesc(deadGeometryDesc);
+        deadMeshDesc.attachTo = this.group;
         deadMeshDesc.name = RAPIER_INSTANCES.DEAD_BODY;
+        deadMeshDesc.userData.physics.mass = DEAD_BODY_MASS;
+        // deadMeshDesc.userData.physics.enableX = false;
+        // deadMeshDesc.userData.physics.enableZ = false;
 
         this.rapierContainer.add(characterInstance, deadMeshDesc);
+        this.rapierContainer.scale = this.scale;
         this.rapierInstances = RAPIER_INSTANCES;
 
-        this.rapierContainer.setActiveInstances([RAPIER_INSTANCES.CHARACTER_CONTROLLER]);
+        this.rapierContainer.actives.push(characterInstance);
 
     }
 

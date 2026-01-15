@@ -121,8 +121,9 @@ class SimplePhysics {
         names.forEach(name => {
 
             const find = this.enemies.find(e => e.name === name);
+            const idx = this.activeEnemies.indexOf(find);
 
-            if (find) {
+            if (idx === -1) {
                 
                 this.activeEnemies.push(find);
                 this.onTofuCollisionBoxChanged(find);

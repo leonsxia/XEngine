@@ -10,6 +10,7 @@ import { WorldScene6 } from "./worldScenes/WorldScene6";
 import { WorldMatrix } from "./worldScenes/Matrix";
 import { EnemyTestScene } from "./worldScenes/EnemyTestScene";
 import { WorldTerrain } from "./worldScenes/WorldTerrain";
+import { WorldRapier } from "./worldScenes/WorldRapier";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
@@ -47,7 +48,8 @@ const config = {
         'Entries Test',  
         'Matrix', 
         'Enemy Test Scene',
-        'Terrain'
+        'Terrain',
+        'Rapier Physics'
     ],  // scene list for scene selector
 };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
@@ -132,7 +134,8 @@ class World {
             new Mansion(this.#renderer, config), 
             new WorldMatrix(this.#renderer, config), 
             new EnemyTestScene(this.#renderer, config),
-            new WorldTerrain(this.#renderer, config)
+            new WorldTerrain(this.#renderer, config),
+            new WorldRapier(this.#renderer, config)
         );
 
     }

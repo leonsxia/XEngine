@@ -19,8 +19,8 @@ function generateRapierCharacterInstance(name, size) {
     } else {
 
         const radius = height / 2;
-        const capsuleGeometryDesc = new GeometryDesc({ type: SPHERE_GEOMETRY, radius });
-        meshDesc = new MeshDesc(capsuleGeometryDesc);
+        const sphereGeometryDesc = new GeometryDesc({ type: SPHERE_GEOMETRY, radius });
+        meshDesc = new MeshDesc(sphereGeometryDesc);
         meshDesc.name = name;
 
     }

@@ -6,9 +6,16 @@ class RapierContainer {
     actives = [];
     _scale = new Vector3(1, 1, 1);
 
+    onBeforeActivesChanged = [];
     onActivesChanged = [];
 
-    constructor() { }
+    attachTo;
+
+    constructor(specs) { 
+
+        this.attachTo = specs.attachTo;
+
+    }
 
     get scale() {
 
@@ -53,6 +60,7 @@ class RapierContainer {
 
     clearActives() {
 
+        this.doBeforeActivesChangedEvents();
         this.actives.length = 0;
 
     }
@@ -87,6 +95,17 @@ class RapierContainer {
     }
 
     // events
+    doBeforeActivesChangedEvents() {
+
+        for (let i = 0, il = this.onBeforeActivesChanged.length; i < il; i++) {
+
+            const event = this.onBeforeActivesChanged[i];
+            event(this);
+
+        }
+
+    }
+
     doActivesChangedEvents() {
 
         for (let i = 0, il = this.onActivesChanged.length; i < il; i++) {

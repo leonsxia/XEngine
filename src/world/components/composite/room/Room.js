@@ -80,6 +80,7 @@ class Room {
             this.group.add(this.backWall.mesh);
             this.bindWallEvents(this.backWall);
             this.backWall.visible = true;
+            this.backWall.mesh.userData.physics = { mass: 0 };
 
         }
 
@@ -91,6 +92,7 @@ class Room {
             this.group.add(this.leftWall.mesh);
             this.bindWallEvents(this.leftWall);
             this.leftWall.visible = true;
+            this.leftWall.mesh.userData.physics = { mass: 0 };
 
         }
 
@@ -102,6 +104,7 @@ class Room {
             this.group.add(this.rightWall.mesh);
             this.bindWallEvents(this.rightWall);
             this.rightWall.visible = true;
+            this.rightWall.mesh.userData.physics = { mass: 0 };
 
         }
         
@@ -114,6 +117,7 @@ class Room {
             this.group.add(this.frontWall.mesh);
             this.bindWallEvents(this.frontWall);
             this.frontWall.visible = true;
+            this.frontWall.mesh.userData.physics = { mass: 0 };
 
         }
 
@@ -509,7 +513,8 @@ class Room {
             this.frontWall.setConfig({ rotationT, repeatU, repeatV })
                 .setPosition([0, 0, depth * .5])
                 .setRotationY(Math.PI)
-                .setScaleFullUpdate(scale);
+                .setScaleFullUpdate(scale)
+                .syncRapierWorld();
 
         }
 
@@ -518,7 +523,8 @@ class Room {
             this.backWall.setConfig({ rotationT, repeatU, repeatV })
                 .setPosition([0, 0, - depth * .5])
                 .setRotationY(0)
-                .setScaleFullUpdate(scale);
+                .setScaleFullUpdate(scale)
+                .syncRapierWorld();
 
         }
 
@@ -527,7 +533,8 @@ class Room {
             this.leftWall.setConfig({ rotationT, repeatU, repeatV })
                 .setPosition([width * .5, 0, 0])
                 .setRotationY(- Math.PI * .5)
-                .setScaleFullUpdate(scale);
+                .setScaleFullUpdate(scale)
+                .syncRapierWorld();
 
         }
 
@@ -536,7 +543,8 @@ class Room {
             this.rightWall.setConfig({ rotationT, repeatU, repeatV })
                 .setPosition([- width * .5, 0, 0])
                 .setRotationY(Math.PI * .5)
-                .setScaleFullUpdate(scale);
+                .setScaleFullUpdate(scale)
+                .syncRapierWorld();
 
         }
     }

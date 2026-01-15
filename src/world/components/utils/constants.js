@@ -592,6 +592,7 @@ const GUI_CONFIG = {
     TPC_CONTROL: 'Third Person Camera',
     IC_CONTROL: 'Inspector Camera',
     CAMERA_CONTROL: 'Cameras',
+    RAPIER_PHYSICS_CONTROL: 'Rapier Physics',
     PICKER_CONTROL: 'Picker',
     HEALTH_CONTROL: 'Health',
     WEAPON_CONTROL: 'Weapons',

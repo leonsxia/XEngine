@@ -173,6 +173,23 @@ class GuiMaker {
             this.guiLeftSpecs.details.push(folder);
         }
 
+        // Rapier physics
+        if ($scene.physics.isRapierWorld) {
+
+            const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.RAPIER_PHYSICS_CONTROL, parent: 'rapierPhysics', close: true });
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'debugger',
+                value: { debugger: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showRapierDebugger.bind($scene)
+            }));
+
+            this.guiLeftSpecs.details.push(folder);
+
+        }
+
         if (!$scene.picker.isUnavailable) {
            
             const pickerActions = {
@@ -185,7 +202,7 @@ class GuiMaker {
 
             this.guiLeftSpecs.details.push(makeFunctionGuiConfig(GUI_CONFIG.PICKER_CONTROL, GUI_CONFIG.PICKER_ACTIONS_PARENT, null, true));
 
-        }
+        }        
 
         if ($scene.postProcessor.ready) {
 

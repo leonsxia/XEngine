@@ -733,6 +733,18 @@ class SceneBuilder {
 
             }
 
+            if (room.terrains) {
+
+                for (let j = 0, jl = room.terrains.length; j < jl; j++) {
+
+                    const terrain = room.terrains[j];
+                    const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).terrains.find(f => f.type === terrain.type && f.name === terrain.name);
+                    this.updateObject(terrain, _target, updateSetupOnly);
+
+                }
+
+            }
+
         }
 
     }
@@ -1235,7 +1247,7 @@ class SceneBuilder {
 
             } else if (find.isMesh) {
 
-                if (find.father.isFloor || find.father.isCeiling) {
+                if (find.father.isFloor || find.father.isCeiling || find.father.isTerrain) {
 
                     if (updateSetupOnly) {
 
@@ -1245,6 +1257,7 @@ class SceneBuilder {
 
                         const { rotation = [0, 0, 0] } = _target;
                         find.father.setRotation(rotation);
+                        find.father.syncRapierWorld();
 
                     }
                         

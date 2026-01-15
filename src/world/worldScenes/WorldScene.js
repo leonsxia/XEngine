@@ -18,6 +18,7 @@ import { independence } from '../components/basic/colorBase.js';
 import { InputBase } from '../systems/physicalInputs/InputBase.js';
 import { pdaItemViewer } from '../systems/ItemViewer.js';
 import { AudioMixer } from '../components/updatables/AudioMixer.js';
+import { RapierWorld } from '../components/physics/rapier/RapierWorld.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -192,7 +193,8 @@ class WorldScene {
         const { 
             camera: { position = [0, 0, 0] }, defaultPlayer, resolution = 1,
             enableGui = false, enablePicker = false, enableShadow = false,
-            enableTPC = false, enableIC = false
+            enableTPC = false, enableIC = false,
+            physics = 'simple'
         } = this.setup;
 
         // set camera initial position and save the state
@@ -223,7 +225,17 @@ class WorldScene {
         }
 
         // physics
-        this.physics = new SimplePhysics(this.players, this.enemies);
+        if (physics === 'simple') {
+
+            this.physics = new SimplePhysics(this.players, this.enemies);
+
+        } else if (physics === 'rapier') {
+
+            this.physics = new RapierWorld({
+                players: this.players, enemies: this.enemies, attachTo: this
+            });
+
+        }
         this.updatableQueue.add(this.physics);
 
         // ai
@@ -849,7 +861,6 @@ class WorldScene {
 
         // player should have boundingBox and boundingBoxHelper.
         const find = this.players.find(p => p.name === name);
-        const oldPlayerBoxHelper = this.player ? this.scene.getObjectByName(this.player.boundingBoxHelper.name) : null;
 
         if (find) {
 
@@ -890,6 +901,7 @@ class WorldScene {
 
                 }
 
+                const oldPlayerBoxHelper = this.scene.getObjectByName(this.player.boundingBoxHelper.name);
                 if (oldPlayerBoxHelper) this.scene.remove(oldPlayerBoxHelper);
 
             }
@@ -1254,8 +1266,6 @@ class WorldScene {
 
         }
 
-        this.player.showArrows(s);
-
         return this;
 
     }
@@ -1474,6 +1484,7 @@ class WorldScene {
                 this.scene.add(enemy.rightArrow);
                 this.scene.add(enemy.backLeftArrow);
                 this.scene.add(enemy.backRightArrow);
+                this.scene.add(enemy.centerArrow);
                 this.scene.add(enemy.focusArrow);
 
             } else {
@@ -1482,11 +1493,10 @@ class WorldScene {
                 this.scene.remove(enemy.rightArrow);
                 this.scene.remove(enemy.backLeftArrow);
                 this.scene.remove(enemy.backRightArrow);
+                this.scene.remove(enemy.centerArrow);
                 this.scene.remove(enemy.focusArrow);
 
             }
-
-            enemy.showArrows(s);
 
         }
 
@@ -2063,6 +2073,13 @@ class WorldScene {
             enemy.DAW?.changeMasterLevel(level);
 
         }
+
+    }
+
+    showRapierDebugger(show) {
+
+        const s = show === 'show' ? true : false;
+        this.physics.showDebugger(s);
 
     }
 

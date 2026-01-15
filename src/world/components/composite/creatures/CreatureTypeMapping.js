@@ -46,7 +46,7 @@ class CreatureTypeMapping {
         const { pushingBoxSize } = specs;
         const { weapon } = specs;
         const { sounds } = specs;
-        const { gltfScale = [1, 1, 1], offset = [0, 0, 0] } = specs;
+        const { gltfScale = [1, 1, 1], offset = [undefined, undefined, undefined] } = specs;
 
         this.name = name;
         this.idle = idle;

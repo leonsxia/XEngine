@@ -12,7 +12,9 @@ class MeshDesc {
     rotation = new Euler();
     quaternion = new Quaternion();
     scale = new Vector3(1, 1, 1);
-    userData = {};
+    userData = { physics: {} };
+
+    attachTo;
 
     constructor(geometry = new GeometryDesc()) {
 

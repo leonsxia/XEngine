@@ -760,7 +760,7 @@ function makeObjectsGuiConfig(objects) {
         const object = objects[i];
 
         // set parent to null, so gui will use prop to set identifier
-        const folder = makeFolderGuiConfig({ folder: object.name, parent: null, close: false });
+        const folder = makeFolderGuiConfig({ folder: object.name, parent: null, close: false });        
 
         const postChangeFn = () => {
                 
@@ -783,8 +783,10 @@ function makeObjectsGuiConfig(objects) {
 
                 object.father.updateRay?.();
                 object.father.updateOBB?.();
+                object.father.syncRapierWorld();
 
             }
+
         }
 
         const picked_number_steps = !object.isWeapon ? PICKED_NUMBER_STEPS : PICKED_WEAPON_NUMBER_STEPS;
@@ -838,10 +840,11 @@ function makeObjectsGuiConfig(objects) {
 
                         object.father.updateLightObjects?.();
 
-                    } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall || object.father.isAirWall)) {
+                    } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall || object.father.isAirWall || object.father.isTerrain)) {
 
                         object.father.updateRay?.();
                         object.father.updateOBB?.();
+                        object.father.syncRapierWorld();
 
                     }
 

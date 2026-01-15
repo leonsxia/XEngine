@@ -34,7 +34,6 @@ class GLTFModel extends EventDispatcher {
     async init() {
 
         const { src, receiveShadow = false, castShadow = false, hasBones = false, needCloneTexture = false } = this.specs;
-        let { offsetX, offsetY, offsetZ } = this.specs;
 
         let model;
 
@@ -65,14 +64,9 @@ class GLTFModel extends EventDispatcher {
 
             }
 
-            _box.setFromObject(gltfModel.scene);
-            _box.getCenter(_v1);
-            offsetX = offsetX ?? - _v1.x;
-            offsetY = offsetY ?? - _v1.y;
-            offsetZ = offsetZ ?? - _v1.z;
-            modelGroup.position.set(offsetX, offsetY, offsetZ);
-
+            this.gltf = gltfModel;            
             this.group.add(modelGroup);
+            this.adjustModelPosition();
 
             this.getMeshes(this.group);
 
@@ -81,9 +75,22 @@ class GLTFModel extends EventDispatcher {
             this.castShadow(receiveShadow)
                 .receiveShadow(castShadow);
 
-            this.gltf = gltfModel;
-
         }
+
+    }
+
+    adjustModelPosition({ biasx, biasy, biasz } = {}) {
+
+        const modelGroup = this.group.children[0];
+        let { offsetX, offsetY, offsetZ } = this.specs;
+
+        _box.setFromObject(this.gltf.scene);
+        _box.getCenter(_v1);
+        offsetX = biasx ?? ( offsetX ?? - _v1.x);
+        offsetY = biasy ?? ( offsetY ?? - _v1.y);
+        offsetZ = biasz ?? ( offsetZ ?? - _v1.z);
+
+        modelGroup.position.set(offsetX, offsetY, offsetZ);
 
     }
 

@@ -8,6 +8,7 @@ const DEBUG = true;
 
 const _m1 = new Matrix4();
 const _v1 = new Vector3();
+const _v2 = new Vector3();
 
 class Moveable2D {
     #movingLeft = false;
@@ -386,6 +387,28 @@ class Moveable2D {
 
     }
 
+    fallingTickRaw(params) {
+
+        const { delta } = params;
+        const moveVector = new Vector3();
+
+        if (!this.#isClimbingUp && !this.#isClimbingForward) {
+            
+            const now = this.#fallingTime + delta;
+            const deltaY = .5 * this.#g * (now ** 2 - this.#fallingTime ** 2);
+
+            this.#lastFrameFallingDist = deltaY;
+            this.#isFalling = true;
+            this.#fallingTime = now;
+
+            moveVector.set(0, - deltaY, 0);
+
+        }
+
+        return moveVector;
+        
+    }
+
     onHittingBottomTick(params) {
 
         const { bottomWall, $self } = params;
@@ -469,6 +492,23 @@ class Moveable2D {
         dir.y += $self.height * .5;
         $self.group.position.y = $self.group.parent ? dir.applyMatrix4(_m1.copy($self.group.parent.matrixWorld).invert()).y : dir.y;
 
+    }
+
+    setOnSlopePointRaw(params) {
+
+        const { points, $self } = params;
+
+        $self.getWorldPosition(_v1);
+        // descending order;
+        points.sort((a, b) => {
+            return b.y - a.y;
+        });
+
+        _v2.copy(points[0]);
+        _v2.y += $self.height * .5;
+
+        return new Vector3(0, _v2.y - _v1.y, 0);
+        
     }
 
     /**
@@ -759,6 +799,72 @@ class Moveable2D {
             }
 
         }
+
+    }
+
+    tankmoveTickRaw(params) {
+
+        const { group, R, rotateVel, stoodRotateVel, dist, delta, $self } = params;
+        let deltaX, deltaZ;
+        const rotateRad = rotateVel * delta;
+        const stoodRotateRad = stoodRotateVel * delta;
+        const worldY = $self.worldYDirection;
+        $self.getWorldPosition(_v1);
+
+        if(this.#isQuickTuring || this.#isAimTurning || this.#isClimbingUp || this.#isClimbingForward) {
+
+            return new Vector3();
+
+        }
+
+        if (this.isMovingForward) {
+
+            _v1.set(0, 0, dist).applyMatrix4(group.matrixWorld);
+
+        } else if (this.isMovingBackward) {
+
+            _v1.set(0, 0, - dist).applyMatrix4(group.matrixWorld);
+
+        } else if (this.isTurnClockwise) {
+
+            group.rotateOnWorldAxis(worldY, - stoodRotateRad);
+
+        } else if (this.isTurnCounterClockwise) {
+
+            group.rotateOnWorldAxis(worldY, stoodRotateRad);
+
+        } else {
+
+            deltaX = R - R * Math.cos(dist / R);
+            deltaZ = R * Math.sin(dist / R);
+
+            if (this.isMovingForwardLeft) {
+
+                _v1.set(deltaX, 0, deltaZ).applyMatrix4(group.matrixWorld);
+                group.rotateOnWorldAxis(worldY, rotateRad);
+
+            } else if (this.isMovingForwardRight) {
+
+                _v1.set(-deltaX, 0, deltaZ).applyMatrix4(group.matrixWorld);
+                group.rotateOnWorldAxis(worldY, - rotateRad);
+
+            } else if (this.isMovingBackwardLeft) {
+
+                _v1.set(deltaX, 0, -deltaZ).applyMatrix4(group.matrixWorld);
+                group.rotateOnWorldAxis(worldY, - rotateRad);
+
+            } else if (this.isMovingBackwardRight) {
+
+                _v1.set(-deltaX, 0, -deltaZ).applyMatrix4(group.matrixWorld);
+                group.rotateOnWorldAxis(worldY, rotateRad);
+
+            }
+
+        }
+
+        _v1.sub(_v2.set(0, 0, 0).applyMatrix4(group.matrixWorld));
+
+        return new Vector3().set(_v1.x, 0, _v1.z);
 
     }
 

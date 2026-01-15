@@ -87,7 +87,6 @@ class TofuBase extends Moveable2D {
     _showBBW = false;
     _showPushingBox = false;
     _showCBoxArrows = false;
-    _showArrows = false;
 
     _target = null;
     _focusTarget = null;
@@ -272,7 +271,7 @@ class TofuBase extends Moveable2D {
         this.health.strip.position.y = height / 2 + .2;
         this.health.showStrip(false);
 
-        this.rapierContainer = new RapierContainer();
+        this.rapierContainer = new RapierContainer({ attachTo: this });
 
     }
 
@@ -796,16 +795,6 @@ class TofuBase extends Moveable2D {
 
     }
 
-    showArrows(show) {
-
-        this._showArrows = show;
-        this.leftArrow.visible = show;
-        this.rightArrow.visible = show;
-        this.backLeftArrow.visible = show;
-        this.backRightArrow.visible = show;
-
-    }
-
     showCollisionBox(show) {
 
         if (this.collisionBox) {
@@ -900,23 +889,34 @@ class TofuBase extends Moveable2D {
         }
         
         _v1.set(0, this.#armedHeight, 0).applyMatrix4(this.group.matrixWorld);
+        
+        if (this._target) {
 
-        // get world direction
-        if (this.#aimDirection === aimDirection.forward) {
+            const instance = this._target.instance;
+            instance.getWorldPosition(_v2);
+            _v2.y += instance.height * .5 - 0.01;
+            _v2.sub(_v1).normalize();
 
-            _v2.copy(_forward);
+        } else {
 
-        } else if (this.#aimDirection === aimDirection.forwardDown) {
+            // get world direction
+            if (this.#aimDirection === aimDirection.forward) {
 
-            _v2.copy(_forwardDown);
+                _v2.copy(_forward);
 
-        } else if (this.#aimDirection === aimDirection.forwardUp) {
+            } else if (this.#aimDirection === aimDirection.forwardDown) {
 
-            _v2.copy(_forwardUp);
+                _v2.copy(_forwardDown);
 
-        }
+            } else if (this.#aimDirection === aimDirection.forwardUp) {
 
-        _v2.applyQuaternion(this.group.quaternion).normalize();
+                _v2.copy(_forwardUp);
+
+            }
+
+            _v2.applyQuaternion(this.group.quaternion).normalize();
+
+        }        
 
         this.aimRay.set(_v1, _v2);
         this.aimRay.far = this.damageRange;
@@ -1206,6 +1206,14 @@ class TofuBase extends Moveable2D {
     setPosition(pos, resetState = false) {
 
         this.group.position.set(...pos);
+        if (this.rapierContainer.actives.length > 0) {
+
+            const controller = this.rapierContainer.getInstanceByName(this.rapierInstances.CHARACTER_CONTROLLER);
+            const { collider } = controller.userData;
+            this.getWorldPosition(_v1);
+            collider?.setTranslation(_v1);
+
+        }
 
         if (resetState) {
 
@@ -1318,7 +1326,7 @@ class TofuBase extends Moveable2D {
 
         return this;
 
-    }    
+    }
 
     setTickParams(delta) {
 
@@ -1362,6 +1370,18 @@ class TofuBase extends Moveable2D {
 
     }
 
+    tickRaw(delta) {
+
+        const params = this.setTickParams(delta);
+
+        this.#slowDownCoefficient = 1;
+
+        const moveVector = this.tankmoveTickRaw(params);
+
+        return moveVector;
+
+    }
+
     tickClimb(delta, wall) {
 
         this.climbWallTick({ delta, wall, $self: this });
@@ -1375,6 +1395,14 @@ class TofuBase extends Moveable2D {
         this.fallingTick({ delta, $self: this });
 
         this.updateAccessories();
+
+    }
+
+    tickFallRaw(delta) {
+
+        const moveVector = this.fallingTickRaw({ delta });
+
+        return moveVector;
 
     }
 
@@ -1406,9 +1434,17 @@ class TofuBase extends Moveable2D {
 
     tickOnSlopePointsAdjust(points) {
 
-        this.setOnSlopePoint({points, $self: this});
+        this.setOnSlopePoint({ points, $self: this });
 
         this.updateAccessories();
+
+    }
+
+    tickOnSlopePointsAdjustRaw(points) {
+
+        const moveVector = this.setOnSlopePointRaw({ points, $self: this });
+
+        return moveVector;
 
     }
 
@@ -1454,6 +1490,38 @@ class TofuBase extends Moveable2D {
         this.isActive = false;
         this.disposed = true;
         this._inSightTargets = undefined;
+
+    }
+
+    // Rapier physics function
+    adjustDeadInstance() {
+
+        if (this.rapierContainer.actives.length === 0) return;
+
+        const { offsetY, gltfScale = [1, 1, 1] } = this.specs;
+        const deadInstance = this.rapierContainer.getInstanceByName(this.rapierInstances.DEAD_BODY);
+        const deadMeshHeight = deadInstance.geometry.parameters.height * deadInstance.scale.y;
+        const totalScaleY = gltfScale[1] * this.scale.y;
+        const biasy = (offsetY ? (offsetY * totalScaleY + (this.height - deadMeshHeight) * .5) : - deadMeshHeight * .5) // world y
+            / totalScaleY; // local y
+        this.gltf.adjustModelPosition({ biasy });
+        this.group.position.y -= (this.height - deadMeshHeight) * .5;
+        this.rapierContainer.setActiveInstances([this.rapierInstances.DEAD_BODY]);
+
+    }
+
+    adjustCharacterControllerInstance() {
+
+        if (this.rapierContainer.actives.length === 0) return;
+
+        this.rapierContainer.setActiveInstances([this.rapierInstances.CHARACTER_CONTROLLER]);
+        this.gltf.adjustModelPosition();
+
+    }
+
+    onRapierUpdated() {
+
+        this.updateAccessories();
 
     }
 
