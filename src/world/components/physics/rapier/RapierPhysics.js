@@ -108,6 +108,8 @@ class RapierPhysics {
     ready = false;
     isRapierPhysics = true;
 
+    RAPIER = RAPIER;
+
     constructor() {
 
         this.world = new RAPIER.World(this.gravity);

@@ -115,8 +115,8 @@
                     "name": "room1_mainLight",
                     "display": "Directional Light",
                     "detail": {
-                        "color": [251, 216, 142],
-                        "intensity": 0.1,
+                        "color": [249, 230, 190],
+                        "intensity": 1.45,
                         "position": [0, 20, 28],
                         "target": [0, 0, 0]
                     },
@@ -338,8 +338,8 @@
                     "width": 30,
                     "depth": 30,
                     "height": 0.8,
-                    "segmentW": 30,
-                    "segmentD": 30,
+                    "segmentW": 50,
+                    "segmentD": 50,
                     "map": "SOIL_135",
                     "normalMap": "SOIL_135_NORMAL",
                     "dispMap": "SOIL_135_DISP",
