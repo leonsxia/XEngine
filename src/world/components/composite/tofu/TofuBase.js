@@ -1250,7 +1250,7 @@ class TofuBase extends Moveable2D {
 
         this._cachedWidth = this.#w * this.group.scale.x;
         this._cachedHeight = this.#h * this.group.scale.y;
-        this._cachedWidth = this.#d * this.group.scale.z;
+        this._cachedDepth = this.#d * this.group.scale.z;
 
         this.rapierContainer.scale = this.group.scale;
 

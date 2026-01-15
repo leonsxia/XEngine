@@ -634,7 +634,6 @@ class CreatureBase extends CustomizedCreatureTofu {
         } else {
 
             this.stopMovingActions();
-            this._focusTarget = null;
 
         }
 
@@ -733,7 +732,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         if (this._inSightTargets.length === 0) {
 
-            this.isNoticed = false;
+            this.onInSightTargetsCleared();
             this.sovBoundingSphereMesh.material.color.setHex(BS);
 
         }
@@ -742,6 +741,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     onInSightTargetsCleared() {
 
+        super.onInSightTargetsCleared();
         this.isNoticed = false;
 
     }
@@ -750,7 +750,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         if (this._inSightTargets.length === 0) {
 
-            this.isNoticed = false;
+            this.onInSightTargetsCleared();
 
         }
 

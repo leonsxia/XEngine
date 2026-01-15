@@ -194,8 +194,6 @@ class Tofu extends TofuBase {
         if (this.disposed) return;
 
         this._inSightTargets.length = 0;
-        this._target = null;
-        this._focusTarget = null;
         this.onInSightTargetsCleared();
 
     }
@@ -216,7 +214,12 @@ class Tofu extends TofuBase {
     onSovSphereTriggerExit() {}
 
     // inherited by children
-    onInSightTargetsCleared() {}
+    onInSightTargetsCleared() {
+
+        this._target = null;
+        this._focusTarget = null;
+
+    }
 
     // inherited by children
     onInSightTargetsRemoved() {}
