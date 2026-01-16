@@ -23,6 +23,13 @@ const HEAD_WIDTH = .1;
 const SLOPE_RAY_LENGTH = 2;
 const TERRAIN_RAY_LENGTH = .6;
 
+// rapier component
+const RAPIER_INSTANCES = {
+    CHARACTER_CONTROLLER: 'characterController',
+    DEAD_BODY: 'deadBody'
+};
+
+// auxiliary 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
 const _down = new Vector3(0, -1, 0);
@@ -40,6 +47,7 @@ class TofuBase extends Moveable2D {
     meshes;
     boundingObjects;
 
+    // bounding box & faces
     bodyMesh;
     slotMeshes = [];
     boundingBoxMesh;
@@ -52,6 +60,7 @@ class TofuBase extends Moveable2D {
     boundingBox;
     boundingBoxHelper;
 
+    // rays
     hasRays = false;
     leftRay;
     rightRay;
@@ -75,6 +84,7 @@ class TofuBase extends Moveable2D {
 
     intersectSlope;
 
+    // collision box
     _collisionSize;
     collisionBox;
     walls = [];
@@ -114,6 +124,7 @@ class TofuBase extends Moveable2D {
     #backwardRotatingRadiusCoefficient = .7;
     #isPushing = false;
 
+    // actions
     #damageRange = 0;
     #damageRadius = 0;
     #armedHeight = 0;
@@ -132,9 +143,11 @@ class TofuBase extends Moveable2D {
 
     _cornors = [];
 
+    // rapier
     rapierContainer;
-    rapierInstances;
+    rapierInstances = Object.assign({}, RAPIER_INSTANCES);
 
+    // resource tracker
     resTracker = new ResourceTracker();
     track = this.resTracker.track.bind(this.resTracker);
     dispose = this.resTracker.dispose.bind(this.resTracker);
@@ -1361,11 +1374,9 @@ class TofuBase extends Moveable2D {
     tick(delta) {
 
         const params = this.setTickParams(delta);
-
         this.#slowDownCoefficient = 1;
 
         this.tankmoveTick(params);
-
         this.updateAccessories();
 
     }
@@ -1373,9 +1384,6 @@ class TofuBase extends Moveable2D {
     tickRaw(delta) {
 
         const params = this.setTickParams(delta);
-
-        this.#slowDownCoefficient = 1;
-
         const moveVector = this.tankmoveTickRaw(params);
 
         return moveVector;
@@ -1385,7 +1393,6 @@ class TofuBase extends Moveable2D {
     tickClimb(delta, wall) {
 
         this.climbWallTick({ delta, wall, $self: this });
-
         this.updateAccessories();
 
     }
@@ -1393,7 +1400,6 @@ class TofuBase extends Moveable2D {
     tickFall(delta) {
 
         this.fallingTick({ delta, $self: this });
-
         this.updateAccessories();
 
     }
@@ -1409,7 +1415,6 @@ class TofuBase extends Moveable2D {
     onGround(floor) {
 
         this.onGroundTick({ floor, $self: this });
-
         this.updateAccessories();
 
     }
@@ -1417,7 +1422,6 @@ class TofuBase extends Moveable2D {
     tickOnHittingBottom(bottomWall) {
 
         this.onHittingBottomTick({ bottomWall, $self: this });
-
         this.updateAccessories();
         
     }
@@ -1425,7 +1429,6 @@ class TofuBase extends Moveable2D {
     tickOnSlope(slopes, type = 'normal') {
 
         let result = this.onSlopeTick({ slopes, type, $self: this });
-
         this.updateAccessories();
 
         return result;
@@ -1435,7 +1438,6 @@ class TofuBase extends Moveable2D {
     tickOnSlopePointsAdjust(points) {
 
         this.setOnSlopePoint({ points, $self: this });
-
         this.updateAccessories();
 
     }
@@ -1451,13 +1453,10 @@ class TofuBase extends Moveable2D {
     tickWithWall(delta, wall) {
 
         const params = this.setTickParams(delta);
-
         params.wall = wall;
 
         this.#slowDownCoefficient = SLOWDOWN_COEFFICIENT;
-
         this.tankmoveTickWithWall(params);
-
         this.updateAccessories();
 
     }
@@ -1465,7 +1464,6 @@ class TofuBase extends Moveable2D {
     applyPositionAdjustment() {
 
         this.applyWorldDeltaV3({ group: this.group });
-
         this.updateAccessories();
 
     }
