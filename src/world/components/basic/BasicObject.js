@@ -665,6 +665,7 @@ class BasicObject extends EventDispatcher {
 
     }
 
+    // rapier function
     syncRapierWorld() {
 
         if (this.mesh.userData.physics) {

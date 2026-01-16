@@ -68,7 +68,7 @@
             "sovRadius": 6.5,
             "showBS": false,
             "variant": "standard",
-            "vel": 0.7,
+            "vel": 0.5,
             "rotateR": 1,
             "HPMax": 80
         },
@@ -337,7 +337,7 @@
                     "type": "Terrain",
                     "width": 30,
                     "depth": 30,
-                    "height": 0.6,
+                    "height": 0.8,
                     "segmentW": 50,
                     "segmentD": 50,
                     "map": "FOREST_LEAVES_02",

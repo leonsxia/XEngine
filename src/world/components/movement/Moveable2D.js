@@ -494,7 +494,7 @@ class Moveable2D {
 
     }
 
-    setOnSlopePointRaw(params) {
+    setOnLandPointRaw(params) {
 
         const { points, $self } = params;
 

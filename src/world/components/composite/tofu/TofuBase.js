@@ -1,4 +1,4 @@
-import { Group, Box3, Box3Helper, Raycaster, ArrowHelper, Vector3 } from 'three';
+import { Group, Box3, Box3Helper, Raycaster, ArrowHelper, Vector3, Quaternion } from 'three';
 import { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
 import { orange, BF, BF2, green, yellow } from '../../basic/colorBase';
@@ -36,6 +36,7 @@ const _down = new Vector3(0, -1, 0);
 const _forward = new Vector3(0, 0, 1);
 const _forwardDown = new Vector3(0, -1, 1).normalize();
 const _forwardUp = new Vector3(0, 1, 1).normalize();
+const _q1 = new Quaternion();
 
 const DEBUG = false;
 
@@ -1442,9 +1443,9 @@ class TofuBase extends Moveable2D {
 
     }
 
-    tickOnSlopePointsAdjustRaw(points) {
+    tickOnLandPointsAdjustRaw(points) {
 
-        const moveVector = this.setOnSlopePointRaw({ points, $self: this });
+        const moveVector = this.setOnLandPointRaw({ points, $self: this });
 
         return moveVector;
 
@@ -1514,6 +1515,30 @@ class TofuBase extends Moveable2D {
 
         this.rapierContainer.setActiveInstances([this.rapierInstances.CHARACTER_CONTROLLER]);
         this.gltf.adjustModelPosition();
+
+    }
+
+    syncRapierWorld() {
+
+        if (this.rapierContainer.actives.length === 0) return;
+
+        const activeInstance = this.rapierContainer.getInstanceByName(this.rapierContainer.actives[0].name);
+        if (activeInstance.userData.physics) {
+
+            const { collider } = activeInstance.userData.physics;
+
+            if (collider) {
+
+                this.group.updateWorldMatrix(true, false);
+                this.group.matrixWorld.decompose(_v1, _q1, _v2);
+                collider.setTranslation(_v1);
+                collider.setRotation(_q1);
+
+            }
+
+        }
+
+        return this;
 
     }
 

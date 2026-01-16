@@ -767,6 +767,7 @@ function makeObjectsGuiConfig(objects) {
             if (object.isTofu) {
     
                 object.father.updateAccessories();
+                object.father.syncRapierWorld();
     
             } else if (object.isWeapon) {
 

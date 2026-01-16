@@ -1,6 +1,7 @@
 import { Quaternion, Vector3 } from 'three';
 import { getShape, RapierPhysics } from './RapierPhysics';
 import { RapierHelper } from 'three/addons/helpers/RapierHelper.js';
+import { Logger } from '../../../systems/Logger';
 
 const CHARACTER_CONTROLLER = 'characterController';
 const STAIR_OFFSET_MAX = .3;
@@ -10,6 +11,8 @@ const _v1 = new Vector3();
 const _v2 = new Vector3();
 const _q1 = new Quaternion();
 const _down = new Vector3(0, -1, 0);
+
+const DEBUG = false;
 
 class RapierWorld {
 
@@ -24,7 +27,6 @@ class RapierWorld {
 
     compounds = [];
     floors = [];
-    obstacleTops = [];
     slopes = [];
     terrains = [];
 
@@ -36,6 +38,8 @@ class RapierWorld {
     isActive = true;
 
     _debug = false;
+
+    #logger = new Logger(DEBUG, 'RapierWorld');
 
     constructor({ players = [], enemies = [], attachTo }) {
 
@@ -97,12 +101,11 @@ class RapierWorld {
     initPhysics(room) {
 
         const { 
-            floors, topOBBs, slopes,
+            floors, slopes,
             terrains 
         } = room;
 
         this.floors = floors;
-        this.obstacleTops = topOBBs;
         this.slopes = slopes;
         this.terrains = terrains;
 
@@ -161,7 +164,7 @@ class RapierWorld {
         characterController.setMinSlopeSlideAngle(60 * Math.PI / 180);
         characterController.enableAutostep(STAIR_OFFSET_MAX, 0.2, true);
 
-        userData.controller = characterController;
+        userData.physics.controller = characterController;
 
     }
 
@@ -193,6 +196,7 @@ class RapierWorld {
             const { heights } = terrain.geometry.userData;
             this.physics.addHeightfield(terrain.mesh, heightSegments, widthSegments, new Float32Array(heights), { x: width, y: 1, z: height });
             terrain.mesh.userData.physics.manuallyLoad = true;
+            terrain.mesh.userData.physics.collider.checkByRay = true;
             terrain.mesh.userData.physics.collider.name = `${terrain.name}_collider`;
 
         }
@@ -238,8 +242,8 @@ class RapierWorld {
             } else {
 
                 const userData = instance.userData;
-                this.physics.removeCollider(userData.collider);
-                userData.collider = undefined;
+                this.physics.removeCollider(userData.physics.collider);
+                userData.physics.collider = undefined;
             
             }
 
@@ -266,8 +270,8 @@ class RapierWorld {
                 const colliderDesc = getShape(geometryDesc, rapierContainer.scale);
                 avatar.getWorldPosition(_v1);
                 colliderDesc.setTranslation(..._v1);
-                userData.collider = this.physics.world.createCollider(colliderDesc);
-                userData.collider.name = `${avatar.name}_character_controller_collider`;
+                userData.physics.collider = this.physics.world.createCollider(colliderDesc);
+                userData.physics.collider.name = `${avatar.name}_character_controller_collider`;
 
             }
 
@@ -366,29 +370,11 @@ class RapierWorld {
 
     }
 
-    // check
-    checkBlockByTopT(avatar, top) {
-
-        let block = false;
-        const topPosY = top.getWorldPosition(_v1).y;
-        const offset = Math.abs(topPosY - avatar.bottomY);
-
-        if (avatar.bottomY < topPosY - avatar.lastFrameFallingDistance && offset > STAIR_OFFSET_MAX) {
-            
-            block = true;
-
-        }
-
-        return block;
-
-    }
-
     tick(delta) {
 
         if (this._rapierHelper && this._debug) this._rapierHelper.update();
 
         this.playerTick(delta);
-
         this.enemyTick(delta);
 
         this.physics.step(delta);
@@ -413,47 +399,26 @@ class RapierWorld {
         for (let i = 0, il = activeAvatars.length; i < il; i++) {
 
             const avatar = activeAvatars[i];
-            const { userData: { collider, controller } } = avatar.rapierContainer.getInstanceByName(CHARACTER_CONTROLLER);
+            const { physics: { collider, controller } } = avatar.rapierContainer.getInstanceByName(CHARACTER_CONTROLLER).userData;
             const position = collider.translation();
 
-            // let rotationTicked = false;
             if (!avatar.isInAir) {
                 
                 avatar.tickRotateActions(delta);
-                // rotationTicked = true;
 
             }
 
             const moveVector = avatar.tickRaw(delta);
 
+            // update rotation
+            avatar.group.getWorldQuaternion(_q1);
+            collider.setRotation(_q1);
+
             // for avatar falling down check
-            const collisionTops = [];
-
-            for (let i = 0; i < this.obstacleTops.length; i++) {
-
-                const top = this.obstacleTops[i];
-
-                if (avatar.obb.intersectsOBB(top.obb) && !this.checkBlockByTopT(avatar, top)) {
-
-                    collisionTops.push(top);
-
-                    break;
-
-                }
-
-            }
-
             let isLanded = false;
-            if (collisionTops.length > 0) {
 
-                isLanded = true;
-
-            }
-
-            // collect on slope points and return the highest one
-            const onSlopePoints = [];
-
-            // let isOnSlope = false;     
+            // collect on land points and return the highest one
+            const onLandPoints = [];  
 
             if (!avatar.isClimbingUp) {
 
@@ -461,18 +426,6 @@ class RapierWorld {
                 if (this.terrains.length > 0) {
 
                     avatar.updateRayLength('terrain');
-                    // for (let i = 0, il = this.terrains.length; i < il; i++) {
-
-                    //     const terrain = this.terrains[i];
-                    //     const { onSlope, point } = avatar.tickOnSlope([terrain.mesh], 'terrain');
-                    //     if (onSlope) {
-
-                    //         onSlopePoints.push(point);
-                    //         isLanded = true;
-
-                    //     }
-
-                    // }
 
                 }
                 
@@ -481,23 +434,39 @@ class RapierWorld {
                 _v1.set(position.x, position.y, position.z);    // origin
 
                 const ray = new this.physics.RAPIER.Ray(_v1, _down);
-                const hit = this.physics.world.castRay(ray, maxToi, false, null, null, collider);
+                const hit = this.physics.world.castRay(ray, maxToi, false, null, null, collider, null, 
+                    (collider) => collider.checkByRay   // take terrain into account
+                );
+
                 if (hit) {
 
                     // The hit point is obtained from the ray's origin and direction: `origin + dir * timeOfImpact`.
-                    onSlopePoints.push(_v1.add(_v2.copy(_down).multiplyScalar(hit.timeOfImpact)));
-                    moveVector.add(avatar.tickOnSlopePointsAdjustRaw(onSlopePoints));
+                    onLandPoints.push(_v1.add(_v2.copy(_down).multiplyScalar(hit.timeOfImpact)));
+                    moveVector.add(avatar.tickOnLandPointsAdjustRaw(onLandPoints));
                     isLanded = true;
+                    this.#logger.log(`charater: ${avatar.name}, is landed by castRay`);
 
+                } else {
+
+                    const halfsize = Math.min(avatar.width, avatar.depth) / 4;
+                    const halfheight = .1;
+                    const shape = new this.physics.RAPIER.Cuboid(halfsize, halfheight, halfsize);
+                    const stopAtPenetration = true;
+                    const maxToi = 0;
+                    _v1.set(position.x, position.y - avatar.height / 2 + halfheight, position.z);    // origin
+                    const hit = this.physics.world.castShape(_v1, _q1, _down, shape, 0, maxToi, stopAtPenetration, null, null, collider, null, 
+                        (collider) => !collider.checkByRay  // terrain will be excluded
+                    );
+
+                    if (hit) {
+
+                        isLanded = true;
+                        this.#logger.log(`charater: ${avatar.name}, is landed by castShape`);
+
+                    }
                 }
                 
             }
-
-            // if (onSlopePoints.length > 0) {
-
-            //     moveVector.add(avatar.tickOnSlopePointsAdjustRaw(onSlopePoints));
-
-            // }
 
             if (!isLanded) {
 
@@ -508,40 +477,13 @@ class RapierWorld {
 
             if (avatar.isInAir) {
 
-                const collisionFloors = [];
+                moveVector.add(avatar.tickFallRaw(delta));
 
-                for (let i = 0, il = this.floors.length; i < il; i++) {
+            }            
 
-                    const floor = this.floors[i];
-
-                    if (!avatar.isClimbingUp && !this.checkBlockByTopT(avatar, floor)) {
-
-                        if (avatar.obb.intersectsOBB(floor.obb)) {
-
-                            collisionFloors.push(floor);
-
-                            break;
-
-                        }
-                    }
-                }
-
-                if (collisionFloors.length === 0) {
-
-                    moveVector.add(avatar.tickFallRaw(delta));
-
-                } else {
-
-                    isLanded = true;
-
-                }
-
-            }
-
-            avatar.group.getWorldQuaternion(_q1);
-            collider.setRotation(_q1);
-
-            controller.computeColliderMovement(collider, moveVector);
+            controller.computeColliderMovement(collider, moveVector, null, null, 
+                collider => !collider.checkByRay    // terrain will be excluded
+            );
             const translation = controller.computedMovement();
 
             position.x += translation.x;
