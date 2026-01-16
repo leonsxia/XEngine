@@ -29,6 +29,8 @@ class CreatureTypeMapping {
 
     pushingBoxSize;
 
+    rapierInstanceSize;
+
     weapon;
 
     sounds;
@@ -43,6 +45,7 @@ class CreatureTypeMapping {
         const { idleCollisionSize, walkCollisionSize, attackCollisionSize } = specs;
         const { idleBoundingFaceSize, walkBoundingFaceSize, rotateBoundingFaceSize, attackBoundingFaceSize } = specs;
         const { idleBoundingBoxSize, walkBoundingBoxSize, attackBoundingBoxSize } = specs;
+        const { rapierInstanceSize } = specs;
         const { pushingBoxSize } = specs;
         const { weapon } = specs;
         const { sounds } = specs;
@@ -73,6 +76,8 @@ class CreatureTypeMapping {
         this.attackBoundingBoxSize = attackBoundingBoxSize;
 
         this.pushingBoxSize = pushingBoxSize;
+
+        this.rapierInstanceSize = rapierInstanceSize;
 
         this.weapon = weapon;
 

@@ -58,6 +58,26 @@ class RapierContainer {
 
     }
 
+    remove(object) {
+
+        const idx = this.instances.indexOf(object);
+        const activeIdx = this.actives.indexOf(object);
+
+        if (idx > -1) {
+
+            this.instances.splice(idx, 1);
+
+        }
+
+        if (activeIdx > -1) {
+
+            this.doBeforeActivesChangedEvents();
+            this.actives.splice(activeIdx, 1);
+
+        }
+
+    }
+
     clearActives() {
 
         this.doBeforeActivesChangedEvents();

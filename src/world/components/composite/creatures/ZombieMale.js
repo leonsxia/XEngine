@@ -44,9 +44,10 @@ const ZOMBIE_TYPES_MAPPING = {
         rotateBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         attackBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
-        walkBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
-        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        walkBoundingBoxSize: { width: .63, depth: .75, height: 1.8 },
+        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8 },
         pushingBoxSize: { height: 1.8, depth: .7 },
+        rapierInstanceSize: { width: .6, depth: .9, height: 1.8 },
         weapon: new WeaponBase({
             name: `zombie_male_standard_claw`,
             weaponType: WEAPONS.ZOMBIE_CLAW,
@@ -79,8 +80,9 @@ const ZOMBIE_TYPES_MAPPING = {
         attackBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
         walkBoundingBoxSize: { width: .63, depth: .75, height: 1.8 },
-        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8 },
         pushingBoxSize: { height: 1.8, depth: .9 },
+        rapierInstanceSize: { width: .6, depth: .9, height: 1.8 },
         weapon: new WeaponBase({
             name: `zombie_male_variant1_claw`,
             weaponType: WEAPONS.ZOMBIE_CLAW,
@@ -112,9 +114,10 @@ const ZOMBIE_TYPES_MAPPING = {
         rotateBoundingFaceSize: { width: .63, depth: 1.07, height: 1.8, bbfThickness: .18, gap: .1 },
         attackBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
-        walkBoundingBoxSize: { width: .63, depth: 1.12, height: 1.8},
-        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        walkBoundingBoxSize: { width: .63, depth: 1.12, height: 1.8 },
+        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8 },
         pushingBoxSize: { height: 1.8, depth: 1.12 },
+        rapierInstanceSize: { width: .63, depth: 1.12, height: 1.8 },
         weapon: new WeaponBase({
             name: `zombie_male_variant2_claw`,
             weaponType: WEAPONS.ZOMBIE_CLAW,
@@ -147,8 +150,9 @@ const ZOMBIE_TYPES_MAPPING = {
         attackBoundingFaceSize: { width: .63, depth: .7, height: 1.8, bbfThickness: .18, gap: .1 },
         idleBoundingBoxSize: { width: .63, depth: .4, height: 1.8 },
         walkBoundingBoxSize: { width: .63, depth: 1.12, height: 1.8 },
-        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8},
+        attackBoundingBoxSize: { width: .63, depth: .75, height: 1.8 },
         pushingBoxSize: { height: 1.8, depth: 1.12 },
+        rapierInstanceSize: { width: .63, depth: 1.12, height: 1.8 },
         weapon: new WeaponBase({
             name: `zombie_male_variant3_claw`,
             weaponType: WEAPONS.ZOMBIE_CLAW,
@@ -304,21 +308,11 @@ class ZombieMale extends CreatureBase {
 
     addRapierInstances() {
 
-        const { width, depth, height, variant } = this.specs;
+        const { typeMapping } = this.specs;
+        const { rapierInstanceSize: { width, depth, height } } = typeMapping;
         const mass = 65;
 
-        let characterInstance;
-        if (variant === ZOMBIE_TYPES_MAPPING.VARIANT2.name || variant === ZOMBIE_TYPES_MAPPING.VARIANT3.name) {
-
-            const { width, depth, height } = ZOMBIE_TYPES_MAPPING[variant.toUpperCase()].walkBoundingBoxSize;
-            characterInstance = generateRapierCharacterInstance(this.rapierInstances.CHARACTER_CONTROLLER, { width, depth, height });
-
-        } else {
-
-            characterInstance = generateRapierCharacterInstance(this.rapierInstances.CHARACTER_CONTROLLER, { width, depth, height });
-
-        }
-
+        const characterInstance = generateRapierCharacterInstance(this.rapierInstances.CHARACTER_CONTROLLER, { width, depth, height });
         characterInstance.userData.physics.mass = mass;
 
         const deadGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width, depth, height: .15 * height});
