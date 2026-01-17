@@ -87,8 +87,9 @@ class SimplePhysics {
         names.forEach(name => {
 
             const find = this.players.find(p => p.name === name);
+            const idx = this.activePlayers.indexOf(find);
 
-            if (find) {
+            if (idx === -1) {
 
                 this.activePlayers.push(find);
                 this.onTofuCollisionBoxChanged(find);

@@ -717,7 +717,8 @@ class WorldScene {
             this.player.updateRoomInfo?.(this.currentRoom);
             this.player.setPosition(allPlayerPos[roomSequence], true);
             this.player.clearInSightTargets();
-            
+            this.physics.addActivePlayers(this.player.name);
+
         }
 
         this.thirdPersonCamera?.updateObjectsNeedChecked();

@@ -112,6 +112,7 @@ class RapierWorld {
         this._currentRoom = room.name;
 
         this.physics.removeAll();
+        this.cleanupAvatars();
         this.setupWorld();
 
         if (this._debug) this.updateDebugger();
@@ -367,6 +368,42 @@ class RapierWorld {
             }
 
         });
+
+    }
+
+    cleanupAvatars() {
+
+        for (let i = 0, il = this.players.length; i < il; i++) {
+
+            const player = this.players[i];
+            if (player.dead) {
+
+                const idx = this.activePlayers.indexOf(player);
+                if (idx > -1) {
+
+                    this.activePlayers.splice(idx, 1);
+
+                }
+
+            }
+
+        }
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+            if (enemy.dead) {
+
+                const idx = this.activeEnemies.indexOf(enemy);
+                if (idx > -1) {
+
+                    this.activeEnemies.splice(idx, 1);
+
+                }
+
+            }
+
+        }
 
     }
 

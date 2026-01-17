@@ -139,7 +139,7 @@ class Combat extends UpdatableBase {
 
                                 }
 
-                            }                            
+                            }
 
                         }
 
