@@ -5,7 +5,7 @@ import { Logger } from '../../../systems/Logger';
 
 const CHARACTER_CONTROLLER = 'characterController';
 const STAIR_OFFSET_MAX = .3;
-const DOWN_RAY_LENGTH = .55;
+const DOWN_RAY_LENGTH = .52;
 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
@@ -399,12 +399,15 @@ class RapierWorld {
         for (let i = 0, il = activeAvatars.length; i < il; i++) {
 
             const avatar = activeAvatars[i];
-            const { physics: { collider, controller } } = avatar.rapierContainer.getInstanceByName(CHARACTER_CONTROLLER).userData;
+            const instance = avatar.rapierContainer.getInstanceByName(CHARACTER_CONTROLLER);
+            const { physics: { collider, controller } } = instance.userData;
             const position = collider.translation();
 
+            let rotationTicked = false;
             if (!avatar.isInAir) {
                 
                 avatar.tickRotateActions(delta);
+                rotationTicked = true;
 
             }
 
@@ -435,7 +438,8 @@ class RapierWorld {
 
                 const ray = new this.physics.RAPIER.Ray(_v1, _down);
                 const hit = this.physics.world.castRay(ray, maxToi, false, null, null, collider, null, 
-                    (collider) => collider.checkByRay   // take terrain into account
+                    // take terrain into account, `undefined` will not see as `false` in rapier!!!
+                    (collider) => collider.checkByRay || false
                 );
 
                 if (hit) {
@@ -448,14 +452,18 @@ class RapierWorld {
 
                 } else {
 
-                    const halfsize = Math.min(avatar.width, avatar.depth) / 4;
-                    const halfheight = .1;
-                    const shape = new this.physics.RAPIER.Cuboid(halfsize, halfheight, halfsize);
+                    const radius = instance.geometry.parameters.radius * instance.scale.x;
+                    const shape = new this.physics.RAPIER.Ball(radius);
                     const stopAtPenetration = true;
-                    const maxToi = 0;
-                    _v1.set(position.x, position.y - avatar.height / 2 + halfheight, position.z);    // origin
+                    /* 
+                        maxToi should not be 0, otherwise it will not take effect,
+                        also a little bigger than character controller offset
+                    */
+                    const maxToi = controller.offset() + 0.002;
+                    _v1.set(position.x, position.y - avatar.height / 2 + radius, position.z);   // origin
                     const hit = this.physics.world.castShape(_v1, _q1, _down, shape, 0, maxToi, stopAtPenetration, null, null, collider, null, 
-                        (collider) => !collider.checkByRay  // terrain will be excluded
+                        // terrain will be excluded
+                        (collider) => !collider.checkByRay
                     );
 
                     if (hit) {
@@ -464,25 +472,29 @@ class RapierWorld {
                         this.#logger.log(`charater: ${avatar.name}, is landed by castShape`);
 
                     }
+
                 }
                 
             }
 
-            if (!isLanded) {
-
-                avatar.isInAir = true;
-                // console.log(`is in air`);
-
-            }
+            avatar.isInAir = !isLanded;
 
             if (avatar.isInAir) {
 
                 moveVector.add(avatar.tickFallRaw(delta));
 
-            }            
+            } else if (!rotationTicked) {
+
+                avatar.tickRotateActions(delta);
+                // update rotation
+                avatar.group.getWorldQuaternion(_q1);
+                collider.setRotation(_q1);
+
+            }
 
             controller.computeColliderMovement(collider, moveVector, null, null, 
-                collider => !collider.checkByRay    // terrain will be excluded
+                // terrain will be excluded
+                collider => !collider.checkByRay
             );
             const translation = controller.computedMovement();
 
@@ -494,7 +506,6 @@ class RapierWorld {
 
             // Sync avatar with Rapier collider
             avatar.position.set(position.x, position.y, position.z);
-
             avatar.updateAccessories();
 
             if (isLanded) {
