@@ -1223,7 +1223,7 @@ class TofuBase extends Moveable2D {
         if (this.rapierContainer.actives.length > 0) {
 
             const controller = this.rapierContainer.getInstanceByName(this.rapierInstances.CHARACTER_CONTROLLER);
-            const { collider } = controller.userData;
+            const { physics: { collider } } = controller.userData;
             this.getWorldPosition(_v1);
             collider?.setTranslation(_v1);
 

@@ -949,7 +949,7 @@ class WorldScene {
 
                 this.physics.addActiveEnemies(enemy.name);
                 this.scene.add(enemy.group);
-                enemy.isActive = true;
+                enemy.isActive = !enemy.dead;
 
                 if (enemy._showBBHelper) {
 
