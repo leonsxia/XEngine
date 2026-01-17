@@ -6,7 +6,7 @@ import {
     ROOM, INSPECTOR_ROOM, SCENE, WATER_CUBE,
 } from '../../components/utils/constants.js';
 import { colorStr, colorArr } from "../../components/basic/colorBase.js";
-import { moveableObjectFilter, objectFilter, objectFilter2, objectFilter3, objectFilter4 } from "../../components/utils/objectHelper.js";
+import { moveableObjectFilter, objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from "../../components/utils/objectHelper.js";
 import { ModelBuilder } from "./ModelBuilder.js";
 
 class SceneBuilder {
@@ -1336,6 +1336,24 @@ class SceneBuilder {
                     }
 
                 }
+
+                if (objectFilter5(find.father)) {
+
+                    if (updateSetupOnly) {
+
+                        _origin.roughness = find.father.roughness;
+                        _origin.metalness = find.father.metalness;
+
+                    } else {
+
+                        const { roughness = 1, metalness = 0 } = _target;
+                        find.father.roughness = roughness;
+                        find.father.metalness = metalness;
+
+                    }
+
+                }
+
             }
 
             if (!updateSetupOnly) {

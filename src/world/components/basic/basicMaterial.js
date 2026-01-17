@@ -5,6 +5,8 @@ function createBasicMaterials() {
 
     const basic = new MeshPhongMaterial({ color: Color.basic });
 
+    const standard = new MeshStandardMaterial({ color: Color.basic });
+
     const boundingBox = new MeshStandardMaterial({ color: Color.BB });
 
     const sovBoundingSphere = new MeshStandardMaterial({ color: Color.BS });
@@ -17,7 +19,11 @@ function createBasicMaterials() {
 
     const dark = new MeshBasicMaterial({ color: Color.black });
 
-    return { basic, boundingBox, sovBoundingSphere, boundingFace, boundingFace2, boundingBoxWire, dark };
+    return {
+        basic, standard,
+        boundingBox, sovBoundingSphere, boundingFace, boundingFace2, boundingBoxWire,
+        dark
+    };
 
 }
 
@@ -43,6 +49,6 @@ function createSpriteMaterial(canvas) {
 
 }
 
-const basicMateraials = createBasicMaterials();
+const basicMaterials = createBasicMaterials();
 
-export { basicMateraials, createBasicMaterial, createSpriteMaterial };
+export { basicMaterials, createBasicMaterial, createSpriteMaterial };

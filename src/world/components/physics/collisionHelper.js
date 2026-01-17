@@ -1,6 +1,6 @@
 import { BoxGeometry, EdgesGeometry, Mesh, LineSegments, Vector3, SphereGeometry } from 'three';
 import { OBB } from 'three/addons/math/OBB.js';
-import { basicMateraials, createBasicMaterial } from '../basic/basicMaterial';
+import { basicMaterials, createBasicMaterial } from '../basic/basicMaterial';
 import { CollisionPlane } from './primitives/CollisionPlane';
 import { CollisionOctagon } from './primitives/CollisionOctagon';
 import { CollisionOBBPlane } from './primitives/CollisionOBBPlane';
@@ -141,7 +141,7 @@ function createSovBoundingSphere(specs) {
     const { sovRadius, showBS } = specs;
     const sovBoundingSphereGeometry = new SphereGeometry(sovRadius, 16, 16);
 
-    const sovBoundingSphere = new Mesh(sovBoundingSphereGeometry, basicMateraials.sovBoundingSphere.clone());
+    const sovBoundingSphere = new Mesh(sovBoundingSphereGeometry, basicMaterials.sovBoundingSphere.clone());
     sovBoundingSphere.material.transparent = true;
     sovBoundingSphere.material.opacity = 0.2;
     sovBoundingSphere.name = 'sovBoundingSphere-helper';
@@ -164,12 +164,12 @@ function createBoundingBox(specs) {
     boundingBoxGeometry.userData.obb = new OBB();
     boundingBoxGeometry.userData.obb.halfSize.copy( new Vector3(width, height, depth) ).multiplyScalar( 0.5 );
 
-    const boundingBoxWire = new LineSegments(boundingBoxEdgesGeometry, basicMateraials.boundingBoxWire.clone());
+    const boundingBoxWire = new LineSegments(boundingBoxEdgesGeometry, basicMaterials.boundingBoxWire.clone());
     boundingBoxWire.name = 'boundingBoxWire';
     boundingBoxWire.position.set(0, 0, 0);
     boundingBoxWire.visible = showBBW;
 
-    const boundingBox = new Mesh(boundingBoxGeometry, basicMateraials.boundingBox.clone());
+    const boundingBox = new Mesh(boundingBoxGeometry, basicMaterials.boundingBox.clone());
     boundingBox.name = 'boundingBox';
     boundingBox.position.set(0, 0, 0);
     boundingBox.visible = showBB;
@@ -191,7 +191,7 @@ function createBoundingFaces(specs) {
 
     const BBFDepthOffset = depth / 2 - bbfThickness / 2;
     const BBFWidthOffset = width / 2 - bbfThickness / 2;
-    const boundingFaceMaterial = color ? createBasicMaterial(color) : basicMateraials.boundingFace;
+    const boundingFaceMaterial = color ? createBasicMaterial(color) : basicMaterials.boundingFace;
     const frontBoundingFace = new Mesh(boundingFaceGeometry, boundingFaceMaterial.clone());
     frontBoundingFace.name = `frontFace${suffix}`;
     frontBoundingFace.position.set(0, 0, BBFDepthOffset);

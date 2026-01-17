@@ -1,9 +1,9 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher, Quaternion } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher, Quaternion, MeshStandardMaterial } from 'three';
 // eslint-disable-next-line no-unused-vars
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, generateTerrainGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
-import { basicMateraials } from './basicMaterial';
+import { basicMaterials } from './basicMaterial';
 import { white } from './colorBase';
 import { REPEAT_WRAPPING } from '../utils/constants';
 import { PLANE, BOX, SPHERE, CIRCLE, CYLINDER, TRIANGLE, STAIRS_SIDE, STAIRS_FRONT, STAIRS_TOP, WATER_PLANE, TERRAIN, CAPSULE } from '../utils/constants';
@@ -172,7 +172,7 @@ class BasicObject extends EventDispatcher {
 
     setupMaterials(...materials) {
 
-        const { needMaterial = true, transparent = false, useBasicMaterial = false, color } = this.specs;
+        const { needMaterial = true, transparent = false, useBasicMaterial = false, useStandardMaterial = false, color } = this.specs;
 
         for (let i = 0, il = materials.length; i < il; i++) {
 
@@ -184,6 +184,10 @@ class BasicObject extends EventDispatcher {
 
                         this[materials[i]] = new MeshBasicMaterial({ color: color });
 
+                    } else if (useStandardMaterial) {
+
+                        this[materials[i]] = new MeshStandardMaterial({ color: color });
+
                     } else {
 
                         this[materials[i]] = new MeshPhongMaterial({ color: color });
@@ -192,7 +196,15 @@ class BasicObject extends EventDispatcher {
 
                 } else {
 
-                    this[materials[i]] = basicMateraials.basic.clone();
+                    if (useStandardMaterial) {
+
+                        this[materials[i]] = basicMaterials.standard.clone();
+
+                    } else {
+
+                        this[materials[i]] = basicMaterials.basic.clone();
+
+                    }
 
                 }
 
@@ -354,7 +366,31 @@ class BasicObject extends EventDispatcher {
 
         this.update();
 
-    }    
+    }
+
+    get roughness() {
+
+        return this.material.roughness;
+
+    }
+
+    set roughness(val) {
+
+        this.material.roughness = val;
+
+    }
+
+    get metalness() {
+
+        return this.material.metalness;
+
+    }
+
+    set metalness(val) {
+
+        this.material.metalness = val;
+
+    }
 
     get visible() {
 

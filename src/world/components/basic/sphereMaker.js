@@ -1,7 +1,7 @@
 import { SphereGeometry,  Mesh, MeshStandardMaterial, TextureLoader, SRGBColorSpace, MathUtils } from 'three'
-import { basicMateraials } from './basicMaterial';
+import { basicMaterials } from './basicMaterial';
 
-const material = basicMateraials.basic;
+const material = basicMaterials.basic;
 
 async function loadMaterial(specs) {
     const { map, sphere } = specs;

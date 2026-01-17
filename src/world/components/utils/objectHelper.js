@@ -43,7 +43,8 @@ import {
     ClassicWoodenDoor6,
     DungeonGate1,
     VerticalLadder,
-    RotatableLadder
+    RotatableLadder,
+    Terrain
 } from "../Models";
 import { ObstacleMoveable } from "../movement/ObstacleMoveable";
 
@@ -285,6 +286,20 @@ function objectFilter4(object) {
 
 }
 
+function objectFilter5(object) {
+
+    if (object instanceof Terrain) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+}
+
 function moveableObjectFilter(object) {
 
     if (object instanceof ObstacleMoveable) {
@@ -327,7 +342,7 @@ function getIntersectionTarget(object) {
 
 export { 
     clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, 
-    objectFilter, objectFilter2, objectFilter3, objectFilter4,
+    objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5,
     moveableObjectFilter,
     resetObject3D,
     getIntersectionTarget

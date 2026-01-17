@@ -53,7 +53,7 @@ async function loadTextures(mapsArr) {
     for (let i = 0, il = mapsArr.length; i < il; i++) {
 
         const m = mapsArr[i];
-        const { name, map, normalMap, aoMap, dispMap } = m;
+        const { name, map, normalMap, aoMap, roughMap, metalMap, dispMap } = m;
 
         if (map) {
 
@@ -76,6 +76,20 @@ async function loadTextures(mapsArr) {
 
         }
 
+        if (roughMap) {
+
+            loaded[`${name}_ROUGH`] = null;
+            loadPromises.push(loader.loadAsync(roughMap));
+
+        }
+
+        if (metalMap) {
+
+            loaded[`${name}_METAL`] = null;
+            loadPromises.push(loader.loadAsync(metalMap));
+
+        }
+
         if (dispMap) {
 
             loaded[`${name}_DISP`] = null;
@@ -92,7 +106,7 @@ async function loadTextures(mapsArr) {
 
         const m = mapsArr[j];
 
-        const { name, map, normalMap, aoMap, dispMap } = m;
+        const { name, map, normalMap, aoMap, roughMap, metalMap, dispMap } = m;
 
         if (map) {
 
@@ -112,6 +126,20 @@ async function loadTextures(mapsArr) {
         if (aoMap) {
 
             loaded[`${name}_AO`] = results[i];
+            i++;
+
+        }
+
+        if (roughMap) {
+
+            loaded[`${name}_ROUGH`] = results[i];
+            i++;
+
+        }
+
+        if (metalMap) {
+
+            loaded[`${name}_METAL`] = results[i];
             i++;
 
         }

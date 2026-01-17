@@ -18,6 +18,7 @@ class Terrain extends BasicObject {
 
     constructor(specs) {
 
+        specs.useStandardMaterial = true;
         super(TERRAIN, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);
@@ -33,7 +34,11 @@ class Terrain extends BasicObject {
         const initPromises = [];
         initPromises.push(this.initBasic());
 
-        const { aoMap, dispMap, displacementScale = 1, useHeightmap = false, repeatU = 1, repeatV = 1, height = 1 } = this.specs;
+        const {
+            aoMap, roughMap, roughness = 1, metalMap, metalness = 0,
+            dispMap, displacementScale = 1, useHeightmap = false,
+            repeatU = 1, repeatV = 1, height = 1
+        } = this.specs;
 
         if (aoMap?.isTexture) {
 
@@ -43,12 +48,27 @@ class Terrain extends BasicObject {
 
         }
 
+        if (roughMap?.isTexture) {
+
+            const _map = roughMap.clone();
+            this.setTexture(_map);
+            this.material.roughnessMap = _map;
+
+        }
+
+        if (metalMap?.isTexture) {
+
+            const _map = metalMap.clone();
+            this.setTexture(_map);
+            this.material.metalnessMap = _map;
+
+        }
+
         if (dispMap?.isTexture) {
 
             const _map = dispMap.clone();
             // this.setTexture(dispMap);
             // this.material.displacementMap = _map;
-            this.material.displacementScale = displacementScale;
 
             if (useHeightmap) {
 
@@ -59,9 +79,11 @@ class Terrain extends BasicObject {
         }
 
         initPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
+        initPromises.push(roughMap && !roughMap.isTexture ? this.loader.loadAsync(roughMap) : Promise.resolve(null));
+        initPromises.push(metalMap && !metalMap.isTexture ? this.loader.loadAsync(metalMap) : Promise.resolve(null));
         initPromises.push(dispMap && !dispMap.isTexture ? this.loader.loadAsync(dispMap) : Promise.resolve(null));
 
-        const [, ao, disp] = await Promise.all(initPromises);
+        const [ao, rough, metal, disp] = await Promise.all(initPromises);
 
         if (ao) {
 
@@ -70,11 +92,24 @@ class Terrain extends BasicObject {
 
         }
 
+        if (rough) {
+
+            this.setTexture(rough);
+            this.material.roughnessMap = rough;
+
+        }
+
+        if (metal) {
+
+            this.setTexture(metal);
+            this.material.metalnessMap = metal;
+
+        }
+
         if (disp) {
 
             // this.setTexture(disp);
             // this.material.displacementMap = disp;
-            this.material.displacementScale = displacementScale;
 
             if (useHeightmap) {
 
@@ -83,6 +118,10 @@ class Terrain extends BasicObject {
             }
 
         }
+
+        this.material.roughness = roughness;
+        this.material.metalness = metalness;
+        this.material.displacementScale = displacementScale;
 
     }
 

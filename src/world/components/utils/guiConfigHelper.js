@@ -1,5 +1,5 @@
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './constants';
-import { objectFilter, objectFilter2, objectFilter3, objectFilter4 } from './objectHelper';
+import { objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from './objectHelper';
 
 const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
@@ -854,6 +854,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
+        // LWall
         if (objectFilter3(object.father)) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -900,7 +901,7 @@ function makeObjectsGuiConfig(objects) {
                 type: 'number'
             }));
 
-        } else if (objectFilter2(object.father)) {
+        } else if (objectFilter2(object.father)) {  // cylinder shape like
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'scaleR',
@@ -920,6 +921,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
+        // plane
         if (objectFilter4(object.father)) {
 
             if (object.father.material) {
@@ -1029,6 +1031,7 @@ function makeObjectsGuiConfig(objects) {
                 }));
 
             }
+
         }
 
         if (object.father.isArea || object.father.isWater || object.father.isWaterCube ) {
@@ -1197,6 +1200,27 @@ function makeObjectsGuiConfig(objects) {
                 prop: 'flowY',
                 value: object.father,
                 params: [-1, 1, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+        }
+
+        // standard material properties
+        if (objectFilter5(object.father)) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'roughness',
+                prop: 'roughness',
+                value: object.father,
+                params: [0, 1, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'metalness',
+                prop: 'metalness',
+                value: object.father,
+                params: [0, 1, PICKED_NUMBER_STEPS],
                 type: 'number'
             }));
 

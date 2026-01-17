@@ -11,7 +11,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OUTLINE, SSAO, FXAA, SSAA, BLOOM, REPEAT_WRAPPING, BLOOM_SCENE_LAYER, SHADER_NAMES, TEXTURE_NAMES } from '../components/utils/constants';
 import { black, white } from '../components/basic/colorBase';
 import { loadSingleTexture } from '../components/utils/textureHelper';
-import { basicMateraials } from '../components/basic/basicMaterial';
+import { basicMaterials } from '../components/basic/basicMaterial';
 import { shaders } from '../components/utils/shaderHelper';
 import { container } from './htmlElements';
 
@@ -76,7 +76,7 @@ class PostProcessor {
     bloomPass;
     bloomMixedPass;
     bloomMaterials = {};
-    darkMaterial = basicMateraials.dark;
+    darkMaterial = basicMaterials.dark;
 
     // config
     #outlineConfig = {};
