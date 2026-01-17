@@ -249,6 +249,24 @@ const TEXTURE_NAMES = {
     COAST_SAND_ROCKS_ROUGH: 'COAST_SAND_ROCKS_ROUGH',
     COAST_SAND_ROCKS_METAL: 'COAST_SAND_ROCKS_METAL',
     COAST_SAND_ROCKS_DISP: 'COAST_SAND_ROCKS_DISP',
+    AERIAL_ROCKS_01: 'AERIAL_ROCKS_01',
+    AERIAL_ROCKS_01_NORMAL: 'AERIAL_ROCKS_01_NORMAL',
+    AERIAL_ROCKS_01_AO: 'AERIAL_ROCKS_01_AO',
+    AERIAL_ROCKS_01_ROUGH: 'AERIAL_ROCKS_01_ROUGH',
+    AERIAL_ROCKS_01_METAL: 'AERIAL_ROCKS_01_METAL',
+    AERIAL_ROCKS_01_DISP: 'AERIAL_ROCKS_01_DISP',
+    BROWN_MUD_LEAVES_01: 'BROWN_MUD_LEAVES_01',
+    BROWN_MUD_LEAVES_01_NORMAL: 'BROWN_MUD_LEAVES_01_NORMAL',
+    BROWN_MUD_LEAVES_01_AO: 'BROWN_MUD_LEAVES_01_AO',
+    BROWN_MUD_LEAVES_01_ROUGH: 'BROWN_MUD_LEAVES_01_ROUGH',
+    BROWN_MUD_LEAVES_01_METAL: 'BROWN_MUD_LEAVES_01_METAL',
+    BROWN_MUD_LEAVES_01_DISP: 'BROWN_MUD_LEAVES_01_DISP',
+    MOSSY_ROCK: 'MOSSY_ROCK',
+    MOSSY_ROCK_NORMAL: 'MOSSY_ROCK_NORMAL',
+    MOSSY_ROCK_AO: 'MOSSY_ROCK_AO',
+    MOSSY_ROCK_ROUGH: 'MOSSY_ROCK_ROUGH',
+    MOSSY_ROCK_METAL: 'MOSSY_ROCK_METAL',
+    MOSSY_ROCK_DISP: 'MOSSY_ROCK_DISP',
     // water
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
@@ -329,13 +347,43 @@ const TEXTURES = [{
 }, {
     name: TEXTURE_NAMES.COAST_SAND_ROCKS, 
     map: 'assets/textures/terrain/coast_sand_rocks_02_diff_4k.jpg', 
-    normalMap: 'assets/textures/normals/coast_sand_rocks_02_nor_gl_4k.jpg',
+    normalMap: 'assets/textures/normals/coast_sand_rocks_02_nor_gl_2k.jpg',
     // aoMap: 'assets/textures/ao/coast_sand_rocks_02_ao_4k.jpg',
     // roughMap: 'assets/textures/rough/coast_sand_rocks_02_rough_4k.jpg',
     aoMap: 'assets/textures/arm/coast_sand_rocks_02_arm_4k.jpg',
     roughMap: 'assets/textures/arm/coast_sand_rocks_02_arm_4k.jpg',
     metalMap: 'assets/textures/arm/coast_sand_rocks_02_arm_4k.jpg',
     dispMap: 'assets/textures/disp/coast_sand_rocks_02_disp_2k.png'
+}, {
+    name: TEXTURE_NAMES.AERIAL_ROCKS_01, 
+    map: 'assets/textures/terrain/aerial_rocks_01_diff_4k.jpg', 
+    normalMap: 'assets/textures/normals/aerial_rocks_01_nor_gl_2k.jpg',
+    // aoMap: 'assets/textures/ao/aerial_rocks_01_ao_4k.jpg',
+    // roughMap: 'assets/textures/rough/aerial_rocks_01_rough_4k.jpg',
+    aoMap: 'assets/textures/arm/aerial_rocks_01_arm_4k.jpg',
+    roughMap: 'assets/textures/arm/aerial_rocks_01_arm_4k.jpg',
+    metalMap: 'assets/textures/arm/aerial_rocks_01_arm_4k.jpg',
+    dispMap: 'assets/textures/disp/aerial_rocks_01_disp_2k.png'
+}, {
+    name: TEXTURE_NAMES.BROWN_MUD_LEAVES_01, 
+    map: 'assets/textures/terrain/brown_mud_leaves_01_diff_4k.jpg', 
+    normalMap: 'assets/textures/normals/brown_mud_leaves_01_nor_gl_2k.jpg',
+    // aoMap: 'assets/textures/ao/brown_mud_leaves_01_ao_4k.jpg',
+    // roughMap: 'assets/textures/rough/brown_mud_leaves_01_rough_4k.jpg',
+    aoMap: 'assets/textures/arm/brown_mud_leaves_01_arm_4k.jpg',
+    roughMap: 'assets/textures/arm/brown_mud_leaves_01_arm_4k.jpg',
+    metalMap: 'assets/textures/arm/brown_mud_leaves_01_arm_4k.jpg',
+    dispMap: 'assets/textures/disp/brown_mud_leaves_01_disp_2k.png'
+}, {
+    name: TEXTURE_NAMES.MOSSY_ROCK, 
+    map: 'assets/textures/terrain/mossy_rock_diff_4k.jpg', 
+    normalMap: 'assets/textures/normals/mossy_rock_nor_gl_2k.jpg',
+    // aoMap: 'assets/textures/ao/mossy_rock_ao_4k.jpg',
+    // roughMap: 'assets/textures/rough/mossy_rock_rough_4k.jpg',
+    aoMap: 'assets/textures/arm/mossy_rock_arm_4k.jpg',
+    roughMap: 'assets/textures/arm/mossy_rock_arm_4k.jpg',
+    metalMap: 'assets/textures/arm/mossy_rock_arm_4k.jpg',
+    dispMap: 'assets/textures/disp/mossy_rock_disp_2k.png'
 }, {
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {
