@@ -617,6 +617,12 @@ const CONTROL_TYPES = {
     MOUSE: 'mouse'
 };
 
+// physics
+const PHYSICS_TYPES = {
+    RAPIER: 'rapier',
+    SIMPLE: 'simple'
+}
+
 export { 
     REPEAT_WRAPPING,
     MIRRORED_REPEAT_WRAPPING,
@@ -761,5 +767,7 @@ export {
 
     GUI_CONFIG,
 
-    CONTROL_TYPES
+    CONTROL_TYPES,
+
+    PHYSICS_TYPES
 };

@@ -6,7 +6,7 @@ import { WorldControls } from '../systems/Controls.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
-import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS } from '../components/utils/constants.js';
+import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS, PHYSICS_TYPES } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
 import { UpdatableQueue } from '../components/updatables/UpdatableQueue.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
@@ -194,7 +194,7 @@ class WorldScene {
             camera: { position = [0, 0, 0] }, defaultPlayer, resolution = 1,
             enableGui = false, enablePicker = false, enableShadow = false,
             enableTPC = false, enableIC = false,
-            physics = 'simple'
+            physics = PHYSICS_TYPES.SIMPLE
         } = this.setup;
 
         // set camera initial position and save the state
@@ -225,11 +225,11 @@ class WorldScene {
         }
 
         // physics
-        if (physics === 'simple') {
+        if (physics === PHYSICS_TYPES.SIMPLE) {
 
             this.physics = new SimplePhysics(this.players, this.enemies);
 
-        } else if (physics === 'rapier') {
+        } else if (physics === PHYSICS_TYPES.RAPIER) {
 
             this.physics = new RapierWorld({
                 players: this.players, enemies: this.enemies, attachTo: this

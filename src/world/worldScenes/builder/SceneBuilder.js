@@ -306,6 +306,7 @@ class SceneBuilder {
         for (let i = 0, il = roomSpecs.length; i < il; i++) {
 
             const roomSpec = roomSpecs[i];
+            roomSpec.physics = this.worldScene.setup.physics;
 
             roomSpec.updateOBBnRay = false;
             const room = this.buildObject(roomSpec);

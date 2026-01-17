@@ -104,7 +104,8 @@
             "showBS": false,
             "variant": "descendant",
             "vel": 1.2,
-            "rotateR": 1.1
+            "rotateR": 1.1,
+            "HPMax": 20
         }
     ],
     "lights": [

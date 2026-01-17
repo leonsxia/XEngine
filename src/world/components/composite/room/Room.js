@@ -1,7 +1,7 @@
 import { Object3D, Group } from 'three';
 import { createCollisionPlane, createCollisionOBBPlane } from '../../physics/collisionHelper';
 import { green } from '../../basic/colorBase';
-import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, TOFU_RAY_LAYER, OBSTACLE_RAY_LAYER } from '../../utils/constants';
+import { REPEAT_WRAPPING, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, TOFU_RAY_LAYER, OBSTACLE_RAY_LAYER, PHYSICS_TYPES } from '../../utils/constants';
 import { Logger } from '../../../systems/Logger';
 
 const DEBUG = false;
@@ -45,6 +45,8 @@ class Room {
 
     sequence = 0;
 
+    physics;
+
     specs;
 
     #logger = new Logger(DEBUG, 'Room');
@@ -56,6 +58,7 @@ class Room {
         const { name, sequence = 0, width, depth, height, showArrow = false, enableWallOBBs = false } = specs;
         const { frontMap, backMap, leftMap, rightMap } = this.specs;
         const { frontNormal, backNormal, leftNormal, rightNormal } = this.specs;
+        const { physics = PHYSICS_TYPES.SIMPLE } = specs;
 
         const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap, normalMap: frontNormal });
         const backSpecs = this.makePlaneConfig({ width, height, map: backMap, normalMap: backNormal });
@@ -69,6 +72,7 @@ class Room {
         this.group.father = this;
         this.group.name = name;
         this.sequence = sequence;
+        this.physics = physics;
 
         const createWallFunction = enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
         
@@ -80,7 +84,7 @@ class Room {
             this.group.add(this.backWall.mesh);
             this.bindWallEvents(this.backWall);
             this.backWall.visible = true;
-            this.backWall.mesh.userData.physics = { mass: 0 };
+            if (this.physics === PHYSICS_TYPES.RAPIER) this.backWall.addPhysics();
 
         }
 
@@ -92,7 +96,7 @@ class Room {
             this.group.add(this.leftWall.mesh);
             this.bindWallEvents(this.leftWall);
             this.leftWall.visible = true;
-            this.leftWall.mesh.userData.physics = { mass: 0 };
+            if (this.physics === PHYSICS_TYPES.RAPIER) this.leftWall.addPhysics();
 
         }
 
@@ -104,7 +108,7 @@ class Room {
             this.group.add(this.rightWall.mesh);
             this.bindWallEvents(this.rightWall);
             this.rightWall.visible = true;
-            this.rightWall.mesh.userData.physics = { mass: 0 };
+            if (this.physics === PHYSICS_TYPES.RAPIER) this.rightWall.addPhysics();
 
         }
         
@@ -117,7 +121,7 @@ class Room {
             this.group.add(this.frontWall.mesh);
             this.bindWallEvents(this.frontWall);
             this.frontWall.visible = true;
-            this.frontWall.mesh.userData.physics = { mass: 0 };
+            if (this.physics === PHYSICS_TYPES.RAPIER) this.frontWall.addPhysics();
 
         }
 
