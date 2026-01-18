@@ -174,7 +174,7 @@ class GuiMaker {
         }
 
         // Rapier physics
-        if ($scene.physics.isRapierWorld) {
+        if ($scene.physics?.isRapierWorld) {
 
             const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.RAPIER_PHYSICS_CONTROL, parent: 'rapierPhysics', close: true });
 

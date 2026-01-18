@@ -771,7 +771,8 @@ class SceneBuilder {
                 .setRotation(rotation)
                 .updateOBB()
                 .updateRay?.()
-                .updateWalls?.();
+                .updateWalls?.()
+                .syncRapierWorld?.();
             
             if (currentHP !== undefined) findPlayer.currentHP = currentHP;
 
@@ -800,9 +801,18 @@ class SceneBuilder {
                 .setRotation(rotation)
                 .updateOBB()
                 .updateRay?.()
-                .updateWalls?.();
+                .updateWalls?.()
+                .syncRapierWorld?.();
 
-            if (currentHP !== undefined) findEnemy.currentHP = currentHP;
+            if (currentHP !== undefined) {
+                
+                findEnemy.currentHP = currentHP;
+            
+            } else {
+
+                findEnemy.resetHealth();                
+
+            }
 
         }
 

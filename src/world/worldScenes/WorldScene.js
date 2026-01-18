@@ -348,6 +348,14 @@ class WorldScene {
 
                 }
 
+                // update enemy HP state
+                const { currentHP } = this.sceneSetupCopy.enemies.find(e => e.name === enemy.name);
+                if (currentHP !== undefined) {
+
+                    enemy.currentHP = currentHP;
+
+                }
+
             }
 
         }
@@ -984,7 +992,7 @@ class WorldScene {
             this.player.setPosition(allPlayerPos[this.loadSequence]);
             this.player.resetFallingState?.();
             this.player.resetHealth();
-            this.player.resetAnimation?.();
+            // this.player.resetAnimation?.();
             this.player.clearInSightTargets();
             this.player.reloadAllWeapons?.();
             this.player.setAllBoundingBoxLayers(true);
@@ -1000,8 +1008,8 @@ class WorldScene {
 
             const enemy = this.enemies[i];
             enemy.resetFallingState();
-            enemy.resetHealth();
-            enemy.resetAnimation();
+            // enemy.resetHealth();
+            // enemy.resetAnimation();
             enemy.clearInSightTargets();
             enemy.setAllBoundingBoxLayers(true);
             enemy.DAW?.stopAll();

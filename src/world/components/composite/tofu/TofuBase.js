@@ -1141,6 +1141,8 @@ class TofuBase extends Moveable2D {
 
         }
 
+        return this;
+
     }
 
     updateBoundingFaces(needUpdateParentMatrixWorld = true) {
@@ -1220,22 +1222,13 @@ class TofuBase extends Moveable2D {
     setPosition(pos, resetState = false) {
 
         this.group.position.set(...pos);
-        if (this.rapierContainer.actives.length > 0) {
-
-            const controller = this.rapierContainer.getInstanceByName(this.rapierInstances.CHARACTER_CONTROLLER);
-            const { physics: { collider } } = controller.userData;
-            this.getWorldPosition(_v1);
-            collider?.setTranslation(_v1);
-
-        }
 
         if (resetState) {
 
             this.updateAccessories();
-
             this.setSlopeIntersection();
-
             this.resetFallingState();
+            this.syncRapierWorld();
 
         }
 
@@ -1525,10 +1518,19 @@ class TofuBase extends Moveable2D {
         const activeInstance = this.rapierContainer.getInstanceByName(this.rapierContainer.actives[0].name);
         if (activeInstance.userData.physics) {
 
-            const { collider } = activeInstance.userData.physics;
+            const { collider, body } = activeInstance.userData.physics;
 
-            if (collider) {
+            if (body) {
 
+                // fro dynamic body
+                this.group.updateWorldMatrix(true, false);
+                this.group.matrixWorld.decompose(_v1, _q1, _v2);
+                body.setTranslation(_v1);
+                body.setRotation(_q1);
+
+            } else if (collider) {
+
+                // for character controller
                 this.group.updateWorldMatrix(true, false);
                 this.group.matrixWorld.decompose(_v1, _q1, _v2);
                 collider.setTranslation(_v1);

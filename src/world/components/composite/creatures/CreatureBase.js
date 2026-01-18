@@ -705,8 +705,6 @@ class CreatureBase extends CustomizedCreatureTofu {
         super.movingForward(false);
         this.switchHelperComponents();
         this.AWS.resetAllActions();
-        
-        this.adjustCharacterControllerInstance();
 
     }
 

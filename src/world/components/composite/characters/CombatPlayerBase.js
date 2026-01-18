@@ -1758,8 +1758,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
         this.AWS.setActionEffectiveWeight(this.currentActionType.idle.nick, 1);
         this.AWS.activeAction = this.AWS.previousAction = this.AWS.actions[this.currentActionType.idle.nick];
 
-        this.adjustCharacterControllerInstance();
-
     }
 
     animationMixerTick(delta) {

@@ -32,13 +32,15 @@ class Tofu extends TofuBase {
         this.health.current = val;
         
         if (this.health.isEmpty && !this.dead) {
-
+            // dead
             this.setStateAfterDamageReceived();
 
         } else if (!this.health.isEmpty && this.dead) {
 
+            // resurrection
             this.isActive = true;
             this.resetAnimation();
+            this.adjustCharacterControllerInstance();
             this.setAllBoundingBoxLayers(true);
 
         } else {
@@ -389,7 +391,12 @@ class Tofu extends TofuBase {
     }
 
     // inherited by children
-    onHealthReset() {}
+    onHealthReset() {
+
+        this.resetAnimation();
+        this.adjustCharacterControllerInstance();
+
+    }
 
     // inherited by children
     resetAnimation() {}
