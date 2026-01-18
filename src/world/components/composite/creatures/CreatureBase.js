@@ -424,7 +424,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
             const endCallback = () => {
 
-                // this.isActive = false;
+                this.isActive = false;
                 hurtAction.ignoreFinishedEvent = undefined;
                 hurtAction.ignoreFadeOut = undefined;
                 attackAction.ignoreFinishedEvent = undefined;
@@ -434,9 +434,8 @@ class CreatureBase extends CustomizedCreatureTofu {
                 this.adjustDeadInstance();
 
             }
-            dieAction.ignoreFadeOut = true;
 
-            this.isActive = false;
+            dieAction.ignoreFadeOut = true;
             this.AWS.prepareCrossFade(null, dieAction, this._animationSettings.DIE, 1, false, false, 0, endCallback);
 
         }        

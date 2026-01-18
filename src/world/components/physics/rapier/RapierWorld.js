@@ -313,6 +313,8 @@ class RapierWorld {
 
             }
 
+            if (find.dead) find.isActive = false;
+
         });
 
     }
@@ -348,6 +350,8 @@ class RapierWorld {
                 this.onTofuContainerChanged(find.rapierContainer);
             
             }
+
+            if (find.dead) find.isActive = false;
 
         });
 

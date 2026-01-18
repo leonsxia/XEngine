@@ -717,6 +717,7 @@ class WorldScene {
             this.player.updateRoomInfo?.(this.currentRoom);
             this.player.setPosition(allPlayerPos[roomSequence], true);
             this.player.clearInSightTargets();
+            this.player.isActive = true;    // for temporary update, it will be reset after next step
             this.physics.addActivePlayers(this.player.name);
 
         }
@@ -948,9 +949,10 @@ class WorldScene {
             const oldBoxHelper = this.scene.getObjectByName(enemy.boundingBoxHelper.name);
             if (enemy.currentRoom === this.currentRoom.name) {
 
+                // temporary update, it will be reset after next step
+                enemy.isActive = true;
                 this.physics.addActiveEnemies(enemy.name);
                 this.scene.add(enemy.group);
-                enemy.isActive = !enemy.dead;
 
                 if (enemy._showBBHelper) {
 

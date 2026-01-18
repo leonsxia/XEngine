@@ -1386,7 +1386,7 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             const endCallback = () => {
 
-                // this.isActive = false;
+                this.isActive = false;
                 hurtAction.ignoreFinishedEvent = undefined;
                 hurtAction.ignoreFadeOut = undefined;
                 interactAction.ignoreFadeOut = undefined;
@@ -1396,7 +1396,6 @@ class CombatPlayerBase extends CustomizedCombatTofu {
 
             }
 
-            this.isActive = false;
             dieAction.ignoreFadeOut = true;
             this.AWS.prepareCrossFade(null, dieAction, this._animationSettings.DIE, 1, false, false, 0, endCallback);
 
