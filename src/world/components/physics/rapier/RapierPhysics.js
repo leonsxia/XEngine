@@ -262,6 +262,9 @@ class RapierPhysics {
             if (body) this.removeBody(body);
             if (collider) this.removeCollider(collider);
 
+            mesh.userData.physics.body = undefined;
+            mesh.userData.physics.collider = undefined;
+
         }
 
     }
@@ -281,6 +284,9 @@ class RapierPhysics {
             if (body) this.removeBody(body);
             if (collider) this.removeCollider(collider);
 
+            mesh.userData.physics.body = undefined;
+            mesh.userData.physics.collider = undefined;
+
         }
 
         this.meshes.length = 0;
@@ -295,6 +301,9 @@ class RapierPhysics {
 
             if (body) this.removeBody(body);
             if (collider) this.removeCollider(collider);
+
+            mesh.userData.physics.body = undefined;
+            mesh.userData.physics.collider = undefined;
 
         }
 

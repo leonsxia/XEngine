@@ -1522,7 +1522,7 @@ class TofuBase extends Moveable2D {
 
             if (body) {
 
-                // fro dynamic body
+                // for dynamic body
                 this.group.updateWorldMatrix(true, false);
                 this.group.matrixWorld.decompose(_v1, _q1, _v2);
                 body.setTranslation(_v1);
