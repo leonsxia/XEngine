@@ -321,6 +321,14 @@ class WorldScene {
 
                     }
 
+                    // update player HP state
+                    const { currentHP } = this.sceneSetupCopy.players.find(e => e.name === player.name);
+                    if (currentHP !== undefined) {
+
+                        player.currentHP = currentHP;
+
+                    }
+
                 }
 
             }
@@ -416,7 +424,7 @@ class WorldScene {
 
                 if (act === 'resetPlayer') {
 
-                    leftActions.actions[act] = this.resetCharacter.bind(this);
+                    leftActions.actions[act] = this.resetCurrentPlayer.bind(this);
 
                 } else if (act === 'resetCamera') {
 
@@ -918,7 +926,7 @@ class WorldScene {
 
             this.player = find;
 
-            this.player.isActive = true;
+            this.player.isActive = !this.player.dead;
             this.player.showHealth(this.enablePlayerHealth);
 
             --this.loadSequence;
@@ -984,14 +992,25 @@ class WorldScene {
 
     }
 
+    resetCurrentPlayer() {
+
+        if (this.player) {
+            
+            this.resetCharacter();
+            this.player.resetHealth();
+
+        }
+
+    }
+
     resetCharacter() {
         
         if (this.player) {
 
             const { allPlayerPos } = this.setup;
-            this.player.setPosition(allPlayerPos[this.loadSequence]);
-            this.player.resetFallingState?.();
-            this.player.resetHealth();
+            this.player.setPosition(allPlayerPos[this.loadSequence], true);
+            // this.player.resetFallingState?.();
+            // this.player.resetHealth();
             // this.player.resetAnimation?.();
             this.player.clearInSightTargets();
             this.player.reloadAllWeapons?.();

@@ -773,8 +773,8 @@ class SceneBuilder {
                 .updateRay?.()
                 .updateWalls?.()
                 .syncRapierWorld?.();
-            
-            if (currentHP !== undefined) findPlayer.currentHP = currentHP;
+
+            findPlayer.currentHP = currentHP ?? findPlayer.health.max;
 
         }
 
@@ -804,15 +804,7 @@ class SceneBuilder {
                 .updateWalls?.()
                 .syncRapierWorld?.();
 
-            if (currentHP !== undefined) {
-                
-                findEnemy.currentHP = currentHP;
-            
-            } else {
-
-                findEnemy.resetHealth();                
-
-            }
+            findEnemy.currentHP = currentHP ?? findEnemy.health.max;
 
         }
 
