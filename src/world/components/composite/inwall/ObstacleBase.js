@@ -1,11 +1,13 @@
-import { Group, MathUtils, Vector3, Layers, Raycaster, ArrowHelper } from 'three';
+import { Group, MathUtils, Vector3, Layers, Raycaster, ArrowHelper, Quaternion } from 'three';
 import { createOBBBox, createOBBPlane } from '../../physics/collisionHelper';
 import { ObstacleMoveable } from '../../movement/ObstacleMoveable';
 import { violetBlue, BF, red } from '../../basic/colorBase';
-import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER } from '../../utils/constants';
+import { CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, OBSTACLE_RAY_LAYER, FRONT_TRIGGER_LAYER, BACK_TRIGGER_LAYER, LEFT_TRIGGER_LAYER, RIGHT_TRIGGER_LAYER, FRONT_FACE_LAYER, BACK_FACE_LAYER, LEFT_FACE_LAYER, RIGHT_FACE_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, BOX_GEOMETRY, PHYSICS_TYPES } from '../../utils/constants';
 import { getVisibleMeshes } from '../../utils/objectHelper';
 import { Logger } from '../../../systems/Logger';
 import { BasicObject } from '../../basic/BasicObject';
+import { GeometryDesc, MeshDesc } from '../../Models';
+import { GLOBALS } from '../../../systems/globals';
 
 const frontTriggerLayer = new Layers();
 const backTriggerLayer = new Layers();
@@ -33,11 +35,16 @@ const HEAD_WIDTH = .08;
 const DEBUG = false;
 
 const _v1 = new Vector3();
+const _v2 = new Vector3();
+const _q1 = new Quaternion();
 const _down = new Vector3(0, -1, 0);
 
 class ObstacleBase extends ObstacleMoveable {
 
     isObstacleBase = true;
+
+    canBeIgnored = false;
+    isSimplePhysics = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE ? true : false;
 
     name = '';
     box;
@@ -97,6 +104,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         const { name, density = .5 } = specs;
         const { isObstacle = false, enableWallOBBs = false, climbable = false, movable = false, pushable = false, draggable = false } = specs;
+        const { canBeIgnored = false } = specs;
 
         this.name = name;
         this.isObstacle = isObstacle;
@@ -111,6 +119,8 @@ class ObstacleBase extends ObstacleMoveable {
         this.group.father = this;
 
         this.density = density;
+
+        this.canBeIgnored = canBeIgnored;
 
     }
 
@@ -375,6 +385,25 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    setCanBeIgnored() {
+
+        const meshes = getVisibleMeshes(this.group).filter(m => m.father instanceof BasicObject);
+
+        for (let i = 0, il = meshes.length; i < il; i++) {
+
+            const m = meshes[i];
+            m.father.canBeIgnored = this.canBeIgnored;
+
+        }
+
+        if (this.gltf) {
+
+            this.gltf.setCanBeIgnored(this.canBeIgnored);
+
+        }
+
+    }
+
     setCObjectsVisible(show) {
 
         this.cObjects.forEach(obj => {
@@ -430,7 +459,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         const { movable = false, pushable = false, draggable = false } = this.specs;
 
-        if (!movable || !(pushable || draggable)) return;
+        if (this.triggers.length === 0 || !movable || !(pushable || draggable)) return;
 
         const ZOffset = this.depth / 2;
         const XOffset = this.width / 2;
@@ -671,7 +700,7 @@ class ObstacleBase extends ObstacleMoveable {
 
         const { movable } = this.specs;
 
-        if (!movable) return;
+        if (this.boundingFaces.length === 0 || !movable) return;
 
         const width = this.box.geometry.parameters.width;
         const depth = this.box.geometry.parameters.depth;
@@ -903,29 +932,6 @@ class ObstacleBase extends ObstacleMoveable {
 
         }
 
-        // if (!result) {
-            
-        //     if (plane.father?.father?.isObstacleBase || plane.father?.father?.father?.isObstacleBase) {
-
-        //         const father = plane.father.father.isObstacleBase ? plane.father.father : plane.father.father.father;
-
-        //         for (let i = 0; i < this.bottomOBBs.length; i++) {
-
-        //             const thisPlane = this.bottomOBBs[i];
-
-        //             if (father.intersectsOBB(thisPlane.obb)) {
-
-        //                 result = true;
-        //                 break;
-
-        //             }
-
-        //         }
-
-        //     }
-
-        // }
-
         return result;
 
     }
@@ -1004,6 +1010,47 @@ class ObstacleBase extends ObstacleMoveable {
 
         this.updateOBBs();
         this.updateRay(false);
+
+    }
+
+    // Rapier physics function
+    rapierInstances = [];
+
+    addRapierInstances() {
+
+        const { physics: { mass = 0, restitution = 0 } = {} } = this.specs;
+        const boxGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width: this.width, depth: this.depth, height: this.height });
+        const boxMeshDesc = new MeshDesc(boxGeometryDesc);
+
+        boxMeshDesc.name = `${this.name}_box_mesh_desc`;
+        boxMeshDesc.userData.physics.mass = mass;
+        boxMeshDesc.userData.physics.restitution = restitution;
+
+        this.rapierInstances.push(boxMeshDesc);
+
+    }
+
+    syncRapierWorld() {
+        
+        if (this.rapierInstances.length > 0) {
+
+            const { body } = this.group.userData.physics;
+            if (body) {
+
+                this.group.updateWorldMatrix(true, false);
+                this.group.matrixWorld.decompose(_v1, _q1, _v2);
+                body.setTranslation(_v1);
+                body.setRotation(_q1);
+
+            }
+
+        }
+
+    }
+
+    onRapierUpdated() {
+
+        this.updateOBBs();
 
     }
 

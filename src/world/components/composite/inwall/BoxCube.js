@@ -75,10 +75,14 @@ class BoxCube extends ObstacleBase {
         // this.setPlaneVisible(false); // for debug only
         // this.box.visible = false; // for debug only
 
-        this.setTriggers();
-        this.createBoundingFaces();
-        this.createRay();
-        this.showArrows(false);
+        if (this.isSimplePhysics) {
+
+            this.setTriggers();
+            this.createBoundingFaces();
+            this.createRay();
+            this.showArrows(false);
+
+        }
 
         this.update(false, true);
 
@@ -93,6 +97,7 @@ class BoxCube extends ObstacleBase {
         );
 
         this.setPickLayers();
+        this.setCanBeIgnored();
 
     }
 

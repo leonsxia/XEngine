@@ -314,6 +314,20 @@ function moveableObjectFilter(object) {
 
 }
 
+function isRapierObject(object) {
+
+    if (object instanceof BoxCube) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+}
+
 function resetObject3D(object) {
 
     object.position.set(0, 0, 0);
@@ -343,7 +357,7 @@ function getIntersectionTarget(object) {
 export { 
     clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, 
     objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5,
-    moveableObjectFilter,
+    moveableObjectFilter, isRapierObject,
     resetObject3D,
     getIntersectionTarget
 };

@@ -723,7 +723,7 @@ class BasicObject extends EventDispatcher {
 
     }
 
-    addPhysics({ mass = 0, restitution = 0 } = {}) {
+    setupRapierPhysics(mass = 0, restitution = 0) {
 
         this.mesh.userData.physics = { mass, restitution };
 

@@ -21,7 +21,7 @@ import { initPickableModels, loadGLTFModels } from "./components/utils/gltfHelpe
 import { loadShaders } from "./components/utils/shaderHelper";
 import { loadImages } from "./components/utils/imageHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
-import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES, TEXTURE_NAMES } from "./components/utils/constants";
+import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES, TEXTURE_NAMES, PHYSICS_TYPES } from "./components/utils/constants";
 import { IMAGES, XBOX_CONTROLLER_ICONS } from "./systems/ui/uiConstants";
 import { Logger } from "./systems/Logger";
 import { InputBase } from "./systems/physicalInputs/InputBase";
@@ -63,6 +63,9 @@ const controlActions = InputBase.CONTROL_ACTIONS.map(actions => {
 });
 const controlEventDispatcher = new ControlEventDispatcher(controlTypes, controlActions);
 config.controlEventDispatcher = controlEventDispatcher;
+
+config.physics = PHYSICS_TYPES.SIMPLE;
+
 const DEBUG = true;
 
 class World {

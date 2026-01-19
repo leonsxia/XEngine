@@ -3,11 +3,12 @@ import { setupShadowLight, updateSingleLightCamera } from "../../components/shad
 import {
     DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
     AXES, GRID, 
-    ROOM, INSPECTOR_ROOM, SCENE, WATER_CUBE,
+    ROOM, INSPECTOR_ROOM, SCENE, WATER_CUBE
 } from '../../components/utils/constants.js';
 import { colorStr, colorArr } from "../../components/basic/colorBase.js";
 import { moveableObjectFilter, objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from "../../components/utils/objectHelper.js";
 import { ModelBuilder } from "./ModelBuilder.js";
+import { GLOBALS } from "../../systems/globals.js";
 
 class SceneBuilder {
 
@@ -40,6 +41,8 @@ class SceneBuilder {
             worldScene.sceneSavedSetup = JSON.parse(JSON.stringify(setup));
 
             Object.assign(worldScene.setup, setup.settings);
+
+            GLOBALS.CURRENT_PHYSICS = setup.settings.physics ?? worldScene.setup.physics;
 
             const { players = [], enemies = [], lights = [], objects = [] } = setup;
             const sceneSpecs = objects.find(o => o.type === SCENE);
@@ -306,7 +309,6 @@ class SceneBuilder {
         for (let i = 0, il = roomSpecs.length; i < il; i++) {
 
             const roomSpec = roomSpecs[i];
-            roomSpec.physics = this.worldScene.setup.physics;
 
             roomSpec.updateOBBnRay = false;
             const room = this.buildObject(roomSpec);
@@ -1363,11 +1365,15 @@ class SceneBuilder {
                 find.father.updateLightObjects?.();
 
             }
+
+            find.father.syncRapierWorld?.();
+
         }
+
     }
     
     buildObject(specs) {
-    
+
         const object = this.modelBuilder.callCreateFunction(specs);
 
         return object;

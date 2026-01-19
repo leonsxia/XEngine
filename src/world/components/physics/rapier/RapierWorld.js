@@ -100,11 +100,13 @@ class RapierWorld {
 
     initPhysics(room) {
 
-        const { 
+        const {
+            compounds,
             floors, slopes,
             terrains 
         } = room;
 
+        this.compounds = compounds;
         this.floors = floors;
         this.slopes = slopes;
         this.terrains = terrains;
@@ -171,9 +173,22 @@ class RapierWorld {
 
     setupWorld() {
 
+        this.addCompounds();
         this.addFloors();
         this.addTerrains();
         this.physics.addScene(this.attachTo.scene);
+
+    }
+
+    addCompounds() {
+
+        for (let i = 0, il = this.compounds.length; i < il; i++) {
+
+            const compound = this.compounds[i];
+            compound.addRapierInstances();
+            this.physics.addCompoundMesh(compound.group, compound.rapierInstances);
+
+        }
 
     }
 

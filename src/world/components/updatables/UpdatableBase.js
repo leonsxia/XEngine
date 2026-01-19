@@ -2,6 +2,7 @@ class UpdatableBase {
 
     _attachTo;
     _concats = [];
+    _cachedRoomObjects = [];
 
     constructor() {}
 
@@ -21,6 +22,20 @@ class UpdatableBase {
     get currentRoom() {
 
         return this.attachTo.currentRoom;
+
+    }
+
+    // inherited by children
+    get currentRoomObjects() {
+
+        return this._cachedRoomObjects;
+
+    }
+    
+    resetCachedRoomObjects() {
+
+        this._cachedRoomObjects.length = 0;
+        this.currentRoomObjects;
 
     }
 

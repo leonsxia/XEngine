@@ -1,5 +1,10 @@
-import { Logger } from "../../systems/Logger";
-import { UpdatableBase } from "./UpdatableBase";
+import { Layers } from 'three';
+import { Logger } from '../../systems/Logger';
+import { UpdatableBase } from './UpdatableBase';
+import { TOFU_FOCUS_LAYER } from '../utils/constants';
+
+const tofuFocusLayer = new Layers();
+tofuFocusLayer.set(TOFU_FOCUS_LAYER);
 
 class AI extends UpdatableBase {
 
@@ -53,6 +58,26 @@ class AI extends UpdatableBase {
 
     }
 
+    get currentRoomObjects() {
+
+        if (this._cachedRoomObjects.length === 0) {
+
+            this.currentRoom.group.traverse(object => {
+
+                if (tofuFocusLayer.test(object.layers) && !(object.canBeIgnored ?? object.father?.canBeIgnored)) {
+
+                    this._cachedRoomObjects.push(object);
+
+                }
+
+            });
+
+        }
+
+        return this._cachedRoomObjects;
+
+    }
+
     tick(delta) {
 
         for (let i = 0, il = this.players.length; i < il; i++) {
@@ -85,7 +110,7 @@ class AI extends UpdatableBase {
 
                 if (!player.isActive || player.dead) continue;
 
-                this.concatObjects(this.currentRoom.group, ...this.sceneObjects, ...this.playerObjects);
+                this.concatObjects(...this.currentRoomObjects, ...this.sceneObjects, ...this.playerObjects);
                 enemy.checkTargetInSight(player, this._concats);
 
             }

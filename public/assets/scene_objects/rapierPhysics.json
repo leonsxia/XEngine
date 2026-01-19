@@ -118,7 +118,7 @@
                     "display": "Directional Light",
                     "detail": {
                         "color": [249, 230, 190],
-                        "intensity": 0.7,
+                        "intensity": 1.5,
                         "position": [0, 20, 28],
                         "target": [0, 0, 0]
                     },
@@ -163,7 +163,7 @@
                     "detail": {
                         "color": [255, 255, 255],
                         "position": [0, 3, 0],
-                        "intensity": 120,
+                        "intensity": 150,
                         "distance": 0,
                         "decay": 2
                     },
@@ -327,6 +327,174 @@
             "position": [0, 2.5, 0],
             "rotationY": 0.5236,
             "groups": [
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox1",
+                    "position": [
+                        2,
+                        -1,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 1000 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox2",
+                    "position": [
+                        2,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 300 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox3",
+                    "position": [
+                        2,
+                        1,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 300 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox4",
+                    "position": [
+                        3.5,
+                        -1,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 1000 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox5",
+                    "position": [
+                        3.5,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 300 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox6",
+                    "position": [
+                        3.5,
+                        1,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 300 }
+                }
             ],
             "floors": [],
             "ceilings": [],

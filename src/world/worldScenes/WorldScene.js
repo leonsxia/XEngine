@@ -19,6 +19,7 @@ import { InputBase } from '../systems/physicalInputs/InputBase.js';
 import { pdaItemViewer } from '../systems/ItemViewer.js';
 import { AudioMixer } from '../components/updatables/AudioMixer.js';
 import { RapierWorld } from '../components/physics/rapier/RapierWorld.js';
+import { GLOBALS } from '../systems/globals.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -194,7 +195,7 @@ class WorldScene {
             camera: { position = [0, 0, 0] }, defaultPlayer, resolution = 1,
             enableGui = false, enablePicker = false, enableShadow = false,
             enableTPC = false, enableIC = false,
-            physics = PHYSICS_TYPES.SIMPLE
+            physics
         } = this.setup;
 
         // set camera initial position and save the state
@@ -479,6 +480,9 @@ class WorldScene {
         const tpcIdx = updatables.findIndex(f => f === this.thirdPersonCamera);
         const icIdx = updatables.findIndex(f => f === this.inspectorCamera);
 
+        const { physics } = this.setup;
+        GLOBALS.CURRENT_PHYSICS = physics;
+
         if (tpcIdx == -1 && icIdx == -1) {
 
             this.controls.enableDefControl();
@@ -709,6 +713,8 @@ class WorldScene {
         this.currentRoom = targetRoom;
         this.physics.initPhysics(this.currentRoom);
         this.updatePickables();
+
+        this.ai.resetCachedRoomObjects();
 
         for (let i = 0, il = this.rooms.length; i < il; i++) {
 
@@ -1215,8 +1221,8 @@ class WorldScene {
         for (let i = 0, il = player.walls.length; i < il; i++) {
 
             const wall = player.walls[i];
-            this.scene.remove(wall.leftArrow);
-            this.scene.remove(wall.rightArrow);
+            if (wall.leftArrow) this.scene.remove(wall.leftArrow);
+            if (wall.rightArrow) this.scene.remove(wall.rightArrow);
 
         }
 
@@ -1229,8 +1235,8 @@ class WorldScene {
         for (let i = 0, il = player.walls.length; i < il; i++) {
 
             const wall = player.walls[i];
-            this.scene.add(wall.leftArrow);
-            this.scene.add(wall.rightArrow);
+            if (wall.leftArrow) this.scene.add(wall.leftArrow);
+            if (wall.rightArrow) this.scene.add(wall.rightArrow);
 
         }
 
@@ -1429,8 +1435,8 @@ class WorldScene {
         for (let i = 0, il = enemy.walls.length; i < il; i++) {
 
             const wall = enemy.walls[i];
-            this.scene.remove(wall.leftArrow);
-            this.scene.remove(wall.rightArrow)
+            if (wall.leftArrow) this.scene.remove(wall.leftArrow);
+            if (wall.rightArrow) this.scene.remove(wall.rightArrow)
 
         }
 
@@ -1445,8 +1451,8 @@ class WorldScene {
         for (let i = 0, il = enemy.walls.length; i < il; i++) {
 
             const wall = enemy.walls[i];
-            this.scene.add(wall.leftArrow);
-            this.scene.add(wall.rightArrow);
+            if (wall.leftArrow) this.scene.add(wall.leftArrow);
+            if (wall.rightArrow) this.scene.add(wall.rightArrow);
 
         }
 

@@ -556,8 +556,8 @@ class CustomizedCombatTofu extends Tofu {
                 for (let i = 0, il = cbox.walls.length; i < il; i++) {
 
                     const wall = cbox.walls[i];
-                    wall.leftArrow.visible = show;
-                    wall.rightArrow.visible = show;
+                    if (wall.leftRay) wall.leftArrow.visible = show;
+                    if (wall.rightRay) wall.rightArrow.visible = show;
 
                 }
 

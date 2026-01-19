@@ -126,6 +126,17 @@ class GLTFModel extends EventDispatcher {
 
     }
 
+    setCanBeIgnored(canBeIgnored) {
+
+        this.traverse((mesh) => {
+
+            mesh.canBeIgnored = canBeIgnored;
+
+
+        });
+
+    }
+
     traverse(callback) {
 
         this.group.traverse((object) => {

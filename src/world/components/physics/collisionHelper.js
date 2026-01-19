@@ -8,7 +8,8 @@ import { CollisionTrianglePlane } from './primitives/CollisionTrianglePlane';
 import { OBBPlane } from './primitives/OBBPlane';
 import { OBBBox } from './primitives/OBBBox';
 import { BF2, violetBlue } from '../basic/colorBase';
-import { CORNOR_RAY_LAYER } from '../utils/constants';
+import { CORNOR_RAY_LAYER, PHYSICS_TYPES } from '../utils/constants';
+import { GLOBALS } from '../../systems/globals';
 
 // create plane with line and rays, only support rotationY for collision for now.
 function createCollisionPlane(specs, name, position, rotationY, receiveShadow = false, castShadow = false, showArrow = false) {
@@ -20,10 +21,15 @@ function createCollisionPlane(specs, name, position, rotationY, receiveShadow = 
         .castShadow(castShadow)
         .setPosition(position)
         .setRotationY(rotationY)
-        .createRay();
 
-    if (cPlane.leftArrow) cPlane.leftArrow.visible = showArrow;
-    if (cPlane.rightArrow) cPlane.rightArrow.visible = showArrow;
+    const createRay = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE ? true : false;
+    if (createRay) {
+
+        cPlane.createRay();
+        if (cPlane.leftArrow) cPlane.leftArrow.visible = showArrow;
+        if (cPlane.rightArrow) cPlane.rightArrow.visible = showArrow;
+
+    }
 
     return cPlane;
 
@@ -39,10 +45,15 @@ function createCollisionTrianglePlane(specs, name, position, rotationY, receiveS
         .castShadow(castShadow)
         .setPosition(position)
         .setRotationY(rotationY)
-        .createRay()
 
-    if (cTriPlane.leftArrow) cTriPlane.leftArrow.visible = showArrow;
-    if (cTriPlane.rightArrow) cTriPlane.rightArrow.visible = showArrow;
+    const createRay = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE ? true : false;
+    if (createRay) {
+
+        cTriPlane.createRay();
+        if (cTriPlane.leftArrow) cTriPlane.leftArrow.visible = showArrow;
+        if (cTriPlane.rightArrow) cTriPlane.rightArrow.visible = showArrow;
+
+    }
 
     return cTriPlane;
 
@@ -58,10 +69,15 @@ function createCollisionOBBPlane(specs, name, position, rotationY, receiveShadow
         .castShadow(castShadow)
         .setPosition(position)
         .setRotationY(rotationY)
-        .createRay();
 
-    if (cObbPlane.leftArrow) cObbPlane.leftArrow.visible = showArrow;
-    if (cObbPlane.rightArrow) cObbPlane.rightArrow.visible = showArrow;
+    const createRay = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE ? true : false;
+    if (createRay) {
+
+        cObbPlane.createRay();
+        if (cObbPlane.leftArrow) cObbPlane.leftArrow.visible = showArrow;
+        if (cObbPlane.rightArrow) cObbPlane.rightArrow.visible = showArrow;
+
+    }
     
     return cObbPlane;
 
@@ -69,7 +85,7 @@ function createCollisionOBBPlane(specs, name, position, rotationY, receiveShadow
 
 
 // create plane with line, optional rays
-function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow = false, castShadow = false, createRay= false, showArrow = false) {
+function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow = false, castShadow = false, createRay = false, showArrow = false) {
 
     const cPlane = new CollisionPlane(specs);
 
@@ -79,10 +95,10 @@ function createCollisionPlaneFree(specs, name, position, rotation, receiveShadow
         .setPosition(position)
         .setRotation(rotation);
 
-    if (createRay) cPlane.createRay();
-    
+    createRay = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE ? createRay : false;
     if (createRay) {
 
+        cPlane.createRay();
         if (cPlane.leftArrow) cPlane.leftArrow.visible = showArrow;
         if (cPlane.rightArrow) cPlane.rightArrow.visible = showArrow;
 
