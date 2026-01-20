@@ -127,7 +127,7 @@ class RapierPhysics {
 
                 if (physics && !physics.manuallyLoad) {
 
-                    this.addMesh(child, physics.mass, physics.restitution);
+                    this.addMesh(child);
 
                 }
 
@@ -137,14 +137,18 @@ class RapierPhysics {
 
     }
 
-    addMesh(mesh, mass = 0, restitution = 0) {
+    addMesh(mesh) {
 
+        if (!mesh.userData.physics) mesh.userData.physics = {};
+
+        const { mass = 0, restitution = 0, friction = 0 } = mesh.userData.physics;
         const shape = getShape(mesh.geometry, mesh.scale);
 
         if (shape === null) return;
 
         shape.setMass(mass);
         shape.setRestitution(restitution);
+        shape.setFriction(friction);
 
         if (!mesh.isInstancedMesh) {
 
@@ -157,8 +161,6 @@ class RapierPhysics {
         const { body, collider } = mesh.isInstancedMesh
             ? this.createInstancedBody(mesh, mass, shape)
             : this.createBody(_v1, _q1, mass, shape);
-
-        if (!mesh.userData.physics) mesh.userData.physics = {};
 
         const { enableX = true, enableY = true, enableZ = true } = mesh.userData.physics;
         body.setEnabledRotations(enableX, enableY, enableZ, true);
@@ -203,7 +205,7 @@ class RapierPhysics {
             const physics = mesh.userData.physics;
 
             if (!physics) continue;
-            const { mass = 0, restitution = 0 } = physics;
+            const { mass = 0, restitution = 0, friction = 0 } = physics;
 
             const shape = getShape(mesh.geometry, mesh.scale);
             shape.setTranslation(...mesh.position);
@@ -213,6 +215,7 @@ class RapierPhysics {
 
             shape.setMass(mass);
             shape.setRestitution(restitution);
+            shape.setFriction(friction);
 
             const collider = this.world.createCollider(shape, body);
 
@@ -449,7 +452,11 @@ class RapierPhysics {
 
     addHeightfield(mesh, width, depth, heights, scale) {
 
+        if (!mesh.userData.physics) mesh.userData.physics = {};
+
+        const { friction = 0 } = mesh.userData.physics;
         const shape = RAPIER.ColliderDesc.heightfield(width, depth, heights, scale);
+        shape.setFriction(friction);
 
         const bodyDesc = RAPIER.RigidBodyDesc.fixed();
         mesh.updateWorldMatrix(true, false);
@@ -459,8 +466,7 @@ class RapierPhysics {
 
         const body = this.world.createRigidBody(bodyDesc);
         const collider = this.world.createCollider(shape, body);
-
-        if (!mesh.userData.physics) mesh.userData.physics = {};
+        
         mesh.userData.physics.body = body;
         mesh.userData.physics.collider = collider;
 

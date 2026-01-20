@@ -338,6 +338,8 @@ class Room {
             t.mesh.layers.enable(OBSTACLE_RAY_LAYER);
             this.terrains.push(t);
 
+            if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER) t.setupRapierPhysics(t.specs.physics);
+
         }
 
     }
@@ -411,6 +413,7 @@ class Room {
 
             if (this.physics === PHYSICS_TYPES.RAPIER && isRapierObject(g)) {
 
+                g.addRapierInstances();
                 this.compounds.push(g);
 
             }

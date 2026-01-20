@@ -353,7 +353,7 @@
                     "rotationY": 0,
                     "transparent": false,
                     "canBeIgnored": true,
-                    "physics": { "mass": 1000 }
+                    "physics": { "mass": 1000, "friction": 1 }
                 },
                 {
                     "type": "BoxCube",
@@ -437,7 +437,7 @@
                     "rotationY": 0,
                     "transparent": false,
                     "canBeIgnored": true,
-                    "physics": { "mass": 1000 }
+                    "physics": { "mass": 1000, "friction": 1 }
                 },
                 {
                     "type": "BoxCube",
@@ -526,7 +526,8 @@
                     "receiveShadow": true,
                     "position": [0, -2.8, 0],
                     "rotation": [0, 0, 0],
-                    "useHeightmap": true
+                    "useHeightmap": true,
+                    "physics": { "friction": 1 }
                 }
             ]
         }

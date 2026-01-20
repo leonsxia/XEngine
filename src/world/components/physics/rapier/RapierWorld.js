@@ -185,7 +185,6 @@ class RapierWorld {
         for (let i = 0, il = this.compounds.length; i < il; i++) {
 
             const compound = this.compounds[i];
-            compound.addRapierInstances();
             this.physics.addCompoundMesh(compound.group, compound.rapierInstances);
 
         }
@@ -275,7 +274,7 @@ class RapierWorld {
             const instance = rapierContainer.actives[i];
             if (instance.name !== CHARACTER_CONTROLLER) {
 
-                this.physics.addMesh(instance, instance.userData.physics.mass);
+                this.physics.addMesh(instance);
 
             } else {
 

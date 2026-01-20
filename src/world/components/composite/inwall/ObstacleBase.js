@@ -1016,15 +1016,17 @@ class ObstacleBase extends ObstacleMoveable {
     // Rapier physics function
     rapierInstances = [];
 
+    // can be inherited by children
     addRapierInstances() {
 
-        const { physics: { mass = 0, restitution = 0 } = {} } = this.specs;
+        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
         const boxGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width: this.width, depth: this.depth, height: this.height });
         const boxMeshDesc = new MeshDesc(boxGeometryDesc);
 
         boxMeshDesc.name = `${this.name}_box_mesh_desc`;
         boxMeshDesc.userData.physics.mass = mass;
         boxMeshDesc.userData.physics.restitution = restitution;
+        boxMeshDesc.userData.physics.friction = friction;
 
         this.rapierInstances.push(boxMeshDesc);
 
