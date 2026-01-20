@@ -64,6 +64,7 @@ class RapierWorld {
                 player.onDisposed.push(this.onTofuDisposed.bind(this));                
                 player.addRapierInstances();
                 this.addCharacterController(player);
+                this.bindObjectSyncEvents(player);
 
             }
 
@@ -85,6 +86,7 @@ class RapierWorld {
                 enemy.onDisposed.push(this.onTofuDisposed.bind(this));
                 enemy.addRapierInstances();
                 this.addCharacterController(enemy);
+                this.bindObjectSyncEvents(enemy);
 
             }
 
@@ -115,7 +117,7 @@ class RapierWorld {
 
         this.physics.removeAll();
         this.cleanupAvatars();
-        this.setupWorld();
+        this.setupWorld(room);
 
         if (this._debug) this.updateDebugger();
 
@@ -171,12 +173,22 @@ class RapierWorld {
 
     }
 
-    setupWorld() {
+    setupWorld(room) {
 
+        this.addDefaultWalls(room);
         this.addCompounds();
         this.addFloors();
         this.addTerrains();
         this.physics.addScene(this.attachTo.scene);
+
+    }
+
+    addDefaultWalls(room) {
+
+        this.bindObjectSyncEvents(room.leftWall);
+        this.bindObjectSyncEvents(room.rightWall);
+        this.bindObjectSyncEvents(room.frontWall);
+        this.bindObjectSyncEvents(room.backWall);
 
     }
 
@@ -185,9 +197,10 @@ class RapierWorld {
         for (let i = 0, il = this.compounds.length; i < il; i++) {
 
             const compound = this.compounds[i];
-            this.bindPickEvents(compound);
+            this.bindObjectSyncEvents(compound);
             compound.rapierInstances.length = 0;
-            this.onObjectAdded(compound);
+            compound.addRapierInstances();
+            this.physics.addCompoundMesh(compound.group, compound.rapierInstances);
 
         }
 
@@ -198,8 +211,10 @@ class RapierWorld {
         for (let i = 0, il = this.floors.length; i < il; i++) {
 
             const floor = this.floors[i];
-            this.bindPickEvents(floor);
-            floor.mesh.userData.physics = { mass: 0, restitution: 0 };
+            const { restitution = 0, friction = 0 } = floor.specs.physics;
+
+            floor.setupRapierPhysics({ mass: 0, restitution, friction });
+            this.bindObjectSyncEvents(floor);            
 
         }
 
@@ -212,10 +227,13 @@ class RapierWorld {
             const terrain = this.terrains[i];
             const { width, height, widthSegments, heightSegments } = terrain.geometry.parameters;
             const { heights } = terrain.geometry.userData;
+            const { restitution = 0, friction = 0 } = terrain.specs.physics;
+            
+            terrain.setupRapierPhysics({ mass: 0, restitution, friction });
             this.physics.addHeightfield(terrain.mesh, heightSegments, widthSegments, new Float32Array(heights), { x: width, y: 1, z: height });
-            terrain.mesh.userData.physics.manuallyLoad = true;
-            terrain.mesh.userData.physics.collider.checkByRay = true;
-            terrain.mesh.userData.physics.collider.name = `${terrain.name}_collider`;
+            terrain.addRapierInfo();
+
+            this.bindObjectSyncEvents(terrain);
 
         }
 
@@ -318,9 +336,12 @@ class RapierWorld {
 
     onObjectRemoved(object) {
 
-        if (object.isObstacleBase || object.isInWallObjectBase) {
+        if (object.isTofu) {
+            
+            this.onBeforeTofuContainerChanged(object.rapierContainer);
 
-            object.rapierInstances.length = 0;
+        } else if (object.isObstacleBase || object.isInWallObjectBase) {
+            
             this.physics.removeMesh(object.group);
 
         } else {
@@ -333,9 +354,12 @@ class RapierWorld {
 
     onObjectAdded(object) {
 
-        if (object.isObstacleBase || object.isInWallObjectBase) {
+        if (object.isTofu) {
 
-            object.addRapierInstances();
+            this.onTofuContainerChanged(object.rapierContainer);
+
+        } else if (object.isObstacleBase || object.isInWallObjectBase) {
+            
             this.physics.addCompoundMesh(object.group, object.rapierInstances);
 
         } else {
@@ -346,7 +370,9 @@ class RapierWorld {
 
     }
 
-    bindPickEvents(object) {
+    bindObjectSyncEvents(object) {
+
+        if (!object) return;
 
         object.onRapierInstanceRemoved = this.onObjectRemoved.bind(this);
         object.onRapierInstanceAdded = this.onObjectAdded.bind(this);

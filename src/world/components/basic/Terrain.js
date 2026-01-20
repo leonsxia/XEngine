@@ -171,6 +171,22 @@ class Terrain extends BasicObject {
 
     }
 
+    syncRapierWorld() {
+
+        super.syncRapierWorld();
+        this.addRapierInfo();
+
+        return this;
+
+    }
+
+    addRapierInfo() {
+
+        this.mesh.userData.physics.collider.checkByRay = true;
+        this.mesh.userData.physics.collider.name = `${this.name}_collider`;
+
+    }
+
 }
 
 export { Terrain };

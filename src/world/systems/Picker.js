@@ -121,7 +121,6 @@ class Picker {
             const father = selectedObject.father;
             father?.resetFallingState?.();
             father?.resetInwaterAnimeState?.();
-            father?.onRapierInstanceRemoved?.(father);
 
             this.#postProcessor.addOutlineObjects([selectedObject]);
 

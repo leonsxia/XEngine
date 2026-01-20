@@ -350,7 +350,7 @@ class PostProcessor {
 
             const selected = this.outlinePass.selectedObjects[0];
             delete selected.isPicked;
-            selected.father?.onRapierInstanceAdded?.(selected.father);
+            selected.father?.syncRapierWorld?.();
             this.outlinePass.selectedObjects.length = 0;
 
         }

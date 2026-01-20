@@ -42,6 +42,8 @@ const DEBUG = false;
 
 class TofuBase extends Moveable2D {
 
+    isTofu = true;
+
     name = '';
     group;
     boundingFaceGroup;
@@ -143,10 +145,6 @@ class TofuBase extends Moveable2D {
     _cachedDepth;
 
     _cornors = [];
-
-    // rapier
-    rapierContainer;
-    rapierInstances = Object.assign({}, RAPIER_INSTANCES);
 
     // resource tracker
     resTracker = new ResourceTracker();
@@ -1486,6 +1484,12 @@ class TofuBase extends Moveable2D {
     }
 
     // Rapier physics function
+    rapierContainer;
+    rapierInstances = Object.assign({}, RAPIER_INSTANCES);
+    // events
+    onRapierInstanceRemoved;
+    onRapierInstanceAdded;
+
     adjustDeadInstance() {
 
         if (this.rapierContainer.actives.length === 0) return;
@@ -1520,21 +1524,34 @@ class TofuBase extends Moveable2D {
 
             const { collider, body } = activeInstance.userData.physics;
 
-            if (body) {
+            if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
 
-                // for dynamic body
-                this.group.updateWorldMatrix(true, false);
-                this.group.matrixWorld.decompose(_v1, _q1, _v2);
-                body.setTranslation(_v1);
-                body.setRotation(_q1);
+                if (collider || body) {
 
-            } else if (collider) {
+                    this.onRapierInstanceRemoved(this);
+                    this.onRapierInstanceAdded(this);
 
-                // for character controller
-                this.group.updateWorldMatrix(true, false);
-                this.group.matrixWorld.decompose(_v1, _q1, _v2);
-                collider.setTranslation(_v1);
-                collider.setRotation(_q1);
+                }
+
+            } else {
+
+                if (body) {
+
+                    // for dynamic body
+                    this.group.updateWorldMatrix(true, false);
+                    this.group.matrixWorld.decompose(_v1, _q1, _v2);
+                    body.setTranslation(_v1);
+                    body.setRotation(_q1);
+
+                } else if (collider) {
+
+                    // for character controller
+                    this.group.updateWorldMatrix(true, false);
+                    this.group.matrixWorld.decompose(_v1, _q1, _v2);
+                    collider.setTranslation(_v1);
+                    collider.setRotation(_q1);
+
+                }
 
             }
 

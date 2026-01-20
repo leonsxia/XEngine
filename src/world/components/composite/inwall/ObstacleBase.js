@@ -1091,13 +1091,24 @@ class ObstacleBase extends ObstacleMoveable {
         
         if (this.rapierInstances.length > 0) {
 
-            const { body } = this.group.userData.physics;
-            if (body) {
+            if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
 
-                this.group.updateWorldMatrix(true, false);
-                this.group.matrixWorld.decompose(_v1, _q1, _v2);
-                body.setTranslation(_v1);
-                body.setRotation(_q1);
+                this.rapierInstances.length = 0;
+                this.onRapierInstanceRemoved(this);
+                this.addRapierInstances();
+                this.onRapierInstanceAdded(this);
+
+            } else {
+
+                const { body } = this.group.userData.physics;
+                if (body) {
+
+                    this.group.updateWorldMatrix(true, false);
+                    this.group.matrixWorld.decompose(_v1, _q1, _v2);
+                    body.setTranslation(_v1);
+                    body.setRotation(_q1);
+
+                }
 
             }
 

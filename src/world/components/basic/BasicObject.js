@@ -708,16 +708,25 @@ class BasicObject extends EventDispatcher {
 
     syncRapierWorld() {
 
-        if (this.mesh.userData.physics && !this.onRapierInstanceAdded && !this.onRapierInstanceRemoved) {
+        if (this.mesh.userData.physics) {
 
-            const { body } = this.mesh.userData.physics;
+            if (this.onRapierInstanceAdded && this.onRapierInstanceRemoved) {
 
-            if (body) {
+                this.onRapierInstanceRemoved(this);
+                this.onRapierInstanceAdded(this);
 
-                this.mesh.updateWorldMatrix(true, false);
-                this.mesh.matrixWorld.decompose(_v1, _q1, _v2);
-                body.setTranslation(_v1);
-                body.setRotation(_q1);
+            } else {
+
+                const { body } = this.mesh.userData.physics;
+
+                if (body) {
+
+                    this.mesh.updateWorldMatrix(true, false);
+                    this.mesh.matrixWorld.decompose(_v1, _q1, _v2);
+                    body.setTranslation(_v1);
+                    body.setRotation(_q1);
+
+                }
 
             }
 
@@ -732,6 +741,9 @@ class BasicObject extends EventDispatcher {
         this.mesh.userData.physics = { mass, restitution, friction };
 
     }
+
+    // inherited by children
+    addRapierInfo() {}
 
 }
 

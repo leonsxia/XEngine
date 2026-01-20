@@ -1146,7 +1146,7 @@ class SceneBuilder {
 
                         } else {
 
-                            const {rotation = [0, 0, 0]} = _target;
+                            const { rotation = [0, 0, 0] } = _target;
                             find.father.setRotation(rotation);
                             find.father.updateOBBs();
 
@@ -1384,12 +1384,7 @@ class SceneBuilder {
 
             }
 
-            if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER) {
-
-                find.father.onRapierInstanceRemoved?.(find.father);
-                find.father.onRapierInstanceAdded?.(find.father);
-
-            }
+            find.father.syncRapierWorld?.();
 
         }
 

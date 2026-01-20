@@ -767,7 +767,6 @@ function makeObjectsGuiConfig(objects) {
             if (object.isTofu) {
     
                 object.father.updateAccessories();
-                object.father.syncRapierWorld();
     
             } else if (object.isWeapon) {
 
@@ -784,7 +783,6 @@ function makeObjectsGuiConfig(objects) {
 
                 object.father.updateRay?.();
                 object.father.updateOBB?.();
-                object.father.syncRapierWorld();
 
             }
 
@@ -841,11 +839,10 @@ function makeObjectsGuiConfig(objects) {
 
                         object.father.updateLightObjects?.();
 
-                    } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall || object.father.isAirWall || object.father.isTerrain)) {
+                    } else if (object.isMesh && (object.father.isWall || object.father.isInsideWall || object.father.isAirWall)) {
 
                         object.father.updateRay?.();
                         object.father.updateOBB?.();
-                        object.father.syncRapierWorld();
 
                     }
 

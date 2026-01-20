@@ -490,6 +490,7 @@ class RapierPhysics {
         
         mesh.userData.physics.body = body;
         mesh.userData.physics.collider = collider;
+        mesh.userData.physics.manuallyLoad = true;
 
         this.fixedMeshes.push(mesh);
 
@@ -506,7 +507,7 @@ class RapierPhysics {
 
             const mesh = this.meshes[i];
 
-            if (mesh.isPicked) continue;
+            if (mesh.isPicked || mesh.attachTo?.isPicked) continue;
 
             if (mesh.isInstancedMesh) {
 
