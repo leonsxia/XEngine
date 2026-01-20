@@ -647,7 +647,7 @@ class ModelBuilder {
     createLWall(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { outTMap, outSMap, inTMap, inSMap, sideTMap, sideSMap, topMap, bottomMap } = specs;
         const { outTNormal, outSNormal, inTNormal, inSNormal, sideTNormal, sideSNormal, topNormal, bottomNormal } = specs;
 
@@ -657,7 +657,9 @@ class ModelBuilder {
 
         object = new LWall(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -750,7 +752,7 @@ class ModelBuilder {
     createBoxCube(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
 
@@ -760,7 +762,9 @@ class ModelBuilder {
 
         object = new BoxCube(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 

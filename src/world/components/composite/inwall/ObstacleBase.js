@@ -583,11 +583,45 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    setRotationX(x) {
+
+        this.group.rotation.x = x;
+
+        return this;
+
+    }
+
     setRotationY(y) {
 
         this.group.rotation.y = y;
 
         return this;
+
+    }
+
+    setRotationZ(z) {
+
+        this.group.rotation.z = z;
+
+        return this;
+
+    }
+
+    get rotationX() {
+
+        return this.group.rotation.x;
+
+    }
+
+    get rotationXDegree() {
+
+        return MathUtils.radToDeg(this.rotationX);
+
+    }
+
+    set rotationXDegree(value) {
+
+        this.setRotationX(MathUtils.degToRad(value));
 
     }
 
@@ -606,6 +640,24 @@ class ObstacleBase extends ObstacleMoveable {
     set rotationYDegree(value) {
 
         this.setRotationY(MathUtils.degToRad(value));
+
+    }
+
+    get rotationZ() {
+
+        return this.group.rotation.z;
+
+    }
+
+    get rotationZDegree() {
+
+        return MathUtils.radToDeg(this.rotationZ);
+
+    }
+
+    set rotationZDegree(value) {
+
+        this.setRotationZ(MathUtils.degToRad(value));
 
     }
 
@@ -1015,6 +1067,9 @@ class ObstacleBase extends ObstacleMoveable {
 
     // Rapier physics function
     rapierInstances = [];
+    // events
+    onRapierInstanceRemoved;
+    onRapierInstanceAdded;
 
     // can be inherited by children
     addRapierInstances() {

@@ -3,7 +3,8 @@ import { setupShadowLight, updateSingleLightCamera } from "../../components/shad
 import {
     DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
     AXES, GRID, 
-    ROOM, INSPECTOR_ROOM, SCENE, WATER_CUBE
+    ROOM, INSPECTOR_ROOM, SCENE, WATER_CUBE,
+    PHYSICS_TYPES
 } from '../../components/utils/constants.js';
 import { colorStr, colorArr } from "../../components/basic/colorBase.js";
 import { moveableObjectFilter, objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from "../../components/utils/objectHelper.js";
@@ -1125,14 +1126,31 @@ class SceneBuilder {
 
                     if (updateSetupOnly) {
 
-                        _origin.rotationY = find.father.rotationY;
+                        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE) {
+
+                            _origin.rotationY = find.father.rotationY;
+
+                        } else {
+
+                            _origin.rotation = this.rotationArr(find.father.rotation);
+
+                        }
 
                     } else {
 
-                        const { rotationY = 0 } = _target;
+                        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE) {
 
-                        find.father.setRotationY(rotationY);
-                        find.father.updateOBBs();
+                            const { rotationY = 0 } = _target;
+                            find.father.setRotationY(rotationY);
+                            find.father.updateOBBs();
+
+                        } else {
+
+                            const {rotation = [0, 0, 0]} = _target;
+                            find.father.setRotation(rotation);
+                            find.father.updateOBBs();
+
+                        }
 
                     }
 
@@ -1366,7 +1384,12 @@ class SceneBuilder {
 
             }
 
-            find.father.syncRapierWorld?.();
+            if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER) {
+
+                find.father.onRapierInstanceRemoved?.(find.father);
+                find.father.onRapierInstanceAdded?.(find.father);
+
+            }
 
         }
 

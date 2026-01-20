@@ -413,7 +413,6 @@ class Room {
 
             if (this.physics === PHYSICS_TYPES.RAPIER && isRapierObject(g)) {
 
-                g.addRapierInstances();
                 this.compounds.push(g);
 
             }

@@ -702,9 +702,13 @@ class BasicObject extends EventDispatcher {
     }
 
     // rapier function
+    // events
+    onRapierInstanceRemoved;
+    onRapierInstanceAdded;
+
     syncRapierWorld() {
 
-        if (this.mesh.userData.physics) {
+        if (this.mesh.userData.physics && !this.onRapierInstanceAdded && !this.onRapierInstanceRemoved) {
 
             const { body } = this.mesh.userData.physics;
 

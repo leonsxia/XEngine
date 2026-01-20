@@ -250,7 +250,7 @@ class RapierPhysics {
 
     removeMesh(mesh) {
 
-        const index = this.meshes.indexOf(mesh);
+        let index = this.meshes.indexOf(mesh);
 
         if (index !== - 1) {
 
@@ -267,6 +267,27 @@ class RapierPhysics {
 
             mesh.userData.physics.body = undefined;
             mesh.userData.physics.collider = undefined;
+
+        } else {
+
+            index = this.fixedMeshes.indexOf(mesh);
+
+            if (index !== -1) {
+
+                this.fixedMeshes.splice(index, 1);
+
+                if (!mesh.userData.physics) return;
+
+                const body = mesh.userData.physics.body;
+                const collider = mesh.userData.physics.collider;
+
+                if (body) this.removeBody(body);
+                if (collider) this.removeCollider(collider);
+
+                mesh.userData.physics.body = undefined;
+                mesh.userData.physics.collider = undefined;
+
+            }
 
         }
 

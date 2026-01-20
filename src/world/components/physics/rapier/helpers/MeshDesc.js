@@ -19,8 +19,8 @@ class MeshDesc {
     constructor(geometry = new GeometryDesc()) {
 
         this.geometry = geometry;
-        this.rotation._onChange();
-        this.quaternion._onChange();
+        this.rotation._onChange(this.onRotationChange.bind(this));
+        this.quaternion._onChange(this.onQuaternionChange.bind(this));
 
     }
 

@@ -185,7 +185,9 @@ class RapierWorld {
         for (let i = 0, il = this.compounds.length; i < il; i++) {
 
             const compound = this.compounds[i];
-            this.physics.addCompoundMesh(compound.group, compound.rapierInstances);
+            this.bindPickEvents(compound);
+            compound.rapierInstances.length = 0;
+            this.onObjectAdded(compound);
 
         }
 
@@ -196,6 +198,7 @@ class RapierWorld {
         for (let i = 0, il = this.floors.length; i < il; i++) {
 
             const floor = this.floors[i];
+            this.bindPickEvents(floor);
             floor.mesh.userData.physics = { mass: 0, restitution: 0 };
 
         }
@@ -310,6 +313,43 @@ class RapierWorld {
             this.removeActiveEnemies(tofu.name);
 
         }
+
+    }
+
+    onObjectRemoved(object) {
+
+        if (object.isObstacleBase || object.isInWallObjectBase) {
+
+            object.rapierInstances.length = 0;
+            this.physics.removeMesh(object.group);
+
+        } else {
+
+            this.physics.removeMesh(object.mesh);
+
+        }
+
+    }
+
+    onObjectAdded(object) {
+
+        if (object.isObstacleBase || object.isInWallObjectBase) {
+
+            object.addRapierInstances();
+            this.physics.addCompoundMesh(object.group, object.rapierInstances);
+
+        } else {
+
+            this.physics.addMesh(object.mesh);
+
+        }
+
+    }
+
+    bindPickEvents(object) {
+
+        object.onRapierInstanceRemoved = this.onObjectRemoved.bind(this);
+        object.onRapierInstanceAdded = this.onObjectAdded.bind(this);
 
     }
 

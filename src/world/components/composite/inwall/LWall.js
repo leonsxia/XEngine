@@ -1,6 +1,8 @@
 import { createCollisionPlane, createCollisionOBBPlane, createCollisionPlaneFree, createOBBPlane } from '../../physics/collisionHelper';
 import { InWallObjectBase } from './InWallObjectBase';
 import { green, yankeesBlue } from '../../basic/colorBase';
+import { GeometryDesc, MeshDesc } from '../../Models';
+import { BOX_GEOMETRY } from '../../utils/constants';
 
 class LWall extends InWallObjectBase {
 
@@ -207,6 +209,32 @@ class LWall extends InWallObjectBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    addRapierInstances() {
+
+        const thicknessS = this._thicknessS;
+        const thicknessT = this._thicknessT;
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        mass /= 2;
+
+        const boxTGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: thicknessS, height, depth });
+        const boxTMesh = new MeshDesc(boxTGeo);
+        boxTMesh.position.set((thicknessS - width) * .5, 0, 0);
+        boxTMesh.name = `${this.name}_boxT_mesh_desc`;
+        boxTMesh.userData.physics = { mass, restitution, friction };
+
+        const boxSGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: width - thicknessS, height, depth: thicknessT });
+        const boxSMesh = new MeshDesc(boxSGeo);
+        boxSMesh.position.set(thicknessS * .5, 0, (thicknessT - depth) * .5);
+        boxSMesh.name = `${this.name}_boxS_mesh_desc`;
+        boxSMesh.userData.physics = { mass, restitution, friction };
+
+        this.rapierInstances.push(boxTMesh, boxSMesh);
 
     }
 
