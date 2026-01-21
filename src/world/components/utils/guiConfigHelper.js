@@ -1,5 +1,5 @@
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './constants';
-import { objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from './objectHelper';
+import { isRapierObject, objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from './objectHelper';
 
 const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
@@ -821,7 +821,8 @@ function makeObjectsGuiConfig(objects) {
             !object.father.isFloor && !object.father.isCeiling && 
             !object.father.isArea &&
             !object.father.isWater && !object.father.isWaterCube &&
-            !object.father.isRotatableLadder
+            !object.father.isRotatableLadder &&
+            !isRapierObject(object.father)
         ) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -847,6 +848,34 @@ function makeObjectsGuiConfig(objects) {
                     }
 
                 }
+            }));
+
+        }
+
+        if (isRapierObject) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'rotationXDegree',
+                prop: 'rotation.x',
+                value: object.father,
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                type: 'object-angle'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'rotationYDegree',
+                prop: 'rotation.y',
+                value: object.father,
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                type: 'object-angle'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'rotationZDegree',
+                prop: 'rotation.z',
+                value: object.father,
+                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                type: 'object-angle'
             }));
 
         }

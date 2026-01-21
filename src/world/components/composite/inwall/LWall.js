@@ -212,7 +212,9 @@ class LWall extends InWallObjectBase {
 
     }
 
-    addRapierInstances() {
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
 
         const thicknessS = this._thicknessS;
         const thicknessT = this._thicknessT;

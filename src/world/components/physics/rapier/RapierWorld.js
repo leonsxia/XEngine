@@ -198,7 +198,6 @@ class RapierWorld {
 
             const compound = this.compounds[i];
             this.bindObjectSyncEvents(compound);
-            compound.rapierInstances.length = 0;
             compound.addRapierInstances();
             this.physics.addCompoundMesh(compound.group, compound.rapierInstances);
 

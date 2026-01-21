@@ -337,6 +337,12 @@ class InWallObjectBase {
     // can be inherited by children
     addRapierInstances() {}
 
+    clearRapierInstances() {
+
+        this.rapierInstances.length = 0;
+
+    }
+
     syncRapierWorld() {
 
         if (this.rapierInstances.length > 0) {
@@ -344,7 +350,6 @@ class InWallObjectBase {
             // remove and add instances
             if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
 
-                this.rapierInstances.length = 0;
                 this.onRapierInstanceRemoved(this);
                 this.addRapierInstances();
                 this.onRapierInstanceAdded(this);

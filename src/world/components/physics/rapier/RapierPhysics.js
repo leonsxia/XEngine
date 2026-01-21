@@ -162,8 +162,10 @@ class RapierPhysics {
             ? this.createInstancedBody(mesh, mass, shape)
             : this.createBody(_v1, _q1, mass, shape);
 
-        const { enableX = true, enableY = true, enableZ = true } = mesh.userData.physics;
-        body.setEnabledRotations(enableX, enableY, enableZ, true);
+        const { enableRotations: { enableRotX = true, enableRotY = true, enableRotZ = true } = {} } = mesh.userData.physics;
+        const { enableTranslations: { enableTransX = true, enableTransY = true, enableTransZ = true } = {}} = mesh.userData.physics;
+        body.setEnabledRotations(enableRotX, enableRotY, enableRotZ, true);
+        body.setEnabledTranslations(enableTransX, enableTransY, enableTransZ, true);
 
         mesh.userData.physics.body = body;
         mesh.userData.physics.collider = collider;
@@ -229,8 +231,10 @@ class RapierPhysics {
 
         if (!group.userData.physics) group.userData.physics = {};
 
-        const { enableX = true, enableY = true, enableZ = true } = group.userData.physics;
-        body.setEnabledRotations(enableX, enableY, enableZ, true);
+        const { enableRotations: { enableRotX = true, enableRotY = true, enableRotZ = true } = {} } = group.userData.physics;
+        const { enableTranslations: { enableTransX = true, enableTransY = true, enableTransZ = true } = {} } = group.userData.physics;
+        body.setEnabledRotations(enableRotX, enableRotY, enableRotZ, true);
+        body.setEnabledTranslations(enableTransX, enableTransY, enableTransZ, true);
 
         group.userData.physics.body = body;
         group.userData.physics.collider = colliders;

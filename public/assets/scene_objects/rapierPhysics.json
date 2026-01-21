@@ -496,6 +496,41 @@
                     "physics": { "mass": 300 }
                 },
                 {
+                    "type": "SquarePillar",
+                    "scale": [
+                        3,
+                        0.5,
+                        3
+                    ],
+                    "baseSize": 4.6,
+                    "enableOBBs": true,
+                    "frontMap": "BRICK_159",
+                    "frontNormal": "BRICK_159_NORMAL",
+                    "backMap": "BRICK_159",
+                    "backNormal": "BRICK_159_NORMAL",
+                    "leftMap": "BRICK_159",
+                    "leftNormal": "BRICK_159_NORMAL",
+                    "rightMap": "BRICK_159",
+                    "rightNormal": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room1_square_pillar1",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [
+                        -1.8,
+                        -2.33,
+                        -5
+                    ],
+                    "rotationY": 2.618,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
                     "type": "LWall",
                     "thicknessS": 0.8,
                     "thicknessT": 0.3,

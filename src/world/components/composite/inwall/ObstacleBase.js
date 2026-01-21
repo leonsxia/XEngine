@@ -1072,7 +1072,9 @@ class ObstacleBase extends ObstacleMoveable {
     onRapierInstanceAdded;
 
     // can be inherited by children
-    addRapierInstances() {
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
 
         const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
         const boxGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width: this.width, depth: this.depth, height: this.height });
@@ -1087,13 +1089,18 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    clearRapierInstances() {
+
+        this.rapierInstances.length = 0;
+
+    }
+
     syncRapierWorld() {
         
         if (this.rapierInstances.length > 0) {
 
             if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
 
-                this.rapierInstances.length = 0;
                 this.onRapierInstanceRemoved(this);
                 this.addRapierInstances();
                 this.onRapierInstanceAdded(this);
