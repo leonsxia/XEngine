@@ -1007,6 +1007,7 @@ class WorldScene {
             
             this.resetCharacter();
             this.player.resetHealth();
+            this.player.setRotation([0, 0, 0]);
 
         }
 

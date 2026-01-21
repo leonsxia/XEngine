@@ -540,7 +540,7 @@ class RapierWorld {
 
             // update rotation
             avatar.group.getWorldQuaternion(_q1);
-            collider.setRotation(_q1);
+            // collider.setRotation(_q1);
 
             // for avatar falling down check
             let isLanded = false;
@@ -613,7 +613,7 @@ class RapierWorld {
                 avatar.tickRotateActions(delta);
                 // update rotation
                 avatar.group.getWorldQuaternion(_q1);
-                collider.setRotation(_q1);
+                // collider.setRotation(_q1);
 
             }
 
@@ -622,6 +622,8 @@ class RapierWorld {
                 collider => !collider.checkByRay
             );
             const translation = controller.computedMovement();
+
+            if (controller.computedGrounded()) isLanded = true;
 
             position.x += translation.x;
             position.y += translation.y;

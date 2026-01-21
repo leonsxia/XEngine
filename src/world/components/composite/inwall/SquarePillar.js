@@ -83,6 +83,7 @@ class SquarePillar extends InWallObjectBase {
         );
 
         this.setPickLayers();
+        this.setCanBeIgnored();
 
     }
 

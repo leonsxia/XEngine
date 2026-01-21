@@ -1,4 +1,5 @@
-import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './constants';
+import { GLOBALS } from '../../systems/globals';
+import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, PHYSICS_TYPES } from './constants';
 import { isRapierObject, objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from './objectHelper';
 
 const DEFALUT_GRID_WIDTH = 50;
@@ -822,7 +823,7 @@ function makeObjectsGuiConfig(objects) {
             !object.father.isArea &&
             !object.father.isWater && !object.father.isWaterCube &&
             !object.father.isRotatableLadder &&
-            !isRapierObject(object.father)
+            GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE
         ) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
@@ -852,7 +853,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (isRapierObject) {
+        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER && isRapierObject(object.father)) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationXDegree',

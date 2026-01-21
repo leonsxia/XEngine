@@ -104,6 +104,7 @@ class LWall extends InWallObjectBase {
         );
 
         this.setPickLayers();
+        this.setCanBeIgnored();
     }
 
     async init() {

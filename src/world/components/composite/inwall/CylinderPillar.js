@@ -1,6 +1,8 @@
 import { createCollisionPlane, createCollisionOBBPlane, createCollisionOctagonFree, createOBBPlane } from '../../physics/collisionHelper';
 import { InWallObjectBase } from './InWallObjectBase';
 import { green, yankeesBlue } from '../../basic/colorBase';
+import { GeometryDesc, MeshDesc } from '../../Models';
+import { BOX_GEOMETRY } from '../../utils/constants';
 
 class CylinderPillar extends InWallObjectBase {
 
@@ -121,6 +123,7 @@ class CylinderPillar extends InWallObjectBase {
         );
 
         this.setPickLayers();
+        this.setCanBeIgnored();
 
     }
 
@@ -279,6 +282,43 @@ class CylinderPillar extends InWallObjectBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = width * Math.tan(.375 * Math.PI);
+        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        mass /= 4;
+
+        const boxCTGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth });
+        const boxCTMesh = new MeshDesc(boxCTGeo);
+        boxCTMesh.name = `${this.name}_boxCT_mesh_desc`;
+        boxCTMesh.userData.physics = { mass, restitution, friction };
+
+        const boxCSGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth });
+        const boxCSMesh = new MeshDesc(boxCSGeo);
+        boxCSMesh.name = `${this.name}_boxCS_mesh_desc`;
+        boxCSMesh.rotation.set(0, .5 * Math.PI, 0);
+        boxCSMesh.userData.physics = { mass, restitution, friction };
+
+        const boxLGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth });
+        const boxLMesh = new MeshDesc(boxLGeo);
+        boxLMesh.name = `${this.name}_boxL_mesh_desc`;
+        boxLMesh.rotation.set(0, .25 * Math.PI, 0);
+        boxLMesh.userData.physics = { mass, restitution, friction };
+
+        const boxRGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth });
+        const boxRMesh = new MeshDesc(boxRGeo);
+        boxRMesh.name = `${this.name}_boxR_mesh_desc`;
+        boxRMesh.rotation.set(0, - .25 * Math.PI, 0);
+        boxRMesh.userData.physics = { mass, restitution, friction };
+
+        this.rapierInstances.push(boxCTMesh, boxCSMesh, boxLMesh, boxRMesh);
 
     }
 

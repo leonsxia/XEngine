@@ -63,7 +63,7 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1, 1, 1],
-            "position": [3, 3, 5],
+            "position": [3, 3, 8],
             "rotation": [0, 3.1416, 0],
             "isActive": true,
             "sovRadius": 6.5,
@@ -80,17 +80,17 @@
             "currentRoom": "room1",
             "castShadow": true,
             "receiveShadow": true,
-            "scale": [2, 2, 2],
-            "position": [3, 2, 8],
+            "scale": [1, 1, 1],
+            "position": [3, 2, 12],
             "rotation": [0, 3.1416, 0],
             "isActive": true,
-            "sovRadius": 6.5,
+            "sovRadius": 7,
             "showBS": false,
             "variant": "standard",
-            "vel": 1.2,
+            "vel": 1.4,
             "rotateR": 1.1,
             "characterControllerSettings": {
-                "autoStepMaxHeight": 0.7
+                "autoStepMaxHeight": 0.5
             }
         },
         {
@@ -101,7 +101,7 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1.2, 1.2, 1.2],
-            "position": [-3, 2, 8],
+            "position": [-3, 2, 12],
             "rotation": [0, 3.1416, 0],
             "isActive": true,
             "sovRadius": 6.5,
@@ -310,7 +310,7 @@
             ]
         },
         {
-            "type": "Room",
+            "type": "InspectorRoom",
             "width": 30,
             "height": 5.5,
             "depth": 30,
@@ -329,6 +329,52 @@
             "enableWallOBBs": true,
             "position": [0, 2.5, 0],
             "rotationY": 0.5236,
+            "areas": [
+                {
+                    "name": "front_left",
+                    "width": 15,
+                    "height": 0.5,
+                    "depth": 15,
+                    "color": "#aaaaaa",
+                    "position": [7.5, -2.25, 7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [-3, 1.3, -3],
+                    "cameraTarget": [10, -6.74, 10]
+                },
+                {
+                    "name": "front_right",
+                    "width": 15,
+                    "height": 0.5,
+                    "depth": 15,
+                    "color": "#bbbbbb",
+                    "position": [-7.5, -2.25, 7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [3, 2.06, -3],
+                    "cameraTarget": [-10, -6.74, 10]
+                },
+                {
+                    "name": "back_left",
+                    "width": 15,
+                    "height": 0.5,
+                    "depth": 15,
+                    "color": "#cccccc",
+                    "position": [7.5, -2.25, -7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [-3, 3.29, 3],
+                    "cameraTarget": [10, -6.74, -10]
+                },
+                {
+                    "name": "back_right",
+                    "width": 15,
+                    "height": 0.5,
+                    "depth": 15,
+                    "color": "#dddddd",
+                    "position": [-7.5, -2.25, -7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [3, 1.3, 3],
+                    "cameraTarget": [-10, -6.74, -10]
+                }
+            ],
             "groups": [
                 {
                     "type": "BoxCube",
@@ -499,6 +545,35 @@
                     "physics": { "mass": 300 }
                 },
                 {
+                    "type": "HexCylinderPillar",
+                    "scale": [
+                        1,
+                        3.6
+                    ],
+                    "baseSize": 4.6,
+                    "map": "BRICK_159",
+                    "normalMap": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "name": "room1_hexCylinder1",
+                    "mapRatio": 1.5,
+                    "showArrow": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": false,
+                    "position": [
+                        2.5,
+                        -0.7009999999999998,
+                        -3.5
+                    ],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
                     "type": "SquarePillar",
                     "scale": [
                         3,
@@ -506,7 +581,7 @@
                         3
                     ],
                     "baseSize": 4.6,
-                    "enableOBBs": true,
+                    "enableOBBs": false,
                     "frontMap": "BRICK_159",
                     "frontNormal": "BRICK_159_NORMAL",
                     "backMap": "BRICK_159",
@@ -527,10 +602,41 @@
                     "climbable": true,
                     "position": [
                         -1.8,
-                        -2.33,
+                        -2.3,
                         -5
                     ],
                     "rotationY": 2.618,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "CylinderPillar",
+                    "scale": [
+                        1.5,
+                        1
+                    ],
+                    "baseSize": 4.6,
+                    "enableOBBs": false,
+                    "map": "BRICK_159",
+                    "normalMap": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room1_cylinder_pillar1",
+                    "showArrow": false,
+                    "enableWallOBBs": true,
+                    "isObstacle": true,
+                    "climbable": true,
+                    "position": [
+                        -2,
+                        -2,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "transparent": false,
+                    "canBeIgnored": true,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
@@ -559,7 +665,7 @@
                     "name": "room1_LWall1",
                     "showArrow": false,
                     "enableWallOBBs": true,
-                    "enableOBBs": true,
+                    "enableOBBs": false,
                     "isObstacle": true,
                     "climbable": false,
                     "position": [5, -1.2, 8],
