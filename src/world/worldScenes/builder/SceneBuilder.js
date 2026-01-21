@@ -562,6 +562,18 @@ class SceneBuilder {
         const sceneSpecs = objects.find(o => o.type === SCENE);
         const roomSpecs = objects.filter(o => o.type === ROOM || o.type === INSPECTOR_ROOM);
 
+        if (updateSetupOnly) {
+
+            _setup.settings.currentRoomSequence = this.worldScene.currentRoom.sequence;
+
+        } else {
+
+            const { settings: { currentRoomSequence = 0 } } = _targetSetup;
+            this.worldScene.changeRoom(currentRoomSequence);
+            this.worldScene.changeCamera(currentRoomSequence);
+
+        }
+
         for (let i = 0, il = players.length; i < il; i++) {
 
             const p = players[i];
@@ -747,7 +759,7 @@ class SceneBuilder {
 
                 }
 
-            }
+            }            
 
         }
 

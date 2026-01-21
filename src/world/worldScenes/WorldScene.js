@@ -195,7 +195,7 @@ class WorldScene {
             camera: { position = [0, 0, 0] }, defaultPlayer, resolution = 1,
             enableGui = false, enablePicker = false, enableShadow = false,
             enableTPC = false, enableIC = false,
-            physics
+            physics, currentRoomSequence = 0
         } = this.setup;
 
         // set camera initial position and save the state
@@ -206,6 +206,8 @@ class WorldScene {
         this.forceStaticRender = true;
 
         this.controls.defControl.saveState();
+
+        this.loadSequence = currentRoomSequence;
 
         // only set pixel ratio at first time
         if (devicePixelRatio > 1) {
@@ -804,6 +806,7 @@ class WorldScene {
                 );
 
             }
+
         }
 
     }

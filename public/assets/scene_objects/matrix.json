@@ -21,9 +21,9 @@
                 "z": 0
             },
             {
-                "x": 0,
-                "y": 0,
-                "z": 0
+                "x": -0.454,
+                "y": 0.907,
+                "z": -0.699
             }
         ],
         "allCameraPos": [
@@ -33,9 +33,9 @@
                 "z": 8
             },
             {
-                "x": 1.12,
-                "y": 2.957,
-                "z": 2.278
+                "x": 0.968,
+                "y": 3.439,
+                "z": 2.98
             }
         ],
         "allPlayerPos": [
@@ -54,7 +54,8 @@
         "postProcessing": {
             "bloomStrength": 1.68,
             "bloomRadius": 0.74
-        }
+        },
+        "currentRoomSequence": 0
     },
     "players": [
         {
