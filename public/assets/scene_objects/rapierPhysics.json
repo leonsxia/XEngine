@@ -88,7 +88,10 @@
             "showBS": false,
             "variant": "standard",
             "vel": 1.2,
-            "rotateR": 1.1
+            "rotateR": 1.1,
+            "characterControllerSettings": {
+                "autoStepMaxHeight": 0.7
+            }
         },
         {
             "name": "blackWidhow2",

@@ -1158,8 +1158,8 @@ class SceneBuilder {
 
                         } else {
 
-                            const { rotation = [0, 0, 0] } = _target;
-                            find.father.setRotation(rotation);
+                            const { rotationY, rotation = [0, 0, 0] } = _target;
+                            find.father.setRotation([rotation[0], rotationY ?? rotation[1], rotation[2]]);
                             find.father.updateOBBs();
 
                         }

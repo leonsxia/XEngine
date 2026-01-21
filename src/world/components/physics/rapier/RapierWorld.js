@@ -159,15 +159,20 @@ class RapierWorld {
 
         const meshDesc = avatar.rapierContainer.getInstanceByName(CHARACTER_CONTROLLER);
         const userData = meshDesc.userData;
+        const { characterControllerSettings: { 
+            offset = 0.01, snapToGroundDistance = 0.2, slideEnabled = true,
+            maxSlopeClimbAngle = 80, minSlopeSlideAngle = 60,
+            autoStepMaxHeight = STAIR_OFFSET_MAX, autoStepMinWidth = 0.2
+        } = {} } = avatar.specs;
 
-        const characterController = this.physics.world.createCharacterController(0.01);
+        const characterController = this.physics.world.createCharacterController(offset);
         characterController.setApplyImpulsesToDynamicBodies(true);
         characterController.setCharacterMass(userData.physics.mass ?? 60);
-        characterController.enableSnapToGround(0.2);
-        // characterController.setSlideEnabled(true);
-        characterController.setMaxSlopeClimbAngle(80 * Math.PI / 180);
-        characterController.setMinSlopeSlideAngle(60 * Math.PI / 180);
-        characterController.enableAutostep(STAIR_OFFSET_MAX, 0.2, true);
+        characterController.enableSnapToGround(snapToGroundDistance);
+        characterController.setSlideEnabled(slideEnabled);  // rapier default is true
+        characterController.setMaxSlopeClimbAngle(maxSlopeClimbAngle * Math.PI / 180);
+        characterController.setMinSlopeSlideAngle(minSlopeSlideAngle * Math.PI / 180);
+        characterController.enableAutostep(autoStepMaxHeight, autoStepMinWidth, true);
 
         userData.physics.controller = characterController;
 
@@ -210,7 +215,7 @@ class RapierWorld {
         for (let i = 0, il = this.floors.length; i < il; i++) {
 
             const floor = this.floors[i];
-            const { restitution = 0, friction = 0 } = floor.specs.physics;
+            const { physics: { restitution = 0, friction = 0 } = {} } = floor.specs;
 
             floor.setupRapierPhysics({ mass: 0, restitution, friction });
             this.bindObjectSyncEvents(floor);            
@@ -226,7 +231,7 @@ class RapierWorld {
             const terrain = this.terrains[i];
             const { width, height, widthSegments, heightSegments } = terrain.geometry.parameters;
             const { heights } = terrain.geometry.userData;
-            const { restitution = 0, friction = 0 } = terrain.specs.physics;
+            const { physics: { restitution = 0, friction = 0 } = {} } = terrain.specs;
             
             terrain.setupRapierPhysics({ mass: 0, restitution, friction });
             this.physics.addHeightfield(terrain.mesh, heightSegments, widthSegments, new Float32Array(heights), { x: width, y: 1, z: height });

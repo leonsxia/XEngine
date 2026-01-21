@@ -179,6 +179,8 @@ class SoldierFemale extends CombatPlayerBase {
         const { sovRadius = 10, showBS = false, enableCollision = true } = specs;
         const { createDefaultBoundingObjects = false } = specs;    
         const { HPMax = 100 } = specs;
+        const { characterControllerSettings } = specs;
+        const { physics = {} } = specs;
         const { isActive = true } = specs;
 
         const armedHeight = .4;
@@ -264,6 +266,7 @@ class SoldierFemale extends CombatPlayerBase {
             sovRadius, showBS, enableCollision, createDefaultBoundingObjects,
             weaponActionMapping, initialWeaponType, weapons,
             HPMax,
+            characterControllerSettings, physics,
             isActive
         };
 
@@ -311,7 +314,7 @@ class SoldierFemale extends CombatPlayerBase {
     addRapierInstances() {
 
         const { width, depth, height } = this.specs;
-        const mass = 55;
+        const { physics: { mass = 55 } = {} } = this.specs;
 
         const characterInstance = generateRapierCharacterInstance(this.rapierInstances.CHARACTER_CONTROLLER, { width, depth, height });
         characterInstance.userData.physics.mass = mass;

@@ -98,6 +98,8 @@ class BlackWidow extends CreatureBase {
         const { variant = 'standard' } = specs;
         const { createDefaultBoundingObjects = false } = specs;
         const { HPMax = 80 } = specs;
+        const { characterControllerSettings } = specs;
+        const { physics = {} } = specs;
         let { width, width2, depth, depth2, height } = specs;
         let { gltfScale = [1, 1, 1] } = specs;
         let { offsetY } = specs;
@@ -125,7 +127,8 @@ class BlackWidow extends CreatureBase {
             isActive, sovRadius, showBS, enableCollision,
             typeMapping,
             createDefaultBoundingObjects,
-            HPMax
+            HPMax,
+            characterControllerSettings, physics
         };
 
         super(setup);
@@ -166,8 +169,8 @@ class BlackWidow extends CreatureBase {
     addRapierInstances() {
 
         const { variant, typeMapping } = this.specs;
+        const { physics: { mass = variant === BLACK_WIDOW_TYPES_MAPPING.STANDARD.name ? 20 : 10 } = {} } = this.specs;
         const { rapierInstanceSize: { width, depth, height } } = typeMapping;
-        const mass = variant === BLACK_WIDOW_TYPES_MAPPING.STANDARD.name ? 50 : 25;
         const sphereGeometryDesc = new GeometryDesc({ type: SPHERE_GEOMETRY, radius: height / 2 });
         const characterInstance = new MeshDesc(sphereGeometryDesc);
         characterInstance.name = this.rapierInstances.CHARACTER_CONTROLLER;

@@ -191,6 +191,8 @@ class ZombieMale extends CreatureBase {
         const { variant = 'standard' } = specs;
         const { createDefaultBoundingObjects = false } = specs;
         const { HPMax = 100 } = specs;
+        const { characterControllerSettings } = specs;
+        const { physics = {} } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
         const soundSetting = Object.assign({}, SOUND_SETTINGS);
@@ -217,6 +219,7 @@ class ZombieMale extends CreatureBase {
             typeMapping,
             createDefaultBoundingObjects,
             HPMax,
+            characterControllerSettings, physics,
             focusHeight: .4,
             variant
         };
@@ -310,7 +313,7 @@ class ZombieMale extends CreatureBase {
 
         const { typeMapping } = this.specs;
         const { rapierInstanceSize: { width, depth, height } } = typeMapping;
-        const mass = 65;
+        const { physics: { mass = 65 } = {} } = this.specs;
 
         const characterInstance = generateRapierCharacterInstance(this.rapierInstances.CHARACTER_CONTROLLER, { width, depth, height });
         characterInstance.userData.physics.mass = mass;
