@@ -44,6 +44,7 @@ import {
     DungeonGate1,
     VerticalLadder,
     RotatableLadder,
+    Ladder,
     Terrain
 } from "../Models";
 import { ObstacleMoveable } from "../movement/ObstacleMoveable";
@@ -219,6 +220,7 @@ function objectFilter(object) {
         object instanceof DungeonGate1 ||
         object instanceof VerticalLadder ||
         object instanceof RotatableLadder ||
+        object instanceof Ladder ||
         object instanceof GlockItem ||
         object instanceof PistolItem ||
         object instanceof RevolverItem ||
@@ -322,7 +324,8 @@ function isRapierObject(object) {
         object instanceof SquarePillar ||
         object instanceof CylinderPillar ||
         object instanceof Slope ||
-        object instanceof Stairs
+        object instanceof Stairs ||
+        object instanceof Ladder
     ) {
 
         return true;

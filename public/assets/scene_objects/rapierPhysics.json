@@ -641,8 +641,8 @@
                 },
                 {
                     "type": "LWall",
-                    "thicknessS": 0.8,
-                    "thicknessT": 0.3,
+                    "thicknessS": 0.9,
+                    "thicknessT": 0.9,
                     "scale": [3, 2.6, 5],
                     "baseSize": 4.6,
                     "outTMap": "BRICK_159",
@@ -740,6 +740,102 @@
                         0.5672320068981571,
                         0
                     ],
+                    "physics": { "mass": 0 }
+                },
+                {
+                    "type": "Ladder",
+                    "scale": [
+                        2.33,
+                        4.6,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "name": "room1_rotatable_ladder_1",
+                    "position": [
+                        5,
+                        -1.15,
+                        3.57
+                    ],
+                    "rotation": [
+                        0.9913470151327791,
+                        3.141592653589793,
+                        0
+                    ],
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true,
+                    "physics": { "mass": 0 }
+                },
+                {
+                    "type": "Ladder",
+                    "scale": [
+                        1.5,
+                        2,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "name": "room1_rotatable_ladder_2",
+                    "position": [
+                        -2,
+                        -1.92,
+                        5.33
+                    ],
+                    "rotation": [
+                        1.0733774899765127,
+                        0,
+                        0
+                    ],
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true,
+                    "physics": { "mass": 0 }
+                },
+                {
+                    "type": "Ladder",
+                    "scale": [
+                        1,
+                        4.2,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "name": "room1_rotatable_ladder_3",
+                    "position": [
+                        1.7,
+                        -0.6377804337409438,
+                        8
+                    ],
+                    "rotation": [
+                        -1.5707963267948966,
+                        -0.4014257279586958,
+                        -1.5707963267948966
+                    ],
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true,
                     "physics": { "mass": 0 }
                 }
             ],
