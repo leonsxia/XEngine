@@ -712,7 +712,7 @@
                         2.09,
                         5.74
                     ],
-                    "stepHeight": 0.1,
+                    "stepHeight": 0.16,
                     "baseSize": 4.6,
                     "frontMap": "BRICK_159",
                     "frontNormal": "BRICK_159_NORMAL",

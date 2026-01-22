@@ -142,7 +142,7 @@ class Stairs extends Slope {
             const stepGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: i < this.#steps - 1 ? stepHeight : lastStepHeight, depth: stepDepth })
             const stepMesh = new MeshDesc(stepGeo);
             stepMesh.name = `${this.name}_step_${i}_mesh_desc`;
-            if (height < this.#steps - 1) {
+            if (i < this.#steps - 1) {
 
                 stepMesh.position.set(0, (stepHeight - height) * .5 + i * stepHeight, (depth - stepDepth) * .5 - i * stepDepth);
 
