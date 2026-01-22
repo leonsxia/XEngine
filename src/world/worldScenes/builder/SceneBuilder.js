@@ -569,7 +569,12 @@ class SceneBuilder {
         } else {
 
             const { settings: { currentRoomSequence = 0 } } = _targetSetup;
-            this.worldScene.changeRoom(currentRoomSequence);
+            if (this.worldScene.currentRoom.sequence !== currentRoomSequence) {
+
+                this.worldScene.changeRoom(currentRoomSequence);
+
+            }
+
             this.worldScene.changeCamera(currentRoomSequence);
 
         }
@@ -1145,6 +1150,7 @@ class SceneBuilder {
                         } else {
 
                             _origin.rotation = this.rotationArr(find.father.rotation);
+                            _origin.rotationY = find.father.rotation.y;
 
                         }
 

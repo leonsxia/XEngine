@@ -1,5 +1,5 @@
 import { 
-    BoxCube, CylinderPillar, HexCylinderPillar, LWall, Plane, Slope, SquarePillar, 
+    BoxCube, CylinderPillar, HexCylinderPillar, LWall, Plane, Slope, Stairs, SquarePillar, 
     ModernCeilingLamp01, SecurityLight, Television01, 
     FancyPictureFrame01, 
     RoundWoodenTable,  VintageGrandfatherClock, WoodenPicnicTable, 
@@ -320,7 +320,9 @@ function isRapierObject(object) {
         object instanceof HexCylinderPillar ||
         object instanceof LWall ||
         object instanceof SquarePillar ||
-        object instanceof CylinderPillar
+        object instanceof CylinderPillar ||
+        object instanceof Slope ||
+        object instanceof Stairs
     ) {
 
         return true;

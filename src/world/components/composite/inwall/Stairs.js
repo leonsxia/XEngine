@@ -1,7 +1,7 @@
-import { StairsSidePlane, StairsStepPlane } from '../../Models';
+import { GeometryDesc, MeshDesc, StairsSidePlane, StairsStepPlane } from '../../Models';
 import { Slope } from './Slope';
 import { yankeesBlue, basic } from '../../basic/colorBase';
-import { STAIRS_FRONT, STAIRS_TOP } from '../../utils/constants';
+import { BOX_GEOMETRY, STAIRS_FRONT, STAIRS_TOP } from '../../utils/constants';
 
 const DEFAULT_STEP_HEIGHT = .25;
 
@@ -31,6 +31,7 @@ class Stairs extends Slope {
         this.#stepHeight = stepHeight / this.scale[1];
         this.#steps = Math.ceil(this._height * this.scale[1] / stepHeight);
         this.#lastStepHeight = (this._height * this.scale[1] % stepHeight) / this.scale[1];
+        this.#lastStepHeight = Number.parseFloat(this.#lastStepHeight.toFixed(3)) === 0 ? this.#stepHeight : this.#lastStepHeight;
         this.#stepDepth = this._depth / this.#steps;
 
         this.slope.visible = false;
@@ -120,6 +121,60 @@ class Stairs extends Slope {
         this.stepTop.setScaleWithTexUpdate([this.scale[0], this.scale[2], this.scale[1]]);
 
         super.update(needToUpdateOBBnRay);
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        mass /= 4;
+
+        const stepHeight = this.#stepHeight * height;
+        const lastStepHeight = this.#lastStepHeight * height;
+        const stepDepth = depth / this.#steps;
+        for (let i = 0; i < this.#steps; i++) {
+
+            const stepGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: i < this.#steps - 1 ? stepHeight : lastStepHeight, depth: stepDepth })
+            const stepMesh = new MeshDesc(stepGeo);
+            stepMesh.name = `${this.name}_step_${i}_mesh_desc`;
+            if (height < this.#steps - 1) {
+
+                stepMesh.position.set(0, (stepHeight - height) * .5 + i * stepHeight, (depth - stepDepth) * .5 - i * stepDepth);
+
+            } else {
+
+                stepMesh.position.set(0, (height - lastStepHeight) * .5, (depth - stepDepth) * .5 - i * stepDepth);
+
+            }
+
+            stepMesh.userData.physics = { mass: 0, restitution, friction };
+            this.rapierInstances.push(stepMesh);
+
+        }
+
+        const bottomGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: depth, depth: 0 });
+        const bottomMesh = new MeshDesc(bottomGeo);
+        bottomMesh.name = `${this.name}_bottom_mesh_desc`;
+        bottomMesh.position.set(0, - height * .5, 0);
+        bottomMesh.rotation.set(Math.PI * .5, 0, 0);
+        bottomMesh.userData.physics = { mass, restitution, friction };
+
+        const backGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth: 0 });
+        const backMesh = new MeshDesc(backGeo);
+        backMesh.name = `${this.name}_back_mesh_desc`;
+        backMesh.position.set(0, 0, - depth * .5);
+        backMesh.rotation.set(0, Math.PI, 0);
+        backMesh.userData.physics = { mass, restitution, friction };
+
+        this.leftFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+        this.rightFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+
+        this.rapierInstances.push(bottomMesh, backMesh, this.leftFace.mesh, this.rightFace.mesh);
 
     }
 

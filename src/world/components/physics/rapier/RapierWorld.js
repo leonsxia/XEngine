@@ -281,9 +281,13 @@ class RapierWorld {
 
             } else {
 
-                const userData = instance.userData;
-                this.physics.removeCollider(userData.physics.collider);
-                userData.physics.collider = undefined;
+                const { collider } = instance.userData.physics;
+                if (collider) {
+                    
+                    this.physics.removeCollider(collider);
+                    instance.userData.physics.collider = undefined;
+
+                }
             
             }
 
@@ -303,10 +307,12 @@ class RapierWorld {
 
             } else {
 
+                const userData = instance.userData;
+                if (userData.physics.collider) return;
+
                 // re-create character collider
                 const avatar = rapierContainer.attachTo;
                 const geometryDesc = instance.geometry;
-                const userData = instance.userData;
                 const colliderDesc = getShape(geometryDesc, rapierContainer.scale);
                 avatar.getWorldPosition(_v1);
                 colliderDesc.setTranslation(..._v1);
@@ -397,8 +403,6 @@ class RapierWorld {
 
             }
 
-            if (find.dead) find.isActive = false;
-
         });
 
     }
@@ -434,8 +438,6 @@ class RapierWorld {
                 this.onTofuContainerChanged(find.rapierContainer);
             
             }
-
-            if (find.dead) find.isActive = false;
 
         });
 

@@ -741,8 +741,15 @@ class WorldScene {
             this.player.updateRoomInfo?.(this.currentRoom);
             this.player.setPosition(allPlayerPos[roomSequence], true);
             this.player.clearInSightTargets();
-            this.player.isActive = true;    // for temporary update, it will be reset after next step
+            /*
+                due to die action will set `isActive` to false, 
+                and in SimplePhysics `onTofuCollisionBoxChanged` will not take isActive = false into account,
+                for temporary update, it will be reset after next step
+            */
+            const isActive = this.player.isActive;
+            this.player.isActive = true;
             this.physics.addActivePlayers(this.player.name);
+            this.player.isActive = isActive;
 
         }
 
@@ -974,9 +981,16 @@ class WorldScene {
             const oldBoxHelper = this.scene.getObjectByName(enemy.boundingBoxHelper.name);
             if (enemy.currentRoom === this.currentRoom.name) {
 
-                // temporary update, it will be reset after next step
+                /*
+                    due to die action will set `isActive` to false, 
+                    and in SimplePhysics `onTofuCollisionBoxChanged` will not take isActive = false into account,
+                    for temporary update, it will be reset after next step
+                */
+                const isActive = enemy.isActive;
                 enemy.isActive = true;
                 this.physics.addActiveEnemies(enemy.name);
+                enemy.isActive = isActive;
+
                 this.scene.add(enemy.group);
 
                 if (enemy._showBBHelper) {

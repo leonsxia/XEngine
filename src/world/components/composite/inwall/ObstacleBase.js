@@ -44,7 +44,7 @@ class ObstacleBase extends ObstacleMoveable {
     isObstacleBase = true;
 
     canBeIgnored = false;
-    isSimplePhysics = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE ? true : false;
+    isSimplePhysics = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE;
 
     name = '';
     box;

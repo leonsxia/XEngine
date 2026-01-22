@@ -38,9 +38,10 @@ class Tofu extends TofuBase {
         } else if (!this.health.isEmpty && this.dead) {
 
             // resurrection
-            this.isActive = true;
             this.resetAnimation();
-            this.adjustCharacterControllerInstance();
+            // only when die animation over will `isActive` be set to false, otherwise there will be duplicated
+            if (!this.isActive) this.adjustCharacterControllerInstance();
+            this.isActive = true;
             this.setAllBoundingBoxLayers(true);
 
         } else {

@@ -1,8 +1,8 @@
 import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree, createOBBBox } from '../../physics/collisionHelper';
 import { InWallObjectBase } from './InWallObjectBase';
 import { yankeesBlue, basic, green, red } from '../../basic/colorBase';
-import { TOFU_RAY_LAYER, OBSTACLE_RAY_LAYER } from '../../utils/constants';
-import { Plane } from '../../Models';
+import { TOFU_RAY_LAYER, OBSTACLE_RAY_LAYER, BOX_GEOMETRY } from '../../utils/constants';
+import { GeometryDesc, MeshDesc, Plane } from '../../Models';
 
 const DEFAULT_STEP_HEIGHT = .25;
 
@@ -44,55 +44,62 @@ class Slope extends InWallObjectBase {
 
         this._scale = new Array(...scale);
 
-        const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height } };
-        const bufferSpecs = { size: { width: this._width, depth: .2, height: .1 }, color: yankeesBlue };
-
-        const slopeSpecs = this.makePlaneConfig({ width: this._width, height: this._slopeHeight, color: yankeesBlue, map: slopeMap, normalMap: slopeNormal });
-        const topPlaneSpecs = this.makePlaneConfig({ width: this._width, height: 1 });
+        const slopeSpecs = this.makePlaneConfig({ width: this._width, height: this._slopeHeight, color: yankeesBlue, map: slopeMap, normalMap: slopeNormal });        
         const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, leftHanded: true, color: basic, map: leftMap, normalMap: leftNormal });
         const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, leftHanded: false, color: basic, map: rightMap, normalMap: rightNormal });
         const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal });
         const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
 
-        const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
-
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], false, false);
-        this.bottomBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_bottom_buffer`, [0, 0, 0], [0, 0, 0], false, false);
-        this.topBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_top_buffer`, [0, 0, 0], [0, 0, 0], false, false);
-
-        this.topPlane = new Plane(Object.assign({ name: `${name}_top_plane` }, topPlaneSpecs));
-        this.topPlane.setRotation([- Math.PI * .5, 0, 0]);
+        const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;                
         this.slope = createOBBPlane(slopeSpecs, `${name}_slope`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
         this.leftFace = createCollisionTrianglePlane(leftSpecs, `${name}_left`, [0, 0, 0], Math.PI * .5, receiveShadow, castShadow, showArrow);
         this.rightFace = createCollisionTrianglePlane(rightSpecs, `${name}_right`, [0, 0, 0], - Math.PI * .5, receiveShadow, castShadow, showArrow);
         this.backFace = createWallFunction(backSpecs, `${name}_back`, [0, 0, 0], Math.PI, receiveShadow, castShadow, showArrow);
-
-        this.createSideOBBs();
-
+        
         this.slope.mesh.layers.enable(TOFU_RAY_LAYER);
         this.slope.mesh.layers.enable(OBSTACLE_RAY_LAYER);
-        this.box.visible = false;
-        this.bottomBoxBuffer.visible = false;
-        this.topBoxBuffer.visible = false;
-        this.topPlane.mesh.layers.enable(TOFU_RAY_LAYER);
-        this.topPlane.visible = false;
-
+                
         if (!this.enableOBBs) {
 
             this.bottomFace = createCollisionPlaneFree(bottomSpecs, `${name}_bottom`, [0, 0, 0], [Math.PI * .5, 0, 0], receiveShadow, true, false, showArrow);
-
             this.bottoms = [this.bottomFace];
 
         } else {
 
             this.bottomFace = createOBBPlane(bottomSpecs, `${name}_bottomOBB`, [0, 0, 0], [Math.PI * .5, 0, 0], receiveShadow, true);
-
             this.bottomOBBs = [this.bottomFace];
 
         }
 
-        const { needUpdate = true } = specs;
+        if (this.isSimplePhysics) {
 
+            const topPlaneSpecs = this.makePlaneConfig({ width: this._width, height: 1 });
+            this.topPlane = new Plane(Object.assign({ name: `${name}_top_plane` }, topPlaneSpecs));
+            this.topPlane.setRotation([- Math.PI * .5, 0, 0]);
+            this.group.add(this.topPlane.mesh);
+            this.topPlane.mesh.layers.enable(TOFU_RAY_LAYER);
+            this.topPlane.visible = false;
+
+            const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height } };
+            const bufferSpecs = { size: { width: this._width, depth: .2, height: .1 }, color: yankeesBlue };
+            this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], false, false);
+            this.bottomBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_bottom_buffer`, [0, 0, 0], [0, 0, 0], false, false);
+            this.topBoxBuffer = createOBBBox(bufferSpecs, `${name}_obb_top_buffer`, [0, 0, 0], [0, 0, 0], false, false);
+            this.group.add(
+                this.box.mesh,
+                this.bottomBoxBuffer.mesh,
+                this.topBoxBuffer.mesh
+            );
+            
+            this.box.visible = false;
+            this.bottomBoxBuffer.visible = false;
+            this.topBoxBuffer.visible = false;
+
+            this.createSideOBBs();
+
+        }
+
+        const { needUpdate = true } = specs;
         if (needUpdate) {
 
             this.update(false);
@@ -102,11 +109,7 @@ class Slope extends InWallObjectBase {
         this.walls.push(this.leftFace, this.rightFace, this.backFace);
 
         this.group.add(
-            this.box.mesh,
-            this.bottomBoxBuffer.mesh,
-            this.topBoxBuffer.mesh,
             this.slope.mesh,
-            this.topPlane.mesh,
             this.leftFace.mesh,
             this.rightFace.mesh,
             this.backFace.mesh,
@@ -202,9 +205,13 @@ class Slope extends InWallObjectBase {
 
         this.slope.updateOBB(needUpdateMatrixWorld);
 
-        this.box.updateOBB(needUpdateMatrixWorld);
-        this.bottomBoxBuffer.updateOBB(needUpdateMatrixWorld);
-        this.topBoxBuffer.updateOBB(needUpdateMatrixWorld);
+        if (this.isSimplePhysics) {
+
+            this.box.updateOBB(needUpdateMatrixWorld);
+            this.bottomBoxBuffer.updateOBB(needUpdateMatrixWorld);
+            this.topBoxBuffer.updateOBB(needUpdateMatrixWorld);
+
+        }
 
     }
 
@@ -215,23 +222,35 @@ class Slope extends InWallObjectBase {
         const depth = this._depth * this.scale[2];
         const bufferSize = { width, depth: .2, height: .1 };
 
-        // update box
-        this.box.setScale(this.scale);
+        if (this.isSimplePhysics) {
 
-        // update buffer
-        this.bottomBoxBuffer.setScale([this.scale[0], 1, 1])
-            .setPosition([0, - height * .5 + bufferSize.height * .5, depth * .5 + bufferSize.depth * .5]);
-        this.topBoxBuffer.setScale([this.scale[0], 1, 1])
-            .setPosition([0, height * .5 + bufferSize.height * .5, - depth * .5 - bufferSize.depth * .5]);
+            // update box
+            this.box.setScale(this.scale);
 
-        // update slope & top plane
-        const slopeHeight = Math.sqrt(depth * depth + height * height);
+            // update buffer
+            this.bottomBoxBuffer.setScale([this.scale[0], 1, 1])
+                .setPosition([0, - height * .5 + bufferSize.height * .5, depth * .5 + bufferSize.depth * .5]);
+            this.topBoxBuffer.setScale([this.scale[0], 1, 1])
+                .setPosition([0, height * .5 + bufferSize.height * .5, - depth * .5 - bufferSize.depth * .5]);
 
-        this.slope.setScaleWithTexUpdate([this.scale[0], slopeHeight / this._slopeHeight, 1])
-            .setRotation([- Math.atan(depth / height), 0, 0]);
-
-        this.topPlane.setScale([this.scale[0], 1, 1])
+            // update top plane
+            this.topPlane.setScale([this.scale[0], 1, 1])
             .setPosition([0, height * .5, - depth * .5 - this.topPlane.height * .5]);
+
+            // update side obbs
+            const { stepHeight = DEFAULT_STEP_HEIGHT } = this.specs;
+            const bottomY = (stepHeight - height) * .5;
+            this.leftOBBFace.setScale([this.scale[2], 1, 1])
+                .setPosition([width * .5, bottomY, 0]);
+            this.rightOBBFace.setScale([this.scale[2], 1, 1])
+                .setPosition([- width * .5, bottomY, 0]);
+
+        }
+
+        // update slope
+        const slopeHeight = Math.sqrt(depth * depth + height * height);
+        this.slope.setScaleWithTexUpdate([this.scale[0], slopeHeight / this._slopeHeight, 1])
+            .setRotation([- Math.atan(depth / height), 0, 0]);        
 
         // update faces
         this.leftFace.setScaleWithTexUpdate([this.scale[2], this.scale[1], 1])
@@ -243,19 +262,49 @@ class Slope extends InWallObjectBase {
         this.bottomFace.setScaleWithTexUpdate([this.scale[0], this.scale[2], 1])
             .setPosition([0, - height * .5, 0]);
 
-        // update side obbs
-        const { stepHeight = DEFAULT_STEP_HEIGHT } = this.specs;
-        const bottomY = (stepHeight - height) * .5;
-        this.leftOBBFace.setScale([this.scale[2], 1, 1])
-            .setPosition([width * .5, bottomY, 0]);
-        this.rightOBBFace.setScale([this.scale[2], 1, 1])
-            .setPosition([- width * .5, bottomY, 0]);
-
         if (needToUpdateOBBnRay) {
 
             this.updateOBBs();
 
         }
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        mass /= 5;
+        
+        const slopeHeight = Math.sqrt(depth * depth + height * height);
+        const slopeGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: slopeHeight, depth: 0 });
+        const slopeMesh = new MeshDesc(slopeGeo);
+        slopeMesh.name = `${this.name}_slope_mesh_desc`;
+        slopeMesh.rotation.set(- Math.atan(depth / height), 0, 0);
+        slopeMesh.userData.physics = { mass, restitution, friction };
+
+        const bottomGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: depth, depth: 0 });
+        const bottomMesh = new MeshDesc(bottomGeo);
+        bottomMesh.name = `${this.name}_bottom_mesh_desc`;
+        bottomMesh.position.set(0, - height * .5, 0);
+        bottomMesh.rotation.set(Math.PI * .5, 0, 0);
+        bottomMesh.userData.physics = { mass, restitution, friction };
+
+        const backGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth: 0 });
+        const backMesh = new MeshDesc(backGeo);
+        backMesh.name = `${this.name}_back_mesh_desc`;
+        backMesh.position.set(0, 0, - depth * .5);
+        backMesh.rotation.set(0, Math.PI, 0);
+        backMesh.userData.physics = { mass, restitution, friction };
+
+        this.leftFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+        this.rightFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+
+        this.rapierInstances.push(slopeMesh, bottomMesh, backMesh, this.leftFace.mesh, this.rightFace.mesh);
 
     }
 

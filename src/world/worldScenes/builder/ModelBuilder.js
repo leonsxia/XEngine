@@ -672,7 +672,7 @@ class ModelBuilder {
     createCylinderPillar(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { map, topMap, bottomMap, normalMap, topNormal, bottomNormal } = specs;
 
         const maps = [{ map }, { topMap }, { bottomMap }, { normalMap }, { topNormal }, { bottomNormal }];
@@ -681,7 +681,9 @@ class ModelBuilder {
 
         object = new CylinderPillar(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -692,7 +694,7 @@ class ModelBuilder {
     createSlope(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0 ,0], updateOBBs = true } = specs;
         const { backMap, leftMap, rightMap, slopeMap, bottomMap } = specs;
         const { backNormal, leftNormal, rightNormal, slopeNormal, bottomNormal } = specs;
 
@@ -702,7 +704,9 @@ class ModelBuilder {
 
         object = new Slope(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -713,7 +717,7 @@ class ModelBuilder {
     createStairs(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { frontMap, topMap, sideMap, backMap, bottomMap } = specs;
         const { frontNormal, topNormal, sideNormal, backNormal, bottomNormal } = specs;
 
@@ -723,7 +727,9 @@ class ModelBuilder {
 
         object = new Stairs(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -734,7 +740,7 @@ class ModelBuilder {
     createHexCylinderPillar(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal } = specs;
 
         const maps = [{ map }, { normalMap }, { topMap }, { topNormal }, { bottomMap }, { bottomNormal }];
@@ -743,7 +749,9 @@ class ModelBuilder {
 
         object = new HexCylinderPillar(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
