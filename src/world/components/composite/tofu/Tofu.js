@@ -33,6 +33,9 @@ class Tofu extends TofuBase {
         
         if (this.health.isEmpty && !this.dead) {
             // dead
+            // need to reset position.y to avoid falling into other colliders
+            this.getWorldPosition(_v1);
+            this.setPosition([_v1.x, _v1.y + this.height * .5, _v1.z], true);
             this.setStateAfterDamageReceived();
 
         } else if (!this.health.isEmpty && this.dead) {
