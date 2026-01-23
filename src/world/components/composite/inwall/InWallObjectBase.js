@@ -343,18 +343,12 @@ class InWallObjectBase {
 
     }
 
-    syncRapierWorld() {
+    syncRapierWorld(force = false) {
 
         if (this.rapierInstances.length > 0) {
 
-            // remove and add instances
-            if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
-
-                this.onRapierInstanceRemoved(this);
-                this.addRapierInstances();
-                this.onRapierInstanceAdded(this);
-
-            } else {
+            
+            if (force || !this.onRapierInstanceRemoved || !this.onRapierInstanceAdded) {
 
                 const { body } = this.group.userData.physics;
                 if (body) {
@@ -365,6 +359,13 @@ class InWallObjectBase {
                     body.setRotation(_q1);
 
                 }
+                
+            } else if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
+
+                // remove and add instances
+                this.onRapierInstanceRemoved(this);
+                this.addRapierInstances();
+                this.onRapierInstanceAdded(this);
 
             }
 

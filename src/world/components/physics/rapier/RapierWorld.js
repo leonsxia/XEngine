@@ -6,6 +6,7 @@ import { Logger } from '../../../systems/Logger';
 const CHARACTER_CONTROLLER = 'characterController';
 const STAIR_OFFSET_MAX = .3;
 const DOWN_RAY_LENGTH = .52;
+const PICKABLE_DOWN_RAY_LENGTH = 1;
 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
@@ -255,12 +256,18 @@ class RapierWorld {
                 if (idx === -1) {
 
                     this.compounds.push(obj);
+                    this.bindObjectSyncEvents(obj);
+                    obj.addRapierInstances();
+                    this.onObjectAdded(obj);
 
                 }
 
             } else if (idx > -1) {
 
                 this.compounds.splice(idx, 1);
+                this.onObjectRemoved(obj);
+                // make sure it won't be added again when resetScene or loadScene
+                obj.clearRapierEvents();
 
             }
 
@@ -403,6 +410,9 @@ class RapierWorld {
 
             }
 
+            // make sure die action is over
+            if (find.dead && !find.AWS.isLooping) find.isActive = false;
+
         });
 
     }
@@ -439,6 +449,9 @@ class RapierWorld {
             
             }
 
+            // make sure die action is over
+            if (find.dead && !find.AWS.isLooping) find.isActive = false;
+
         });
 
     }
@@ -461,6 +474,9 @@ class RapierWorld {
 
     }
 
+    // changeRoom will remove all dynamic and fixed bodies from rapier physics world when initPhysics, 
+    // so need to remove dead player/enemies from actives first,
+    // then they will be added again after initPhysics
     cleanupAvatars() {
 
         for (let i = 0, il = this.players.length; i < il; i++) {
@@ -503,8 +519,62 @@ class RapierWorld {
 
         this.playerTick(delta);
         this.enemyTick(delta);
+        this.fixedItemTick(delta);
 
         this.physics.step(delta);
+
+    }
+
+    fixedItemTick(delta) {
+
+        for (let i = 0, il = this.compounds.length; i < il; i++) {
+
+            const item = this.compounds[i];
+            if (item.isPickableItem && !item.group.isPicked) {
+                
+                const { body, collider } = item.group.userData.physics;
+                const position = body.translation();
+
+                 // check on land
+                const maxToi = item.height * PICKABLE_DOWN_RAY_LENGTH;
+                _v1.set(position.x, position.y, position.z);    // origin
+
+                let isLanded = false;
+
+                // collect on land points and return the highest one
+                const onLandPoints = [];
+
+                const ray = new this.physics.RAPIER.Ray(_v1, _down);
+                const hit = this.physics.world.castRay(ray, maxToi, false, null, null, null, null,                     
+                    (col) => collider.indexOf(col) === -1
+                );
+
+                if (hit) {
+
+                    // The hit point is obtained from the ray's origin and direction: `origin + dir * timeOfImpact`.
+                    onLandPoints.push(_v1.add(_v2.copy(_down).multiplyScalar(hit.timeOfImpact)));
+                    item.onSlopePointsAdjust(onLandPoints);
+                    isLanded = true;
+
+                }
+
+                item.isInAir = !isLanded;
+
+                if (item.isInAir) {
+
+                    item.tickFall(delta);
+
+                } else {
+
+                    item.resetFallingState();
+
+                }
+
+                item.syncRapierWorld(true);
+
+            }
+
+        }
 
     }
 
@@ -548,7 +618,7 @@ class RapierWorld {
             let isLanded = false;
 
             // collect on land points and return the highest one
-            const onLandPoints = [];  
+            const onLandPoints = [];
 
             if (!avatar.isClimbingUp) {
 

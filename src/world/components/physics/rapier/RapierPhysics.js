@@ -197,9 +197,11 @@ class RapierPhysics {
 
         }
 
+        if (!group.userData.physics) group.userData.physics = {};
+        const { rigidBodyType } = group.userData.physics;
         group.updateWorldMatrix(true, false);
         group.matrixWorld.decompose(_v1, _q1, _vector);
-        const body = this.createRigidBody(_v1, _q1, totalMass ? 'dynamic' : 'fixed');
+        const body = this.createRigidBody(_v1, _q1, rigidBodyType ?? (totalMass ? 'dynamic' : 'fixed'));
 
         for (let i = 0, il = children.length; i < il; i++) {
 
@@ -228,8 +230,6 @@ class RapierPhysics {
             totalMass += mass;
 
         }
-
-        if (!group.userData.physics) group.userData.physics = {};
 
         const { enableRotations: { enableRotX = true, enableRotY = true, enableRotZ = true } = {} } = group.userData.physics;
         const { enableTranslations: { enableTransX = true, enableTransY = true, enableTransZ = true } = {} } = group.userData.physics;
@@ -395,6 +395,18 @@ class RapierPhysics {
 
                 {
                     const desc = RAPIER.RigidBodyDesc.dynamic();
+                    desc.setTranslation(...position);
+                    if (quaternion !== null) desc.setRotation(quaternion);
+
+                    body = this.world.createRigidBody(desc);
+                }
+
+                break;
+
+            case 'kinematicPositionBased':
+
+                {
+                    const desc = RAPIER.RigidBodyDesc.kinematicPositionBased();
                     desc.setTranslation(...position);
                     if (quaternion !== null) desc.setRotation(quaternion);
 

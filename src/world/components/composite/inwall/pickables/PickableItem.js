@@ -10,6 +10,7 @@ import { getImageUrl } from "../../../utils/imageHelper";
 import { addElementClass, removeElementClass } from "../../../utils/htmlHelper";
 import { getJsonItem } from "../../../utils/jsonHelper";
 import { JSON_NAMES } from "../../../utils/documentary";
+import { RIGID_BODY_TYPES } from "../../../utils/constants";
 
 class PickableItem extends ObstacleBase {
 
@@ -275,6 +276,7 @@ class PickableItem extends ObstacleBase {
         const local = new Vector3(0, 0, 0.5);
         const worldPos = local.applyMatrix4(owner.group.matrixWorld);
         this.group.position.copy(worldPos);
+        this.syncRapierWorld(true);
         this.resetFallingState();
         this.updateOBBs();
 
@@ -299,8 +301,22 @@ class PickableItem extends ObstacleBase {
 
     tick(delta) {
 
+        if (this.group.isPicked) return;
+
         this.group.rotation.y = (this.group.rotation.y + 0.5 * delta) % (2 * Math.PI);
         this.updateOBBs();
+        this.syncRapierWorld(true);
+
+    }
+
+    addRapierInstances() {
+
+        super.addRapierInstances();
+        this.group.userData.physics = {
+            enableRotations: { enableRotX: false, enableRotY: true, enableRotZ: false },
+            enableTranslations: { enableTransX: false, enableTransY: true, enableTransZ: false },
+            rigidBodyType: RIGID_BODY_TYPES.KENEMATIC_POSITION_BASED
+        }
 
     }
 

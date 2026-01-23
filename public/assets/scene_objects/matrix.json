@@ -560,7 +560,7 @@
                         10.63
                     ],
                     "rotationY": 0,
-                    "currentRoom": "safe_room_1",
+                    "currentRoom": "room1",
                     "isPicked": true,
                     "belongTo": "jill",
                     "ammo": {

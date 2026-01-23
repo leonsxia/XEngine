@@ -792,7 +792,7 @@ class SceneBuilder {
                 .updateOBB()
                 .updateRay?.()
                 .updateWalls?.()
-                .syncRapierWorld?.();
+                .syncRapierWorld?.(true);
 
             findPlayer.currentHP = currentHP ?? findPlayer.health.max;
 
@@ -822,7 +822,7 @@ class SceneBuilder {
                 .updateOBB()
                 .updateRay?.()
                 .updateWalls?.()
-                .syncRapierWorld?.();
+                .syncRapierWorld?.(true);
 
             findEnemy.currentHP = currentHP ?? findEnemy.health.max;
 
@@ -1298,7 +1298,6 @@ class SceneBuilder {
 
                         const { rotation = [0, 0, 0] } = _target;
                         find.father.setRotation(rotation);
-                        find.father.syncRapierWorld();
 
                     }
                         

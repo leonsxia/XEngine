@@ -746,10 +746,8 @@ class WorldScene {
                 and in SimplePhysics `onTofuCollisionBoxChanged` will not take isActive = false into account,
                 for temporary update, it will be reset after next step
             */
-            const isActive = this.player.isActive;
             this.player.isActive = true;
             this.physics.addActivePlayers(this.player.name);
-            this.player.isActive = isActive;
 
         }
 
@@ -986,10 +984,8 @@ class WorldScene {
                     and in SimplePhysics `onTofuCollisionBoxChanged` will not take isActive = false into account,
                     for temporary update, it will be reset after next step
                 */
-                const isActive = enemy.isActive;
                 enemy.isActive = true;
                 this.physics.addActiveEnemies(enemy.name);
-                enemy.isActive = isActive;
 
                 this.scene.add(enemy.group);
 

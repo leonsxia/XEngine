@@ -1076,7 +1076,13 @@ class ObstacleBase extends ObstacleMoveable {
 
         if (needClear) this.clearRapierInstances();
 
-        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        const { 
+            physics: {
+                mass = 0, restitution = 0, friction = 0,
+                enableRotations = {},
+                enableTranslations = {}
+            } = {}
+        } = this.specs;
         const boxGeometryDesc = new GeometryDesc({ type: BOX_GEOMETRY, width: this.width, depth: this.depth, height: this.height });
         const boxMeshDesc = new MeshDesc(boxGeometryDesc);
 
@@ -1084,6 +1090,9 @@ class ObstacleBase extends ObstacleMoveable {
         boxMeshDesc.userData.physics.mass = mass;
         boxMeshDesc.userData.physics.restitution = restitution;
         boxMeshDesc.userData.physics.friction = friction;
+        this.group.userData.physics = {
+            enableRotations, enableTranslations
+        }
 
         this.rapierInstances.push(boxMeshDesc);
 
@@ -1095,17 +1104,11 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
-    syncRapierWorld() {
+    syncRapierWorld(force = false) {
         
         if (this.rapierInstances.length > 0) {
 
-            if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
-
-                this.onRapierInstanceRemoved(this);
-                this.addRapierInstances();
-                this.onRapierInstanceAdded(this);
-
-            } else {
+            if (force || !this.onRapierInstanceRemoved || !this.onRapierInstanceAdded) {
 
                 const { body } = this.group.userData.physics;
                 if (body) {
@@ -1116,6 +1119,12 @@ class ObstacleBase extends ObstacleMoveable {
                     body.setRotation(_q1);
 
                 }
+                
+            } else if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
+
+                this.onRapierInstanceRemoved(this);
+                this.addRapierInstances();
+                this.onRapierInstanceAdded(this);
 
             }
 
@@ -1126,6 +1135,13 @@ class ObstacleBase extends ObstacleMoveable {
     onRapierUpdated() {
 
         this.updateOBBs();
+
+    }
+
+    clearRapierEvents() {
+
+        this.onRapierInstanceRemoved = undefined;
+        this.onRapierInstanceAdded = undefined;
 
     }
 

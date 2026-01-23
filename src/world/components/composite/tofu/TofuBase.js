@@ -1226,7 +1226,7 @@ class TofuBase extends Moveable2D {
             this.updateAccessories();
             this.setSlopeIntersection();
             this.resetFallingState();
-            this.syncRapierWorld();
+            this.syncRapierWorld(true);
 
         }
 
@@ -1515,7 +1515,7 @@ class TofuBase extends Moveable2D {
 
     }
 
-    syncRapierWorld() {
+    syncRapierWorld(force = false) {
 
         if (this.rapierContainer.actives.length === 0) return;
 
@@ -1524,16 +1524,7 @@ class TofuBase extends Moveable2D {
 
             const { collider, body } = activeInstance.userData.physics;
 
-            if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
-
-                if (collider || body) {
-
-                    this.onRapierInstanceRemoved(this);
-                    this.onRapierInstanceAdded(this);
-
-                }
-
-            } else {
+            if (force || !this.onRapierInstanceRemoved || !this.onRapierInstanceAdded) {
 
                 if (body) {
 
@@ -1550,6 +1541,15 @@ class TofuBase extends Moveable2D {
                     this.group.matrixWorld.decompose(_v1, _q1, _v2);
                     collider.setTranslation(_v1);
                     collider.setRotation(_q1);
+
+                }
+
+            } else if (this.onRapierInstanceRemoved && this.onRapierInstanceAdded) {
+
+                if (collider || body) {
+
+                    this.onRapierInstanceRemoved(this);
+                    this.onRapierInstanceAdded(this);
 
                 }
 

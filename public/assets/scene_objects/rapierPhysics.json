@@ -306,6 +306,174 @@
                     "belongTo": "jill",
                     "isPicked": true,
                     "isArmed": true
+                },
+                {
+                    "type": "PistolAmmoBox",
+                    "src": "PISTOL_AMMO_BOX_ITEM",
+                    "name": "pistol_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -5,
+                        1,
+                        -3.2
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 35
+                    },
+                    "physics": {
+                        "mass": 0
+                    }
+                },
+                {
+                    "type": "PistolAmmoBox",
+                    "src": "PISTOL_AMMO_BOX_ITEM",
+                    "name": "pistol_ammo_box_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        5,
+                        2,
+                        10.63
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": true,
+                    "belongTo": "jill",
+                    "ammo": {
+                        "count": 30
+                    },
+                    "physics": {
+                        "mass": 0
+                    }
+                },
+                {
+                    "type": "MagnumAmmoBox",
+                    "src": "MAGNUM_AMMO_BOX_ITEM",
+                    "name": "magnum_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -4.5,
+                        1,
+                        -3.2
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 10
+                    }
+                },
+                {
+                    "type": "SMGAmmoBox",
+                    "src": "SMG_AMMO_BOX_ITEM",
+                    "name": "smg_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -4,
+                        1,
+                        -3.2
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 90
+                    }
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitSmall",
+                    "name": "small_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -4,
+                        1,
+                        -2.7
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitMedium",
+                    "name": "medium_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -3.5,
+                        1,
+                        -2.7
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitLarge",
+                    "name": "large_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -3,
+                        1,
+                        -2.7
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false
                 }
             ]
         },

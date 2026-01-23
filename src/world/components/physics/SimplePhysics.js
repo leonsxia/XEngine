@@ -96,6 +96,8 @@ class SimplePhysics {
 
             }
 
+            if (find.dead) find.isActive = false;
+
         });
 
     }
@@ -131,6 +133,8 @@ class SimplePhysics {
                 this.onTofuCollisionBoxChanged(find);
             
             }
+
+            if (find.dead) find.isActive = false;
 
         });
 

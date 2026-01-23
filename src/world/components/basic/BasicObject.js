@@ -706,16 +706,11 @@ class BasicObject extends EventDispatcher {
     onRapierInstanceRemoved;
     onRapierInstanceAdded;
 
-    syncRapierWorld() {
+    syncRapierWorld(force = false) {
 
         if (this.mesh.userData.physics) {
 
-            if (this.onRapierInstanceAdded && this.onRapierInstanceRemoved) {
-
-                this.onRapierInstanceRemoved(this);
-                this.onRapierInstanceAdded(this);
-
-            } else {
+            if (force || !this.onRapierInstanceRemoved || !this.onRapierInstanceAdded) {
 
                 const { body } = this.mesh.userData.physics;
 
@@ -727,6 +722,11 @@ class BasicObject extends EventDispatcher {
                     body.setRotation(_q1);
 
                 }
+
+            } else if (this.onRapierInstanceAdded && this.onRapierInstanceRemoved) {
+
+                this.onRapierInstanceRemoved(this);
+                this.onRapierInstanceAdded(this);
 
             }
 

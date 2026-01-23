@@ -318,7 +318,9 @@ function moveableObjectFilter(object) {
 
 function isRapierObject(object) {
 
-    if (object instanceof BoxCube ||
+    if (object instanceof Plane ||
+        object instanceof Terrain ||
+        object instanceof BoxCube ||
         object instanceof HexCylinderPillar ||
         object instanceof LWall ||
         object instanceof SquarePillar ||

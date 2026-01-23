@@ -670,6 +670,12 @@ const PHYSICS_TYPES = {
     SIMPLE: 'simple'
 }
 
+const RIGID_BODY_TYPES = {
+    DYNAMIC: 'dynamic',
+    FIXED: 'fixed',
+    KENEMATIC_POSITION_BASED: 'kinematicPositionBased'
+};
+
 export { 
     REPEAT_WRAPPING,
     MIRRORED_REPEAT_WRAPPING,
@@ -817,5 +823,6 @@ export {
 
     CONTROL_TYPES,
 
-    PHYSICS_TYPES
+    PHYSICS_TYPES,
+    RIGID_BODY_TYPES
 };
