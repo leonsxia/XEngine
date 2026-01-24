@@ -161,8 +161,8 @@ class RapierWorld {
         const meshDesc = avatar.rapierContainer.getInstanceByName(CHARACTER_CONTROLLER);
         const userData = meshDesc.userData;
         const { characterControllerSettings: { 
-            offset = 0.01, snapToGroundDistance = 0.2, slideEnabled = true,
-            maxSlopeClimbAngle = 80, minSlopeSlideAngle = 60,
+            offset = 0.01, snapToGroundDistance = 0.5, slideEnabled = true,
+            maxSlopeClimbAngle = 50, minSlopeSlideAngle = 45,
             autoStepMaxHeight = STAIR_OFFSET_MAX, autoStepMinWidth = 0.2
         } = {} } = avatar.specs;
 
@@ -553,7 +553,7 @@ class RapierWorld {
 
                     // The hit point is obtained from the ray's origin and direction: `origin + dir * timeOfImpact`.
                     onLandPoints.push(_v1.add(_v2.copy(_down).multiplyScalar(hit.timeOfImpact)));
-                    item.onSlopePointsAdjust(onLandPoints);
+                    item.onLandPointsAdjust(onLandPoints);
                     isLanded = true;
 
                 }
@@ -647,29 +647,6 @@ class RapierWorld {
                     isLanded = true;
                     this.#logger.log(`charater: ${avatar.name}, is landed by castRay`);
 
-                } else {
-
-                    const radius = instance.geometry.parameters.radius * instance.scale.x;
-                    const shape = new this.physics.RAPIER.Ball(radius);
-                    const stopAtPenetration = true;
-                    /* 
-                        maxToi should not be 0, otherwise it will not take effect,
-                        also a little bigger than character controller offset
-                    */
-                    const maxToi = controller.offset() + 0.002;
-                    _v1.set(position.x, position.y - avatar.height / 2 + radius, position.z);   // origin
-                    const hit = this.physics.world.castShape(_v1, _q1, _down, shape, 0, maxToi, stopAtPenetration, null, null, collider, null, 
-                        // terrain will be excluded
-                        (collider) => !collider.checkByRay
-                    );
-
-                    if (hit) {
-
-                        isLanded = true;
-                        this.#logger.log(`charater: ${avatar.name}, is landed by castShape`);
-
-                    }
-
                 }
                 
             }
@@ -714,6 +691,28 @@ class RapierWorld {
             }
 
         }
+
+    }
+
+    checkHitCollider(object, instance) {
+
+        const { physics: { collider, controller } } = instance.userData;
+        const position = collider.translation();
+        const radius = instance.geometry.parameters.radius * instance.scale.x;
+        const shape = new this.physics.RAPIER.Ball(radius);
+        const stopAtPenetration = true;
+        /*
+            maxToi should not be 0, otherwise it will not take effect,
+            also a little bigger than character controller offset
+        */
+        const maxToi = controller.offset() + 0.002;
+        _v1.set(position.x, position.y - object.height / 2 + radius, position.z);   // origin
+        const hit = this.physics.world.castShape(_v1, _q1, _down, shape, 0, maxToi, stopAtPenetration, null, null, collider, null,
+            // terrain will be excluded
+            (collider) => !collider.checkByRay
+        );
+
+        return hit;
 
     }
 

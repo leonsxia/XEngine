@@ -217,7 +217,7 @@ class ObstacleMoveable {
         
     }
 
-    setOnSlopePoint(params) {
+    setOnLandPoint(params) {
 
         const { points, obstacle } = params;
 

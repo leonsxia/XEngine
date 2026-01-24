@@ -479,7 +479,7 @@ class Moveable2D {
 
     }
 
-    setOnSlopePoint(params) {
+    setOnLandPoint(params) {
 
         const { points, $self } = params;
 

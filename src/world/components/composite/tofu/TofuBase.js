@@ -1427,9 +1427,9 @@ class TofuBase extends Moveable2D {
 
     }
 
-    tickOnSlopePointsAdjust(points) {
+    tickOnLandPointsAdjust(points) {
 
-        this.setOnSlopePoint({ points, $self: this });
+        this.setOnLandPoint({ points, $self: this });
         this.updateAccessories();
 
     }

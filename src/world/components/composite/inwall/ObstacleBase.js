@@ -1035,9 +1035,9 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
-    onSlopePointsAdjust(points) {
+    onLandPointsAdjust(points) {
 
-        this.setOnSlopePoint({ points, obstacle: this });
+        this.setOnLandPoint({ points, obstacle: this });
 
         this.updateOBBs();
         this.updateRay(false);

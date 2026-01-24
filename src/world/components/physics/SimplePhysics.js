@@ -955,7 +955,7 @@ class SimplePhysics {
 
                 if (points.length > 0) {
 
-                    obs.onSlopePointsAdjust(points);
+                    obs.onLandPointsAdjust(points);
 
                 }
 
@@ -1391,7 +1391,7 @@ class SimplePhysics {
 
             if (onSlopePoints.length > 0) {
 
-                avatar.tickOnSlopePointsAdjust(onSlopePoints);
+                avatar.tickOnLandPointsAdjust(onSlopePoints);
 
             }
 
