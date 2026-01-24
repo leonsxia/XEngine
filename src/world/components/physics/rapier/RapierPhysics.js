@@ -549,13 +549,23 @@ class RapierPhysics {
                 const { body } = this.meshMap.get(mesh);
 
                 const _mesh1 = (mesh.attachTo ?? mesh);
-                const _mesh2 = _mesh1.parent ?? _mesh1;
-                _mesh2.getWorldQuaternion(_q1).invert();
-                _m1.copy(_mesh2.matrixWorld).invert();
-                _v1.copy(body.translation()).applyMatrix4(_m1);
-                _q2.copy(body.rotation()).premultiply(_q1);
-                _mesh1.position.copy(_v1);
-                _mesh1.quaternion.copy(_q2);
+                const _mesh2 = _mesh1.parent;
+
+                if (_mesh2 && !_mesh2.isScene) {
+
+                    _mesh2.getWorldQuaternion(_q1).invert();
+                    _m1.copy(_mesh2.matrixWorld).invert();
+                    _v1.copy(body.translation()).applyMatrix4(_m1);
+                    _q2.copy(body.rotation()).premultiply(_q1);
+                    _mesh1.position.copy(_v1);
+                    _mesh1.quaternion.copy(_q2);
+
+                } else {
+
+                    _mesh1.position.copy(body.translation());
+                    _mesh1.quaternion.copy(body.rotation());
+
+                }
 
                 _mesh1.father?.onRapierUpdated?.();
 
