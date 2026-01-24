@@ -204,6 +204,13 @@ class LightLamp extends ObstacleBase {
         
     }
 
+    onRapierUpdated() {
+
+        super.onRapierUpdated();
+        this.updateLightObjects();
+
+    }
+
 }
 
 export { LightLamp };

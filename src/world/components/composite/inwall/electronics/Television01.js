@@ -92,6 +92,7 @@ class Television01 extends LightLamp {
         await this.gltf.init();
 
         this.setPickLayers();
+        this.setCanBeIgnored();
 
     }
 
@@ -100,34 +101,7 @@ class Television01 extends LightLamp {
         // update cBox scale and position
         this._cBox.setScale(this.scale);
 
-        // update bloom screen scale and position
-        const screenX = this._screenX * this.scale[0];
-        const screenY = this._screenY * this.scale[1];
-        const screenZ = this._screenZ * this.scale[2];
-
-        this._bloomScreen.setScale(this.scale).setPosition([screenX, screenY, screenZ]);
-
-        // update bloom screen linked light position and target
-        const spotLightPosition = new Vector3(screenX, screenY, screenZ);
-        const spotLightTargetPos = new Vector3(screenX, screenY, screenZ + this._targetZ * this.scale[2]);
-
-        if (needToUpdateLight) {
-
-            const lightObj = this._bloomScreen.linked;
-            const { light } = lightObj;
-
-            light.position.sub(this.spotLightPosition).add(spotLightPosition);
-            light.target.position.sub(this.spotLightTargetPos).add(spotLightTargetPos);            
-            updateSingleLightCamera.call(null, lightObj, false);
-
-        } else {
-
-            this.spotLightTarget.position.copy(spotLightTargetPos);
-
-        }
-
-        this.spotLightPosition.copy(spotLightPosition);
-        this.spotLightTargetPos.copy(spotLightTargetPos);
+        this.updateBloom(needToUpdateLight);
 
         // update gltf scale
         this.gltf.setScale(this.scale);
@@ -185,14 +159,16 @@ class Television01 extends LightLamp {
                 }
 
                 break;
+
         }
+
     }
 
     getLightPositionNTarget(light, type) {
 
         const results = {};
 
-        switch(type) {
+        switch (type) {
 
             case 'screen':
                 {
@@ -204,6 +180,47 @@ class Television01 extends LightLamp {
         }
 
         return results;
+
+    }
+
+    updateBloom(needToUpdateLight = true) {
+
+        // update bloom screen scale and position
+        const screenX = this._screenX * this.scale[0];
+        const screenY = this._screenY * this.scale[1];
+        const screenZ = this._screenZ * this.scale[2];
+
+        this._bloomScreen.setScale(this.scale).setPosition([screenX, screenY, screenZ]);
+
+        // update bloom screen linked light position and target
+        const spotLightPosition = new Vector3(screenX, screenY, screenZ);
+        const spotLightTargetPos = new Vector3(screenX, screenY, screenZ + this._targetZ * this.scale[2]);
+
+        if (needToUpdateLight) {
+
+            const lightObj = this._bloomScreen.linked;
+            const { light } = lightObj;
+
+            light.position.sub(this.spotLightPosition).add(spotLightPosition);
+            light.target.position.sub(this.spotLightTargetPos).add(spotLightTargetPos);            
+            updateSingleLightCamera.call(null, lightObj, false);
+
+        } else {
+
+            this.spotLightTarget.position.copy(spotLightTargetPos);
+
+        }
+
+        this.spotLightPosition.copy(spotLightPosition);
+        this.spotLightTargetPos.copy(spotLightTargetPos);
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        super.addRapierInstances(needClear);
+        this.updateBloom();
+
     }
 
 }

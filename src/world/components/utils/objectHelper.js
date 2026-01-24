@@ -320,14 +320,16 @@ function isRapierObject(object) {
 
     if (object instanceof Plane ||
         object instanceof Terrain ||
-        object instanceof BoxCube ||
         object instanceof HexCylinderPillar ||
         object instanceof LWall ||
         object instanceof SquarePillar ||
         object instanceof CylinderPillar ||
         object instanceof Slope ||
         object instanceof Stairs ||
-        object instanceof Ladder
+        object instanceof Ladder ||
+        object instanceof BoxCube ||
+        object instanceof Television01 ||
+        object instanceof WoodenPicnicTable
     ) {
 
         return true;

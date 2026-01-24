@@ -1132,6 +1132,7 @@ class ObstacleBase extends ObstacleMoveable {
 
     }
 
+    // can be inherited by children
     onRapierUpdated() {
 
         this.updateOBBs();

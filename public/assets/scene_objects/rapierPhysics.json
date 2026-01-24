@@ -179,7 +179,45 @@
                     "turnOn": true
                 }
             ],
-            "spotLightSpecs": []
+            "spotLightSpecs": [
+                {
+                    "name": "room1_spotLight1",
+                    "display": "TV Spot Light",
+                    "detail": {
+                        "color": [
+                            179,
+                            255,
+                            250
+                        ],
+                        "position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "target": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "intensity": 26,
+                        "distance": 10,
+                        "decay": 0.33,
+                        "penumbra": 0.35,
+                        "angle": 0.4618
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "room1_television_01_1",
+                    "attachToType": "screen",
+                    "turnOn": false,
+                    "alwaysOn": false,
+                    "room": "room1"
+                }
+            ]
         }
     ],
     "objects": [
@@ -730,7 +768,7 @@
                     "showArrow": false,
                     "isObstacle": true,
                     "enableWallOBBs": false,
-                    "movable": true,
+                    "movable": false,
                     "climbable": false,
                     "position": [
                         2.5,
@@ -765,9 +803,9 @@
                     "mapRatio": 1.5,
                     "name": "room1_square_pillar1",
                     "showArrow": false,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "isObstacle": true,
-                    "climbable": true,
+                    "climbable": false,
                     "position": [
                         -1.8,
                         -2.3,
@@ -796,7 +834,7 @@
                     "showArrow": false,
                     "enableWallOBBs": false,
                     "isObstacle": true,
-                    "climbable": true,
+                    "climbable": false,
                     "position": [
                         -2,
                         -2,
@@ -1005,6 +1043,52 @@
                     "ignoreAimTest": true,
                     "ignoreFocusTest": true,
                     "physics": { "mass": 0 }
+                },
+                {
+                    "type": "WoodenPicnicTable",
+                    "src": "WOODEN_PICNIC_TABLE",
+                    "name": "room1_wooden_picnic_table_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "canBeIgnored": true,
+                    "position": [
+                        -6.496906873322366,
+                        -2.01,
+                        -2.890598020645133
+                    ],
+                    "rotation": [
+                        3.1171580440618727,
+                        0.5654866776461628,
+                        3.1433379828417873
+                    ],
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "Television01",
+                    "src": "TELEVISION_01",
+                    "name": "room1_television_01_1",
+                    "scale": [
+                        1.5,
+                        1.5,
+                        1.5
+                    ],
+                    "isObstacle": true,
+                    "canBeIgnored": true,
+                    "position": [
+                        -6.489766925296546,
+                        -1.2967450618743896,
+                        -2.832128821444477
+                    ],
+                    "rotation": [
+                        -0.022642115428185096,
+                        0.5398354480503069,
+                        -0.0017491144587764669
+                    ],
+                    "physics": { "mass": 100 }
                 }
             ],
             "floors": [],

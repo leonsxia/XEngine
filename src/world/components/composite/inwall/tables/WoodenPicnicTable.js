@@ -1,6 +1,7 @@
 import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
-import { GLTFModel, CollisionBox } from '../../../Models';
+import { GLTFModel, CollisionBox, GeometryDesc, MeshDesc } from '../../../Models';
+import { BOX_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'in_room/tables/wooden_picnic_table_1k/wooden_picnic_table_1k.gltf';
 
@@ -10,6 +11,7 @@ class WoodenPicnicTable extends ObstacleBase {
     _height = .742;
     _depth = 3.03;
     _bottomHeight = .35;
+    _sideHeight = .15;
     _topWidth = 1.246;
 
     gltf;
@@ -75,6 +77,7 @@ class WoodenPicnicTable extends ObstacleBase {
         await this.gltf.init();
 
         this.setPickLayers();
+        this.setCanBeIgnored();
 
     }
 
@@ -107,6 +110,45 @@ class WoodenPicnicTable extends ObstacleBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        const bottomHeight = this._bottomHeight * this.scale[1];
+        const sideHeight = this._sideHeight * this.scale[1];
+        const topWidth = this._topWidth * this.scale[0];
+
+        const topHeight = height - bottomHeight;
+        const sideWidth = (width - topWidth) * .5;
+        const sideX = (topWidth + sideWidth) * .5;
+        const bottomY = (height - sideHeight) * .5 - topHeight;
+
+        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        mass /= 3;
+
+        const topBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: topWidth, height, depth });
+        const topBoxMesh = new MeshDesc(topBoxGeo);
+        topBoxMesh.name = `${this.name}_topBox_mesh_desc`;
+        topBoxMesh.userData.physics = { mass, restitution, friction };
+
+        const sideBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: sideWidth, height: sideHeight, depth });
+        const sideLeftBoxMesh = new MeshDesc(sideBoxGeo);
+        sideLeftBoxMesh.position.set(sideX, bottomY, 0);
+        sideLeftBoxMesh.name = `${this.name}_sideLeftBox_mesh_desc`;
+        sideLeftBoxMesh.userData.physics = { mass, restitution, friction };
+
+        const sideRightBoxMesh = new MeshDesc(sideBoxGeo);
+        sideRightBoxMesh.position.set(- sideX, bottomY, 0);
+        sideRightBoxMesh.name = `${this.name}_sideRightBox_mesh_desc`;
+        sideRightBoxMesh.userData.physics = { mass, restitution, friction };
+
+        this.rapierInstances.push(topBoxMesh, sideLeftBoxMesh, sideRightBoxMesh);
 
     }
 
