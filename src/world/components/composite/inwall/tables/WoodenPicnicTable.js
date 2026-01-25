@@ -129,8 +129,7 @@ class WoodenPicnicTable extends ObstacleBase {
         const sideX = (topWidth + sideWidth) * .5;
         const bottomY = (height - sideHeight) * .5 - topHeight;
 
-        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
-        mass /= 3;
+        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
 
         const topBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: topWidth, height, depth });
         const topBoxMesh = new MeshDesc(topBoxGeo);
@@ -141,12 +140,12 @@ class WoodenPicnicTable extends ObstacleBase {
         const sideLeftBoxMesh = new MeshDesc(sideBoxGeo);
         sideLeftBoxMesh.position.set(sideX, bottomY, 0);
         sideLeftBoxMesh.name = `${this.name}_sideLeftBox_mesh_desc`;
-        sideLeftBoxMesh.userData.physics = { mass, restitution, friction };
+        sideLeftBoxMesh.userData.physics = { mass: 0, restitution, friction };
 
         const sideRightBoxMesh = new MeshDesc(sideBoxGeo);
         sideRightBoxMesh.position.set(- sideX, bottomY, 0);
         sideRightBoxMesh.name = `${this.name}_sideRightBox_mesh_desc`;
-        sideRightBoxMesh.userData.physics = { mass, restitution, friction };
+        sideRightBoxMesh.userData.physics = { mass: 0, restitution, friction };
 
         this.rapierInstances.push(topBoxMesh, sideLeftBoxMesh, sideRightBoxMesh);
 

@@ -9,7 +9,7 @@ function generateRapierCharacterInstance(name, size) {
 
     if (Math.max(width, depth, height) === height) {
 
-        const diameter = Math.max(width, depth);
+        const diameter = (width + depth) / 2;
         const capRadius = diameter / 2;
         const capHeight = height - diameter;
         const capsuleGeometryDesc = new GeometryDesc({ type: CAPSULE_GEOMETRY, radius: capRadius, height: capHeight });
