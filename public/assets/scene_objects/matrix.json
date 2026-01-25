@@ -1286,7 +1286,8 @@
                         -1.5708,
                         0,
                         0
-                    ]
+                    ],
+                    "physics": { "friction": 1 }
                 }
             ],
             "ceilings": [],
@@ -1590,7 +1591,8 @@
                         -1.5708,
                         0,
                         0
-                    ]
+                    ],
+                    "physics": { "friction": 1 }
                 }
             ],
             "ceilings": [],
