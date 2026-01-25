@@ -1115,6 +1115,8 @@ class TofuBase extends Moveable2D {
 
     updateWalls(needUpdateParentMatrixWorld = true) {
 
+        if (!this.collisionBox) return this;
+
         if (needUpdateParentMatrixWorld) {
 
             this.collisionBox.group.updateWorldMatrix(true, true);
@@ -1145,6 +1147,8 @@ class TofuBase extends Moveable2D {
 
     updateBoundingFaces(needUpdateParentMatrixWorld = true) {
 
+        if (!this.boundingFaceGroup) return this;
+
         if (needUpdateParentMatrixWorld) {
 
             this.boundingFaceGroup.updateWorldMatrix(true, true);
@@ -1154,6 +1158,8 @@ class TofuBase extends Moveable2D {
             this.boundingFaceGroup.updateWorldMatrix(false, true)
 
         }
+
+        return this;
 
     }
 

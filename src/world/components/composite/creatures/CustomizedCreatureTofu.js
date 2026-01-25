@@ -1,7 +1,8 @@
+import { GLOBALS } from "../../../systems/globals";
 import { BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
 import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
-import { TOFU_AIM_LAYER } from "../../utils/constants";
+import { PHYSICS_TYPES, TOFU_AIM_LAYER } from "../../utils/constants";
 
 class CustomizedCreatureTofu extends Tofu {
 
@@ -21,7 +22,8 @@ class CustomizedCreatureTofu extends Tofu {
 
         super(specs);
 
-        const { enableCollision = true, typeMapping = {} } = specs;
+        let enableCollision = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE ? (specs.enableCollision ?? true) : false;
+        const { typeMapping = {} } = specs;
         const { createDefaultBoundingObjects = true } = specs;
 
         this.typeMapping = typeMapping;
@@ -36,11 +38,15 @@ class CustomizedCreatureTofu extends Tofu {
         
         if (!createDefaultBoundingObjects) {
 
+            if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE) {
+
+                this.createBoundingFaces();
+                this.switchBoundingFace();
+
+            }
+
             this.createBoundingBoxes();
             this.switchBoundingBox(this.typeMapping.idle.nick);
-
-            this.createBoundingFaces();
-            this.switchBoundingFace();
 
             this.createPushingBox();
 
@@ -289,6 +295,8 @@ class CustomizedCreatureTofu extends Tofu {
     }
 
     switchCollisionBox(action, forceEvent = true) {
+
+        if (this.collisionBoxes.size === 0) return;
 
         if (forceEvent) this.doBeforeCollisionBoxChangedEvents();
 

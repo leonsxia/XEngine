@@ -1,8 +1,9 @@
+import { GLOBALS } from "../../../systems/globals";
 import { Logger } from "../../../systems/Logger";
 import { BF, BF2 } from "../../basic/colorBase";
 import { CollisionBox, Tofu } from "../../Models";
 import { createBoundingBox, createBoundingFaces as createBoundingFacesMesh, createTofuPushingOBBBox } from "../../physics/collisionHelper";
-import { TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, WEAPONS } from "../../utils/constants";
+import { PHYSICS_TYPES, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, WEAPONS } from "../../utils/constants";
 
 const DEBUG = false;
 
@@ -29,7 +30,7 @@ class CustomizedCombatTofu extends Tofu {
 
         super(specs);
 
-        const { enableCollision = true } = specs;
+        let enableCollision = GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE ? (specs.enableCollision ?? true) : false;
         const { weaponActionMapping = {}, initialWeaponType, weapons = [] } = specs;
         const { createDefaultBoundingObjects = true } = specs;
 
@@ -46,8 +47,12 @@ class CustomizedCombatTofu extends Tofu {
 
         if (!createDefaultBoundingObjects) {
 
-            this.createBoundingFaces();
-            this.switchBoundingFace(initialWeaponType);
+            if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE) {
+
+                this.createBoundingFaces();
+                this.switchBoundingFace(initialWeaponType);
+
+            }
 
             this.createBoundingBoxes();
             this.switchBoundingBox(initialWeaponType, this.weaponActionMapping[initialWeaponType].idle.nick);
@@ -410,6 +415,8 @@ class CustomizedCombatTofu extends Tofu {
 
     switchCollisionBox(weaponType, action, forceEvent = true) {
 
+        if (this.collisionBoxMap.size === 0) return;
+
         if (forceEvent) this.doBeforeCollisionBoxChangedEvents();
 
         const cbox = this.collisionBoxMap.get(weaponType).get(action);
@@ -585,19 +592,19 @@ class CustomizedCombatTofu extends Tofu {
         // otherwise it will have misplaced height when on obstacle tops and change state
         this.updateAccessories();
 
-        this.#logger.log(
-            `current collision box map:`, this.collisionBoxMap.get(weaponType),
-            `current collision box: ${this.collisionBox.group.uuid}`,
-            `current walls:`, this.walls,
-            `current boudning faces map:`, this.boundingFaceMap.get(weaponType),
-            `current bounding faces`, this.boundingFaceMesh,
-            `current bounding box map:`, this.boundingBoxMap.get(weaponType),
-            `current bounding box: ${this.boundingBoxMesh.uuid}`,
-            `current bounding box wire: ${this.boundingBoxWireMesh.uuid}`,
-            `current pushing box map:`, this.pushingBoxMap.get(weaponType),
-            `current pushing box: ${this.pushingOBBBoxMesh.uuid}`,
-            `current action: ${action}`
-        );
+        // this.#logger.log(
+        //     `current collision box map:`, this.collisionBoxMap.get(weaponType),
+        //     `current collision box: ${this.collisionBox.group.uuid}`,
+        //     `current walls:`, this.walls,
+        //     `current boudning faces map:`, this.boundingFaceMap.get(weaponType),
+        //     `current bounding faces`, this.boundingFaceMesh,
+        //     `current bounding box map:`, this.boundingBoxMap.get(weaponType),
+        //     `current bounding box: ${this.boundingBoxMesh.uuid}`,
+        //     `current bounding box wire: ${this.boundingBoxWireMesh.uuid}`,
+        //     `current pushing box map:`, this.pushingBoxMap.get(weaponType),
+        //     `current pushing box: ${this.pushingOBBBoxMesh.uuid}`,
+        //     `current action: ${action}`
+        // );
 
     }
 

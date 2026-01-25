@@ -324,8 +324,8 @@ class SoldierFemale extends CombatPlayerBase {
         deadMeshDesc.attachTo = this.group;
         deadMeshDesc.name = this.rapierInstances.DEAD_BODY;
         deadMeshDesc.userData.physics.mass = DEAD_BODY_MASS;
-        deadMeshDesc.userData.physics.enableX = false;
-        deadMeshDesc.userData.physics.enableZ = false;
+        // deadMeshDesc.userData.physics.enableX = false;
+        // deadMeshDesc.userData.physics.enableZ = false;
 
         this.rapierContainer.add(characterInstance, deadMeshDesc);
         this.rapierContainer.scale = this.scale;
