@@ -705,6 +705,7 @@ class BasicObject extends EventDispatcher {
     // events
     onRapierInstanceRemoved;
     onRapierInstanceAdded;
+    onSyncFinished;
 
     syncRapierWorld(force = false) {
 
@@ -729,6 +730,8 @@ class BasicObject extends EventDispatcher {
                 this.onRapierInstanceAdded(this);
 
             }
+
+            if (this.onSyncFinished) this.onSyncFinished();
 
         }
 

@@ -278,6 +278,13 @@ class Room {
 
             f.visible = true;
 
+            // set floor collider can be checked by ray to avoid falling into ground
+            f.onSyncFinished = () => {
+
+                f.mesh.userData.physics.collider.checkByRay = true;
+
+            }
+
         }
 
     }
