@@ -186,6 +186,7 @@ class RapierWorld {
         this.addFloors();
         this.addTerrains();
 
+        // add current room objects and scene objects
         this.physics.addScene(this.attachTo.currentRoom.group);
         for (let i = 0, il = this.attachTo.sceneObjects.length; i < il; i++) {
 
@@ -196,6 +197,14 @@ class RapierWorld {
                 this.physics.addScene(sceneObj.group ?? sceneObj.mesh);
 
             }
+
+        }
+
+        // set floor collider can be checked by ray to avoid falling into ground
+        for (let i = 0, il = this.floors.length; i < il; i++) {
+
+            const floor = this.floors[i];
+            floor.mesh.userData.physics.collider.checkByRay = true;
 
         }
 
