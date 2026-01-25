@@ -647,7 +647,7 @@ class SceneBuilder {
             if (o.type !== AXES && o.type !== GRID) {
 
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.type === SCENE).children.find(f => f.type === o.type && f.name === o.name);
-                this.updateObject(o, _target, updateSetupOnly);
+                this.updateObject(o, _target, updateSetupOnly, o.currentRoom === this.worldScene.currentRoom.name);
 
             }
 
@@ -663,6 +663,7 @@ class SceneBuilder {
         for (let i = 0, il = roomSpecs.length; i < il; i++) {
 
             const room = roomSpecs[i];
+            const isCurrentRoom = this.worldScene.currentRoom.name === room.name;
 
             this.worldScene.rooms.find(r => r.name === room.name).resetDefaultWalls();
 
@@ -672,7 +673,7 @@ class SceneBuilder {
 
                     const area = room.areas[j];
                     const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).areas.find(f => f.name === area.name);
-                    this.updateObject(area, _target, updateSetupOnly);
+                    this.updateObject(area, _target, updateSetupOnly, isCurrentRoom);
                     
                 }
 
@@ -682,7 +683,7 @@ class SceneBuilder {
 
                 const group = room.groups[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).groups.find(f => f.type === group.type && f.name === group.name);
-                this.updateObject(group, _target, updateSetupOnly);
+                this.updateObject(group, _target, updateSetupOnly, isCurrentRoom);
 
             }
 
@@ -690,7 +691,7 @@ class SceneBuilder {
 
                 const floor = room.floors[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).floors.find(f => f.type === floor.type && f.name === floor.name);
-                this.updateObject(floor, _target, updateSetupOnly);
+                this.updateObject(floor, _target, updateSetupOnly, isCurrentRoom);
 
             }
 
@@ -698,7 +699,7 @@ class SceneBuilder {
 
                 const ceiling = room.ceilings[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).ceilings.find(f => f.type === ceiling.type && f.name === ceiling.name);
-                this.updateObject(ceiling, _target, updateSetupOnly);
+                this.updateObject(ceiling, _target, updateSetupOnly, isCurrentRoom);
 
             }
 
@@ -706,7 +707,7 @@ class SceneBuilder {
 
                 const wall = room.walls[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).walls.find(f => f.type === wall.type && f.name === wall.name);
-                this.updateObject(wall, _target, updateSetupOnly);
+                this.updateObject(wall, _target, updateSetupOnly, isCurrentRoom);
 
             }
 
@@ -714,7 +715,7 @@ class SceneBuilder {
 
                 const inwall = room.insideWalls[j];
                 const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).insideWalls.find(f => f.type === inwall.type && f.name === inwall.name);
-                this.updateObject(inwall, _target, updateSetupOnly);
+                this.updateObject(inwall, _target, updateSetupOnly, isCurrentRoom);
 
             }
 
@@ -724,7 +725,7 @@ class SceneBuilder {
 
                     const airwall = room.airWalls[j];
                     const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).airWalls.find(f => f.type === airwall.type && f.name === airwall.name);
-                    this.updateObject(airwall, _target, updateSetupOnly);
+                    this.updateObject(airwall, _target, updateSetupOnly, isCurrentRoom);
 
                 }
 
@@ -736,7 +737,7 @@ class SceneBuilder {
 
                     const water = room.waters[j];
                     const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).waters.find(f => f.type === water.type && f.name === water.name);
-                    this.updateObject(water, _target, updateSetupOnly);
+                    this.updateObject(water, _target, updateSetupOnly, isCurrentRoom);
 
                 }
 
@@ -748,7 +749,7 @@ class SceneBuilder {
 
                     const entry = room.entries[j];
                     const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).entries.find(f => f.type === entry.type && f.name === entry.name);
-                    this.updateObject(entry, _target, updateSetupOnly);
+                    this.updateObject(entry, _target, updateSetupOnly, isCurrentRoom);
 
                 }
 
@@ -760,7 +761,7 @@ class SceneBuilder {
 
                     const terrain = room.terrains[j];
                     const _target = updateSetupOnly ? null : _targetSetup.objects.find(r => r.name === room.name).terrains.find(f => f.type === terrain.type && f.name === terrain.name);
-                    this.updateObject(terrain, _target, updateSetupOnly);
+                    this.updateObject(terrain, _target, updateSetupOnly, isCurrentRoom);
 
                 }
 
@@ -1056,7 +1057,7 @@ class SceneBuilder {
 
     }
 
-    updateObject(_origin, _target, updateSetupOnly = false) {
+    updateObject(_origin, _target, updateSetupOnly = false, isCurrentRoom = false) {
 
         const { name } = _origin;
         const objects = this.worldScene.scene.children.filter(o => o.isGroup || o.isMesh);
@@ -1401,7 +1402,15 @@ class SceneBuilder {
 
             }
 
-            find.father.syncRapierWorld?.();
+            if (isCurrentRoom) {
+
+                find.father.syncRapierWorld?.();
+
+            } else {
+
+                find.father.syncRapierWorld?.(true);
+
+            }            
 
         }
 

@@ -185,7 +185,19 @@ class RapierWorld {
         this.addCompounds();
         this.addFloors();
         this.addTerrains();
-        this.physics.addScene(this.attachTo.scene);
+
+        this.physics.addScene(this.attachTo.currentRoom.group);
+        for (let i = 0, il = this.attachTo.sceneObjects.length; i < il; i++) {
+
+            const sceneObj = this.attachTo.sceneObjects[i];
+            const object3D = sceneObj.group ?? sceneObj.mesh;
+            if (object3D) {
+
+                this.physics.addScene(sceneObj.group ?? sceneObj.mesh);
+
+            }
+
+        }
 
     }
 

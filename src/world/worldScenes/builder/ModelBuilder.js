@@ -843,14 +843,16 @@ class ModelBuilder {
     createRoundWoodenTable(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new RoundWoodenTable(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 

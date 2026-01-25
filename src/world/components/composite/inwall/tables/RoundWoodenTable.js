@@ -1,6 +1,7 @@
 import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
-import { GLTFModel, CollisionHexCylinder } from '../../../Models';
+import { GLTFModel, CollisionHexCylinder, GeometryDesc, MeshDesc } from '../../../Models';
+import { CYLINDER_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'in_room/tables/round_wooden_table_01_1k/round_wooden_table_01_1k.gltf';
 
@@ -112,6 +113,23 @@ class RoundWoodenTable extends ObstacleBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
+
+        const radius = this._radius * this.scale[0];
+        const height = this._height * this.scale[1];
+        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+
+        const cylinderGeo = new GeometryDesc({ type: CYLINDER_GEOMETRY, radiusBottom: radius, height });
+        const cylinderMesh = new MeshDesc(cylinderGeo);
+        cylinderMesh.name = `${this.name}_cylinder_mesh_desc`;
+        cylinderMesh.userData.physics = { mass, restitution, friction };
+
+        this.rapierInstances.push(cylinderMesh);
 
     }
 

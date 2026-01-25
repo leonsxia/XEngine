@@ -121,7 +121,7 @@
                     "display": "Directional Light",
                     "detail": {
                         "color": [249, 230, 190],
-                        "intensity": 1.5,
+                        "intensity": 1,
                         "position": [0, 20, 28],
                         "target": [0, 0, 0]
                     },
@@ -780,6 +780,66 @@
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
+                    "type": "HexCylinderPillar",
+                    "scale": [
+                        0.5,
+                        3.6
+                    ],
+                    "baseSize": 4.6,
+                    "map": "BRICK_159",
+                    "normalMap": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "name": "room1_hexCylinder2",
+                    "mapRatio": 1.5,
+                    "showArrow": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -6,
+                        -0.7009999999999998,
+                        -8
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "HexCylinderPillar",
+                    "scale": [
+                        0.5,
+                        3.6
+                    ],
+                    "baseSize": 4.6,
+                    "map": "BRICK_159",
+                    "normalMap": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "name": "room1_hexCylinder3",
+                    "mapRatio": 1.5,
+                    "showArrow": false,
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        6,
+                        -0.7009999999999998,
+                        -8
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
                     "type": "SquarePillar",
                     "scale": [
                         3,
@@ -843,6 +903,66 @@
                     "rotation": [0, 0, 0],
                     "transparent": false,
                     "canBeIgnored": true,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "CylinderPillar",
+                    "scale": [
+                        3,
+                        0.5
+                    ],
+                    "baseSize": 4.6,
+                    "enableOBBs": false,
+                    "map": "BRICK_159",
+                    "normalMap": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room1_cylinder_pillar2",
+                    "showArrow": false,
+                    "enableWallOBBs": false,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        -6,
+                        1.3489563465118408,
+                        -8
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": false,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "CylinderPillar",
+                    "scale": [
+                        3,
+                        0.5
+                    ],
+                    "baseSize": 4.6,
+                    "enableOBBs": false,
+                    "map": "BRICK_159",
+                    "normalMap": "BRICK_159_NORMAL",
+                    "topMap": "BRICK_159",
+                    "topNormal": "BRICK_159_NORMAL",
+                    "bottomMap": "BRICK_159",
+                    "bottomNormal": "BRICK_159_NORMAL",
+                    "mapRatio": 1.5,
+                    "name": "room1_cylinder_pillar3",
+                    "showArrow": false,
+                    "enableWallOBBs": false,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        6,
+                        1.3489563465118408,
+                        -8
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": false,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
@@ -914,7 +1034,7 @@
                 {
                     "type": "Stairs",
                     "scale": [
-                        3.43,
+                        2,
                         2.09,
                         5.74
                     ],
@@ -978,6 +1098,7 @@
                     "transparent": false,
                     "ignoreAimTest": true,
                     "ignoreFocusTest": true,
+                    "canBeIgnored": true,
                     "physics": { "mass": 0 }
                 },
                 {
@@ -1010,6 +1131,7 @@
                     "transparent": false,
                     "ignoreAimTest": true,
                     "ignoreFocusTest": true,
+                    "canBeIgnored": true,
                     "physics": { "mass": 0 }
                 },
                 {
@@ -1042,6 +1164,75 @@
                     "transparent": false,
                     "ignoreAimTest": true,
                     "ignoreFocusTest": true,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 0 }
+                },
+                {
+                    "type": "Ladder",
+                    "scale": [
+                        1,
+                        4.2,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "stickGap": 0.1,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "name": "room1_rotatable_ladder_4",
+                    "position": [
+                        -10.738239049230264,
+                        0.5884690284729004,
+                        -5.053149583668515
+                    ],
+                    "rotation": [
+                        -1.178612435903375,
+                        -0.36914178691750255,
+                        -0.7725342555662341
+                    ],
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 0 }
+                },
+                {
+                    "type": "Ladder",
+                    "scale": [
+                        2,
+                        5,
+                        1
+                    ],
+                    "bodyBaseSize": 4,
+                    "baseSize": 4,
+                    "stickGap": 0.15,
+                    "map": "METAL_168",
+                    "normalMap": "METAL_168_NORMAL",
+                    "bodyMap": "METAL_168",
+                    "bodyNormalMap": "METAL_168_NORMAL",
+                    "bodyMapRatio": 1.5,
+                    "mapRatio": 1.5,
+                    "noRepeat": false,
+                    "name": "room1_rotatable_ladder_5",
+                    "position": [
+                        0,
+                        1.6477055549621582,
+                        -8
+                    ],
+                    "rotation": [
+                        -1.5708,
+                        0,
+                        -1.5708
+                    ],
+                    "transparent": false,
+                    "ignoreAimTest": true,
+                    "ignoreFocusTest": true,
+                    "canBeIgnored": true,
                     "physics": { "mass": 0 }
                 },
                 {
@@ -1066,6 +1257,23 @@
                         3.1433379828417873
                     ],
                     "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "RoundWoodenTable",
+                    "src": "ROUND_WOODEN_TABLE",
+                    "name": "room1_round_wooden_table_1",
+                    "scale": [1, 0.8],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        -6,
+                        2.0978941917419434,
+                        -8
+                    ],
+                    "rotation": [0, 2.0944, 0],
+                    "physics": { "mass": 100 }
                 },
                 {
                     "type": "Television01",

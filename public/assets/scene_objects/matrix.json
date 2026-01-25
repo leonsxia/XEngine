@@ -55,7 +55,8 @@
             "bloomStrength": 1.68,
             "bloomRadius": 0.74
         },
-        "currentRoomSequence": 0
+        "currentRoomSequence": 0,
+        "physics": "rapier"
     },
     "players": [
         {
