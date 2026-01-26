@@ -121,7 +121,7 @@
                     "display": "Directional Light",
                     "detail": {
                         "color": [249, 230, 190],
-                        "intensity": 1,
+                        "intensity": 1.26,
                         "position": [0, 20, 28],
                         "target": [0, 0, 0]
                     },
@@ -165,10 +165,10 @@
                     "display": "top point light",
                     "detail": {
                         "color": [255, 255, 255],
-                        "position": [0, 3, 0],
-                        "intensity": 150,
+                        "position": [0, 7, -2.95],
+                        "intensity": 250,
                         "distance": 0,
-                        "decay": 2
+                        "decay": 1.85
                     },
                     "debug": true,
                     "shadow": true,
