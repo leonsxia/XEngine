@@ -146,31 +146,30 @@ class Sofa03 extends ObstacleBase {
         const bottomZ = (depth - bottomDepth) * .5;
         const backZ = (backDepth - depth) * .5;
 
-        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
-        mass /= 2;
+        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
 
         const backBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: bottomWidth, height, depth: backDepth });
         const backBoxMesh = new MeshDesc(backBoxGeo);
         backBoxMesh.name = `${this.name}_backBox_mesh_desc`;
         backBoxMesh.position.set(0, 0, backZ);
-        backBoxMesh.userData.physics = { mass, restitution, friction };
+        backBoxMesh.userData.physics = { mass: mass / 4, restitution, friction };
 
         const bottomBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: bottomWidth, height: bottomHeight, depth: bottomDepth });
         const bottomBoxMesh = new MeshDesc(bottomBoxGeo);
         bottomBoxMesh.name = `${this.name}_bottomBox_mesh_desc`;
         bottomBoxMesh.position.set(0, bottomY, bottomZ);
-        bottomBoxMesh.userData.physics = { mass, restitution, friction };
+        bottomBoxMesh.userData.physics = { mass: mass / 2, restitution, friction };
 
         const sideBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: sideWidth, height: sideHeight, depth });
         const sideLeftBoxMesh = new MeshDesc(sideBoxGeo);
         sideLeftBoxMesh.name = `${this.name}_sideLeftBox_mesh_desc`;
         sideLeftBoxMesh.position.set(sideX, sideY, 0);
-        sideLeftBoxMesh.userData.physics = { mass: 0, restitution, friction };
+        sideLeftBoxMesh.userData.physics = { mass: mass / 8, restitution, friction };
 
         const sideRightBoxMesh = new MeshDesc(sideBoxGeo);
         sideRightBoxMesh.name = `${this.name}_sideRightBox_mesh_desc`;
         sideRightBoxMesh.position.set(- sideX, sideY, 0);
-        sideRightBoxMesh.userData.physics = { mass: 0, restitution, friction };
+        sideRightBoxMesh.userData.physics = { mass: mass / 8, restitution, friction };
 
         this.rapierInstances.push(backBoxMesh, bottomBoxMesh, sideLeftBoxMesh, sideRightBoxMesh);
 

@@ -1256,6 +1256,7 @@
                         0.4085590525267473,
                         3.1213591128932077
                     ],
+                    "transparent": false,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
@@ -1269,7 +1270,12 @@
                         1.9979338645935059,
                         -8
                     ],
-                    "rotation": [0, 2.0944, 0],
+                    "rotation": [
+                        0,
+                        2.0944,
+                        0
+                    ],
+                    "transparent": false,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
@@ -1288,6 +1294,7 @@
                         -0.6684599232798722,
                         0
                     ],
+                    "transparent": false,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
@@ -1306,6 +1313,7 @@
                         -0.523598974142949,
                         -0.00021153404400337878
                     ],
+                    "transparent": false,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
@@ -1324,6 +1332,7 @@
                         0.10472070467911526,
                         0.000013713214601792128
                     ],
+                    "transparent": false,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
@@ -1341,11 +1350,47 @@
                         -6.5400789160900334
                     ],
                     "rotation": [
-                        0.000008491721905705208,
+                        0,
                         0.7098246745971563,
-                        -0.00023083116880536302
+                        0
                     ],
-                     "physics": { "mass": 30, "friction": 1 }
+                    "physics": { "mass": 30, "friction": 1 }
+                },
+                {
+                    "type": "PaintedWoodenBlueChair",
+                    "src": "PAINTED_WOODEN_BLUE_CHAIR",
+                    "name": "room1_painted_wooden_blue_chair_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "position": [
+                        4.6494574516316005,
+                        2.235720157623291,
+                        -9.080592836236029
+                    ],
+                    "rotation": [
+                        0,
+                        0.722561870757904,
+                        0
+                    ],
+                    "physics": { "mass": 30, "friction": 1 }
+                },
+                {
+                    "type": "PaintedWoodenWhiteChair",
+                    "src": "PAINTED_WOODEN_WHITE_CHAIR",
+                    "name": "room1_painted_wooden_white_chair_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "position": [
+                        7.280051370959265,
+                        2.079909324645996,
+                        -7.150000801190357
+                    ],
+                    "rotation": [
+                        0,
+                        -1.9041542139258134,
+                        0
+                    ],
+                    "physics": { "mass": 30, "friction": 1 }
                 },
                 {
                     "type": "PaintedWoodenWhiteCabinet",
@@ -1363,7 +1408,7 @@
                         0,
                         0
                     ],
-                     "physics": { "mass": 0, "friction": 1 }
+                    "physics": { "mass": 0, "friction": 1 }
                 },
                 {
                     "type": "VintageGrandfatherClock",
@@ -1399,6 +1444,7 @@
                         1.2636632701844048,
                         0
                     ],
+                    "transparent": false,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {

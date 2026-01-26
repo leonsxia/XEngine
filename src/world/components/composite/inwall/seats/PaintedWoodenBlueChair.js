@@ -1,6 +1,7 @@
 import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
-import { GLTFModel, CollisionBox } from '../../../Models';
+import { GLTFModel, CollisionBox, GeometryDesc, MeshDesc } from '../../../Models';
+import { BOX_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'in_room/seats/painted_wooden_chair_02_1k/painted_wooden_chair_02_1k.gltf';
 
@@ -11,9 +12,11 @@ class PaintedWoodenBlueChair extends ObstacleBase {
     _depth = .666;
     _bottomWidth = .572;
     _bottomHeight = .589;
-    _bottomDepth = .655;
+    _bottomDepth = .576;
+    _bottomPosZ = .04;
     _backHeight = .691;
     _backDepth = .154;
+    _backPosZ = - .29 + this._bottomPosZ;
 
     gltf;
 
@@ -81,10 +84,11 @@ class PaintedWoodenBlueChair extends ObstacleBase {
         const backHeight = this._backHeight * this.scale[1];
 
         const bottomY = (bottomHeight - height) * .5;
+        const bottomZ = this._bottomPosZ * this.scale[2];
         const backY = (backHeight - height) * .5 + bottomHeight;
-        const backZ = - .28 * this.scale[2];
+        const backZ = this._backPosZ * this.scale[2];
 
-        this._cBoxBottom.setPosition([0, bottomY, 0]).setScale(this.scale);
+        this._cBoxBottom.setPosition([0, bottomY, bottomZ]).setScale(this.scale);
         this._cBoxBack.setPosition([0, backY, backZ]).setScale(this.scale);
 
         // update gltf scale
@@ -98,6 +102,39 @@ class PaintedWoodenBlueChair extends ObstacleBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const bottomWidth = this._bottomWidth * this.scale[0];
+        const bottomHeight = this._bottomHeight * this.scale[1];
+        const bottomDepth = this._bottomDepth * this.scale[2];
+        const bottomPosY = (bottomHeight - height) * .5;
+        const bottomPosZ = this._bottomPosZ * this.scale[2];
+        const backHeight = this._backHeight * this.scale[1];
+        const backDepth = this._backDepth * this.scale[2];
+        const backPosY = (height - backHeight) * .5;
+        const backPosZ = this._backPosZ * this.scale[2];
+        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+
+        const bottomBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: bottomWidth, height: bottomHeight, depth: bottomDepth });
+        const bottomBoxMesh = new MeshDesc(bottomBoxGeo);
+        bottomBoxMesh.name = `${this.name}_bottomBox_mesh_desc`;
+        bottomBoxMesh.position.set(0, bottomPosY, bottomPosZ);
+        bottomBoxMesh.userData.physics = { mass: mass * 4 / 5, restitution, friction };
+
+        const backBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: backHeight, depth: backDepth });
+        const backBoxMesh = new MeshDesc(backBoxGeo);
+        backBoxMesh.name = `${this.name}_backBox_mesh_desc`;
+        backBoxMesh.position.set(0, backPosY, backPosZ);
+        backBoxMesh.userData.physics = { mass: mass / 5, restitution, friction };
+
+        this.rapierInstances.push(bottomBoxMesh, backBoxMesh);
 
     }
 

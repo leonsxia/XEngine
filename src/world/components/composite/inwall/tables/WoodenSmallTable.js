@@ -116,31 +116,31 @@ class WoodenSmallTable extends ObstacleBase {
         const topBoxMesh = new MeshDesc(topBoxGeo);
         topBoxMesh.name = `${this.name}_topBox_mesh_desc`;
         topBoxMesh.position.set(0, topPosY, 0);
-        topBoxMesh.userData.physics = { mass, restitution, friction };
+        topBoxMesh.userData.physics = { mass: mass / 2, restitution, friction };
 
         const footFLGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: footWidth, height: footHeight, depth: footDepth });
         const footFLMesh = new MeshDesc(footFLGeo);
         footFLMesh.name = `${this.name}_footFL_mesh_desc`;
         footFLMesh.position.set(footPosX, footPosY, footPosZ);
-        footFLMesh.userData.physics = { mass: 0, restitution, friction };
+        footFLMesh.userData.physics = { mass: mass / 8, restitution, friction };
 
         const footFRGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: footWidth, height: footHeight, depth: footDepth });
         const footFRMesh = new MeshDesc(footFRGeo);
         footFRMesh.name = `${this.name}_footFR_mesh_desc`;
         footFRMesh.position.set(- footPosX, footPosY, footPosZ);
-        footFRMesh.userData.physics = { mass: 0, restitution, friction };
+        footFRMesh.userData.physics = { mass: mass / 8, restitution, friction };
 
         const footBLGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: footWidth, height: footHeight, depth: footDepth });
         const footBLMesh = new MeshDesc(footBLGeo);
         footBLMesh.name = `${this.name}_footBL_mesh_desc`;
         footBLMesh.position.set(footPosX, footPosY, - footPosZ);
-        footBLMesh.userData.physics = { mass: 0, restitution, friction };
+        footBLMesh.userData.physics = { mass: mass / 8, restitution, friction };
 
         const footBRGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: footWidth, height: footHeight, depth: footDepth });
         const footBRMesh = new MeshDesc(footBRGeo);
         footBRMesh.name = `${this.name}_footBR_mesh_desc`;
         footBRMesh.position.set(- footPosX, footPosY, - footPosZ);
-        footBRMesh.userData.physics = { mass: 0, restitution, friction };
+        footBRMesh.userData.physics = { mass: mass / 8, restitution, friction };
 
         this.rapierInstances.push(topBoxMesh, footFLMesh, footFRMesh, footBLMesh, footBRMesh);
 
