@@ -542,7 +542,8 @@
                     "isPicked": false,
                     "ammo": {
                         "count": 35
-                    }
+                    },
+                    "transparent": false
                 },
                 {
                     "type": "PistolAmmoBox",
@@ -566,7 +567,8 @@
                     "belongTo": "jill",
                     "ammo": {
                         "count": 30
-                    }
+                    },
+                    "transparent": false
                 },
                 {
                     "type": "MagnumAmmoBox",
@@ -589,7 +591,8 @@
                     "isPicked": false,
                     "ammo": {
                         "count": 10
-                    }
+                    },
+                    "transparent": false
                 },
                 {
                     "type": "SMGAmmoBox",
@@ -612,7 +615,8 @@
                     "isPicked": false,
                     "ammo": {
                         "count": 90
-                    }
+                    },
+                    "transparent": false
                 },
                 {
                     "type": "FirstAidKit",
@@ -635,7 +639,8 @@
                     ],
                     "rotationY": 0,
                     "currentRoom": "safe_room_1",
-                    "isPicked": false
+                    "isPicked": false,
+                    "transparent": false
                 },
                 {
                     "type": "FirstAidKit",
@@ -658,7 +663,8 @@
                     ],
                     "rotationY": 0,
                     "currentRoom": "safe_room_1",
-                    "isPicked": false
+                    "isPicked": false,
+                    "transparent": false
                 },
                 {
                     "type": "FirstAidKit",
@@ -681,7 +687,8 @@
                     ],
                     "rotationY": 0,
                     "currentRoom": "safe_room_1",
-                    "isPicked": false
+                    "isPicked": false,
+                    "transparent": false
                 }
             ]
         },
@@ -808,7 +815,8 @@
                         -2.13,
                         0
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "Television01",
@@ -828,7 +836,8 @@
                         -1.3039999999999998,
                         0
                     ],
-                    "rotationY": 3.8397
+                    "rotationY": 3.8397,
+                    "transparent": false
                 },
                 {
                     "type": "HexCylinderPillar",
@@ -890,7 +899,8 @@
                         -2.2,
                         -5
                     ],
-                    "rotationY": 2.618
+                    "rotationY": 2.618,
+                    "transparent": false
                 },
                 {
                     "type": "CylinderPillar",
@@ -1034,7 +1044,8 @@
                         1.23,
                         8
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "LWall",
@@ -1243,7 +1254,8 @@
                     ],
                     "rotationY": 0,
                     "castShadow": false,
-                    "receiveShadow": false
+                    "receiveShadow": false,
+                    "transparent": false
                 },
                 {
                     "type": "SecurityLight",
@@ -1261,7 +1273,8 @@
                     ],
                     "rotationY": -1.5708,
                     "castShadow": false,
-                    "receiveShadow": false
+                    "receiveShadow": false,
+                    "transparent": false
                 }
             ],
             "floors": [
@@ -1345,6 +1358,7 @@
                     ],
                     "rotationY": 1.5708,
                     "ignoreTPC": true,
+                    "transparent": false,
                     "roomSequence": 0,
                     "transportType": 1,
                     "linkTo": "safe_room_1_wooden_door_1",
@@ -1370,6 +1384,7 @@
                     ],
                     "rotationY": 0,
                     "ignoreTPC": true,
+                    "transparent": false,
                     "roomSequence": 0,
                     "transportType": 1,
                     "linkTo": "safe_room_1_wooden_glass_door_1",
@@ -1510,7 +1525,8 @@
                         1.23,
                         0
                     ],
-                    "rotationY": 0
+                    "rotationY": 0,
+                    "transparent": false
                 },
                 {
                     "type": "BoxCube",
@@ -1566,7 +1582,8 @@
                     ],
                     "rotationY": 0,
                     "castShadow": false,
-                    "receiveShadow": false
+                    "receiveShadow": false,
+                    "transparent": false
                 }
             ],
             "floors": [
@@ -1621,6 +1638,7 @@
                     ],
                     "rotationY": 1.5708,
                     "ignoreTPC": true,
+                    "transparent": false,
                     "roomSequence": 1,
                     "transportType": 1,
                     "linkTo": "room1_wooden_door_1",
@@ -1646,6 +1664,7 @@
                     ],
                     "rotationY": 0,
                     "ignoreTPC": true,
+                    "transparent": false,
                     "roomSequence": 1,
                     "transportType": 1,
                     "linkTo": "room1_wooden_glass_door_1",

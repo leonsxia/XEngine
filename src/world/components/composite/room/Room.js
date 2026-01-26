@@ -281,7 +281,8 @@ class Room {
             // set floor collider can be checked by ray to avoid falling into ground
             f.onSyncFinished = () => {
 
-                f.mesh.userData.physics.collider.isFloor = true;
+                const { physics: { collider } } = f.mesh.userData;
+                if (collider) collider.isFloor = true;
 
             }
 

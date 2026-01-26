@@ -367,6 +367,7 @@
                     "ammo": {
                         "count": 35
                     },
+                    "transparent": false,
                     "physics": {
                         "mass": 0
                     }
@@ -394,6 +395,7 @@
                     "ammo": {
                         "count": 30
                     },
+                    "transparent": false,
                     "physics": {
                         "mass": 0
                     }
@@ -419,7 +421,8 @@
                     "isPicked": false,
                     "ammo": {
                         "count": 10
-                    }
+                    },
+                    "transparent": false
                 },
                 {
                     "type": "SMGAmmoBox",
@@ -442,7 +445,8 @@
                     "isPicked": false,
                     "ammo": {
                         "count": 90
-                    }
+                    },
+                    "transparent": false
                 },
                 {
                     "type": "FirstAidKit",
@@ -465,7 +469,8 @@
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
-                    "isPicked": false
+                    "isPicked": false,
+                    "transparent": false
                 },
                 {
                     "type": "FirstAidKit",
@@ -488,7 +493,8 @@
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
-                    "isPicked": false
+                    "isPicked": false,
+                    "transparent": false
                 },
                 {
                     "type": "FirstAidKit",
@@ -511,7 +517,8 @@
                     ],
                     "rotationY": 0,
                     "currentRoom": "room1",
-                    "isPicked": false
+                    "isPicked": false,
+                    "transparent": false
                 }
             ]
         },
@@ -872,6 +879,7 @@
                         -5
                     ],
                     "rotation": [0, 2.618, 0],
+                    "transparent": false,
                     "canBeIgnored": true,
                     "physics": { "mass": 0, "friction": 1 }
                 },
@@ -996,6 +1004,7 @@
                     "climbable": false,
                     "position": [5, -1.2, 8],
                     "rotation": [0, 0, 0],
+                    "transparent": false,
                     "physics": { "mass": 0 }
                 },
                 {
@@ -1354,6 +1363,7 @@
                         0.7098246745971563,
                         0
                     ],
+                    "transparent": false,
                     "physics": { "mass": 30, "friction": 1 }
                 },
                 {
@@ -1372,6 +1382,7 @@
                         0.722561870757904,
                         0
                     ],
+                    "transparent": false,
                     "physics": { "mass": 30, "friction": 1 }
                 },
                 {
@@ -1390,6 +1401,7 @@
                         -1.9041542139258134,
                         0
                     ],
+                    "transparent": false,
                     "physics": { "mass": 30, "friction": 1 }
                 },
                 {
@@ -1408,6 +1420,7 @@
                         0,
                         0
                     ],
+                    "transparent": false,
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
@@ -1426,6 +1439,7 @@
                         0.7223714817643996,
                         -0.00014886498533800557
                     ],
+                    "transparent": false,
                     "physics": { "mass": 0 }
                 },
                 {
@@ -1468,6 +1482,7 @@
                         0.5424182807222999,
                         0.022024510630154016
                     ],
+                    "transparent": false,
                     "physics": { "mass": 100, "friction": 1 }
                 }
             ],
