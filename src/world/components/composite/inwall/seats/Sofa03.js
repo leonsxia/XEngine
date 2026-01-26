@@ -1,6 +1,7 @@
 import { createOBBBox } from '../../../physics/collisionHelper';
 import { ObstacleBase } from '../ObstacleBase';
-import { GLTFModel, CollisionBox } from '../../../Models';
+import { GLTFModel, CollisionBox, GeometryDesc, MeshDesc } from '../../../Models';
+import { BOX_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'in_room/seats/sofa_03_1k/sofa_03_1k.gltf';
 
@@ -122,6 +123,56 @@ class Sofa03 extends ObstacleBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
+
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        const bottomWidth = this._bottomWidth * this.scale[0];
+        const bottomHeight = this._bottomHeight * this.scale[1];
+        const sideHeight = this._sideHeight * this.scale[1];
+        const backDepth = this._backDepth * this.scale[2];
+
+        const bottomDepth = this._bottomDepth * this.scale[2];
+        const sideWidth = this._sideWidth * this.scale[0];
+
+        const sideX = (bottomWidth + sideWidth) * .5;
+        const sideY = (sideHeight - height) * .5;
+        const bottomY = (bottomHeight - height) * .5;
+        const bottomZ = (depth - bottomDepth) * .5;
+        const backZ = (backDepth - depth) * .5;
+
+        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        mass /= 2;
+
+        const backBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: bottomWidth, height, depth: backDepth });
+        const backBoxMesh = new MeshDesc(backBoxGeo);
+        backBoxMesh.name = `${this.name}_backBox_mesh_desc`;
+        backBoxMesh.position.set(0, 0, backZ);
+        backBoxMesh.userData.physics = { mass, restitution, friction };
+
+        const bottomBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: bottomWidth, height: bottomHeight, depth: bottomDepth });
+        const bottomBoxMesh = new MeshDesc(bottomBoxGeo);
+        bottomBoxMesh.name = `${this.name}_bottomBox_mesh_desc`;
+        bottomBoxMesh.position.set(0, bottomY, bottomZ);
+        bottomBoxMesh.userData.physics = { mass, restitution, friction };
+
+        const sideBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: sideWidth, height: sideHeight, depth });
+        const sideLeftBoxMesh = new MeshDesc(sideBoxGeo);
+        sideLeftBoxMesh.name = `${this.name}_sideLeftBox_mesh_desc`;
+        sideLeftBoxMesh.position.set(sideX, sideY, 0);
+        sideLeftBoxMesh.userData.physics = { mass: 0, restitution, friction };
+
+        const sideRightBoxMesh = new MeshDesc(sideBoxGeo);
+        sideRightBoxMesh.name = `${this.name}_sideRightBox_mesh_desc`;
+        sideRightBoxMesh.position.set(- sideX, sideY, 0);
+        sideRightBoxMesh.userData.physics = { mass: 0, restitution, friction };
+
+        this.rapierInstances.push(backBoxMesh, bottomBoxMesh, sideLeftBoxMesh, sideRightBoxMesh);
 
     }
 

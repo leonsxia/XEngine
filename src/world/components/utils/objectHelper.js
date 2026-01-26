@@ -331,7 +331,8 @@ function isRapierObject(object) {
         object instanceof Television01 ||
         object instanceof WoodenPicnicTable ||
         object instanceof RoundWoodenTable ||
-        object instanceof WoodenSmallTable
+        object instanceof WoodenSmallTable ||
+        object instanceof Sofa03
     ) {
 
         return true;

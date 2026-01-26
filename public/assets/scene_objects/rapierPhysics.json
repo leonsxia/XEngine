@@ -1264,9 +1264,6 @@
                     "name": "room1_round_wooden_table_1",
                     "scale": [1, 0.8],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": false,
-                    "climbable": false,
                     "position": [
                         -6,
                         2.0978941917419434,
@@ -1281,9 +1278,6 @@
                     "name": "room1_wooden_table_1",
                     "scale": [1.5, 1, 3],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": false,
-                    "climbable": false,
                     "position": [
                         6,
                         1.9987258911132812,
@@ -1295,6 +1289,24 @@
                         0
                     ],
                     "physics": { "mass": 100 }
+                },
+                {
+                    "type": "Sofa03",
+                    "src": "SOFA_03",
+                    "name": "room1_sofa03_1",
+                    "scale": [1.2, 1, 1.2],
+                    "isObstacle": true,
+                    "position": [
+                        -5.0002073894500825,
+                        2.1559877395629883,
+                        -10.001109107772475
+                    ],
+                    "rotation": [
+                        -0.0005140545510339145,
+                        -0.523598974142949,
+                        -0.00021153404400337878
+                    ],
+                    "physics": { "mass": 500 }
                 },
                 {
                     "type": "Television01",

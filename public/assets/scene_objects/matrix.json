@@ -747,7 +747,8 @@
                         0.17749999997930394
                     ],
                     "rotationY": 0,
-                    "transparent": false
+                    "transparent": false,
+                     "physics": { "mass": 300 }
                 },
                 {
                     "type": "BoxCube",
@@ -786,7 +787,8 @@
                         -1.0240740740878715
                     ],
                     "rotationY": 0,
-                    "transparent": false
+                    "transparent": false,
+                    "physics": { "mass": 300 }
                 },
                 {
                     "type": "WoodenPicnicTable",
