@@ -1266,11 +1266,11 @@
                     "isObstacle": true,
                     "position": [
                         -6,
-                        2.0978941917419434,
+                        1.9979338645935059,
                         -8
                     ],
                     "rotation": [0, 2.0944, 0],
-                    "physics": { "mass": 100 }
+                    "physics": { "mass": 0 }
                 },
                 {
                     "type": "WoodenSmallTable",
@@ -1288,7 +1288,7 @@
                         -0.6684599232798722,
                         0
                     ],
-                    "physics": { "mass": 100 }
+                    "physics": { "mass": 0 }
                 },
                 {
                     "type": "Sofa03",
@@ -1306,7 +1306,82 @@
                         -0.523598974142949,
                         -0.00021153404400337878
                     ],
-                    "physics": { "mass": 500 }
+                    "physics": { "mass": 0 }
+                },
+                {
+                    "type": "PaintedWoodenNightstand",
+                    "src": "PAINTED_WOODEN_NIGHTSTAND",
+                    "name": "room1_painted_wooden_nightstand_1",
+                    "scale": [1.3, 1.2, 1.3],
+                    "isObstacle": true,
+                    "position": [
+                        -7.000267579466702,
+                        1.9578514099121094,
+                        -10.839695506395193
+                    ],
+                    "rotation": [
+                        0.000011832214493485686,
+                        0.10472070467911526,
+                        0.000013713214601792128
+                    ],
+                    "physics": { "mass": 0 }
+                },
+                {
+                    "type": "PaintedWoodenStool",
+                    "src": "PAINTED_WOODEN_STOOL",
+                    "name": "room1_painted_wooden_stool_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        4.790235559818167,
+                        1.887953281402588,
+                        -6.5400789160900334
+                    ],
+                    "rotation": [
+                        0.000008491721905705208,
+                        0.7098246745971563,
+                        -0.00023083116880536302
+                    ],
+                     "physics": { "mass": 30 }
+                },
+                {
+                    "type": "PaintedWoodenWhiteCabinet",
+                    "src": "PAINTED_WOODEN_WHITE_CABINET",
+                    "name": "room1_painted_wooden_white_cabinet_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "position": [
+                        5.040120447660481,
+                        2.189570426940918,
+                        -11.050514436110177
+                    ],
+                    "rotation": [
+                        0,
+                        0,
+                        0
+                    ],
+                     "physics": { "mass": 0 }
+                },
+                {
+                    "type": "VintageGrandfatherClock",
+                    "src": "VINTAGE_GRANDFATHER_CLOCK",
+                    "name": "room1_vintage_grandfather_clock_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "position": [
+                        -8.009475620495296,
+                        2.6986031532287598,
+                        -10.559631388328155
+                    ],
+                    "rotation": [
+                        0.00024776632693540796,
+                        0.7223714817643996,
+                        -0.00014886498533800557
+                    ],
+                    "physics": { "mass": 0 }
                 },
                 {
                     "type": "Television01",

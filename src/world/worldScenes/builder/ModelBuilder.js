@@ -865,14 +865,16 @@ class ModelBuilder {
     createPaintedWoodenTable(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new PaintedWoodenTable(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -883,14 +885,16 @@ class ModelBuilder {
     createPaintedWoodenNightstand(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new PaintedWoodenNightstand(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -901,14 +905,16 @@ class ModelBuilder {
     createPaintedWoodenBlueChair(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new PaintedWoodenBlueChair(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -919,14 +925,16 @@ class ModelBuilder {
     createPaintedWoodenWhiteChair(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new PaintedWoodenWhiteChair(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -937,14 +945,16 @@ class ModelBuilder {
     createPaintedWoodenStool(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0],updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new PaintedWoodenStool(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -975,14 +985,16 @@ class ModelBuilder {
     createPaintedWoodenBlueCabinet(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new PaintedWoodenBlueCabinet(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -993,14 +1005,16 @@ class ModelBuilder {
     createShelf01(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new Shelf01(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -1011,14 +1025,16 @@ class ModelBuilder {
     createPaintedWoodenWhiteCabinet(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0, updateOBBs = true } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new PaintedWoodenWhiteCabinet(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
 
@@ -1081,7 +1097,7 @@ class ModelBuilder {
     createFancyPictureFrame01(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src, img, imgNormal } = specs;
 
         this.setupObjectGLTF({ src }, specs);
@@ -1089,7 +1105,11 @@ class ModelBuilder {
 
         object = new FancyPictureFrame01(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
+
+        if (updateOBBs) object.updateOBBs();
 
         return object;
 
@@ -1098,14 +1118,18 @@ class ModelBuilder {
     createVintageGrandfatherClock(specs) {
 
         let object;
-        const { position = [0, 0, 0], rotationY = 0 } = specs;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { src } = specs;
 
         this.setupObjectGLTF({ src }, specs);
 
         object = new VintageGrandfatherClock(specs);
         object.setPosition(position)
-            .setRotationY(rotationY);
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
+
+        if (updateOBBs) object.updateOBBs();
 
         return object;
 
