@@ -201,12 +201,12 @@ class RapierWorld {
         }
 
         // set floor collider can be checked by ray to avoid falling into ground
-        for (let i = 0, il = this.floors.length; i < il; i++) {
+        // for (let i = 0, il = this.floors.length; i < il; i++) {
 
-            const floor = this.floors[i];
-            floor.mesh.userData.physics.collider.isFloor = true;
+        //     const floor = this.floors[i];
+        //     floor.mesh.userData.physics.collider.isFloor = true;
 
-        }
+        // }
 
     }
 
@@ -657,7 +657,7 @@ class RapierWorld {
                 const ray = new this.physics.RAPIER.Ray(_v1, _down);
                 const hit = this.physics.world.castRay(ray, maxToi, false, null, null, collider, null, 
                     // take terrain into account, `undefined` will not see as `false` in rapier!!!
-                    (collider) => collider.isTerrain || collider.isFloor || false
+                    (collider) => collider.isTerrain || false
                 );
 
                 if (hit) {

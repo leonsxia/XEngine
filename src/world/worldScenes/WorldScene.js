@@ -755,6 +755,8 @@ class WorldScene {
 
         this.updateEnemies();
 
+        this.loop.reset();
+
     }
 
     changeCamera(roomSequence) {
