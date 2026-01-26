@@ -204,7 +204,7 @@ class RapierWorld {
         for (let i = 0, il = this.floors.length; i < il; i++) {
 
             const floor = this.floors[i];
-            floor.mesh.userData.physics.collider.checkByRay = true;
+            floor.mesh.userData.physics.collider.isFloor = true;
 
         }
 
@@ -657,7 +657,7 @@ class RapierWorld {
                 const ray = new this.physics.RAPIER.Ray(_v1, _down);
                 const hit = this.physics.world.castRay(ray, maxToi, false, null, null, collider, null, 
                     // take terrain into account, `undefined` will not see as `false` in rapier!!!
-                    (collider) => collider.checkByRay || false
+                    (collider) => collider.isTerrain || collider.isFloor || false
                 );
 
                 if (hit) {
@@ -689,7 +689,7 @@ class RapierWorld {
 
             controller.computeColliderMovement(collider, moveVector, null, null, 
                 // terrain will be excluded
-                collider => !collider.checkByRay
+                collider => !collider.isTerrain
             );
             const translation = controller.computedMovement();
 
@@ -730,7 +730,7 @@ class RapierWorld {
         _v1.set(position.x, position.y - object.height / 2 + radius, position.z);   // origin
         const hit = this.physics.world.castShape(_v1, _q1, _down, shape, 0, maxToi, stopAtPenetration, null, null, collider, null,
             // terrain will be excluded
-            (collider) => !collider.checkByRay
+            (collider) => !collider.isTerrain
         );
 
         return hit;

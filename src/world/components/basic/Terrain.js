@@ -182,7 +182,7 @@ class Terrain extends BasicObject {
 
     addRapierInfo() {
 
-        this.mesh.userData.physics.collider.checkByRay = true;
+        this.mesh.userData.physics.collider.isTerrain = true;
         this.mesh.userData.physics.collider.name = `${this.name}_collider`;
 
     }
