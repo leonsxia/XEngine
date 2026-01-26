@@ -1247,14 +1247,14 @@
                     "isObstacle": true,
                     "canBeIgnored": true,
                     "position": [
-                        -6.496906873322366,
-                        -2.01,
-                        -2.890598020645133
+                        -6.529252224274001,
+                        -1.9959529638290405,
+                        -2.963326823209254
                     ],
                     "rotation": [
-                        3.1171580440618727,
-                        0.5654866776461628,
-                        3.1433379828417873
+                        3.1173180955412616,
+                        0.4085590525267473,
+                        3.1213591128932077
                     ],
                     "physics": { "mass": 0, "friction": 1 }
                 },
@@ -1270,7 +1270,7 @@
                         -8
                     ],
                     "rotation": [0, 2.0944, 0],
-                    "physics": { "mass": 0 }
+                    "physics": { "mass": 0, "friction": 1 }
                 },
                 {
                     "type": "WoodenSmallTable",
@@ -1288,7 +1288,7 @@
                         -0.6684599232798722,
                         0
                     ],
-                    "physics": { "mass": 0 }
+                    "physics": { "mass": 0, "friction": 1 }
                 },
                 {
                     "type": "Sofa03",
@@ -1306,7 +1306,7 @@
                         -0.523598974142949,
                         -0.00021153404400337878
                     ],
-                    "physics": { "mass": 0 }
+                    "physics": { "mass": 0, "friction": 1 }
                 },
                 {
                     "type": "PaintedWoodenNightstand",
@@ -1324,7 +1324,7 @@
                         0.10472070467911526,
                         0.000013713214601792128
                     ],
-                    "physics": { "mass": 0 }
+                    "physics": { "mass": 0, "friction": 1 }
                 },
                 {
                     "type": "PaintedWoodenStool",
@@ -1345,7 +1345,7 @@
                         0.7098246745971563,
                         -0.00023083116880536302
                     ],
-                     "physics": { "mass": 30 }
+                     "physics": { "mass": 30, "friction": 1 }
                 },
                 {
                     "type": "PaintedWoodenWhiteCabinet",
@@ -1363,7 +1363,7 @@
                         0,
                         0
                     ],
-                     "physics": { "mass": 0 }
+                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
                     "type": "VintageGrandfatherClock",
@@ -1384,6 +1384,24 @@
                     "physics": { "mass": 0 }
                 },
                 {
+                    "type": "PaintedWoodenTable",
+                    "src": "PAINTED_WOODEN_TABLE",
+                    "name": "room1_painted_wooden_table_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "position": [
+                        -8.919981543730902,
+                        2.0797390937805176,
+                        -8.920045776912573
+                    ],
+                    "rotation": [
+                        0,
+                        1.2636632701844048,
+                        0
+                    ],
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
                     "type": "Television01",
                     "src": "TELEVISION_01",
                     "name": "room1_television_01_1",
@@ -1395,16 +1413,16 @@
                     "isObstacle": true,
                     "canBeIgnored": true,
                     "position": [
-                        -6.489766925296546,
-                        -1.2967450618743896,
-                        -2.832128821444477
+                        -6.487372495237851,
+                        -1.2793313264846802,
+                        -2.843125358649356
                     ],
                     "rotation": [
-                        -0.022642115428185096,
-                        0.5398354480503069,
-                        -0.0017491144587764669
+                        -0.04370833952791678,
+                        0.5424182807222999,
+                        0.022024510630154016
                     ],
-                    "physics": { "mass": 100 }
+                    "physics": { "mass": 100, "friction": 1 }
                 }
             ],
             "floors": [],

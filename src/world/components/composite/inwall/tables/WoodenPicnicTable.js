@@ -13,6 +13,16 @@ class WoodenPicnicTable extends ObstacleBase {
     _bottomHeight = .35;
     _sideHeight = .15;
     _topWidth = 1.246;
+    _topHeight = .047;
+    _topDepth = 2.93;
+    _bodyHeight = .508;
+    _bodyDepth = 2.784;
+    _bodyPosY = (this._height - this._bodyHeight) * .5 - this._topHeight;
+    _footHeight = this._height - this._topHeight - this._bodyHeight;
+    _footWidth = .1342;
+    _footDepth = .107;
+    _footPosX = .6392;
+    _footPosZ = 1.342;
 
     gltf;
 
@@ -120,34 +130,72 @@ class WoodenPicnicTable extends ObstacleBase {
         const width = this._width * this.scale[0];
         const height = this._height * this.scale[1];
         const depth = this._depth * this.scale[2];
-        const bottomHeight = this._bottomHeight * this.scale[1];
-        const sideHeight = this._sideHeight * this.scale[1];
         const topWidth = this._topWidth * this.scale[0];
-
-        const topHeight = height - bottomHeight;
+        const topHeight = this._topHeight * this.scale[1];
+        const topDepth = this._topDepth * this.scale[2];
+        const bodyHeight = this._bodyHeight * this.scale[1];
+        const bodyDepth = this._bodyDepth * this.scale[2];
+        const bodyPosY = this._bodyPosY * this.scale[1];
+        const bottomHeight = this._bottomHeight * this.scale[1];
+        const footWidth = this._footWidth * this.scale[0];
+        const footHeight = this._footHeight * this.scale[1];
+        const footDepth = this._footDepth * this.scale[2];
+        const footPosX = this._footPosX * this.scale[0];
+        const footPosZ = this._footPosZ * this.scale[2];
+        const footPosY = (footHeight - height) * .5;
+        const sideHeight = this._sideHeight * this.scale[1];
         const sideWidth = (width - topWidth) * .5;
-        const sideX = (topWidth + sideWidth) * .5;
-        const bottomY = (height - sideHeight) * .5 - topHeight;
+        const sidePosX = (topWidth + sideWidth) * .5;
+        const sidePosY = bottomHeight - (height + sideHeight) * .5;
 
-        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        mass /= 5;
 
-        const topBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: topWidth, height, depth });
+        const topBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: topWidth, height: topHeight, depth: topDepth });
         const topBoxMesh = new MeshDesc(topBoxGeo);
         topBoxMesh.name = `${this.name}_topBox_mesh_desc`;
+        topBoxMesh.position.set(0, (height - topHeight) * .5, 0);
         topBoxMesh.userData.physics = { mass, restitution, friction };
+
+        const bodyBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: topWidth, height: bodyHeight, depth: bodyDepth });
+        const bodyBoxMesh = new MeshDesc(bodyBoxGeo);
+        bodyBoxMesh.name = `${this.name}_bodyBox_mesh_desc`;
+        bodyBoxMesh.position.set(0, bodyPosY, 0);
+        bodyBoxMesh.userData.physics = { mass, restitution, friction };
+
+        const footBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: footWidth, height: footHeight, depth: footDepth });
+        const footFLBoxMesh = new MeshDesc(footBoxGeo);
+        footFLBoxMesh.name = `${this.name}_footFLBox_mesh_desc`;
+        footFLBoxMesh.position.set(footPosX, footPosY, footPosZ);
+        footFLBoxMesh.userData.physics = { mass: mass / 4, restitution, friction };
+
+        const footFRBoxMesh = new MeshDesc(footBoxGeo);
+        footFRBoxMesh.name = `${this.name}_footFRBox_mesh_desc`;
+        footFRBoxMesh.position.set(- footPosX, footPosY, footPosZ);
+        footFRBoxMesh.userData.physics = { mass: mass / 4, restitution, friction };
+
+        const footBLBoxMesh = new MeshDesc(footBoxGeo);
+        footBLBoxMesh.name = `${this.name}_footBLBox_mesh_desc`;
+        footBLBoxMesh.position.set(footPosX, footPosY, - footPosZ);
+        footBLBoxMesh.userData.physics = { mass: mass / 4, restitution, friction };
+
+        const footBRBoxMesh = new MeshDesc(footBoxGeo);
+        footBRBoxMesh.name = `${this.name}_footBRBox_mesh_desc`;
+        footBRBoxMesh.position.set(- footPosX, footPosY, - footPosZ);
+        footBRBoxMesh.userData.physics = { mass: mass / 4, restitution, friction };
 
         const sideBoxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width: sideWidth, height: sideHeight, depth });
         const sideLeftBoxMesh = new MeshDesc(sideBoxGeo);
-        sideLeftBoxMesh.position.set(sideX, bottomY, 0);
+        sideLeftBoxMesh.position.set(sidePosX, sidePosY, 0);
         sideLeftBoxMesh.name = `${this.name}_sideLeftBox_mesh_desc`;
-        sideLeftBoxMesh.userData.physics = { mass: 0, restitution, friction };
+        sideLeftBoxMesh.userData.physics = { mass, restitution, friction };
 
         const sideRightBoxMesh = new MeshDesc(sideBoxGeo);
-        sideRightBoxMesh.position.set(- sideX, bottomY, 0);
+        sideRightBoxMesh.position.set(- sidePosX, sidePosY, 0);
         sideRightBoxMesh.name = `${this.name}_sideRightBox_mesh_desc`;
-        sideRightBoxMesh.userData.physics = { mass: 0, restitution, friction };
+        sideRightBoxMesh.userData.physics = { mass, restitution, friction };
 
-        this.rapierInstances.push(topBoxMesh, sideLeftBoxMesh, sideRightBoxMesh);
+        this.rapierInstances.push(topBoxMesh, bodyBoxMesh, footFLBoxMesh, footFRBoxMesh, footBLBoxMesh, footBRBoxMesh, sideLeftBoxMesh, sideRightBoxMesh);
 
     }
 
