@@ -653,12 +653,8 @@ class RapierWorld {
                 // check on land
                 const maxToi = avatar.height * DOWN_RAY_LENGTH;
                 _v1.set(position.x, position.y, position.z);    // origin
-
-                const ray = new this.physics.RAPIER.Ray(_v1, _down);
-                const hit = this.physics.world.castRay(ray, maxToi, false, null, null, collider, null, 
-                    // take terrain into account, `undefined` will not see as `false` in rapier!!!
-                    (collider) => collider.isTerrain || false
-                );
+                // take terrain into account, `undefined` will not see as `false` in rapier!!!
+                const hit = this.checkRayHitCollider(_v1, _down, maxToi, collider, (collider) => collider.isTerrain || false);
 
                 if (hit) {
 
@@ -682,7 +678,7 @@ class RapierWorld {
 
                 avatar.tickRotateActions(delta);
                 // update rotation
-                avatar.group.getWorldQuaternion(_q1);
+                // avatar.group.getWorldQuaternion(_q1);
                 // collider.setRotation(_q1);
 
             }
@@ -715,7 +711,25 @@ class RapierWorld {
 
     }
 
-    checkHitCollider(object, instance) {
+    checkRayHitCollider(origin, direction, maxToi, excludeCollider = null, filter = null) {
+
+        const ray = new this.physics.RAPIER.Ray(origin, direction);
+        const hit = this.physics.world.castRay(ray, maxToi, false, null, null, excludeCollider, null, filter);
+
+        return hit;
+
+    }
+
+    checkRayHitColliderAndGetNormal(origin, direction, maxToi, excludeCollider = null, filter = null) {
+
+        const ray = new this.physics.RAPIER.Ray(origin, direction);
+        const hitWithNormal = this.physics.world.castRayAndGetNormal(ray, maxToi, false, null, null, excludeCollider, null, filter);
+
+        return hitWithNormal;
+
+    }
+
+    checkShapeHitCollider(object, instance) {
 
         const { physics: { collider, controller } } = instance.userData;
         const position = collider.translation();

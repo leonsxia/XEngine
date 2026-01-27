@@ -1,6 +1,6 @@
 import { Vector3, Raycaster, ArrowHelper, Object3D } from 'three';
 import { blue, green, red, yellow } from '../basic/colorBase';
-import { PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../utils/constants';
+import { PHYSICS_TYPES, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAMERA_TRANSPARENT_LAYER } from '../utils/constants';
 import { container } from '../../systems/htmlElements';
 import { Logger } from '../../systems/Logger';
 
@@ -9,6 +9,7 @@ const HEADLENGTH = .5;
 const HEADWIDTH = .1;
 
 const _v1 = new Vector3();
+const _v2 = new Vector3();
 const _obj0 = new Object3D();
 
 const DEBUG = true;
@@ -556,9 +557,7 @@ class ThirdPersonCamera {
 
             intersects.push(...ray.intersectObjects(this._objectsNeedChecked));
 
-        }
-
-        collisionRayIntersects.push(...this.#collisionRay.intersectObjects(this._objectsNeedChecked));
+        }        
 
         this.resetInterectObjects();
 
@@ -602,26 +601,46 @@ class ThirdPersonCamera {
 
         }
 
-        if (collisionRayIntersects.length > 0) {
+        const { physics } = this.attachTo.setup;
+        if (physics === PHYSICS_TYPES.SIMPLE) {
 
-            const { point, object } = collisionRayIntersects[0];
+            collisionRayIntersects.push(...this.#collisionRay.intersectObjects(this._objectsNeedChecked));
 
-            const dummy = this.dummyObject.copy(_obj0);
+            if (collisionRayIntersects.length > 0) {
 
-            object.updateWorldMatrix(true, false);
-            dummy.applyMatrix4(object.matrixWorld);
-            dummy.scale.set(1, 1, 1);
-            // dummy.updateMatrixWorld();  // worldToLocal will do this
+                const { point, object } = collisionRayIntersects[0];
 
-            const pointToObject = dummy.worldToLocal(_v1.copy(point));
+                const dummy = this.dummyObject.copy(_obj0);
+                object.updateWorldMatrix(true, false);
+                dummy.applyMatrix4(object.matrixWorld);
+                dummy.scale.set(1, 1, 1);
+                // dummy.updateMatrixWorld();  // worldToLocal will do this
 
-            pointToObject.z += 0.1;
-            pointToObject.x += 0.05;
-            pointToObject.y += this.#camPosLocal.y - this.#collisionCamPosLocal.y;
+                const pointToObject = dummy.worldToLocal(_v1.copy(point));
+                pointToObject.z += 0.1;
+                pointToObject.x += 0.05;
+                pointToObject.y += this.#camPosLocal.y - this.#collisionCamPosLocal.y;
 
-            const updatedPos = pointToObject.applyMatrix4(dummy.matrixWorld);
+                const updatedPos = pointToObject.applyMatrix4(dummy.matrixWorld);
+                this.camera.position.copy(updatedPos);
 
-            this.camera.position.copy(updatedPos);
+            }
+
+        } else if (physics === PHYSICS_TYPES.RAPIER) {
+
+            const origin = _v1.copy(this.#collisionRay.ray.origin);
+            const dir = _v2.copy(this.#collisionRay.ray.direction);
+            const maxToi = this.#collisionRay.far;
+            const excludeCollider = this.#player.rapierContainer.getInstanceByName('characterController').userData.physics.collider;
+            const hitWithNormal = this.attachTo.physics.checkRayHitColliderAndGetNormal(origin, dir, maxToi, excludeCollider, (collider) => !collider.isTerrain);
+
+            if (hitWithNormal) {
+
+                const hitPoint = origin.add(dir.multiplyScalar(hitWithNormal.timeOfImpact));
+                hitPoint.add(_v2.copy(hitWithNormal.normal).multiplyScalar(0.1));
+                this.camera.position.set(hitPoint.x, this.camera.position.y, hitPoint.z);
+
+            }
 
         }
 
