@@ -27,8 +27,8 @@ class RapierWorld {
     activeEnemies = [];
 
     compounds = [];
+    walls = [];
     floors = [];
-    slopes = [];
     terrains = [];
 
     _currentRoom;
@@ -105,20 +105,20 @@ class RapierWorld {
 
         const {
             compounds,
-            floors, slopes,
+            walls, floors,
             terrains 
         } = room;
 
         this.compounds = compounds;
+        this.walls = walls;
         this.floors = floors;
-        this.slopes = slopes;
         this.terrains = terrains;
 
         this._currentRoom = room.name;
 
         this.physics.removeAll();
         this.cleanupAvatars();
-        this.setupWorld(room);
+        this.setupWorld();
 
         if (this._debug) this.updateDebugger();
 
@@ -179,9 +179,9 @@ class RapierWorld {
 
     }
 
-    setupWorld(room) {
+    setupWorld() {
 
-        this.addDefaultWalls(room);
+        this.addDefaultWalls();
         this.addCompounds();
         this.addFloors();
         this.addTerrains();
@@ -210,12 +210,16 @@ class RapierWorld {
 
     }
 
-    addDefaultWalls(room) {
+    addDefaultWalls() {
 
-        this.bindObjectSyncEvents(room.leftWall);
-        this.bindObjectSyncEvents(room.rightWall);
-        this.bindObjectSyncEvents(room.frontWall);
-        this.bindObjectSyncEvents(room.backWall);
+        for (let i = 0, il = this.walls.length; i < il; i++) {
+
+            const wall = this.walls[i];
+            const { physics: { restitution = 0, friction = 0 } = {} } = wall.specs;
+            wall.setupRapierPhysics({ mass: 0, restitution, friction });
+            this.bindObjectSyncEvents(wall);
+
+        }
 
     }
 

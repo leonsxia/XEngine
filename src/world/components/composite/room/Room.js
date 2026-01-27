@@ -86,7 +86,6 @@ class Room {
             this.group.add(this.backWall.mesh);
             this.bindWallEvents(this.backWall);
             this.backWall.visible = true;
-            if (this.physics === PHYSICS_TYPES.RAPIER) this.backWall.setupRapierPhysics();
 
         }
 
@@ -98,7 +97,6 @@ class Room {
             this.group.add(this.leftWall.mesh);
             this.bindWallEvents(this.leftWall);
             this.leftWall.visible = true;
-            if (this.physics === PHYSICS_TYPES.RAPIER) this.leftWall.setupRapierPhysics();
 
         }
 
@@ -110,7 +108,6 @@ class Room {
             this.group.add(this.rightWall.mesh);
             this.bindWallEvents(this.rightWall);
             this.rightWall.visible = true;
-            if (this.physics === PHYSICS_TYPES.RAPIER) this.rightWall.setupRapierPhysics();
 
         }
         
@@ -123,7 +120,6 @@ class Room {
             this.group.add(this.frontWall.mesh);
             this.bindWallEvents(this.frontWall);
             this.frontWall.visible = true;
-            if (this.physics === PHYSICS_TYPES.RAPIER) this.frontWall.setupRapierPhysics();
 
         }
 
