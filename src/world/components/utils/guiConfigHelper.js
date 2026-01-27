@@ -1250,6 +1250,26 @@ function makeObjectsGuiConfig(objects) {
                 params: [0, 1, PICKED_NUMBER_STEPS],
                 type: 'number'
             }));
+            
+            if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER) {
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'segmentW',
+                    prop: 'segmentW',
+                    value: object.father.specs,
+                    params: [1, 350, 1],
+                    type: 'number'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'segmentD',
+                    prop: 'segmentD',
+                    value: object.father.specs,
+                    params: [1, 350, 1],
+                    type: 'number'
+                }));
+
+            }
 
         }
 

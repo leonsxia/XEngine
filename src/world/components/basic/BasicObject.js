@@ -1,7 +1,7 @@
 import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher, Quaternion, MeshStandardMaterial } from 'three';
 // eslint-disable-next-line no-unused-vars
 import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
-import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, generateTerrainGeometry } from '../utils/geometryHelper';
+import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, getTerrainGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
 import { basicMaterials } from './basicMaterial';
 import { white } from './colorBase';
@@ -90,11 +90,7 @@ class BasicObject extends EventDispatcher {
                 break;
             case TERRAIN:
                 {
-                    const { width, depth, height = 1, segmentW, segmentD, useHeightmap = false } = specs;
-                    const geometry = !useHeightmap ? 
-                        generateTerrainGeometry(width, depth, height, segmentW, segmentD).geometry : 
-                        new PlaneGeometry(width, depth, segmentW, segmentD);
-                    this.geometry = geometry;
+                    this.geometry = getTerrainGeometry(specs);
                 }
                 break;
             case CAPSULE:
@@ -705,11 +701,14 @@ class BasicObject extends EventDispatcher {
     // events
     onRapierInstanceRemoved;
     onRapierInstanceAdded;
+    onBeforeSync;
     onSyncFinished;
 
     syncRapierWorld(force = false) {
 
         if (this.mesh.userData.physics) {
+
+            if (this.onBeforeSync) this.onBeforeSync();
 
             if (force || !this.onRapierInstanceRemoved || !this.onRapierInstanceAdded) {
 

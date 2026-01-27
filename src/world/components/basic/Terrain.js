@@ -2,7 +2,7 @@ import { Mesh, Vector3 } from 'three';
 import { BasicObject } from './BasicObject';
 import { TERRAIN } from '../utils/constants';
 import { Logger } from '../../systems/Logger';
-import { updateTerrainGeometry } from '../utils/geometryHelper';
+import { getTerrainGeometry, updateTerrainGeometry } from '../utils/geometryHelper';
 
 const DEBUG = false;
 const _v1 = new Vector3();
@@ -13,6 +13,10 @@ class Terrain extends BasicObject {
 
     _cachedWidth;
     _cachedHeight;
+
+    _segmentW;
+    _segmentD;
+    _displacementMap;
 
     #logger = new Logger(DEBUG, 'Terrain');
 
@@ -25,6 +29,8 @@ class Terrain extends BasicObject {
         this.mesh.name = specs.name;
         this.mesh.father = this;
 
+        this.updateSegments();
+        this.bindOnBeforeSync();
         this.bindEvents();
 
     }
@@ -76,6 +82,8 @@ class Terrain extends BasicObject {
 
             }
 
+            this._displacementMap = _map;
+
         }
 
         initPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
@@ -116,6 +124,8 @@ class Terrain extends BasicObject {
                 updateTerrainGeometry(this.geometry, disp, this.material, [repeatU, repeatV], height);
 
             }
+
+            this._displacementMap = disp;
 
         }
 
@@ -168,6 +178,41 @@ class Terrain extends BasicObject {
 
         this.setConfig({ texScale: [this.scale.x, this.scale.y] })
             .updateTextures();
+
+    }
+
+    updateSegments() {
+
+        const { segmentW, segmentD } = this.specs;
+        this._segmentW = segmentW;
+        this._segmentD = segmentD;
+
+    }
+
+    bindOnBeforeSync() {
+
+        this.onBeforeSync = () => {
+
+            const { segmentW, segmentD } = this.specs;
+            if (this._segmentW !== segmentW || this._segmentD !== segmentD) {
+
+                const { useHeightmap = false, repeatU = 1, repeatV = 1, height = 1 } = this.specs;
+                const geometry = getTerrainGeometry(this.specs);
+                if (useHeightmap) {
+
+                    updateTerrainGeometry(geometry, this._displacementMap, this.material, [repeatU, repeatV], height);
+
+                }
+
+                this.mesh.geometry = geometry;
+                this.geometry.dispose();
+                this.geometry = geometry;
+
+                this.updateSegments();
+
+            }
+
+        }
 
     }
 

@@ -394,6 +394,17 @@ function updateTerrainGeometry(geometry, heightmap, material, texScale = [1, 1],
 
 }
 
+function getTerrainGeometry(specs) {
+
+    const { width, depth, height = 1, segmentW, segmentD, useHeightmap = false } = specs;
+    const geometry = !useHeightmap ?
+        generateTerrainGeometry(width, depth, height, segmentW, segmentD).geometry :
+        new PlaneGeometry(width, depth, segmentW, segmentD);
+
+    return geometry;
+
+}
+
 export {
     createPlaneGeometry,
     createTriangleGeometry,
@@ -401,5 +412,6 @@ export {
     createStairsFrontGeometry,
     createStairsTopGeometry,
     generateTerrainGeometry,
-    updateTerrainGeometry
+    updateTerrainGeometry,
+    getTerrainGeometry
 };

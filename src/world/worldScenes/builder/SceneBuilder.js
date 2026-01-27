@@ -1295,10 +1295,26 @@ class SceneBuilder {
 
                         _origin.rotation = this.rotationArr(find.rotation);
 
+                        if (find.father.isTerrain) {
+
+                            _origin.segmentW = find.father.specs.segmentW;
+                            _origin.segmentD = find.father.specs.segmentD;
+
+                        }
+
                     } else {
 
                         const { rotation = [0, 0, 0] } = _target;
                         find.father.setRotation(rotation);
+
+                        if (find.father.isTerrain) {
+
+                            const { segmentW = 1, segmentD = 1, useHeightmap = false } = _target;
+                            find.father.specs.segmentW = segmentW;
+                            find.father.specs.segmentD = segmentD;
+                            find.father.specs.useHeightmap = useHeightmap;
+
+                        }
 
                     }
                         
