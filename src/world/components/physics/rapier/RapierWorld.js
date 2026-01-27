@@ -654,12 +654,12 @@ class RapierWorld {
                 const maxToi = avatar.height * DOWN_RAY_LENGTH;
                 _v1.set(position.x, position.y, position.z);    // origin
                 // take terrain into account, `undefined` will not see as `false` in rapier!!!
-                const hit = this.checkRayHitCollider(_v1, _down, maxToi, collider, (collider) => collider.isTerrain || false);
+                const { hit, ray } = this.physics.checkRayHitCollider(_v1, _down, maxToi, collider, (collider) => collider.isTerrain || false);
 
                 if (hit) {
 
                     // The hit point is obtained from the ray's origin and direction: `origin + dir * timeOfImpact`.
-                    onLandPoints.push(_v1.add(_v2.copy(_down).multiplyScalar(hit.timeOfImpact)));
+                    onLandPoints.push(ray.pointAt(hit.timeOfImpact)); // Same as: `ray.origin + ray.dir * toi`
                     moveVector.add(avatar.tickOnLandPointsAdjustRaw(onLandPoints));
                     isLanded = true;
                     this.#logger.log(`charater: ${avatar.name}, is landed by castRay`);
@@ -711,24 +711,7 @@ class RapierWorld {
 
     }
 
-    checkRayHitCollider(origin, direction, maxToi, excludeCollider = null, filter = null) {
-
-        const ray = new this.physics.RAPIER.Ray(origin, direction);
-        const hit = this.physics.world.castRay(ray, maxToi, false, null, null, excludeCollider, null, filter);
-
-        return hit;
-
-    }
-
-    checkRayHitColliderAndGetNormal(origin, direction, maxToi, excludeCollider = null, filter = null) {
-
-        const ray = new this.physics.RAPIER.Ray(origin, direction);
-        const hitWithNormal = this.physics.world.castRayAndGetNormal(ray, maxToi, false, null, null, excludeCollider, null, filter);
-
-        return hitWithNormal;
-
-    }
-
+    // deprecated
     checkShapeHitCollider(object, instance) {
 
         const { physics: { collider, controller } } = instance.userData;

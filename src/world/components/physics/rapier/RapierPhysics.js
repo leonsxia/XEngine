@@ -575,6 +575,24 @@ class RapierPhysics {
 
     }
 
+    checkRayHitCollider(origin, direction, maxToi, excludeCollider = null, filter = null) {
+
+        const ray = new this.RAPIER.Ray(origin, direction);
+        const hit = this.world.castRay(ray, maxToi, false, null, null, excludeCollider, null, filter);
+
+        return { hit, ray };
+
+    }
+
+    checkRayHitColliderAndGetNormal(origin, direction, maxToi, excludeCollider = null, filter = null) {
+
+        const ray = new this.RAPIER.Ray(origin, direction);
+        const hitWithNormal = this.world.castRayAndGetNormal(ray, maxToi, false, null, null, excludeCollider, null, filter);
+
+        return { hitWithNormal, ray };
+
+    }
+
 }
 
 export { RapierPhysics, getShape };
