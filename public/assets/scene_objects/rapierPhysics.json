@@ -1424,6 +1424,44 @@
                     "physics": { "mass": 0, "friction": 1 }
                 },
                 {
+                    "type": "PaintedWoodenBlueCabinet",
+                    "src": "PAINTED_WOODEN_BLUE_CABINET",
+                    "name": "room1_painted_wooden_blue_cabinet_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "position": [
+                        6.5402111363170095,
+                        2.8832387924194336,
+                        -11.05139296428288
+                    ],
+                    "rotation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "transparent": false,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "Shelf01",
+                    "src": "SHELF_01",
+                    "name": "room1_shelf_01_1",
+                    "scale": [1, 1, 1.5],
+                    "isObstacle": true,
+                    "position": [
+                        7.740497262441139,
+                        2.6376023292541504,
+                        -10.761279504935974
+                    ],
+                    "rotation": [
+                        0,
+                        -0.5128267082527895,
+                        0
+                    ],
+                    "transparent": false,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
                     "type": "VintageGrandfatherClock",
                     "src": "VINTAGE_GRANDFATHER_CLOCK",
                     "name": "room1_vintage_grandfather_clock_1",

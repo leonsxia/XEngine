@@ -339,6 +339,8 @@ function isRapierObject(object) {
         object instanceof PaintedWoodenWhiteChair ||
         object instanceof PaintedWoodenBlueChair ||
         object instanceof PaintedWoodenWhiteCabinet ||
+        object instanceof PaintedWoodenBlueCabinet ||
+        object instanceof Shelf01 ||
         object instanceof VintageGrandfatherClock
     ) {
 
