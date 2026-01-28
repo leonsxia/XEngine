@@ -11,6 +11,7 @@ import { WorldMatrix } from "./worldScenes/Matrix";
 import { EnemyTestScene } from "./worldScenes/EnemyTestScene";
 import { WorldTerrain } from "./worldScenes/WorldTerrain";
 import { WorldRapier } from "./worldScenes/WorldRapier";
+import { RouteKanal } from "./worldScenes/levels/RouteKanal";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
@@ -49,7 +50,8 @@ const config = {
         'Matrix', 
         'Enemy Test Scene',
         'Terrain',
-        'Rapier Physics'
+        'Rapier Physics',
+        'Route Kanal'
     ],  // scene list for scene selector
 };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
@@ -138,7 +140,8 @@ class World {
             new WorldMatrix(this.#renderer, config), 
             new EnemyTestScene(this.#renderer, config),
             new WorldTerrain(this.#renderer, config),
-            new WorldRapier(this.#renderer, config)
+            new WorldRapier(this.#renderer, config),
+            new RouteKanal(this.#renderer, config)
         );
 
     }
