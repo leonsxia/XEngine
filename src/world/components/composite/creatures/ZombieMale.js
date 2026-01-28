@@ -262,6 +262,8 @@ class ZombieMale extends CreatureBase {
 
         }
 
+        this.addSoundsToGroup(this.typeMapping.weapon.fireSound);
+
         return this;
 
     }
