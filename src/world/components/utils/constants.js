@@ -270,6 +270,12 @@ const TEXTURE_NAMES = {
     MOSSY_ROCK_ROUGH: 'MOSSY_ROCK_ROUGH',
     MOSSY_ROCK_METAL: 'MOSSY_ROCK_METAL',
     MOSSY_ROCK_DISP: 'MOSSY_ROCK_DISP',
+    FOREST_GROUND_01: 'FOREST_GROUND_01',
+    FOREST_GROUND_01_NORMAL: 'FOREST_GROUND_01_NORMAL',
+    FOREST_GROUND_01_AO: 'FOREST_GROUND_01_AO',
+    FOREST_GROUND_01_ROUGH: 'FOREST_GROUND_01_ROUGH',
+    FOREST_GROUND_01_METAL: 'FOREST_GROUND_01_METAL',
+    FOREST_GROUND_01_DISP: 'FOREST_GROUND_01_DISP',
     // water
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
@@ -387,6 +393,14 @@ const TEXTURES = [{
     roughMap: 'assets/textures/arm/mossy_rock_arm_2k.jpg',
     metalMap: 'assets/textures/arm/mossy_rock_arm_2k.jpg',
     dispMap: 'assets/textures/disp/mossy_rock_disp_2k.png'
+}, {
+    name: TEXTURE_NAMES.FOREST_GROUND_01, 
+    map: 'assets/textures/terrain/forrest_ground_01_diff_2k.jpg', 
+    normalMap: 'assets/textures/normals/forrest_ground_01_nor_gl_2k.jpg',
+    aoMap: 'assets/textures/arm/forrest_ground_01_arm_4k.jpg',
+    roughMap: 'assets/textures/arm/forrest_ground_01_arm_4k.jpg',
+    metalMap: 'assets/textures/arm/forrest_ground_01_arm_4k.jpg',
+    dispMap: 'assets/textures/disp/forrest_ground_01_disp_2k.png'
 }, {
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {
