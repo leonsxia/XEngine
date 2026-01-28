@@ -294,7 +294,6 @@ class BasicObject extends EventDispatcher {
     set repeatU(val) {
 
         this.specs.repeatU = val;
-
         this.updateTextures();
 
     }
@@ -309,7 +308,34 @@ class BasicObject extends EventDispatcher {
     set repeatV(val) {
 
         this.specs.repeatV = val;
+        this.updateTextures();
 
+    }
+
+    get offsetX() {
+
+        const { offsetX = 0 } = this.specs;
+        return offsetX;
+
+    }
+
+    set offsetX(val) {
+
+        this.specs.offsetX = val;
+        this.updateTextures();
+
+    }
+
+    get offsetY() {
+
+        const { offsetY = 0 } = this.specs;
+        return offsetY;
+
+    }
+
+    set offsetY(val) {
+
+        this.specs.offsetY = val;
         this.updateTextures();
 
     }
@@ -471,7 +497,7 @@ class BasicObject extends EventDispatcher {
 
         }
 
-        if (offsetX > 0 || offsetY > 0) {
+        if (offsetX >= 0 || offsetY >= 0) {
 
             texture.offset.set(offsetX, offsetY);
 

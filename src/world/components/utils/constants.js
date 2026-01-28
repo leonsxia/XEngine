@@ -206,8 +206,6 @@ const TEXTURE_NAMES = {
     WES_NUT: 'WES_NUT',
     WES_NUT_NORMAL: 'WES_NUT_NORMAL',
     // texture
-    LIGHT_BROWN_CARPET: 'LIGHT_BROWN_CARPET',
-    LIGHT_BROWN_CARPET_NORMAL: 'LIGHT_BROWN_CARPET_NORMAL',
     CONCRETE_128: 'CONCRETE_128',
     CONCRETE_128_NORMAL: 'CONCRETE_128_NORMAL',
     CONCRETE_132: 'CONCRETE_132',
@@ -246,6 +244,12 @@ const TEXTURE_NAMES = {
     FOREST_LEAVES_02_ROUGH: 'FOREST_LEAVES_02_ROUGH',
     FOREST_LEAVES_02_METAL: 'FOREST_LEAVES_02_METAL',
     FOREST_LEAVES_02_DISP: 'FOREST_LEAVES_02_DISP',
+    FOREST_LEAVES_04: 'FOREST_LEAVES_04',
+    FOREST_LEAVES_04_NORMAL: 'FOREST_LEAVES_04_NORMAL',
+    FOREST_LEAVES_04_AO: 'FOREST_LEAVES_04_AO',
+    FOREST_LEAVES_04_ROUGH: 'FOREST_LEAVES_04_ROUGH',
+    FOREST_LEAVES_04_METAL: 'FOREST_LEAVES_04_METAL',
+    FOREST_LEAVES_04_DISP: 'FOREST_LEAVES_04_DISP',
     COAST_SAND_ROCKS_02: 'COAST_SAND_ROCKS_02',
     COAST_SAND_ROCKS_02_NORMAL: 'COAST_SAND_ROCKS_02_NORMAL',
     COAST_SAND_ROCKS_02_AO: 'COAST_SAND_ROCKS_02_AO',
@@ -258,6 +262,12 @@ const TEXTURE_NAMES = {
     AERIAL_ROCKS_01_ROUGH: 'AERIAL_ROCKS_01_ROUGH',
     AERIAL_ROCKS_01_METAL: 'AERIAL_ROCKS_01_METAL',
     AERIAL_ROCKS_01_DISP: 'AERIAL_ROCKS_01_DISP',
+    AERIAL_GRASS_ROCK: 'AERIAL_GRASS_ROCK',
+    AERIAL_GRASS_ROCK_NORMAL: 'AERIAL_GRASS_ROCK_NORMAL',
+    AERIAL_GRASS_ROCK_AO: 'AERIAL_GRASS_ROCK_AO',
+    AERIAL_GRASS_ROCK_ROUGH: 'AERIAL_GRASS_ROCK_ROUGH',
+    AERIAL_GRASS_ROCK_METAL: 'AERIAL_GRASS_ROCK_METAL',
+    AERIAL_GRASS_ROCK_DISP: 'AERIAL_GRASS_ROCK_DIPS',
     BROWN_MUD_LEAVES_01: 'BROWN_MUD_LEAVES_01',
     BROWN_MUD_LEAVES_01_NORMAL: 'BROWN_MUD_LEAVES_01_NORMAL',
     BROWN_MUD_LEAVES_01_AO: 'BROWN_MUD_LEAVES_01_AO',
@@ -275,7 +285,7 @@ const TEXTURE_NAMES = {
     FOREST_GROUND_01_AO: 'FOREST_GROUND_01_AO',
     FOREST_GROUND_01_ROUGH: 'FOREST_GROUND_01_ROUGH',
     FOREST_GROUND_01_METAL: 'FOREST_GROUND_01_METAL',
-    FOREST_GROUND_01_DISP: 'FOREST_GROUND_01_DISP',
+    FOREST_GROUND_01_DISP: 'FOREST_GROUND_01_DISP',    
     // water
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
@@ -309,8 +319,6 @@ const TEXTURES = [{
     name: TEXTURE_NAMES.WES_NAKED_WOMAN, map: 'assets/textures/wes_gallery/wes_naked_woman.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_naked_woman_normal.jpg'
 }, {
     name: TEXTURE_NAMES.WES_NUT, map: 'assets/textures/wes_gallery/wes_nut.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_nut_normal.jpg'
-}, {
-    name: TEXTURE_NAMES.LIGHT_BROWN_CARPET, map: 'assets/textures/carpets/Light_Brown_Carpet.jpg', normalMap: 'assets/textures/normals/Light_Brown_Carpet.jpg'
 }, {
     name: TEXTURE_NAMES.CONCRETE_128, map: 'assets/textures/walls/Texturelabs_Concrete_128M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_128L.jpg'
 }, {
@@ -354,6 +362,14 @@ const TEXTURES = [{
     metalMap: 'assets/textures/arm/forest_leaves_02_arm_4k.jpg',
     dispMap: 'assets/textures/disp/forest_leaves_02_disp_2k.png'
 }, {
+    name: TEXTURE_NAMES.FOREST_LEAVES_04, 
+    map: 'assets/textures/terrain/forest_leaves_04_diff_4k.jpg', 
+    normalMap: 'assets/textures/normals/forest_leaves_04_nor_gl_2k.jpg',
+    aoMap: 'assets/textures/arm/forest_leaves_04_arm_4k.jpg',
+    roughMap: 'assets/textures/arm/forest_leaves_04_arm_4k.jpg',
+    metalMap: 'assets/textures/arm/forest_leaves_04_arm_4k.jpg',
+    dispMap: 'assets/textures/disp/forest_leaves_04_disp_2k.png'
+}, {
     name: TEXTURE_NAMES.COAST_SAND_ROCKS_02, 
     map: 'assets/textures/terrain/coast_sand_rocks_02_diff_4k.jpg', 
     normalMap: 'assets/textures/normals/coast_sand_rocks_02_nor_gl_2k.jpg',
@@ -373,6 +389,14 @@ const TEXTURES = [{
     roughMap: 'assets/textures/arm/aerial_rocks_01_arm_4k.jpg',
     metalMap: 'assets/textures/arm/aerial_rocks_01_arm_4k.jpg',
     dispMap: 'assets/textures/disp/aerial_rocks_01_disp_2k.png'
+}, {
+    name: TEXTURE_NAMES.AERIAL_GRASS_ROCK, 
+    map: 'assets/textures/terrain/aerial_grass_rock_diff_4k.jpg', 
+    normalMap: 'assets/textures/normals/aerial_grass_rock_nor_gl_2k.jpg',
+    aoMap: 'assets/textures/arm/aerial_grass_rock_arm_4k.jpg',
+    roughMap: 'assets/textures/arm/aerial_grass_rock_arm_4k.jpg',
+    metalMap: 'assets/textures/arm/aerial_grass_rock_arm_4k.jpg',
+    dispMap: 'assets/textures/disp/aerial_grass_rock_disp_2k.png'
 }, {
     name: TEXTURE_NAMES.BROWN_MUD_LEAVES_01, 
     map: 'assets/textures/terrain/brown_mud_leaves_01_diff_2k.jpg', 

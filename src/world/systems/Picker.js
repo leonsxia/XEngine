@@ -89,9 +89,6 @@ class Picker {
         this.#raycaster.setFromCamera(this.#mouse, this.#camera);
 
         const intersects = this.#raycaster.intersectObjects(this.#scene.children.filter(c => c.visible));
-
-        this.clearPicked();
-
         if (intersects.length > 0) {
 
             const intersectObj = intersects[0].object;
@@ -122,11 +119,14 @@ class Picker {
             father?.resetFallingState?.();
             father?.resetInwaterAnimeState?.();
 
-            this.#postProcessor.addOutlineObjects([selectedObject]);
+            if (this.#worldScene.pickedObject !== selectedObject) {
 
-            this.#worldScene.pickedObject = selectedObject;
+                this.clearPicked();
+                this.#postProcessor.addOutlineObjects([selectedObject]);
+                this.#worldScene.pickedObject = selectedObject;
+                this.#worldScene.guiMaker.setupObjectsGuiConfig([this.#worldScene.pickedObject]);
 
-            this.#worldScene.guiMaker.setupObjectsGuiConfig([this.#worldScene.pickedObject]);
+            }
 
         }
 

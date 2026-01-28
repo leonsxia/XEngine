@@ -17,6 +17,8 @@ class Terrain extends BasicObject {
 
     _repeatU;
     _repeatV;
+    _offsetX;
+    _offsetY;
 
     _segmentW;
     _segmentD;
@@ -36,6 +38,7 @@ class Terrain extends BasicObject {
         this.updateSize();
         this.updateSegments();
         this.updateTexRepeat();
+        this.updateTexOffset();
         this.bindOnBeforeSync();
         this.bindEvents();
 
@@ -49,7 +52,7 @@ class Terrain extends BasicObject {
         const {
             aoMap, roughMap, roughness = 1, metalMap, metalness = 0,
             dispMap, displacementScale = 1, useHeightmap = false,
-            repeatU = 1, repeatV = 1, height = 1
+            repeatU = 1, repeatV = 1, offsetX = 0, offsetY = 0, height = 1
         } = this.specs;
 
         if (aoMap?.isTexture) {
@@ -84,7 +87,7 @@ class Terrain extends BasicObject {
 
             if (useHeightmap) {
 
-                updateTerrainGeometry(this.geometry, _map, this.material, [repeatU, repeatV], height);
+                updateTerrainGeometry(this.geometry, _map, this.material, [repeatU, repeatV], [offsetX, offsetY], height);
 
             }
 
@@ -127,7 +130,7 @@ class Terrain extends BasicObject {
 
             if (useHeightmap) {
 
-                updateTerrainGeometry(this.geometry, disp, this.material, [repeatU, repeatV], height);
+                updateTerrainGeometry(this.geometry, disp, this.material, [repeatU, repeatV], [offsetX, offsetY], height);
 
             }
 
@@ -188,22 +191,31 @@ class Terrain extends BasicObject {
 
     }
 
+    updateTexOffset() {
+
+        const { offsetX, offsetY } = this.specs;
+        this._offsetX = offsetX;
+        this._offsetY = offsetY;
+
+    }
+
     bindOnBeforeSync() {
 
         this.onBeforeSync = () => {
 
-            const { width, depth, height, segmentW, segmentD, repeatU, repeatV } = this.specs;
+            const { width, depth, height, segmentW, segmentD, repeatU, repeatV, offsetX, offsetY } = this.specs;
             if (
                 this._width !== width || this._depth !== depth || this._height !== height ||
                 this._segmentW !== segmentW || this._segmentD !== segmentD ||
-                this._repeatU !== repeatU || this._repeatV !== repeatV
+                this._repeatU !== repeatU || this._repeatV !== repeatV ||
+                this._offsetX !== offsetX || this._offsetY !== offsetY
             ) {
 
                 const { useHeightmap = false, repeatU = 1, repeatV = 1, height = 1 } = this.specs;
                 const geometry = getTerrainGeometry(this.specs);
                 if (useHeightmap) {
 
-                    updateTerrainGeometry(geometry, this._displacementMap, this.material, [repeatU, repeatV], height);
+                    updateTerrainGeometry(geometry, this._displacementMap, this.material, [repeatU, repeatV], [offsetX, offsetY], height);
 
                 }
 
@@ -214,6 +226,7 @@ class Terrain extends BasicObject {
                 this.updateSize();
                 this.updateSegments();
                 this.updateTexRepeat();
+                this.updateTexOffset();
                 this.updateTextures();
 
             }

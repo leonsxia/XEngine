@@ -1311,6 +1311,22 @@ function makeObjectsGuiConfig(objects) {
                 type: 'number'
             }));
 
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'offsetX',
+                prop: 'offsetX',
+                value: object.father,
+                params: [0, 1, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'offsetY',
+                prop: 'offsetY',
+                value: object.father,
+                params: [0, 1, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
         }
 
         if (object.father.isRotatableLadder) {

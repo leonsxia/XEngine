@@ -1302,8 +1302,10 @@ class SceneBuilder {
                             _origin.height = find.father.specs.height;
                             _origin.segmentW = find.father.specs.segmentW;
                             _origin.segmentD = find.father.specs.segmentD;
-                            _origin.repeatU = find.father.specs.repeatU;
-                            _origin.repeatV = find.father.specs.repeatV;
+                            _origin.repeatU = find.father.repeatU;
+                            _origin.repeatV = find.father.repeatV;
+                            _origin.offsetX = find.father.offsetX;
+                            _origin.offsetY = find.father.offsetY;
 
                         }
 
@@ -1318,6 +1320,7 @@ class SceneBuilder {
                                 width = 1, depth = 1, height = 1,
                                 segmentW = 1, segmentD = 1,
                                 repeatU = 1, repeatV = 1,
+                                offsetX = 0, offsetY = 0,
                                 useHeightmap = false 
                             } = _target;
                             find.father.specs.width = width;
@@ -1325,8 +1328,10 @@ class SceneBuilder {
                             find.father.specs.height = height;
                             find.father.specs.segmentW = segmentW;
                             find.father.specs.segmentD = segmentD;
-                            find.father.specs.repeatU = repeatU;
-                            find.father.specs.repeatV = repeatV;
+                            find.father.repeatU = repeatU;
+                            find.father.repeatV = repeatV;
+                            find.father.offsetX = offsetX;
+                            find.father.offsetY = offsetY;
                             find.father.specs.useHeightmap = useHeightmap;
 
                         }

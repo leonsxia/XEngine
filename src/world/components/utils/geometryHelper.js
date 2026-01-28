@@ -341,7 +341,7 @@ function generateRapierHeights(matrixMap, width, depth) {
 
 }
 
-function updateTerrainGeometry(geometry, heightmap, material, texScale = [1, 1], heightScale = 1) {
+function updateTerrainGeometry(geometry, heightmap, material, texScale = [1, 1], offset = [0, 0], heightScale = 1) {
 
     geometry.rotateX(- Math.PI / 2);
     const position = geometry.getAttribute('position');
@@ -369,8 +369,10 @@ function updateTerrainGeometry(geometry, heightmap, material, texScale = [1, 1],
         const row = Math.floor(i / columnNum);
         const column = (i - row * columnNum) % columnNum;
         // for canvas uv is flipped in y axis
-        const u = column * dx % unitWidth / unitWidth;
-        const v = (unitHeight - (heightSegments - row) * dy % unitHeight) / unitHeight;
+        let u = column * dx % unitWidth / unitWidth;
+        let v = (heightSegments - row) * dy % unitHeight / unitHeight;
+        u = (u + offset[0]) % 1;
+        v = 1 - (offset[1] + v) % 1;
         const calcHeight = getHeightValue(material, canvas, u, v) * heightScale || 0;
         position.setY(i, calcHeight);
 

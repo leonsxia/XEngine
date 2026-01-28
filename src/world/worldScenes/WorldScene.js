@@ -1760,8 +1760,7 @@ class WorldScene {
 
         if (!e) {
 
-            this.postProcessor.clearOutlineObjects();
-            this.guiMaker.clearObjectsPanel();
+            this.clearPickedObject();
         
         }
 
@@ -1805,8 +1804,7 @@ class WorldScene {
 
         } else {
             
-            this.postProcessor.clearOutlineObjects();
-            this.guiMaker.clearObjectsPanel();
+            this.clearPickedObject();
 
             if (!this.postProcessOn) {
 
