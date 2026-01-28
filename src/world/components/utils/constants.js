@@ -250,6 +250,12 @@ const TEXTURE_NAMES = {
     FOREST_LEAVES_04_ROUGH: 'FOREST_LEAVES_04_ROUGH',
     FOREST_LEAVES_04_METAL: 'FOREST_LEAVES_04_METAL',
     FOREST_LEAVES_04_DISP: 'FOREST_LEAVES_04_DISP',
+    COAST_SAND_ROCKS_01: 'COAST_SAND_ROCKS_01',
+    COAST_SAND_ROCKS_01_NORMAL: 'COAST_SAND_ROCKS_01_NORMAL',
+    COAST_SAND_ROCKS_01_AO: 'COAST_SAND_ROCKS_01_AO',
+    COAST_SAND_ROCKS_01_ROUGH: 'COAST_SAND_ROCKS_01_ROUGH',
+    COAST_SAND_ROCKS_01_METAL: 'COAST_SAND_ROCKS_01_METAL',
+    COAST_SAND_ROCKS_01_DISP: 'COAST_SAND_ROCKS_01_DISP',
     COAST_SAND_ROCKS_02: 'COAST_SAND_ROCKS_02',
     COAST_SAND_ROCKS_02_NORMAL: 'COAST_SAND_ROCKS_02_NORMAL',
     COAST_SAND_ROCKS_02_AO: 'COAST_SAND_ROCKS_02_AO',
@@ -285,7 +291,19 @@ const TEXTURE_NAMES = {
     FOREST_GROUND_01_AO: 'FOREST_GROUND_01_AO',
     FOREST_GROUND_01_ROUGH: 'FOREST_GROUND_01_ROUGH',
     FOREST_GROUND_01_METAL: 'FOREST_GROUND_01_METAL',
-    FOREST_GROUND_01_DISP: 'FOREST_GROUND_01_DISP',    
+    FOREST_GROUND_01_DISP: 'FOREST_GROUND_01_DISP',
+    ROCK_TRAIL: 'ROCK_TRAIL',
+    ROCK_TRAIL_NORMAL: 'ROCK_TRAIL_NORMAL',
+    ROCK_TRAIL_AO: 'ROCK_TRAIL_AO',
+    ROCK_TRAIL_ROUGH: 'ROCK_TRAIL_ROUGH',
+    ROCK_TRAIL_METAL: 'ROCK_TRAIL_METAL',
+    ROCK_TRAIL_DISP: 'ROCK_TRAIL_DISP',
+    ROCKY_TERRAIN_03: 'ROCKY_TERRAIN_03',
+    ROCKY_TERRAIN_03_NORMAL: 'ROCKY_TERRAIN_03_NORMAL',
+    ROCKY_TERRAIN_03_AO: 'ROCKY_TERRAIN_03_AO',
+    ROCKY_TERRAIN_03_ROUGH: 'ROCKY_TERRAIN_03_ROUGH',
+    ROCKY_TERRAIN_03_METAL: 'ROCKY_TERRAIN_03_METAL',
+    ROCKY_TERRAIN_03_DISP: 'ROCKY_TERRAIN_03_DISP',
     // water
     WATER_1_M: 'WATER_1_M',
     WATER_1_M_NORMAL: 'WATER_1_M_NORMAL',
@@ -370,6 +388,14 @@ const TEXTURES = [{
     metalMap: 'assets/textures/arm/forest_leaves_04_arm_4k.jpg',
     dispMap: 'assets/textures/disp/forest_leaves_04_disp_2k.png'
 }, {
+    name: TEXTURE_NAMES.COAST_SAND_ROCKS_01, 
+    map: 'assets/textures/terrain/coast_land_rocks_01_diff_2k.jpg', 
+    normalMap: 'assets/textures/normals/coast_land_rocks_01_nor_gl_2k.jpg',
+    aoMap: 'assets/textures/arm/coast_land_rocks_01_arm_2k.jpg',
+    roughMap: 'assets/textures/arm/coast_land_rocks_01_arm_2k.jpg',
+    metalMap: 'assets/textures/arm/coast_land_rocks_01_arm_2k.jpg',
+    dispMap: 'assets/textures/disp/coast_land_rocks_01_disp_2k.png'
+}, {
     name: TEXTURE_NAMES.COAST_SAND_ROCKS_02, 
     map: 'assets/textures/terrain/coast_sand_rocks_02_diff_4k.jpg', 
     normalMap: 'assets/textures/normals/coast_sand_rocks_02_nor_gl_2k.jpg',
@@ -425,6 +451,22 @@ const TEXTURES = [{
     roughMap: 'assets/textures/arm/forrest_ground_01_arm_4k.jpg',
     metalMap: 'assets/textures/arm/forrest_ground_01_arm_4k.jpg',
     dispMap: 'assets/textures/disp/forrest_ground_01_disp_2k.png'
+}, {
+    name: TEXTURE_NAMES.ROCK_TRAIL, 
+    map: 'assets/textures/terrain/rocky_trail_diff_2k.jpg', 
+    normalMap: 'assets/textures/normals/rocky_trail_nor_gl_2k.jpg',
+    aoMap: 'assets/textures/arm/rocky_trail_arm_2k.jpg',
+    roughMap: 'assets/textures/arm/rocky_trail_arm_2k.jpg',
+    metalMap: 'assets/textures/arm/rocky_trail_arm_2k.jpg',
+    dispMap: 'assets/textures/disp/rocky_trail_disp_2k.png'
+}, {
+    name: TEXTURE_NAMES.ROCKY_TERRAIN_03, 
+    map: 'assets/textures/terrain/rocky_terrain_03_diff_2k.jpg', 
+    normalMap: 'assets/textures/normals/rocky_terrain_03_nor_gl_2k.jpg',
+    aoMap: 'assets/textures/arm/rocky_terrain_03_arm_2k.jpg',
+    roughMap: 'assets/textures/arm/rocky_terrain_03_arm_2k.jpg',
+    metalMap: 'assets/textures/arm/rocky_terrain_03_arm_2k.jpg',
+    dispMap: 'assets/textures/disp/rocky_terrain_03_disp_2k.png'
 }, {
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {
