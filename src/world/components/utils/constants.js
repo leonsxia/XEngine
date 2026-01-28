@@ -99,6 +99,8 @@ const MODERN_CEILING_LAMP_01 = 'ModernCeilingLamp01';
 const SECURITY_LIGHT = 'SecurityLight';
 const FANCY_PICTURE_FRAME_01 = 'FancyPictureFrame01';
 const VINTAGE_GRANDFATHER_CLOCK = 'VintageGrandfatherClock';
+const BARREL_EXPLOSIVE = 'BarrelExplosive';
+const BARREL_BLUE = 'BarrelBlue';
 const WOODEN_DOOR_1 = 'WoodenDoor1';
 const WOODEN_DOOR_2 = 'WoodenDoor2';
 const WOODEN_GLASS_DOOR_1 = 'WoodenGlassDoor1';
@@ -435,6 +437,8 @@ const GLTF_NAMES = {
     // decorative
     FANCY_PICTURE_FRAME_01: 'FANCY_PICTURE_FRAME_01',
     VINTAGE_GRANDFATHER_CLOCK: 'VINTAGE_GRANDFATHER_CLOCK',
+    BARREL_EXPLOSIVE: 'BARREL_EXPLOSIVE',
+    BARREL_BLUE: 'BARREL_BLUE',
     // entries
     WOODEN_DOOR_1: 'WOODEN_DOOR_1',
     WOODEN_DOOR_2: 'WOODEN_DOOR_2',
@@ -498,6 +502,10 @@ const GLTFS = [{
     name: GLTF_NAMES.FANCY_PICTURE_FRAME_01, src: 'in_room/decorative/fancy_picture_frame_01_1k/fancy_picture_frame_01_1k.gltf'
 }, {
     name: GLTF_NAMES.VINTAGE_GRANDFATHER_CLOCK, src: 'in_room/decorative/vintage_grandfather_clock_01_1k/vintage_grandfather_clock_01_1k.gltf'
+}, {
+    name: GLTF_NAMES.BARREL_EXPLOSIVE, src: 'in_room/decorative/barrel_01_2k/Barrel_01_2k.gltf'
+}, {
+    name: GLTF_NAMES.BARREL_BLUE, src: 'in_room/decorative/barrel_03_2k/barrel_03_2k.gltf'
 }, {
     name: GLTF_NAMES.BAYONET_ITEM, src: 'weapons/bayonet.glb'
 }, {
@@ -755,6 +763,8 @@ export {
     SECURITY_LIGHT,
     FANCY_PICTURE_FRAME_01,
     VINTAGE_GRANDFATHER_CLOCK,
+    BARREL_EXPLOSIVE,
+    BARREL_BLUE,
     WOODEN_DOOR_1,
     WOODEN_DOOR_2,
     WOODEN_GLASS_DOOR_1,

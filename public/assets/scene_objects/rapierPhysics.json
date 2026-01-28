@@ -1274,6 +1274,7 @@
                     "name": "room1_round_wooden_table_1",
                     "scale": [1, 0.8],
                     "isObstacle": true,
+                    "canBeIgnored": true,
                     "position": [
                         -6,
                         1.9979338645935059,
@@ -1293,6 +1294,7 @@
                     "name": "room1_wooden_table_1",
                     "scale": [1.5, 1, 3],
                     "isObstacle": true,
+                    "canBeIgnored": true,
                     "position": [
                         6,
                         1.9987258911132812,
@@ -1331,6 +1333,7 @@
                     "name": "room1_painted_wooden_nightstand_1",
                     "scale": [1.3, 1.2, 1.3],
                     "isObstacle": true,
+                    "canBeIgnored": true,
                     "position": [
                         -7.000267579466702,
                         1.9578514099121094,
@@ -1350,9 +1353,7 @@
                     "name": "room1_painted_wooden_stool_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": false,
-                    "climbable": false,
+                    "canBeIgnored": true,
                     "position": [
                         4.790235559818167,
                         1.887953281402588,
@@ -1372,6 +1373,7 @@
                     "name": "room1_painted_wooden_blue_chair_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
+                    "canBeIgnored": true,
                     "position": [
                         4.6494574516316005,
                         2.235720157623291,
@@ -1391,6 +1393,7 @@
                     "name": "room1_painted_wooden_white_chair_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
+                    "canBeIgnored": true,
                     "position": [
                         7.280051370959265,
                         2.079909324645996,
@@ -1410,6 +1413,7 @@
                     "name": "room1_painted_wooden_white_cabinet_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
+                    "canBeIgnored": true,
                     "position": [
                         5.040120447660481,
                         2.189570426940918,
@@ -1467,6 +1471,7 @@
                     "name": "room1_vintage_grandfather_clock_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
+                    "canBeIgnored": true,
                     "position": [
                         -8.009475620495296,
                         2.6986031532287598,
@@ -1486,6 +1491,7 @@
                     "name": "room1_painted_wooden_table_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
+                    "canBeIgnored": true,
                     "position": [
                         -8.919981543730902,
                         2.0797390937805176,
@@ -1522,6 +1528,46 @@
                     ],
                     "transparent": false,
                     "physics": { "mass": 100, "friction": 1 }
+                },
+                {
+                    "type": "BarrelExplosive",
+                    "src": "BARREL_EXPLOSIVE",
+                    "name": "room1_red_barrel_1",
+                    "scale": [1, 1],
+                    "isObstacle": true,
+                    "canBeIgnored": true,
+                    "position": [
+                        -3,
+                        -0.5,
+                        8
+                    ],
+                    "rotation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "transparent": false,
+                    "physics": { "mass": 50, "friction": 1 }
+                },
+                {
+                    "type": "BarrelBlue",
+                    "src": "BARREL_BLUE",
+                    "name": "room1_blue_barrel_1",
+                    "scale": [1, 1],
+                    "isObstacle": true,
+                    "canBeIgnored": true,
+                    "position": [
+                        3,
+                        -1.5,
+                        8
+                    ],
+                    "rotation": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "transparent": false,
+                    "physics": { "mass": 50, "friction": 1 }
                 }
             ],
             "floors": [],

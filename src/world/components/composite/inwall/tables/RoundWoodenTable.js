@@ -20,15 +20,15 @@ class RoundWoodenTable extends ObstacleBase {
 
         const { name, scale = [1, 1], lines = false } = specs;
         const { showArrow = false } = specs;
-        const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs; 
+        const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
 
         this._scale = [scale[0], scale[1], scale[0]];
 
         // gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow }
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
 
         const boxSpecs = { size: { width: this._radius * 2, depth: this._radius * 2, height: this._height }, lines };
-        
+
         const chCylinderSpecs = { name, radius: this._radius, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model

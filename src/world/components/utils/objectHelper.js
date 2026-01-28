@@ -45,7 +45,9 @@ import {
     VerticalLadder,
     RotatableLadder,
     Ladder,
-    Terrain
+    Terrain,
+    BarrelExplosive,
+    BarrelBlue
 } from "../Models";
 import { ObstacleMoveable } from "../movement/ObstacleMoveable";
 
@@ -247,7 +249,9 @@ function objectFilter2(object) {
     if (object instanceof HexCylinderPillar ||
         object instanceof CylinderPillar ||
         object instanceof ModernCeilingLamp01 ||
-        object instanceof RoundWoodenTable
+        object instanceof RoundWoodenTable ||
+        object instanceof BarrelExplosive ||
+        object instanceof BarrelBlue
     ) {
 
         return true;
@@ -341,7 +345,9 @@ function isRapierObject(object) {
         object instanceof PaintedWoodenWhiteCabinet ||
         object instanceof PaintedWoodenBlueCabinet ||
         object instanceof Shelf01 ||
-        object instanceof VintageGrandfatherClock
+        object instanceof VintageGrandfatherClock ||
+        object instanceof BarrelExplosive ||
+        object instanceof BarrelBlue
     ) {
 
         return true;

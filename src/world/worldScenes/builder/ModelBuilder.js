@@ -8,6 +8,7 @@ import {
     PaintedWoodenBlueCabinet, Shelf01, PaintedWoodenWhiteCabinet,
     Television01,
     FancyPictureFrame01, VintageGrandfatherClock,
+    BarrelExplosive, BarrelBlue,
     WoodenDoor1, WoodenDoor2, 
     WoodenGlassDoor1, WoodenGlassDoor2, WoodenGlassDoor3, WoodenWhiteDoor1, WoodenWhiteDoor2, WoodenPinkDoor1,
     IronPlateGlassDoor1, IronPlateGlassDoor2, IronPlateDoor1, OfficeDoor1,
@@ -29,6 +30,7 @@ import {
     PAINTED_WOODEN_BLUE_CABINET, SHELF_01, PAINTED_WOODEN_WHITE_CABINET,
     TELEVISION_01,
     FANCY_PICTURE_FRAME_01, VINTAGE_GRANDFATHER_CLOCK,
+    BARREL_EXPLOSIVE, BARREL_BLUE,
     WOODEN_DOOR_1, WOODEN_DOOR_2, 
     WOODEN_GLASS_DOOR_1, WOODEN_GLASS_DOOR_2, WOODEN_GLASS_DOOR_3, WOODEN_WHITE_DOOR_1, WOODEN_WHITE_DOOR_2, WOODEN_PINK_DOOR_1,
     IRON_PLATE_GLASS_DOOR_1, IRON_PLATE_GLASS_DOOR_2, IRON_PLATE_DOOR_1, OFFICE_DOOR_1,
@@ -116,6 +118,8 @@ class ModelBuilder {
         this.objectCreationMapping[SECURITY_LIGHT] = this.createSecurityLight;
         this.objectCreationMapping[FANCY_PICTURE_FRAME_01] = this.createFancyPictureFrame01;
         this.objectCreationMapping[VINTAGE_GRANDFATHER_CLOCK] = this.createVintageGrandfatherClock;
+        this.objectCreationMapping[BARREL_EXPLOSIVE] = this.createBarrelExplosive;
+        this.objectCreationMapping[BARREL_BLUE] = this.createBarrelBlue;
         this.objectCreationMapping[WOODEN_DOOR_1] = this.createWoodenDoor1;
         this.objectCreationMapping[WOODEN_DOOR_2] = this.createWoodenDoor2;
         this.objectCreationMapping[WOODEN_GLASS_DOOR_1] = this.createWoodenGlassDoor1;
@@ -1130,6 +1134,42 @@ class ModelBuilder {
             .setRotationZ(rotation[2]);
 
         if (updateOBBs) object.updateOBBs();
+
+        return object;
+
+    }
+
+    createBarrelExplosive(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0]} = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new BarrelExplosive(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
+
+        return object;
+
+    }
+
+    createBarrelBlue(specs) {
+
+        let object;
+        const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0]} = specs;
+        const { src } = specs;
+
+        this.setupObjectGLTF({ src }, specs);
+
+        object = new BarrelBlue(specs);
+        object.setPosition(position)
+            .setRotationY(rotationY ?? rotation[1])
+            .setRotationX(rotation[0])
+            .setRotationZ(rotation[2]);
 
         return object;
 
