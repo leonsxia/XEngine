@@ -1297,8 +1297,13 @@ class SceneBuilder {
 
                         if (find.father.isTerrain) {
 
+                            _origin.width = find.father.specs.width;
+                            _origin.depth = find.father.specs.depth;
+                            _origin.height = find.father.specs.height;
                             _origin.segmentW = find.father.specs.segmentW;
                             _origin.segmentD = find.father.specs.segmentD;
+                            _origin.repeatU = find.father.specs.repeatU;
+                            _origin.repeatV = find.father.specs.repeatV;
 
                         }
 
@@ -1309,9 +1314,19 @@ class SceneBuilder {
 
                         if (find.father.isTerrain) {
 
-                            const { segmentW = 1, segmentD = 1, useHeightmap = false } = _target;
+                            const {
+                                width = 1, depth = 1, height = 1,
+                                segmentW = 1, segmentD = 1,
+                                repeatU = 1, repeatV = 1,
+                                useHeightmap = false 
+                            } = _target;
+                            find.father.specs.width = width;
+                            find.father.specs.depth = depth;
+                            find.father.specs.height = height;
                             find.father.specs.segmentW = segmentW;
                             find.father.specs.segmentD = segmentD;
+                            find.father.specs.repeatU = repeatU;
+                            find.father.specs.repeatV = repeatV;
                             find.father.specs.useHeightmap = useHeightmap;
 
                         }

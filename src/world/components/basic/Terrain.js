@@ -11,8 +11,12 @@ class Terrain extends BasicObject {
 
     isTerrain = true;
 
-    _cachedWidth;
-    _cachedHeight;
+    _width;
+    _depth;
+    _height;
+
+    _repeatU;
+    _repeatV;
 
     _segmentW;
     _segmentD;
@@ -29,7 +33,9 @@ class Terrain extends BasicObject {
         this.mesh.name = specs.name;
         this.mesh.father = this;
 
+        this.updateSize();
         this.updateSegments();
+        this.updateTexRepeat();
         this.bindOnBeforeSync();
         this.bindEvents();
 
@@ -149,35 +155,20 @@ class Terrain extends BasicObject {
         this.addEventListener(type, listener);
 
     }
-
-    get width() {
-
-        if (!this._cachedWidth) {
-
-            this._cachedWidth = this.geometry.parameters.width * this.mesh.getWorldScale(_v1).x;
-
-        }
-
-        return this._cachedWidth;
-
-    }
-
-    get height() {
-
-        if (!this._cachedHeight) {
-
-            this._cachedHeight = this.geometry.parameters.height * this.mesh.getWorldScale(_v1).y;
-
-        }
-
-        return this._cachedHeight;
-
-    }
     
     updateTexScale() {
 
         this.setConfig({ texScale: [this.scale.x, this.scale.y] })
             .updateTextures();
+
+    }
+
+    updateSize() {
+
+        const { width, depth, height } = this.specs;
+        this._width = width;
+        this._depth = depth;
+        this._height = height;
 
     }
 
@@ -189,12 +180,24 @@ class Terrain extends BasicObject {
 
     }
 
+    updateTexRepeat() {
+
+        const { repeatU, repeatV } = this.specs;
+        this._repeatU = repeatU;
+        this._repeatV = repeatV;
+
+    }
+
     bindOnBeforeSync() {
 
         this.onBeforeSync = () => {
 
-            const { segmentW, segmentD } = this.specs;
-            if (this._segmentW !== segmentW || this._segmentD !== segmentD) {
+            const { width, depth, height, segmentW, segmentD, repeatU, repeatV } = this.specs;
+            if (
+                this._width !== width || this._depth !== depth || this._height !== height ||
+                this._segmentW !== segmentW || this._segmentD !== segmentD ||
+                this._repeatU !== repeatU || this._repeatV !== repeatV
+            ) {
 
                 const { useHeightmap = false, repeatU = 1, repeatV = 1, height = 1 } = this.specs;
                 const geometry = getTerrainGeometry(this.specs);
@@ -208,7 +211,10 @@ class Terrain extends BasicObject {
                 this.geometry.dispose();
                 this.geometry = geometry;
 
+                this.updateSize();
                 this.updateSegments();
+                this.updateTexRepeat();
+                this.updateTextures();
 
             }
 

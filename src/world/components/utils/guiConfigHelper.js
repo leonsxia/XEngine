@@ -965,7 +965,7 @@ function makeObjectsGuiConfig(objects) {
                     name: 'repeatU',
                     prop: 'repeatU',
                     value: object.father,
-                    params: [- SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                    params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
                     type: 'number'
                 }));
 
@@ -973,7 +973,7 @@ function makeObjectsGuiConfig(objects) {
                     name: 'repeatV',
                     prop: 'repeatV',
                     value: object.father,
-                    params: [- SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                    params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
                     type: 'number'
                 }));
 
@@ -1249,27 +1249,67 @@ function makeObjectsGuiConfig(objects) {
                 value: object.father,
                 params: [0, 1, PICKED_NUMBER_STEPS],
                 type: 'number'
+            }));                        
+
+        }
+
+        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER && object.father.isTerrain) {
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'width',
+                prop: 'width',
+                value: object.father.specs,
+                params: [1, 500, 0.1],
+                type: 'number'
             }));
-            
-            if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER) {
 
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'segmentW',
-                    prop: 'segmentW',
-                    value: object.father.specs,
-                    params: [1, 350, 1],
-                    type: 'number'
-                }));
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'depth',
+                prop: 'depth',
+                value: object.father.specs,
+                params: [1, 500, 0.1],
+                type: 'number'
+            }));
 
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'segmentD',
-                    prop: 'segmentD',
-                    value: object.father.specs,
-                    params: [1, 350, 1],
-                    type: 'number'
-                }));
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'height',
+                prop: 'height',
+                value: object.father.specs,
+                params: [0.1, 2, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
 
-            }
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'segmentW',
+                prop: 'segmentW',
+                value: object.father.specs,
+                params: [1, 350, 1],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'segmentD',
+                prop: 'segmentD',
+                value: object.father.specs,
+                params: [1, 350, 1],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'repeatU',
+                prop: 'repeatU',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'repeatV',
+                prop: 'repeatV',
+                value: object.father,
+                params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
+                type: 'number'
+            }));
 
         }
 
