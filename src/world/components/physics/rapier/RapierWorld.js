@@ -540,6 +540,8 @@ class RapierWorld {
 
     tick(delta) {
 
+        if (delta > 0.077) return;  // lost frame when fps lower than 13fps
+
         if (this._rapierHelper && this._debug) this._rapierHelper.update();
 
         this.playerTick(delta);
