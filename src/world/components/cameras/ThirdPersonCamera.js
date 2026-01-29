@@ -632,7 +632,7 @@ class ThirdPersonCamera {
             const dir = _v2.copy(this.#collisionRay.ray.direction);
             const maxToi = this.#collisionRay.far;
             const excludeCollider = this.#player.rapierContainer.getInstanceByName('characterController').userData.physics.collider;
-            const { hitWithNormal, ray } = this.attachTo.physics.physics.checkRayHitColliderAndGetNormal(origin, dir, maxToi, excludeCollider, (collider) => !collider.isTerrain);
+            const { hitWithNormal, ray } = this.attachTo.physics.engine.checkRayHitColliderAndGetNormal(origin, dir, maxToi, excludeCollider, (collider) => !collider.isTerrain);
 
             if (hitWithNormal) {
 

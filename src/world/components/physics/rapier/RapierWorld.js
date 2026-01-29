@@ -19,7 +19,7 @@ class RapierWorld {
 
     isRapierWorld = true;
 
-    physics = new RapierPhysics();
+    engine = new RapierPhysics();
 
     players = [];
     enemies = [];
@@ -116,7 +116,7 @@ class RapierWorld {
 
         this._currentRoom = room.name;
 
-        this.physics.removeAll();
+        this.engine.removeAll();
         this.cleanupAvatars();
         this.setupWorld();
 
@@ -128,7 +128,7 @@ class RapierWorld {
 
         if (this._rapierHelper) this.scene.remove(this._rapierHelper);
 
-        this._rapierHelper = new RapierHelper(this.physics.world);
+        this._rapierHelper = new RapierHelper(this.engine.world);
         this._rapierHelper.update();
         this.attachTo.scene.add(this._rapierHelper);
 
@@ -140,7 +140,7 @@ class RapierWorld {
 
             if (!this._rapierHelper) {
                 
-                this._rapierHelper = new RapierHelper(this.physics.world);
+                this._rapierHelper = new RapierHelper(this.engine.world);
                 this._rapierHelper.update();
             
             }
@@ -166,7 +166,7 @@ class RapierWorld {
             autoStepMaxHeight = STAIR_OFFSET_MAX, autoStepMinWidth = 0.2
         } = {} } = avatar.specs;
 
-        const characterController = this.physics.world.createCharacterController(offset);
+        const characterController = this.engine.world.createCharacterController(offset);
         characterController.setApplyImpulsesToDynamicBodies(true);
         characterController.setCharacterMass(userData.physics.mass ?? 60);
         characterController.enableSnapToGround(snapToGroundDistance);
@@ -187,14 +187,14 @@ class RapierWorld {
         this.addTerrains();
 
         // add current room objects and scene objects
-        this.physics.addScene(this.attachTo.currentRoom.group);
+        this.engine.addScene(this.attachTo.currentRoom.group);
         for (let i = 0, il = this.attachTo.sceneObjects.length; i < il; i++) {
 
             const sceneObj = this.attachTo.sceneObjects[i];
             const object3D = sceneObj.group ?? sceneObj.mesh;
             if (object3D) {
 
-                this.physics.addScene(sceneObj.group ?? sceneObj.mesh);
+                this.engine.addScene(sceneObj.group ?? sceneObj.mesh);
 
             }
 
@@ -230,7 +230,7 @@ class RapierWorld {
             const compound = this.compounds[i];
             this.bindObjectSyncEvents(compound);
             compound.addRapierInstances();
-            this.physics.addCompoundMesh(compound.group, compound.rapierInstances);
+            this.engine.addCompoundMesh(compound.group, compound.rapierInstances);
 
         }
 
@@ -260,7 +260,7 @@ class RapierWorld {
             const { physics: { restitution = 0, friction = 0 } = {} } = terrain.specs;
             
             terrain.setupRapierPhysics({ mass: 0, restitution, friction });
-            this.physics.addHeightfield(terrain.mesh, heightSegments, widthSegments, new Float32Array(heights), { x: width, y: 1, z: height });
+            this.engine.addHeightfield(terrain.mesh, heightSegments, widthSegments, new Float32Array(heights), { x: width, y: 1, z: height });
             terrain.addRapierInfo();
 
             this.bindObjectSyncEvents(terrain);
@@ -309,14 +309,14 @@ class RapierWorld {
             const instance = rapierContainer.actives[i];
             if (instance.name !== CHARACTER_CONTROLLER) {
 
-                this.physics.removeMesh(instance);
+                this.engine.removeMesh(instance);
 
             } else {
 
                 const { collider } = instance.userData.physics;
                 if (collider) {
                     
-                    this.physics.removeCollider(collider);
+                    this.engine.removeCollider(collider);
                     instance.userData.physics.collider = undefined;
 
                 }
@@ -335,7 +335,7 @@ class RapierWorld {
             const instance = rapierContainer.actives[i];
             if (instance.name !== CHARACTER_CONTROLLER) {
 
-                this.physics.addMesh(instance);
+                this.engine.addMesh(instance);
 
             } else {
 
@@ -348,7 +348,7 @@ class RapierWorld {
                 const colliderDesc = getShape(geometryDesc, rapierContainer.scale);
                 avatar.getWorldPosition(_v1);
                 colliderDesc.setTranslation(..._v1);
-                userData.physics.collider = this.physics.world.createCollider(colliderDesc);
+                userData.physics.collider = this.engine.world.createCollider(colliderDesc);
                 userData.physics.collider.name = `${avatar.name}_character_controller_collider`;
 
             }
@@ -384,11 +384,11 @@ class RapierWorld {
 
         } else if (object.isObstacleBase || object.isInWallObjectBase) {
             
-            this.physics.removeMesh(object.group);
+            this.engine.removeMesh(object.group);
 
         } else {
 
-            this.physics.removeMesh(object.mesh);
+            this.engine.removeMesh(object.mesh);
 
         }
 
@@ -402,11 +402,11 @@ class RapierWorld {
 
         } else if (object.isObstacleBase || object.isInWallObjectBase) {
             
-            this.physics.addCompoundMesh(object.group, object.rapierInstances);
+            this.engine.addCompoundMesh(object.group, object.rapierInstances);
 
         } else {
 
-            this.physics.addMesh(object.mesh);
+            this.engine.addMesh(object.mesh);
 
         }
 
@@ -546,7 +546,7 @@ class RapierWorld {
         this.enemyTick(delta);
         this.fixedItemTick(delta);
 
-        this.physics.step(delta);
+        this.engine.step(delta);
 
     }
 
@@ -569,8 +569,8 @@ class RapierWorld {
                 // collect on land points and return the highest one
                 const onLandPoints = [];
 
-                const ray = new this.physics.RAPIER.Ray(_v1, _down);
-                const hit = this.physics.world.castRay(ray, maxToi, false, null, null, null, null,                     
+                const ray = new this.engine.RAPIER.Ray(_v1, _down);
+                const hit = this.engine.world.castRay(ray, maxToi, false, null, null, null, null,                     
                     (col) => collider.indexOf(col) === -1
                 );
 
@@ -658,7 +658,7 @@ class RapierWorld {
                 const maxToi = avatar.height * DOWN_RAY_LENGTH;
                 _v1.set(position.x, position.y, position.z);    // origin
                 // take terrain into account, `undefined` will not see as `false` in rapier!!!
-                const { hit, ray } = this.physics.checkRayHitCollider(_v1, _down, maxToi, collider, (collider) => collider.isTerrain || false);
+                const { hit, ray } = this.engine.checkRayHitCollider(_v1, _down, maxToi, collider, (collider) => collider.isTerrain || false);
 
                 if (hit) {
 
@@ -721,7 +721,7 @@ class RapierWorld {
         const { physics: { collider, controller } } = instance.userData;
         const position = collider.translation();
         const radius = instance.geometry.parameters.radius * instance.scale.x;
-        const shape = new this.physics.RAPIER.Ball(radius);
+        const shape = new this.engine.RAPIER.Ball(radius);
         const stopAtPenetration = true;
         /*
             maxToi should not be 0, otherwise it will not take effect,
@@ -729,7 +729,7 @@ class RapierWorld {
         */
         const maxToi = controller.offset() + 0.002;
         _v1.set(position.x, position.y - object.height / 2 + radius, position.z);   // origin
-        const hit = this.physics.world.castShape(_v1, _q1, _down, shape, 0, maxToi, stopAtPenetration, null, null, collider, null,
+        const hit = this.engine.world.castShape(_v1, _q1, _down, shape, 0, maxToi, stopAtPenetration, null, null, collider, null,
             // terrain will be excluded
             (collider) => !collider.isTerrain
         );
