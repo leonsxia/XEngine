@@ -161,7 +161,7 @@ class RapierWorld {
         const meshDesc = avatar.rapierContainer.getInstanceByName(CHARACTER_CONTROLLER);
         const userData = meshDesc.userData;
         const { characterControllerSettings: { 
-            offset = 0.01, snapToGroundDistance = 0.5, slideEnabled = true,
+            offset = 0.01, snapToGroundDistance = 0.2, slideEnabled = true,
             maxSlopeClimbAngle = 50, minSlopeSlideAngle = 45,
             autoStepMaxHeight = STAIR_OFFSET_MAX, autoStepMinWidth = 0.2
         } = {} } = avatar.specs;
@@ -199,14 +199,6 @@ class RapierWorld {
             }
 
         }
-
-        // set floor collider can be checked by ray to avoid falling into ground
-        // for (let i = 0, il = this.floors.length; i < il; i++) {
-
-        //     const floor = this.floors[i];
-        //     floor.mesh.userData.physics.collider.isFloor = true;
-
-        // }
 
     }
 
@@ -255,13 +247,13 @@ class RapierWorld {
         for (let i = 0, il = this.terrains.length; i < il; i++) {
 
             const terrain = this.terrains[i];
-            const { width, height, widthSegments, heightSegments } = terrain.geometry.parameters;
-            const { heights } = terrain.geometry.userData;
+            // const { width, height, widthSegments, heightSegments } = terrain.geometry.parameters;
+            // const { heights } = terrain.geometry.userData;
             const { physics: { restitution = 0, friction = 0 } = {} } = terrain.specs;
             
             terrain.setupRapierPhysics({ mass: 0, restitution, friction });
-            this.engine.addHeightfield(terrain.mesh, heightSegments, widthSegments, new Float32Array(heights), { x: width, y: 1, z: height });
-            terrain.addRapierInfo();
+            // this.engine.addHeightfield(terrain.mesh, heightSegments, widthSegments, new Float32Array(heights), { x: width, y: 1, z: height });
+            // terrain.addRapierInfo();
 
             this.bindObjectSyncEvents(terrain);
 
@@ -637,10 +629,6 @@ class RapierWorld {
 
             const moveVector = avatar.tickRaw(delta);
 
-            // update rotation
-            avatar.group.getWorldQuaternion(_q1);
-            // collider.setRotation(_q1);
-
             // for avatar falling down check
             let isLanded = false;
 
@@ -662,7 +650,10 @@ class RapierWorld {
                 // take terrain into account, `undefined` will not see as `false` in rapier!!!
                 const { hit, ray } = this.engine.checkRayHitCollider(_v1, _down, maxToi, collider, (collider) => collider.isTerrain || false);
 
-                if (hit) {
+                if (hit && (
+                    !controller.computedGrounded() || 
+                    hit.timeOfImpact < avatar.height * .5   // avoid falling into ground
+                )) {
 
                     // The hit point is obtained from the ray's origin and direction: `origin + dir * timeOfImpact`.
                     onLandPoints.push(ray.pointAt(hit.timeOfImpact)); // Same as: `ray.origin + ray.dir * toi`
@@ -683,9 +674,6 @@ class RapierWorld {
             } else if (!rotationTicked) {
 
                 avatar.tickRotateActions(delta);
-                // update rotation
-                // avatar.group.getWorldQuaternion(_q1);
-                // collider.setRotation(_q1);
 
             }
 

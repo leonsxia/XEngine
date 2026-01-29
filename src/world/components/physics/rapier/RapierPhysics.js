@@ -7,6 +7,7 @@ const _scale = new Vector3(1, 1, 1);
 const ZERO = new Vector3();
 const _geometry = new BufferGeometry();
 const _v1 = new Vector3();
+const _v2 = new Vector3();
 const _q1 = new Quaternion();
 const _q2 = new Quaternion();
 const _m1 = new Matrix4();
@@ -128,6 +129,7 @@ class RapierPhysics {
                 if (physics && !physics.manuallyLoad) {
 
                     this.addMesh(child);
+                    child.father?.addRapierInfo?.();
 
                 }
 
@@ -577,7 +579,9 @@ class RapierPhysics {
 
     checkRayHitCollider(origin, direction, maxToi, excludeCollider = null, filter = null) {
 
-        const ray = new this.RAPIER.Ray(origin, direction);
+        _v1.copy(origin);
+        _v2.copy(direction);
+        const ray = new this.RAPIER.Ray(_v1, _v2);
         const hit = this.world.castRay(ray, maxToi, false, null, null, excludeCollider, null, filter);
 
         return { hit, ray };
@@ -586,7 +590,9 @@ class RapierPhysics {
 
     checkRayHitColliderAndGetNormal(origin, direction, maxToi, excludeCollider = null, filter = null) {
 
-        const ray = new this.RAPIER.Ray(origin, direction);
+        _v1.copy(origin);
+        _v2.copy(direction);
+        const ray = new this.RAPIER.Ray(_v1, _v2);
         const hitWithNormal = this.world.castRayAndGetNormal(ray, maxToi, false, null, null, excludeCollider, null, filter);
 
         return { hitWithNormal, ray };

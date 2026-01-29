@@ -30,7 +30,7 @@
         ],
         "allPlayerPos": [
             [
-                0,
+                1,
                 3,
                 0
             ]
@@ -283,7 +283,7 @@
         {
             "type": "InspectorRoom",
             "width": 30,
-            "height": 5.5,
+            "height": 6,
             "depth": 30,
             "baseSize": 9,
             "frontMap": "CONCRETE_132",
