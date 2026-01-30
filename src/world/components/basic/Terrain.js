@@ -211,7 +211,7 @@ class Terrain extends BasicObject {
                 this._offsetX !== offsetX || this._offsetY !== offsetY
             ) {
 
-                const { useHeightmap = false, repeatU = 1, repeatV = 1, height = 1 } = this.specs;
+                const { useHeightmap = false, repeatU = 1, repeatV = 1, offsetX = 0, offsetY = 0, height = 1 } = this.specs;
                 const geometry = getTerrainGeometry(this.specs);
                 if (useHeightmap) {
 
