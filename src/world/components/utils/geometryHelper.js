@@ -398,7 +398,7 @@ function updateTerrainGeometry(geometry, heightmap, material, texScale = [1, 1],
 
 function getTerrainGeometry(specs) {
 
-    const { width, depth, height = 1, segmentW, segmentD, useHeightmap = false } = specs;
+    const { width = 1, depth = 1, height = 1, segmentW = 1, segmentD = 1, useHeightmap = false } = specs;
     const geometry = !useHeightmap ?
         generateTerrainGeometry(width, depth, height, segmentW, segmentD).geometry :
         new PlaneGeometry(width, depth, segmentW, segmentD);
