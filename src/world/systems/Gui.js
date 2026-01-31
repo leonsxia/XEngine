@@ -744,13 +744,13 @@ class Gui {
 
     bindControllerProperties(controller) {
 
-        controller.setInactive = () => {
+        controller.setInactive = function() {
 
             controller.domElement.classList.add(GUI_CONFIG.CLASS_INACTIVE);
 
         };
 
-        controller.setActive = () => {
+        controller.setActive = function() {
 
             controller.domElement.classList.remove(GUI_CONFIG.CLASS_INACTIVE);
 
