@@ -610,6 +610,15 @@ class GuiMaker {
             const parent = `${detail.folder}_object_actions`;
             const objectActions = {};
             objectActions[parent] = { 'lock': $scene.lockObjects.bind($scene) };
+            if ($scene.physics?.isRapierWorld) {
+
+                objectActions[parent]['apply'] = function() {
+
+                    objects[i].father?.syncRapierWorld?.();
+
+                }
+
+            }
 
             this.gui.addPanelParentObjects(objectActions);
             objectsConfig.details.push(makeFunctionGuiConfig(detail.folder, parent));

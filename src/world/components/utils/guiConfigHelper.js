@@ -997,26 +997,9 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (object.father.isFloor) {
+        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE) {
 
-            folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'rotationZDegree',
-                prop: 'rotation.z',
-                value: object.father,
-                params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
-                type: 'object-angle',
-                changeFn: () => {
-
-                    object.father.updateOBB();
-
-                }
-            }));
-            
-        }
-
-        if (object.father.isCeiling) {
-
-            if (object.father.isOBB) {
+            if (object.father.isFloor) {
 
                 folder.specs.push(makeFolderSpecGuiConfig({
                     name: 'rotationZDegree',
@@ -1025,37 +1008,58 @@ function makeObjectsGuiConfig(objects) {
                     params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
                     type: 'object-angle',
                     changeFn: () => {
-    
+
                         object.father.updateOBB();
-    
+
                     }
                 }));
 
-            } else {
+            }
 
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'rotationXDegree',
-                    prop: 'rotation.x',
-                    value: object.father,
-                    params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
-                    type: 'object-angle'
-                }));
-    
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'rotationYDegree',
-                    prop: 'rotation.y',
-                    value: object.father,
-                    params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
-                    type: 'object-angle'
-                }));
-    
-                folder.specs.push(makeFolderSpecGuiConfig({
-                    name: 'rotationZDegree',
-                    prop: 'rotation.z',
-                    value: object.father,
-                    params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
-                    type: 'object-angle'
-                }));
+            if (object.father.isCeiling) {
+
+                if (object.father.isOBB) {
+
+                    folder.specs.push(makeFolderSpecGuiConfig({
+                        name: 'rotationZDegree',
+                        prop: 'rotation.z',
+                        value: object.father,
+                        params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                        type: 'object-angle',
+                        changeFn: () => {
+
+                            object.father.updateOBB();
+
+                        }
+                    }));
+
+                } else {
+
+                    folder.specs.push(makeFolderSpecGuiConfig({
+                        name: 'rotationXDegree',
+                        prop: 'rotation.x',
+                        value: object.father,
+                        params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                        type: 'object-angle'
+                    }));
+
+                    folder.specs.push(makeFolderSpecGuiConfig({
+                        name: 'rotationYDegree',
+                        prop: 'rotation.y',
+                        value: object.father,
+                        params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                        type: 'object-angle'
+                    }));
+
+                    folder.specs.push(makeFolderSpecGuiConfig({
+                        name: 'rotationZDegree',
+                        prop: 'rotation.z',
+                        value: object.father,
+                        params: [- MAX_ANGLE, MAX_ANGLE, PICKED_ANGLE_STEPS],
+                        type: 'object-angle'
+                    }));
+
+                }
 
             }
 
