@@ -241,9 +241,28 @@ const TEXTURE_NAMES = {
     BRICK_WALL_001: 'BRICK_WALL_001',
     BRICK_WALL_001_NORMAL: 'BRICK_WALL_001_NORMAL',
     BRICK_WALL_001_ARM: 'BRICK_WALL_001_ARM',
+    BRICK_WALL_005: 'BRICK_WALL_005',
+    BRICK_WALL_005_NORMAL: 'BRICK_WALL_005_NORMAL',
+    BRICK_WALL_005_ARM: 'BRICK_WALL_005_ARM',
     DAMAGED_PLASTER: 'DAMAGED_PLASTER',
     DAMAGED_PLASTER_NORMAL: 'DAMAGED_PLASTER_NORMAL',
     DAMAGED_PLASTER_ARM: 'DAMAGED_PLASTER_ARM',
+    CASTLE_BRICK_02_RED: 'CASTLE_BRICK_02_RED',
+    CASTLE_BRICK_02_RED_NORMAL: 'CASTLE_BRICK_02_RED_NORMAL',
+    CASTLE_BRICK_02_RED_ARM: 'CASTLE_BRICK_02_RED_ARM',
+    RED_BRICK_PLASTER_PATCH_02: 'RED_BRICK_PLASTER_PATCH_02',
+    RED_BRICK_PLASTER_PATCH_02_NORMAL: 'RED_BRICK_PLASTER_PATCH_02_NORMAL',
+    RED_BRICK_PLASTER_PATCH_02_ARM: 'RED_BRICK_PLASTER_PATCH_02_ARM',
+    WALL_BRICKS_PLASTER: 'WALL_BRICKS_PLASTER',
+    WALL_BRICKS_PLASTER_NORMAL: 'WALL_BRICKS_PLASTER_NORMAL',
+    WALL_BRICKS_PLASTER_ARM: 'WALL_BRICKS_PLASTER_ARM',
+    PLASTER_BRICK_01: 'PLASTER_BRICK_01',
+    PLASTER_BRICK_01_NORMAL: 'PLASTER_BRICK_01_NORMAL',
+    PLASTER_BRICK_01_ARM: 'PLASTER_BRICK_01_ARM',
+    // concrete
+    WORN_MOSSY_PLASTER_WALL: 'WORN_MOSSY_PLASTER_WALL',
+    WORN_MOSSY_PLASTER_WALL_NORMAL: 'WORN_MOSSY_PLASTER_WALL_NORMAL',
+    WORN_MOSSY_PLASTER_WALL_ARM: 'WORN_MOSSY_PLASTER_WALL_ARM',
     // terrain
     FOREST_LEAVES_02: 'FOREST_LEAVES_02',
     FOREST_LEAVES_02_NORMAL: 'FOREST_LEAVES_02_NORMAL',
@@ -306,6 +325,7 @@ const TEXTURE_ARM_ROOT = `${TEXTURE_ROOT}/arm`;
 const TEXTURE_DISP_ROOT = `${TEXTURE_ROOT}/disp`;
 const TEXTURE_TERRAIN_SUB = `/terrain`;
 const TEXTURE_BRICK_SUB = `/brick`;
+const TEXTURE_CONCRETE_SUB = `/concrete`;
 
 const TEXTURES = [{
     name: TEXTURE_NAMES.CRATE, map: 'assets/textures/crate.png', normalMap: 'assets/textures/normals/crate.jpg'
@@ -369,11 +389,41 @@ const TEXTURES = [{
     normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_BRICK_SUB}/brick_wall_001_nor_gl_2k.jpg`,
     armMap: `${TEXTURE_ARM_ROOT}${TEXTURE_BRICK_SUB}/brick_wall_001_arm_2k.jpg`
 }, {
+    name: TEXTURE_NAMES.BRICK_WALL_005, 
+    map: `${TEXTURE_WALL_ROOT}${TEXTURE_BRICK_SUB}/brick_wall_005_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_BRICK_SUB}/brick_wall_005_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}${TEXTURE_BRICK_SUB}/brick_wall_005_arm_2k.jpg`
+}, {
     name: TEXTURE_NAMES.DAMAGED_PLASTER, 
     map: `${TEXTURE_WALL_ROOT}${TEXTURE_BRICK_SUB}/damaged_plaster_diff_2k.jpg`, 
     normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_BRICK_SUB}/damaged_plaster_nor_gl_2k.jpg`,
     armMap: `${TEXTURE_ARM_ROOT}${TEXTURE_BRICK_SUB}/damaged_plaster_arm_2k.jpg`
-},  {
+}, {
+    name: TEXTURE_NAMES.CASTLE_BRICK_02_RED, 
+    map: `${TEXTURE_WALL_ROOT}${TEXTURE_BRICK_SUB}/castle_brick_02_red_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_BRICK_SUB}/castle_brick_02_red_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}${TEXTURE_BRICK_SUB}/castle_brick_02_red_arm_2k.jpg`
+}, {
+    name: TEXTURE_NAMES.RED_BRICK_PLASTER_PATCH_02, 
+    map: `${TEXTURE_WALL_ROOT}${TEXTURE_BRICK_SUB}/red_brick_plaster_patch_02_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_BRICK_SUB}/red_brick_plaster_patch_02_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}${TEXTURE_BRICK_SUB}/red_brick_plaster_patch_02_arm_2k.jpg`
+}, {
+    name: TEXTURE_NAMES.WALL_BRICKS_PLASTER, 
+    map: `${TEXTURE_WALL_ROOT}${TEXTURE_BRICK_SUB}/wall_bricks_plaster_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_BRICK_SUB}/wall_bricks_plaster_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}${TEXTURE_BRICK_SUB}/wall_bricks_plaster_arm_2k.jpg`
+}, {
+    name: TEXTURE_NAMES.PLASTER_BRICK_01,
+    map: `${TEXTURE_WALL_ROOT}${TEXTURE_BRICK_SUB}/plaster_brick_01_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_BRICK_SUB}/plaster_brick_01_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}${TEXTURE_BRICK_SUB}/plaster_brick_01_arm_2k.jpg`
+}, {
+    name: TEXTURE_NAMES.WORN_MOSSY_PLASTER_WALL, 
+    map: `${TEXTURE_WALL_ROOT}${TEXTURE_CONCRETE_SUB}/worn_mossy_plasterwall_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_CONCRETE_SUB}/worn_mossy_plasterwall_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}${TEXTURE_CONCRETE_SUB}/worn_mossy_plasterwall_arm_2k.jpg`
+}, {
     name: TEXTURE_NAMES.FOREST_LEAVES_02, 
     map: `${TEXTURE_TERRAIN_ROOT}/forest_leaves_02_diffuse_4k.jpg`, 
     normalMap: `${TEXTURE_NORMALS_ROOT}${TEXTURE_TERRAIN_SUB}/forest_leaves_02_nor_gl_4k.jpg`,

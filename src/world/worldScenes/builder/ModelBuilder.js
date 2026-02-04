@@ -458,9 +458,9 @@ class ModelBuilder {
 
         let object;
         const { position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false } = specs;
-        const { map, normalMap } = specs;
+        const { map, normalMap, armMap } = specs;
 
-        const maps = [{ map }, { normalMap }];
+        const maps = [{ map }, { normalMap }, { armMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new Plane(specs);
@@ -496,9 +496,9 @@ class ModelBuilder {
 
         let object;
         const { position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], receiveShadow = false, castShadow = false, updateOBB = true } = specs;
-        const { map, normalMap } = specs;
+        const { map, normalMap, armMap } = specs;
 
-        const maps = [{ map }, { normalMap }];
+        const maps = [{ map }, { normalMap }, { armMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new OBBPlane(specs);
@@ -518,9 +518,9 @@ class ModelBuilder {
 
         let object;
         const { position = [0, 0, 0], rotationY = 0, scale = [1, 1, 1], receiveShadow = false, castShadow = false, updateRay = true } = specs;
-        const { map, normalMap } = specs;
+        const { map, normalMap, armMap } = specs;
 
-        const maps = [{ map }, { normalMap }];
+        const maps = [{ map }, { normalMap }, { armMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new CollisionPlane(specs);
@@ -541,9 +541,9 @@ class ModelBuilder {
 
         let object;
         const { position = [0, 0, 0], rotationY = 0, scale = [1, 1, 1], receiveShadow = false, castShadow = false, updateOBB = true, updateRay = true } = specs;
-        const { map, normalMap } = specs;
+        const { map, normalMap, armMap } = specs;
 
-        const maps = [{ map }, { normalMap }];
+        const maps = [{ map }, { normalMap }, { armMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new CollisionOBBPlane(specs);
@@ -587,8 +587,13 @@ class ModelBuilder {
         const { position = [0, 0, 0], rotationY = 0, updateOBBnRay = true } = specs;
         const { frontMap, backMap, leftMap, rightMap } = specs;
         const { frontNormal, backNormal, leftNormal, rightNormal } = specs;
+        const { frontArm, backArm, leftArm, rightArm } = specs;
 
-        const maps = [{ frontMap }, { backMap }, { leftMap }, { rightMap }, { frontNormal }, { backNormal }, { leftNormal }, { rightNormal }];
+        const maps = [
+            { frontMap }, { backMap }, { leftMap }, { rightMap },
+            { frontNormal }, { backNormal }, { leftNormal }, { rightNormal },
+            { frontArm }, { backArm }, { leftArm }, { rightArm }
+        ];
 
         this.setupObjectTextures(maps, specs);
 
@@ -608,8 +613,13 @@ class ModelBuilder {
         const { position = [0, 0, 0], rotationY = 0, updateOBBnRay = true } = specs;
         const { frontMap, backMap, leftMap, rightMap } = specs;
         const { frontNormal, backNormal, leftNormal, rightNormal } = specs;
+        const { frontArm, backArm, leftArm, rightArm } = specs;
 
-        const maps = [{ frontMap }, { backMap }, { leftMap }, { rightMap }, { frontNormal }, { backNormal }, { leftNormal }, { rightNormal }];
+        const maps = [
+            { frontMap }, { backMap }, { leftMap }, { rightMap },
+            { frontNormal }, { backNormal }, { leftNormal }, { rightNormal },
+            { frontArm }, { backArm }, { leftArm }, { rightArm }
+        ];
 
         this.setupObjectTextures(maps, specs);
 
@@ -793,8 +803,13 @@ class ModelBuilder {
         const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
+        const { armMap, frontArm, backArm, leftArm, rightArm, topArm, bottomArm } = specs;
 
-        const maps = [{ map }, { frontMap }, { backMap }, { leftMap }, { rightMap }, { topMap }, { bottomMap }, { normalMap }, { frontNormal }, { backNormal }, { leftNormal }, { rightNormal }, { topNormal }, { bottomNormal }];
+        const maps = [
+            { map }, { frontMap }, { backMap }, { leftMap }, { rightMap }, { topMap },
+            { bottomMap }, { normalMap }, { frontNormal }, { backNormal }, { leftNormal }, { rightNormal }, { topNormal }, { bottomNormal },
+            { armMap }, { frontArm }, { backArm }, { leftArm }, { rightArm }, { topArm }, { bottomArm }
+        ];
 
         this.setupObjectTextures(maps, specs);
 

@@ -61,13 +61,13 @@ class Room {
         const { name, sequence = 0, width, depth, height, showArrow = false, enableWallOBBs = false } = specs;
         const { frontMap, backMap, leftMap, rightMap } = this.specs;
         const { frontNormal, backNormal, leftNormal, rightNormal } = this.specs;
+        const { frontArm, backArm, leftArm, rightArm } = this.specs;
 
-        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap, normalMap: frontNormal });
-        const backSpecs = this.makePlaneConfig({ width, height, map: backMap, normalMap: backNormal });
+        const frontSpecs = this.makePlaneConfig({ width, height, map: frontMap, normalMap: frontNormal, armMap: frontArm });
+        const backSpecs = this.makePlaneConfig({ width, height, map: backMap, normalMap: backNormal, armMap: backArm });
 
-        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap, normalMap: leftNormal });
-        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap, normalMap: rightNormal });
-
+        const leftSpecs = this.makePlaneConfig({ width: depth, height, map: leftMap, normalMap: leftNormal, armMap: leftArm });
+        const rightSpecs = this.makePlaneConfig({ width: depth, height, map: rightMap, normalMap: rightNormal, armMap: rightArm });
         this.name = name;
         this.group = new Group();
         this.group.isRoom = true;
@@ -459,8 +459,11 @@ class Room {
 
         const { baseSize = height, mapRatio, lines = false } = this.specs;
         const { repeatU, repeatV, repeatModeU = REPEAT_WRAPPING, repeatModeV = REPEAT_WRAPPING } = this.specs;
+        const { roughness = 1, metalness = 0 } = this.specs;
 
         specs.lines = lines;
+        specs.roughness = roughness;
+        specs.metalness = metalness;
 
         if (repeatU && repeatV) {
 
