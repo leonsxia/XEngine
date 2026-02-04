@@ -518,14 +518,14 @@ class BasicObject extends EventDispatcher {
 
     }
 
-    updateTextures() {
+    updateTextures(material = this.material) {
 
-        const map = this.material?.map;
-        const normal = this.material?.normalMap;
-        const ao = this.material?.aoMap;
-        const rough = this.material?.roughnessMap;
-        const metal = this.material?.metalnessMap;
-        const disp = this.material?.displacementMap;
+        const map = material?.map;
+        const normal = material?.normalMap;
+        const ao = material?.aoMap;
+        const rough = material?.roughnessMap;
+        const metal = material?.metalnessMap;
+        const disp = material?.displacementMap;
 
         if (map) this.setTexture(map);
         if (normal) this.setTexture(normal, true);
@@ -693,6 +693,8 @@ class BasicObject extends EventDispatcher {
             }
 
         }
+
+        return this;
 
     }
 

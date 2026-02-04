@@ -50,8 +50,7 @@ class Cylinder extends BasicObject {
 
             material.color.setHex(white);
             _map.isCap = true;
-            this.setTexture(_map);
-            this.setCapRotation(_map);
+            this.setTexture(_map).setCapRotation(_map);
 
             material.map = _map;
 
@@ -63,8 +62,7 @@ class Cylinder extends BasicObject {
 
             material.color.setHex(white);
             _normal.isCap = true;
-            this.setTexture(_normal, true);
-            this.setCapRotation(_normal);
+            this.setTexture(_normal, true).setCapRotation(_normal);
 
             material.normalMap = _normal;
 
@@ -74,8 +72,7 @@ class Cylinder extends BasicObject {
 
             const _arm = armMap.clone();
             _arm.isCap = true;
-            this.setTexture(_arm, false);
-            this.setCapRotation(_arm);
+            this.setTexture(_arm).setCapRotation(_arm);
 
             material.aoMap = _arm;
             material.roughnessMap = _arm;
@@ -87,8 +84,7 @@ class Cylinder extends BasicObject {
 
                 const _ao = aoMap.clone();
                 _ao.isCap = true;
-                this.setTexture(_ao, false);
-                this.setCapRotation(_ao);
+                this.setTexture(_ao).setCapRotation(_ao);
 
                 material.aoMap = _ao;
 
@@ -98,8 +94,7 @@ class Cylinder extends BasicObject {
 
                 const _rough = roughMap.clone();
                 _rough.isCap = true;
-                this.setTexture(_rough, false);
-                this.setCapRotation(_rough);
+                this.setTexture(_rough).setCapRotation(_rough);
 
                 material.roughnessMap = _rough;
 
@@ -109,8 +104,7 @@ class Cylinder extends BasicObject {
 
                 const _metal = metalMap.clone();
                 _metal.isCap = true;
-                this.setTexture(_metal, false);
-                this.setCapRotation(_metal);
+                this.setTexture(_metal).setCapRotation(_metal);
 
                 material.metalnessMap = _metal;
 
@@ -133,8 +127,7 @@ class Cylinder extends BasicObject {
 
             material.color.setHex(white);
             texture.isCap = true;
-            this.setTexture(texture);
-            this.setCapRotation(texture);
+            this.setTexture(texture).setCapRotation(texture);
 
             material.map = texture;
 
@@ -144,8 +137,7 @@ class Cylinder extends BasicObject {
 
             material.color.setHex(white);
             normal.isCap = true;
-            this.setTexture(normal, true);
-            this.setCapRotation(normal);
+            this.setTexture(normal, true).setCapRotation(normal);
 
             material.normalMap = normal;
 
@@ -154,8 +146,7 @@ class Cylinder extends BasicObject {
         if (arm) {
 
             arm.isCap = true;
-            this.setTexture(arm, false);
-            this.setCapRotation(arm);
+            this.setTexture(arm).setCapRotation(arm);
 
             material.aoMap = arm;
             material.roughnessMap = arm;
@@ -166,8 +157,7 @@ class Cylinder extends BasicObject {
             if (ao) {
 
                 ao.isCap = true;
-                this.setTexture(ao, false);
-                this.setCapRotation(ao);
+                this.setTexture(ao).setCapRotation(ao);
 
                 material.aoMap = ao;
 
@@ -176,8 +166,7 @@ class Cylinder extends BasicObject {
             if (rough) {
 
                 rough.isCap = true;
-                this.setTexture(rough, false);
-                this.setCapRotation(rough);
+                this.setTexture(rough).setCapRotation(rough);
 
                 material.roughnessMap = rough;
 
@@ -186,8 +175,7 @@ class Cylinder extends BasicObject {
             if (metal) {
 
                 metal.isCap = true;
-                this.setTexture(metal, false);
-                this.setCapRotation(metal);
+                this.setTexture(metal).setCapRotation(metal);
 
                 material.metalnessMap = metal;
 
@@ -207,100 +195,35 @@ class Cylinder extends BasicObject {
 
     setCapRotation(texture) {
 
-        let { rotationC } = this.specs;
+        if (!texture) return this;
 
+        let { rotationC } = this.specs;
         if (rotationC) {
 
             texture.rotation = rotationC;
             
         }
 
+        return this;
+
     }
 
     updateTextures() {
 
         super.updateTextures();
+        super.updateTextures(this.topMaterial);
+        super.updateTextures(this.bottomMaterial);
 
-        const topMap = this.topMaterial?.map;
-        const topMapNorm = this.topMaterial?.normalMap;
-        const topMapAo = this.topMaterial?.aoMap;
-        const topMapRough = this.topMaterial?.roughnessMap;
-        const topMapMetal = this.topMaterial?.metalnessMap;
-        const bottomMap = this.bottomMaterial?.map;
-        const bottomMapNorm = this.bottomMaterial?.normalMap;
-        const bottomMapAo = this.bottomMaterial?.aoMap;
-        const bottomMapRough = this.bottomMaterial?.roughnessMap;
-        const bottomMapMetal = this.bottomMaterial?.metalnessMap;
-        
-        if (topMap) {
-
-            this.setTexture(topMap);
-            this.setCapRotation(topMap);
-
-        }
-
-        if (topMapNorm) {
-
-            this.setTexture(topMapNorm);
-            this.setCapRotation(topMapNorm);
-
-        }
-
-        if (topMapAo) {
-
-            this.setTexture(topMapAo);
-            this.setCapRotation(topMapAo);
-
-        }
-
-        if (topMapRough) {
-
-            this.setTexture(topMapRough);
-            this.setCapRotation(topMapRough);
-
-        }
-
-        if (topMapMetal) {
-
-            this.setTexture(topMapMetal);
-            this.setCapRotation(topMapMetal);
-
-        }
-
-        if (bottomMap) {
-
-            this.setTexture(bottomMap);
-            this.setCapRotation(bottomMap);
-
-        }
-
-        if (bottomMapNorm) {
-
-            this.setTexture(bottomMapNorm);
-            this.setCapRotation(bottomMapNorm);
-
-        }
-
-        if (bottomMapAo) {
-
-            this.setTexture(bottomMapAo);
-            this.setCapRotation(bottomMapAo);
-
-        }
-
-        if (bottomMapRough) {
-
-            this.setTexture(bottomMapRough);
-            this.setCapRotation(bottomMapRough);
-
-        }
-
-        if (bottomMapMetal) {
-
-            this.setTexture(bottomMapMetal);
-            this.setCapRotation(bottomMapMetal);
-
-        }
+        this.setCapRotation(this.topMaterial?.map);
+        this.setCapRotation(this.topMaterial?.normalMap);
+        this.setCapRotation(this.topMaterial?.aoMap);
+        this.setCapRotation(this.topMaterial?.roughnessMap);
+        this.setCapRotation(this.topMaterial?.metalnessMap);
+        this.setCapRotation(this.bottomMaterial?.map);
+        this.setCapRotation(this.bottomMaterial?.normalMap);
+        this.setCapRotation(this.bottomMaterial?.aoMap);
+        this.setCapRotation(this.bottomMaterial?.roughnessMap);
+        this.setCapRotation(this.bottomMaterial?.metalnessMap);       
 
     }
 
