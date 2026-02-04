@@ -97,8 +97,8 @@
                     "name": "room1_ambientLight",
                     "display": "Ambient Light",
                     "detail": {
-                        "color": [255, 235, 102],
-                        "intensity": 0.1
+                        "color": [255, 255, 255],
+                        "intensity": 1.5
                     },
                     "type": "AmbientLight",
                     "debug": true,
@@ -321,6 +321,7 @@
                     "name": "room1_CubeBox1",
                     "position": [-2.7, 1, 1.2],
                     "rotationY": 0,
+                    "canBeIgnored": true,
                     "physics": { "mass": 100, "friction": 1 }
                 },
                 {
@@ -354,6 +355,7 @@
                     "name": "room1_CubeBox2",
                     "position": [-1.5, 1, 0],
                     "rotationY": 0,
+                    "canBeIgnored": true,
                     "physics": { "mass": 100, "friction": 1 }
                 },
                 {
