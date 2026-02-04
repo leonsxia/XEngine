@@ -223,30 +223,82 @@ class Cylinder extends BasicObject {
 
         const topMap = this.topMaterial?.map;
         const topMapNorm = this.topMaterial?.normalMap;
+        const topMapAo = this.topMaterial?.aoMap;
+        const topMapRough = this.topMaterial?.roughnessMap;
+        const topMapMetal = this.topMaterial?.metalnessMap;
         const bottomMap = this.bottomMaterial?.map;
         const bottomMapNorm = this.bottomMaterial?.normalMap;
+        const bottomMapAo = this.bottomMaterial?.aoMap;
+        const bottomMapRough = this.bottomMaterial?.roughnessMap;
+        const bottomMapMetal = this.bottomMaterial?.metalnessMap;
         
         if (topMap) {
 
             this.setTexture(topMap);
+            this.setCapRotation(topMap);
 
         }
 
         if (topMapNorm) {
 
             this.setTexture(topMapNorm);
+            this.setCapRotation(topMapNorm);
+
+        }
+
+        if (topMapAo) {
+
+            this.setTexture(topMapAo);
+            this.setCapRotation(topMapAo);
+
+        }
+
+        if (topMapRough) {
+
+            this.setTexture(topMapRough);
+            this.setCapRotation(topMapRough);
+
+        }
+
+        if (topMapMetal) {
+
+            this.setTexture(topMapMetal);
+            this.setCapRotation(topMapMetal);
 
         }
 
         if (bottomMap) {
 
             this.setTexture(bottomMap);
+            this.setCapRotation(bottomMap);
 
         }
 
         if (bottomMapNorm) {
 
             this.setTexture(bottomMapNorm);
+            this.setCapRotation(bottomMapNorm);
+
+        }
+
+        if (bottomMapAo) {
+
+            this.setTexture(bottomMapAo);
+            this.setCapRotation(bottomMapAo);
+
+        }
+
+        if (bottomMapRough) {
+
+            this.setTexture(bottomMapRough);
+            this.setCapRotation(bottomMapRough);
+
+        }
+
+        if (bottomMapMetal) {
+
+            this.setTexture(bottomMapMetal);
+            this.setCapRotation(bottomMapMetal);
 
         }
 
