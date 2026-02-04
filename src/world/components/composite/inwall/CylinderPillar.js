@@ -40,7 +40,7 @@ class CylinderPillar extends InWallObjectBase {
         
         const { name } = specs;
         const { showArrow = false } = specs;
-        const { map, topMap, bottomMap, normalMap, topNormal, bottomNormal } = specs;
+        const { map, topMap, bottomMap, normalMap, topNormal, bottomNormal, armMap, topArm, bottomArm } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1] } = specs;
 
@@ -48,17 +48,16 @@ class CylinderPillar extends InWallObjectBase {
 
         this.radius = this._width * .5 / Math.cos(.375 * Math.PI);
 
-        const pSpecs1 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap }, 0);
-        const pSpecs2 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap }, 1);
-        const pSpecs3 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap }, 2);
-        const pSpecs4 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap }, 3);
-        const pSpecs5 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap }, 4);
-        const pSpecs6 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap }, 5);
-        const pSpecs7 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap }, 6);
-        const pSpecs8 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap }, 7);
-        const topSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: topMap, normalMap: topNormal });
-        const bottomSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal }, false);
-
+        const pSpecs1 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap, armMap }, 0);
+        const pSpecs2 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap, armMap }, 1);
+        const pSpecs3 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap, armMap }, 2);
+        const pSpecs4 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap, armMap }, 3);
+        const pSpecs5 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap, armMap }, 4);
+        const pSpecs6 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap, armMap }, 5);
+        const pSpecs7 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap, armMap }, 6);
+        const pSpecs8 = this.makePlaneConfig({ width: this._width, height: this._height, map, normalMap, armMap }, 7);
+        const topSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: topMap, normalMap: topNormal, armMap: topArm });
+        const bottomSpecs = this.makeTBPlaneConfig({ radius: this.radius, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, armMap: bottomArm }, false);
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
         this.face8 = createWallFunction(pSpecs8, `${name}_face8`, [0, 0, 0], - Math.PI / 4, receiveShadow, castShadow, showArrow);
@@ -159,6 +158,7 @@ class CylinderPillar extends InWallObjectBase {
         const { separatedFace = false } = this.specs;
         const { scale = [1, 1] } = this.specs;
         const { transparent = true } = this.specs;
+        const { roughness = 1, metalness = 0 } = this.specs;
 
         if (!separatedFace) {
 
@@ -171,6 +171,8 @@ class CylinderPillar extends InWallObjectBase {
         specs.baseSize = baseSize;
         specs.transparent = transparent;
         specs.texScale = scale;
+        specs.roughness = roughness;
+        specs.metalness = metalness;
 
         return specs;
 
@@ -179,12 +181,15 @@ class CylinderPillar extends InWallObjectBase {
     makeTBPlaneConfig(specs, top = true) {
         
         const { baseSize = this.radius * 2, mapRatio, lines = false, scale = [1, 1], transparent = true } = this.specs;
+        const { roughness = 1, metalness = 0 } = this.specs;
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;
         specs.baseSize = baseSize;
         specs.transparent = transparent;
         specs.texScale = [scale[0]];
+        specs.roughness = roughness;
+        specs.metalness = metalness;
 
         if (top)
             specs.rotationT = .125 * Math.PI;

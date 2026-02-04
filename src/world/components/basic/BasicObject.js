@@ -107,52 +107,81 @@ class BasicObject extends EventDispatcher {
 
     async initBasic() {
 
-        const { map, normalMap } = this.specs;
-        let mapLoaded = false;
-        let normalLoaded = false;
+        const initPromises = [];
+        const {
+            map, normalMap,
+            aoMap, roughMap, roughness = 1, metalMap, metalness = 0, armMap,
+            useStandardMaterial = false
+        } = this.specs;
 
         if (map?.isTexture) {
 
             const _map = map.clone();
-
             this.resetTextureColor();
             this.setTexture(_map);
             this.material.map = _map;
-
-            mapLoaded = true;
 
         }
 
         if (normalMap?.isTexture) {
 
-            const _normalMap = normalMap.clone();
-
+            const _map = normalMap.clone();
             this.resetTextureColor();
-            this.setTexture(_normalMap, true);
-            this.material.normalMap = _normalMap;
-
-            normalLoaded = true;
+            this.setTexture(_map, true);
+            this.material.normalMap = _map;
 
         }
 
-        if (mapLoaded && normalLoaded) {
+        if (armMap?.isTexture) {
 
-            return;
+            const _map = armMap.clone();
+            this.setTexture(_map);
+            this.material.aoMap = _map;
+            this.material.roughnessMap = _map;
+            this.material.metalnessMap = _map;
+
+        } else {
+
+            if (aoMap?.isTexture) {
+
+                const _map = aoMap.clone();
+                this.setTexture(_map);
+                this.material.aoMap = _map;
+
+            }
+
+            if (roughMap?.isTexture) {
+
+                const _map = roughMap.clone();
+                this.setTexture(_map);
+                this.material.roughnessMap = _map;
+
+            }
+
+            if (metalMap?.isTexture) {
+
+                const _map = metalMap.clone();
+                this.setTexture(_map);
+                this.material.metalnessMap = _map;
+
+            }
 
         }
-        
-        const loadPromises = [];
 
-        loadPromises.push(map && !map.isTexture ? this.loader.loadAsync(map) : Promise.resolve(null));
-        loadPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
+        initPromises.push(map && !map.isTexture ? this.loader.loadAsync(map) : Promise.resolve(null));
+        initPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
+        initPromises.push(armMap && !armMap.isTexture ? this.loader.loadAsync(armMap) : Promise.resolve(null));
+        initPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
+        initPromises.push(roughMap && !roughMap.isTexture ? this.loader.loadAsync(roughMap) : Promise.resolve(null));
+        initPromises.push(metalMap && !metalMap.isTexture ? this.loader.loadAsync(metalMap) : Promise.resolve(null));
 
-        const [texture, normal] = await Promise.all(loadPromises);
+        const [tex, normal, arm, ao, rough, metal] = await Promise.all(initPromises);
 
-        if (texture) {
+        if (tex) {
 
             this.resetTextureColor();
-            this.setTexture(texture);
-            this.material.map = texture;
+            this.setTexture(tex);
+            this.material.map = tex;
 
         }
 
@@ -161,6 +190,45 @@ class BasicObject extends EventDispatcher {
             this.resetTextureColor();
             this.setTexture(normal, true);
             this.material.normalMap = normal;
+
+        }
+
+        if (arm) {
+
+            this.setTexture(arm);
+            this.material.aoMap = arm;
+            this.material.roughnessMap = arm;
+            this.material.metalnessMap = arm;
+
+        } else {
+
+            if (ao) {
+
+                this.setTexture(ao);
+                this.material.aoMap = ao;
+
+            }
+
+            if (rough) {
+
+                this.setTexture(rough);
+                this.material.roughnessMap = rough;
+
+            }
+
+            if (metal) {
+
+                this.setTexture(metal);
+                this.material.metalnessMap = metal;
+
+            }
+
+        }
+
+        if (useStandardMaterial) {
+
+            this.material.roughness = roughness;
+            this.material.metalness = metalness;
 
         }
 

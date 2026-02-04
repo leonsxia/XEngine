@@ -565,9 +565,9 @@ class ModelBuilder {
 
         let object;
         const { position = [0, 0, 0], scale = [1, 1, 1], rotation = [0, 0, 0], receiveShadow = false, castShadow = false } = specs;
-        const { map, normalMap, aoMap, roughMap, metalMap, dispMap } = specs;
+        const { map, normalMap, armMap, aoMap, roughMap, metalMap, dispMap } = specs;
 
-        const maps = [{ map }, { normalMap }, { aoMap }, { roughMap }, { metalMap }, { dispMap }];
+        const maps = [{ map }, { normalMap }, { armMap }, { aoMap }, { roughMap }, { metalMap }, { dispMap }];
         this.setupObjectTextures(maps, specs);
 
         object = new Terrain(specs);
@@ -634,8 +634,13 @@ class ModelBuilder {
         const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
+        const { frontArm, backArm, leftArm, rightArm, topArm, bottomArm } = specs;
 
-        const maps = [{ frontMap }, { backMap }, { leftMap }, { rightMap }, { topMap }, { bottomMap }, { frontNormal }, { backNormal }, { leftNormal }, { rightNormal }, { topNormal }, { bottomNormal }];
+        const maps = [
+            { frontMap }, { backMap }, { leftMap }, { rightMap }, { topMap }, { bottomMap }, 
+            { frontNormal }, { backNormal }, { leftNormal }, { rightNormal }, { topNormal }, { bottomNormal },
+            { frontArm }, { backArm }, { leftArm }, { rightArm }, { topArm }, { bottomArm }
+        ];
 
         this.setupObjectTextures(maps, specs);
 
@@ -657,8 +662,13 @@ class ModelBuilder {
         const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { outTMap, outSMap, inTMap, inSMap, sideTMap, sideSMap, topMap, bottomMap } = specs;
         const { outTNormal, outSNormal, inTNormal, inSNormal, sideTNormal, sideSNormal, topNormal, bottomNormal } = specs;
+        const { outTArm, outSArm, inTArm, inSArm, sideTArm, sideSArm, topArm, bottomArm } = specs;
 
-        const maps = [{ outTMap }, { outSMap }, { inTMap }, { inSMap }, { sideTMap }, { sideSMap }, { topMap }, { bottomMap }, { outTNormal }, { outSNormal }, { inTNormal }, { inSNormal }, { sideTNormal }, { sideSNormal }, { topNormal }, { bottomNormal }];
+        const maps = [
+            { outTMap }, { outSMap }, { inTMap }, { inSMap }, { sideTMap }, { sideSMap }, { topMap }, { bottomMap }, 
+            { outTNormal }, { outSNormal }, { inTNormal }, { inSNormal }, { sideTNormal }, { sideSNormal }, { topNormal }, { bottomNormal },
+            { outTArm }, { outSArm }, { inTArm }, { inSArm }, { sideTArm }, { sideSArm }, { topArm }, { bottomArm }
+        ];
 
         this.setupObjectTextures(maps, specs);
 
@@ -678,9 +688,9 @@ class ModelBuilder {
 
         let object;
         const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
-        const { map, topMap, bottomMap, normalMap, topNormal, bottomNormal } = specs;
+        const { map, topMap, bottomMap, normalMap, topNormal, bottomNormal, armMap, topArm, bottomArm } = specs;
 
-        const maps = [{ map }, { topMap }, { bottomMap }, { normalMap }, { topNormal }, { bottomNormal }];
+        const maps = [{ map }, { topMap }, { bottomMap }, { normalMap }, { topNormal }, { bottomNormal }, { armMap }, { topArm }, { bottomArm }];
 
         this.setupObjectTextures(maps, specs);
 
@@ -702,8 +712,13 @@ class ModelBuilder {
         const { position = [0, 0, 0], rotationY, rotation = [0, 0 ,0], updateOBBs = true } = specs;
         const { backMap, leftMap, rightMap, slopeMap, bottomMap } = specs;
         const { backNormal, leftNormal, rightNormal, slopeNormal, bottomNormal } = specs;
+        const { backArm, leftArm, rightArm, slopeArm, bottomArm } = specs;
 
-        const maps = [{ backMap }, { leftMap }, { rightMap }, { slopeMap }, { bottomMap }, { backNormal }, { leftNormal }, { rightNormal }, { slopeNormal }, { bottomNormal }];
+        const maps = [
+            { backMap }, { leftMap }, { rightMap }, { slopeMap }, { bottomMap }, 
+            { backNormal }, { leftNormal }, { rightNormal }, { slopeNormal }, { bottomNormal },
+            { backArm }, { leftArm }, { rightArm }, { slopeArm }, { bottomArm }
+        ];
 
         this.setupObjectTextures(maps, specs);
 
@@ -725,8 +740,13 @@ class ModelBuilder {
         const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
         const { frontMap, topMap, sideMap, backMap, bottomMap } = specs;
         const { frontNormal, topNormal, sideNormal, backNormal, bottomNormal } = specs;
+        const { frontArm, topArm, sideArm, backArm, bottomArm } = specs;
 
-        const maps = [{ frontMap }, { topMap }, { sideMap }, { backMap }, { bottomMap }, { frontNormal }, { topNormal }, { sideNormal }, { backNormal }, { bottomNormal }];
+        const maps = [
+            { frontMap }, { topMap }, { sideMap }, { backMap }, { bottomMap },
+            { frontNormal }, { topNormal }, { sideNormal }, { backNormal }, { bottomNormal },
+            { frontArm }, { topArm }, { sideArm }, { backArm }, { bottomArm }
+        ];
 
         this.setupObjectTextures(maps, specs);
 
@@ -746,9 +766,12 @@ class ModelBuilder {
 
         let object;
         const { position = [0, 0, 0], rotationY, rotation = [0, 0, 0], updateOBBs = true } = specs;
-        const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal } = specs;
+        const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal, armMap, topArm, bottomArm } = specs;
 
-        const maps = [{ map }, { normalMap }, { topMap }, { topNormal }, { bottomMap }, { bottomNormal }];
+        const maps = [
+            { map }, { normalMap }, { topMap }, { topNormal }, { bottomMap }, { bottomNormal },
+            { armMap }, { topArm }, { bottomArm }
+        ];
 
         this.setupObjectTextures(maps, specs);
 

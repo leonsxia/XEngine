@@ -237,72 +237,57 @@ const TEXTURE_NAMES = {
     METAL_241: 'METAL_241',
     METAL_168: 'METAL_168',
     METAL_168_NORMAL: 'METAL_168_NORMAL',
+    // brick
+    BRICK_WALL_001: 'BRICK_WALL_001',
+    BRICK_WALL_001_NORMAL: 'BRICK_WALL_001_NORMAL',
+    BRICK_WALL_001_ARM: 'BRICK_WALL_001_ARM',
+    DAMAGED_PLASTER: 'DAMAGED_PLASTER',
+    DAMAGED_PLASTER_NORMAL: 'DAMAGED_PLASTER_NORMAL',
+    DAMAGED_PLASTER_ARM: 'DAMAGED_PLASTER_ARM',
     // terrain
     FOREST_LEAVES_02: 'FOREST_LEAVES_02',
     FOREST_LEAVES_02_NORMAL: 'FOREST_LEAVES_02_NORMAL',
-    FOREST_LEAVES_02_AO: 'FOREST_LEAVES_02_AO',
-    FOREST_LEAVES_02_ROUGH: 'FOREST_LEAVES_02_ROUGH',
-    FOREST_LEAVES_02_METAL: 'FOREST_LEAVES_02_METAL',
+    FOREST_LEAVES_02_ARM: 'FOREST_LEAVES_02_ARM',
     FOREST_LEAVES_02_DISP: 'FOREST_LEAVES_02_DISP',
     FOREST_LEAVES_04: 'FOREST_LEAVES_04',
     FOREST_LEAVES_04_NORMAL: 'FOREST_LEAVES_04_NORMAL',
-    FOREST_LEAVES_04_AO: 'FOREST_LEAVES_04_AO',
-    FOREST_LEAVES_04_ROUGH: 'FOREST_LEAVES_04_ROUGH',
-    FOREST_LEAVES_04_METAL: 'FOREST_LEAVES_04_METAL',
+    FOREST_LEAVES_04_ARM: 'FOREST_LEAVES_04_ARM',
     FOREST_LEAVES_04_DISP: 'FOREST_LEAVES_04_DISP',
     COAST_SAND_ROCKS_01: 'COAST_SAND_ROCKS_01',
     COAST_SAND_ROCKS_01_NORMAL: 'COAST_SAND_ROCKS_01_NORMAL',
-    COAST_SAND_ROCKS_01_AO: 'COAST_SAND_ROCKS_01_AO',
-    COAST_SAND_ROCKS_01_ROUGH: 'COAST_SAND_ROCKS_01_ROUGH',
-    COAST_SAND_ROCKS_01_METAL: 'COAST_SAND_ROCKS_01_METAL',
+    COAST_SAND_ROCKS_01_ARM: 'COAST_SAND_ROCKS_01_ARM',
     COAST_SAND_ROCKS_01_DISP: 'COAST_SAND_ROCKS_01_DISP',
     COAST_SAND_ROCKS_02: 'COAST_SAND_ROCKS_02',
     COAST_SAND_ROCKS_02_NORMAL: 'COAST_SAND_ROCKS_02_NORMAL',
-    COAST_SAND_ROCKS_02_AO: 'COAST_SAND_ROCKS_02_AO',
-    COAST_SAND_ROCKS_02_ROUGH: 'COAST_SAND_ROCKS_02_ROUGH',
-    COAST_SAND_ROCKS_02_METAL: 'COAST_SAND_ROCKS_02_METAL',
+    COAST_SAND_ROCKS_02_ARM: 'COAST_SAND_ROCKS_02_ARM',
     COAST_SAND_ROCKS_02_DISP: 'COAST_SAND_ROCKS_02_DISP',
     AERIAL_ROCKS_01: 'AERIAL_ROCKS_01',
     AERIAL_ROCKS_01_NORMAL: 'AERIAL_ROCKS_01_NORMAL',
-    AERIAL_ROCKS_01_AO: 'AERIAL_ROCKS_01_AO',
-    AERIAL_ROCKS_01_ROUGH: 'AERIAL_ROCKS_01_ROUGH',
-    AERIAL_ROCKS_01_METAL: 'AERIAL_ROCKS_01_METAL',
+    AERIAL_ROCKS_01_ARM: 'AERIAL_ROCKS_01_ARM',
     AERIAL_ROCKS_01_DISP: 'AERIAL_ROCKS_01_DISP',
     AERIAL_GRASS_ROCK: 'AERIAL_GRASS_ROCK',
     AERIAL_GRASS_ROCK_NORMAL: 'AERIAL_GRASS_ROCK_NORMAL',
-    AERIAL_GRASS_ROCK_AO: 'AERIAL_GRASS_ROCK_AO',
-    AERIAL_GRASS_ROCK_ROUGH: 'AERIAL_GRASS_ROCK_ROUGH',
-    AERIAL_GRASS_ROCK_METAL: 'AERIAL_GRASS_ROCK_METAL',
-    AERIAL_GRASS_ROCK_DISP: 'AERIAL_GRASS_ROCK_DIPS',
+    AERIAL_GRASS_ROCK_ARM: 'AERIAL_GRASS_ROCK_ARM',
+    AERIAL_GRASS_ROCK_DISP: 'AERIAL_GRASS_ROCK_DISP',
     BROWN_MUD_LEAVES_01: 'BROWN_MUD_LEAVES_01',
     BROWN_MUD_LEAVES_01_NORMAL: 'BROWN_MUD_LEAVES_01_NORMAL',
-    BROWN_MUD_LEAVES_01_AO: 'BROWN_MUD_LEAVES_01_AO',
-    BROWN_MUD_LEAVES_01_ROUGH: 'BROWN_MUD_LEAVES_01_ROUGH',
-    BROWN_MUD_LEAVES_01_METAL: 'BROWN_MUD_LEAVES_01_METAL',
+    BROWN_MUD_LEAVES_01_ARM: 'BROWN_MUD_LEAVES_01_ARM',
     BROWN_MUD_LEAVES_01_DISP: 'BROWN_MUD_LEAVES_01_DISP',
     MOSSY_ROCK: 'MOSSY_ROCK',
     MOSSY_ROCK_NORMAL: 'MOSSY_ROCK_NORMAL',
-    MOSSY_ROCK_AO: 'MOSSY_ROCK_AO',
-    MOSSY_ROCK_ROUGH: 'MOSSY_ROCK_ROUGH',
-    MOSSY_ROCK_METAL: 'MOSSY_ROCK_METAL',
+    MOSSY_ROCK_ARM: 'MOSSY_ROCK_ARM',
     MOSSY_ROCK_DISP: 'MOSSY_ROCK_DISP',
     FOREST_GROUND_01: 'FOREST_GROUND_01',
     FOREST_GROUND_01_NORMAL: 'FOREST_GROUND_01_NORMAL',
-    FOREST_GROUND_01_AO: 'FOREST_GROUND_01_AO',
-    FOREST_GROUND_01_ROUGH: 'FOREST_GROUND_01_ROUGH',
-    FOREST_GROUND_01_METAL: 'FOREST_GROUND_01_METAL',
+    FOREST_GROUND_01_ARM: 'FOREST_GROUND_01_ARM',
     FOREST_GROUND_01_DISP: 'FOREST_GROUND_01_DISP',
     ROCK_TRAIL: 'ROCK_TRAIL',
     ROCK_TRAIL_NORMAL: 'ROCK_TRAIL_NORMAL',
-    ROCK_TRAIL_AO: 'ROCK_TRAIL_AO',
-    ROCK_TRAIL_ROUGH: 'ROCK_TRAIL_ROUGH',
-    ROCK_TRAIL_METAL: 'ROCK_TRAIL_METAL',
+    ROCK_TRAIL_ARM: 'ROCK_TRAIL_ARM',
     ROCK_TRAIL_DISP: 'ROCK_TRAIL_DISP',
     ROCKY_TERRAIN_03: 'ROCKY_TERRAIN_03',
     ROCKY_TERRAIN_03_NORMAL: 'ROCKY_TERRAIN_03_NORMAL',
-    ROCKY_TERRAIN_03_AO: 'ROCKY_TERRAIN_03_AO',
-    ROCKY_TERRAIN_03_ROUGH: 'ROCKY_TERRAIN_03_ROUGH',
-    ROCKY_TERRAIN_03_METAL: 'ROCKY_TERRAIN_03_METAL',
+    ROCKY_TERRAIN_03_ARM: 'ROCKY_TERRAIN_03_ARM',
     ROCKY_TERRAIN_03_DISP: 'ROCKY_TERRAIN_03_DISP',
     // water
     WATER_1_M: 'WATER_1_M',
@@ -312,6 +297,13 @@ const TEXTURE_NAMES = {
     // post-processor
     TRI_PATTERN: 'TRI_PATTERN'
 };
+
+const TEXTURE_ROOT = 'assets/textures';
+const TEXTURE_WALL_ROOT = `${TEXTURE_ROOT}/walls`;
+const TEXTURE_TERRAIN_ROOT = `${TEXTURE_ROOT}/terrain`;
+const TEXTURE_NORMALS_ROOT = `${TEXTURE_ROOT}/normals`;
+const TEXTURE_ARM_ROOT = `${TEXTURE_ROOT}/arm`;
+const TEXTURE_DISP_ROOT = `${TEXTURE_ROOT}/disp`;
 
 const TEXTURES = [{
     name: TEXTURE_NAMES.CRATE, map: 'assets/textures/crate.png', normalMap: 'assets/textures/normals/crate.jpg'
@@ -338,135 +330,113 @@ const TEXTURES = [{
 }, {
     name: TEXTURE_NAMES.WES_NUT, map: 'assets/textures/wes_gallery/wes_nut.jpg', normalMap: 'assets/textures/wes_gallery_normal/wes_nut_normal.jpg'
 }, {
-    name: TEXTURE_NAMES.CONCRETE_128, map: 'assets/textures/walls/Texturelabs_Concrete_128M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_128L.jpg'
+    name: TEXTURE_NAMES.CONCRETE_128, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Concrete_128M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Concrete_128L.jpg`
 }, {
-    name: TEXTURE_NAMES.CONCRETE_132, map: 'assets/textures/walls/Texturelabs_Concrete_132M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_132L.jpg'
+    name: TEXTURE_NAMES.CONCRETE_132, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Concrete_132M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Concrete_132L.jpg`
 }, {
-    name: TEXTURE_NAMES.CONCRETE_165, map: 'assets/textures/walls/Texturelabs_Concrete_165M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Concrete_165L.jpg'
+    name: TEXTURE_NAMES.CONCRETE_165, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Concrete_165M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Concrete_165L.jpg`
 }, {
-    name: TEXTURE_NAMES.BRICK_159, map: 'assets/textures/walls/Texturelabs_Brick_159M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Brick_159L.jpg'
+    name: TEXTURE_NAMES.BRICK_159, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Brick_159M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Brick_159L.jpg`
 }, {
-    name: TEXTURE_NAMES.FABRIC_190, map: 'assets/textures/walls/Texturelabs_Fabric_190M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Fabric_190L.jpg'
+    name: TEXTURE_NAMES.FABRIC_190, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Fabric_190M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Fabric_190L.jpg`
 }, {
-    name: TEXTURE_NAMES.FABRIC_197, map: 'assets/textures/walls/Texturelabs_Fabric_197M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Fabric_197L.jpg'
+    name: TEXTURE_NAMES.FABRIC_197, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Fabric_197M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Fabric_197L.jpg`
 }, {
-    name: TEXTURE_NAMES.STONE_165, map: 'assets/textures/walls/Texturelabs_Stone_165M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Stone_165L.jpg'
+    name: TEXTURE_NAMES.STONE_165, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Stone_165M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Stone_165L.jpg`
 }, {
-    name: TEXTURE_NAMES.WOOD_156, map: 'assets/textures/walls/Texturelabs_Wood_156M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Wood_156L.jpg'
+    name: TEXTURE_NAMES.WOOD_156, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Wood_156M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Wood_156L.jpg`
 }, {
-    name: TEXTURE_NAMES.WOOD_186, map: 'assets/textures/walls/Texturelabs_Wood_186M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Wood_186L.jpg'
+    name: TEXTURE_NAMES.WOOD_186, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Wood_186M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Wood_186L.jpg`
 }, {
-    name: TEXTURE_NAMES.WOOD_227, map: 'assets/textures/walls/Texturelabs_Wood_227M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Wood_227M.jpg'
+    name: TEXTURE_NAMES.WOOD_227, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Wood_227M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Wood_227L.jpg`
 }, {
-    name: TEXTURE_NAMES.METAL_272, map: 'assets/textures/walls/Texturelabs_Metal_272M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_272L.jpg'
+    name: TEXTURE_NAMES.METAL_272, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Metal_272M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Metal_272L.jpg`
 }, {
-    name: TEXTURE_NAMES.METAL_274, map: 'assets/textures/walls/Texturelabs_Metal_274M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_274L.jpg'
+    name: TEXTURE_NAMES.METAL_274, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Metal_274M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Metal_274L.jpg`
 }, {
-    name: TEXTURE_NAMES.METAL_290, map: 'assets/textures/walls/Texturelabs_Metal_290M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_290L.jpg'
+    name: TEXTURE_NAMES.METAL_290, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Metal_290M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Metal_290L.jpg`
 }, {
-    name: TEXTURE_NAMES.METAL_292, map: 'assets/textures/walls/Texturelabs_Metal_292M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_292L.jpg'
+    name: TEXTURE_NAMES.METAL_292, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Metal_292M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Metal_292L.jpg`
 }, {
-    name: TEXTURE_NAMES.METAL_241, map: 'assets/textures/walls/Texturelabs_Metal_241L.jpg'
+    name: TEXTURE_NAMES.METAL_241, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Metal_241L.jpg`
 }, {
-    name: TEXTURE_NAMES.METAL_168, map: 'assets/textures/walls/Texturelabs_Metal_168M.jpg', normalMap: 'assets/textures/normals/Texturelabs_Metal_168L.jpg'
+    name: TEXTURE_NAMES.METAL_168, map: `${TEXTURE_WALL_ROOT}/Texturelabs_Metal_168M.jpg`, normalMap: `${TEXTURE_NORMALS_ROOT}/Texturelabs_Metal_168L.jpg`
 }, {
+    name: TEXTURE_NAMES.BRICK_WALL_001, 
+    map: `${TEXTURE_WALL_ROOT}/brick/brick_wall_001_diffuse_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/brick/brick_wall_001_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/brick/brick_wall_001_arm_2k.jpg`
+}, {
+    name: TEXTURE_NAMES.DAMAGED_PLASTER, 
+    map: `${TEXTURE_WALL_ROOT}/brick/damaged_plaster_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/brick/damaged_plaster_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/brick/damaged_plaster_arm_2k.jpg`
+},  {
     name: TEXTURE_NAMES.FOREST_LEAVES_02, 
-    map: 'assets/textures/terrain/forest_leaves_02_diffuse_4k.jpg', 
-    normalMap: 'assets/textures/normals/forest_leaves_02_nor_gl_4k.jpg',
-    // aoMap: 'assets/textures/ao/forest_leaves_02_ao_4k.jpg',
-    // roughMap: 'assets/textures/rough/forest_leaves_02_rough_4k.jpg',
-    aoMap: 'assets/textures/arm/forest_leaves_02_arm_4k.jpg',
-    roughMap: 'assets/textures/arm/forest_leaves_02_arm_4k.jpg',
-    metalMap: 'assets/textures/arm/forest_leaves_02_arm_4k.jpg',
-    dispMap: 'assets/textures/disp/forest_leaves_02_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/forest_leaves_02_diffuse_4k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/forest_leaves_02_nor_gl_4k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/forest_leaves_02_arm_4k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/forest_leaves_02_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.FOREST_LEAVES_04, 
-    map: 'assets/textures/terrain/forest_leaves_04_diff_4k.jpg', 
-    normalMap: 'assets/textures/normals/forest_leaves_04_nor_gl_2k.jpg',
-    aoMap: 'assets/textures/arm/forest_leaves_04_arm_4k.jpg',
-    roughMap: 'assets/textures/arm/forest_leaves_04_arm_4k.jpg',
-    metalMap: 'assets/textures/arm/forest_leaves_04_arm_4k.jpg',
-    dispMap: 'assets/textures/disp/forest_leaves_04_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/forest_leaves_04_diff_4k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/forest_leaves_04_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/forest_leaves_04_arm_4k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/forest_leaves_04_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.COAST_SAND_ROCKS_01, 
-    map: 'assets/textures/terrain/coast_land_rocks_01_diff_2k.jpg', 
-    normalMap: 'assets/textures/normals/coast_land_rocks_01_nor_gl_2k.jpg',
-    aoMap: 'assets/textures/arm/coast_land_rocks_01_arm_2k.jpg',
-    roughMap: 'assets/textures/arm/coast_land_rocks_01_arm_2k.jpg',
-    metalMap: 'assets/textures/arm/coast_land_rocks_01_arm_2k.jpg',
-    dispMap: 'assets/textures/disp/coast_land_rocks_01_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/coast_land_rocks_01_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/coast_land_rocks_01_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/coast_land_rocks_01_arm_2k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/coast_land_rocks_01_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.COAST_SAND_ROCKS_02, 
-    map: 'assets/textures/terrain/coast_sand_rocks_02_diff_4k.jpg', 
-    normalMap: 'assets/textures/normals/coast_sand_rocks_02_nor_gl_2k.jpg',
-    // aoMap: 'assets/textures/ao/coast_sand_rocks_02_ao_4k.jpg',
-    // roughMap: 'assets/textures/rough/coast_sand_rocks_02_rough_4k.jpg',
-    aoMap: 'assets/textures/arm/coast_sand_rocks_02_arm_2k.jpg',
-    roughMap: 'assets/textures/arm/coast_sand_rocks_02_arm_2k.jpg',
-    metalMap: 'assets/textures/arm/coast_sand_rocks_02_arm_2k.jpg',
-    dispMap: 'assets/textures/disp/coast_sand_rocks_02_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/coast_sand_rocks_02_diff_4k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/coast_sand_rocks_02_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/coast_sand_rocks_02_arm_2k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/coast_sand_rocks_02_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.AERIAL_ROCKS_01, 
-    map: 'assets/textures/terrain/aerial_rocks_01_diff_4k.jpg', 
-    normalMap: 'assets/textures/normals/aerial_rocks_01_nor_gl_2k.jpg',
-    // aoMap: 'assets/textures/ao/aerial_rocks_01_ao_4k.jpg',
-    // roughMap: 'assets/textures/rough/aerial_rocks_01_rough_4k.jpg',
-    aoMap: 'assets/textures/arm/aerial_rocks_01_arm_4k.jpg',
-    roughMap: 'assets/textures/arm/aerial_rocks_01_arm_4k.jpg',
-    metalMap: 'assets/textures/arm/aerial_rocks_01_arm_4k.jpg',
-    dispMap: 'assets/textures/disp/aerial_rocks_01_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/aerial_rocks_01_diff_4k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/aerial_rocks_01_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/aerial_rocks_01_arm_4k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/aerial_rocks_01_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.AERIAL_GRASS_ROCK, 
-    map: 'assets/textures/terrain/aerial_grass_rock_diff_4k.jpg', 
-    normalMap: 'assets/textures/normals/aerial_grass_rock_nor_gl_2k.jpg',
-    aoMap: 'assets/textures/arm/aerial_grass_rock_arm_4k.jpg',
-    roughMap: 'assets/textures/arm/aerial_grass_rock_arm_4k.jpg',
-    metalMap: 'assets/textures/arm/aerial_grass_rock_arm_4k.jpg',
-    dispMap: 'assets/textures/disp/aerial_grass_rock_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/aerial_grass_rock_diff_4k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/aerial_grass_rock_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/aerial_grass_rock_arm_4k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/aerial_grass_rock_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.BROWN_MUD_LEAVES_01, 
-    map: 'assets/textures/terrain/brown_mud_leaves_01_diff_2k.jpg', 
-    normalMap: 'assets/textures/normals/brown_mud_leaves_01_nor_gl_2k.jpg',
-    // aoMap: 'assets/textures/ao/brown_mud_leaves_01_ao_4k.jpg',
-    // roughMap: 'assets/textures/rough/brown_mud_leaves_01_rough_4k.jpg',
-    aoMap: 'assets/textures/arm/brown_mud_leaves_01_arm_2k.jpg',
-    roughMap: 'assets/textures/arm/brown_mud_leaves_01_arm_2k.jpg',
-    metalMap: 'assets/textures/arm/brown_mud_leaves_01_arm_2k.jpg',
-    dispMap: 'assets/textures/disp/brown_mud_leaves_01_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/brown_mud_leaves_01_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/brown_mud_leaves_01_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/brown_mud_leaves_01_arm_2k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/brown_mud_leaves_01_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.MOSSY_ROCK, 
-    map: 'assets/textures/terrain/mossy_rock_diff_2k.jpg', 
-    normalMap: 'assets/textures/normals/mossy_rock_nor_gl_2k.jpg',
-    // aoMap: 'assets/textures/ao/mossy_rock_ao_4k.jpg',
-    // roughMap: 'assets/textures/rough/mossy_rock_rough_4k.jpg',
-    aoMap: 'assets/textures/arm/mossy_rock_arm_2k.jpg',
-    roughMap: 'assets/textures/arm/mossy_rock_arm_2k.jpg',
-    metalMap: 'assets/textures/arm/mossy_rock_arm_2k.jpg',
-    dispMap: 'assets/textures/disp/mossy_rock_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/mossy_rock_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/mossy_rock_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/mossy_rock_arm_2k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/mossy_rock_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.FOREST_GROUND_01, 
-    map: 'assets/textures/terrain/forrest_ground_01_diff_2k.jpg', 
-    normalMap: 'assets/textures/normals/forrest_ground_01_nor_gl_2k.jpg',
-    aoMap: 'assets/textures/arm/forrest_ground_01_arm_4k.jpg',
-    roughMap: 'assets/textures/arm/forrest_ground_01_arm_4k.jpg',
-    metalMap: 'assets/textures/arm/forrest_ground_01_arm_4k.jpg',
-    dispMap: 'assets/textures/disp/forrest_ground_01_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/forrest_ground_01_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/forrest_ground_01_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/forrest_ground_01_arm_4k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/forrest_ground_01_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.ROCK_TRAIL, 
-    map: 'assets/textures/terrain/rocky_trail_diff_2k.jpg', 
-    normalMap: 'assets/textures/normals/rocky_trail_nor_gl_2k.jpg',
-    aoMap: 'assets/textures/arm/rocky_trail_arm_2k.jpg',
-    roughMap: 'assets/textures/arm/rocky_trail_arm_2k.jpg',
-    metalMap: 'assets/textures/arm/rocky_trail_arm_2k.jpg',
-    dispMap: 'assets/textures/disp/rocky_trail_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/rocky_trail_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/rocky_trail_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/rocky_trail_arm_2k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/rocky_trail_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.ROCKY_TERRAIN_03, 
-    map: 'assets/textures/terrain/rocky_terrain_03_diff_2k.jpg', 
-    normalMap: 'assets/textures/normals/rocky_terrain_03_nor_gl_2k.jpg',
-    aoMap: 'assets/textures/arm/rocky_terrain_03_arm_2k.jpg',
-    roughMap: 'assets/textures/arm/rocky_terrain_03_arm_2k.jpg',
-    metalMap: 'assets/textures/arm/rocky_terrain_03_arm_2k.jpg',
-    dispMap: 'assets/textures/disp/rocky_terrain_03_disp_2k.png'
+    map: `${TEXTURE_TERRAIN_ROOT}/rocky_terrain_03_diff_2k.jpg`, 
+    normalMap: `${TEXTURE_NORMALS_ROOT}/rocky_terrain_03_nor_gl_2k.jpg`,
+    armMap: `${TEXTURE_ARM_ROOT}/rocky_terrain_03_arm_2k.jpg`,
+    dispMap: `${TEXTURE_DISP_ROOT}/rocky_terrain_03_disp_2k.png`
 }, {
     name: TEXTURE_NAMES.WATER_1_M, normalMap: 'assets/textures/water/Water_1_M_Normal.jpg'
 }, {

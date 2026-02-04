@@ -10,6 +10,7 @@ class Cylinder extends BasicObject {
 
     constructor(specs) {
 
+        specs.useStandardMaterial = true;
         super(CYLINDER, specs);
 
         this.setupMaterials('topMaterial', 'bottomMaterial');
@@ -23,18 +24,18 @@ class Cylinder extends BasicObject {
 
     async init() {
 
-        const { topMap, topNormal } = this.specs;
-        const { bottomMap, bottomNormal } = this.specs;
+        const { topMap, topNormal, topArm, topAo, topRough, topMetal } = this.specs;
+        const { bottomMap, bottomNormal, bottomArm, bottomAo, bottomRough, bottomMetal } = this.specs;
 
         await Promise.all([
             this.initBasic(),
-            this.initCap(topMap, topNormal, true),
-            this.initCap(bottomMap, bottomNormal)
+            this.initCap(topMap, topNormal, topArm, topAo, topRough, topMetal, true),
+            this.initCap(bottomMap, bottomNormal, bottomArm, bottomAo, bottomRough, bottomMetal, false)
         ]);
 
     }
 
-    async initCap(map, normalMap, isTop = false) {
+    async initCap(map, normalMap, armMap, aoMap, roughMap, metalMap, isTop = false) {
 
         let material;
 
@@ -42,9 +43,6 @@ class Cylinder extends BasicObject {
             material = this.topMaterial;
         else
             material = this.bottomMaterial;
-
-        let mapLoaded = false;
-        let normalLoaded = false;
 
         if (map?.isTexture) {
 
@@ -56,8 +54,6 @@ class Cylinder extends BasicObject {
             this.setCapRotation(_map);
 
             material.map = _map;
-
-            mapLoaded = true;
 
         }
 
@@ -72,13 +68,53 @@ class Cylinder extends BasicObject {
 
             material.normalMap = _normal;
 
-            normalLoaded = true;
-
         }
 
-        if (mapLoaded && normalLoaded) {
+        if (armMap?.isTexture) {
 
-            return;
+            const _arm = armMap.clone();
+            _arm.isCap = true;
+            this.setTexture(_arm, false);
+            this.setCapRotation(_arm);
+
+            material.aoMap = _arm;
+            material.roughnessMap = _arm;
+            material.metalnessMap = _arm;
+
+        } else {
+
+            if (aoMap?.isTexture) {
+
+                const _ao = aoMap.clone();
+                _ao.isCap = true;
+                this.setTexture(_ao, false);
+                this.setCapRotation(_ao);
+
+                material.aoMap = _ao;
+
+            }
+
+            if (roughMap?.isTexture) {
+
+                const _rough = roughMap.clone();
+                _rough.isCap = true;
+                this.setTexture(_rough, false);
+                this.setCapRotation(_rough);
+
+                material.roughnessMap = _rough;
+
+            }
+
+            if (metalMap?.isTexture) {
+
+                const _metal = metalMap.clone();
+                _metal.isCap = true;
+                this.setTexture(_metal, false);
+                this.setCapRotation(_metal);
+
+                material.metalnessMap = _metal;
+
+            }
 
         }
 
@@ -86,8 +122,12 @@ class Cylinder extends BasicObject {
 
         loadPromises.push(map && !map.isTexture ? this.loader.loadAsync(map) : Promise.resolve(null));
         loadPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
+        loadPromises.push(armMap && !armMap.isTexture ? this.loader.loadAsync(armMap) : Promise.resolve(null));
+        loadPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
+        loadPromises.push(roughMap && !roughMap.isTexture ? this.loader.loadAsync(roughMap) : Promise.resolve(null));
+        loadPromises.push(metalMap && !metalMap.isTexture ? this.loader.loadAsync(metalMap) : Promise.resolve(null));
 
-        const [texture, normal] = await Promise.all(loadPromises);
+        const [texture, normal, arm, ao, rough, metal] = await Promise.all(loadPromises);
 
         if (texture) {
 
@@ -108,6 +148,58 @@ class Cylinder extends BasicObject {
             this.setCapRotation(normal);
 
             material.normalMap = normal;
+
+        }
+
+        if (arm) {
+
+            arm.isCap = true;
+            this.setTexture(arm, false);
+            this.setCapRotation(arm);
+
+            material.aoMap = arm;
+            material.roughnessMap = arm;
+            material.metalnessMap = arm;
+
+        } else {
+
+            if (ao) {
+
+                ao.isCap = true;
+                this.setTexture(ao, false);
+                this.setCapRotation(ao);
+
+                material.aoMap = ao;
+
+            }
+
+            if (rough) {
+
+                rough.isCap = true;
+                this.setTexture(rough, false);
+                this.setCapRotation(rough);
+
+                material.roughnessMap = rough;
+
+            }
+
+            if (metal) {
+
+                metal.isCap = true;
+                this.setTexture(metal, false);
+                this.setCapRotation(metal);
+
+                material.metalnessMap = metal;
+
+            }
+
+        }
+
+        const { useStandardMaterial = false, roughness = 1, metalness = 0 } = this.specs;
+        if (useStandardMaterial) {
+
+            material.roughness = roughness;
+            material.metalness = metalness;
 
         }
 

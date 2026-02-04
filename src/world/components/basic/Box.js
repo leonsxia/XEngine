@@ -16,6 +16,7 @@ class Box extends BasicObject {
 
     constructor(specs) {
 
+        specs.useStandardMaterial = true;
         super(BOX, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);

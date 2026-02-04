@@ -1413,20 +1413,20 @@ class SceneBuilder {
 
                 }
 
-                if (objectFilter5(find.father)) {
+            }
 
-                    if (updateSetupOnly) {
+            if (objectFilter5(find.father)) {
 
-                        _origin.roughness = find.father.roughness;
-                        _origin.metalness = find.father.metalness;
+                if (updateSetupOnly) {
 
-                    } else {
+                    _origin.roughness = find.father.roughness;
+                    _origin.metalness = find.father.metalness;
 
-                        const { roughness = 1, metalness = 0 } = _target;
-                        find.father.roughness = roughness;
-                        find.father.metalness = metalness;
+                } else {
 
-                    }
+                    const { roughness = 1, metalness = 0 } = _target;
+                    find.father.roughness = roughness;
+                    find.father.metalness = metalness;
 
                 }
 

@@ -294,7 +294,17 @@ function objectFilter4(object) {
 
 function objectFilter5(object) {
 
-    if (object instanceof Terrain) {
+    if (object instanceof Terrain ||
+        object instanceof Plane ||
+        object instanceof LWall ||
+        object instanceof SquarePillar ||
+        object instanceof CylinderPillar ||
+        object instanceof HexCylinderPillar ||
+        object instanceof Slope ||
+        object instanceof Stairs ||
+        object instanceof BoxCube ||
+        object instanceof Ladder
+    ) {
 
         return true;
 

@@ -39,16 +39,17 @@ class Slope extends InWallObjectBase {
         const { showArrow = false } = specs;
         const { backMap, leftMap, rightMap, slopeMap, bottomMap } = specs;
         const { backNormal, leftNormal, rightNormal, slopeNormal, bottomNormal } = specs;
+        const { backArm, leftArm, rightArm, slopeArm, bottomArm } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1, 1] } = specs;
 
         this._scale = new Array(...scale);
 
-        const slopeSpecs = this.makePlaneConfig({ width: this._width, height: this._slopeHeight, color: yankeesBlue, map: slopeMap, normalMap: slopeNormal });        
-        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, leftHanded: true, color: basic, map: leftMap, normalMap: leftNormal });
-        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, leftHanded: false, color: basic, map: rightMap, normalMap: rightNormal });
-        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal });
-        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
+        const slopeSpecs = this.makePlaneConfig({ width: this._width, height: this._slopeHeight, color: yankeesBlue, map: slopeMap, normalMap: slopeNormal, armMap: slopeArm });        
+        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, leftHanded: true, color: basic, map: leftMap, normalMap: leftNormal, armMap: leftArm });
+        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, leftHanded: false, color: basic, map: rightMap, normalMap: rightNormal, armMap: rightArm });
+        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal, armMap: backArm });
+        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, armMap: bottomArm });
 
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;                
         this.slope = createOBBPlane(slopeSpecs, `${name}_slope`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);

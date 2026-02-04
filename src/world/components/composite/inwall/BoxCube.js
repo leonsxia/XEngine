@@ -24,21 +24,21 @@ class BoxCube extends ObstacleBase {
         const { showArrow = false, freeTexture = false } = specs;
         const { map, frontMap, backMap, leftMap, rightMap, topMap, bottomMap } = specs;
         const { normalMap, frontNormal, backNormal, leftNormal, rightNormal, topNormal, bottomNormal } = specs;
+        const { armMap, frontArm, backArm, leftArm, rightArm, topArm, bottomArm } = specs;       
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1, 1] } = specs;
 
         this._scale = new Array(...scale);
 
-        const boxSpecs = this.makeBoxConfig({ size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap});
+        const boxSpecs = this.makeBoxConfig({ size: { width: this._width, depth: this._depth, height: this._height }, color: yankeesBlue, map, normalMap, armMap });
 
-        const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: frontMap, normalMap: frontNormal })
-        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal });
+        const frontSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: frontMap, normalMap: frontNormal, armMap: frontArm });
+        const backSpecs = this.makePlaneConfig({ width: this._width, height: this._height, color: basic, map: backMap, normalMap: backNormal, armMap: backArm });
 
-        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: leftMap, normalMap: leftNormal });
-        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: rightMap, normalMap: rightNormal });
-
-        const topSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
-        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
+        const leftSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: leftMap, normalMap: leftNormal, armMap: leftArm });
+        const rightSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, color: basic, map: rightMap, normalMap: rightNormal, armMap: rightArm });
+        const topSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal, armMap: topArm });
+        const bottomSpecs = this.makePlaneConfig({ width: this._width, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, armMap: bottomArm });
 
         this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
 
@@ -130,12 +130,15 @@ class BoxCube extends ObstacleBase {
     makeBoxConfig(specs) {
         
         const { baseSize = this._height, mapRatio, lines = false, transparent = true, noRepeat = false } = this.specs;
+         const { roughness = 1, metalness = 0 } = this.specs;
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;
         specs.baseSize = baseSize;
         specs.transparent = transparent;
         specs.noRepeat = noRepeat;
+        specs.roughness = roughness;
+        specs.metalness = metalness;
 
         return specs;
 

@@ -133,11 +133,14 @@ class InWallObjectBase {
 
         const { height } = specs;
         const { baseSize = height, mapRatio, lines = false, transparent = true } = this.specs;
+        const { roughness = 1, metalness = 0 } = this.specs;
 
         specs.lines = lines;
         specs.mapRatio = mapRatio;
         specs.baseSize = baseSize;
         specs.transparent = transparent;
+        specs.roughness = roughness;
+        specs.metalness = metalness;
 
         return specs;
 
@@ -289,6 +292,80 @@ class InWallObjectBase {
     set rotationZDegree(value) {
 
         this.setRotationZ(MathUtils.degToRad(value));
+
+    }
+
+    get roughness() {
+
+        return this.specs.roughness ?? 1;
+
+    }
+
+    set roughness(val) {
+
+        const meshes = [];
+        this.group.traverse(m => m.father instanceof BasicObject && meshes.push(m));
+        for (let i = 0, il = meshes.length; i < il; i++) {
+
+            const mesh = meshes[i];
+            if (Array.isArray(mesh.material)) {
+
+                for (let j = 0, jl = mesh.material.length; j < jl; j++) {
+
+                    const mat = mesh.material[j];
+                    if (mat.isMeshStandardMaterial) {
+
+                        mat.roughness = val;
+
+                    }
+
+                }
+
+            } else if (mesh.material.isMeshStandardMaterial) {
+
+                mesh.material.roughness = val;
+
+            }
+
+        }
+        this.specs.roughness = val;
+
+    }
+
+    get metalness() {
+
+        return this.specs.metalness ?? 0;
+
+    }
+
+    set metalness(val) {
+
+        const meshes = [];
+        this.group.traverse(m => m.father instanceof BasicObject && meshes.push(m));
+        for (let i = 0, il = meshes.length; i < il; i++) {
+
+            const mesh = meshes[i];
+            if (Array.isArray(mesh.material)) {
+
+                for (let j = 0, jl = mesh.material.length; j < jl; j++) {
+
+                    const mat = mesh.material[j];
+                    if (mat.isMeshStandardMaterial) {
+
+                        mat.metalness = val;
+
+                    }
+
+                }
+
+            } else if (mesh.material.isMeshStandardMaterial) {
+
+                mesh.material.metalness = val;
+
+            }
+
+        }
+        this.specs.metalness = val;
 
     }
 

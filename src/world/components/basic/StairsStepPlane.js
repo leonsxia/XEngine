@@ -14,6 +14,7 @@ class StairsStepPlane extends BasicObject {
 
     constructor(specs) {
 
+        specs.useStandardMaterial = true;
         super(specs.type, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);

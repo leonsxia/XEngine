@@ -89,12 +89,15 @@ class LadderItem {
     makeBoxConfig(specs, idx) {
         
         const { bodyBaseSize = this._height, bodyMapRatio, lines = false, transparent = true } = this.specs;
+        const { roughness = 1, metalness = 0 } = this.specs;
 
         specs.lines = lines;
         specs.offsetX = idx / 2;
         specs.mapRatio = bodyMapRatio;
         specs.baseSize = bodyBaseSize;
         specs.transparent = transparent;
+        specs.roughness = roughness;
+        specs.metalness = metalness;
 
         return specs;
 
@@ -103,12 +106,15 @@ class LadderItem {
     makeCylinderConfig(specs, idx) {
 
         const { baseSize = this._height, mapRatio, lines = false, transparent = true } = this.specs;
+        const { roughness = 1, metalness = 0 } = this.specs;
 
         specs.lines = lines;
         specs.offsetX = idx / this._stickNum;
         specs.mapRatio = mapRatio;
         specs.baseSize = baseSize;
         specs.transparent = transparent;
+        specs.roughness = roughness;
+        specs.metalness = metalness;
 
         return specs;
 

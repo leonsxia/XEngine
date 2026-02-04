@@ -34,6 +34,7 @@ class LWall extends InWallObjectBase {
         const { showArrow = false } = specs;
         const { outTMap, outSMap, inTMap, inSMap, sideTMap, sideSMap, topMap, bottomMap } = specs;
         const { outTNormal, outSNormal, inTNormal, inSNormal, sideTNormal, sideSNormal, topNormal, bottomNormal } = specs;
+        const { outTArm, outSArm, inTArm, inSArm, sideTArm, sideSArm, topArm, bottomArm } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1, 1] } = specs;
 
@@ -41,17 +42,16 @@ class LWall extends InWallObjectBase {
         this._thicknessS = thicknessS;
         this._thicknessT = thicknessT;
 
-        const outWallTSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, map: outTMap, normalMap: outTNormal });
-        const inWallTSpecs = this.makePlaneConfig({ width: this._depth - this.defaultThickT, height: this._height, map: inTMap, normalMap: inTNormal });
-        const outWallSSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: outSMap, normalMap: outSNormal });
-        const inWallSSpecs = this.makePlaneConfig({ width: this._width - this.defaultThickS, height: this._height, map: inSMap, normalMap: inSNormal });
-        const sideWallTSpecs = this.makePlaneConfig({ width: this.defaultThickT, height: this._height, map: sideTMap, normalMap: sideTNormal });
-        const sideWallSSpecs = this.makePlaneConfig({ width: this.defaultThickS, height: this._height, map: sideSMap, normalMap: sideSNormal });
-        const topTSpecs = this.makePlaneConfig({ width: this.defaultThickS, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal });
-        const topSSpecs = this.makePlaneConfig({ width: this._width - this.defaultThickS, height: this.defaultThickT, color: yankeesBlue, map: topMap, normalMap: topNormal });
-        const bottomTSpecs = this.makePlaneConfig({ width: this.defaultThickS, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
-        const bottomSSpecs = this.makePlaneConfig({ width: this._width - this.defaultThickS, height: this.defaultThickT, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal });
-
+        const outWallTSpecs = this.makePlaneConfig({ width: this._depth, height: this._height, map: outTMap, normalMap: outTNormal, armMap: outTArm });
+        const inWallTSpecs = this.makePlaneConfig({ width: this._depth - this.defaultThickT, height: this._height, map: inTMap, normalMap: inTNormal, armMap: inTArm });
+        const outWallSSpecs = this.makePlaneConfig({ width: this._width, height: this._height, map: outSMap, normalMap: outSNormal, armMap: outSArm });
+        const inWallSSpecs = this.makePlaneConfig({ width: this._width - this.defaultThickS, height: this._height, map: inSMap, normalMap: inSNormal, armMap: inSArm });
+        const sideWallTSpecs = this.makePlaneConfig({ width: this.defaultThickT, height: this._height, map: sideTMap, normalMap: sideTNormal, armMap: sideTArm });
+        const sideWallSSpecs = this.makePlaneConfig({ width: this.defaultThickS, height: this._height, map: sideSMap, normalMap: sideSNormal, armMap: sideSArm });
+        const topTSpecs = this.makePlaneConfig({ width: this.defaultThickS, height: this._depth, color: yankeesBlue, map: topMap, normalMap: topNormal, armMap: topArm });
+        const topSSpecs = this.makePlaneConfig({ width: this._width - this.defaultThickS, height: this.defaultThickT, color: yankeesBlue, map: topMap, normalMap: topNormal, armMap: topArm });
+        const bottomTSpecs = this.makePlaneConfig({ width: this.defaultThickS, height: this._depth, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, armMap: bottomArm });
+        const bottomSSpecs = this.makePlaneConfig({ width: this._width - this.defaultThickS, height: this.defaultThickT, color: yankeesBlue, map: bottomMap, normalMap: bottomNormal, armMap: bottomArm });
         const createWallFunction = this.enableWallOBBs ? createCollisionOBBPlane : createCollisionPlane;
 
         this.outWallT = createWallFunction(outWallTSpecs, `${name}_outT`, [0, 0, 0], - Math.PI / 2, receiveShadow, castShadow, showArrow);

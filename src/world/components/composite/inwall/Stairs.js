@@ -64,10 +64,10 @@ class Stairs extends Slope {
 
     createSideFaces() {
 
-        const { name, sideMap, sideNormal } = this.specs;
+        const { name, sideMap, sideNormal, sideArm } = this.specs;
         const { receiveShadow = true, castShadow = true } = this.specs;
-        const leftSideSpecs = this.makePlaneConfig({ name: `${name}_left_side`, width: this._depth, height: this._height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: sideMap, normalMap: sideNormal, leftHanded: true, color: basic });
-        const rightSideSpecs = this.makePlaneConfig({ name: `${name}_right_side`, width: this._depth, height: this._height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: sideMap, normalMap: sideNormal, leftHanded: false, color: basic });
+        const leftSideSpecs = this.makePlaneConfig({ name: `${name}_left_side`, width: this._depth, height: this._height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: sideMap, normalMap: sideNormal, armMap: sideArm, leftHanded: true, color: basic });
+        const rightSideSpecs = this.makePlaneConfig({ name: `${name}_right_side`, width: this._depth, height: this._height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: sideMap, normalMap: sideNormal, armMap: sideArm, leftHanded: false, color: basic });
 
         const leftSide = this.stepLeftSide = new StairsSidePlane(leftSideSpecs);
         const rightSide = this.stepRightSide = new StairsSidePlane(rightSideSpecs);
@@ -87,10 +87,10 @@ class Stairs extends Slope {
 
     createStepFaces() {
 
-        const { name, frontMap, topMap, frontNormal, topNormal } = this.specs;
+        const { name, frontMap, topMap, frontNormal, topNormal, frontArm, topArm } = this.specs;
         const { receiveShadow = true, castShadow = true } = this.specs;
-        const frontSpecs = this.makePlaneConfig({ name: `${name}_front`, width: this._width, height: this._height, depth: this._depth, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: frontMap, normalMap: frontNormal, type: STAIRS_FRONT, color: basic });
-        const topSpecs = this.makePlaneConfig({ name: `${name}_top`, width: this._width, height: this._depth, depth: this._height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: topMap, normalMap: topNormal, type: STAIRS_TOP, color: yankeesBlue });
+        const frontSpecs = this.makePlaneConfig({ name: `${name}_front`, width: this._width, height: this._height, depth: this._depth, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: frontMap, normalMap: frontNormal, armMap: frontArm, type: STAIRS_FRONT, color: basic });
+        const topSpecs = this.makePlaneConfig({ name: `${name}_top`, width: this._width, height: this._depth, depth: this._height, stepHeight: this.#stepHeight, steps: this.#steps, lastStepHeight: this.#lastStepHeight, stepDepth: this.#stepDepth, map: topMap, normalMap: topNormal, armMap: topArm, type: STAIRS_TOP, color: yankeesBlue });
         
         const front = this.stepFront = new StairsStepPlane(frontSpecs);
         const top =  this.stepTop = new StairsStepPlane(topSpecs);

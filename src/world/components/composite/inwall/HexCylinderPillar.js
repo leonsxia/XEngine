@@ -19,7 +19,8 @@ class HexCylinderPillar extends ObstacleBase {
 
         const { name, lines = false, showArrow = false } = specs;
         const { segments = 16, baseSize, mapRatio, rotationC = Math.PI * .5 } = specs;
-        const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal } = specs;
+        const { map, normalMap, topMap, topNormal, bottomMap, bottomNormal, armMap, topArm, bottomArm } = specs;
+        const { roughness = 1, metalness = 0 } = specs;
         const { receiveShadow = true, castShadow = true } = specs;
         const { scale = [1, 1] } = specs;
         const { transparent = true } = specs;
@@ -29,8 +30,9 @@ class HexCylinderPillar extends ObstacleBase {
         const boxSpecs = { size: { width: this._radius * 2, depth: this._radius * 2, height: this._height }, lines };
         const cylinderSpecs = {
             name: `${name}_cylinder`, radius: this._radius, height: this._height, segments, baseSize,
-            map, normalMap, topMap, topNormal, bottomMap, bottomNormal,
-            mapRatio, rotationC, lines, transparent
+            map, normalMap, topMap, topNormal, bottomMap, bottomNormal, armMap, topArm, bottomArm,
+            mapRatio, rotationC, lines, transparent,
+            roughness, metalness
         };
         const chCylinderSpecs = { name: `${name}_collision_hex_cylinder`, radius: this._radius, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
