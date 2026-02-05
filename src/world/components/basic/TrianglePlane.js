@@ -15,7 +15,7 @@ class TrianglePlane extends BasicObject {
 
     constructor(specs) {
 
-        specs.useStandardMaterial = true;
+        specs.useStandardMaterial = specs.useStandardMaterial ?? true;
         super(TRIANGLE, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);

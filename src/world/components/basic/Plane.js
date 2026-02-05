@@ -16,7 +16,7 @@ class Plane extends BasicObject {
 
     constructor(specs) {
 
-        specs.useStandardMaterial = true;
+        specs.useStandardMaterial = specs.useStandardMaterial ?? true;
         super(PLANE, specs);
 
         if (specs.empty) return this;

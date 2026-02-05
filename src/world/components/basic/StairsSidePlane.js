@@ -15,7 +15,7 @@ class StairsSidePlane extends BasicObject {
 
     constructor(specs) {
 
-        specs.useStandardMaterial = true;
+        specs.useStandardMaterial = specs.useStandardMaterial ?? true;
         super(STAIRS_SIDE, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);

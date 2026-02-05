@@ -6,7 +6,7 @@ class Circle extends BasicObject {
 
     constructor(specs) {
 
-        specs.useStandardMaterial = true;
+        specs.useStandardMaterial = specs.useStandardMaterial ?? true;
         super(CIRCLE, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);

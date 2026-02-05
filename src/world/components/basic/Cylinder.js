@@ -10,7 +10,7 @@ class Cylinder extends BasicObject {
 
     constructor(specs) {
 
-        specs.useStandardMaterial = true;
+        specs.useStandardMaterial = specs.useStandardMaterial ?? true;
         super(CYLINDER, specs);
 
         this.setupMaterials('topMaterial', 'bottomMaterial');
