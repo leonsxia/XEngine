@@ -29,6 +29,7 @@ class RapierWorld {
     compounds = [];
     walls = [];
     floors = [];
+    ceilings = [];
     terrains = [];
 
     _currentRoom;
@@ -105,13 +106,14 @@ class RapierWorld {
 
         const {
             compounds,
-            walls, floors,
+            walls, floors, ceilings,
             terrains 
         } = room;
 
         this.compounds = compounds;
         this.walls = walls;
         this.floors = floors;
+        this.ceilings = ceilings;
         this.terrains = terrains;
 
         this._currentRoom = room.name;
@@ -184,6 +186,7 @@ class RapierWorld {
         this.addDefaultWalls();
         this.addCompounds();
         this.addFloors();
+        this.addCeilings();
         this.addTerrains();
 
         // add current room objects and scene objects
@@ -237,6 +240,20 @@ class RapierWorld {
 
             floor.setupRapierPhysics({ mass: 0, restitution, friction });
             this.bindObjectSyncEvents(floor);            
+
+        }
+
+    }
+
+    addCeilings() {
+
+        for (let i = 0, il = this.ceilings.length; i < il; i++) {
+
+            const ceiling = this.ceilings[i];
+            const { physics: { restitution = 0, friction = 0 } = {} } = ceiling.specs;
+
+            ceiling.setupRapierPhysics({ mass: 0, restitution, friction });
+            this.bindObjectSyncEvents(ceiling);            
 
         }
 

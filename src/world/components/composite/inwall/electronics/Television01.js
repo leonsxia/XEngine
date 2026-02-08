@@ -1,9 +1,10 @@
 import { Object3D, Vector3 } from 'three';
 import { createOBBBox } from '../../../physics/collisionHelper';
-import { GLTFModel, CollisionBox, Box } from '../../../Models';
+import { GLTFModel, CollisionBox, Box, GeometryDesc, MeshDesc } from '../../../Models';
 import { TVNoise } from '../../../basic/colorBase';
 import { LightLamp } from '../lighting/LightLamp';
 import { updateSingleLightCamera } from '../../../shadowMaker';
+import { BOX_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'in_room/electronics/Television_01_1k/Television_01_1k.gltf';
 
@@ -54,19 +55,24 @@ class Television01 extends LightLamp {
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
 
-        // obb box
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
-        this.box.visible = false;
+        if (this.isSimplePhysics) {
 
-        // collision box
-        const cBox = this._cBox = new CollisionBox(cBoxSpecs);
+            // obb box
+            this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
+            this.box.visible = false;
+            this.group.add(this.box.mesh);
 
-        this.cObjects = [cBox];
-        this.walls = this.getWalls();
-        this.topOBBs = this.getTopOBBs();
-        this.bottomOBBs = this.getBottomOBBs();
-        this.addCObjects();
-        this.setCObjectsVisible(false);
+            // collision box
+            const cBox = this._cBox = new CollisionBox(cBoxSpecs);
+
+            this.cObjects = [cBox];
+            this.walls = this.getWalls();
+            this.topOBBs = this.getTopOBBs();
+            this.bottomOBBs = this.getBottomOBBs();
+            this.addCObjects();
+            this.setCObjectsVisible(false);
+
+        }
 
         // bloom object
         const bloomScreen = this._bloomScreen = new Box(bloomScreenSpecs);
@@ -81,7 +87,6 @@ class Television01 extends LightLamp {
 
         this.group.add(
             this.gltf.group,
-            this.box.mesh,
             this.spotLightTarget
         );
 
@@ -98,16 +103,21 @@ class Television01 extends LightLamp {
 
     update(needToUpdateOBBnRay = true, needToUpdateLight = true) {
 
-        // update cBox scale and position
-        this._cBox.setScale(this.scale);
+        if (this.isSimplePhysics) {
+
+            // update cBox scale and position
+            this._cBox.setScale(this.scale);
+
+            // update box scale
+            this.box.setScale(this.scale);
+
+        }
 
         this.updateBloom(needToUpdateLight);
 
         // update gltf scale
         this.gltf.setScale(this.scale);
 
-        // update box scale
-        this.box.setScale(this.scale);
 
         if (needToUpdateOBBnRay) {
 
@@ -218,7 +228,20 @@ class Television01 extends LightLamp {
 
     addRapierInstances(needClear = true) {
 
-        super.addRapierInstances(needClear);
+        if (needClear) this.clearRapierInstances();
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+
+        const boxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth });
+        const boxMesh = new MeshDesc(boxGeo);
+        boxMesh.name = `${this.name}_box_mesh_desc`;
+        boxMesh.userData.physics = { mass, restitution, friction };
+
+        this.rapierInstances.push(boxMesh);
+
         this.updateBloom();
 
     }

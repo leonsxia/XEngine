@@ -32,9 +32,7 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
-
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
-
         const cBoxFrontSpecs = { name: `${name}_front`, width: this._width, depth: this._frontDepth, height: this._frontHeight, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
         const cBoxBackSpecs = { name: `${name}_back`, width: this._width, depth: this._backDepth, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
@@ -42,29 +40,30 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
         this.gltf = new GLTFModel(gltfSpecs);
         this.gltf.setScale(scale);
 
-        // obb box
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
-        this.box.visible = false;
+        if (this.isSimplePhysics) {
 
-        // collision box
-        const cBoxFront = this._cBoxFront = new CollisionBox(cBoxFrontSpecs);
-        const cBoxBack = this._cBoxBack = new CollisionBox(cBoxBackSpecs);
+            // obb box
+            this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
+            this.box.visible = false;
+            this.group.add(this.box.mesh);
+
+            // collision box
+            const cBoxFront = this._cBoxFront = new CollisionBox(cBoxFrontSpecs);
+            const cBoxBack = this._cBoxBack = new CollisionBox(cBoxBackSpecs);
+
+            this.cObjects = [cBoxFront, cBoxBack];
+            this.walls = this.getWalls();
+            this.topOBBs = this.getTopOBBs();
+            this.bottomOBBs = this.getBottomOBBs();
+            this.addCObjects();
+            this.setCObjectsVisible(false);
+
+        }
 
         this.update(false);
 
-        this.cObjects = [cBoxFront, cBoxBack];
-        this.walls = this.getWalls();
-        this.topOBBs = this.getTopOBBs();
-        this.bottomOBBs = this.getBottomOBBs();
-        this.addCObjects();
-        this.setCObjectsVisible(false);
-
-        // set triggers if needed
-        this.setTriggers();
-
         this.group.add(
-            this.gltf.group,
-            this.box.mesh
+            this.gltf.group
         );
 
     }
@@ -79,25 +78,29 @@ class PaintedWoodenBlueCabinet extends ObstacleBase {
 
     update(needToUpdateOBBnRay = true) {
 
-        // update cBox position and scale
-        const height = this._height * this.scale[1];
-        const depth = this._depth * this.scale[2];
-        const frontHeight = this._frontHeight * this.scale[1];
-        const backDepth = this._backDepth * this.scale[2];
-        const frontDepth = this._frontDepth * this.scale[2];
-
-        const frontY = (frontHeight - height) * .5;
-        const frontZ = (depth - frontDepth) * .5;
-        const backZ = (backDepth - depth) * .5;
-
-        this._cBoxFront.setPosition([0, frontY, frontZ]).setScale(this.scale);
-        this._cBoxBack.setPosition([0, 0, backZ]).setScale(this.scale);
-
         // update gltf scale
         this.gltf.setScale(this.scale);
 
-        // update box scale
-        this.box.setScale(this.scale);
+        if (this.isSimplePhysics) {
+
+            // update cBox position and scale
+            const height = this._height * this.scale[1];
+            const depth = this._depth * this.scale[2];
+            const frontHeight = this._frontHeight * this.scale[1];
+            const backDepth = this._backDepth * this.scale[2];
+            const frontDepth = this._frontDepth * this.scale[2];
+
+            const frontY = (frontHeight - height) * .5;
+            const frontZ = (depth - frontDepth) * .5;
+            const backZ = (backDepth - depth) * .5;
+
+            this._cBoxFront.setPosition([0, frontY, frontZ]).setScale(this.scale);
+            this._cBoxBack.setPosition([0, 0, backZ]).setScale(this.scale);
+
+            // update box scale
+            this.box.setScale(this.scale);
+
+        }
 
         if (needToUpdateOBBnRay) {
 

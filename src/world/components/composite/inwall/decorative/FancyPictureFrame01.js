@@ -41,9 +41,6 @@ class FancyPictureFrame01 extends ObstacleBase {
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
 
-        // collision box
-        const cBox = this._cBox = new CollisionBox(cBoxSpecs);
-
         if (img) {
 
             const { imgNormal } = specs;
@@ -58,14 +55,21 @@ class FancyPictureFrame01 extends ObstacleBase {
 
         }
 
-        this.update(false);
+        if (this.isSimplePhysics) {
 
-        this.cObjects = [cBox];
-        this.walls = this.getWalls();
-        this.topOBBs = this.getTopOBBs();
-        this.bottomOBBs = this.getBottomOBBs();
-        this.addCObjects();
-        this.setCObjectsVisible(false);
+            // collision box
+            const cBox = this._cBox = new CollisionBox(cBoxSpecs);
+
+            this.cObjects = [cBox];
+            this.walls = this.getWalls();
+            this.topOBBs = this.getTopOBBs();
+            this.bottomOBBs = this.getBottomOBBs();
+            this.addCObjects();
+            this.setCObjectsVisible(false);
+
+        }
+
+        this.update(false);
 
         this.group.add(
             this.gltf.group
@@ -157,8 +161,12 @@ class FancyPictureFrame01 extends ObstacleBase {
         // update gltf scale
         this.gltf.setScale(this.scale);
 
-        // update cbox scale
-        this._cBox.setScale(this.scale);
+        if (this.isSimplePhysics) {
+
+            // update cbox scale
+            this._cBox.setScale(this.scale);
+
+        }
 
         if (needToUpdateOBBnRay) {
 

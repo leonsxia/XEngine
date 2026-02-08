@@ -26,37 +26,36 @@ class RoundWoodenTable extends ObstacleBase {
 
         // gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
-
         const boxSpecs = { size: { width: this._radius * 2, depth: this._radius * 2, height: this._height }, lines };
-
         const chCylinderSpecs = { name, radius: this._radius, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
         this.gltf.setScale([scale[0], scale[1], scale[0]]);
 
-        // obb box
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
-        this.box.visible = false;
+        if (this.isSimplePhysics) {
 
-        // collision cylinder
-        const chCylinder = this._chCylinder = new CollisionHexCylinder(chCylinderSpecs);
+            // obb box
+            this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
+            this.box.visible = false;
+            this.group.add(this.box.mesh);
+
+            // collision cylinder
+            const chCylinder = this._chCylinder = new CollisionHexCylinder(chCylinderSpecs);
+
+            this.cObjects = [chCylinder];
+            this.walls = this.getWalls();
+            this.topOBBs = this.getTopOBBs();
+            this.bottomOBBs = this.getBottomOBBs();
+            this.addCObjects();
+            this.setCObjectsVisible(false);
+
+        }
 
         this.update(false);
 
-        this.cObjects = [chCylinder];
-        this.walls = this.getWalls();
-        this.topOBBs = this.getTopOBBs();
-        this.bottomOBBs = this.getBottomOBBs();
-        this.addCObjects();
-        this.setCObjectsVisible(false);
-
-        // set triggers if needed
-        this.setTriggers();
-
         this.group.add(
-            this.gltf.group,
-            this.box.mesh
+            this.gltf.group
         );
 
     }
@@ -102,11 +101,15 @@ class RoundWoodenTable extends ObstacleBase {
         // update gltf scale
         this.gltf.setScale(this._scale);
 
-        // update box scale
-        this.box.setScale(this._scale);
+        if (this.isSimplePhysics) {
 
-        // update collision hex cylinder
-        this._chCylinder.setScale(this._scale);
+            // update box scale
+            this.box.setScale(this._scale);
+
+            // update collision hex cylinder
+            this._chCylinder.setScale(this._scale);
+
+        }
 
         if (needToUpdateOBBnRay) {
 

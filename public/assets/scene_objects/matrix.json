@@ -709,7 +709,7 @@
             "mapRatio": 1.5,
             "name": "room1",
             "showArrow": false,
-            "enableWallOBBs": true,
+            "enableWallOBBs": false,
             "position": [
                 0,
                 2.5,
@@ -745,7 +745,7 @@
                     "freeTexture": false,
                     "noRepeat": true,
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": true,
                     "climbable": true,
                     "pushable": true,
@@ -757,7 +757,8 @@
                     ],
                     "rotationY": 0,
                     "transparent": false,
-                     "physics": { "mass": 300 }
+                    "canBeIgnored": true,
+                    "physics": { "mass": 300 }
                 },
                 {
                     "type": "BoxCube",
@@ -787,7 +788,7 @@
                     "freeTexture": true,
                     "noRepeat": true,
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": true,
                     "climbable": true,
                     "pushable": true,
@@ -799,6 +800,7 @@
                     ],
                     "rotationY": 0,
                     "transparent": false,
+                    "canBeIgnored": true,
                     "physics": { "mass": 300 }
                 },
                 {
@@ -811,7 +813,7 @@
                         0.8
                     ],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": true,
                     "climbable": true,
                     "position": [
@@ -832,7 +834,7 @@
                         2
                     ],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": true,
                     "climbable": true,
                     "position": [
@@ -841,6 +843,7 @@
                         0
                     ],
                     "rotationY": 3.8397,
+                    "canBeIgnored": true,
                     "transparent": false
                 },
                 {
@@ -864,7 +867,7 @@
                     "name": "room1_hexCylinder1",
                     "showArrow": false,
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": true,
                     "climbable": false,
                     "position": [
@@ -883,7 +886,7 @@
                         3
                     ],
                     "baseSize": 3,
-                    "enableOBBs": true,
+                    "enableOBBs": false,
                     "frontMap": "BRICK_WALL_005",
                     "frontNormal": "BRICK_WALL_005_NORMAL",
                     "frontArm": "BRICK_WALL_005_ARM",
@@ -906,7 +909,7 @@
                     "roughness": 0.68,
                     "name": "room1_square_pillar1",
                     "showArrow": false,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "isObstacle": true,
                     "climbable": true,
                     "position": [
@@ -924,7 +927,7 @@
                         1
                     ],
                     "baseSize": 3,
-                    "enableOBBs": true,
+                    "enableOBBs": false,
                     "map": "BRICK_WALL_005",
                     "normalMap": "BRICK_WALL_005_NORMAL",
                     "armMap": "BRICK_WALL_005_ARM",
@@ -938,7 +941,7 @@
                     "roughness": 0.68,
                     "name": "room1_cylinder_pillar1",
                     "showArrow": false,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "isObstacle": true,
                     "climbable": true,
                     "position": [
@@ -985,8 +988,8 @@
                     "roughness": 0.71,
                     "name": "room1_saferoom_LWall1",
                     "showArrow": false,
-                    "enableWallOBBs": true,
-                    "enableOBBs": true,
+                    "enableWallOBBs": false,
+                    "enableOBBs": false,
                     "isObstacle": true,
                     "climbable": false,
                     "position": [
@@ -1033,8 +1036,8 @@
                     "roughness": 0.71,
                     "name": "room1_saferoom_LWall2",
                     "showArrow": false,
-                    "enableWallOBBs": true,
-                    "enableOBBs": true,
+                    "enableWallOBBs": false,
+                    "enableOBBs": false,
                     "isObstacle": true,
                     "climbable": false,
                     "position": [
@@ -1053,7 +1056,7 @@
                         7
                     ],
                     "baseSize": 4,
-                    "enableOBBs": true,
+                    "enableOBBs": false,
                     "frontMap": "CASTLE_BRICK_02_RED",
                     "frontNormal": "CASTLE_BRICK_02_RED_NORMAL",
                     "frontArm": "CASTLE_BRICK_02_RED_ARM",
@@ -1076,7 +1079,7 @@
                     "roughness": 0.71,
                     "name": "room1_square_pillar_safe_room_roof",
                     "showArrow": false,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "isObstacle": true,
                     "climbable": false,
                     "position": [
@@ -1123,8 +1126,8 @@
                     "roughness": 0.68,
                     "name": "room1_pool_LWall1",
                     "showArrow": false,
-                    "enableWallOBBs": true,
-                    "enableOBBs": true,
+                    "enableWallOBBs": false,
+                    "enableOBBs": false,
                     "isObstacle": true,
                     "climbable": true,
                     "position": [
@@ -1171,8 +1174,8 @@
                     "roughness": 0.68,
                     "name": "room1_pool_LWall2",
                     "showArrow": false,
-                    "enableWallOBBs": true,
-                    "enableOBBs": true,
+                    "enableWallOBBs": false,
+                    "enableOBBs": false,
                     "isObstacle": true,
                     "climbable": true,
                     "position": [
@@ -1212,7 +1215,7 @@
                     "mapRatio": 1,
                     "roughness": 0.68,
                     "enableOBBs": false,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "name": "room1_Slope1",
                     "position": [
                         11.94,
@@ -1249,7 +1252,7 @@
                     "mapRatio": 1,
                     "roughness": 0.68,
                     "enableOBBs": false,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "name": "room1_Stairs1",
                     "position": [
                         -11.28,
@@ -1260,7 +1263,7 @@
                     "transparent": false
                 },
                 {
-                    "type": "VerticalLadder",
+                    "type": "Ladder",
                     "scale": [1, 3.61, 1],
                     "bodyBaseSize": 4,
                     "baseSize": 4,
@@ -1268,23 +1271,23 @@
                     "normalMap": "METAL_168_NORMAL",
                     "bodyMap": "METAL_168",
                     "bodyNormalMap": "METAL_168_NORMAL",
+                    "roughness": 0.37,
+                    "metalness": 0.35,
                     "bodyMapRatio": 1.5,
                     "mapRatio": 1.5,
                     "noRepeat": false,
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": false,
-                    "climbable": true,
                     "name": "room1_vertical_ladder_1",
                     "position": [2.5, -0.696, -2.46],
                     "rotationY": 0,
                     "transparent": false,
                     "ignoreAimTest": true,
                     "ignoreFocusTest": true,
+                    "canBeIgnored": true,
                     "stickGap": 0.15
                 },
                 {
-                    "type": "VerticalLadder",
+                    "type": "Ladder",
                     "scale": [1, 3.88, 1],
                     "bodyBaseSize": 4,
                     "baseSize": 4,
@@ -1292,18 +1295,18 @@
                     "normalMap": "METAL_168_NORMAL",
                     "bodyMap": "METAL_168",
                     "bodyNormalMap": "METAL_168_NORMAL",
+                    "roughness": 0.37,
+                    "metalness": 0.35,
                     "bodyMapRatio": 1.5,
                     "mapRatio": 1.5,
                     "noRepeat": false,
                     "isObstacle": true,
-                    "enableWallOBBs": true,
-                    "movable": false,
-                    "climbable": true,
                     "name": "room1_vertical_ladder_2",
                     "position": [3.415, -0.561, 10],
                     "rotationY": 1.5708,
                     "transparent": false,
                     "ignoreAimTest": true,
+                    "canBeIgnored": true,
                     "ignoreFocusTest": true
                 },
                 {
@@ -1416,7 +1419,7 @@
                         1
                     ],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": false,
                     "climbable": false,
                     "position": [
@@ -1442,7 +1445,7 @@
                         1
                     ],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": false,
                     "climbable": false,
                     "position": [
@@ -1470,7 +1473,7 @@
             "mapRatio": 1.5,
             "name": "safe_room_1",
             "showArrow": false,
-            "enableWallOBBs": true,
+            "enableWallOBBs": false,
             "position": [
                 0,
                 2.5,
@@ -1508,8 +1511,8 @@
                     "mapRatio": 1.5,
                     "name": "safe_room_1_saferoom_LWall1",
                     "showArrow": false,
-                    "enableWallOBBs": true,
-                    "enableOBBs": true,
+                    "enableWallOBBs": false,
+                    "enableOBBs": false,
                     "isObstacle": true,
                     "climbable": false,
                     "position": [
@@ -1549,8 +1552,8 @@
                     "mapRatio": 1.5,
                     "name": "safe_room_1_saferoom_LWall2",
                     "showArrow": false,
-                    "enableWallOBBs": true,
-                    "enableOBBs": true,
+                    "enableWallOBBs": false,
+                    "enableOBBs": false,
                     "isObstacle": true,
                     "climbable": false,
                     "position": [
@@ -1569,7 +1572,7 @@
                         7
                     ],
                     "baseSize": 7,
-                    "enableOBBs": true,
+                    "enableOBBs": false,
                     "frontMap": "BRICK_159",
                     "frontNormal": "BRICK_159_NORMAL",
                     "backMap": "BRICK_159",
@@ -1585,7 +1588,7 @@
                     "mapRatio": 1,
                     "name": "safe_room_1_square_pillar_safe_room_roof",
                     "showArrow": false,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "isObstacle": true,
                     "climbable": false,
                     "position": [
@@ -1624,7 +1627,7 @@
                     "freeTexture": true,
                     "noRepeat": false,
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": true,
                     "climbable": true,
                     "pushable": false,
@@ -1698,7 +1701,7 @@
                         1
                     ],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": false,
                     "climbable": false,
                     "position": [
@@ -1724,7 +1727,7 @@
                         1
                     ],
                     "isObstacle": true,
-                    "enableWallOBBs": true,
+                    "enableWallOBBs": false,
                     "movable": false,
                     "climbable": false,
                     "position": [

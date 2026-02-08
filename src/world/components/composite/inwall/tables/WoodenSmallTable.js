@@ -34,36 +34,35 @@ class WoodenSmallTable extends ObstacleBase {
 
         // basic gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
-
         const boxSpecs = { size: { width: this._width, depth: this._depth, height: this._height }, lines };
-
         const cBoxSpecs = { name, width: this._width, depth: this._depth, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
 
-        // obb box
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
-        this.box.visible = false;
+        if (this.isSimplePhysics) {
 
-        // collision box
-        const cBox = this._cBox = new CollisionBox(cBoxSpecs);
+            // obb box
+            this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
+            this.box.visible = false;
+            this.group.add(this.box.mesh);
+
+            // collision box
+            const cBox = this._cBox = new CollisionBox(cBoxSpecs);
+
+            this.cObjects = [cBox];
+            this.walls = this.getWalls();
+            this.topOBBs = this.getTopOBBs();
+            this.bottomOBBs = this.getBottomOBBs();
+            this.addCObjects();
+            this.setCObjectsVisible(false);
+
+        }
 
         this.update(false);
 
-        this.cObjects = [cBox];
-        this.walls = this.getWalls();
-        this.topOBBs = this.getTopOBBs();
-        this.bottomOBBs = this.getBottomOBBs();
-        this.addCObjects();
-        this.setCObjectsVisible(false);
-
-        // set triggers if needed
-        this.setTriggers();
-
         this.group.add(
-            this.gltf.group,
-            this.box.mesh
+            this.gltf.group
         );
 
     }
@@ -77,15 +76,19 @@ class WoodenSmallTable extends ObstacleBase {
     }
 
     update(needToUpdateOBBnRay = true) {
-
-        // update cBox scale
-        this._cBox.setScale(this.scale);
-
+        
         // update gltf scale
         this.gltf.setScale(this.scale);
 
-        // update box scale
-        this.box.setScale(this.scale);
+        if (this.isSimplePhysics) {
+
+            // update box scale
+            this.box.setScale(this.scale);
+
+            // update cBox scale
+            this._cBox.setScale(this.scale);
+
+        }
 
         if (needToUpdateOBBnRay) {
 
