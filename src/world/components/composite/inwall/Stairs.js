@@ -157,24 +157,12 @@ class Stairs extends Slope {
 
         }
 
-        const bottomGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: depth, depth: 0 });
-        const bottomMesh = new MeshDesc(bottomGeo);
-        bottomMesh.name = `${this.name}_bottom_mesh_desc`;
-        bottomMesh.position.set(0, - height * .5, 0);
-        bottomMesh.rotation.set(Math.PI * .5, 0, 0);
-        bottomMesh.userData.physics = { mass, restitution, friction };
-
-        const backGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth: 0 });
-        const backMesh = new MeshDesc(backGeo);
-        backMesh.name = `${this.name}_back_mesh_desc`;
-        backMesh.position.set(0, 0, - depth * .5);
-        backMesh.rotation.set(0, Math.PI, 0);
-        backMesh.userData.physics = { mass, restitution, friction };
-
+        this.backFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+        this.bottomFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
         this.leftFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
         this.rightFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
 
-        this.rapierInstances.push(bottomMesh, backMesh, this.leftFace.mesh, this.rightFace.mesh);
+        this.rapierInstances.push(this.backFace.mesh, this.bottomFace.mesh, this.leftFace.mesh, this.rightFace.mesh);
 
     }
 

@@ -1,8 +1,8 @@
 import { createCollisionPlane, createCollisionOBBPlane, createOBBPlane, createCollisionTrianglePlane, createCollisionPlaneFree, createOBBBox } from '../../physics/collisionHelper';
 import { InWallObjectBase } from './InWallObjectBase';
 import { yankeesBlue, basic, green, red } from '../../basic/colorBase';
-import { TOFU_RAY_LAYER, OBSTACLE_RAY_LAYER, BOX_GEOMETRY } from '../../utils/constants';
-import { GeometryDesc, MeshDesc, Plane } from '../../Models';
+import { TOFU_RAY_LAYER, OBSTACLE_RAY_LAYER } from '../../utils/constants';
+import { Plane } from '../../Models';
 
 const DEFAULT_STEP_HEIGHT = .25;
 
@@ -275,37 +275,16 @@ class Slope extends InWallObjectBase {
 
         if (needClear) this.clearRapierInstances();
 
-        const width = this._width * this.scale[0];
-        const height = this._height * this.scale[1];
-        const depth = this._depth * this.scale[2];
         let { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
         mass /= 5;
-        
-        const slopeHeight = Math.sqrt(depth * depth + height * height);
-        const slopeGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: slopeHeight, depth: 0 });
-        const slopeMesh = new MeshDesc(slopeGeo);
-        slopeMesh.name = `${this.name}_slope_mesh_desc`;
-        slopeMesh.rotation.set(- Math.atan(depth / height), 0, 0);
-        slopeMesh.userData.physics = { mass, restitution, friction };
 
-        const bottomGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height: depth, depth: 0 });
-        const bottomMesh = new MeshDesc(bottomGeo);
-        bottomMesh.name = `${this.name}_bottom_mesh_desc`;
-        bottomMesh.position.set(0, - height * .5, 0);
-        bottomMesh.rotation.set(Math.PI * .5, 0, 0);
-        bottomMesh.userData.physics = { mass, restitution, friction };
-
-        const backGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth: 0 });
-        const backMesh = new MeshDesc(backGeo);
-        backMesh.name = `${this.name}_back_mesh_desc`;
-        backMesh.position.set(0, 0, - depth * .5);
-        backMesh.rotation.set(0, Math.PI, 0);
-        backMesh.userData.physics = { mass, restitution, friction };
-
+        this.slope.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+        this.backFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+        this.bottomFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
         this.leftFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
         this.rightFace.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
 
-        this.rapierInstances.push(slopeMesh, bottomMesh, backMesh, this.leftFace.mesh, this.rightFace.mesh);
+        this.rapierInstances.push(this.slope.mesh, this.bottomFace.mesh, this.backFace.mesh, this.leftFace.mesh, this.rightFace.mesh);
 
     }
 
