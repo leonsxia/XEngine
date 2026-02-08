@@ -23,6 +23,7 @@ import {
     MagnumAmmoBox,
     SMGAmmoBox,
     FirstAidKitItem,
+    Door,
     WoodenGlassDoor1,
     WoodenGlassDoor2,
     WoodenGlassDoor3,
@@ -357,7 +358,8 @@ function isRapierObject(object) {
         object instanceof Shelf01 ||
         object instanceof VintageGrandfatherClock ||
         object instanceof BarrelExplosive ||
-        object instanceof BarrelBlue
+        object instanceof BarrelBlue ||
+        object instanceof Door
     ) {
 
         return true;

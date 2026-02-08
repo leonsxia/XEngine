@@ -41,26 +41,30 @@ class HexCylinderPillar extends ObstacleBase {
         this.cylinder.receiveShadow(receiveShadow)
             .castShadow(castShadow);
 
-        // obb box
-        this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
-        this.box.visible = false;
+        if (this.isSimplePhysics) {
 
-        // collision cylinder
-        const chCylinder = this._chCylinder = new CollisionHexCylinder(chCylinderSpecs);
-        chCylinder.setRotationY(Math.PI / 16);
+            // obb box
+            this.box = createOBBBox(boxSpecs, `${name}_obb_box`, [0, 0, 0], [0, 0, 0], receiveShadow, castShadow);
+            this.box.visible = false;
+            this.group.add(this.box.mesh);
+
+            // collision cylinder
+            const chCylinder = this._chCylinder = new CollisionHexCylinder(chCylinderSpecs);
+            chCylinder.setRotationY(Math.PI / 16);
+
+            this.cObjects = [chCylinder];
+            this.walls = this.getWalls();
+            this.topOBBs = this.getTopOBBs();
+            this.bottomOBBs = this.getBottomOBBs();
+            this.addCObjects();
+            this.setCObjectsVisible(false);
+
+        }
 
         this.update(false);
 
-        this.cObjects = [chCylinder];
-        this.walls = this.getWalls();
-        this.topOBBs = this.getTopOBBs();
-        this.bottomOBBs = this.getBottomOBBs();
-        this.addCObjects();
-        this.setCObjectsVisible(false);
-
         this.group.add(
-            this.cylinder.mesh,
-            this.box.mesh
+            this.cylinder.mesh
         );
 
         this.setPickLayers();
@@ -104,11 +108,14 @@ class HexCylinderPillar extends ObstacleBase {
 
     update(needToUpdateOBBnRay = true) {
 
-        this._chCylinder.setScale(this._scale);
+        this.cylinder.setScaleWithTexUpdate(this._scale);
 
-        this.cylinder.setScaleWithTexUpdate(this._scale);        
+        if (this.isSimplePhysics) {
 
-        this.box.setScale(this._scale);
+            this._chCylinder.setScale(this._scale);
+            this.box.setScale(this._scale);
+
+        }
 
         if (needToUpdateOBBnRay) {
 

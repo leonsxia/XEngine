@@ -323,7 +323,7 @@ class ObstacleBase extends ObstacleMoveable {
             if (!this.specs.ignoreAimTest) obj.setLayers(TOFU_AIM_LAYER);
             if (!this.specs.ignoreFocusTest) obj.setLayers(TOFU_FOCUS_LAYER);
             
-            const { transparent = true } = obj.specs;
+            const { transparent = false } = obj.specs;
 
             if (transparent) {
 
@@ -350,7 +350,7 @@ class ObstacleBase extends ObstacleMoveable {
             gltf.setLayers(CAMERA_RAY_LAYER);
             if (!this.specs.ignoreTPC) gltf.setLayers(PLAYER_CAMERA_RAY_LAYER);
 
-            const { transparent = true } = this.specs;
+            const { transparent = false } = this.specs;
             if (transparent) {
 
                 gltf.setLayers(PLAYER_CAMERA_TRANSPARENT_LAYER);
