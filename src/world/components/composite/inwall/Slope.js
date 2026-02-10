@@ -239,12 +239,16 @@ class Slope extends InWallObjectBase {
             .setPosition([0, height * .5, - depth * .5 - this.topPlane.height * .5]);
 
             // update side obbs
-            const { stepHeight = DEFAULT_STEP_HEIGHT } = this.specs;
-            const bottomY = (stepHeight - height) * .5;
-            this.leftOBBFace.setScale([this.scale[2], 1, 1])
-                .setPosition([width * .5, bottomY, 0]);
-            this.rightOBBFace.setScale([this.scale[2], 1, 1])
-                .setPosition([- width * .5, bottomY, 0]);
+            if (this.enableWallOBBs) {
+
+                const { stepHeight = DEFAULT_STEP_HEIGHT } = this.specs;
+                const bottomY = (stepHeight - height) * .5;
+                this.leftOBBFace.setScale([this.scale[2], 1, 1])
+                    .setPosition([width * .5, bottomY, 0]);
+                this.rightOBBFace.setScale([this.scale[2], 1, 1])
+                    .setPosition([- width * .5, bottomY, 0]);
+
+            }
 
         }
 
