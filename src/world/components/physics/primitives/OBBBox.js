@@ -67,6 +67,13 @@ class OBBBox extends Box {
         return this;
         
     }
+
+    update() {
+
+        this.updateOBB();
+
+    }
+
 }
 
 export { OBBBox };

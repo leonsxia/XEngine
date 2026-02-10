@@ -45,7 +45,7 @@ class FancyPictureFrame01 extends ObstacleBase {
 
             const { imgNormal } = specs;
 
-            const imageSpecs = { name: `${name}_image`, width: this._imgWidth, height: this._imgHeight, map: img, normalMap: imgNormal, transparent: true };
+            const imageSpecs = { name: `${name}_image`, width: this._imgWidth, height: this._imgHeight, map: img, normalMap: imgNormal, transparent: false, roughness: 0.5 };
 
             this._image = new Plane(imageSpecs);
 

@@ -24,10 +24,10 @@ class InspectorRoom extends Room {
 
             const area = areas[i];
 
-            const { name, width, height, depth, color = basic } = area;
+            const { name, width, height, depth, scale, color = basic } = area;
             const { position = [0, 0, 0], rotation = [0, 0, 0] } = area;
             const { cameraPosition = [0, 0, 0], cameraTarget = [0, 0, 0] } = area;
-            const boxSpecs = { size: { width, depth, height }, color };
+            const boxSpecs = { size: { width: 1, depth: 1, height: 1 }, color };
 
             const areaBlock = {
 
@@ -37,7 +37,7 @@ class InspectorRoom extends Room {
                 cameraTarget
 
             };
-
+            areaBlock.box.setScale(scale ?? [width, height, depth]);
             areaBlock.box.isArea = true;
 
             // set collision areas invisible

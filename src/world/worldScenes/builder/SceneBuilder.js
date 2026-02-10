@@ -1071,7 +1071,7 @@ class SceneBuilder {
 
                 for (let i = 0, il = rooms.length; i < il; i++) {
 
-                    const roomFind = rooms[i].children.filter(o => o.isGroup || o.isMesh).find(f => f.name === name);
+                    const roomFind = rooms[i].children.filter(o => o.isGroup || o.isMesh).find(f => f.name === name || f.father?.name === name);
 
                     if (roomFind) {
 
@@ -1382,12 +1382,26 @@ class SceneBuilder {
 
                         _origin.rotation = this.rotationArr(find.rotation);
 
+                        if (find.father.isArea) {
+
+                            _origin.scale = this.scaleArr(find.scale);
+
+                        }
+
                     } else {
 
                         const { rotation = [0, 0, 0] } = _target;
 
                         find.father.setRotation(rotation);
                         find.father.updateOBB?.();
+
+                        if (find.father.isArea) {
+
+                            const { scale, width, height, depth } = _target;
+                            const shapeScale = scale ?? [width, height, depth];
+                            find.father.setScaleFullUpdate(shapeScale);
+
+                        }
 
                     }
 

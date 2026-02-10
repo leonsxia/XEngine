@@ -1144,6 +1144,30 @@ function makeObjectsGuiConfig(objects) {
             if (object.father.isArea) {
 
                 folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'scaleX',
+                    prop: 'scale.x',
+                    value: object.father,
+                    params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
+                    type: 'number'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'scaleY',
+                    prop: 'scale.y',
+                    value: object.father,
+                    params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
+                    type: 'number'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'scaleZ',
+                    prop: 'scale.z',
+                    value: object.father,
+                    params: [SCALE_MIN, WATER_SCALE_MAX, PICKED_NUMBER_STEPS],
+                    type: 'number'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
                     name: 'cameraPositionX',
                     prop: 'camPos.x',
                     value: object.father,
