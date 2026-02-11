@@ -743,7 +743,6 @@ class WorldScene {
             this.player.clearInSightTargets();
             /*
                 due to die action will set `isActive` to false, 
-                and in SimplePhysics `onTofuCollisionBoxChanged` will not take isActive = false into account,
                 for temporary update, it will be reset after next step
             */
             this.player.isActive = true;
@@ -978,12 +977,12 @@ class WorldScene {
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
             const enemy = this.enemies[i];
-            const oldBoxHelper = this.scene.getObjectByName(enemy.boundingBoxHelper.name);
+            if (enemy.disposed) continue;
+            
             if (enemy.currentRoom === this.currentRoom.name) {
 
                 /*
                     due to die action will set `isActive` to false, 
-                    and in SimplePhysics `onTofuCollisionBoxChanged` will not take isActive = false into account,
                     for temporary update, it will be reset after next step
                 */
                 enemy.isActive = true;
@@ -1005,6 +1004,7 @@ class WorldScene {
                 enemy.clearInSightTargets();
                 enemy.DAW.stopAll();
 
+                const oldBoxHelper = this.scene.getObjectByName(enemy.boundingBoxHelper.name);
                 if (oldBoxHelper) this.scene.remove(oldBoxHelper);
 
             }

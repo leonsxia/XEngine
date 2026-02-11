@@ -250,8 +250,6 @@ class SimplePhysics {
 
     onTofuCollisionBoxChanged(tofu) {
 
-        if (!tofu.isActive || tofu.disposed) return;
-
         for (let i = 0, il = tofu.walls.length; i < il; i++) {
 
             const wall = tofu.walls[i];
