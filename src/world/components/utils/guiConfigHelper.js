@@ -1,6 +1,6 @@
 import { GLOBALS } from '../../systems/globals';
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, PHYSICS_TYPES } from './constants';
-import { isRapierObject, objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from './objectHelper';
+import { isRapierObject, noPhysicsObject, objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from './objectHelper';
 
 const DEFALUT_GRID_WIDTH = 50;
 const DEFAULT_GRID_HEIGHT = 25;
@@ -853,7 +853,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER && isRapierObject(object.father)) {
+        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER && (isRapierObject(object.father) || noPhysicsObject(object.father))) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationXDegree',

@@ -359,7 +359,33 @@ function isRapierObject(object) {
         object instanceof VintageGrandfatherClock ||
         object instanceof BarrelExplosive ||
         object instanceof BarrelBlue ||
-        object instanceof Door
+        object instanceof Door ||
+        object instanceof GlockItem ||
+        object instanceof PistolItem ||
+        object instanceof RevolverItem ||
+        object instanceof SMGShortItem ||
+        object instanceof BayonetItem ||
+        object instanceof PistolAmmoBox ||
+        object instanceof MagnumAmmoBox ||
+        object instanceof SMGAmmoBox ||
+        object instanceof FirstAidKitItem
+    ) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+}
+
+function noPhysicsObject(object) {
+
+    if (object instanceof FancyPictureFrame01 ||
+        object instanceof ModernCeilingLamp01 ||
+        object instanceof SecurityLight
     ) {
 
         return true;
@@ -401,7 +427,7 @@ function getIntersectionTarget(object) {
 export { 
     clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, 
     objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5,
-    moveableObjectFilter, isRapierObject,
+    moveableObjectFilter, isRapierObject, noPhysicsObject,
     resetObject3D,
     getIntersectionTarget
 };
