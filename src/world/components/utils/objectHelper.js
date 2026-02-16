@@ -359,6 +359,7 @@ function isRapierObject(object) {
         object instanceof VintageGrandfatherClock ||
         object instanceof BarrelExplosive ||
         object instanceof BarrelBlue ||
+        object instanceof FancyPictureFrame01 ||
         object instanceof Door ||
         object instanceof GlockItem ||
         object instanceof PistolItem ||
@@ -383,8 +384,7 @@ function isRapierObject(object) {
 
 function noPhysicsObject(object) {
 
-    if (object instanceof FancyPictureFrame01 ||
-        object instanceof ModernCeilingLamp01 ||
+    if (object instanceof ModernCeilingLamp01 ||
         object instanceof SecurityLight
     ) {
 

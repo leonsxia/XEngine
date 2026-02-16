@@ -1,5 +1,6 @@
 import { ObstacleBase } from '../ObstacleBase';
-import { GLTFModel, CollisionBox, Plane } from '../../../Models';
+import { GLTFModel, CollisionBox, Plane, GeometryDesc, MeshDesc } from '../../../Models';
+import { BOX_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'in_room/decorative/fancy_picture_frame_01_1k/fancy_picture_frame_01_1k.gltf';
 
@@ -173,6 +174,24 @@ class FancyPictureFrame01 extends ObstacleBase {
             this.updateOBBs();
 
         }
+
+    }
+
+    addRapierInstances(needClear = true) {
+
+        if (needClear) this.clearRapierInstances();
+
+        const width = this._width * this.scale[0];
+        const height = this._height * this.scale[1];
+        const depth = this._depth * this.scale[2];
+        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+
+        const boxGeo = new GeometryDesc({ type: BOX_GEOMETRY, width, height, depth });
+        const boxMesh = new MeshDesc(boxGeo);
+        boxMesh.name = `${this.name}_box_mesh_desc`;
+        boxMesh.userData.physics = { mass, restitution, friction };
+
+        this.rapierInstances.push(boxMesh);
 
     }
 
