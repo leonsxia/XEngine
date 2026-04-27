@@ -163,7 +163,7 @@ function getTopParent(object, out, level = '') {
 
     }
 
-    let target = null;
+    let target;
     
     if (!object[level] && object.parent && !object.parent.isScene) {
 
@@ -410,7 +410,7 @@ function resetObject3D(object) {
 
 function getIntersectionTarget(object) {
 
-    let realTarget = null;
+    let realTarget;
     const objectFather = object.parent.father;
     realTarget = objectFather ?
         (
