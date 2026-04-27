@@ -1,10 +1,8 @@
-import { Clock } from 'three';
-
-// let clock = new Clock();
+import { Timer } from 'three';
 
 class Loop {
 
-    _clock = new Clock();
+    _timer = new Timer();
     _paused = false;
     _isLooping = false;
     callbackAfterTick;
@@ -13,6 +11,7 @@ class Loop {
 
         this._loopObject = loopObject;
         this.updatables = [];
+        this._timer.connect(document);
 
     }
 
@@ -73,7 +72,8 @@ class Loop {
     tick() {
 
         // only call the getDelta function once per frame
-        const delta = this._clock.getDelta();
+        this._timer.update();
+        const delta = this._timer.getDelta();
 
         // console.log(
         //     `The last frame rendered in ${delta * 1000} milliseconds`,
@@ -91,7 +91,9 @@ class Loop {
 
     reset() {
 
-        this._clock = new Clock();
+        this._timer.disconnect();
+        this._timer = new Timer();
+        this._timer.connect(document);
 
     }
 
