@@ -357,7 +357,7 @@
                         "color": [253, 182, 58],
                         "position": [0, 0, 0],
                         "intensity": 200,
-                        "distance": 16.77,
+                        "distance": 0,
                         "decay": 2
                     },
                     "debug": true,
@@ -376,7 +376,7 @@
                         "color": [253, 182, 58],
                         "position": [0, 0, 0],
                         "intensity": 300,
-                        "distance": 16.77,
+                        "distance": 0,
                         "decay": 2
                     },
                     "debug": true,
@@ -1382,7 +1382,7 @@
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room3_modern_ceiling_lamp_01_1",
                     "scale": [1.2, 1.3],
-                    "position": [-4, 3.2, 7],
+                    "position": [6.98, 2.43, 7],
                     "rotationY": 0,
                     "castShadow": false,
                     "receiveShadow": false
@@ -1392,7 +1392,7 @@
                     "src": "MODERN_CEILING_LAMP_01",
                     "name": "room3_modern_ceiling_lamp_01_2",
                     "scale": [1.2, 1.3],
-                    "position": [-6.5, 3.2, -1.6],
+                    "position": [-6.54, 2.77, -5.69],
                     "rotationY": 0,
                     "castShadow": false,
                     "receiveShadow": false

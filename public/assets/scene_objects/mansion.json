@@ -159,7 +159,7 @@
                         "color": [244, 200, 122],
                         "position": [
                             0,
-                            -0.745,
+                            -1.32,
                             0
                         ],
                         "intensity": 180,
@@ -1284,7 +1284,7 @@
                     "name": "room1_vintage_grandfather_clock_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
-                    "position": [0, 1.289138221740723, -11.280954360961914],
+                    "position": [0, 1.289138221740723, -11.28],
                     "rotationY": 0
                 },
                 {
@@ -1310,7 +1310,7 @@
                     "src": "FANCY_PICTURE_FRAME_01",
                     "name": "room1_fancy_picture_frame_01_1",
                     "scale": [1.45, 1.45, 1.5],
-                    "position": [-1.45, 2.31, -11.48],
+                    "position": [-1.45, 2.31, -11.49],
                     "rotationY": 0
                 },
                 {
@@ -1346,8 +1346,8 @@
                     "name": "room1_shelf_01_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
-                    "position": [-11.36144733428955, 1.2279523849487308, -7.649745464324951],
-                    "rotationY": 1.5708
+                    "position": [-11.36, 1.2279523849487308, -7.649745464324951],
+                    "rotationY": 1.5725416560468908
                 },
                 {
                     "type": "RoundWoodenTable",
