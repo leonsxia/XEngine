@@ -206,6 +206,22 @@ function addDirectionalLight(light, specs) {
                 type: 'light-num',
                 changeFn: null
             }, {
+                name: 'bias',
+                prop: 'shadow bias',
+                value: null,
+                sub: 'shadow',
+                params: [- .01, 0.01, .0001],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'normalBias',
+                prop: 'shadow normalBias',
+                value: null,
+                sub: 'shadow',
+                params: [- .1, 0.1, .0001],
+                type: 'light-num',
+                changeFn: null
+            }, {
                 name: 'width',
                 prop: 'shadow cam width',
                 value: null,
@@ -229,7 +245,7 @@ function addDirectionalLight(light, specs) {
                 value: null,
                 sub: 'shadow',
                 subprop: 'camera',
-                params: [0.1, 10, NUMBER_STEPS],
+                params: [0.01, 10, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -238,7 +254,7 @@ function addDirectionalLight(light, specs) {
                 value: null,
                 sub: 'shadow',
                 subprop: 'camera',
-                params: [10, 100, NUMBER_STEPS],
+                params: [100, 1000, NUMBER_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -474,6 +490,22 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     type: 'light-num',
                     changeFn: null
                 }, {
+                    name: 'bias',
+                    prop: 'shadow bias',
+                    value: null,
+                    sub: 'shadow',
+                    params: [- .01, 0.01, .0001],
+                    type: 'light-num',
+                    changeFn: null
+                }, {
+                    name: 'normalBias',
+                    prop: 'shadow normalBias',
+                    value: null,
+                    sub: 'shadow',
+                    params: [- .1, 0.1, .0001],
+                    type: 'light-num',
+                    changeFn: null
+                }, {
                     name: 'fov',
                     prop: 'shadow cam fov',
                     value: null,
@@ -497,7 +529,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [0.1, 10, NUMBER_STEPS],
+                    params: [0.01, 10, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -554,7 +586,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
             specs: [{
                 name: 'intensity',
                 value: null,
-                params: [0, 100, NUMBER_STEPS],
+                params: [0, 500, NUMBER_STEPS],
                 type: 'number'
             }, {
                 name: 'power',
@@ -674,6 +706,22 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     type: 'light-num',
                     changeFn: null
                 }, {
+                    name: 'bias',
+                    prop: 'shadow bias',
+                    value: null,
+                    sub: 'shadow',
+                    params: [- .01, 0.01, .0001],
+                    type: 'light-num',
+                    changeFn: null
+                }, {
+                    name: 'normalBias',
+                    prop: 'shadow normalBias',
+                    value: null,
+                    sub: 'shadow',
+                    params: [- .1, 0.1, .0001],
+                    type: 'light-num',
+                    changeFn: null
+                }, {
                     name: 'radius',
                     prop: 'shadow radius',
                     value: null,
@@ -696,7 +744,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     value: null,
                     sub: 'shadow',
                     subprop: 'camera',
-                    params: [0.1, 10, NUMBER_STEPS],
+                    params: [0.01, 10, NUMBER_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {

@@ -164,9 +164,8 @@ function addShadow(light, mapSize = { width: 1024, height: 1024 }) {
 
                 light.shadow.camera.width = w;
                 light.shadow.camera.height = h;
-                light.shadow.camera.near = 1;
-                light.shadow.camera.far = 70;
-                // light.shadow.bias = 0.0001;
+                light.shadow.camera.near = .5;
+                light.shadow.camera.far = 500;
             }
 
             break;
@@ -179,8 +178,8 @@ function addShadow(light, mapSize = { width: 1024, height: 1024 }) {
 
                 light.shadow.camera.fov = 90;
                 light.shadow.camera.aspect = aspect;
-                light.shadow.camera.near = 0.5;
-                light.shadow.camera.far = 100;   // default 500
+                light.shadow.camera.near = .5;
+                light.shadow.camera.far = 500;   // default 500
             }
 
             break;
@@ -188,11 +187,10 @@ function addShadow(light, mapSize = { width: 1024, height: 1024 }) {
         case SPOT_LIGHT:
 
             {
-                light.shadow.radius = 4.5;
                 light.shadow.camera.fov = 50;
                 light.shadow.camera.aspect = 1;
                 light.shadow.camera.near = 0.5;
-                light.shadow.camera.far = 100;   // default 500
+                light.shadow.camera.far = 500;   // default 500
             }
 
             break;

@@ -94,12 +94,15 @@ function createSpotLights(spotLihgtSpecsArr) {
 
 function createDirectionalLight(lightSpecs) {
 
-    const { detail: { color, intensity, position, target } } = lightSpecs;
+    const { detail: { color, intensity, position, target, shadowRadius = 2, bias = 0, normalBias = 0 } } = lightSpecs;
 
     const light = new DirectionalLight(new Color(colorStr(...color)), intensity);
 
-    light.position.set(...position);
+    light.shadow.radius = shadowRadius;
+    light.shadow.bias =  bias;
+    light.shadow.normalBias = normalBias;
 
+    light.position.set(...position);
     light.target.position.set(...target);
 
     // no need to update target.updateMatrixWorld(), 
@@ -133,11 +136,13 @@ function createHemisphereLight(lightSpecs) {
 
 function createPointLight(lightSpecs) {
 
-    const { detail: { color, position, intensity, distance = 0, decay = 2, shadowRadius = 5, shadowCameraAspect = 1 } } = lightSpecs;
+    const { detail: { color, position, intensity, distance = 0, decay = 2, shadowRadius = 2, bias = 0, normalBias = 0, shadowCameraAspect = 1 } } = lightSpecs;
 
     const light = new PointLight(new Color(colorStr(...color)), intensity, distance, decay);
 
     light.shadow.radius = shadowRadius;
+    light.shadow.bias =  bias;
+    light.shadow.normalBias = normalBias;
     light.shadow.camera.aspect = shadowCameraAspect;
 
     light.position.set(...position);
@@ -148,12 +153,15 @@ function createPointLight(lightSpecs) {
 
 function createSpotLight(lightSpecs) {
 
-    const { detail: { color, position, target, intensity, distance = 0, angle = Math.PI / 3, penumbra = 0, decay = 2, map }} = lightSpecs;
+    const { detail: { color, position, target, intensity, distance = 0, angle = Math.PI / 3, penumbra = 0, decay = 2, shadowRadius = 2, bias = 0, normalBias = 0, map }} = lightSpecs;
 
     const light = new SpotLight(new Color(colorStr(...color)), intensity, distance, angle, penumbra, decay);
 
-    light.position.set(...position);
+    light.shadow.radius = shadowRadius;
+    light.shadow.bias =  bias;
+    light.shadow.normalBias = normalBias;
 
+    light.position.set(...position);
     light.target.position.set(...target);
 
     if (map) light.map = map;

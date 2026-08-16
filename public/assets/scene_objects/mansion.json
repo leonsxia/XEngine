@@ -159,13 +159,14 @@
                         "color": [244, 200, 122],
                         "position": [
                             0,
-                            -1.32,
+                            -0.745,
                             0
                         ],
                         "intensity": 180,
                         "distance": 0,
                         "decay": 2,
-                        "shadowCameraAspect": 1.0025
+                        "bias": 0.0002,
+                        "normalBias": 0.024
                     },
                     "debug": true,
                     "shadow": true,
@@ -188,7 +189,8 @@
                         ],
                         "intensity": 120,
                         "distance": 0,
-                        "decay": 2
+                        "decay": 2,
+                        "normalBias": 0.02
                     },
                     "debug": true,
                     "shadow": true,
@@ -211,7 +213,8 @@
                         ],
                         "intensity": 80,
                         "distance": 0,
-                        "decay": 2
+                        "decay": 2,
+                        "normalBias": 0.025
                     },
                     "debug": true,
                     "shadow": true,

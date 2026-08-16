@@ -182,7 +182,8 @@
                         "position": [0, 4, -4.3],
                         "intensity": 25,
                         "distance": 0,
-                        "decay": 1
+                        "decay": 1,
+                        "bias": 0.0002
                     },
                     "debug": true,
                     "shadow": true,
@@ -204,7 +205,9 @@
                         "distance": 45,
                         "decay": 0.33,
                         "penumbra": 0.35,
-                        "angle": 0.7156
+                        "angle": 0.7156,
+                        "bias": 0.0004,
+                        "normalBias": 0.05
                     },
                     "debug": true,
                     "shadow": true,
@@ -358,7 +361,8 @@
                         "position": [0, 0, 0],
                         "intensity": 200,
                         "distance": 0,
-                        "decay": 2
+                        "decay": 2,
+                        "normalBias": 0.035
                     },
                     "debug": true,
                     "shadow": true,
@@ -377,7 +381,9 @@
                         "position": [0, 0, 0],
                         "intensity": 300,
                         "distance": 0,
-                        "decay": 2
+                        "decay": 2,
+                        "bias": 0.0001,
+                        "normalBias": 0.05
                     },
                     "debug": true,
                     "shadow": true,

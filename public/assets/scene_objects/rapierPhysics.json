@@ -168,7 +168,8 @@
                         "position": [0, 7, -2.95],
                         "intensity": 250,
                         "distance": 0,
-                        "decay": 1.85
+                        "decay": 1.85,
+                        "normalBias": 0.03
                     },
                     "debug": true,
                     "shadow": true,

@@ -7,7 +7,7 @@ class Camera {
 
     constructor(specs = {}) {
 
-        const { fov = 50, aspect = 1, near = .1, far = 500 } = specs;
+        const { fov = 50, aspect = 1, near = .1, far = 2000 } = specs;
         const { position = [0, 0, 0] } = specs;
 
         this.camera = new PerspectiveCamera(fov, aspect, near, far);
