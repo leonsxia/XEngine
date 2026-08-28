@@ -1,7 +1,11 @@
 import { Box3, EventDispatcher, Group, SkeletonHelper, Vector3 } from 'three';
 import { worldGLTFLoader } from '../utils/gltfHelper';
 import { clone } from '../utils/objectHelper';
-import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js'
+import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js';
+import { computeMikkTSpaceTangents } from 'three/addons/utils/BufferGeometryUtils.js';
+import * as MikkTSpace from 'three/addons/libs/mikktspace.module.js';
+
+await MikkTSpace.ready;
 
 const _box = new Box3();
 const _v1 = new Vector3();
@@ -157,6 +161,11 @@ class GLTFModel extends EventDispatcher {
 
             if (object.isMesh) {
                 
+                if (object.geometry.attributes['uv']) {
+
+                    computeMikkTSpaceTangents(object.geometry, MikkTSpace, true);
+
+                }
                 this.meshes.push(object);
             
             }
