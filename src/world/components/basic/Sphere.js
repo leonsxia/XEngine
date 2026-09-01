@@ -38,8 +38,6 @@ class Sphere extends BasicObject {
         if (normalMap?.isTexture) {
 
             const _normalMap = normalMap.clone();
-
-            this.resetTextureColor();
             this.material.normalMap = _normalMap;
 
             normalLoaded = true;
@@ -51,6 +49,7 @@ class Sphere extends BasicObject {
             const _specularMap = specularMap.clone();
 
             this.resetTextureColor();
+            _specularMap.colorSpace = SRGBColorSpace;
             this.material.specularMap = _specularMap;
 
             specularLoaded = true;
@@ -83,7 +82,6 @@ class Sphere extends BasicObject {
 
         if (normalT) {
 
-            this.resetTextureColor();
             this.material.normalMap = normalT;
 
         }
@@ -91,6 +89,7 @@ class Sphere extends BasicObject {
         if (specularT) {
 
             this.resetTextureColor();
+            specularT.colorSpace = SRGBColorSpace;
             this.material.specularMap = specularT;
 
         }

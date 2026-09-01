@@ -166,13 +166,13 @@ class WaterPlane extends BasicObject {
 
         if (this._normalMap0) {
 
-            this.setTexture(this._normalMap0, true);
+            this.setTexture(this._normalMap0);
 
         }
 
         if (this._normalMap1) {
 
-            this.setTexture(this._normalMap1, true);
+            this.setTexture(this._normalMap1);
 
         }
 

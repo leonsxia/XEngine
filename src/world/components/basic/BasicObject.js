@@ -1,6 +1,5 @@
 import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher, Quaternion, MeshStandardMaterial } from 'three';
-// eslint-disable-next-line no-unused-vars
-import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
+// import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, getTerrainGeometry } from '../utils/geometryHelper';
 import { worldTextureLoader } from '../utils/textureHelper';
 import { basicMaterials } from './basicMaterial';
@@ -118,7 +117,7 @@ class BasicObject extends EventDispatcher {
 
             const _map = map.clone();
             this.resetTextureColor();
-            this.setTexture(_map);
+            this.setTexture(_map, true);
             this.material.map = _map;
 
         }
@@ -126,8 +125,7 @@ class BasicObject extends EventDispatcher {
         if (normalMap?.isTexture) {
 
             const _map = normalMap.clone();
-            this.resetTextureColor();
-            this.setTexture(_map, true);
+            this.setTexture(_map);
             this.material.normalMap = _map;
 
         }
@@ -180,15 +178,14 @@ class BasicObject extends EventDispatcher {
         if (tex) {
 
             this.resetTextureColor();
-            this.setTexture(tex);
+            this.setTexture(tex, true);
             this.material.map = tex;
 
         }
 
         if (normal) {
 
-            this.resetTextureColor();
-            this.setTexture(normal, true);
+            this.setTexture(normal);
             this.material.normalMap = normal;
 
         }
@@ -228,7 +225,7 @@ class BasicObject extends EventDispatcher {
         if (useStandardMaterial) {
 
             this.material.roughness = roughness;
-            this.material.metalness = metalness;
+            this.material.metalness = !metalness ? (armMap || metalMap) ? 1 : 0 : metalness;
 
         }
 
@@ -537,8 +534,8 @@ class BasicObject extends EventDispatcher {
         const metal = material?.metalnessMap;
         const disp = material?.displacementMap;
 
-        if (map) this.setTexture(map);
-        if (normal) this.setTexture(normal, true);
+        if (map) this.setTexture(map, true);
+        if (normal) this.setTexture(normal);
         if (ao) this.setTexture(ao);
         if (rough) this.setTexture(rough);
         if (metal) this.setTexture(metal);
@@ -548,7 +545,7 @@ class BasicObject extends EventDispatcher {
 
     }
 
-    setTexture(texture, isNormal = false) {
+    setTexture(texture, isRGBColorSpace = false) {
 
         const { 
             rotationT, 
@@ -557,7 +554,7 @@ class BasicObject extends EventDispatcher {
             mapRatio 
         } = this.specs;
 
-        if (!isNormal) {
+        if (isRGBColorSpace) {
 
             texture.colorSpace = SRGBColorSpace;
             
@@ -581,14 +578,14 @@ class BasicObject extends EventDispatcher {
 
         }
 
-        if (!isNormal) {
+        // if (!isNormal) {
 
-            texture.minFilter = LinearMipMapLinearFilter;
+        //     texture.minFilter = LinearMipMapLinearFilter;
 
-        } else {
+        // } else {
 
-            texture.minFilter = NearestMipMapLinearFilter;
-        }
+        //     texture.minFilter = NearestMipMapLinearFilter;
+        // }
 
         if (!noRepeat) {
 

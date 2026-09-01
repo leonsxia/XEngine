@@ -50,7 +50,7 @@ class Cylinder extends BasicObject {
 
             material.color.setHex(white);
             _map.isCap = true;
-            this.setTexture(_map).setCapRotation(_map);
+            this.setTexture(_map, true).setCapRotation(_map);
 
             material.map = _map;
 
@@ -59,10 +59,8 @@ class Cylinder extends BasicObject {
         if (normalMap?.isTexture) {
 
             const _normal = normalMap.clone();
-
-            material.color.setHex(white);
             _normal.isCap = true;
-            this.setTexture(_normal, true).setCapRotation(_normal);
+            this.setTexture(_normal).setCapRotation(_normal);
 
             material.normalMap = _normal;
 
@@ -127,7 +125,7 @@ class Cylinder extends BasicObject {
 
             material.color.setHex(white);
             texture.isCap = true;
-            this.setTexture(texture).setCapRotation(texture);
+            this.setTexture(texture, true).setCapRotation(texture);
 
             material.map = texture;
 
@@ -135,9 +133,8 @@ class Cylinder extends BasicObject {
 
         if (normal) {
 
-            material.color.setHex(white);
             normal.isCap = true;
-            this.setTexture(normal, true).setCapRotation(normal);
+            this.setTexture(normal).setCapRotation(normal);
 
             material.normalMap = normal;
 
@@ -187,7 +184,7 @@ class Cylinder extends BasicObject {
         if (useStandardMaterial) {
 
             material.roughness = roughness;
-            material.metalness = metalness;
+            material.metalness = !metalness ? (armMap || metalMap) ? 1 : 0 : metalness;
 
         }
 
