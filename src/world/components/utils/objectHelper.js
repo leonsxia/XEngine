@@ -48,7 +48,8 @@ import {
     Ladder,
     Terrain,
     BarrelExplosive,
-    BarrelBlue
+    BarrelBlue,
+    HandCraftedStudio
 } from "../Models";
 import { ObstacleMoveable } from "../movement/ObstacleMoveable";
 
@@ -369,7 +370,8 @@ function isRapierObject(object) {
         object instanceof PistolAmmoBox ||
         object instanceof MagnumAmmoBox ||
         object instanceof SMGAmmoBox ||
-        object instanceof FirstAidKitItem
+        object instanceof FirstAidKitItem ||
+        object instanceof HandCraftedStudio
     ) {
 
         return true;

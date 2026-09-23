@@ -125,6 +125,9 @@ const VERTICAL_LADDER = 'VerticalLadder';
 const ROTATABLE_LADDER = 'RotatableLadder';
 const LADDER = 'Ladder';
 
+// scene objects
+const HAND_CRAFTED_STUDIO = 'HandCraftedStudio';
+
 // pickable items
 const AMMUNITION = {
     PISTOL_AMMO_BOX: 'PistolAmmoBox',
@@ -561,7 +564,9 @@ const GLTF_NAMES = {
     CLASSIC_WOODEN_DOOR_4: 'CLASSIC_WOODEN_DOOR_4',
     CLASSIC_WOODEN_DOOR_5: 'CLASSIC_WOODEN_DOOR_5',
     CLASSIC_WOODEN_DOOR_6: 'CLASSIC_WOODEN_DOOR_6',
-    DUNGEON_GATE_1: 'DUNGEON_GATE_1'
+    DUNGEON_GATE_1: 'DUNGEON_GATE_1',
+    // scene objects
+    HAND_CRAFTED_STUDIO: 'HAND_CRAFTED_STUDIO'
 };
 
 const GLTFS = [{
@@ -668,6 +673,8 @@ const GLTFS = [{
     name: GLTF_NAMES.CLASSIC_WOODEN_DOOR_6, src: 'in_room/entries/classic_wooden_door_6.glb'
 }, {
     name: GLTF_NAMES.DUNGEON_GATE_1, src: 'in_room/entries/dungeon_gate_1.glb'
+}, {
+    name: GLTF_NAMES.HAND_CRAFTED_STUDIO, src: 'scene_objects/rooms/hand_crafted_studio_1-2k/hand_crafted_studio.gltf'
 }];
 
 const SHADER_NAMES = {
@@ -890,6 +897,8 @@ export {
     VERTICAL_LADDER,
     ROTATABLE_LADDER,
     LADDER,
+
+    HAND_CRAFTED_STUDIO,
 
     CAMERAS,
 

@@ -138,19 +138,19 @@ class ObstacleBase extends ObstacleMoveable {
 
     get width() {
 
-        return this.box.width;
+        return this.box ? this.box.width : 0;
 
     }
 
     get height() {
 
-        return this.box.height;
+        return this.box ? this.box.height : 0;
 
     }
 
     get depth() {
 
-        return this.box.depth;
+        return this.box ? this.box.depth : 0;
 
     }
 

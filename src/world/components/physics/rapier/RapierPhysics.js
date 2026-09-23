@@ -144,7 +144,7 @@ class RapierPhysics {
         if (!mesh.userData.physics) mesh.userData.physics = {};
 
         const { mass = 0, restitution = 0, friction = 0 } = mesh.userData.physics;
-        const shape = getShape(mesh.geometry, mesh.scale);
+        const shape = getShape(mesh.geometry, mesh.isMesh ? mesh.getWorldScale(_scale) : mesh.scale);
 
         if (shape === null) return;
 
@@ -213,7 +213,7 @@ class RapierPhysics {
             if (!physics) continue;
             const { mass = 0, restitution = 0, friction = 0 } = physics;
 
-            const shape = getShape(mesh.geometry, mesh.scale);
+            const shape = getShape(mesh.geometry, mesh.isMesh ? mesh.getWorldScale(_scale) : mesh.scale);
             shape.setTranslation(...mesh.position);
             shape.setRotation(mesh.quaternion);
 

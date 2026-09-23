@@ -8,7 +8,8 @@ import {
 } from '../../components/utils/constants.js';
 import { colorStr, colorArr } from "../../components/basic/colorBase.js";
 import { moveableObjectFilter, objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5 } from "../../components/utils/objectHelper.js";
-import { ModelBuilder } from "./ModelBuilder.js";
+// import { ModelBuilder } from "./ModelBuilder.js";
+import { ModelBuilderSceneExt } from "./ModelBuilderSceneExt.js";
 import { GLOBALS } from "../../systems/globals.js";
 
 class SceneBuilder {
@@ -20,7 +21,7 @@ class SceneBuilder {
 
     loadAssets(textures, gltfs) {
 
-        this.modelBuilder = new ModelBuilder(textures, gltfs);
+        this.modelBuilder = new ModelBuilderSceneExt(textures, gltfs);
 
     }
 
@@ -638,7 +639,7 @@ class SceneBuilder {
         }
 
         // clear picked object first
-        this.worldScene.clearPickedObject();
+        this.worldScene.clearPicking();
 
         for (let i = 0, il = sceneSpecs.children.length; i < il; i++) {
 
@@ -933,6 +934,8 @@ class SceneBuilder {
                         _origin.detail.distance = light.distance;
                         _origin.detail.decay = light.decay;
                         _origin.detail.shadowCameraAspect = light.shadow.camera.aspect;
+                        _origin.detail.bias = light.shadow.bias;
+                        _origin.detail.normalBias = light.shadow.normalBias;
 
                         if (attachTo) {
 
@@ -948,7 +951,7 @@ class SceneBuilder {
 
                     } else {
 
-                        const { intensity = 1, distance = 0, decay = 2, shadowCameraAspect = 1, position = [0, 0, 0] } = _target.detail;
+                        const { intensity = 1, distance = 0, decay = 2, shadowCameraAspect = 1, bias = 0, normalBias = 0, position = [0, 0, 0] } = _target.detail;
                         const { color = [255, 255, 255] } = _target.detail;
                         const { attachTo, attachToType, turnOn = true } = _origin;
 
@@ -957,6 +960,8 @@ class SceneBuilder {
                         _origin.detail.distance = distance;
                         _origin.detail.decay = decay;
                         _origin.detail.shadowCameraAspect = shadowCameraAspect;
+                        _origin.detail.bias = bias;
+                        _origin.detail.normalBias = normalBias;
                         _origin.detail.position = new Array(...position);
 
                         light.color.setStyle(colorStr(...color));
@@ -964,6 +969,8 @@ class SceneBuilder {
                         light.distance = distance;
                         light.decay = decay;
                         light.shadow.camera.aspect = shadowCameraAspect;
+                        light.shadow.bias = bias;
+                        light.shadow.normalBias = normalBias;
 
                         if (attachTo) {
 
@@ -1167,7 +1174,7 @@ class SceneBuilder {
 
                             const { rotationY, rotation = [0, 0, 0] } = _target;
                             find.father.setRotation([rotation[0], rotationY ?? rotation[1], rotation[2]]);
-                            find.father.updateOBBs();
+                            find.father.updateOBBs?.();
 
                         }
 

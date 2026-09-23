@@ -679,14 +679,7 @@ class WorldScene {
 
         this.renderer.shadowMap.enabled = false;
 
-        // clear picker object
-        if (this.enablePick) {
-
-            this.pickedObject = null;            
-            this.enablePicking();
-            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, 'disable', 'enable');
-
-        }
+        this.clearPicking();
 
         this.picker.reset();
 
@@ -768,6 +761,8 @@ class WorldScene {
     }
 
     focusNext(forceStaticRender = true) {
+
+        this.clearPicking();
 
         this.focusNextProcess(forceStaticRender);
 
@@ -1770,6 +1765,19 @@ class WorldScene {
 
             this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, 'disable', 'enable');
             this.enablePick = false;
+
+        }
+
+    }
+
+    clearPicking() {
+
+        // clear picked object
+        if (this.enablePick) {
+
+            this.pickedObject = null;
+            this.enablePicking();
+            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, 'disable', 'enable');
 
         }
 

@@ -124,3 +124,6 @@ export { DungeonGate1 } from './composite/inwall/entries/DungeonGate1.js';
 export { VerticalLadder } from './composite/inwall/connectors/VerticalLadder.js';
 export { RotatableLadder } from './composite/inwall/connectors/RotatableLadder.js';
 export { Ladder } from './composite/inwall/connectors/Ladder.js';
+
+// scene objects
+export { HandCraftedStudio } from './composite/sceneObjects/rooms/HandCraftedStudio.js';

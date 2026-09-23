@@ -24,6 +24,11 @@
                 "x": -0.454,
                 "y": 0.907,
                 "z": -0.699
+            },
+            {
+                "x": -0.36583020622071993,
+                "y": 0.8009332345324264,
+                "z": 0.1362997517646624
             }
         ],
         "allCameraPos": [
@@ -36,6 +41,11 @@
                 "x": 0.968,
                 "y": 3.439,
                 "z": 2.98
+            },
+            {
+                "x": 2.357097753801041,
+                "y": 2.1848675055876026,
+                "z": 2.0462839381816496
             }
         ],
         "allPlayerPos": [
@@ -46,7 +56,12 @@
             ],
             [
                 0,
-                1.8,
+                0.9,
+                0
+            ],
+            [
+                0,
+                0.9,
                 0
             ]
         ],
@@ -369,6 +384,52 @@
                     "attachTo": "safe_room_1_modern_ceiling_lamp_01",
                     "turnOn": true,
                     "room": "safe_room_1"
+                }
+            ]
+        },
+        {
+            "room": "safe_room_2",
+            "basicLightSpecs": [
+                {
+                    "name": "safe_room_2_ambientLight",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [255, 221, 173],
+                        "intensity": 0.05
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true,
+                    "room": "safe_room_2"
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "safe_room_2_pointLight_1",
+                    "display": "Ceiling Lamp Safe Room",
+                    "detail": {
+                        "color": [255, 250, 235],
+                        "position": [
+                            0,
+                            -0.30000000000000104,
+                            0
+                        ],
+                        "intensity": 30,
+                        "distance": 4,
+                        "decay": 2,
+                        "shadowCameraAspect": 1,
+                        "bias": -0.0008,
+                        "normalBias": 0.0047
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "safe_room_2_modern_ceiling_lamp_01",
+                    "turnOn": true,
+                    "room": "safe_room_2"
                 }
             ]
         }
@@ -1462,6 +1523,32 @@
                     "transportType": 1,
                     "linkTo": "safe_room_1_wooden_glass_door_1",
                     "transportTo": -1
+                },
+                {
+                    "type": "ClassicWoodenDoor6",
+                    "src": "CLASSIC_WOODEN_DOOR_6",
+                    "name": "room1_classic_wooden_door_6",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -1.351,
+                        -15
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true,
+                    "transparent": false,
+                    "roomSequence": 0,
+                    "transportType": 1,
+                    "linkTo": "safe_room_2_classic_wooden_door_6",
+                    "transportTo": 1
                 }
             ]
         },
@@ -1744,6 +1831,104 @@
                     "transportType": 1,
                     "linkTo": "room1_wooden_glass_door_1",
                     "transportTo": 1
+                }
+            ]
+        },
+        {
+            "type": "Room",
+            "width": 15,
+            "height": 5,
+            "depth": 15,
+            "baseSize": 9,
+            "ignoreWalls": [0, 1, 2, 3],
+            "mapRatio": 1.5,
+            "name": "safe_room_2",
+            "showArrow": false,
+            "enableWallOBBs": false,
+            "position": [
+                0,
+                2.5,
+                0
+            ],
+            "rotationY": 0,
+            "sequence": 2,
+            "groups": [
+                {
+                    "type": "HandCraftedStudio",
+                    "src": "HAND_CRAFTED_STUDIO",
+                    "name": "safe_room_2_hand_crafted_studio",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "position": [
+                        0,
+                        -0.895,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false
+                },
+                {
+                    "type": "PaintedWoodenBlueChair",
+                    "src": "PAINTED_WOODEN_BLUE_CHAIR",
+                    "name": "safe_room_2_painted_wooden_blue_chair_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "position": [-1.4351, -1.8625402450561523, -1],
+                    "rotationY": 3.1416,
+                    "physics": { "mass": 30, "friction": 1 }
+                },
+                {
+                    "type": "ModernCeilingLamp01",
+                    "src": "MODERN_CEILING_LAMP_01",
+                    "name": "safe_room_2_modern_ceiling_lamp_01",
+                    "scale": [
+                        1,
+                        0.3
+                    ],
+                    "position": [
+                        0,
+                        0.57,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false,
+                    "transparent": false
+                }
+            ],
+            "floors": [],
+            "ceilings": [],
+            "walls": [],
+            "insideWalls": [],
+            "entries": [
+                {
+                    "type": "ClassicWoodenDoor6",
+                    "src": "CLASSIC_WOODEN_DOOR_6",
+                    "name": "safe_room_2_classic_wooden_door_6",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -1.351,
+                        2.285
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true,
+                    "transparent": false,
+                    "roomSequence": 2,
+                    "transportType": 1,
+                    "linkTo": "room1_classic_wooden_door_6",
+                    "transportTo": -1
                 }
             ]
         }

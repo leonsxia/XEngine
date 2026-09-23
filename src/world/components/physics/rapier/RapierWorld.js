@@ -391,7 +391,7 @@ class RapierWorld {
             
             this.onBeforeTofuContainerChanged(object.rapierContainer);
 
-        } else if (object.isObstacleBase || object.isInWallObjectBase) {
+        } else if (object.isObstacleBase || object.isInWallObjectBase || object.isSceneObjectBase) {
             
             this.engine.removeMesh(object.group);
 
@@ -409,7 +409,7 @@ class RapierWorld {
 
             this.onTofuContainerChanged(object.rapierContainer);
 
-        } else if (object.isObstacleBase || object.isInWallObjectBase) {
+        } else if (object.isObstacleBase || object.isInWallObjectBase || object.isSceneObjectBase) {
             
             this.engine.addCompoundMesh(object.group, object.rapierInstances);
 
