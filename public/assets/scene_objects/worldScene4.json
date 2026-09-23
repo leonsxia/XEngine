@@ -198,14 +198,18 @@
                     "name": "room1_spotLight1",
                     "display": "Spot Light",
                     "detail": {
-                        "color": [242, 176, 33],
+                        "color": [241, 204, 255],
                         "position": [-4.3, 4.6, -7],
-                        "target": [0, 0, 0],
-                        "intensity": 46,
+                        "target": [
+                            -1.17,
+                            -2.96,
+                            -0.479999999999997
+                        ],
+                        "intensity": 30,
                         "distance": 45,
                         "decay": 0.33,
                         "penumbra": 0.35,
-                        "angle": 0.7156,
+                        "angle": 0.15707963267948966,
                         "bias": 0.0004,
                         "normalBias": 0.05
                     },
@@ -214,7 +218,35 @@
                     "shadow_debug": true,
                     "helper_show": false,
                     "shadow_cam_show": false,
-                    "visible": true
+                    "visible": true,
+                    "room": "room1"
+                },
+                {
+                    "name": "room1_spotLight2",
+                    "display": "Spot Light 2",
+                    "detail": {
+                        "color": [33, 242, 207],
+                        "position": [-4.3, 4.6, 7],
+                        "target": [
+                            -1.16,
+                            0,
+                            1.7
+                        ],
+                        "intensity": 20,
+                        "distance": 49.52,
+                        "decay": 0.33,
+                        "penumbra": 0.35,
+                        "angle": 0.16336281798666924,
+                        "bias": 0.0004,
+                        "normalBias": 0.05
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "room": "room1"
                 }
             ]
         },

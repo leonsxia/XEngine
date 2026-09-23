@@ -6,7 +6,7 @@ import {
     createPointLightHelper,
     createSpotLightHelper 
 } from './utils/helpers.js';
-import { DIRECTIONAL_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT, DIRECTIONAL_LIGHT_TARGET, SPOT_LIGHT_TARGET } from './utils/constants.js';
+import { DIRECTIONAL_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT } from './utils/constants.js';
 
 function setupShadowLight(scene, room, ...lights) {
 
@@ -20,9 +20,10 @@ function setupShadowLight(scene, room, ...lights) {
 
         const l = visibleLights[i];
 
-        const { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show, room = 'scene' } = l;
+        // detail is shadow copied, read-only
+        const { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show, room = 'scene', attachTo, detail } = l;
 
-        let lightObj = { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show, room };
+        let lightObj = { light, name, debug, shadow, shadow_debug, helper_show, shadow_cam_show, room, attachTo, detail };
 
         const addShadowCamHelper = () => {
 
@@ -106,7 +107,7 @@ function setupShadowLight(scene, room, ...lights) {
 
             room.add(light);
 
-            changeLightTargetToRoom(room, light);
+            changeLightTargetToRoom(room, lightObj);
 
         } else {
 
@@ -265,31 +266,32 @@ function attachLightHelper(lightObj, lightHelper, lightShadowCamHelper) {
 
 }
 
-function changeLightTargetToRoom(room, light) {
+function changeLightTargetToRoom(room, lightObj) {
     
+    const { light, name, attachTo } = lightObj;    
+
     switch (light.type) {
 
         case DIRECTIONAL_LIGHT:
 
             {
-                const targetPos = light.target.position.clone();
-
-                light.target = room.getObjectByName(DIRECTIONAL_LIGHT_TARGET);
-                light.target.position.copy(targetPos);
+                light.target.position.set(...lightObj.detail.target);
+                light.target.name = `${name}_target`;
+                if (!attachTo) room.add(light.target);
             }
 
             break;
         case SPOT_LIGHT:
 
             {
-                const targetPos = light.target.position.clone();
-
-                light.target = room.getObjectByName(SPOT_LIGHT_TARGET);
-                light.target.position.copy(targetPos);
+                light.target.position.set(...lightObj.detail.target);
+                light.target.name = `${name}_target`;
+                if (!attachTo) room.add(light.target);
             }
 
             break;
     }
+    
 }
 
 function updateLightAndShadowCamHelper(lightObj) {

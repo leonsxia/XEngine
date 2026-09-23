@@ -19,9 +19,6 @@ const HEMISPHERE_LIGHT = 'HemisphereLight';
 const POINT_LIGHT = 'PointLight';
 const SPOT_LIGHT = 'SpotLight';
 
-const DIRECTIONAL_LIGHT_TARGET = 'DirectionalLightTarget';
-const SPOT_LIGHT_TARGET = 'SpotLightTarget';
-
 // scene objects
 const AXES = 'Axes';
 const GRID = 'Grid';
@@ -809,8 +806,6 @@ export {
     HEMISPHERE_LIGHT,
     POINT_LIGHT,
     SPOT_LIGHT,
-    DIRECTIONAL_LIGHT_TARGET,
-    SPOT_LIGHT_TARGET,
 
     AXES,
     GRID,
