@@ -52,7 +52,7 @@ class HandCraftedStudio extends SceneObjectBase {
         this._scale = new Array(...scale);
 
         // gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, ignoreList: gltfIgnoreShadowCastList };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, shadowCastIgnoreList: gltfIgnoreShadowCastList };
         this.gltf = new GLTFModel(gltfSpecs);
 
         this.createBoundaries();
