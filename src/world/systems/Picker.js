@@ -94,11 +94,16 @@ class Picker {
             const intersectObj = intersects[0].object;
             let tofu = {};
             let weapon = {};
-            let selectedObject = null;
+            let sceneModel = {};
+            let selectedObject;
             
             if ( intersectObj.parent.isRoom) {
 
                 selectedObject = intersectObj;
+
+            } else if (getTopParent(intersectObj, sceneModel, 'isSceneModel').isSceneModel) {
+
+                selectedObject = sceneModel.value;
 
             } else if (getTopParent(intersectObj, weapon, 'isWeapon').isWeapon) {
 

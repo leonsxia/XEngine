@@ -53,23 +53,18 @@ class HandCraftedStudio extends SceneObjectBase {
 
         // gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, shadowCastIgnoreList: gltfIgnoreShadowCastList };
-        this.gltf = new GLTFModel(gltfSpecs);
+        this.GLTFs.push(new GLTFModel(gltfSpecs));
 
         this.createBoundaries();
         this.update();
 
-        this.group.add(
-            this.gltf.group
-        );
+        this.addGLTFs();
 
     }
-
+    
     async init() {
 
-        await this.gltf.init();
-
-        this.setPickLayers();
-        this.setCanBeIgnored();
+        await super.init();
 
     }
 
@@ -110,8 +105,13 @@ class HandCraftedStudio extends SceneObjectBase {
 
     update() {
 
-        // update gltf scale
-        this.gltf.setScale(this._scale);
+        // update gltfs scale
+        for (let i = 0, il = this.GLTFs.length; i < il; i++) {
+
+            this.GLTFs[i].setScale(this._scale);
+
+        }
+
         this.updateBoundaries();
 
     }

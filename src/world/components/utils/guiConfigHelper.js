@@ -866,7 +866,7 @@ function makeObjectsGuiConfig(objects) {
             changeFn: postChangeFn
         }));
 
-        if (!object.isTofu && !object.isWeapon &&
+        if (!object.isTofu && !object.isWeapon && !object.isSceneModel &&
             !object.father.isFloor && !object.father.isCeiling && 
             !object.father.isArea &&
             !object.father.isWater && !object.father.isWaterCube &&
@@ -1435,7 +1435,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (object.isWeapon) {
+        if (object.isWeapon || object.isSceneModel) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'x',

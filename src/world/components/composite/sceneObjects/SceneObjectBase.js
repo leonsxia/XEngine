@@ -16,7 +16,7 @@ class SceneObjectBase {
 
     name = '';
     group;
-    gltf;
+    GLTFs = [];
 
     _scale = [1, 1, 1];
 
@@ -36,6 +36,16 @@ class SceneObjectBase {
         this.group.name = name;
         this.group.isInwallObject = true;
         this.group.father = this;
+
+    }
+
+    async init() {
+
+        await Promise.all(this.GLTFs.map((gltf) => gltf.init()));
+
+        this.setPickLayers();
+        this.setCanBeIgnored();
+        this.setSceneModelFlags();
 
     }
 
@@ -204,7 +214,17 @@ class SceneObjectBase {
     // this should be inherited and implemented by child class
     update() { }
 
-    bindGLTFEvents(gltf = this.gltf) {
+    addGLTFs() {
+
+        for (let i = 0, il = this.GLTFs.length; i < il; i++) {
+
+            this.group.add(this.GLTFs[i].group);
+
+        }
+
+    }
+
+    bindGLTFEvents(gltf) {
 
         if (!gltf) return;
 
@@ -235,13 +255,37 @@ class SceneObjectBase {
 
     setPickLayers() {
 
-        this.bindGLTFEvents();
+        for (let i = 0, il = this.GLTFs.length; i < il; i++) {
+
+            this.bindGLTFEvents(this.GLTFs[i]);
+
+        }
 
     }
 
     setCanBeIgnored() {
 
-        this.gltf?.setCanBeIgnored(this.canBeIgnored);
+        for (let i = 0, il = this.GLTFs.length; i < il; i++) {
+
+            this.GLTFs[i].setCanBeIgnored(this.canBeIgnored);
+
+        }
+
+    }
+
+    setSceneModelFlags() {
+
+        for (let i = 0, il = this.GLTFs.length; i < il; i++) {
+
+            const gltf = this.GLTFs[i];
+            gltf.group.traverse((mesh) => { 
+                
+                mesh.isSceneModel = true;
+                mesh.father = gltf;
+            
+            });
+
+        }
 
     }
 
