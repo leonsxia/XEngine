@@ -2077,7 +2077,7 @@
 					"emissiveStrength":10
 				}
 			},
-			"name":"M_12_Bench_Props_1k",
+			"name":"M_12_Bench_Props_2k",
 			"normalTexture":{
 				"index":14
 			},
@@ -4742,28 +4742,28 @@
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_12_Bench_Props_1k_Emissive",
-			"uri":"textures/T_12_Bench_Props_1k_Emissive.png"
+			"name":"T_12_Bench_Props_2k_Emissive",
+			"uri":"textures/T_12_Bench_Props_2k_Emissive.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_12_Bench_Props_1k_Translucency",
-			"uri":"textures/T_12_Bench_Props_1k_Translucency.png"
+			"name":"T_12_Bench_Props_2k_Translucency",
+			"uri":"textures/T_12_Bench_Props_2k_Translucency.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_12_Bench_Props_1k_Normal",
-			"uri":"textures/T_12_Bench_Props_1k_Normal.png"
+			"name":"T_12_Bench_Props_2k_Normal",
+			"uri":"textures/T_12_Bench_Props_2k_Normal.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_12_Bench_Props_1k_ORM",
-			"uri":"textures/T_12_Bench_Props_1k_ORM.png"
+			"name":"T_12_Bench_Props_2k_ORM",
+			"uri":"textures/T_12_Bench_Props_2k_ORM.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_12_Bench_Props_1k_BaseColor",
-			"uri":"textures/T_12_Bench_Props_1k_BaseColor.png"
+			"name":"T_12_Bench_Props_2k_BaseColor",
+			"uri":"textures/T_12_Bench_Props_2k_BaseColor.png"
 		},
 		{
 			"mimeType":"image/png",
@@ -4907,13 +4907,13 @@
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_4_Window_1k_BaseColor.png",
-			"uri":"textures/T_4_Window_1k_BaseColor.png.png"
+			"name":"T_4_Window_1k_BaseColor",
+			"uri":"textures/T_4_Window_1k_BaseColor.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_4_Window_1k_BaseColor-T_4_Window_1k_Opacity.png",
-			"uri":"textures/T_4_Window_1k_BaseColor-T_4_Window_1k_Opacity.png.png"
+			"name":"T_4_Window_1k_BaseColor-T_4_Window_1k_Opacity",
+			"uri":"textures/T_4_Window_1k_BaseColor-T_4_Window_1k_Opacity.png"
 		},
 		{
 			"mimeType":"image/png",
