@@ -2,7 +2,7 @@ import { SceneObjectBase } from "../SceneObjectBase";
 import { GLTFModel, GeometryDesc, MeshDesc, Plane } from '../../../Models';
 import { BOX_GEOMETRY } from '../../../utils/constants';
 
-const GLTF_SRC = 'scene_objects/rooms/hand_crafted_studio_1-2k/hand_crafted_studio.gltf';
+const GLTF_SRC = 'scene_objects/rooms/hand_crafted_studio_1-4k/hand_crafted_studio.gltf';
 const gltfIgnoreShadowCastList = [    
     'Blank_Paper',
     'Blank_Paper001',

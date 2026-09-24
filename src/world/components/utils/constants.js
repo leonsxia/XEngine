@@ -671,7 +671,7 @@ const GLTFS = [{
 }, {
     name: GLTF_NAMES.DUNGEON_GATE_1, src: 'in_room/entries/dungeon_gate_1.glb'
 }, {
-    name: GLTF_NAMES.HAND_CRAFTED_STUDIO, src: 'scene_objects/rooms/hand_crafted_studio_1-2k/hand_crafted_studio.gltf'
+    name: GLTF_NAMES.HAND_CRAFTED_STUDIO, src: 'scene_objects/rooms/hand_crafted_studio_1-4k/hand_crafted_studio.gltf'
 }];
 
 const SHADER_NAMES = {
