@@ -2180,7 +2180,7 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"M_2_Room_Floor_2k",
+			"name":"M_2-3_Room_Main_Rear_Floor_2k",
 			"normalTexture":{
 				"index":30
 			},
@@ -2198,7 +2198,7 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"M_3_Room_Main_Rear_2k",
+			"name":"M_1_Room_Main_Wall_2k",
 			"normalTexture":{
 				"index":33
 			},
@@ -2215,30 +2215,12 @@
 			}
 		},
 		{
-			"doubleSided":true,
-			"name":"M_1_Room_Main_Wall_2k",
-			"normalTexture":{
-				"index":36
-			},
-			"occlusionTexture":{
-				"index":37
-			},
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":38
-				},
-				"metallicRoughnessTexture":{
-					"index":37
-				}
-			}
-		},
-		{
 			"alphaMode":"BLEND",
 			"doubleSided":true,
 			"name":"M_Decal_Wall_Leak_1k",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":39
+					"index":36
 				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
@@ -2249,21 +2231,45 @@
 			"doubleSided":true,
 			"name":"M_Decal_Tape_1k",
 			"normalTexture":{
-				"index":40
+				"index":37
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":41
+					"index":38
 				},
 				"metallicFactor":0,
 				"metallicRoughnessTexture":{
-					"index":42
+					"index":39
 				}
 			}
 		},
 		{
 			"doubleSided":true,
 			"name":"M_4_Window_1k",
+			"normalTexture":{
+				"index":40
+			},
+			"occlusionTexture":{
+				"index":41
+			},
+			"pbrMetallicRoughness":{
+				"baseColorTexture":{
+					"index":42
+				},
+				"metallicRoughnessTexture":{
+					"index":41
+				}
+			}
+		},
+		{
+			"alphaMode":"BLEND",
+			"doubleSided":true,
+			"extensions":{
+				"KHR_materials_transmission":{
+					"transmissionFactor":1
+				}
+			},
+			"name":"M_Window_Glass_1k",
 			"normalTexture":{
 				"index":43
 			},
@@ -2280,42 +2286,20 @@
 			}
 		},
 		{
-			"alphaMode":"BLEND",
-			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_transmission":{
-					"transmissionFactor":1
-				}
-			},
-			"name":"M_Window_Glass_1k",
-			"normalTexture":{
-				"index":46
-			},
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":47
-				},
-				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"index":48
-				}
-			}
-		},
-		{
 			"doubleSided":true,
 			"name":"M_7_Workbench_Bottom_1k",
 			"normalTexture":{
-				"index":49
+				"index":46
 			},
 			"occlusionTexture":{
-				"index":50
+				"index":47
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":51
+					"index":48
 				},
 				"metallicRoughnessTexture":{
-					"index":50
+					"index":47
 				}
 			}
 		}
@@ -3954,7 +3938,7 @@
 						"TANGENT":530
 					},
 					"indices":531,
-					"material":11
+					"material":10
 				}
 			]
 		},
@@ -3969,7 +3953,7 @@
 						"TANGENT":535
 					},
 					"indices":536,
-					"material":12
+					"material":11
 				}
 			]
 		},
@@ -4254,7 +4238,7 @@
 						"TANGENT":627
 					},
 					"indices":4,
-					"material":13
+					"material":12
 				}
 			]
 		},
@@ -4269,7 +4253,7 @@
 						"TANGENT":631
 					},
 					"indices":4,
-					"material":14
+					"material":13
 				}
 			]
 		},
@@ -4284,7 +4268,7 @@
 						"TANGENT":635
 					},
 					"indices":636,
-					"material":15
+					"material":14
 				}
 			]
 		},
@@ -4299,7 +4283,7 @@
 						"TANGENT":640
 					},
 					"indices":641,
-					"material":16
+					"material":15
 				}
 			]
 		},
@@ -4314,7 +4298,7 @@
 						"TANGENT":645
 					},
 					"indices":646,
-					"material":15
+					"material":14
 				}
 			]
 		},
@@ -4329,7 +4313,7 @@
 						"TANGENT":650
 					},
 					"indices":651,
-					"material":15
+					"material":14
 				}
 			]
 		},
@@ -4344,7 +4328,7 @@
 						"TANGENT":655
 					},
 					"indices":656,
-					"material":15
+					"material":14
 				}
 			]
 		},
@@ -4359,7 +4343,7 @@
 						"TANGENT":660
 					},
 					"indices":661,
-					"material":15
+					"material":14
 				}
 			]
 		},
@@ -4374,7 +4358,7 @@
 						"TANGENT":665
 					},
 					"indices":641,
-					"material":16
+					"material":15
 				}
 			]
 		},
@@ -4449,7 +4433,7 @@
 						"TANGENT":689
 					},
 					"indices":690,
-					"material":17
+					"material":16
 				}
 			]
 		},
@@ -4644,6 +4628,14 @@
 		},
 		{
 			"sampler":0,
+			"source":40
+		},
+		{
+			"sampler":0,
+			"source":41
+		},
+		{
+			"sampler":0,
 			"source":43
 		},
 		{
@@ -4656,27 +4648,7 @@
 		},
 		{
 			"sampler":0,
-			"source":43
-		},
-		{
-			"sampler":0,
 			"source":46
-		},
-		{
-			"sampler":0,
-			"source":47
-		},
-		{
-			"sampler":0,
-			"source":48
-		},
-		{
-			"sampler":0,
-			"source":49
-		},
-		{
-			"sampler":0,
-			"source":50
 		}
 	],
 	"images":[
@@ -4747,8 +4719,8 @@
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_12_Bench_Props_2k_Translucency",
-			"uri":"textures/T_12_Bench_Props_2k_Translucency.png"
+			"name":"T_12_Bench_Props_1k_Translucency",
+			"uri":"textures/T_12_Bench_Props_1k_Translucency.png"
 		},
 		{
 			"mimeType":"image/png",
@@ -4832,33 +4804,18 @@
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_2_Room_Floor_2k_Normal",
-			"uri":"textures/T_2_Room_Floor_2k_Normal.png"
+			"name":"T_2-3_room_main_rear_floor_2k_Normal",
+			"uri":"textures/T_2-3_room_main_rear_floor_2k_Normal.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_2_Room_Floor_2k_ORM",
-			"uri":"textures/T_2_Room_Floor_2k_ORM.png"
+			"name":"T_2-3_room_main_rear_floor_2k_ORM",
+			"uri":"textures/T_2-3_room_main_rear_floor_2k_ORM.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"T_2_Room_Floor_2k_BaseColor",
-			"uri":"textures/T_2_Room_Floor_2k_BaseColor.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"T_3_Room_Main_Rear_2k_Normal",
-			"uri":"textures/T_3_Room_Main_Rear_2k_Normal.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"T_3_Room_Main_Rear_2k_ORM",
-			"uri":"textures/T_3_Room_Main_Rear_2k_ORM.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"T_3_Room_Main_Rear_2k_BaseColor",
-			"uri":"textures/T_3_Room_Main_Rear_2k_BaseColor.png"
+			"name":"T_2-3_room_main_rear_floor_2k_BaseColor",
+			"uri":"textures/T_2-3_room_main_rear_floor_2k_BaseColor.png"
 		},
 		{
 			"mimeType":"image/png",
@@ -4914,11 +4871,6 @@
 			"mimeType":"image/png",
 			"name":"T_4_Window_1k_BaseColor-T_4_Window_1k_Opacity",
 			"uri":"textures/T_4_Window_1k_BaseColor-T_4_Window_1k_Opacity.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"T_4_Window_1k_ORM",
-			"uri":"textures/T_4_Window_1k_ORM-1.png"
 		},
 		{
 			"mimeType":"image/png",
