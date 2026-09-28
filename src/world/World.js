@@ -18,7 +18,7 @@ import { Picker } from "./systems/Picker";
 import { ControlEventDispatcher } from "./systems/ControlEventDispatcher";
 
 import { loadedTextures, loadTextures } from "./components/utils/textureHelper";
-import { initPickableModels, loadGLTFModels } from "./components/utils/gltfHelper";
+import { initPickableModels, loadGLTFModels, setKTX2Loader } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
 import { loadImages } from "./components/utils/imageHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
@@ -149,7 +149,8 @@ class World {
     async initScene(name) {
 
         const start = Date.now();
-            
+
+        setKTX2Loader(this.#renderer);
         const [textures, gltfs] = await Promise.all([
             loadTextures(TEXTURES),
             loadGLTFModels(GLTFS),

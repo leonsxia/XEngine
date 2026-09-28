@@ -1,4 +1,7 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 import { 
     GLTFModel, BayonetItem, GlockItem, PistolItem, RevolverItem, SMGShortItem,
     PistolAmmoBox, MagnumAmmoBox, SMGAmmoBox,
@@ -9,6 +12,11 @@ import { GLTF_NAMES } from './constants';
 function getGLTFLoader() {
 
     const loader = new GLTFLoader().setPath('assets/models/gltf/');
+    const dracoLoader = new DRACOLoader();
+    
+    dracoLoader.setDecoderPath('node_modules/three/examples/jsm/libs/draco/');
+    loader.setDRACOLoader(dracoLoader);
+    loader.setMeshoptDecoder(MeshoptDecoder);    
 
     return loader;
 
@@ -16,6 +24,15 @@ function getGLTFLoader() {
 
 const worldGLTFLoader = getGLTFLoader();
 const loadedGLTFModels = {};
+const ktx2Loader = new KTX2Loader();
+
+function setKTX2Loader(renderer) {
+
+    // ktx2Loader.setTranscoderPath('node_modules/three/examples/jsm/libs/basis/');
+    ktx2Loader.detectSupport(renderer);
+    worldGLTFLoader.setKTX2Loader(ktx2Loader);
+
+}
 
 async function loadGLTFModels(sources) {
 
@@ -150,4 +167,4 @@ async function initPickableModels() {
 
 }
 
-export { worldGLTFLoader, loadedGLTFModels, loadGLTFModels, initPickableModels };
+export { worldGLTFLoader, loadedGLTFModels, setKTX2Loader, loadGLTFModels, initPickableModels };
