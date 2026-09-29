@@ -67,7 +67,6 @@ class VintageGrandfatherClock extends ObstacleBase {
         this.setPickLayers();
 
         // remove glass
-        this.gltf.getMeshes(this.gltf.group);
         const cylinder001_1 = this.gltf.meshes.find(m => m.name === 'Cylinder001_1');
 
         cylinder001_1.parent.remove(cylinder001_1);

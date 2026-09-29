@@ -175,11 +175,11 @@ function addShadow(light, mapSize = { width: 1024, height: 1024 }) {
 
             {
 
-                const { shadow: { camera: { aspect } } } = light;
+                const { shadow: { camera: { aspect, near } } } = light;
 
                 light.shadow.camera.fov = 90;
                 light.shadow.camera.aspect = aspect;
-                light.shadow.camera.near = .5;
+                light.shadow.camera.near = near;
                 light.shadow.camera.far = 500;   // default 500
             }
 

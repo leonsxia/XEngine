@@ -3,7 +3,6 @@ import { createOBBBox } from '../../../physics/collisionHelper';
 import { GLTFModel, CollisionBox, Box, GeometryDesc, MeshDesc } from '../../../Models';
 import { TVNoise } from '../../../basic/colorBase';
 import { LightLamp } from '../lighting/LightLamp';
-import { updateSingleLightCamera } from '../../../shadowMaker';
 import { BOX_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'in_room/electronics/Television_01_1k/Television_01_1k.gltf';
@@ -29,10 +28,6 @@ class Television01 extends LightLamp {
 
     gltf;
 
-    spotLightPosition = new Vector3();
-    spotLightTargetPos = new Vector3();
-    spotLightTarget = new Object3D();
-
     constructor(specs) {
 
         super(specs);
@@ -40,6 +35,7 @@ class Television01 extends LightLamp {
         const { name, scale = [1, 1, 1], lines = false } = specs;
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
+        const { bloomTransparency = .1 } = specs;
 
         this._scale = new Array(...scale);
 
@@ -78,16 +74,25 @@ class Television01 extends LightLamp {
         const bloomScreen = this._bloomScreen = new Box(bloomScreenSpecs);
         this.bloomObjects = [bloomScreen];
         this.setBloomObjectsFather();
-        this.setBloomObjectsTransparent();
+        this.setBloomObjectsTransparent(bloomTransparency);
         this.setBloomObjectsLayers();
         this.setBloomObjectsVisible(false);
         this.addBloomObjects();
+        this.setLightingMap('screen', {
+            bloomObject: bloomScreen,
+            intensity: 0,
+            lightObject: null,
+            position: new Vector3(this._screenX, this._screenY, this._screenZ),
+            currentPosition: new Vector3(),
+            target: new Vector3(this._screenX, this._screenY, this._targetZ + this._screenZ),
+            currentTarget: new Vector3(),
+            targetObject: new Object3D()
+        });
 
         this.update(false, false);
 
         this.group.add(
-            this.gltf.group,
-            this.spotLightTarget
+            this.gltf.group
         );
 
     }
@@ -113,88 +118,6 @@ class Television01 extends LightLamp {
 
         }
 
-        this.updateBloom(needToUpdateLight);
-
-        // update gltf scale
-        this.gltf.setScale(this.scale);
-
-
-        if (needToUpdateOBBnRay) {
-
-            this.updateOBBs();
-
-        }
-
-    }
-
-    addLight(lightObj, type) {
-
-        const { light } = lightObj;
-
-        switch(type) {
-
-            case 'screen':  // spot light
-                {
-                    light.position.add(this.spotLightPosition);
-                    this.spotLightTarget.position.add(light.target.position);
-                    light.target = this.spotLightTarget;
-
-                    this.bloomObjects[0].linked = lightObj;
-                    this.bloomObjects[0].material.color.copy(light.color);
-                }
-
-                break;
-
-        }
-
-        this.lightObjs.push(lightObj);
-        this.lightIntensities.push(light.intensity);
-
-        this.bindBloomEvents(lightObj);
-
-        this.group.add(light);
-
-    }
-
-    setLightPositionNTarget(light, position, target, type) {
-
-        switch(type) {
-
-            case 'screen':
-                {
-                    const pos = new Vector3(...position);
-                    const tar = new Vector3(...target);
-                    light.position.copy(pos.add(this.spotLightPosition));
-                    light.target.position.copy(tar.add(this.spotLightTargetPos));
-                }
-
-                break;
-
-        }
-
-    }
-
-    getLightPositionNTarget(light, type) {
-
-        const results = {};
-
-        switch (type) {
-
-            case 'screen':
-                {
-                    results.position = light.position.clone().sub(this.spotLightPosition);
-                    results.target = light.target.position.clone().sub(this.spotLightTargetPos);
-                }
-
-                break;
-        }
-
-        return results;
-
-    }
-
-    updateBloom(needToUpdateLight = true) {
-
         // update bloom screen scale and position
         const screenX = this._screenX * this.scale[0];
         const screenY = this._screenY * this.scale[1];
@@ -202,27 +125,16 @@ class Television01 extends LightLamp {
 
         this._bloomScreen.setScale(this.scale).setPosition([screenX, screenY, screenZ]);
 
-        // update bloom screen linked light position and target
-        const spotLightPosition = new Vector3(screenX, screenY, screenZ);
-        const spotLightTargetPos = new Vector3(screenX, screenY, screenZ + this._targetZ * this.scale[2]);
+        this.updateLightingMap(needToUpdateLight);
 
-        if (needToUpdateLight) {
+        // update gltf scale
+        this.gltf.setScale(this.scale);
 
-            const lightObj = this._bloomScreen.linked;
-            const { light } = lightObj;
+        if (needToUpdateOBBnRay) {
 
-            light.position.sub(this.spotLightPosition).add(spotLightPosition);
-            light.target.position.sub(this.spotLightTargetPos).add(spotLightTargetPos);            
-            updateSingleLightCamera.call(null, lightObj, false);
-
-        } else {
-
-            this.spotLightTarget.position.copy(spotLightTargetPos);
+            this.updateOBBs();
 
         }
-
-        this.spotLightPosition.copy(spotLightPosition);
-        this.spotLightTargetPos.copy(spotLightTargetPos);
 
     }
 
@@ -242,7 +154,7 @@ class Television01 extends LightLamp {
 
         this.rapierInstances.push(boxMesh);
 
-        this.updateBloom();
+        this.updateLightingMap();
 
     }
 

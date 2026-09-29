@@ -465,6 +465,30 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                 type: 'light-num',
                 changeFn: null
             }, {
+                name: 'x',
+                prop: 'scale.x',
+                value: null,
+                sub: 'scale',
+                params: [0.01, 10, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'y',
+                prop: 'scale.y',
+                value: null,
+                sub: 'scale',
+                params: [0.01, 10, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'z',
+                prop: 'scale.z',
+                value: null,
+                sub: 'scale',
+                params: [0.01, 10, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
                 name: 'visible',
                 prop: 'light helper',
                 value: null,
@@ -830,8 +854,8 @@ function makeObjectsGuiConfig(objects) {
     
             } else if (object.isMesh) {
 
-                object.father.updateRay?.();
-                object.father.updateOBB?.();
+                object.father?.updateRay?.();
+                object.father?.updateOBB?.();
 
             }
 
@@ -1113,7 +1137,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (object.father.isArea || object.father.isWater || object.father.isWaterCube ) {
+        if (object.father && (object.father.isArea || object.father.isWater || object.father.isWaterCube)) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationXDegree',
@@ -1267,7 +1291,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (object.father.isWater || object.father.isWaterCube) {
+        if (object.father && (object.father.isWater || object.father.isWaterCube)) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'waterColor',
@@ -1329,7 +1353,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER && object.father.isTerrain) {
+        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER && object.father?.isTerrain) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'width',
@@ -1405,7 +1429,7 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (object.father.isRotatableLadder) {
+        if (object.father?.isRotatableLadder) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'rotationXDegree',

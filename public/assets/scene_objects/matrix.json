@@ -67,8 +67,8 @@
         ],
         "defaultPlayer": "jill",
         "postProcessing": {
-            "bloomStrength": 1.68,
-            "bloomRadius": 0.74
+            "bloomStrength": 0.4,
+            "bloomRadius": 0.24
         },
         "currentRoomSequence": 0,
         "physics": "rapier"
@@ -283,8 +283,13 @@
                         ],
                         "position": [
                             0,
-                            0.2699999999999999,
-                            0.270000000000003
+                            0.730000000000001,
+                            -0.01999999999999571
+                        ],
+                        "scale": [
+                            0.5,
+                            0.5,
+                            0.5
                         ],
                         "intensity": 12.5,
                         "distance": 18,
@@ -408,15 +413,20 @@
                     "name": "safe_room_2_pointLight_1",
                     "display": "Ceiling Lamp Safe Room",
                     "detail": {
-                        "color": [255, 250, 235],
+                        "color": [235, 247, 255],
                         "position": [
                             0,
                             -0.30000000000000104,
                             0
                         ],
-                        "intensity": 30,
-                        "distance": 4,
-                        "decay": 2,
+                        "scale": [
+                            0.1,
+                            0.1,
+                            0.1
+                        ],
+                        "intensity": 5,
+                        "distance": 4.5,
+                        "decay": 0.8,
                         "shadowCameraAspect": 1,
                         "bias": -0.0008,
                         "normalBias": 0.0047
@@ -429,6 +439,43 @@
                     "visible": true,
                     "attachTo": "safe_room_2_modern_ceiling_lamp_01",
                     "turnOn": true,
+                    "room": "safe_room_2"
+                },
+                {
+                    "name": "safe_room_2_pointLight_2",
+                    "display": "Lamp Light",
+                    "detail": {
+                        "color": [
+                            225,
+                            186,
+                            132
+                        ],
+                        "position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "scale": [
+                            0.05,
+                            0.05,
+                            0.05
+                        ],
+                        "intensity": 4.45,
+                        "distance": 1.88,
+                        "decay": 0.77,
+                        "shadowCameraAspect": 1,
+                        "bias": -0.0049,
+                        "shadowCameraNear": 0.27
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "safe_room_2_hand_crafted_studio",
+                    "turnOn": true,
+                    "alwaysOn": true,
                     "room": "safe_room_2"
                 }
             ]
@@ -907,7 +954,8 @@
                     ],
                     "rotationY": 3.8397,
                     "canBeIgnored": true,
-                    "transparent": false
+                    "transparent": false,
+                    "bloomTransparency": 1
                 },
                 {
                     "type": "HexCylinderPillar",
@@ -1388,7 +1436,8 @@
                     "rotationY": 0,
                     "castShadow": false,
                     "receiveShadow": false,
-                    "transparent": false
+                    "transparent": false,
+                    "bloomTransparency": 0.6
                 },
                 {
                     "type": "SecurityLight",
@@ -1745,7 +1794,8 @@
                     "rotationY": 0,
                     "castShadow": false,
                     "receiveShadow": false,
-                    "transparent": false
+                    "transparent": false,
+                    "bloomTransparency": 0.6
                 }
             ],
             "floors": [
@@ -1891,12 +1941,13 @@
                     "position": [
                         0,
                         0.57,
-                        0
+                        0.55
                     ],
                     "rotationY": 0,
                     "castShadow": false,
                     "receiveShadow": false,
-                    "transparent": false
+                    "transparent": false,
+                    "bloomTransparency": 0.5
                 }
             ],
             "floors": [],

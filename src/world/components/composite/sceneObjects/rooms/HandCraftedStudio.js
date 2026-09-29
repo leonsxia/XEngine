@@ -1,4 +1,5 @@
-import { SceneObjectBase } from "../SceneObjectBase";
+import { Vector3 } from "three";
+import { LightingSceneBase, BLOOM_TYPE_DEFAULT } from "../LightingSceneBase";
 import { GLTFModel, GeometryDesc, MeshDesc, Plane } from '../../../Models';
 import { BOX_GEOMETRY } from '../../../utils/constants';
 
@@ -11,7 +12,7 @@ const gltfIgnoreShadowCastList = [
     'Wall_Tape'
 ]
 
-class HandCraftedStudio extends SceneObjectBase {
+class HandCraftedStudio extends LightingSceneBase {
 
     _width = 4.67;
     _height = 3.21;
@@ -55,8 +56,7 @@ class HandCraftedStudio extends SceneObjectBase {
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, shadowCastIgnoreList: gltfIgnoreShadowCastList };
         this.GLTFs.push(new GLTFModel(gltfSpecs));
 
-        this.createBoundaries();
-        this.update();
+        this.createBoundaries();        
 
         this.addGLTFs();
 
@@ -65,6 +65,22 @@ class HandCraftedStudio extends SceneObjectBase {
     async init() {
 
         await super.init();
+
+        const lampBulb = this.GLTFs[0].meshes.find(m => m.name === 'Lamp_Bulb_Low');
+        lampBulb.material = lampBulb.material.clone();
+        lampBulb.alwaysVisible = true;
+
+        this.bloomObjects = [lampBulb];
+        this.setBloomObjectsFather();
+        this.setBloomObjectsLayers();
+        this.setLightingMap(BLOOM_TYPE_DEFAULT, {
+            bloomObject: lampBulb,
+            intensity: 0,
+            lightObject: null,
+            position: new Vector3(-1.87, - 0.25, - 1.67),
+            currentPosition: new Vector3()
+        });
+        this.update(false);
 
     }
 
@@ -103,7 +119,7 @@ class HandCraftedStudio extends SceneObjectBase {
 
     }
 
-    update() {
+    update(needToUpdateLight = true) {
 
         // update gltfs scale
         for (let i = 0, il = this.GLTFs.length; i < il; i++) {
@@ -111,6 +127,8 @@ class HandCraftedStudio extends SceneObjectBase {
             this.GLTFs[i].setScale(this._scale);
 
         }
+
+        this.updateLightingMap(needToUpdateLight);
 
         this.updateBoundaries();
 
@@ -204,8 +222,6 @@ class HandCraftedStudio extends SceneObjectBase {
             this._ceiling.mesh,
             this._floor.mesh
         );
-
-
 
     }
 

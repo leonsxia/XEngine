@@ -278,10 +278,9 @@ class SceneObjectBase {
         for (let i = 0, il = this.GLTFs.length; i < il; i++) {
 
             const gltf = this.GLTFs[i];
-            gltf.group.traverse((mesh) => { 
+            gltf.traverse((mesh) => { 
                 
                 mesh.isSceneModel = true;
-                mesh.father = gltf;
             
             });
 

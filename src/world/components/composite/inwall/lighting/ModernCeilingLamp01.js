@@ -1,7 +1,7 @@
 import { Vector3 } from 'three';
 import { GLTFModel, Sphere } from '../../../Models';
 import { khaki } from '../../../basic/colorBase';
-import { LightLamp } from './LightLamp';
+import { LightLamp, BLOOM_TYPE_DEFAULT } from './LightLamp';
 
 const GLTF_SRC = 'in_room/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_01_1k.gltf';
 
@@ -18,7 +18,6 @@ class ModernCeilingLamp01 extends LightLamp {
     gltf;
 
     _lightY = - .3;
-    lightPosition = new Vector3(0, this._lightY, 0);
 
     constructor(specs) {
 
@@ -26,6 +25,7 @@ class ModernCeilingLamp01 extends LightLamp {
 
         const { name, scale = [1, 1] } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
+        const { bloomTransparency = 1 } = specs;
 
         this._scale = [scale[0], scale[1], scale[0]];
 
@@ -42,10 +42,17 @@ class ModernCeilingLamp01 extends LightLamp {
 
         this.bloomObjects = [lamp];
         this.setBloomObjectsFather();
-        this.setBloomObjectsTransparent();
+        this.setBloomObjectsTransparent(bloomTransparency);
         this.setBloomObjectsLayers();
         this.setBloomObjectsVisible(false);
         this.addBloomObjects();
+        this.setLightingMap(BLOOM_TYPE_DEFAULT, {
+            bloomObject: lamp,
+            intensity: 0,
+            lightObject: null,
+            position: new Vector3(0, this._lightY, 0),
+            currentPosition: new Vector3()
+        });
 
         this.update(false);
 
@@ -79,7 +86,7 @@ class ModernCeilingLamp01 extends LightLamp {
 
     get scale() {
 
-        return [this._scale[0], this._scale[1]];
+        return this._scale;
 
     }
 
@@ -102,52 +109,10 @@ class ModernCeilingLamp01 extends LightLamp {
         this._lamp.setScale(this._scale).setPosition([0, lampY, 0]);
 
         // update bloom lamp linked point light position
-        const lightY = this._lightY * this.scale[1];
-        const lampLightPosition = new Vector3(0, lightY, 0);
-
-        if (needToUpdateLight) {
-
-            const lightObj = this._lamp.linked;
-            const { light } = lightObj;
-
-            light.position.sub(this.lightPosition).add(lampLightPosition);
-
-        }
-
-        this.lightPosition.copy(lampLightPosition);
+        this.updateLightingMap(needToUpdateLight);
 
         // update gltf scale
         this.gltf.setScale(this._scale);
-
-    }
-
-    addLight(lightObj) {
-
-        const { light } = lightObj;
-
-        light.position.add(this.lightPosition);
-
-        this.lightObjs.push(lightObj);
-        this.lightIntensities.push(light.intensity);
-
-        this.bloomObjects[0].linked = lightObj;
-        this.bloomObjects[0].material.color.copy(light.color);
-        this.bindBloomEvents(lightObj);
-
-        this.group.add(light);
-
-    }
-
-    setLightPosition(light, position) {
-
-        const pos = new Vector3(...position);
-        light.position.copy(pos.add(this.lightPosition));
-
-    }
-
-    getLightPosition(light) {
-
-        return light.position.clone().sub(this.lightPosition);
 
     }
 

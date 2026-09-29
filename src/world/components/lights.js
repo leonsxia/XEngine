@@ -136,7 +136,7 @@ function createHemisphereLight(lightSpecs) {
 
 function createPointLight(lightSpecs) {
 
-    const { detail: { color, position, intensity, distance = 0, decay = 2, shadowRadius = 2, bias = 0, normalBias = 0, shadowCameraAspect = 1 } } = lightSpecs;
+    const { detail: { color, position, scale = [1, 1, 1], intensity, distance = 0, decay = 2, shadowRadius = 2, bias = 0, normalBias = 0, shadowCameraAspect = 1, shadowCameraNear = .5 } } = lightSpecs;
 
     const light = new PointLight(new Color(colorStr(...color)), intensity, distance, decay);
 
@@ -144,8 +144,10 @@ function createPointLight(lightSpecs) {
     light.shadow.bias =  bias;
     light.shadow.normalBias = normalBias;
     light.shadow.camera.aspect = shadowCameraAspect;
+    light.shadow.camera.near = shadowCameraNear;
 
     light.position.set(...position);
+    light.scale.set(...scale);
 
     return light;
 

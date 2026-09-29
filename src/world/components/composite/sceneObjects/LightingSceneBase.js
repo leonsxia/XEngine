@@ -1,13 +1,13 @@
 import { Vector3 } from 'three';
-import { ObstacleBase } from '../ObstacleBase';
-import { updateSingleLightCamera } from '../../../shadowMaker';
-import { BLOOM_SCENE_LAYER } from '../../../utils/constants';
+import { SceneObjectBase } from "./SceneObjectBase";
+import { updateSingleLightCamera } from "../../shadowMaker";
+import { BLOOM_SCENE_LAYER } from "../../utils/constants";
 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
 const BLOOM_TYPE_DEFAULT = 'main';
 
-class LightLamp extends ObstacleBase {
+class LightingSceneBase extends SceneObjectBase {
 
     bloomObjects = [];
     lightObjs = [];
@@ -28,13 +28,6 @@ class LightLamp extends ObstacleBase {
     alwaysOn = true;
 
     constructor(specs) {
-
-        const { isObstacle = false, enableWallOBBs = false, movable = false, climbable = false } = specs;
-
-        specs.isObstacle = isObstacle;
-        specs.enableWallOBBs = enableWallOBBs;
-        specs.movable = movable;
-        specs.climbable = climbable;
 
         super(specs);
 
@@ -108,7 +101,7 @@ class LightLamp extends ObstacleBase {
     }
 
     setLightPosition(light, position, bloomType = BLOOM_TYPE_DEFAULT) {
-    
+
         const { currentPosition } = this.lightingMap.get(bloomType);
         _v1.set(...position);
         light.position.copy(_v1.add(currentPosition));
@@ -306,25 +299,8 @@ class LightLamp extends ObstacleBase {
 
     }
 
-    tickFall(delta) {
-
-        this.fallingTick({ delta, obstacle: this });
-
-        this.updateOBBs();
-
-        this.updateLightObjects();
-
-    }
-
-    onGround() {
-
-        this.onGroundTick({ floor: this.hittingGround, obstacle: this });
-        
-        this.updateOBBs();
-
-        this.updateLightObjects();
-        
-    }
+    // this is can be inherited by children
+    updateLights() {}
 
     onRapierUpdated() {
 
@@ -335,4 +311,4 @@ class LightLamp extends ObstacleBase {
 
 }
 
-export { LightLamp, BLOOM_TYPE_DEFAULT };
+export { LightingSceneBase, BLOOM_TYPE_DEFAULT };

@@ -262,9 +262,9 @@ class PostProcessor {
 
         if (bloomLayer.test(obj.layers)) {
 
-            if (!obj.father.alwaysOn) {
+            if (!obj.attachTo.alwaysOn) {
 
-                obj.father.turnOnLights();
+                obj.attachTo.turnOnLights();
 
             }
 
@@ -276,9 +276,9 @@ class PostProcessor {
 
         if (bloomLayer.test(obj.layers)) {
 
-            if (!obj.father.alwaysOn) {
+            if (!obj.attachTo.alwaysOn) {
 
-                obj.father.turnOffLights();
+                obj.attachTo.turnOffLights();
 
             }
 
