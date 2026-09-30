@@ -464,8 +464,9 @@
                         "distance": 1.88,
                         "decay": 0.77,
                         "shadowCameraAspect": 1,
-                        "bias": -0.0049,
-                        "shadowCameraNear": 0.27
+                        "bias": 0,
+                        "normalBias": 0.00392,
+                        "shadowCameraNear": 0.23
                     },
                     "debug": true,
                     "shadow": true,
