@@ -1,9 +1,10 @@
 import { updateSingleLightCamera } from "../components/shadowMaker";
-import { WEAPONS, GUI_CONFIG, CAMERAS } from "../components/utils/constants";
+import { WEAPONS, GUI_CONFIG, CAMERAS, TONE_MAPPING } from "../components/utils/constants";
 import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, makeSubGuiControlFolder, setupFunctionPanel } from "../components/utils/guiConfigHelper";
 import { Gui } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcessor";
 import { Resizer } from "./Resizer";
+import { toneMappingStr } from "./renderer";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
@@ -99,6 +100,7 @@ class GuiMaker {
 
         this.guiLeftSpecs.details.push(makeFunctionGuiConfig('Actions', 'actions'));
 
+        // screen settings
         {
 
             const folder = makeFolderGuiConfig({ folder: 'Screen', parent: 'screen', close: true });
@@ -123,6 +125,7 @@ class GuiMaker {
 
         }
 
+        // select control
         this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
             folder: 'Select Control',
             parent: 'selectControl',
@@ -134,6 +137,7 @@ class GuiMaker {
             close: true
         }));
 
+        // select role
         if ($scene.showRoleSelector) {
             const roles = [];
 
@@ -156,6 +160,18 @@ class GuiMaker {
                 close: true
             }));
         }
+
+        // tone mapping
+        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+            folder: 'Tone Mapping',
+            parent: 'toneMapping',
+            name: 'Mapping',
+            value: { Mapping: toneMappingStr($scene.renderer.toneMapping) },
+            params: TONE_MAPPING,
+            type: 'dropdown',
+            changeFn: $scene.changeToneMapping.bind($scene),
+            close: true
+        }));
 
         // audio
         {
@@ -210,7 +226,7 @@ class GuiMaker {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'PostEffect',
-                value: { PostEffect: 'disable' },
+                value: { PostEffect: this.getEnableStr($scene.setup.postProcessing?.enable) },
                 params: ['enable', 'disable'],
                 type: 'dropdown',
                 changeFn: $scene.enablePostEffect.bind($scene)
@@ -260,14 +276,14 @@ class GuiMaker {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'Bloom',
-                value: { Bloom: 'disable' },
+                value: { Bloom: this.getEnableStr($scene.setup.postProcessing?.bloomEnable) },
                 params: ['enable', 'disable'],
                 type: 'dropdown',
                 changeFn: $scene.enableBloom.bind($scene)
             }));
 
             const bloomStrength = $scene.setup.postProcessing?.bloomStrength;
-            this.bloomSetting.BloomStrength = bloomStrength ? bloomStrength : DEFAULT_BLOOM.strength;
+            this.bloomSetting.BloomStrength = bloomStrength ?? DEFAULT_BLOOM.strength;
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BloomStrength',
@@ -278,7 +294,7 @@ class GuiMaker {
             }));
 
             const bloomRadius = $scene.setup.postProcessing?.bloomRadius;
-            this.bloomSetting.BloomRadius = bloomRadius ? bloomRadius : DEFAULT_BLOOM.radius;
+            this.bloomSetting.BloomRadius = bloomRadius ?? DEFAULT_BLOOM.radius;
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'BloomRadius',
@@ -668,6 +684,12 @@ class GuiMaker {
             }
 
         }
+
+    }
+
+    getEnableStr(bool) {
+
+        return bool ? 'enable' : 'disable';
 
     }
 

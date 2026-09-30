@@ -1,9 +1,8 @@
-// eslint-disable-next-line no-unused-vars
-import { WebGLRenderer, ACESFilmicToneMapping, AgXToneMapping, ReinhardToneMapping, CineonToneMapping, LinearToneMapping } from 'three';
+import { WebGLRenderer, NoToneMapping, LinearToneMapping, ACESFilmicToneMapping, AgXToneMapping, ReinhardToneMapping, CineonToneMapping } from 'three';
 
 function createRenderer() {
     const renderer = new WebGLRenderer({ antialias: true });
-    
+
     // turn on the physically correct lighting model
     renderer.physicallyCorrectLights = true;
     renderer.toneMapping = AgXToneMapping;
@@ -12,4 +11,39 @@ function createRenderer() {
     return renderer;
 }
 
-export { createRenderer };
+function toneMappingStr(tone) {
+
+    switch (tone) {
+        case NoToneMapping:
+
+            return 'NoTone';
+
+        case ACESFilmicToneMapping:
+
+            return 'Filmic';
+
+        case AgXToneMapping:
+
+            return 'AgX';
+
+        case ReinhardToneMapping:
+
+            return 'Reinhard';
+
+        case CineonToneMapping:
+
+            return 'Cineon';
+
+        case LinearToneMapping:
+
+            return 'Linear';
+
+        default:
+
+            return 'AgX';
+
+    }
+
+}
+
+export { createRenderer, toneMappingStr };

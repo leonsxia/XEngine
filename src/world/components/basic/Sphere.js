@@ -7,7 +7,6 @@ class Sphere extends BasicObject {
 
     constructor(specs) {
 
-        specs.useStandardMaterial = specs.useStandardMaterial ?? true;
         super(SPHERE, specs);
 
         this.mesh = new Mesh(this.geometry, this.material);

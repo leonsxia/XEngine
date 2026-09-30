@@ -6,7 +6,7 @@ import { WorldControls } from '../systems/Controls.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcessor.js';
-import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS, PHYSICS_TYPES } from '../components/utils/constants.js';
+import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS, PHYSICS_TYPES, TONE_MAPPING } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
 import { UpdatableQueue } from '../components/updatables/UpdatableQueue.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
@@ -20,6 +20,7 @@ import { pdaItemViewer } from '../systems/ItemViewer.js';
 import { AudioMixer } from '../components/updatables/AudioMixer.js';
 import { RapierWorld } from '../components/physics/rapier/RapierWorld.js';
 import { GLOBALS } from '../systems/globals.js';
+import { toneMappingStr } from '../systems/renderer.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -110,6 +111,8 @@ class WorldScene {
     sceneSavedSetup;
     jsonFileName;
 
+    selectedTone;
+
     loaded = false;
     isRunning = false;
 
@@ -195,7 +198,9 @@ class WorldScene {
             camera: { position = [0, 0, 0] }, defaultPlayer, resolution = 1,
             enableGui = false, enablePicker = false, enableShadow = false,
             enableTPC = false, enableIC = false,
-            physics, currentRoomSequence = 0
+            physics, currentRoomSequence = 0,
+            toneMapping = toneMappingStr(TONE_MAPPING.AgX),
+            postProcessing = { enable: false, bloomEnable: false }
         } = this.setup;
 
         // set camera initial position and save the state
@@ -208,6 +213,9 @@ class WorldScene {
         this.controls.defControl.saveState();
 
         this.loadSequence = currentRoomSequence;
+
+        this.renderer.toneMapping = TONE_MAPPING[toneMapping];
+        this.selectedTone = TONE_MAPPING[toneMapping];
 
         // only set pixel ratio at first time
         if (devicePixelRatio > 1) {
@@ -412,10 +420,7 @@ class WorldScene {
         }        
 
         // role selector
-        this.showRoleSelector = true;
-
-        // post processor
-        this.enablePostProcessing(false);
+        this.showRoleSelector = true;        
 
         // Gui setup
         if (enableGui) {
@@ -455,6 +460,11 @@ class WorldScene {
 
         }
 
+        // post processor
+        this.enablePostEffect(postProcessing.enable ? 'enable' : 'disable');
+        // bloom must set after gui setup, bloomStrength and bloomRadius will be initialized in the gui setup
+        this.enableBloom(postProcessing.bloomEnable ? 'enable' : 'disable');
+
         this.showCPlaneLines(false);
         this.showCPlaneArrows(false);
 
@@ -492,10 +502,10 @@ class WorldScene {
         }
 
         this.sceneBuilder.worldScene = this;
-
-        // set shadow and picker everytime load this scene, but not first time loading
+        
         if (this.loaded) {
 
+            // set shadow and picker everytime load this scene, but not first time loading
             this.renderer.shadowMap.enabled = enableShadow;
 
             if (enablePicker) {
@@ -505,6 +515,9 @@ class WorldScene {
             }
 
             this.initContainer();
+
+            // set tone mapping to current selected
+            this.renderer.toneMapping = this.selectedTone;
 
         }
 
@@ -880,6 +893,13 @@ class WorldScene {
 
         this.resizer.changeScreenAspect(size);
         pdaItemViewer._resizer.changeScreenAspect(size);
+
+    }
+
+    changeToneMapping(tone) {
+
+        this.renderer.toneMapping = tone;
+        this.selectedTone = tone;
 
     }
 

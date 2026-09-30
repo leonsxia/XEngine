@@ -37,7 +37,7 @@ class ModernCeilingLamp01 extends LightingObjectBase {
         this.gltf.setScale([scale[0], scale[1], scale[0]]);
 
         // bloom object
-        const lampSpecs = { name: `${name}_lamp`, size: { radius: this._lampRadius, widthSegments: 32, heightSegments: 32 }, color: khaki, transparent: true }
+        const lampSpecs = { name: `${name}_lamp`, size: { radius: this._lampRadius, widthSegments: 32, heightSegments: 32 }, color: khaki, transparent: true, useStandardMaterial: true }
         const lamp = this._lamp = new Sphere(lampSpecs);
 
         this.bloomObjects = [lamp];

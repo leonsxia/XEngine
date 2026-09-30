@@ -14,6 +14,7 @@ const PICKED_ANGLE_STEPS = .1;
 
 const PICKED_WEAPON_NUMBER_STEPS = .001;
 const PICKED_WEAPON_ANGLE_STEPS = .01;
+const LIGHT_BIAS_STEPS = .00001;
 
 const MAX_ANGLE = 360;
 const MAX_RADIUS = 3.14;
@@ -210,7 +211,7 @@ function addDirectionalLight(light, specs) {
                 prop: 'shadow bias',
                 value: null,
                 sub: 'shadow',
-                params: [- .01, 0.01, .0001],
+                params: [- .01, 0.01, LIGHT_BIAS_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -218,7 +219,7 @@ function addDirectionalLight(light, specs) {
                 prop: 'shadow normalBias',
                 value: null,
                 sub: 'shadow',
-                params: [- .1, 0.1, .0001],
+                params: [- .1, 0.1, LIGHT_BIAS_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -518,7 +519,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     prop: 'shadow bias',
                     value: null,
                     sub: 'shadow',
-                    params: [- .01, 0.01, .0001],
+                    params: [- .01, 0.01, LIGHT_BIAS_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -526,7 +527,7 @@ function makePointLightGuiConfig(pointLightSpecsArr) {
                     prop: 'shadow normalBias',
                     value: null,
                     sub: 'shadow',
-                    params: [- .1, 0.1, .0001],
+                    params: [- .1, 0.1, LIGHT_BIAS_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -734,7 +735,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     prop: 'shadow bias',
                     value: null,
                     sub: 'shadow',
-                    params: [- .01, 0.01, .0001],
+                    params: [- .01, 0.01, LIGHT_BIAS_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {
@@ -742,7 +743,7 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
                     prop: 'shadow normalBias',
                     value: null,
                     sub: 'shadow',
-                    params: [- .1, 0.1, .0001],
+                    params: [- .1, 0.1, LIGHT_BIAS_STEPS],
                     type: 'light-num',
                     changeFn: null
                 }, {

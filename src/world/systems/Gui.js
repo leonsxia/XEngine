@@ -714,7 +714,7 @@ class Gui {
 
     findController(gui, folder, controller) {
 
-        let ctl = null;
+        let ctl;
         
         if (folder) {
 

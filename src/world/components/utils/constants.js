@@ -1,4 +1,7 @@
-import { RepeatWrapping, MirroredRepeatWrapping } from 'three';
+import {
+    RepeatWrapping, MirroredRepeatWrapping,
+    NoToneMapping, LinearToneMapping, ReinhardToneMapping, CineonToneMapping, ACESFilmicToneMapping, AgXToneMapping, NeutralToneMapping
+} from 'three';
 
 // texture
 const REPEAT_WRAPPING = RepeatWrapping;
@@ -19,6 +22,17 @@ const HEMISPHERE_LIGHT = 'HemisphereLight';
 const POINT_LIGHT = 'PointLight';
 const SPOT_LIGHT = 'SpotLight';
 const RECT_AREA_LIGHT = 'RectAreaLight';
+
+// tone mapping
+const TONE_MAPPING = {
+    NoTone: NoToneMapping,
+    Linear: LinearToneMapping,
+    Reinhard: ReinhardToneMapping,
+    Cineon: CineonToneMapping,
+    Filmic: ACESFilmicToneMapping,
+    AgX: AgXToneMapping,
+    Neutral: NeutralToneMapping
+};
 
 // scene objects
 const AXES = 'Axes';
@@ -808,6 +822,8 @@ export {
     POINT_LIGHT,
     SPOT_LIGHT,
     RECT_AREA_LIGHT,
+
+    TONE_MAPPING,
 
     AXES,
     GRID,

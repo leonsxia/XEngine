@@ -37,8 +37,8 @@
         ],
         "defaultPlayer": "jill",
         "postProcessing": {
-            "bloomStrength": 1.68,
-            "bloomRadius": 0.74
+            "bloomStrength": 0.5,
+            "bloomRadius": 0.24
         },
         "physics": "rapier"
     },

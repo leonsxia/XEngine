@@ -38,9 +38,12 @@
         "resolution": 0.5,
         "defaultPlayer": "jill",
         "postProcessing": {
+            "enable": true,
+            "bloomEnable": true,
             "bloomStrength": 0.1,
             "bloomRadius": 0.24
         },
+        "toneMapping": "Cineon",
         "physics": "rapier"
     },
     "players": [
@@ -170,8 +173,8 @@
                         "intensity": 120,
                         "distance": 0,
                         "decay": 2,
-                        "bias": 0.0002,
-                        "normalBias": 0.024
+                        "bias": 0.00025,
+                        "normalBias": 0.0375
                     },
                     "debug": true,
                     "shadow": true,
@@ -239,7 +242,7 @@
                         "color": [253, 182, 58],
                         "position": [0, 0.75, 0],
                         "scale": [0.3, 0.3, 0.3],
-                        "intensity": 25,
+                        "intensity": 20,
                         "distance": 18,
                         "decay": 2
                     },
@@ -261,7 +264,7 @@
                         "position": [0, 0.75, 0],
                         "scale": [0.3, 0.3, 0.3],
                         "intensity": 20,
-                        "distance": 18,
+                        "distance": 10,
                         "decay": 2
                     },
                     "debug": true,
@@ -282,7 +285,7 @@
                         "position": [0, 0.75, 0],
                         "scale": [0.3, 0.3, 0.3],
                         "intensity": 15,
-                        "distance": 18,
+                        "distance": 10,
                         "decay": 2
                     },
                     "debug": true,
@@ -304,7 +307,7 @@
                         "color": [201, 236, 253],
                         "position": [0, 0, 0],
                         "target": [0, 0, 0],
-                        "intensity": 26,
+                        "intensity": 13,
                         "distance": 10,
                         "decay": 0.33,
                         "penumbra": 0.35,
@@ -1228,7 +1231,8 @@
                     "position": [0, -0.73, -11.32],
                     "rotationY": 0,
                     "castShadow": false,
-                    "receiveShadow": false
+                    "receiveShadow": false,
+                    "bloomIntensity": 5
                 },
                 {
                     "type": "SecurityLight",
