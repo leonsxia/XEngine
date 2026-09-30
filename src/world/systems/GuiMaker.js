@@ -2,7 +2,7 @@ import { updateSingleLightCamera } from "../components/shadowMaker";
 import { WEAPONS, GUI_CONFIG, CAMERAS } from "../components/utils/constants";
 import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, makeSubGuiControlFolder, setupFunctionPanel } from "../components/utils/guiConfigHelper";
 import { Gui } from "./Gui";
-import { DEFAULT_BLOOM } from "./PostProcesser";
+import { DEFAULT_BLOOM } from "./PostProcessor";
 import { Resizer } from "./Resizer";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
@@ -649,7 +649,7 @@ class GuiMaker {
 
             const lightObj = this.scene.shadowLightObjects[i];
 
-            const { specs } = this.guiRightLightsSpecs.details.find(d => d.parent === lightObj.name);
+            const { specs = [] } = this.guiRightLightsSpecs.details.find(d => d.parent === lightObj.name) ?? {};
 
             const changeObjs = specs.filter(s => Object.prototype.hasOwnProperty.call(s, 'changeFn') && (s.type === 'light-num' || s.type === 'color' || s.type === 'groundColor' || s.type === 'angle'));
 

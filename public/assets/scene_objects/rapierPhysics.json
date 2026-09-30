@@ -37,8 +37,8 @@
         ],
         "defaultPlayer": "jill",
         "postProcessing": {
-            "bloomStrength": 1.68,
-            "bloomRadius": 0.74
+            "bloomStrength": 0.1,
+            "bloomRadius": 0.24
         },
         "physics": "rapier"
     },
@@ -121,7 +121,7 @@
                     "display": "Directional Light",
                     "detail": {
                         "color": [249, 230, 190],
-                        "intensity": 1.26,
+                        "intensity": 0.5,
                         "position": [0, 20, 28],
                         "target": [0, 0, 0]
                     },
@@ -166,7 +166,7 @@
                     "detail": {
                         "color": [255, 255, 255],
                         "position": [0, 7, -2.95],
-                        "intensity": 250,
+                        "intensity": 120,
                         "distance": 0,
                         "decay": 1.85,
                         "normalBias": 0.03
@@ -200,7 +200,7 @@
                             0,
                             0
                         ],
-                        "intensity": 26,
+                        "intensity": 8,
                         "distance": 10,
                         "decay": 0.33,
                         "penumbra": 0.35,

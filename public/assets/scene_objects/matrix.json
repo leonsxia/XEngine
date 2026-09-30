@@ -67,7 +67,7 @@
         ],
         "defaultPlayer": "jill",
         "postProcessing": {
-            "bloomStrength": 0.4,
+            "bloomStrength": 0.1,
             "bloomRadius": 0.24
         },
         "currentRoomSequence": 0,
@@ -426,7 +426,7 @@
                         ],
                         "intensity": 5,
                         "distance": 4.5,
-                        "decay": 0.8,
+                        "decay": 2,
                         "shadowCameraAspect": 1,
                         "bias": -0.0008,
                         "normalBias": 0.0047
@@ -476,6 +476,41 @@
                     "attachTo": "safe_room_2_hand_crafted_studio",
                     "turnOn": true,
                     "alwaysOn": true,
+                    "attachToType": "lamp",
+                    "room": "safe_room_2"
+                }
+            ],
+            "rectAreaLightSpecs": [
+                {
+                    "name": "safe_room_2_window_Light",
+                    "display": "LED Light",
+                    "detail": {
+                        "color": [
+                            189,
+                            238,
+                            255
+                        ],
+                        "position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "rotation": [
+                            -1.97,
+                            0,
+                            0
+                        ],
+                        "intensity": 25,
+                        "width": 0.93,
+                        "height": 0.05
+                    },
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true,
+                    "attachTo": "safe_room_2_hand_crafted_studio",
+                    "turnOn": true,
+                    "alwaysOn": true,
+                    "attachToType": "led",
                     "room": "safe_room_2"
                 }
             ]
@@ -954,8 +989,7 @@
                     ],
                     "rotationY": 3.8397,
                     "canBeIgnored": true,
-                    "transparent": false,
-                    "bloomTransparency": 1
+                    "transparent": false
                 },
                 {
                     "type": "HexCylinderPillar",
@@ -1436,8 +1470,7 @@
                     "rotationY": 0,
                     "castShadow": false,
                     "receiveShadow": false,
-                    "transparent": false,
-                    "bloomTransparency": 0.6
+                    "transparent": false
                 },
                 {
                     "type": "SecurityLight",
@@ -1794,8 +1827,7 @@
                     "rotationY": 0,
                     "castShadow": false,
                     "receiveShadow": false,
-                    "transparent": false,
-                    "bloomTransparency": 0.6
+                    "transparent": false
                 }
             ],
             "floors": [
@@ -1947,7 +1979,8 @@
                     "castShadow": false,
                     "receiveShadow": false,
                     "transparent": false,
-                    "bloomTransparency": 0.5
+                    "bloomTransparency": 0.5,
+                    "bloomIntensity": 2
                 }
             ],
             "floors": [],

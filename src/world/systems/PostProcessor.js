@@ -47,9 +47,9 @@ const DEFAULT_SSAA = {
 }
 
 const DEFAULT_BLOOM = {
-    strength: 2.2,  // 1
-    radius: .74,  // .5
-    threshold: 0,
+    strength: 1,  // 1
+    radius: .5,  // .5
+    threshold: 1,
     enabled: false
 }
 
@@ -147,6 +147,18 @@ class PostProcessor {
 
     initBloomPass() {
 
+        const bloomPass = new UnrealBloomPass(new Vector2(this.renderTargetWidth, this.renderTargetHeight), 1.5, 0.4, 0.85 );
+        bloomPass.threshold = DEFAULT_BLOOM.threshold;
+        bloomPass.strength = DEFAULT_BLOOM.strength;
+        bloomPass.radius = DEFAULT_BLOOM.radius;
+        this.bloomPass = bloomPass;
+
+        this.bloomMixedPass = bloomPass;
+
+    }
+
+    initAlternativeBloomPass() {
+
         this.#vertexShaderBloom = shaders[SHADER_NAMES.BLOOM_VERTEX];
         this.#fragmentShaderBloom = shaders[SHADER_NAMES.BLOOM_FRAGMENT];
 
@@ -195,7 +207,7 @@ class PostProcessor {
 
     }
 
-    render() {
+    bloomRender() {
 
         if (this.bloomMixedPass.enabled) {
 
@@ -208,6 +220,12 @@ class PostProcessor {
         }
 
         // render the entire scene, then render bloom scene on top
+        this.composer.render();
+
+    }
+
+    render() {
+
         this.composer.render();
 
     }
@@ -268,6 +286,9 @@ class PostProcessor {
 
             }
 
+            obj.attachTo.switchBloomEmissive(true);
+            obj.attachTo.setBloomObjectsVisible(true);
+
         }
 
     }
@@ -281,6 +302,14 @@ class PostProcessor {
                 obj.attachTo.turnOffLights();
 
             }
+
+            if (!obj.alwaysVisible) {
+
+                obj.attachTo.setBloomObjectsVisible(false);
+
+            }
+
+            obj.attachTo.switchBloomEmissive(false);
 
         }
 

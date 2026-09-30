@@ -3,9 +3,10 @@ import {
     CameraHelper, 
     DirectionalLightHelper, 
     HemisphereLightHelper, 
-    PointLightHelper ,
+    PointLightHelper,
     SpotLightHelper
 } from 'three';
+import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 
 function createAxesHelper(spcs) {
 
@@ -62,6 +63,14 @@ function createSpotLightHelper(light) {
     
 }
 
+function createRectAreaLightHelper(light) {
+
+    const helper = new RectAreaLightHelper(light);
+    light.add(helper);
+    return helper;
+
+}
+
 export {
     createAxesHelper, 
     createGridHelper, 
@@ -69,5 +78,6 @@ export {
     createDirectialLightHelper,
     createHemisphereLightHelper,
     createPointLightHelper,
-    createSpotLightHelper
+    createSpotLightHelper,
+    createRectAreaLightHelper
 };

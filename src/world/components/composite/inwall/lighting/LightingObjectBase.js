@@ -2,12 +2,13 @@ import { Vector3 } from 'three';
 import { ObstacleBase } from '../ObstacleBase';
 import { updateSingleLightCamera } from '../../../shadowMaker';
 import { BLOOM_SCENE_LAYER } from '../../../utils/constants';
+import { isBloomObject } from '../../../utils/objectHelper';
 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
 const BLOOM_TYPE_DEFAULT = 'main';
 
-class LightLamp extends ObstacleBase {
+class LightingObjectBase extends ObstacleBase {
 
     bloomObjects = [];
     lightObjs = [];
@@ -17,6 +18,8 @@ class LightLamp extends ObstacleBase {
             lightObject, 
             bloomObject, 
             intensity, 
+            bloomIntensity,
+            emissiveIntensity,
             position = new Vector3(), 
             target = new Vector3(), 
             currentPosition = new Vector3(), 
@@ -83,8 +86,9 @@ class LightLamp extends ObstacleBase {
 
         const { light } = lightObj;
         const bloomContainer = this.lightingMap.get(bloomType);
-        const { bloomObject, currentPosition, targetObject } = bloomContainer;
+        const { bloomObject, currentPosition, targetObject, bloomIntensity } = bloomContainer;
 
+        // inject bloomType to light
         light.bloomType = bloomType;
         light.position.add(currentPosition);
 
@@ -100,7 +104,23 @@ class LightLamp extends ObstacleBase {
         this.lightObjs.push(lightObj);
         bloomContainer.intensity = light.intensity;
         bloomContainer.lightObject = lightObj;
-        bloomObject.material.color.copy(light.color);
+
+        if (isBloomObject(bloomObject)) {
+
+            bloomObject.material.color.copy(light.color);
+
+        }
+
+        if (!bloomObject.material.emissiveMap) {
+
+            bloomObject.material.emissive.copy(light.color);            
+
+        }
+
+        // store the raw emissiveIntensity
+        bloomContainer.emissiveIntensity = bloomObject.material.emissiveIntensity;
+        bloomObject.material.emissiveIntensity = bloomIntensity && bloomIntensity > 0 ? bloomIntensity : bloomObject.material.emissiveIntensity;
+
         this.bindBloomEvents(lightObj);
 
         this.group.add(light);
@@ -269,11 +289,13 @@ class LightLamp extends ObstacleBase {
 
             const bloomObj = this.lightingMap.get(light.bloomType).bloomObject;
 
-            if (bloomObj) {
+            if (isBloomObject(bloomObj)) {
 
                 bloomObj.material.color.copy(light.color);
 
             };
+
+            bloomObj ? bloomObj.material.emissive.copy(light.color) : null;
 
         };
 
@@ -284,9 +306,6 @@ class LightLamp extends ObstacleBase {
         for (let i = 0; i < this.lightObjs.length; i++) {
 
             const { light } = this.lightObjs[i];
-            const bloomContainer = this.lightingMap.get(light.bloomType);
-
-            bloomContainer.intensity = light.intensity;
             light.intensity = 0;
 
         }
@@ -298,9 +317,26 @@ class LightLamp extends ObstacleBase {
         for (let i = 0; i < this.lightObjs.length; i++) {
 
             const { light } = this.lightObjs[i];
-            const bloomContainer = this.lightingMap.get(light.bloomType);
+            const { intensity } = this.lightingMap.get(light.bloomType);
 
-            light.intensity = bloomContainer.intensity;
+            light.intensity = intensity;
+
+        }
+
+    }
+
+    switchBloomEmissive(turnOn) {
+
+        for (let i = 0, il = this.lightObjs.length; i < il; i++) {
+
+            const { light } = this.lightObjs[i];
+            const { bloomObject, bloomIntensity, emissiveIntensity } = this.lightingMap.get(light.bloomType);
+
+            if (bloomObject && bloomIntensity !== undefined) {
+
+                bloomObject.material.emissiveIntensity = turnOn ? bloomIntensity : (bloomObject.material.emissiveMap ? emissiveIntensity : 0);
+
+            }
 
         }
 
@@ -335,4 +371,4 @@ class LightLamp extends ObstacleBase {
 
 }
 
-export { LightLamp, BLOOM_TYPE_DEFAULT };
+export { LightingObjectBase, BLOOM_TYPE_DEFAULT };

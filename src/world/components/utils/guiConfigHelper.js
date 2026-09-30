@@ -808,12 +808,122 @@ function makeSpotLightGuiConfig(spotLightSpecsArr) {
 
 }
 
+function makeRectAreaLightGuiConfig(rectAreaLightSpecsArr) {
+
+    const specs = [];
+    const visibleRectAreaLightSpecsArr = rectAreaLightSpecsArr.filter(l => l.visible);
+
+    for (let i = 0, il = visibleRectAreaLightSpecsArr.length; i < il; i++) {
+
+        const rectArea = visibleRectAreaLightSpecsArr[i];
+
+        specs.push({
+            room: rectArea.room,
+            folder: rectArea.display,
+            parent: rectArea.name,
+            specs: [{
+                name: 'intensity',
+                value: null,
+                params: [0, 500, NUMBER_STEPS],
+                type: 'number'
+            }, {
+                name: 'power',
+                value: null,
+                params: [0, 8000, 1],
+                type: 'number'
+            }, {
+                name: 'width',
+                value: null,
+                params: [0, 100, .0001],
+                type: 'number'
+            }, {
+                name: 'height',
+                value: null,
+                params: [0, 100, .0001],
+                type: 'number'
+            }, {
+                name: 'color',
+                value: rectArea.detail,
+                params: [255],
+                type: 'color',
+                changeFn: null
+            }]
+        });
+
+        if (rectArea.debug) {
+
+            const find = specs.find(s => s.parent === rectArea.name).specs;
+            find.push({
+                name: 'x',
+                prop: 'position.x',
+                value: null,
+                sub: 'position',
+                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'y',
+                prop: 'position.y',
+                value: null,
+                sub: 'position',
+                params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'z',
+                prop: 'position.z',
+                value: null,
+                sub: 'position',
+                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'x',
+                prop: 'rotation.x',
+                value: null,
+                sub: 'rotation',
+                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'y',
+                prop: 'rotation.y',
+                value: null,
+                sub: 'rotation',
+                params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'z',
+                prop: 'rotation.z',
+                value: null,
+                sub: 'rotation',
+                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
+                type: 'light-num',
+                changeFn: null
+            }, {
+                name: 'visible',
+                prop: 'light helper',
+                value: null,
+                sub: 'lightHelper',
+                type: 'boolean'
+            });
+
+        }
+
+    }
+
+    return specs;
+
+}
+
 function makeSceneRightGuiConfig(lightSpecs) {
     const panel = makeGuiPanel();
     panel.details = combineGuiConfigs(
-        makeBasicLightGuiConfig(lightSpecs.basicLightSpecsArr),
-        makePointLightGuiConfig(lightSpecs.pointLightSpecsArr),
-        makeSpotLightGuiConfig(lightSpecs.spotLightSpecsArr)
+        makeBasicLightGuiConfig(lightSpecs.basicLightSpecsArr ?? []),
+        makePointLightGuiConfig(lightSpecs.pointLightSpecsArr ?? []),
+        makeSpotLightGuiConfig(lightSpecs.spotLightSpecsArr ?? []),
+        makeRectAreaLightGuiConfig(lightSpecs.rectAreaLightSpecsArr ?? [])
     );
     return panel;
 }

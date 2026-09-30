@@ -1,11 +1,11 @@
 import { Vector3 } from 'three';
 import { GLTFModel, Sphere } from '../../../Models';
 import { khaki } from '../../../basic/colorBase';
-import { LightLamp, BLOOM_TYPE_DEFAULT } from './LightLamp';
+import { LightingObjectBase, BLOOM_TYPE_DEFAULT } from './LightingObjectBase';
 
 const GLTF_SRC = 'in_room/lighting/modern_ceiling_lamp_01_1k/modern_ceiling_lamp_01_1k.gltf';
 
-class ModernCeilingLamp01 extends LightLamp {
+class ModernCeilingLamp01 extends LightingObjectBase {
 
     _radius = .2157;
     _ropeHeight = .63;
@@ -25,7 +25,7 @@ class ModernCeilingLamp01 extends LightLamp {
 
         const { name, scale = [1, 1] } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
-        const { bloomTransparency = 1 } = specs;
+        const { bloomTransparency = .5, bloomIntensity = 5 } = specs;
 
         this._scale = [scale[0], scale[1], scale[0]];
 
@@ -37,7 +37,7 @@ class ModernCeilingLamp01 extends LightLamp {
         this.gltf.setScale([scale[0], scale[1], scale[0]]);
 
         // bloom object
-        const lampSpecs = { name: `${name}_lamp`, size: { radius: this._lampRadius, widthSegments: 32, heightSegments: 32 }, color: khaki, useBasicMaterial: true, transparent: true }
+        const lampSpecs = { name: `${name}_lamp`, size: { radius: this._lampRadius, widthSegments: 32, heightSegments: 32 }, color: khaki, transparent: true }
         const lamp = this._lamp = new Sphere(lampSpecs);
 
         this.bloomObjects = [lamp];
@@ -49,6 +49,7 @@ class ModernCeilingLamp01 extends LightLamp {
         this.setLightingMap(BLOOM_TYPE_DEFAULT, {
             bloomObject: lamp,
             intensity: 0,
+            bloomIntensity,
             lightObject: null,
             position: new Vector3(0, this._lightY, 0),
             currentPosition: new Vector3()

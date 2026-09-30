@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { LightingSceneBase, BLOOM_TYPE_DEFAULT } from "../LightingSceneBase";
+import { LightingSceneBase } from "../LightingSceneBase";
 import { GLTFModel, GeometryDesc, MeshDesc, Plane } from '../../../Models';
 import { BOX_GEOMETRY } from '../../../utils/constants';
 
@@ -70,14 +70,27 @@ class HandCraftedStudio extends LightingSceneBase {
         lampBulb.material = lampBulb.material.clone();
         lampBulb.alwaysVisible = true;
 
-        this.bloomObjects = [lampBulb];
+        const ledBulb = this.GLTFs[0].meshes.find(m => m.name === 'LED_Bulb_Low');
+        ledBulb.material = ledBulb.material.clone();
+        ledBulb.alwaysVisible = true;
+
+        this.bloomObjects = [lampBulb, ledBulb];
         this.setBloomObjectsFather();
         this.setBloomObjectsLayers();
-        this.setLightingMap(BLOOM_TYPE_DEFAULT, {
+        this.setLightingMap('lamp', {
             bloomObject: lampBulb,
             intensity: 0,
+            bloomIntensity: 3,
             lightObject: null,
             position: new Vector3(-1.87, - 0.25, - 1.67),
+            currentPosition: new Vector3()
+        });
+        this.setLightingMap('led', {
+            bloomObject: ledBulb,
+            intensity: 0,
+            bloomIntensity: 3,
+            lightObject: null,
+            position: new Vector3(-1.48, 0.24, -2.24),
             currentPosition: new Vector3()
         });
         this.update(false);

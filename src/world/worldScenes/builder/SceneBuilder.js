@@ -1,7 +1,7 @@
-import { createBasicLights, createPointLights, createSpotLights } from "../../components/lights.js";
+import { createBasicLights, createPointLights, createSpotLights, createRectAreaLights } from "../../components/lights.js";
 import { setupShadowLight, updateSingleLightCamera } from "../../components/shadowMaker.js";
 import {
-    DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT,
+    DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT, RECT_AREA_LIGHT,
     AXES, GRID, 
     ROOM, INSPECTOR_ROOM, SCENE, WATER_CUBE,
     PHYSICS_TYPES
@@ -84,10 +84,16 @@ class SceneBuilder {
             let basicLightGuiSpecsArr = [];
             let pointLightGuiSpecsArr = [];
             let spotLightGuiSpecsArr = [];
+            let rectAreaLightGuiSpecsArr = [];
 
             if (worldScene.guiMaker) {
 
-                worldScene.guiMaker.guiLights = { basicLightSpecsArr: basicLightGuiSpecsArr, pointLightSpecsArr: pointLightGuiSpecsArr, spotLightSpecsArr: spotLightGuiSpecsArr };
+                worldScene.guiMaker.guiLights = { 
+                    basicLightSpecsArr: basicLightGuiSpecsArr, 
+                    pointLightSpecsArr: pointLightGuiSpecsArr, 
+                    spotLightSpecsArr: spotLightGuiSpecsArr,
+                    rectAreaLightSpecsArr: rectAreaLightGuiSpecsArr
+                };
 
             }
 
@@ -140,11 +146,13 @@ class SceneBuilder {
         const basicLightsSpecsArr = roomLights['basicLightSpecs']?.map(l => { l.room = roomName; return l; }) ?? [];
         const pointLightsSpecsArr = roomLights['pointLightSpecs']?.map(l => { l.room = roomName; return l; }) ?? [];
         const spotLightsSpecsArr = roomLights['spotLightSpecs']?.map(l => { l.room = roomName; return l; }) ?? [];
+        const rectAreaLightsSpecsArr = roomLights['rectAreaLightSpecs']?.map(l => { l.room = roomName; return l; }) ?? [];
 
         // read light objects
         const _basicLights = createBasicLights(basicLightsSpecsArr);
         const _pointLights = createPointLights(pointLightsSpecsArr);
         const _spotLights = createSpotLights(spotLightsSpecsArr);
+        const _rectAreaLights = createRectAreaLights(rectAreaLightsSpecsArr);
 
         if (worldScene.guiMaker) {
 
@@ -153,6 +161,7 @@ class SceneBuilder {
             guiLights.basicLightSpecsArr = guiLights.basicLightSpecsArr.concat(basicLightsSpecsArr);
             guiLights.pointLightSpecsArr = guiLights.pointLightSpecsArr.concat(pointLightsSpecsArr);
             guiLights.spotLightSpecsArr = guiLights.spotLightSpecsArr.concat(spotLightsSpecsArr);
+            guiLights.rectAreaLightSpecsArr = guiLights.rectAreaLightSpecsArr.concat(rectAreaLightsSpecsArr);
     
         }
         
@@ -160,10 +169,11 @@ class SceneBuilder {
         Object.assign(worldScene.lights, _basicLights);
         Object.assign(worldScene.lights, _pointLights);
         Object.assign(worldScene.lights, _spotLights);
+        Object.assign(worldScene.lights, _rectAreaLights);
 
         const roomGroup = roomName === 'scene' ? null : room.group;
         const roomLightObjects = setupShadowLight.call(worldScene,
-            worldScene.scene, roomGroup, ...basicLightsSpecsArr, ...pointLightsSpecsArr, ...spotLightsSpecsArr
+            worldScene.scene, roomGroup, ...basicLightsSpecsArr, ...pointLightsSpecsArr, ...spotLightsSpecsArr, ...rectAreaLightsSpecsArr
         );
 
         // shadowLightObjects are used for binding callback to light helper and shadow cam helper
@@ -172,10 +182,11 @@ class SceneBuilder {
         const basicLights = basicLightsSpecsArr.filter(l => l.visible).map(l => l.light);
         const pointLights = pointLightsSpecsArr.filter(l => l.visible).map(l => l.light);
         const spotLights = spotLightsSpecsArr.filter(l => l.visible).map(l => l.light);
+        const rectAreaLights = rectAreaLightsSpecsArr.filter(l => l.visible).map(l => l.light);
 
         if (roomName !== 'scene') {
 
-            room.lights = basicLights.concat(pointLights, spotLights);
+            room.lights = basicLights.concat(pointLights, spotLights, rectAreaLights);
             room.setLightsVisible(false);
 
         }
@@ -196,6 +207,16 @@ class SceneBuilder {
         for (let i = 0, il = visibleSpotLightSpecsArr.length; i < il; i++) {
 
             const l = visibleSpotLightSpecsArr[i];
+
+            this.attachLightToObject(l, roomLightObjects, room);
+
+        }
+
+        const visibleRectAreaLightSpecsArr = rectAreaLightsSpecsArr.filter(l => l.visible);
+
+        for (let i = 0, il = visibleRectAreaLightSpecsArr.length; i < il; i++) {
+
+            const l = visibleRectAreaLightSpecsArr[i];
 
             this.attachLightToObject(l, roomLightObjects, room);
 
@@ -611,6 +632,7 @@ class SceneBuilder {
             const basicLightsSpecsArr = room['basicLightSpecs']?.filter(l => l.visible).map(l => { l.room = room.room; return l; }) ?? [];
             const pointLightsSpecsArr = room['pointLightSpecs']?.filter(l => l.visible).map(l => { l.room = room.room; return l; }) ?? [];
             const spotLightsSpecsArr = room['spotLightSpecs']?.filter(l => l.visible).map(l => { l.room = room.room; return l; }) ?? [];
+            const rectAreaLightsSpecsArr = room['rectAreaLightSpecs']?.filter(l => l.visible).map(l => { l.room = room.room; return l; }) ?? [];
 
             for (let j = 0, jl = basicLightsSpecsArr.length; j < jl; j++) {
 
@@ -634,6 +656,14 @@ class SceneBuilder {
                 const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['spotLightSpecs'].find(f => f.type === l.type && f.name === l.name);
                 this.updateLight(l, _targetLightSetup, updateSetupOnly);
                 
+            }
+
+            for (let j = 0, jl = rectAreaLightsSpecsArr.length; j < jl; j++) {
+
+                const l = rectAreaLightsSpecsArr[j];
+                const _targetLightSetup = updateSetupOnly ? null : _targetSetup.lights.find(f => f.room === room.room)['rectAreaLightSpecs'].find(f => f.type === l.type && f.name === l.name);
+                this.updateLight(l, _targetLightSetup, updateSetupOnly);
+
             }
 
         }
@@ -1048,6 +1078,68 @@ class SceneBuilder {
                         }
 
                     }
+                }
+
+                break;
+
+            case RECT_AREA_LIGHT:
+
+                {
+                    if (updateSetupOnly) {
+
+                        const { attachTo, attachToType } = _origin;
+
+                        _origin.detail.color = colorArr(light.color);
+                        _origin.detail.width = light.width;
+                        _origin.detail.height = light.height;
+                        _origin.detail.intensity = light.intensity;
+
+                        if (attachTo) {
+
+                            const pos = light.parent.father.getLightPosition(light, attachToType);
+
+                            _origin.detail.position = this.positionArr(pos);
+
+                        } else {
+
+                            _origin.detail.position = this.positionArr(light.position);
+
+                        }
+
+                        _origin.detail.rotation = this.rotationArr(light.rotation);
+
+                    } else {
+
+                        const { intensity = 1, width = 1, height = 1, position = [0, 0, 0], rotation = [0, 0, 0], color = [255, 255, 255] } = _target.detail;
+                        const { attachTo, attachToType, turnOn = true } = _origin;
+
+                        _origin.detail.color = new Array(...color);
+                        _origin.detail.width = width;
+                        _origin.detail.height = height;
+                        _origin.detail.intensity = intensity;
+                        _origin.detail.position = new Array(...position);
+                        _origin.detail.rotation = new Array(...rotation);
+
+                        light.color.setStyle(colorStr(...color));
+                        light.intensity = turnOn || (this.worldScene.postProcessor.bloomMixedPass?.enabled) ? intensity : 0;
+                        light.width = width;
+                        light.height = height;
+
+                        if (attachTo) {
+                            
+                            light.parent.father.setLightPosition(light, position, attachToType);
+                            
+                            
+                        }  else {
+
+                            light.position.set(...position);
+
+                        }
+
+                        light.rotation.set(...rotation);
+
+                    }
+
                 }
 
                 break;

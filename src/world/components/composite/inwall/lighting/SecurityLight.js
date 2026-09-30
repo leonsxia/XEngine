@@ -1,10 +1,10 @@
 import { Vector3 } from 'three';
 import { GLTFModel } from '../../../Models';
-import { LightLamp, BLOOM_TYPE_DEFAULT } from './LightLamp';
+import { LightingObjectBase, BLOOM_TYPE_DEFAULT } from './LightingObjectBase';
 
 const GLTF_SRC = 'in_room/lighting/security_light_1k/security_light_1k.gltf';
 
-class SecurityLight extends LightLamp {
+class SecurityLight extends LightingObjectBase {
 
     _width = .33;
     _height = .52;
@@ -42,6 +42,7 @@ class SecurityLight extends LightLamp {
 
         await this.gltf.init();
 
+        const { bloomIntensity = 10 } = this.specs;
         // bloom object
         const lightGlass = this._bloomLight = this.gltf.meshes.find(m => m.name === 'security_light_glass');
         lightGlass.material = lightGlass.material.clone();
@@ -53,6 +54,7 @@ class SecurityLight extends LightLamp {
         this.setLightingMap(BLOOM_TYPE_DEFAULT, {
             bloomObject: lightGlass,
             intensity: 0,
+            bloomIntensity: bloomIntensity,
             lightObject: null,
             position: new Vector3(0, this._lightY, this._lightZ),
             currentPosition: new Vector3()

@@ -5,7 +5,7 @@ import { createScene } from '../components/scene.js';
 import { WorldControls } from '../systems/Controls.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
-import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcesser.js';
+import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcessor.js';
 import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS, PHYSICS_TYPES } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
 import { UpdatableQueue } from '../components/updatables/UpdatableQueue.js';

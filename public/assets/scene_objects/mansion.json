@@ -37,6 +37,10 @@
         ],
         "resolution": 0.5,
         "defaultPlayer": "jill",
+        "postProcessing": {
+            "bloomStrength": 0.1,
+            "bloomRadius": 0.24
+        },
         "physics": "rapier"
     },
     "players": [
@@ -159,10 +163,11 @@
                         "color": [244, 200, 122],
                         "position": [
                             0,
-                            -0.745,
+                            -0.252,
                             0
                         ],
-                        "intensity": 180,
+                        "scale": [0.5, 0.5, 0.5],
+                        "intensity": 120,
                         "distance": 0,
                         "decay": 2,
                         "bias": 0.0002,
@@ -187,7 +192,8 @@
                             -0.19,
                             0
                         ],
-                        "intensity": 120,
+                        "scale": [0.3, 0.3, 0.3],
+                        "intensity": 50,
                         "distance": 0,
                         "decay": 2,
                         "normalBias": 0.02
@@ -211,7 +217,8 @@
                             -0.19,
                             0
                         ],
-                        "intensity": 80,
+                        "scale": [0.3, 0.3, 0.3],
+                        "intensity": 50,
                         "distance": 0,
                         "decay": 2,
                         "normalBias": 0.025
@@ -231,7 +238,8 @@
                     "detail": {
                         "color": [253, 182, 58],
                         "position": [0, 0.75, 0],
-                        "intensity": 50,
+                        "scale": [0.3, 0.3, 0.3],
+                        "intensity": 25,
                         "distance": 18,
                         "decay": 2
                     },
@@ -251,7 +259,8 @@
                     "detail": {
                         "color": [101, 51, 240],
                         "position": [0, 0.75, 0],
-                        "intensity": 45,
+                        "scale": [0.3, 0.3, 0.3],
+                        "intensity": 20,
                         "distance": 18,
                         "decay": 2
                     },
@@ -271,7 +280,8 @@
                     "detail": {
                         "color": [22, 195, 19],
                         "position": [0, 0.75, 0],
-                        "intensity": 45,
+                        "scale": [0.3, 0.3, 0.3],
+                        "intensity": 15,
                         "distance": 18,
                         "decay": 2
                     },
@@ -1228,7 +1238,8 @@
                     "position": [-11.32, 2.72, 0],
                     "rotationY": 1.5708,
                     "castShadow": false,
-                    "receiveShadow": false
+                    "receiveShadow": false,
+                    "bloomIntensity": 23
                 },
                 {
                     "type": "SecurityLight",

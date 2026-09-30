@@ -4,9 +4,10 @@ import {
     createDirectialLightHelper, 
     createHemisphereLightHelper, 
     createPointLightHelper,
-    createSpotLightHelper 
+    createSpotLightHelper ,
+    createRectAreaLightHelper
 } from './utils/helpers.js';
-import { DIRECTIONAL_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT } from './utils/constants.js';
+import { DIRECTIONAL_LIGHT, HEMISPHERE_LIGHT, POINT_LIGHT, SPOT_LIGHT, RECT_AREA_LIGHT } from './utils/constants.js';
 
 function setupShadowLight(scene, room, ...lights) {
 
@@ -77,6 +78,16 @@ function setupShadowLight(scene, room, ...lights) {
                     lightObj['lightHelper'] = createSpotLightHelper(light);
 
                     addShadowCamHelper();
+
+                }
+
+                break;
+            
+            case RECT_AREA_LIGHT:
+                
+                if (debug) {
+
+                    lightObj['lightHelper'] = createRectAreaLightHelper(light);
 
                 }
 
@@ -246,6 +257,7 @@ function attachLightAdditionalProps(light) {
 
             break;
     }
+
 }
 
 function attachLightHelper(lightObj, lightHelper, lightShadowCamHelper) {
@@ -290,6 +302,7 @@ function changeLightTargetToRoom(room, lightObj) {
             }
 
             break;
+
     }
     
 }
@@ -355,6 +368,7 @@ function updateSingleLightCamera(lightObj, needRender = false) {
             updateLightAndShadowCamHelper(lightObj);
 
             break;
+
     }
 
     if (needRender) this.render();

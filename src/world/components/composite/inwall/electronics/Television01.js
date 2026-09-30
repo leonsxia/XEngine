@@ -2,12 +2,12 @@ import { Object3D, Vector3 } from 'three';
 import { createOBBBox } from '../../../physics/collisionHelper';
 import { GLTFModel, CollisionBox, Box, GeometryDesc, MeshDesc } from '../../../Models';
 import { TVNoise } from '../../../basic/colorBase';
-import { LightLamp } from '../lighting/LightLamp';
+import { LightingObjectBase } from '../lighting/LightingObjectBase';
 import { BOX_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'in_room/electronics/Television_01_1k/Television_01_1k.gltf';
 
-class Television01 extends LightLamp {
+class Television01 extends LightingObjectBase {
 
     _width = .6;
     _height = .456;
@@ -35,7 +35,7 @@ class Television01 extends LightLamp {
         const { name, scale = [1, 1, 1], lines = false } = specs;
         const { showArrow = false } = specs;
         const { src = GLTF_SRC, receiveShadow = true, castShadow = true } = specs;
-        const { bloomTransparency = .1 } = specs;
+        const { bloomTransparency = .5, bloomIntensity = 10 } = specs;
 
         this._scale = new Array(...scale);
 
@@ -46,7 +46,7 @@ class Television01 extends LightLamp {
 
         const cBoxSpecs = { name: `${name}_cbox`, width: this._width, depth: this._depth, height: this._height, enableWallOBBs: this.enableWallOBBs, showArrow, lines };
 
-        const bloomScreenSpecs = { name: `${name}_screen`, size: { width: this._screenWidth, height: this._screenHeight, depth: this._screenDepth }, color: TVNoise, useBasicMaterial: true, transparent: true };
+        const bloomScreenSpecs = { name: `${name}_screen`, size: { width: this._screenWidth, height: this._screenHeight, depth: this._screenDepth }, color: TVNoise, transparent: true };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
@@ -81,6 +81,7 @@ class Television01 extends LightLamp {
         this.setLightingMap('screen', {
             bloomObject: bloomScreen,
             intensity: 0,
+            bloomIntensity,
             lightObject: null,
             position: new Vector3(this._screenX, this._screenY, this._screenZ),
             currentPosition: new Vector3(),

@@ -1,5 +1,5 @@
 import { 
-    BoxCube, CylinderPillar, HexCylinderPillar, LWall, Plane, Slope, Stairs, SquarePillar, 
+    Box, BoxCube, CylinderPillar, HexCylinderPillar, LWall, Plane, Slope, Stairs, SquarePillar, Sphere,
     ModernCeilingLamp01, SecurityLight, Television01, 
     FancyPictureFrame01, 
     RoundWoodenTable,  VintageGrandfatherClock, WoodenPicnicTable, 
@@ -384,6 +384,22 @@ function isRapierObject(object) {
 
 }
 
+function isBloomObject(object) {
+
+    if (object instanceof Box ||
+        object instanceof Plane ||
+        object instanceof Sphere
+    ) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+}
+
 function noPhysicsObject(object) {
 
     if (object instanceof ModernCeilingLamp01 ||
@@ -430,6 +446,7 @@ export {
     clone, groupHasChild, getVisibleMeshes, getInwallParent, getTopParent, 
     objectFilter, objectFilter2, objectFilter3, objectFilter4, objectFilter5,
     moveableObjectFilter, isRapierObject, noPhysicsObject,
+    isBloomObject,
     resetObject3D,
     getIntersectionTarget
 };

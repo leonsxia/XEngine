@@ -2,6 +2,7 @@ import { Vector3 } from 'three';
 import { SceneObjectBase } from "./SceneObjectBase";
 import { updateSingleLightCamera } from "../../shadowMaker";
 import { BLOOM_SCENE_LAYER } from "../../utils/constants";
+import { isBloomObject } from '../../utils/objectHelper';
 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
@@ -17,6 +18,8 @@ class LightingSceneBase extends SceneObjectBase {
             lightObject, 
             bloomObject, 
             intensity, 
+            bloomIntensity,
+            emissiveIntensity,
             position = new Vector3(), 
             target = new Vector3(), 
             currentPosition = new Vector3(), 
@@ -76,7 +79,7 @@ class LightingSceneBase extends SceneObjectBase {
 
         const { light } = lightObj;
         const bloomContainer = this.lightingMap.get(bloomType);
-        const { bloomObject, currentPosition, targetObject } = bloomContainer;
+        const { bloomObject, currentPosition, targetObject, bloomIntensity = 0 } = bloomContainer;
 
         light.bloomType = bloomType;
         light.position.add(currentPosition);
@@ -93,7 +96,23 @@ class LightingSceneBase extends SceneObjectBase {
         this.lightObjs.push(lightObj);
         bloomContainer.intensity = light.intensity;
         bloomContainer.lightObject = lightObj;
-        bloomObject.material.color.copy(light.color);
+        
+        if (isBloomObject(bloomObject)) {
+
+            bloomObject.material.color.copy(light.color);
+
+        }
+
+        if (!bloomObject.material.emissiveMap) {
+
+            bloomObject.material.emissive.copy(light.color);              
+
+        }
+
+        // store the raw emissiveIntensity
+        bloomContainer.emissiveIntensity = bloomObject.material.emissiveIntensity;
+        bloomObject.material.emissiveIntensity = bloomIntensity && bloomIntensity > 0 ? bloomIntensity : bloomObject.material.emissiveIntensity;
+
         this.bindBloomEvents(lightObj);
 
         this.group.add(light);
@@ -277,9 +296,6 @@ class LightingSceneBase extends SceneObjectBase {
         for (let i = 0; i < this.lightObjs.length; i++) {
 
             const { light } = this.lightObjs[i];
-            const bloomContainer = this.lightingMap.get(light.bloomType);
-
-            bloomContainer.intensity = light.intensity;
             light.intensity = 0;
 
         }
@@ -294,6 +310,23 @@ class LightingSceneBase extends SceneObjectBase {
             const bloomContainer = this.lightingMap.get(light.bloomType);
 
             light.intensity = bloomContainer.intensity;
+
+        }
+
+    }
+
+    switchBloomEmissive(turnOn) {
+
+        for (let i = 0, il = this.lightObjs.length; i < il; i++) {
+
+            const { light } = this.lightObjs[i];
+            const { bloomObject, bloomIntensity, emissiveIntensity } = this.lightingMap.get(light.bloomType);
+
+            if (bloomObject && bloomIntensity !== undefined) {
+
+                bloomObject.material.emissiveIntensity = turnOn ? bloomIntensity : (bloomObject.material.emissiveMap ? emissiveIntensity : 0);
+
+            }
 
         }
 

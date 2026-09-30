@@ -1,6 +1,9 @@
-import { DirectionalLight, PointLight, AmbientLight, HemisphereLight, SpotLight, Color } from 'three';
+import { DirectionalLight, PointLight, AmbientLight, HemisphereLight, SpotLight, RectAreaLight, Color } from 'three';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from './utils/constants';
 import { colorStr } from './basic/colorBase';
+
+RectAreaLightUniformsLib.init();
 
 function createBasicLights(basicLightSpecsArr) {
 
@@ -92,6 +95,26 @@ function createSpotLights(spotLihgtSpecsArr) {
 
 }
 
+function createRectAreaLights(rectAreaLightSpecsArr) {
+
+    const rectAreaLights = {};
+
+    const visibleRectAreaLightSpecsArr = rectAreaLightSpecsArr.filter(l => l.visible);
+
+    for (let i = 0, il = visibleRectAreaLightSpecsArr.length; i < il; i++) {
+
+        const rectArea = visibleRectAreaLightSpecsArr[i];
+
+        const { name } = rectArea;
+
+        rectArea.light = rectAreaLights[name] = createRectAreaLight(rectArea);
+
+    }
+
+    return rectAreaLights;
+
+}
+
 function createDirectionalLight(lightSpecs) {
 
     const { detail: { color, intensity, position, target, shadowRadius = 2, bias = 0, normalBias = 0 } } = lightSpecs;
@@ -172,10 +195,24 @@ function createSpotLight(lightSpecs) {
 
 }
 
+function createRectAreaLight(lightSpecs) {
+
+    const { detail: { color, intensity = 1, position = [0, 0, 0], rotation = [0, 0, 0], width = 1, height = 1 } } = lightSpecs;
+
+    const light = new RectAreaLight(new Color(colorStr(...color)), intensity, width, height);
+
+    light.position.set(...position);
+    light.rotation.set(...rotation);
+
+    return light;
+
+}
+
 export { 
     createBasicLights, 
     createPointLights, 
     createSpotLights,
+    createRectAreaLights,
     createDirectionalLight,
     createAmbientLight,
     createHemisphereLight,
