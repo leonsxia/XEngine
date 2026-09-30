@@ -90,7 +90,7 @@ class HandCraftedStudio extends LightingSceneBase {
             intensity: 0,
             bloomIntensity: 3,
             lightObject: null,
-            position: new Vector3(-1.48, 0.24, -2.24),
+            position: new Vector3(-1.48, 0.23, -2.24),
             currentPosition: new Vector3()
         });
         this.update(false);
