@@ -22,6 +22,7 @@ import { RapierWorld } from '../components/physics/rapier/RapierWorld.js';
 import { GLOBALS } from '../systems/globals.js';
 import { toneMappingStr } from '../systems/renderer.js';
 import { countObjects, systemLogger } from '../World.js';
+import { loadedHDRTextures } from '../components/utils/textureHelper.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -201,7 +202,8 @@ class WorldScene {
             enableTPC = false, enableIC = false,
             physics, currentRoomSequence = 0,
             toneMapping = toneMappingStr(TONE_MAPPING.AgX),
-            postProcessing = { enable: false, bloomEnable: false }
+            postProcessing = { enable: false, bloomEnable: false },
+            envHDR
         } = this.setup;
 
         // set camera initial position and save the state
@@ -217,6 +219,8 @@ class WorldScene {
 
         this.renderer.toneMapping = TONE_MAPPING[toneMapping];
         this.selectedTone = TONE_MAPPING[toneMapping];
+
+        if (envHDR) this.scene.background = loadedHDRTextures[envHDR];
 
         // only set pixel ratio at first time
         if (devicePixelRatio > 1) {

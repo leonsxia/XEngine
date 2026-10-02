@@ -13,11 +13,11 @@ const PICKED_NUMBER_STEPS = .01;
 const PICKED_ANGLE_STEPS = .1;
 
 const PICKED_WEAPON_NUMBER_STEPS = .001;
-const PICKED_WEAPON_ANGLE_STEPS = .01;
 const LIGHT_BIAS_STEPS = .00001;
 
 const MAX_ANGLE = 360;
 const MAX_RADIUS = 3.14;
+const RADIUS_STEPS = .0001;
 
 function combineGuiConfigs(...details) {
     let specs = [];
@@ -883,7 +883,7 @@ function makeRectAreaLightGuiConfig(rectAreaLightSpecsArr) {
                 prop: 'rotation.x',
                 value: null,
                 sub: 'rotation',
-                params: [-DEFALUT_GRID_WIDTH, DEFALUT_GRID_WIDTH, NUMBER_STEPS],
+                params: [-MAX_RADIUS, MAX_RADIUS, RADIUS_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -891,7 +891,7 @@ function makeRectAreaLightGuiConfig(rectAreaLightSpecsArr) {
                 prop: 'rotation.y',
                 value: null,
                 sub: 'rotation',
-                params: [-DEFAULT_GRID_HEIGHT, DEFAULT_GRID_HEIGHT, NUMBER_STEPS],
+                params: [-MAX_RADIUS, MAX_RADIUS, RADIUS_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -899,7 +899,7 @@ function makeRectAreaLightGuiConfig(rectAreaLightSpecsArr) {
                 prop: 'rotation.z',
                 value: null,
                 sub: 'rotation',
-                params: [-DEFALUT_GRID_DEPTH, DEFALUT_GRID_DEPTH, NUMBER_STEPS],
+                params: [-MAX_RADIUS, MAX_RADIUS, RADIUS_STEPS],
                 type: 'light-num',
                 changeFn: null
             }, {
@@ -1576,7 +1576,7 @@ function makeObjectsGuiConfig(objects) {
                 name: 'x',
                 prop: 'rotation.x',
                 value: object.rotation,
-                params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
+                params: [- MAX_RADIUS, MAX_RADIUS, RADIUS_STEPS],
                 type: 'number',
                 changeFn: postChangeFn
             }));
@@ -1585,7 +1585,7 @@ function makeObjectsGuiConfig(objects) {
                 name: 'y',
                 prop: 'rotation.y',
                 value: object.rotation,
-                params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
+                params: [- MAX_RADIUS, MAX_RADIUS, RADIUS_STEPS],
                 type: 'number',
                 changeFn: postChangeFn
             }));
@@ -1594,7 +1594,7 @@ function makeObjectsGuiConfig(objects) {
                 name: 'z',
                 prop: 'rotation.z',
                 value: object.rotation,
-                params: [- MAX_RADIUS, MAX_RADIUS, PICKED_WEAPON_ANGLE_STEPS],
+                params: [- MAX_RADIUS, MAX_RADIUS, RADIUS_STEPS],
                 type: 'number',
                 changeFn: postChangeFn
             }));

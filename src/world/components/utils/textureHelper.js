@@ -1,15 +1,16 @@
-import { TextureLoader, SRGBColorSpace} from 'three';
+import { TextureLoader, SRGBColorSpace, EquirectangularReflectionMapping } from 'three';
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 
 function getTextureLoader() {
 
     const loader = new TextureLoader();
-
     return loader;
 
 }
 
 const worldTextureLoader = getTextureLoader();
 const loadedTextures = {};
+const loadedHDRTextures = {};
 
 async function loadSingleTexture(specs) {
 
@@ -173,4 +174,50 @@ async function loadTextures(mapsArr) {
 
 }
 
-export { worldTextureLoader, loadSingleTexture, loadTextures, loadedTextures };
+async function loadHDRTextures(mapsArr) {
+
+    const loadPromises = [];
+    const exrLoader = new HDRLoader();
+    const loaded = {};
+
+    for (let i = 0, il = mapsArr.length; i < il; i++) {
+
+        const m = mapsArr[i];
+        const { name, map } = m;
+
+        if (map) {
+
+            loaded[name] = null;
+            loadPromises.push(exrLoader.loadAsync(map));
+
+        }
+
+    }
+
+    const results = await Promise.all(loadPromises);
+
+    let i = 0;
+    for (let j = 0, jl = mapsArr.length; j < jl; j++) {
+
+        const m = mapsArr[j];
+
+        const { name, map } = m;
+
+        if (map) {
+
+            loaded[name] = results[i];
+            results[i].mapping = EquirectangularReflectionMapping;
+            i++;
+
+        }
+
+    }
+
+    Object.assign(loadedHDRTextures, loaded);
+
+    return loaded;
+
+}
+
+
+export { worldTextureLoader, loadSingleTexture, loadTextures, loadHDRTextures, loadedTextures, loadedHDRTextures };

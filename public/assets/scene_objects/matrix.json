@@ -486,7 +486,7 @@
             ],
             "rectAreaLightSpecs": [
                 {
-                    "name": "safe_room_2_window_Light",
+                    "name": "safe_room_2_led_Light",
                     "display": "LED Light",
                     "detail": {
                         "color": [

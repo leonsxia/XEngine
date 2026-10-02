@@ -12,17 +12,18 @@ import { EnemyTestScene } from "./worldScenes/EnemyTestScene";
 import { WorldTerrain } from "./worldScenes/WorldTerrain";
 import { WorldRapier } from "./worldScenes/WorldRapier";
 import { RouteKanal } from "./worldScenes/levels/RouteKanal";
+import { WoodCabin } from "./worldScenes/levels/WoodCabin";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
 import { ControlEventDispatcher } from "./systems/ControlEventDispatcher";
 
-import { loadedTextures, loadTextures } from "./components/utils/textureHelper";
+import { loadedTextures, loadTextures, loadHDRTextures } from "./components/utils/textureHelper";
 import { initPickableModels, loadGLTFModels, setKTX2Loader } from "./components/utils/gltfHelper";
 import { loadShaders } from "./components/utils/shaderHelper";
 import { loadImages } from "./components/utils/imageHelper";
 import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
-import { TEXTURES, GLTFS, SHADERS, CONTROL_TYPES, TEXTURE_NAMES, PHYSICS_TYPES } from "./components/utils/constants";
+import { TEXTURES, HDR_TEXTURES, GLTFS, SHADERS, CONTROL_TYPES, TEXTURE_NAMES, PHYSICS_TYPES } from "./components/utils/constants";
 import { IMAGES, XBOX_CONTROLLER_ICONS } from "./systems/ui/uiConstants";
 import { Logger } from "./systems/Logger";
 import { InputBase } from "./systems/physicalInputs/InputBase";
@@ -52,7 +53,8 @@ const config = {
         'Enemy Test Scene',
         'Terrain',
         'Rapier Physics',
-        'Route Kanal'
+        'Route Kanal',
+        'Wood Cabin'
     ],  // scene list for scene selector
 };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
@@ -188,7 +190,8 @@ class World {
             new EnemyTestScene(this.#renderer, config),
             new WorldTerrain(this.#renderer, config),
             new WorldRapier(this.#renderer, config),
-            new RouteKanal(this.#renderer, config)
+            new RouteKanal(this.#renderer, config),
+            new WoodCabin(this.#renderer, config)
         );
 
     }
@@ -199,13 +202,14 @@ class World {
 
         setKTX2Loader(this.#renderer);
         const [textures, gltfs] = await Promise.all([
-            loadTextures(TEXTURES),
+            loadTextures(TEXTURES),            
             loadGLTFModels(GLTFS),
             loadShaders(SHADERS),
             loadImages(IMAGES),
             loadImages(XBOX_CONTROLLER_ICONS),
             loadJsons(JSONS),
-            loadSounds(SOUNDS)
+            loadSounds(SOUNDS),
+            loadHDRTextures(HDR_TEXTURES)
         ]);
         const itemViewerEnvironment = loadedTextures[TEXTURE_NAMES.METAL_241].clone();
 

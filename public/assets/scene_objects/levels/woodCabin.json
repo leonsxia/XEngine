@@ -1,0 +1,1370 @@
+{
+    "settings": {
+        "name": "Wood Cabin",
+        "camera": {
+            "position": [
+                -1.5,
+                4.5,
+                6.5
+            ]
+        },
+        "moveType": "tankmove",
+        "enableTPC": true,
+        "enableIC": true,
+        "enableGui": true,
+        "enableShadow": true,
+        "enablePicker": true,
+        "allTargets": [
+            {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            {
+                "x": 0.36583020622071993,
+                "y": 0.8009332345324264,
+                "z": -0.1362997517646624
+            }
+        ],
+        "allCameraPos": [
+            {
+                "x": 3,
+                "y": 7,
+                "z": 8
+            },
+            {
+                "x": -2.357097753801041,
+                "y": 2.1848675055876026,
+                "z": -2.0462839381816496
+            }
+        ],
+        "allPlayerPos": [
+            [
+                0,
+                3,
+                0
+            ],
+            [
+                0,
+                0.9,
+                0
+            ]
+        ],
+        "defaultPlayer": "jill",
+        "postProcessing": {
+            "enable": true,
+            "bloomEnable": true,
+            "bloomStrength": 0.1,
+            "bloomRadius": 0.24
+        },
+        "toneMapping": "Filmic",
+        "envHDR": "DIKHOLOLO_NIGHT",
+        "physics": "rapier"
+    },
+    "players": [
+        {
+            "name": "jill",
+            "type": "SoldierFemale",
+            "src": "SOLDIER_FEMALE",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [0, 0, 0],
+            "rotation": [0, 0, 0]
+        }
+    ],
+    "enemies": [
+    ],
+    "lights": [
+        {
+            "room": "room1",
+            "basicLightSpecs": [
+                {
+                    "name": "room1_mainLight",
+                    "display": "Directional Light",
+                    "detail": {
+                        "color": [249, 230, 190],
+                        "intensity": 0.5,
+                        "position": [0, 20, 28],
+                        "target": [0, 0, 0]
+                    },
+                    "type": "DirectionalLight",
+                    "debug": true,
+                    "shadow": false,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true
+                },
+                {
+                    "name": "room1_ambientLight",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [255, 235, 102],
+                        "intensity": 0.1
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true
+                },
+                {
+                    "name": "room1_hemisphereLight",
+                    "display": "Hemisphere Light",
+                    "detail": {
+                        "groundColor": [103, 210, 96],
+                        "skyColor": [255, 255, 255],
+                        "intensity": 0,
+                        "position": [0, 4.6, 0]
+                    },
+                    "type": "HemisphereLight",
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "room1_pointLight1",
+                    "display": "top point light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "position": [0, 7, -2.95],
+                        "intensity": 120,
+                        "distance": 0,
+                        "decay": 1.85,
+                        "normalBias": 0.03
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "turnOn": true
+                }
+            ],
+            "spotLightSpecs": [
+                {
+                    "name": "room1_spotLight1",
+                    "display": "TV Spot Light",
+                    "detail": {
+                        "color": [
+                            179,
+                            255,
+                            250
+                        ],
+                        "position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "target": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "intensity": 8,
+                        "distance": 10,
+                        "decay": 0.33,
+                        "penumbra": 0.35,
+                        "angle": 0.4618
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "room1_television_01_1",
+                    "attachToType": "screen",
+                    "turnOn": false,
+                    "alwaysOn": false,
+                    "room": "room1"
+                }
+            ]
+        },
+        {
+            "room": "safe_room_1",
+            "basicLightSpecs": [],
+            "pointLightSpecs": [
+                {
+                    "name": "safe_room_1_pointLight_1",
+                    "display": "Ceiling Lamp Safe Room",
+                    "detail": {
+                        "color": [235, 247, 255],
+                        "position": [
+                            0,
+                            -0.30000000000000104,
+                            0
+                        ],
+                        "scale": [
+                            0.1,
+                            0.1,
+                            0.1
+                        ],
+                        "intensity": 3,
+                        "distance": 5,
+                        "decay": 2,
+                        "shadowCameraAspect": 1,
+                        "bias": -0.0008,
+                        "normalBias": 0.0047
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "safe_room_1_modern_ceiling_lamp_01",
+                    "turnOn": true,
+                    "room": "safe_room_1"
+                },
+                {
+                    "name": "safe_room_1_pointLight_2",
+                    "display": "Lamp Light",
+                    "detail": {
+                        "color": [
+                            225,
+                            186,
+                            132
+                        ],
+                        "position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "scale": [
+                            0.05,
+                            0.05,
+                            0.05
+                        ],
+                        "intensity": 4.45,
+                        "distance": 1.88,
+                        "decay": 0.77,
+                        "shadowCameraAspect": 1,
+                        "bias": 0,
+                        "normalBias": 0.00392,
+                        "shadowCameraNear": 0.23
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "attachTo": "safe_room_1_hand_crafted_studio",
+                    "turnOn": true,
+                    "alwaysOn": true,
+                    "attachToType": "lamp",
+                    "room": "safe_room_1"
+                },
+                {
+                    "name": "safe_room_1_pointLight_3",
+                    "display": "Outdoor Light",
+                    "detail": {
+                        "color": [182, 214, 236],
+                        "position": [
+                            12,
+                            3.96,
+                            3.78
+                        ],
+                        "scale": [
+                            0.5,
+                            0.5,
+                            0.5
+                        ],
+                        "intensity": 40,
+                        "distance": 11.3,
+                        "decay": 2,
+                        "shadowCameraAspect": 1
+                    },
+                    "debug": true,
+                    "shadow": false,
+                    "shadow_debug": false,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "room": "safe_room_1"
+                }
+            ],
+            "rectAreaLightSpecs": [
+                {
+                    "name": "safe_room_1_led_Light",
+                    "display": "LED Light",
+                    "detail": {
+                        "color": [
+                            189,
+                            238,
+                            255
+                        ],
+                        "position": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "rotation": [
+                            -2,
+                            0,
+                            0
+                        ],
+                        "intensity": 25,
+                        "width": 0.93,
+                        "height": 0.02
+                    },
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true,
+                    "attachTo": "safe_room_1_hand_crafted_studio",
+                    "turnOn": true,
+                    "alwaysOn": true,
+                    "attachToType": "led",
+                    "room": "safe_room_1"
+                },
+                {
+                    "name": "safe_room_1_window_Light",
+                    "display": "Window Light",
+                    "detail": {
+                        "color": [
+                            200,
+                            215,
+                            238
+                        ],
+                        "position": [
+                            -1.36,
+                            0.13,
+                            0.7
+                        ],
+                        "rotation": [
+                            0,
+                            -1.57,
+                            0
+                        ],
+                        "intensity": 18,
+                        "width": 0.5,
+                        "height": 0.5
+                    },
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true,
+                    "attachTo": "safe_room_1_hand_crafted_studio",
+                    "turnOn": true,
+                    "alwaysOn": true,
+                    "attachToType": "led",
+                    "room": "safe_room_1"
+                }
+            ]
+        }
+    ],
+    "objects": [
+        {
+            "type": "Scene",
+            "children": [
+                {
+                    "type": "Axes",
+                    "size": 3,
+                    "position": [-20.5, 0, -20.5]
+                },
+                {
+                    "type": "Grid",
+                    "size": 40,
+                    "divisions": 40,
+                    "position": [0, -1, 0]
+                },
+                {
+                    "type": "Glock",
+                    "src": "GLOCK_ITEM",
+                    "name": "glock",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
+                },
+                {
+                    "type": "Pistol1",
+                    "src": "PISTOL1_ITEM",
+                    "name": "pistol",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "Revolver",
+                    "src": "REVOLVER_ITEM",
+                    "name": "revolver",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "SMGShort",
+                    "src": "SMG_SHORT_ITEM",
+                    "name": "smg_short",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "Bayonet",
+                    "src": "BAYONET_ITEM",
+                    "name": "bayonet",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
+                },
+                {
+                    "type": "PistolAmmoBox",
+                    "src": "PISTOL_AMMO_BOX_ITEM",
+                    "name": "pistol_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -3,
+                        1,
+                        -4.67
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 35
+                    },
+                    "transparent": false,
+                    "physics": {
+                        "mass": 0
+                    }
+                },
+                {
+                    "type": "PistolAmmoBox",
+                    "src": "PISTOL_AMMO_BOX_ITEM",
+                    "name": "pistol_ammo_box_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        5,
+                        2,
+                        10.63
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": true,
+                    "belongTo": "jill",
+                    "ammo": {
+                        "count": 30
+                    },
+                    "transparent": false,
+                    "physics": {
+                        "mass": 0
+                    }
+                },
+                {
+                    "type": "MagnumAmmoBox",
+                    "src": "MAGNUM_AMMO_BOX_ITEM",
+                    "name": "magnum_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -2.45,
+                        1,
+                        -4.67
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 10
+                    },
+                    "transparent": false
+                },
+                {
+                    "type": "SMGAmmoBox",
+                    "src": "SMG_AMMO_BOX_ITEM",
+                    "name": "smg_ammo_box_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -1.85,
+                        1,
+                        -4.67
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "ammo": {
+                        "count": 90
+                    },
+                    "transparent": false
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitSmall",
+                    "name": "small_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -2.5,
+                        1,
+                        -5.5
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "transparent": false
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitMedium",
+                    "name": "medium_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -1.8,
+                        1,
+                        -5.5
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "transparent": false
+                },
+                {
+                    "type": "FirstAidKit",
+                    "smallSrc": "FIRST_AID_KIT_SMALL",
+                    "mediumSrc": "FIRST_AID_KIT_MEDIUM",
+                    "largeSrc": "FIRST_AID_KIT_LARGE",
+                    "itemType": "FirstAidKitLarge",
+                    "name": "large_health_kit_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        -1,
+                        1,
+                        -5.5
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": false,
+                    "transparent": false
+                }
+            ]
+        },
+        {
+            "type": "InspectorRoom",
+            "width": 30,
+            "height": 5.5,
+            "depth": 30,
+            "baseSize": 9,
+            "frontMap": "WORN_MOSSY_PLASTER_WALL",
+            "frontNormal": "WORN_MOSSY_PLASTER_WALL_NORMAL",
+            "frontArm": "WORN_MOSSY_PLASTER_WALL_ARM",
+            "backMap": "WORN_MOSSY_PLASTER_WALL",
+            "backNormal": "WORN_MOSSY_PLASTER_WALL_NORMAL",
+            "backArm": "WORN_MOSSY_PLASTER_WALL_ARM",
+            "leftMap": "WORN_MOSSY_PLASTER_WALL",
+            "leftNormal": "WORN_MOSSY_PLASTER_WALL_NORMAL",
+            "leftArm": "WORN_MOSSY_PLASTER_WALL_ARM",
+            "rightMap": "WORN_MOSSY_PLASTER_WALL",
+            "rightNormal": "WORN_MOSSY_PLASTER_WALL_NORMAL",
+            "rightArm": "WORN_MOSSY_PLASTER_WALL_ARM",
+            "roughness": 0.5,
+            "mapRatio": 1,
+            "name": "room1",
+            "showArrow": false,
+            "enableWallOBBs": true,
+            "position": [0, 2.5, 0],
+            "rotationY": 0,
+            "areas": [
+                {
+                    "name": "front_left",
+                    "width": 15,
+                    "height": 5.5,
+                    "depth": 15,
+                    "color": "#aaaaaa",
+                    "position": [7.5, 0, 7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [-3, 1.3, -3],
+                    "cameraTarget": [10, -6.74, 10]
+                },
+                {
+                    "name": "front_right",
+                    "width": 15,
+                    "height": 5.5,
+                    "depth": 15,
+                    "color": "#bbbbbb",
+                    "position": [-7.5, 0, 7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [3, 2.06, -3],
+                    "cameraTarget": [-10, -6.74, 10]
+                },
+                {
+                    "name": "back_left",
+                    "width": 15,
+                    "height": 5.5,
+                    "depth": 15,
+                    "color": "#cccccc",
+                    "position": [7.5, 0, -7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [-3, 3.29, 3],
+                    "cameraTarget": [10, -6.74, -10]
+                },
+                {
+                    "name": "back_right",
+                    "width": 15,
+                    "height": 5.5,
+                    "depth": 15,
+                    "color": "#dddddd",
+                    "position": [-7.5, 0, -7.5],
+                    "rotation": [0, 0, 0],
+                    "cameraPosition": [3, 1.3, 3],
+                    "cameraTarget": [-10, -6.74, -10]
+                }
+            ],
+            "groups": [
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "roughness": 0.5,
+                    "metalness": 0,
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox1",
+                    "position": [
+                        2,
+                        -1,
+                        0
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 200, "friction": 1 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "roughness": 0.5,
+                    "metalness": 0,
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox2",
+                    "position": [
+                        2,
+                        0,
+                        0
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 100 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "roughness": 0.5,
+                    "metalness": 0,
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox3",
+                    "position": [
+                        2,
+                        1,
+                        0
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 100 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        1.2,
+                        1.2,
+                        1.2
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "roughness": 0.5,
+                    "metalness": 0,
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox4",
+                    "position": [
+                        3.5,
+                        -1,
+                        0
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 200, "friction": 1 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "roughness": 0.5,
+                    "metalness": 0,
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox5",
+                    "position": [
+                        3.5,
+                        0,
+                        0
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 100 }
+                },
+                {
+                    "type": "BoxCube",
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "baseSize": 1.2,
+                    "map": "CRATE",
+                    "normalMap": "CRATE_NORMAL",
+                    "roughness": 0.5,
+                    "metalness": 0,
+                    "mapRatio": 1,
+                    "freeTexture": false,
+                    "noRepeat": true,
+                    "isObstacle": true,
+                    "enableWallOBBs": true,
+                    "movable": true,
+                    "climbable": true,
+                    "name": "room1_CubeBox6",
+                    "position": [
+                        3.5,
+                        1,
+                        0
+                    ],
+                    "rotation": [0, 0, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 100 }
+                },
+                {
+                    "type": "SquarePillar",
+                    "scale": [
+                        3,
+                        0.5,
+                        3
+                    ],
+                    "baseSize": 3,
+                    "enableOBBs": true,
+                    "frontMap": "BRICK_WALL_005",
+                    "frontNormal": "BRICK_WALL_005_NORMAL",
+                    "frontArm": "BRICK_WALL_005_ARM",
+                    "backMap": "BRICK_WALL_005",
+                    "backNormal": "BRICK_WALL_005_NORMAL",
+                    "backArm": "BRICK_WALL_005_ARM",
+                    "leftMap": "BRICK_WALL_005",
+                    "leftNormal": "BRICK_WALL_005_NORMAL",
+                    "leftArm": "BRICK_WALL_005_ARM",
+                    "rightMap": "BRICK_WALL_005",
+                    "rightNormal": "BRICK_WALL_005_NORMAL",
+                    "rightArm": "BRICK_WALL_005_ARM",
+                    "topMap": "BRICK_WALL_005",
+                    "topNormal": "BRICK_WALL_005_NORMAL",
+                    "topArm": "BRICK_WALL_005_ARM",
+                    "bottomMap": "BRICK_WALL_005",
+                    "bottomNormal": "BRICK_WALL_005_NORMAL",
+                    "bottomArm": "BRICK_WALL_005_ARM",
+                    "mapRatio": 1,
+                    "roughness": 0.68,
+                    "name": "room1_square_pillar1",
+                    "showArrow": false,
+                    "enableWallOBBs": false,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        -1.8,
+                        -2.22,
+                        -5
+                    ],
+                    "rotation": [0, 2.618, 0],
+                    "transparent": false,
+                    "canBeIgnored": true,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "WoodenPicnicTable",
+                    "src": "WOODEN_PICNIC_TABLE",
+                    "name": "room1_wooden_picnic_table_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "canBeIgnored": true,
+                    "position": [
+                        -6.536273002624512,
+                        -1.832202136516571,
+                        -2.9412355422973633
+                    ],
+                    "rotation": [
+                        3.134347364236373,
+                        0.4243310413324208,
+                        3.116758275922127
+                    ],
+                    "transparent": false,
+                    "physics": { "mass": 0, "friction": 1 }
+                },
+                {
+                    "type": "Television01",
+                    "src": "TELEVISION_01",
+                    "name": "room1_television_01_1",
+                    "scale": [
+                        1.5,
+                        1.5,
+                        1.5
+                    ],
+                    "isObstacle": true,
+                    "canBeIgnored": true,
+                    "position": [
+                        -6.497673988342285,
+                        -1.1164673566818237,
+                        -2.8079824447631836
+                    ],
+                    "rotation": [
+                        -0.030758722744721464,
+                        0.5259426048338267,
+                        0.02670663446301997
+                    ],
+                    "transparent": false,
+                    "physics": { "mass": 100, "friction": 1 }
+                },
+                {
+                    "type": "BarrelExplosive",
+                    "src": "BARREL_EXPLOSIVE",
+                    "name": "room1_red_barrel_1",
+                    "scale": [1, 1],
+                    "isObstacle": true,
+                    "canBeIgnored": true,
+                    "position": [
+                        2.911292791366577,
+                        -1.9659841060638428,
+                        7.057702541351318
+                    ],
+                    "rotation": [
+                        0.1477621123866025,
+                        0.041066023932113525,
+                        0.17991442069334482
+                    ],
+                    "transparent": false,
+                    "physics": { "mass": 100, "friction": 1 }
+                },
+                {
+                    "type": "BarrelBlue",
+                    "src": "BARREL_BLUE",
+                    "name": "room1_blue_barrel_1",
+                    "scale": [1, 1],
+                    "isObstacle": true,
+                    "canBeIgnored": true,
+                    "position": [
+                        2.9793663024902344,
+                        -2.009003072977066,
+                        8.041504859924316
+                    ],
+                    "rotation": [
+                        0.08715229546957859,
+                        -0.013068219269329105,
+                        0.042704269158959
+                    ],
+                    "transparent": false,
+                    "physics": { "mass": 100, "friction": 1 }
+                },
+                {
+                    "type": "LWall",
+                    "thicknessS": 0.016,
+                    "thicknessT": 0.024,
+                    "scale": [
+                        4,
+                        3.58,
+                        7
+                    ],
+                    "baseSize": 4,
+                    "outTMap": "CASTLE_BRICK_02_RED",
+                    "outTNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "outTArm": "CASTLE_BRICK_02_RED_ARM",
+                    "outSMap": "CASTLE_BRICK_02_RED",
+                    "outSNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "outSArm": "CASTLE_BRICK_02_RED_ARM",
+                    "inTMap": "METAL_272",
+                    "inTNormal": "METAL_272_NORMAL",
+                    "inSMap": "METAL_272",
+                    "inSNormal": "METAL_272_NORMAL",
+                    "sideTMap": "CASTLE_BRICK_02_RED",
+                    "sideTNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "sideTArm": "CASTLE_BRICK_02_RED_ARM",
+                    "sideSMap": "CASTLE_BRICK_02_RED",
+                    "sideSNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "sideSArm": "CASTLE_BRICK_02_RED_ARM",
+                    "topMap": "CASTLE_BRICK_02_RED",
+                    "topNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "topArm": "CASTLE_BRICK_02_RED_ARM",
+                    "bottomMap": "CASTLE_BRICK_02_RED",
+                    "bottomNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "bottomArm": "CASTLE_BRICK_02_RED_ARM",
+                    "mapRatio": 1,
+                    "roughness": 0.71,
+                    "name": "room1_saferoom_LWall1",
+                    "showArrow": false,
+                    "enableWallOBBs": false,
+                    "enableOBBs": false,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        5.47,
+                        -0.710000000000001,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "transparent": false
+                },
+                {
+                    "type": "LWall",
+                    "thicknessS": 0.016,
+                    "thicknessT": 0.024,
+                    "scale": [
+                        4,
+                        3.58,
+                        7
+                    ],
+                    "baseSize": 4,
+                    "outTMap": "CASTLE_BRICK_02_RED",
+                    "outTNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "outTArm": "CASTLE_BRICK_02_RED_ARM",
+                    "outSMap": "CASTLE_BRICK_02_RED",
+                    "outSNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "outSArm": "CASTLE_BRICK_02_RED_ARM",
+                    "inTMap": "METAL_272",
+                    "inTNormal": "METAL_272_NORMAL",
+                    "inSMap": "METAL_272",
+                    "inSNormal": "METAL_272_NORMAL",
+                    "sideTMap": "CASTLE_BRICK_02_RED",
+                    "sideTNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "sideTArm": "CASTLE_BRICK_02_RED_ARM",
+                    "sideSMap": "CASTLE_BRICK_02_RED",
+                    "sideSNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "sideSArm": "CASTLE_BRICK_02_RED_ARM",
+                    "topMap": "CASTLE_BRICK_02_RED",
+                    "topNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "topArm": "CASTLE_BRICK_02_RED_ARM",
+                    "bottomMap": "CASTLE_BRICK_02_RED",
+                    "bottomNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "bottomArm": "CASTLE_BRICK_02_RED_ARM",
+                    "mapRatio": 1,
+                    "roughness": 0.71,
+                    "name": "room1_saferoom_LWall2",
+                    "showArrow": false,
+                    "enableWallOBBs": false,
+                    "enableOBBs": false,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        5.47,
+                        -0.710000000000001,
+                        8
+                    ],
+                    "rotationY": 3.1416,
+                    "transparent": false
+                },
+                {
+                    "type": "SquarePillar",
+                    "scale": [
+                        4,
+                        0.3,
+                        7
+                    ],
+                    "baseSize": 4,
+                    "enableOBBs": false,
+                    "frontMap": "CASTLE_BRICK_02_RED",
+                    "frontNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "frontArm": "CASTLE_BRICK_02_RED_ARM",
+                    "backMap": "CASTLE_BRICK_02_RED",
+                    "backNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "backArm": "CASTLE_BRICK_02_RED_ARM",
+                    "leftMap": "CASTLE_BRICK_02_RED",
+                    "leftNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "leftArm": "CASTLE_BRICK_02_RED_ARM",
+                    "rightMap": "CASTLE_BRICK_02_RED",
+                    "rightNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "rightArm": "CASTLE_BRICK_02_RED_ARM",
+                    "topMap": "CASTLE_BRICK_02_RED",
+                    "topNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "topArm": "CASTLE_BRICK_02_RED_ARM",
+                    "bottomMap": "CASTLE_BRICK_02_RED",
+                    "bottomNormal": "CASTLE_BRICK_02_RED_NORMAL",
+                    "bottomArm": "CASTLE_BRICK_02_RED_ARM",
+                    "mapRatio": 1,
+                    "roughness": 0.71,
+                    "name": "room1_square_pillar_safe_room_roof",
+                    "showArrow": false,
+                    "enableWallOBBs": false,
+                    "isObstacle": true,
+                    "climbable": false,
+                    "position": [
+                        5.47,
+                        1.23,
+                        8
+                    ],
+                    "rotationY": 0,
+                    "transparent": false
+                }
+            ],
+            "floors": [],
+            "ceilings": [],
+            "walls": [],
+            "insideWalls": [],
+            "waters": [],
+            "entries": [
+                {
+                    "type": "WoodenGlassDoor1",
+                    "src": "WOODEN_GLASS_DOOR_1",
+                    "name": "room1_wooden_glass_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        5.47,
+                        -1.2987,
+                        4.5
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true,
+                    "transparent": false,
+                    "roomSequence": 0,
+                    "transportType": 1,
+                    "linkTo": "safe_room_1_wooden_glass_door_1",
+                    "transportTo": -1
+                }
+            ],
+            "terrains": [
+                {
+                    "type": "Terrain",
+                    "width": 30,
+                    "depth": 30,
+                    "height": 0.74,
+                    "segmentW": 80,
+                    "segmentD": 80,
+                    "map": "FOREST_LEAVES_04",
+                    "normalMap": "FOREST_LEAVES_04_NORMAL",
+                    "armMap": "FOREST_LEAVES_04_ARM",
+                    "roughness": 0.7,
+                    "metalness": 0,
+                    "dispMap": "FOREST_LEAVES_04_DISP",
+                    "name": "room1_terrain1",
+                    "repeatU": 1.4,
+                    "repeatV": 1.7,
+                    "repeatModeU": 1000,
+                    "repeatModeV": 1000,
+                    "receiveShadow": true,
+                    "position": [0, -2.8, 0],
+                    "rotation": [0, 0, 0],
+                    "useHeightmap": true,
+                    "physics": { "friction": 1 }
+                }
+            ]
+        },
+        {
+            "type": "Room",
+            "width": 15,
+            "height": 5,
+            "depth": 15,
+            "baseSize": 9,
+            "ignoreWalls": [0, 1, 2, 3],
+            "mapRatio": 1.5,
+            "name": "safe_room_1",
+            "showArrow": false,
+            "enableWallOBBs": false,
+            "position": [
+                0,
+                2.5,
+                0
+            ],
+            "rotationY": 0,
+            "sequence": 1,
+            "groups": [
+                {
+                    "type": "HandCraftedStudio",
+                    "src": "HAND_CRAFTED_STUDIO",
+                    "name": "safe_room_1_hand_crafted_studio",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "position": [
+                        0,
+                        -0.895,
+                        0
+                    ],
+                    "rotationY": 3.1416,
+                    "transparent": false
+                },
+                {
+                    "type": "PaintedWoodenBlueChair",
+                    "src": "PAINTED_WOODEN_BLUE_CHAIR",
+                    "name": "safe_room_1_painted_wooden_blue_chair_1",
+                    "scale": [1, 1, 1],
+                    "isObstacle": true,
+                    "position": [1.4351, -1.8625402450561523, 1],
+                    "rotationY": 0,
+                    "physics": { "mass": 30, "friction": 1 }
+                },
+                {
+                    "type": "ModernCeilingLamp01",
+                    "src": "MODERN_CEILING_LAMP_01",
+                    "name": "safe_room_1_modern_ceiling_lamp_01",
+                    "scale": [
+                        1,
+                        0.3
+                    ],
+                    "position": [
+                        0,
+                        0.57,
+                        -0.55
+                    ],
+                    "rotationY": 0,
+                    "castShadow": false,
+                    "receiveShadow": false,
+                    "transparent": false,
+                    "bloomTransparency": 0.5,
+                    "bloomIntensity": 2
+                }
+            ],
+            "floors": [],
+            "ceilings": [],
+            "walls": [],
+            "insideWalls": [],
+            "entries": [
+                {
+                    "type": "WoodenGlassDoor1",
+                    "src": "WOODEN_GLASS_DOOR_1",
+                    "name": "safe_room_1_wooden_glass_door_1",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "enableWallOBBs": false,
+                    "movable": false,
+                    "climbable": false,
+                    "position": [
+                        0,
+                        -1.351,
+                        -2.285
+                    ],
+                    "rotationY": 0,
+                    "ignoreTPC": true,
+                    "transparent": false,
+                    "roomSequence": 1,
+                    "transportType": 1,
+                    "linkTo": "room1_wooden_glass_door_1",
+                    "transportTo": 1
+                }
+            ],
+            "terrains": [
+                {
+                    "type": "Terrain",
+                    "width": 40,
+                    "depth": 40,
+                    "height": 0.74,
+                    "segmentW": 80,
+                    "segmentD": 80,
+                    "map": "FOREST_LEAVES_04",
+                    "normalMap": "FOREST_LEAVES_04_NORMAL",
+                    "armMap": "FOREST_LEAVES_04_ARM",
+                    "roughness": 0.7,
+                    "metalness": 0,
+                    "dispMap": "FOREST_LEAVES_04_DISP",
+                    "name": "room1_terrain1",
+                    "repeatU": 3,
+                    "repeatV": 3,
+                    "repeatModeU": 1000,
+                    "repeatModeV": 1000,
+                    "receiveShadow": true,
+                    "position": [0, -3.2, 0],
+                    "rotation": [0, 0, 0],
+                    "useHeightmap": true,
+                    "physics": { "friction": 1 }
+                }
+            ]
+        }
+    ]
+}

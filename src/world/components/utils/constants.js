@@ -329,7 +329,9 @@ const TEXTURE_NAMES = {
     WATER_2_M: 'WATER_2_M',
     WATER_2_M_NORMAL: 'WATER_2_M_NORMAL',
     // post-processor
-    TRI_PATTERN: 'TRI_PATTERN'
+    TRI_PATTERN: 'TRI_PATTERN',
+    // hdr
+    DIKHOLOLO_NIGHT: 'DIKHOLOLO_NIGHT'
 };
 
 const TEXTURE_ROOT = 'assets/textures';
@@ -511,6 +513,10 @@ const TEXTURES = [{
 }, {
     name: TEXTURE_NAMES.TRI_PATTERN, map: `${TEXTURE_ROOT}/tri_pattern.jpg`
 }];
+
+const HDR_TEXTURES = [{
+    name: TEXTURE_NAMES.DIKHOLOLO_NIGHT, map: 'assets/textures/hdr/dikhololo_night_4k.hdr'
+}]
 
 // gltfs
 const GLTF_NAMES = {
@@ -943,6 +949,7 @@ export {
 
     TEXTURE_NAMES,
     TEXTURES,
+    HDR_TEXTURES,
     GLTF_NAMES,
     GLTFS,
     SHADER_NAMES,
