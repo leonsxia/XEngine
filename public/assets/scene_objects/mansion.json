@@ -43,7 +43,7 @@
             "bloomStrength": 0.1,
             "bloomRadius": 0.24
         },
-        "toneMapping": "Cineon",
+        "toneMapping": "Filmic",
         "physics": "rapier"
     },
     "players": [
@@ -240,7 +240,7 @@
                     "display": "Security Light 1",
                     "detail": {
                         "color": [253, 182, 58],
-                        "position": [0, 0.75, 0],
+                        "position": [0, 1.04, 0],
                         "scale": [0.3, 0.3, 0.3],
                         "intensity": 20,
                         "distance": 18,
@@ -261,7 +261,7 @@
                     "display": "Security Light 2",
                     "detail": {
                         "color": [101, 51, 240],
-                        "position": [0, 0.75, 0],
+                        "position": [0, 1.04, 0],
                         "scale": [0.3, 0.3, 0.3],
                         "intensity": 20,
                         "distance": 10,
@@ -282,7 +282,7 @@
                     "display": "Security Light 3",
                     "detail": {
                         "color": [22, 195, 19],
-                        "position": [0, 0.75, 0],
+                        "position": [0, 1.04, 0],
                         "scale": [0.3, 0.3, 0.3],
                         "intensity": 15,
                         "distance": 10,

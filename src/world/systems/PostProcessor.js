@@ -230,6 +230,7 @@ class PostProcessor {
 
     }
 
+    // bloom methods
     darkenNonBloomed(obj) {
 
         if (obj.father?.isWater) {
@@ -314,6 +315,7 @@ class PostProcessor {
         }
 
     }
+    // bloom methods end
 
     disableAllEffects() {
 

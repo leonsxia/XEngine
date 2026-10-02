@@ -67,6 +67,8 @@
         ],
         "defaultPlayer": "jill",
         "postProcessing": {
+            "enable": true,
+            "bloomEnable": true,
             "bloomStrength": 0.1,
             "bloomRadius": 0.24
         },
