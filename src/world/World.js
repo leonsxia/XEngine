@@ -36,6 +36,7 @@ import { AnimationLoop } from "./systems/AnimationLoop";
 import { Loop } from "./systems/Loop";
 import { loadSounds } from "./components/utils/audioHelper";
 import { SOUNDS } from "./components/utils/audioConstants";
+import { getTopParent } from "./components/utils/objectHelper";
 
 const config = { 
     scenes: [
@@ -70,6 +71,57 @@ config.physics = PHYSICS_TYPES.SIMPLE;
 
 const DEBUG = true;
 
+function countObjects(scene, specs = { visibleOnly: false }) {
+
+    let objects = 0, vertices = 0, triangles = 0;
+    const { visibleOnly } = specs;
+    const topParent = {};
+
+    for (let i = 0, il = scene.children.length; i < il; i++) {
+
+        const object = scene.children[i];
+
+        object.traverse(function (object) {
+
+            if (visibleOnly) {
+
+                if (!object.visible) return;
+
+                getTopParent(object, topParent);
+                if (topParent.value && !topParent.value.visible) return;
+
+            }
+
+            objects++;
+
+            if (object.isMesh) {
+
+                const geometry = object.geometry;
+
+                vertices += geometry.attributes.position.count;
+
+                if (geometry.index !== null) {
+
+                    triangles += geometry.index.count / 3;
+
+                } else {
+
+                    triangles += geometry.attributes.position.count / 3;
+
+                }
+
+            }
+
+        });
+
+    }
+
+    return { objects, vertices, triangles };
+
+}
+
+const systemLogger = new Logger(DEBUG, 'World');
+
 class World {
 
     #renderer;
@@ -79,8 +131,6 @@ class World {
     #gltfs;
 
     #sceneBuilder;
-
-    #systemLogger = new Logger(DEBUG, 'World');
 
     _amimationLoop;
     _worldLooper;
@@ -163,7 +213,7 @@ class World {
         const itemViewerEnvironment = loadedTextures[TEXTURE_NAMES.METAL_241].clone();
 
         const end = Date.now();
-        this.#systemLogger.log(`loading assests in ${(end - start) * .001} s`);
+        systemLogger.log(`loading assests in ${(end - start) * .001} s`);
 
         this.#textures = textures;
         this.#gltfs = gltfs;
@@ -204,7 +254,7 @@ class World {
 
         this.#currentScene = loadScene;
 
-        this.#systemLogger.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
+        systemLogger.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
 
         if (infosDomElements) infosDomElements.msg.textContent = 'assets all loaded. => renderding scene...';
 
@@ -217,11 +267,11 @@ class World {
             container.prepend(this.#renderer.domElement);
 
             const end = Date.now();
-            this.#systemLogger.log(`render in ${(end - start) * .001} s`);
+            systemLogger.log(`render in ${(end - start) * .001} s`);
 
-            const { objects, vertices, triangles } = this.countObjects(loadScene.scene);
+            const { objects, vertices, triangles } = countObjects(loadScene.scene);
 
-            this.#systemLogger.log(`objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
+            systemLogger.log(`all objects: ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
 
             if (infosDomElements) {
                 
@@ -253,44 +303,7 @@ class World {
             height: canvas.clientHeight
         };
 
-    }
-
-    countObjects(scene) {
-
-        let objects = 0, vertices = 0, triangles = 0;
-
-        for (let i = 0, il = scene.children.length; i < il; i++) {
-
-            const object = scene.children[i];
-
-            object.traverseVisible(function (object) {
-                objects++;
-
-                if (object.isMesh) {
-
-                    const geometry = object.geometry;
-
-                    vertices += geometry.attributes.position.count;
-
-                    if (geometry.index !== null) {
-
-                        triangles += geometry.index.count / 3;
-
-                    } else {
-
-                        triangles += geometry.attributes.position.count / 3;
-
-                    }
-
-                }
-
-            });
-
-        }
-
-        return { objects, vertices, triangles };
-
-    }
+    }    
 
     setAnimationLoop(callback) {
 
@@ -412,4 +425,4 @@ class World {
 
 }
 
-export { World };
+export { World, countObjects, systemLogger };

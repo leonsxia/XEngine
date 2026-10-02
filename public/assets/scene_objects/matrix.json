@@ -72,6 +72,7 @@
             "bloomStrength": 0.1,
             "bloomRadius": 0.24
         },
+        "toneMapping": "Filmic",
         "currentRoomSequence": 0,
         "physics": "rapier"
     },

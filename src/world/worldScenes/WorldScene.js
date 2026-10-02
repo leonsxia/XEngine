@@ -21,6 +21,7 @@ import { AudioMixer } from '../components/updatables/AudioMixer.js';
 import { RapierWorld } from '../components/physics/rapier/RapierWorld.js';
 import { GLOBALS } from '../systems/globals.js';
 import { toneMappingStr } from '../systems/renderer.js';
+import { countObjects, systemLogger } from '../World.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -761,6 +762,9 @@ class WorldScene {
         this.updateEnemies();
 
         this.loop.reset();
+
+        const { objects, vertices, triangles } = countObjects(this.scene, { visibleOnly: true });
+        systemLogger.log(`visible objects in room: "${this.currentRoom.name}": ${objects}, vertices: ${vertices}, triangles: ${triangles}`);
 
     }
 
