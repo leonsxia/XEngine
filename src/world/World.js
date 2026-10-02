@@ -36,7 +36,7 @@ import { AnimationLoop } from "./systems/AnimationLoop";
 import { Loop } from "./systems/Loop";
 import { loadSounds } from "./components/utils/audioHelper";
 import { SOUNDS } from "./components/utils/audioConstants";
-import { getTopParent } from "./components/utils/objectHelper";
+import { isObjectVisible } from "./components/utils/objectHelper";
 
 const config = { 
     scenes: [
@@ -75,20 +75,17 @@ function countObjects(scene, specs = { visibleOnly: false }) {
 
     let objects = 0, vertices = 0, triangles = 0;
     const { visibleOnly } = specs;
-    const topParent = {};
 
     for (let i = 0, il = scene.children.length; i < il; i++) {
 
         const object = scene.children[i];
+        if (visibleOnly && !object.visible) continue;
 
         object.traverse(function (object) {
 
             if (visibleOnly) {
 
-                if (!object.visible) return;
-
-                getTopParent(object, topParent);
-                if (topParent.value && !topParent.value.visible) return;
+                if (!isObjectVisible(object)) return;
 
             }
 

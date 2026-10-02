@@ -181,6 +181,19 @@ function getTopParent(object, out, level = '') {
 
 }
 
+function isObjectVisible(object) {
+
+    let visible = object.visible;
+    if (visible && object.parent) {
+
+        visible = isObjectVisible(object.parent);
+
+    }
+
+    return visible;
+
+}
+
 function objectFilter(object) {
 
     if (object instanceof BoxCube ||
@@ -448,5 +461,6 @@ export {
     moveableObjectFilter, isRapierObject, noPhysicsObject,
     isBloomObject,
     resetObject3D,
-    getIntersectionTarget
+    getIntersectionTarget,
+    isObjectVisible
 };
