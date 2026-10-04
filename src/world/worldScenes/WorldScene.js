@@ -220,7 +220,16 @@ class WorldScene {
         this.renderer.toneMapping = TONE_MAPPING[toneMapping];
         this.selectedTone = TONE_MAPPING[toneMapping];
 
-        if (envHDR) this.scene.background = loadedHDRTextures[envHDR];
+        if (envHDR?.enabled) {
+
+            const { mapping, rotation = [0, 0, 0], intensity = 1 } = envHDR;
+            this.scene.background = loadedHDRTextures[mapping];
+            this.scene.backgroundRotationX = rotation[0];
+            this.scene.backgroundRotationY = rotation[1];
+            this.scene.backgroundRotationZ = rotation[2];
+            this.scene.backgroundIntensity = intensity;
+
+        }
 
         // only set pixel ratio at first time
         if (devicePixelRatio > 1) {

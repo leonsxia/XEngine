@@ -173,6 +173,49 @@ class GuiMaker {
             close: true
         }));
 
+        // scene
+        {
+            if (this.setup.envHDR?.enabled) {
+
+                const folder = makeFolderGuiConfig({ folder: 'Scene', parent: null, close: true });
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'backgroundRotationX',
+                    prop: 'HDR.rotX',
+                    value: $scene.scene,
+                    params: [- 360, 360, .01],
+                    type: 'object-angle',
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'backgroundRotationY',
+                    prop: 'HDR.rotY',
+                    value: $scene.scene,
+                    params: [- 360, 360, .01],
+                    type: 'object-angle'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'backgroundRotationZ',
+                    prop: 'HDR.rotZ',
+                    value: $scene.scene,
+                    params: [- 360, 360, .01],
+                    type: 'object-angle'
+                }));
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'backgroundIntensity',
+                    prop: 'HDR.intensity',
+                    value: $scene.scene,
+                    params: [0, 5],
+                    type: 'number'
+                }));
+
+                this.guiLeftSpecs.details.push(folder);
+
+            }
+        }
+
         // audio
         {
             const volume = { level: 1 };

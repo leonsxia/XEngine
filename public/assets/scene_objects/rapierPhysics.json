@@ -40,6 +40,12 @@
             "bloomStrength": 0.1,
             "bloomRadius": 0.24
         },
+        "envHDR": {
+            "enabled": true,
+            "mapping": "DIKHOLOLO_NIGHT",
+            "rotation": [0, 0, 0],
+            "intensity": 1
+        },
         "physics": "rapier"
     },
     "players": [

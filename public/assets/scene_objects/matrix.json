@@ -73,7 +73,12 @@
             "bloomRadius": 0.24
         },
         "toneMapping": "Filmic",
-        "envHDR": "DIKHOLOLO_NIGHT",
+        "envHDR": {
+            "enabled": true,
+            "mapping": "DIKHOLOLO_NIGHT",
+            "rotation": [0, 0, 0],
+            "intensity": 1
+        },
         "currentRoomSequence": 0,
         "physics": "rapier"
     },
