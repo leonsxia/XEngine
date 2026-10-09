@@ -1,7 +1,7 @@
 import { WorldScene } from "../WorldScene.js";
 
 const worldSceneSpecs = {
-    name: "Wood Cabin",
+    name: 'Wood Cabin',
     src: 'assets/scene_objects/levels/woodCabin.json',
     enableGui: true
 };

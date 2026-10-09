@@ -281,6 +281,7 @@ class SceneObjectBase {
             gltf.traverse((mesh) => { 
                 
                 mesh.isSceneModel = true;
+                mesh.sceneObject = this;
             
             });
 

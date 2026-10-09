@@ -1,0 +1,331 @@
+{
+    "settings": {
+        "name": "Navigation Room",
+        "camera": {
+            "position": [
+                -1.5,
+                4.5,
+                6.5
+            ]
+        },
+        "moveType": "tankmove",
+        "enableTPC": true,
+        "enableIC": true,
+        "enableGui": true,
+        "enableShadow": true,
+        "enablePicker": true,
+        "allTargets": [
+            {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        ],
+        "allCameraPos": [
+            {
+                "x": 3,
+                "y": 7,
+                "z": 8
+            }
+        ],
+        "allPlayerPos": [
+            [
+                -2.5,
+                1.15234,
+                3.5
+            ]
+        ],
+        "defaultPlayer": "jill",
+        "postProcessing": {
+            "enable": true,
+            "bloomEnable": true,
+            "bloomStrength": 0.1,
+            "bloomRadius": 0.24
+        },
+        "toneMapping": "AgX",
+        "envHDR": {
+            "enabled": false
+        },
+        "physics": "rapier"
+    },
+    "players": [
+        {
+            "name": "jill",
+            "type": "SoldierFemale",
+            "src": "SOLDIER_FEMALE",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [0, 0, 0],
+            "rotation": [0, 0, 0]
+        }
+    ],
+    "enemies": [
+    ],
+    "lights": [
+        {
+            "room": "room1",
+            "basicLightSpecs": [
+                {
+                    "name": "room1_ambientLight",
+                    "display": "Ambient Light",
+                    "detail": {
+                        "color": [255, 255, 255],
+                        "intensity": 1
+                    },
+                    "type": "AmbientLight",
+                    "debug": true,
+                    "visible": true
+                },
+                {
+                    "name": "room1_hemisphereLight",
+                    "display": "Hemisphere Light",
+                    "detail": {
+                        "groundColor": [103, 210, 96],
+                        "skyColor": [255, 255, 255],
+                        "intensity": 0,
+                        "position": [0, 4.6, 0]
+                    },
+                    "type": "HemisphereLight",
+                    "debug": true,
+                    "helper_show": false,
+                    "visible": true
+                }
+            ],
+            "pointLightSpecs": [
+                {
+                    "name": "room1_pointLight_1",
+                    "display": "Ceiling Lamp 1",
+                    "detail": {
+                        "color": [235, 247, 255],
+                        "position": [
+                            0,
+                            6,
+                            0
+                        ],
+                        "scale": [
+                            0.3,
+                            0.3,
+                            0.3
+                        ],
+                        "intensity": 60,
+                        "distance": 15,
+                        "decay": 2,
+                        "shadowCameraAspect": 1,
+                        "bias": -0.0008,
+                        "normalBias": 0.0047
+                    },
+                    "debug": true,
+                    "shadow": true,
+                    "shadow_debug": true,
+                    "helper_show": false,
+                    "shadow_cam_show": false,
+                    "visible": true,
+                    "room": "room1"
+                }
+            ],
+            "spotLightSpecs": [
+            ]
+        }
+    ],
+    "objects": [
+        {
+            "type": "Scene",
+            "children": [
+                {
+                    "type": "Axes",
+                    "size": 3,
+                    "position": [-20.5, 0, -20.5]
+                },
+                {
+                    "type": "Grid",
+                    "size": 40,
+                    "divisions": 40,
+                    "position": [0, -0.1, 0]
+                },
+                {
+                    "type": "Glock",
+                    "src": "GLOCK_ITEM",
+                    "name": "glock",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
+                },
+                {
+                    "type": "Pistol1",
+                    "src": "PISTOL1_ITEM",
+                    "name": "pistol",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "Revolver",
+                    "src": "REVOLVER_ITEM",
+                    "name": "revolver",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "SMGShort",
+                    "src": "SMG_SHORT_ITEM",
+                    "name": "smg_short",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": false
+                },
+                {
+                    "type": "Bayonet",
+                    "src": "BAYONET_ITEM",
+                    "name": "bayonet",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "belongTo": "jill",
+                    "isPicked": true,
+                    "isArmed": true
+                },
+                {
+                    "type": "PistolAmmoBox",
+                    "src": "PISTOL_AMMO_BOX_ITEM",
+                    "name": "pistol_ammo_box_2",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "isObstacle": true,
+                    "movable": true,
+                    "position": [
+                        5,
+                        2,
+                        10.63
+                    ],
+                    "rotationY": 0,
+                    "currentRoom": "room1",
+                    "isPicked": true,
+                    "belongTo": "jill",
+                    "ammo": {
+                        "count": 30
+                    },
+                    "transparent": false,
+                    "physics": {
+                        "mass": 0
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Room",
+            "width": 15,
+            "height": 5,
+            "depth": 15,
+            "baseSize": 9,
+            "ignoreWalls": [0, 1, 2, 3],
+            "mapRatio": 1.5,
+            "name": "room1",
+            "showArrow": false,
+            "enableWallOBBs": false,
+            "position": [
+                0,
+                0,
+                0
+            ],
+            "rotationY": 0,
+            "sequence": 0,
+            "groups": [
+                {
+                    "type": "NavRoom",
+                    "src": "NAV_ROOM",
+                    "name": "room1_nav_room",
+                    "scale": [
+                        1,
+                        1,
+                        1
+                    ],
+                    "position": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "rotationY": 0,
+                    "transparent": false
+                }
+            ],
+            "floors": [],
+            "ceilings": [],
+            "walls": [],
+            "insideWalls": [],
+            "entries": [],
+            "terrains": []
+        }
+    ]
+}

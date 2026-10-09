@@ -13,6 +13,7 @@ import { WorldTerrain } from "./worldScenes/WorldTerrain";
 import { WorldRapier } from "./worldScenes/WorldRapier";
 import { RouteKanal } from "./worldScenes/levels/RouteKanal";
 import { WoodCabin } from "./worldScenes/levels/WoodCabin";
+import { NavRoom } from "./worldScenes/levels/NavRoom";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
@@ -54,7 +55,8 @@ const config = {
         'Terrain',
         'Rapier Physics',
         'Route Kanal',
-        'Wood Cabin'
+        'Wood Cabin',
+        'Navigation Room'
     ],  // scene list for scene selector
 };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
@@ -191,7 +193,8 @@ class World {
             new WorldTerrain(this.#renderer, config),
             new WorldRapier(this.#renderer, config),
             new RouteKanal(this.#renderer, config),
-            new WoodCabin(this.#renderer, config)
+            new WoodCabin(this.#renderer, config),
+            new NavRoom(this.#renderer, config)
         );
 
     }

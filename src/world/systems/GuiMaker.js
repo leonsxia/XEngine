@@ -673,7 +673,9 @@ class GuiMaker {
 
                 objectActions[parent]['apply'] = function() {
 
-                    objects[i].father?.syncRapierWorld?.();
+                    objects[i].father?
+                    objects[i].father.syncRapierWorld?.() :
+                    objects[i].sceneObject?.syncRapierWorld?.();
 
                 }
 

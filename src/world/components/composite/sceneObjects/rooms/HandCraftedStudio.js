@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import { Vector3 } from 'three';
 import { LightingSceneBase } from "../LightingSceneBase";
 import { GLTFModel, GeometryDesc, MeshDesc, Plane } from '../../../Models';
 import { BOX_GEOMETRY } from '../../../utils/constants';
@@ -56,7 +56,7 @@ class HandCraftedStudio extends LightingSceneBase {
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, shadowCastIgnoreList: gltfIgnoreShadowCastList };
         this.GLTFs.push(new GLTFModel(gltfSpecs));
 
-        this.createBoundaries();        
+        this.createBoundaries();
 
         this.addGLTFs();
 

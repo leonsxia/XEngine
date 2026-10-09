@@ -1085,12 +1085,12 @@ function makeObjectsGuiConfig(objects) {
 
         }
 
-        if (objectFilter(object.father)) {
+        if (objectFilter(object.father || object.sceneObject)) {
 
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'scaleX',
                 prop: 'scale.x',
-                value: object.father,
+                value: object.father ?? object.sceneObject,
                 params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
                 type: 'number'
             }));
@@ -1098,7 +1098,7 @@ function makeObjectsGuiConfig(objects) {
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'scaleY',
                 prop: 'scale.y',
-                value: object.father,
+                value: object.father ?? object.sceneObject,
                 params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
                 type: 'number'
             }));
@@ -1106,7 +1106,7 @@ function makeObjectsGuiConfig(objects) {
             folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'scaleZ',
                 prop: 'scale.z',
-                value: object.father,
+                value: object.father ?? object.sceneObject,
                 params: [SCALE_MIN, SCALE_MAX, PICKED_NUMBER_STEPS],
                 type: 'number'
             }));

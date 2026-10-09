@@ -49,7 +49,8 @@ import {
     Terrain,
     BarrelExplosive,
     BarrelBlue,
-    HandCraftedStudio
+    HandCraftedStudio,
+    NavRoom
 } from "../Models";
 import { ObstacleMoveable } from "../movement/ObstacleMoveable";
 
@@ -246,7 +247,8 @@ function objectFilter(object) {
         object instanceof PistolAmmoBox ||
         object instanceof MagnumAmmoBox ||
         object instanceof SMGAmmoBox ||
-        object instanceof FirstAidKitItem
+        object instanceof FirstAidKitItem ||
+        object instanceof NavRoom
     ) {
 
         return true;
@@ -384,7 +386,8 @@ function isRapierObject(object) {
         object instanceof MagnumAmmoBox ||
         object instanceof SMGAmmoBox ||
         object instanceof FirstAidKitItem ||
-        object instanceof HandCraftedStudio
+        object instanceof HandCraftedStudio ||
+        object instanceof NavRoom
     ) {
 
         return true;

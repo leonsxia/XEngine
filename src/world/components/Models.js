@@ -127,3 +127,4 @@ export { Ladder } from './composite/inwall/connectors/Ladder.js';
 
 // scene objects
 export { HandCraftedStudio } from './composite/sceneObjects/rooms/HandCraftedStudio.js';
+export { NavRoom } from './composite/sceneObjects/rooms/NavRoom.js';

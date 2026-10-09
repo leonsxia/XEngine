@@ -139,6 +139,7 @@ const LADDER = 'Ladder';
 
 // scene objects
 const HAND_CRAFTED_STUDIO = 'HandCraftedStudio';
+const NAV_ROOM = 'NavRoom';
 
 // pickable items
 const AMMUNITION = {
@@ -584,7 +585,8 @@ const GLTF_NAMES = {
     CLASSIC_WOODEN_DOOR_6: 'CLASSIC_WOODEN_DOOR_6',
     DUNGEON_GATE_1: 'DUNGEON_GATE_1',
     // scene objects
-    HAND_CRAFTED_STUDIO: 'HAND_CRAFTED_STUDIO'
+    HAND_CRAFTED_STUDIO: 'HAND_CRAFTED_STUDIO',
+    NAV_ROOM: 'NAV_ROOM'
 };
 
 const GLTFS = [{
@@ -693,6 +695,8 @@ const GLTFS = [{
     name: GLTF_NAMES.DUNGEON_GATE_1, src: 'in_room/entries/dungeon_gate_1.glb'
 }, {
     name: GLTF_NAMES.HAND_CRAFTED_STUDIO, src: 'scene_objects/rooms/hand_crafted_studio_1-2k_compact/hand_crafted_studio.glb'
+}, {
+    name: GLTF_NAMES.NAV_ROOM, src: 'scene_objects/rooms/nav_room/nav_room.glb'
 }];
 
 const SHADER_NAMES = {
@@ -918,6 +922,7 @@ export {
     LADDER,
 
     HAND_CRAFTED_STUDIO,
+    NAV_ROOM,
 
     CAMERAS,
 
