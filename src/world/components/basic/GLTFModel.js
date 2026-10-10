@@ -37,7 +37,10 @@ class GLTFModel extends EventDispatcher {
 
     async init() {
 
-        const { src, receiveShadow = false, castShadow = false, hasBones = false, needCloneTexture = false, shadowCastIgnoreList = [], needAdjustPosition = true } = this.specs;
+        const { src, receiveShadow = false, castShadow = false, shadowCastIgnoreList = [],
+            hasBones = false, needCloneMaterial = false,needCloneTexture = false,
+            needAdjustPosition = true
+        } = this.specs;
 
         let model;
 
@@ -79,7 +82,11 @@ class GLTFModel extends EventDispatcher {
 
             this.getMeshes(this.group);
 
-            this.cloneMaterial(needCloneTexture);
+            if (needCloneMaterial) {
+
+                this.cloneMaterial(needCloneTexture);
+
+            }
 
             this.castShadow(receiveShadow, shadowCastIgnoreList)
                 .receiveShadow(castShadow);
