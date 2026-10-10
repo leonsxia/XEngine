@@ -434,7 +434,7 @@
                             0.1
                         ],
                         "intensity": 5,
-                        "distance": 4.5,
+                        "distance": 8,
                         "decay": 2,
                         "shadowCameraAspect": 1,
                         "bias": -0.0008,
@@ -1939,7 +1939,7 @@
             "enableWallOBBs": false,
             "position": [
                 0,
-                2.5,
+                0,
                 0
             ],
             "rotationY": 0,
@@ -1956,7 +1956,7 @@
                     ],
                     "position": [
                         0,
-                        -0.895,
+                        0,
                         0
                     ],
                     "rotationY": 0,
@@ -1968,7 +1968,7 @@
                     "name": "safe_room_2_painted_wooden_blue_chair_1",
                     "scale": [1, 1, 1],
                     "isObstacle": true,
-                    "position": [-1.4351, -1.8625402450561523, -1],
+                    "position": [-1.4351, 0.63746, -1],
                     "rotationY": 3.1416,
                     "physics": { "mass": 30, "friction": 1 }
                 },
@@ -1982,7 +1982,7 @@
                     ],
                     "position": [
                         0,
-                        0.57,
+                        3.07,
                         0.55
                     ],
                     "rotationY": 0,
@@ -2013,7 +2013,7 @@
                     "climbable": false,
                     "position": [
                         0,
-                        -1.351,
+                        1.149,
                         2.285
                     ],
                     "rotationY": 0,

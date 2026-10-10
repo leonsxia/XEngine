@@ -17,8 +17,7 @@ class HandCraftedStudio extends LightingSceneBase {
     _width = 4.67;
     _height = 3.21;
     _depth = 4.57;
-    _offsetX = .14;
-    _offsetZ = .01;
+    _roomHalfHeight = this._height * 0.5;
     _tableTopWidth = 1.65;
     _tableTopDepth = .9;
     _tableTopHeight = .0398;
@@ -30,7 +29,7 @@ class HandCraftedStudio extends LightingSceneBase {
     _tableMiddleDepth = .8106;
     _tablePosX = - 1.5051;
     _tablePosZ = - 1.835;
-    _tableTopPosY = - .72488;
+    _tableTopPosY = - .72488 + this._roomHalfHeight;
     _tableBottomPosY = this._tableTopPosY - (this._tableBottomHeight + this._tableTopHeight) * .5;
     _tableMiddlePosY = this._tableTopPosY - (this._tableTopHeight + this._tableMiddleHeight) * .5;
     _tableFootWidth = .1;
@@ -53,7 +52,7 @@ class HandCraftedStudio extends LightingSceneBase {
         this._scale = new Array(...scale);
 
         // gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, shadowCastIgnoreList: gltfIgnoreShadowCastList };
+        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, shadowCastIgnoreList: gltfIgnoreShadowCastList, needAdjustPosition: false };
         this.GLTFs.push(new GLTFModel(gltfSpecs));
 
         this.createBoundaries();
@@ -82,7 +81,7 @@ class HandCraftedStudio extends LightingSceneBase {
             intensity: 0,
             bloomIntensity: 3,
             lightObject: null,
-            position: new Vector3(-1.87, - 0.25, - 1.67),
+            position: new Vector3(- 1.96, this._roomHalfHeight - 0.25, - 1.67),
             currentPosition: new Vector3()
         });
         this.setLightingMap('led', {
@@ -90,7 +89,7 @@ class HandCraftedStudio extends LightingSceneBase {
             intensity: 0,
             bloomIntensity: 3,
             lightObject: null,
-            position: new Vector3(-1.48, 0.23, -2.24),
+            position: new Vector3(- 1.53, this._roomHalfHeight + 0.23, - 2.25),
             currentPosition: new Vector3()
         });
         this.update(false);
@@ -111,24 +110,23 @@ class HandCraftedStudio extends LightingSceneBase {
 
     updateBoundaries() {
 
+        const height = this._height * this.scale[1];
         const halfWidth = this._width * .5 * this.scale[0];
         const halfHeight = this._height * .5 * this.scale[1];
         const halfDepth = this._depth * .5 * this.scale[2];
-        const halfOffsetX = this._offsetX * .5 * this.scale[0];
-        const halfOffsetZ = this._offsetZ * .5 * this.scale[2];
 
         this._frontWall.setScale([this.scale[0], this.scale[1], 1])
-            .setPosition([halfOffsetX, 0, halfDepth + halfOffsetZ]);
+            .setPosition([0, halfHeight, halfDepth]);
         this._backWall.setScale([this.scale[0], this.scale[1], 1])
-            .setPosition([halfOffsetX, 0, - halfDepth + halfOffsetZ]);
+            .setPosition([0, halfHeight, - halfDepth]);
         this._leftWall.setScale([this.scale[2], this.scale[1], 1])
-            .setPosition([halfWidth + halfOffsetX, 0, halfOffsetZ]);
+            .setPosition([halfWidth, halfHeight, 0]);
         this._rightWall.setScale([this.scale[2], this.scale[1], 1])
-            .setPosition([- halfWidth + halfOffsetX, 0, halfOffsetZ]);
+            .setPosition([- halfWidth, halfHeight, 0]);
         this._ceiling.setScale([this.scale[0], this.scale[2], 1])
-            .setPosition([halfOffsetX, halfHeight, halfOffsetZ]);
+            .setPosition([0, height, 0]);
         this._floor.setScale([this.scale[0], this.scale[2], 1])
-            .setPosition([halfOffsetX, - halfHeight, halfOffsetZ]);
+            .setPosition([0, 0, 0]);
 
     }
 
@@ -151,8 +149,6 @@ class HandCraftedStudio extends LightingSceneBase {
 
         if (needClear) this.clearRapierInstances();
 
-        const halfOffsetX = this._offsetX * .5 * this.scale[0];
-        const halfOffsetZ = this._offsetZ * .5 * this.scale[2];
         const tableTopWidth = this._tableTopWidth * this.scale[0];
         const tableTopHeight = this._tableTopHeight * this.scale[1];
         const tableTopDepth = this._tableTopDepth * this.scale[2];
@@ -162,8 +158,8 @@ class HandCraftedStudio extends LightingSceneBase {
         const tableMiddleWidth = this._tableMiddleWidth * this.scale[0];
         const tableMiddleHeight = this._tableMiddleHeight * this.scale[1];
         const tableMiddleDepth = this._tableMiddleDepth * this.scale[2];
-        const tablePosX = this._tablePosX * this.scale[0] + halfOffsetX;
-        const tablePosZ = this._tablePosZ * this.scale[2] + halfOffsetZ;
+        const tablePosX = this._tablePosX * this.scale[0];
+        const tablePosZ = this._tablePosZ * this.scale[2];
         const tableTopPosY = this._tableTopPosY * this.scale[1];
         const tableBottomPosY = this._tableBottomPosY * this.scale[1];
         const tableMiddlePosY = this._tableMiddlePosY * this.scale[1];
