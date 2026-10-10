@@ -54,13 +54,14 @@ class CreatureBase extends CustomizedCreatureTofu {
         const { createDefaultBoundingObjects = true } = specs;
         const { HPMax = 100 } = specs;
         const { needAimRay = false, needFocusRay = true, focusHeight = 0 } = specs;
+        const { ignoreInSightObstacles = false } = specs;
 
         super({ 
             name, 
             size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, 
             rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, 
             createDefaultBoundingObjects, enableCollision, typeMapping,
-            HPMax, needAimRay, needFocusRay, focusHeight
+            HPMax, needAimRay, needFocusRay, focusHeight, ignoreInSightObstacles
         });
 
         this.specs = specs;
@@ -594,7 +595,7 @@ class CreatureBase extends CustomizedCreatureTofu {
 
     }
 
-    movingTick() {
+    movingTick(params) {
 
         this.#logger.func = this.movingTick.name;
 
@@ -604,9 +605,10 @@ class CreatureBase extends CustomizedCreatureTofu {
 
         }
 
-        if (this._isNoticed) {
+        const { target } = params;
+        if (target) {
 
-            const target = this.getNearestInSightTarget(null, this._inSightTargets, false);
+            // const target = this.getNearestInSightTarget(null, this._inSightTargets, false);
             const { dirAngle } = target;
 
             if (dirAngle.angle < 0.01) {

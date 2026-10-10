@@ -61,6 +61,24 @@
         }
     ],
     "enemies": [
+        {
+            "name": "zombie1",
+            "type": "ZombieMale",
+            "src": "ZOMBIE_MALE",
+            "currentRoom": "room1",
+            "castShadow": true,
+            "receiveShadow": true,
+            "scale": [1, 1, 1],
+            "position": [3, 3, 5],
+            "rotation": [0, 3.1416, 0],
+            "isActive": true,
+            "sovRadius": 9.5,
+            "showBS": false,
+            "variant": "standard",
+            "vel": 0.6,
+            "rotateR": 0.5,
+            "ignoreInSightObstacles": true
+        }
     ],
     "lights": [
         {

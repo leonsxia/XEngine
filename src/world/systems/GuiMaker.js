@@ -465,6 +465,14 @@ class GuiMaker {
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'NavigationArrow',
+                value: { NavigationArrow: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showPlayerNavigationArrow.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'Skeleton',
                 value: { Skeleton: 'hide' },
                 params: ['show', 'hide'],
@@ -573,6 +581,14 @@ class GuiMaker {
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: $scene.showEnemyArrows.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'NavigationArrow',
+                value: { NavigationArrow: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyNavigationArrow.bind($scene)
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({

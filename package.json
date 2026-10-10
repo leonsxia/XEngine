@@ -1,6 +1,6 @@
 {
   "name": "XEngine",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "A 3D game engine built with Three.js targeting WebGL",
   "author": "leonsxia",
   "type": "module",
@@ -16,6 +16,7 @@
     "lil-gui": "^0.21.0",
     "stats.js": "^0.17.0",
     "three": "^0.186.1",
+    "three-pathfinding": "^1.3.0",
     "vite-plugin-wasm": "^3.6.0"
   },
   "devDependencies": {

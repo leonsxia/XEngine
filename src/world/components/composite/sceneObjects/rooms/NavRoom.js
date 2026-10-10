@@ -1,11 +1,10 @@
-import { SceneObjectBase } from '../SceneObjectBase';
+import {NavigationSceneBase} from '../NavigationSceneBase'; 
 import { GLTFModel } from '../../../Models';
 
 const GLTF_SRC = 'scene_objects/rooms/nav_room/nav_room.glb';
 
-class NavRoom extends SceneObjectBase {
+class NavRoom extends NavigationSceneBase {
 
-    _navMesh;
     _walls;
     _room;
 
@@ -30,7 +29,7 @@ class NavRoom extends SceneObjectBase {
 
         await super.init();
 
-        this._navMesh = this.GLTFs[0].getChildByName('Nav_Mesh');
+        this.navigationMesh = this.GLTFs[0].getChildByName('Nav_Mesh');
         this._walls = this.GLTFs[0].getChildByName('Walls');
         this._room = this.GLTFs[0].getChildByName('Room');
 

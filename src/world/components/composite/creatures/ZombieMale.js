@@ -193,6 +193,7 @@ class ZombieMale extends CreatureBase {
         const { HPMax = 100 } = specs;
         const { characterControllerSettings } = specs;
         const { physics = {} } = specs;
+        const { ignoreInSightObstacles = false } = specs;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
         const soundSetting = Object.assign({}, SOUND_SETTINGS);
@@ -221,7 +222,8 @@ class ZombieMale extends CreatureBase {
             HPMax,
             characterControllerSettings, physics,
             focusHeight: .4,
-            variant
+            variant,
+            ignoreInSightObstacles
         };
 
         super(setup);

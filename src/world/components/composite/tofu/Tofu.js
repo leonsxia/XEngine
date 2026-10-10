@@ -233,7 +233,15 @@ class Tofu extends TofuBase {
     getTargetDirectionAngle(target) {
 
         const selfDir = this.boundingBoxMesh.getWorldDirection(_v1);
-        target.getWorldPosition(_v2);
+        if (target.group) {
+            
+            target.getWorldPosition(_v2);
+
+        } else {
+
+            _v2.copy(target);
+
+        }
         this.getWorldPosition(_v3);
         _v2.y = 0;
         _v3.y = 0;

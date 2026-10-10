@@ -1,4 +1,4 @@
-import { Layers } from 'three';
+import { Layers, Vector3 } from 'three';
 import { Logger } from '../../systems/Logger';
 import { UpdatableBase } from './UpdatableBase';
 import { TOFU_FOCUS_LAYER } from '../utils/constants';
@@ -6,14 +6,21 @@ import { TOFU_FOCUS_LAYER } from '../utils/constants';
 const tofuFocusLayer = new Layers();
 tofuFocusLayer.set(TOFU_FOCUS_LAYER);
 
+const _v1 = new Vector3();
+const _v2 = new Vector3();
+let groupID, path;
+
+const DEBUG = true;
+
 class AI extends UpdatableBase {
 
     players = [];
     enemies = [];
+    navMeshIntersects = [];
     isActive = true;
 
     // eslint-disable-next-line no-unused-private-class-members
-    #logger = new Logger(true, 'AI');
+    #logger = new Logger(DEBUG, 'AI');
 
     constructor(players = [], enemies = []) {
 
@@ -78,6 +85,44 @@ class AI extends UpdatableBase {
 
     }
 
+    get navigationMesh() {
+
+        return this.currentRoom.navigationMesh;
+
+    }
+
+    get pathfinder() {
+
+        return this.currentRoom.pathfinder;
+
+    }
+
+    get zone() {
+
+        return this.currentRoom.zone;
+
+    }
+
+    getNavMeshIntersect(object, target) {
+
+        this.navMeshIntersects.length = 0;
+
+        if (this.navigationMesh) {
+
+            object.navigationRay.intersectObject(this.navigationMesh, false, this.navMeshIntersects);
+
+            if (this.navMeshIntersects.length > 0) {
+
+                target.copy(this.navMeshIntersects[0].point);
+
+            }
+
+        }
+
+        return this.navMeshIntersects.length > 0;
+
+    }
+
     tick(delta) {
 
         for (let i = 0, il = this.players.length; i < il; i++) {
@@ -111,11 +156,38 @@ class AI extends UpdatableBase {
                 if (!player.isActive || player.dead) continue;
 
                 this.concatObjects(...this.currentRoomObjects, ...this.sceneObjects, ...this.playerObjects);
-                enemy.checkTargetInSight(player, this._concats);
+                enemy.checkTargetInSight(player, !enemy.ignoreInSightObstacles ? this._concats : null);
 
             }
 
-            enemy.movingTick(delta);
+            if (enemy.isNoticed) {
+
+                let target = enemy.getNearestInSightTarget(null, enemy._inSightTargets, false);
+
+                if (this.navigationMesh) {
+
+                    if (this.getNavMeshIntersect(target.instance, _v1) && this.getNavMeshIntersect(enemy, _v2)) {
+
+                        groupID = this.pathfinder.getGroup(this.zone, _v2, true);
+                        path = this.pathfinder.findPath(_v2, _v1, this.zone, groupID);
+
+                        if (path && path.length > 0) {
+
+                            target = { dirAngle: enemy.getTargetDirectionAngle(path[0]) };
+
+                        }
+
+                    }
+
+                }
+
+                enemy.movingTick({ delta, target });
+
+            } else {
+
+                enemy.movingTick({ delta });
+
+            }
 
         }
 

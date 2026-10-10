@@ -1195,7 +1195,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxHelper) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         if (s) {
 
@@ -1218,7 +1218,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxMesh) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.player.showBB(s);
 
@@ -1230,7 +1230,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxWireMesh) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.player.showBBW(s);
 
@@ -1242,7 +1242,7 @@ class WorldScene {
 
         if (!this.player) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.player.showBF(s);
 
@@ -1254,7 +1254,7 @@ class WorldScene {
 
         if (!this.player) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.player.showCollisionBox(s);
 
@@ -1294,7 +1294,7 @@ class WorldScene {
 
         if (!this.player || !this.player.isCustomizedCombatTofu) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
         
         if (s) {
 
@@ -1316,7 +1316,7 @@ class WorldScene {
 
         if (!this.player || !this.player.showPushingBox) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.player.showPushingBox(s);
 
@@ -1328,7 +1328,7 @@ class WorldScene {
 
         if (!this.player || !this.player.hasRays) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         if (s) {
 
@@ -1354,11 +1354,31 @@ class WorldScene {
 
     }
 
+    showPlayerNavigationArrow(show) {
+
+        if (!this.player || !this.player.hasRays) return this;
+
+        const s = show === 'show';
+
+        if (s) {
+
+            this.scene.add(this.player.navigationArrow);
+
+        } else {
+
+            this.scene.remove(this.player.navigationArrow);
+
+        }
+
+        return this;
+
+    }
+
     showPlayerSkeleton(show) {
 
         if (!this.player.gltf?.skeleton) return this;
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         if (s) {
 
@@ -1378,7 +1398,7 @@ class WorldScene {
 
     showEnemyBBHelper(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1406,7 +1426,7 @@ class WorldScene {
 
     showEnemyBB(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1424,7 +1444,7 @@ class WorldScene {
 
     showEnemyBBW(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1442,7 +1462,7 @@ class WorldScene {
 
     showEnemyBF(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1460,7 +1480,7 @@ class WorldScene {
 
     showEnemyCBox(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1508,7 +1528,7 @@ class WorldScene {
 
     showEnemyCBoxArrows(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1536,7 +1556,7 @@ class WorldScene {
 
     showEnemyPushingBox(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1554,7 +1574,7 @@ class WorldScene {
 
     showEnemyArrows(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1569,7 +1589,6 @@ class WorldScene {
                 this.scene.add(enemy.backLeftArrow);
                 this.scene.add(enemy.backRightArrow);
                 this.scene.add(enemy.centerArrow);
-                this.scene.add(enemy.focusArrow);
 
             } else {
 
@@ -1578,6 +1597,33 @@ class WorldScene {
                 this.scene.remove(enemy.backLeftArrow);
                 this.scene.remove(enemy.backRightArrow);
                 this.scene.remove(enemy.centerArrow);
+
+            }
+
+        }
+
+        return this;
+
+    }
+
+    showEnemyNavigationArrow(show) {
+
+        const s = show === 'show';
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (enemy.disposed) continue;
+
+            if (s) {
+
+                this.scene.add(enemy.navigationArrow);
+                this.scene.add(enemy.focusArrow);
+
+            } else {
+
+                this.scene.remove(enemy.navigationArrow);
                 this.scene.remove(enemy.focusArrow);
 
             }
@@ -1590,7 +1636,7 @@ class WorldScene {
 
     showEnemySkeleton(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1734,7 +1780,7 @@ class WorldScene {
 
     showWireframe(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.cPlanes.forEach(cp => {
 
@@ -1746,7 +1792,7 @@ class WorldScene {
 
     showCPlaneLines(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.cPlanes.forEach(cp => {
 
@@ -1758,7 +1804,7 @@ class WorldScene {
 
     showCPlaneArrows(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.cPlanes.forEach(cp => {
 
@@ -2102,7 +2148,7 @@ class WorldScene {
 
     showAirWalls(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.airWalls.forEach(w => {
 
@@ -2114,7 +2160,7 @@ class WorldScene {
 
     showCObjects(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         this.cObjects.forEach(obj => {
 
@@ -2134,7 +2180,7 @@ class WorldScene {
 
     showICAreas(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
 
         for (let i = 0, il = this.rooms.length; i < il; i++) {
 
@@ -2173,7 +2219,7 @@ class WorldScene {
 
     showRapierDebugger(show) {
 
-        const s = show === 'show' ? true : false;
+        const s = show === 'show';
         this.physics.showDebugger(s);
 
     }

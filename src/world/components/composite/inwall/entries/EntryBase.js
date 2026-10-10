@@ -232,7 +232,7 @@ class EntryBase extends ObstacleBase {
 
         }
 
-        if (this._pickForbidden) {
+        if (this._forbidden) {
 
             ctx.beginPath();
             ctx.lineWidth = 8;

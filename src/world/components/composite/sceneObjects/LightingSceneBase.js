@@ -1,14 +1,14 @@
 import { Vector3 } from 'three';
-import { SceneObjectBase } from "./SceneObjectBase";
-import { updateSingleLightCamera } from "../../shadowMaker";
-import { BLOOM_SCENE_LAYER } from "../../utils/constants";
+import { NavigationSceneBase } from './NavigationSceneBase';
+import { updateSingleLightCamera } from '../../shadowMaker';
+import { BLOOM_SCENE_LAYER } from '../../utils/constants';
 import { isBloomObject } from '../../utils/objectHelper';
 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
 const BLOOM_TYPE_DEFAULT = 'main';
 
-class LightingSceneBase extends SceneObjectBase {
+class LightingSceneBase extends NavigationSceneBase {
 
     bloomObjects = [];
     lightObjs = [];

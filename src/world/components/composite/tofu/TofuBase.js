@@ -72,6 +72,7 @@ class TofuBase extends Moveable2D {
     centerRay;
     aimRay;
     focusRay;
+    navigationRay;
     rays = [];
     
     leftArrow;
@@ -81,6 +82,7 @@ class TofuBase extends Moveable2D {
     centerArrow;
     aimArrow;
     focusArrow;
+    navigationArrow;
 
     _needAimRay;
     _needFocusRay;
@@ -104,6 +106,7 @@ class TofuBase extends Moveable2D {
     _target = null;
     _focusTarget = null;
     _inSightTargets = [];
+    _ignoreInSightObstacles = false;
 
     #w;
     #d;
@@ -176,10 +179,12 @@ class TofuBase extends Moveable2D {
         const { createDefaultBoundingObjects = true } = specs;
         const { enableDefaultCBox = false } = specs;
         const { needAimRay = true, needFocusRay = false, focusHeight = 0 } = specs;
+        const { ignoreInSightObstacles = false } = specs;
 
         this._size = { width, width2, depth, depth2, height, sovRadius };
         this._collisionSize = collisionSize;
         this._useCustomBoundingFaces = !createDefaultBoundingObjects;
+        this._ignoreInSightObstacles = ignoreInSightObstacles;
 
         this.#sightOfView = sovRadius;
         this.#rotateR = rotateR;
@@ -724,6 +729,18 @@ class TofuBase extends Moveable2D {
 
     }
 
+    get ignoreInSightObstacles() {
+
+        return this._ignoreInSightObstacles;
+
+    }
+
+    set ignoreInSightObstacles(val) {
+
+        this._ignoreInSightObstacles = val;
+
+    }
+
     enablePickLayers(...meshes) {
 
         for (let i = 0, il = meshes.length; i < il; i++) {
@@ -829,6 +846,7 @@ class TofuBase extends Moveable2D {
         this.hasRays = true;
  
         const length = this.height * SLOPE_RAY_LENGTH;
+        const navigationLength = this.height * TERRAIN_RAY_LENGTH;
         const posY = 0;
         const posX = this.width * .5 - this.#rayPadding;
         const posZ = this.depth * .5 - this.#rayPadding;
@@ -863,6 +881,10 @@ class TofuBase extends Moveable2D {
         this.centerRay = new Raycaster(fromVec3, _down, 0, length);
         this.centerRay.layers.set(TOFU_RAY_LAYER);
         this.centerArrow = new ArrowHelper(_down, fromVec3, length, orange, HEAD_LENGTH, HEAD_WIDTH);
+
+        // navigationRay
+        this.navigationRay = new Raycaster(fromVec3, _down, 0, navigationLength);
+        this.navigationArrow = new ArrowHelper(_down, fromVec3, navigationLength, orange, HEAD_LENGTH, HEAD_WIDTH);
 
         // aimRay
         if (this._needAimRay) {
@@ -1027,6 +1049,12 @@ class TofuBase extends Moveable2D {
         this.centerArrow.position.copy(_v1);
         this.centerArrow.setDirection(_down);
         // this.centerArrow.setLength(length, HEAD_LENGTH, HEAD_WIDTH);
+
+        // navigationRay
+        _v1.set(0, posY, 0).applyMatrix4(this.group.matrixWorld);
+        this.navigationRay.set(_v1, _down);
+        this.navigationArrow.position.copy(_v1);
+        this.navigationArrow.setDirection(_down);
 
         this.updateAimRay(false);
         if (this._inSightTargets.length === 0) this.updateFocusRay(false);

@@ -5,6 +5,7 @@ import { REPEAT_WRAPPING, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAME
 import { Logger } from '../../../systems/Logger';
 import { isRapierObject } from '../../utils/objectHelper';
 import { GLOBALS } from '../../../systems/globals';
+import { Pathfinding } from 'three-pathfinding';
 
 const DEBUG = false;
 
@@ -40,6 +41,10 @@ class Room {
     waterCubes = [];
     cObjects = [];
     terrains = [];
+
+    navigationMesh;
+    pathfinder;
+    zone;
 
     lights = [];
     directionalLightTarget = new Object3D();
@@ -151,6 +156,8 @@ class Room {
             .concat(insideWallsInit, airWallsInit, floorsInit, ceilingsInit, insideGroupsInit, terrainInit)
         );
 
+        this.initNavigationMesh();        
+
     }
 
     initObjects(objects) {
@@ -166,6 +173,30 @@ class Room {
         }
 
         return promises;
+
+    }
+
+    initNavigationMesh() {
+
+        for (let i = 0, il = this.compounds.length; i < il; i++) {
+
+            const compound = this.compounds[i];
+            if (compound.isNavigationSceneObject) {
+
+                this.navigationMesh = compound.navigationMesh;
+                break;
+
+            }
+
+        }
+
+        if (this.navigationMesh) {
+
+            this.pathfinder = new Pathfinding();
+            this.zone = `level`;
+            this.pathfinder.setZoneData(this.zone, Pathfinding.createZone(this.navigationMesh.geometry));
+
+        }
 
     }
 
