@@ -1,6 +1,6 @@
 import { Vector3 } from 'three';
 import { LightingSceneBase } from "../LightingSceneBase";
-import { GLTFModel, GeometryDesc, MeshDesc, Plane } from '../../../Models';
+import { GLTFModel, GeometryDesc, MeshDesc } from '../../../Models';
 import { BOX_GEOMETRY } from '../../../utils/constants';
 
 const GLTF_SRC = 'scene_objects/rooms/hand_crafted_studio_1-2k/hand_crafted_studio.gltf';
@@ -35,11 +35,8 @@ class HandCraftedStudio extends LightingSceneBase {
     _tableFootWidth = .1;
     _tableFootDepth = .1;
 
-    _frontWall;
-    _backWall;
-    _leftWall;
-    _rightWall;
-    _ceiling;
+    _mainWall;
+    _mainRear;
     _floor;
 
     constructor(specs) {
@@ -54,8 +51,6 @@ class HandCraftedStudio extends LightingSceneBase {
         // gltf model
         const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow, shadowCastIgnoreList: gltfIgnoreShadowCastList, needAdjustPosition: false };
         this.GLTFs.push(new GLTFModel(gltfSpecs));
-
-        this.createBoundaries();
 
         this.addGLTFs();
 
@@ -72,6 +67,10 @@ class HandCraftedStudio extends LightingSceneBase {
         const ledBulb = this.GLTFs[0].meshes.find(m => m.name === 'LED_Bulb_Low');
         ledBulb.material = ledBulb.material.clone();
         ledBulb.alwaysVisible = true;
+
+        this._floor = this.GLTFs[0].getChildByName('Room_Floor_Low');
+        this._mainWall = this.GLTFs[0].getChildByName('Room_Main_Wall_Low');
+        this._mainRear = this.GLTFs[0].getChildByName('Room_Main_Rear_Low');
 
         this.bloomObjects = [lampBulb, ledBulb];
         this.setBloomObjectsFather();
@@ -96,40 +95,6 @@ class HandCraftedStudio extends LightingSceneBase {
 
     }
 
-    createBoundaries() {
-
-        const { name } = this.specs;
-        this._frontWall = new Plane({ name: `${name}_front_wall`,width: this._width, height: this._height, useStandardMaterial: false });
-        this._backWall = new Plane({ name: `${name}_back_wall`, width: this._width, height: this._height, useStandardMaterial: false });
-        this._leftWall = new Plane({ name: `${name}_left_wall`, width: this._depth, height: this._height, useStandardMaterial: false }).setRotation([0, - Math.PI * .5, 0]);
-        this._rightWall = new Plane({ name: `${name}_right_wall`, width: this._depth, height: this._height, useStandardMaterial: false }).setRotation([0, Math.PI * .5, 0]);
-        this._ceiling = new Plane({ name: `${name}_ceiling`, width: this._width, height: this._depth, useStandardMaterial: false }).setRotation([Math.PI * .5, 0, 0]);
-        this._floor = new Plane({ name: `${name}_floor`, width: this._width, height: this._depth, useStandardMaterial: false }).setRotation([- Math.PI * .5, 0, 0]);
-
-    }
-
-    updateBoundaries() {
-
-        const height = this._height * this.scale[1];
-        const halfWidth = this._width * .5 * this.scale[0];
-        const halfHeight = this._height * .5 * this.scale[1];
-        const halfDepth = this._depth * .5 * this.scale[2];
-
-        this._frontWall.setScale([this.scale[0], this.scale[1], 1])
-            .setPosition([0, halfHeight, halfDepth]);
-        this._backWall.setScale([this.scale[0], this.scale[1], 1])
-            .setPosition([0, halfHeight, - halfDepth]);
-        this._leftWall.setScale([this.scale[2], this.scale[1], 1])
-            .setPosition([halfWidth, halfHeight, 0]);
-        this._rightWall.setScale([this.scale[2], this.scale[1], 1])
-            .setPosition([- halfWidth, halfHeight, 0]);
-        this._ceiling.setScale([this.scale[0], this.scale[2], 1])
-            .setPosition([0, height, 0]);
-        this._floor.setScale([this.scale[0], this.scale[2], 1])
-            .setPosition([0, 0, 0]);
-
-    }
-
     update(needToUpdateLight = true) {
 
         // update gltfs scale
@@ -140,8 +105,6 @@ class HandCraftedStudio extends LightingSceneBase {
         }
 
         this.updateLightingMap(needToUpdateLight);
-
-        this.updateBoundaries();
 
     }
 
@@ -216,20 +179,14 @@ class HandCraftedStudio extends LightingSceneBase {
             tableFootBRMesh
         );
 
-        this._frontWall.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
-        this._backWall.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
-        this._leftWall.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
-        this._rightWall.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
-        this._ceiling.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
-        this._floor.mesh.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+        this._mainWall.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+        this._mainRear.userData.physics = { mass, restitution, friction, manuallyLoad: true };
+        this._floor.userData.physics = { mass, restitution, friction, manuallyLoad: true };
 
         this.rapierInstances.push(
-            this._frontWall.mesh,
-            this._backWall.mesh,
-            this._leftWall.mesh,
-            this._rightWall.mesh,
-            this._ceiling.mesh,
-            this._floor.mesh
+            this._mainWall,
+            this._mainRear,
+            this._floor
         );
 
     }
