@@ -52,7 +52,7 @@ class NavRoom extends NavigationSceneBase {
 
         if (needClear) this.clearRapierInstances();
 
-        const { physics: { mass = 0, restitution = 0, friction = 0 } = {} } = this.specs;
+        const { physics: { mass = 0, restitution = 0, friction = 0.3 } = {} } = this.specs;
 
         this._room.userData.physics = { mass, restitution, friction, manuallyLoad: true };
         this._walls.userData.physics = { mass, restitution, friction, manuallyLoad: true };

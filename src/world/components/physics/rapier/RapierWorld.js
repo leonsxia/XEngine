@@ -4,7 +4,7 @@ import { RapierHelper } from 'three/addons/helpers/RapierHelper.js';
 import { Logger } from '../../../systems/Logger';
 
 const CHARACTER_CONTROLLER = 'characterController';
-const STAIR_OFFSET_MAX = .3;
+const STAIR_OFFSET_MAX = .2;
 const DOWN_RAY_LENGTH = .52;
 const PICKABLE_DOWN_RAY_LENGTH = 1;
 
@@ -163,9 +163,10 @@ class RapierWorld {
         const meshDesc = avatar.rapierContainer.getInstanceByName(CHARACTER_CONTROLLER);
         const userData = meshDesc.userData;
         const { characterControllerSettings: { 
-            offset = 0.01, snapToGroundDistance = 0.2, slideEnabled = true,
-            maxSlopeClimbAngle = 50, minSlopeSlideAngle = 45,
-            autoStepMaxHeight = STAIR_OFFSET_MAX, autoStepMinWidth = 0.2
+            offset = 0.01, snapToGroundDistance = 0.3, slideEnabled = true,
+            maxSlopeClimbAngle = 60, // set too small will cause the character to get stuck on stairs
+            minSlopeSlideAngle = 45,
+            autoStepMaxHeight = STAIR_OFFSET_MAX, autoStepMinWidth = 0.1
         } = {} } = avatar.specs;
 
         const characterController = this.engine.world.createCharacterController(offset);
