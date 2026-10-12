@@ -88,6 +88,8 @@ class WorldScene {
     loadSequence = 0;
     showRoleSelector = false;
 
+    showNavigationMesh = false;
+
     currentRoom;
     sceneObjects = [];
     pickables = [];
@@ -761,6 +763,8 @@ class WorldScene {
             }
 
         }
+
+        this.showNavMesh(this.showNavigationMesh ? STRING_CONFIG.show : STRING_CONFIG.hide);
 
         if (this.player) {
 
@@ -2253,6 +2257,54 @@ class WorldScene {
 
         const s = show === STRING_CONFIG.show;
         this.physics.showDebugger(s);
+
+    }
+
+    get pathfindingEnabled() {
+
+        let enabled = false;
+
+        for (let i = 0, il = this.rooms.length; i < il; i++) {
+
+            const room = this.rooms[i];
+
+            if (room.navigationMesh) {
+
+                enabled = true;
+                break;
+
+            }
+
+        }
+
+        return enabled;
+
+    }
+
+    showNavMesh(show) {
+
+        const s = show === STRING_CONFIG.show;
+        this.showNavigationMesh = s;
+
+        for (let i = 0, il = this.rooms.length; i < il; i++) {
+
+            const room = this.rooms[i];
+
+            if (room.navigationMesh) {
+
+                if (this.currentRoom.sequence === room.sequence && s) {
+
+                    room.navigationMesh.visible = s;
+
+                } else {
+
+                    room.navigationMesh.visible = false;
+
+                }
+
+            }
+
+        }
 
     }
 

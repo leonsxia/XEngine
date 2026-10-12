@@ -177,7 +177,7 @@ class GuiMaker {
         {
             if (this.setup.envHDR?.enabled) {
 
-                const folder = makeFolderGuiConfig({ folder: 'Scene', parent: null, close: true });
+                const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.SCENE_CONTROL, parent: null, close: true });
 
                 folder.specs.push(makeFolderSpecGuiConfig({
                     name: 'backgroundRotationX',
@@ -238,14 +238,37 @@ class GuiMaker {
             const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.RAPIER_PHYSICS_CONTROL, parent: 'rapierPhysics', close: true });
 
             folder.specs.push(makeFolderSpecGuiConfig({
-                name: 'debugger',
-                value: { debugger: 'hide' },
+                name: 'Debugger',
+                value: { Debugger: 'hide' },
                 params: ['show', 'hide'],
                 type: 'dropdown',
                 changeFn: $scene.showRapierDebugger.bind($scene)
             }));
 
             this.guiLeftSpecs.details.push(folder);
+
+        }
+
+        // Pathfinding
+        {
+            if ($scene.pathfindingEnabled) {
+
+                const { pathfinding: { showNavigationMesh = false} } = this.setup;
+                const showNavMeshStr = showNavigationMesh ? 'show' : 'hide';
+                const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.PATHFINDING_CONTROL, parent: 'pathfinding', close: true });
+
+                folder.specs.push(makeFolderSpecGuiConfig({
+                    name: 'Navigation Mesh',
+                    value: { ['Navigation Mesh']: showNavMeshStr },
+                    params: ['show', 'hide'],
+                    type: 'dropdown',
+                    changeFn: $scene.showNavMesh.bind($scene)
+                }));
+
+                $scene.showNavMesh(showNavMeshStr);
+                this.guiLeftSpecs.details.push(folder);
+
+            }
 
         }
 

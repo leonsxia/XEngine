@@ -6,6 +6,7 @@ import { Logger } from '../../../systems/Logger';
 import { isRapierObject } from '../../utils/objectHelper';
 import { GLOBALS } from '../../../systems/globals';
 import { pathfinder, createZone } from '../../utils/pathfinder';
+import { GLTFModel } from '../../Models';
 
 const DEBUG = false;
 
@@ -175,15 +176,27 @@ class Room {
 
     }
 
-    initNavigationMesh() {
+    async initNavigationMesh() {
 
-        for (let i = 0, il = this.compounds.length; i < il; i++) {
+        const { navigationMeshSrc } = this.specs;
 
-            const compound = this.compounds[i];
-            if (compound.isNavigationSceneObject) {
+        if (navigationMeshSrc) {
 
-                this.navigationMesh = compound.navigationMesh;
-                break;
+            const navModel = new GLTFModel({ name: `${this.name}_navigation_mesh`, src: navigationMeshSrc, receiveShadow: true, castShadow: true, needAdjustPosition: false });
+            await navModel.init();
+            this.navigationMesh = navModel.getChildByName('Nav_Mesh');
+
+        } else {
+
+            for (let i = 0, il = this.compounds.length; i < il; i++) {
+
+                const compound = this.compounds[i];
+                if (compound.isNavigationSceneObject) {
+
+                    this.navigationMesh = compound.navigationMesh;
+                    break;
+
+                }
 
             }
 

@@ -119,6 +119,12 @@ class SceneBuilder {
 
                 worldScene.scene.add(room.group);
 
+                if (room.navigationMesh) {
+
+                    worldScene.scene.add(room.navigationMesh);
+                
+                }
+
             }
     
         } catch (ex) {

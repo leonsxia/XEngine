@@ -779,6 +779,8 @@ const GUI_CONFIG = {
     IC_CONTROL: 'Inspector Camera',
     CAMERA_CONTROL: 'Cameras',
     RAPIER_PHYSICS_CONTROL: 'Rapier Physics',
+    SCENE_CONTROL: 'Scene',
+    PATHFINDING_CONTROL: 'Pathfinding',
     PICKER_CONTROL: 'Picker',
     HEALTH_CONTROL: 'Health',
     WEAPON_CONTROL: 'Weapons',

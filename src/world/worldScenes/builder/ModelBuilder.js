@@ -588,6 +588,7 @@ class ModelBuilder {
         const { frontMap, backMap, leftMap, rightMap } = specs;
         const { frontNormal, backNormal, leftNormal, rightNormal } = specs;
         const { frontArm, backArm, leftArm, rightArm } = specs;
+        const { navigationMeshSrc } = specs;
 
         const maps = [
             { frontMap }, { backMap }, { leftMap }, { rightMap },
@@ -596,6 +597,12 @@ class ModelBuilder {
         ];
 
         this.setupObjectTextures(maps, specs);
+
+        if (navigationMeshSrc) {
+
+            this.setupObjectGLTF({ navigationMeshSrc }, specs);
+
+        }
 
         object = new Room(specs);
         object.setPosition(position)
@@ -614,6 +621,7 @@ class ModelBuilder {
         const { frontMap, backMap, leftMap, rightMap } = specs;
         const { frontNormal, backNormal, leftNormal, rightNormal } = specs;
         const { frontArm, backArm, leftArm, rightArm } = specs;
+        const { navigationMeshSrc } = specs;
 
         const maps = [
             { frontMap }, { backMap }, { leftMap }, { rightMap },
@@ -622,6 +630,12 @@ class ModelBuilder {
         ];
 
         this.setupObjectTextures(maps, specs);
+
+        if (navigationMeshSrc) {
+
+            this.setupObjectGLTF({ navigationMeshSrc }, specs);
+
+        }
 
         object = new InspectorRoom(specs);
         object.setPosition(position)

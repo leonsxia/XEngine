@@ -42,9 +42,12 @@
             "bloomStrength": 0.1,
             "bloomRadius": 0.24
         },
-        "toneMapping": "AgX",
+        "toneMapping": "Filmic",
         "envHDR": {
             "enabled": false
+        },
+        "pathfinding": {
+            "showNavigationMesh": true
         },
         "physics": "rapier"
     },
@@ -75,7 +78,7 @@
             "sovRadius": 9.5,
             "showBS": false,
             "variant": "standard",
-            "vel": 0.4,
+            "vel": 0.5,
             "rotateR": 0.5,
             "ignoreInSightObstacles": true
         },
