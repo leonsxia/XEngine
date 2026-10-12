@@ -592,6 +592,14 @@ class GuiMaker {
             }));
 
             folder.specs.push(makeFolderSpecGuiConfig({
+                name: 'pathHelper',
+                value: { pathHelper: 'hide' },
+                params: ['show', 'hide'],
+                type: 'dropdown',
+                changeFn: $scene.showEnemyPathHelper.bind($scene)
+            }));
+
+            folder.specs.push(makeFolderSpecGuiConfig({
                 name: 'Skeleton',
                 value: { Skeleton: 'hide' },
                 params: ['show', 'hide'],

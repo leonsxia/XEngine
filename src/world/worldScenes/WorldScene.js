@@ -26,6 +26,12 @@ import { loadedHDRTextures } from '../components/utils/textureHelper.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
+const STRING_CONFIG = {
+    enable: 'enable',
+    disable: 'disable',
+    show: 'show',
+    hide: 'hide'
+}
 
 class WorldScene {
     
@@ -475,9 +481,9 @@ class WorldScene {
         }
 
         // post processor
-        this.enablePostEffect(postProcessing.enable ? 'enable' : 'disable');
+        this.enablePostEffect(postProcessing.enable ? STRING_CONFIG.enable : STRING_CONFIG.disable);
         // bloom must set after gui setup, bloomStrength and bloomRadius will be initialized in the gui setup
-        this.enableBloom(postProcessing.bloomEnable ? 'enable' : 'disable');
+        this.enableBloom(postProcessing.bloomEnable ? STRING_CONFIG.enable : STRING_CONFIG.disable);
 
         this.showCPlaneLines(false);
         this.showCPlaneArrows(false);
@@ -1195,7 +1201,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxHelper) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         if (s) {
 
@@ -1218,7 +1224,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxMesh) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.player.showBB(s);
 
@@ -1230,7 +1236,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxWireMesh) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.player.showBBW(s);
 
@@ -1242,7 +1248,7 @@ class WorldScene {
 
         if (!this.player) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.player.showBF(s);
 
@@ -1254,7 +1260,7 @@ class WorldScene {
 
         if (!this.player) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.player.showCollisionBox(s);
 
@@ -1294,7 +1300,7 @@ class WorldScene {
 
         if (!this.player || !this.player.isCustomizedCombatTofu) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
         
         if (s) {
 
@@ -1316,7 +1322,7 @@ class WorldScene {
 
         if (!this.player || !this.player.showPushingBox) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.player.showPushingBox(s);
 
@@ -1328,7 +1334,7 @@ class WorldScene {
 
         if (!this.player || !this.player.hasRays) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         if (s) {
 
@@ -1358,7 +1364,7 @@ class WorldScene {
 
         if (!this.player || !this.player.hasRays) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         if (s) {
 
@@ -1378,7 +1384,7 @@ class WorldScene {
 
         if (!this.player.gltf?.skeleton) return this;
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         if (s) {
 
@@ -1398,7 +1404,7 @@ class WorldScene {
 
     showEnemyBBHelper(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1426,7 +1432,7 @@ class WorldScene {
 
     showEnemyBB(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1444,7 +1450,7 @@ class WorldScene {
 
     showEnemyBBW(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1462,7 +1468,7 @@ class WorldScene {
 
     showEnemyBF(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1480,7 +1486,7 @@ class WorldScene {
 
     showEnemyCBox(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1528,7 +1534,7 @@ class WorldScene {
 
     showEnemyCBoxArrows(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1556,7 +1562,7 @@ class WorldScene {
 
     showEnemyPushingBox(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1574,7 +1580,7 @@ class WorldScene {
 
     showEnemyArrows(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1608,7 +1614,7 @@ class WorldScene {
 
     showEnemyNavigationArrow(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1634,9 +1640,35 @@ class WorldScene {
 
     }
 
+    showEnemyPathHelper(show) {
+
+        const s = show === STRING_CONFIG.show;
+
+        for (let i = 0, il = this.enemies.length; i < il; i++) {
+
+            const enemy = this.enemies[i];
+
+            if (enemy.disposed) continue;
+
+            if (s) {
+
+                this.scene.add(enemy.pathHelper);
+
+            } else {
+
+                this.scene.remove(enemy.pathHelper);
+
+            }
+
+        }
+
+        return this;
+
+    }
+
     showEnemySkeleton(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1780,7 +1812,7 @@ class WorldScene {
 
     showWireframe(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.cPlanes.forEach(cp => {
 
@@ -1792,7 +1824,7 @@ class WorldScene {
 
     showCPlaneLines(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.cPlanes.forEach(cp => {
 
@@ -1804,7 +1836,7 @@ class WorldScene {
 
     showCPlaneArrows(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.cPlanes.forEach(cp => {
 
@@ -1830,7 +1862,7 @@ class WorldScene {
 
     enablePostEffect(enable) {
 
-        const e = enable === 'enable' ? true : false;
+        const e = enable === STRING_CONFIG.enable;
 
         this.enablePostProcessing(e);
 
@@ -1846,7 +1878,7 @@ class WorldScene {
 
         if (this.enablePick && !this.postProcessOn) {
 
-            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, 'disable', 'enable');
+            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, STRING_CONFIG.disable, STRING_CONFIG.enable);
             this.enablePick = false;
 
         }
@@ -1860,7 +1892,7 @@ class WorldScene {
 
             this.pickedObject = null;
             this.enablePicking();
-            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, 'disable', 'enable');
+            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, STRING_CONFIG.disable, STRING_CONFIG.enable);
 
         }
 
@@ -1891,7 +1923,7 @@ class WorldScene {
 
             }
 
-            triggerPostProcess('enable');
+            triggerPostProcess(STRING_CONFIG.enable);
 
         } else {
             
@@ -1900,7 +1932,7 @@ class WorldScene {
             if (!this.postProcessOn) {
 
                 this.enablePostProcessing(false);  
-                triggerPostProcess('disable');              
+                triggerPostProcess(STRING_CONFIG.disable);              
 
             }            
 
@@ -1918,7 +1950,7 @@ class WorldScene {
 
     enableFXAA(enable) {
 
-        const e = enable === 'enable' ? true : false;
+        const e = enable === STRING_CONFIG.enable;
 
         this.setEffect(FXAA, { enabled: e });
 
@@ -1926,7 +1958,7 @@ class WorldScene {
 
     enableSSAA(enable) {
 
-        const e = enable === 'enable' ? true : false;
+        const e = enable === STRING_CONFIG.enable;
 
         this.setEffect(SSAA, { enabled: e });
 
@@ -1965,7 +1997,7 @@ class WorldScene {
 
     enableSSAO(enable) {
 
-        const e = enable === 'enable' ? true : false;
+        const e = enable === STRING_CONFIG.enable;
 
         this.setEffect(SSAO, { enabled: e });
 
@@ -2005,7 +2037,7 @@ class WorldScene {
 
     enableBloom(enable) {
 
-        const e = enable === 'enable' ? true : false;
+        const e = enable === STRING_CONFIG.enable;
 
         this.setEffect(BLOOM, {
             enabled: e, 
@@ -2148,7 +2180,7 @@ class WorldScene {
 
     showAirWalls(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.airWalls.forEach(w => {
 
@@ -2160,7 +2192,7 @@ class WorldScene {
 
     showCObjects(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         this.cObjects.forEach(obj => {
 
@@ -2180,7 +2212,7 @@ class WorldScene {
 
     showICAreas(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
 
         for (let i = 0, il = this.rooms.length; i < il; i++) {
 
@@ -2219,7 +2251,7 @@ class WorldScene {
 
     showRapierDebugger(show) {
 
-        const s = show === 'show';
+        const s = show === STRING_CONFIG.show;
         this.physics.showDebugger(s);
 
     }

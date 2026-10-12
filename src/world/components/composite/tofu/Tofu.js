@@ -2,6 +2,7 @@ import { Vector3 } from "three";
 import { Logger } from "../../../systems/Logger";
 import { TofuBase } from "./TofuBase";
 import { polarity } from "../../utils/enums";
+import { createPathHelper } from "../../utils/pathfinder";
 
 const _v1 = new Vector3();
 const _v2 = new Vector3();
@@ -13,11 +14,19 @@ class Tofu extends TofuBase {
 
     _currentHP;
 
+    _pathHelper = createPathHelper(_v1.set(0, 0.2, 0));
+
     #logger = new Logger(DEBUG, 'Tofu');
 
     constructor(specs) {
 
         super(specs);
+
+    }
+
+    get pathHelper() {
+
+        return this._pathHelper;
 
     }
 

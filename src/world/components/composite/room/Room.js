@@ -5,7 +5,7 @@ import { REPEAT_WRAPPING, CAMERA_RAY_LAYER, PLAYER_CAMERA_RAY_LAYER, PLAYER_CAME
 import { Logger } from '../../../systems/Logger';
 import { isRapierObject } from '../../utils/objectHelper';
 import { GLOBALS } from '../../../systems/globals';
-import { Pathfinding } from 'three-pathfinding';
+import { pathfinder, createZone } from '../../utils/pathfinder';
 
 const DEBUG = false;
 
@@ -43,7 +43,6 @@ class Room {
     terrains = [];
 
     navigationMesh;
-    pathfinder;
     zone;
 
     lights = [];
@@ -190,11 +189,11 @@ class Room {
 
         }
 
+        // navigation mesh do not support transformation for now, so do not transform the room which contains it
         if (this.navigationMesh) {
 
-            this.pathfinder = new Pathfinding();
-            this.zone = `level`;
-            this.pathfinder.setZoneData(this.zone, Pathfinding.createZone(this.navigationMesh.geometry));
+            this.zone = `level-room:${this.name}`;
+            pathfinder.setZoneData(this.zone, createZone(this.navigationMesh.geometry));
 
         }
 

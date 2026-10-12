@@ -2,6 +2,7 @@ import { Layers, Vector3 } from 'three';
 import { Logger } from '../../systems/Logger';
 import { UpdatableBase } from './UpdatableBase';
 import { TOFU_FOCUS_LAYER } from '../utils/constants';
+import { pathfinder } from '../utils/pathfinder';
 
 const tofuFocusLayer = new Layers();
 tofuFocusLayer.set(TOFU_FOCUS_LAYER);
@@ -91,12 +92,6 @@ class AI extends UpdatableBase {
 
     }
 
-    get pathfinder() {
-
-        return this.currentRoom.pathfinder;
-
-    }
-
     get zone() {
 
         return this.currentRoom.zone;
@@ -168,12 +163,18 @@ class AI extends UpdatableBase {
 
                     if (this.getNavMeshIntersect(target.instance, _v1) && this.getNavMeshIntersect(enemy, _v2)) {
 
-                        groupID = this.pathfinder.getGroup(this.zone, _v2, true);
-                        path = this.pathfinder.findPath(_v2, _v1, this.zone, groupID);
+                        groupID = pathfinder.getGroup(this.zone, _v2, true);
+                        path = pathfinder.findPath(_v2, _v1, this.zone, groupID);
+
+                        enemy.pathHelper
+                            .reset()
+                            .setPlayerPosition(_v2)
+                            .setTargetPosition(_v1);
 
                         if (path && path.length > 0) {
 
                             target = { dirAngle: enemy.getTargetDirectionAngle(path[0]) };
+                            enemy.pathHelper.setPath(path);
 
                         }
 
@@ -186,6 +187,7 @@ class AI extends UpdatableBase {
             } else {
 
                 enemy.movingTick({ delta });
+                enemy.pathHelper.reset();
 
             }
 
