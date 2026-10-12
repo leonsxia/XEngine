@@ -31,7 +31,7 @@
         "allPlayerPos": [
             [
                 0,
-                5,
+                3.9,
                 0
             ]
         ],
@@ -67,13 +67,14 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1, 1, 1],
-            "position": [0, 3, 5],
+            "position": [0, 1.9, 5],
             "rotation": [0, 3.1416, 0],
             "isActive": true,
-            "sovRadius": 6.5,
-            "val": 0.37,
-            "rotateR": 1.1,
-            "showBS": false
+            "sovRadius": 15,
+            "vel": 0.6,
+            "rotateR": 0.5,
+            "showBS": false,
+            "ignoreInSightObstacles": true
         },
         {
             "name": "zombie2",
@@ -83,15 +84,16 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1, 1, 1],
-            "position": [3, 6, -9.23],
+            "position": [3, 4.9, -9.23],
             "rotation": [0, 0, 0],
             "isActive": true,
-            "sovRadius": 7,
-            "val": 0.45,
-            "rotateR": 0.9,
+            "sovRadius": 15,
+            "vel": 0.65,
+            "rotateR": 0.5,
             "showBS": false,
             "variant": "variant1",
-            "HPMax": 500
+            "HPMax": 500,
+            "ignoreInSightObstacles": true
         },
         {
             "name": "zombie3",
@@ -101,14 +103,15 @@
             "castShadow": true,
             "receiveShadow": true,
             "scale": [1, 1, 1],
-            "position": [9.23, 6, 9.23],
+            "position": [9.23, 4.9, 9.23],
             "rotation": [0, 3.1416, 0],
             "isActive": true,
-            "sovRadius": 6.5,
-            "val": 0.35,
-            "rotateR": 1.3,
+            "sovRadius": 15,
+            "vel": 0.6,
+            "rotateR": 0.5,
             "showBS": false,
-            "variant": "standard"
+            "variant": "standard",
+            "ignoreInSightObstacles": true
         }
     ],
     "lights": [
@@ -173,8 +176,8 @@
                         "intensity": 120,
                         "distance": 0,
                         "decay": 2,
-                        "bias": 0.00025,
-                        "normalBias": 0.0375
+                        "bias": 0,
+                        "normalBias": 0.03
                     },
                     "debug": true,
                     "shadow": true,
@@ -224,6 +227,7 @@
                         "intensity": 50,
                         "distance": 0,
                         "decay": 2,
+                        "bias": -0.001,
                         "normalBias": 0.025
                     },
                     "debug": true,
@@ -244,7 +248,8 @@
                         "scale": [0.3, 0.3, 0.3],
                         "intensity": 20,
                         "distance": 18,
-                        "decay": 2
+                        "decay": 2,
+                        "bias": -0.001
                     },
                     "debug": true,
                     "shadow": true,
@@ -265,7 +270,8 @@
                         "scale": [0.3, 0.3, 0.3],
                         "intensity": 20,
                         "distance": 10,
-                        "decay": 2
+                        "decay": 2,
+                        "bias": 0.001
                     },
                     "debug": true,
                     "shadow": true,
@@ -286,7 +292,8 @@
                         "scale": [0.3, 0.3, 0.3],
                         "intensity": 15,
                         "distance": 10,
-                        "decay": 2
+                        "decay": 2,
+                        "bias": 0.001
                     },
                     "debug": true,
                     "shadow": true,
@@ -334,24 +341,13 @@
                 {
                     "type": "Axes",
                     "size": 3,
-                    "position": [-50.5, -0.5, -50.5]
+                    "position": [-25.5, 0, -25.5]
                 },
                 {
                     "type": "Grid",
-                    "size": 100,
-                    "divisions": 100,
-                    "position": [0, -0.5, 0]
-                },
-                {
-                    "type": "OBBPlane",
-                    "width": 100,
-                    "height": 100,
-                    "color": "#CC8866",
-                    "name": "ground",
-                    "position": [0, -0.5, 0],
-                    "rotation": [-1.5708, 0, 0],
-                    "receiveShadow": false,
-                    "castShadow": false
+                    "size": 50,
+                    "divisions": 50,
+                    "position": [0, -0.1, 0]
                 },
                 {
                     "type": "Glock",
@@ -471,6 +467,7 @@
             "height": 7,
             "depth": 23,
             "baseSize": 3.5,
+            "navigationMeshSrc": "MANSION_NAV_MESH",
             "frontMap": "METAL_272",
             "frontNormal": "METAL_272_NORMAL",
             "backMap": "WOOD_186",
@@ -488,7 +485,7 @@
             "name": "room1",
             "showArrow": false,
             "enableWallOBBs": false,
-            "position": [0, 4.6, 0],
+            "position": [0, 3.5, 0],
             "rotationY": 0,
             "areas": [
                 {

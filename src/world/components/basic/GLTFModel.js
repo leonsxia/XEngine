@@ -192,7 +192,7 @@ class GLTFModel extends EventDispatcher {
 
         this.group.traverse((child) => {
 
-            if (child.name === name) result = child;
+            if (child.name.indexOf(name) !== -1) result = child;
 
         });
 

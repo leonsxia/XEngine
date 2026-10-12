@@ -253,7 +253,8 @@ class GuiMaker {
         {
             if ($scene.pathfindingEnabled) {
 
-                const { pathfinding: { showNavigationMesh = false} } = this.setup;
+                const { pathfinding = {} } = this.setup;
+                const { showNavigationMesh = false } = pathfinding;
                 const showNavMeshStr = showNavigationMesh ? 'show' : 'hide';
                 const folder = makeFolderGuiConfig({ folder: GUI_CONFIG.PATHFINDING_CONTROL, parent: 'pathfinding', close: true });
 
