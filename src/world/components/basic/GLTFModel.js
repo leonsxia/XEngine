@@ -37,8 +37,10 @@ class GLTFModel extends EventDispatcher {
 
     async init() {
 
-        const { src, receiveShadow = false, castShadow = false, shadowCastIgnoreList = [],
-            hasBones = false, needCloneMaterial = false,needCloneTexture = false,
+        const { src,
+            receiveShadow = false, castShadow = false, shadowCastIgnoreList = [],
+            hasBones = false,
+            needCloneMaterial = false, needCloneTexture = false,
             needAdjustPosition = true
         } = this.specs;
 
@@ -148,7 +150,6 @@ class GLTFModel extends EventDispatcher {
 
             mesh.canBeIgnored = canBeIgnored;
 
-
         });
 
     }
@@ -186,13 +187,23 @@ class GLTFModel extends EventDispatcher {
 
     }
 
-    getChildByName(name) {
+    getChildByName(name, fuzzy = false) {
 
         let result;
 
         this.group.traverse((child) => {
 
-            if (child.name.indexOf(name) !== -1) result = child;
+            if (result) return; // stop processing if the result is found
+
+            if (fuzzy) {
+
+                if (child.name.indexOf(name) !== -1) result = child;
+
+            } else {
+
+                if (child.name === name) result = child;
+
+            }
 
         });
 
