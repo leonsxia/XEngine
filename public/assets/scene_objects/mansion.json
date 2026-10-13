@@ -227,8 +227,8 @@
                         "intensity": 50,
                         "distance": 0,
                         "decay": 2,
-                        "bias": -0.001,
-                        "normalBias": 0.025
+                        "bias": 0,
+                        "normalBias": 0.02669
                     },
                     "debug": true,
                     "shadow": true,
@@ -271,7 +271,7 @@
                         "intensity": 20,
                         "distance": 10,
                         "decay": 2,
-                        "bias": 0.001
+                        "bias": -0.00113
                     },
                     "debug": true,
                     "shadow": true,
@@ -293,7 +293,8 @@
                         "intensity": 15,
                         "distance": 10,
                         "decay": 2,
-                        "bias": 0.001
+                        "bias": 0.001,
+                        "normalBias": 0.02126
                     },
                     "debug": true,
                     "shadow": true,
