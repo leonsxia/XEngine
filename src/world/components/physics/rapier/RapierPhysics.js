@@ -538,6 +538,7 @@ class RapierPhysics {
 
                     const position = body.translation();
                     _quaternion.copy(body.rotation());
+                    _scale.set(1, 1, 1);
 
                     _matrix.compose(position, _quaternion, _scale).toArray(array, j * 16);
 
