@@ -1,5 +1,8 @@
 import { Object3D, Material, Texture } from "three";
 
+// Global resource counter to keep track of the number of references to each resource.
+const globalResourceCounter = new Map();
+
 class ResourceTracker {
 
     constructor() {
@@ -28,6 +31,16 @@ class ResourceTracker {
         if (resource.dispose || resource instanceof Object3D) {
 
             this.resources.add(resource);
+
+            if (!globalResourceCounter.has(resource)) {
+
+                globalResourceCounter.set(resource, { count: 1 });
+
+            } else {
+
+                globalResourceCounter.get(resource).count++;
+
+            }
 
         }
 
@@ -97,9 +110,17 @@ class ResourceTracker {
 
             }
 
-            if (resource.dispose) {
+            if (resource.dispose && globalResourceCounter.has(resource)) {
 
-                resource.dispose();
+                const resCounter = globalResourceCounter.get(resource);
+
+                resCounter.count--;
+                if (resCounter.count == 0) {
+
+                    resource.dispose();
+                    globalResourceCounter.delete(resource);
+
+                }
 
             }
 
@@ -111,4 +132,4 @@ class ResourceTracker {
 
 }
 
-export { ResourceTracker };
+export { ResourceTracker, globalResourceCounter };

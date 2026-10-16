@@ -61,6 +61,8 @@ class GLTFModel extends EventDispatcher {
             let gltfModel = Array.isArray(model) ? model[0] : model;
             let modelGroup;
 
+            // geometry, material and texture are only referenced, 
+            // when disposed one cloned object, the others using the same references will re-create to upload to GPU next frame
             if (!hasBones) {
 
                 modelGroup = gltfModel.scene.clone();

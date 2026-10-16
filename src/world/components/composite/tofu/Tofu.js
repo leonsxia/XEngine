@@ -64,6 +64,14 @@ class Tofu extends TofuBase {
 
     }
 
+    trackResources() {
+
+        super.trackResources();
+
+        if (this._pathHelper) this.track(this._pathHelper);
+
+    }
+
     // inherited by children
     setStateAfterDamageReceived() {}
 

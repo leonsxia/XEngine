@@ -1,7 +1,7 @@
 import { Group, Box3, Box3Helper, Raycaster, ArrowHelper, Vector3, Quaternion } from 'three';
 import { createMeshes, createDefaultBoundingObjectMeshes, createSovBoundingSphereMesh } from './meshes';
 import { Moveable2D } from '../../movement/Moveable2D';
-import { orange, BF, BF2, green, yellow } from '../../basic/colorBase';
+import { orange, BF, BF2, green, yellow, red } from '../../basic/colorBase';
 import { CAMERA_RAY_LAYER, TOFU_AIM_LAYER, TOFU_FOCUS_LAYER, TOFU_RAY_LAYER } from '../../utils/constants';
 import { CollisionBox, RapierContainer } from '../../Models';
 import { ResourceTracker } from '../../../systems/ResourceTracker';
@@ -884,7 +884,7 @@ class TofuBase extends Moveable2D {
 
         // navigationRay
         this.navigationRay = new Raycaster(fromVec3, _down, 0, navigationLength);
-        this.navigationArrow = new ArrowHelper(_down, fromVec3, navigationLength, orange, HEAD_LENGTH, HEAD_WIDTH);
+        this.navigationArrow = new ArrowHelper(_down, fromVec3, navigationLength, red, HEAD_LENGTH, HEAD_WIDTH);
 
         // aimRay
         if (this._needAimRay) {
@@ -1502,7 +1502,10 @@ class TofuBase extends Moveable2D {
         this.track(this.rightArrow);
         this.track(this.backLeftArrow);
         this.track(this.backRightArrow);
+        this.track(this.centerArrow);
+        this.track(this.navigationArrow)
         this.track(this.aimArrow);
+        this.track(this.focusArrow);
 
         this.track(this.boundingBoxHelper);
 
