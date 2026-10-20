@@ -407,6 +407,14 @@ class GuiMaker {
                 type: 'dropdown',
                 changeFn: $scene.showICAreas.bind($scene)
             }));
+
+            icFolder.specs.push(makeFolderSpecGuiConfig({
+                name: 'Fixed IC',
+                value: { 'Fixed IC': $scene.setup.ICFollowPlayer ? 'no' : 'yes' },
+                params: ['yes', 'no'],
+                type: 'dropdown',
+                changeFn: $scene.switchFixedInspectorCamera.bind($scene)
+            }));
             this.guiLeftSpecs.details.push(icFolder);
 
         }

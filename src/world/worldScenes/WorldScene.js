@@ -30,7 +30,9 @@ const STRING_CONFIG = {
     enable: 'enable',
     disable: 'disable',
     show: 'show',
-    hide: 'hide'
+    hide: 'hide',
+    yes: 'yes',
+    no: 'no'
 }
 
 class WorldScene {
@@ -207,7 +209,7 @@ class WorldScene {
         const { 
             camera: { position = [0, 0, 0] }, defaultPlayer, resolution = 1,
             enableGui = false, enablePicker = false, enableShadow = false,
-            enableTPC = false, enableIC = false,
+            enableTPC = false, enableIC = false, ICFollowPlayer = false,
             physics, currentRoomSequence = 0,
             toneMapping = toneMappingStr(TONE_MAPPING.AgX),
             postProcessing = { enable: false, bloomEnable: false },
@@ -436,7 +438,7 @@ class WorldScene {
 
         if (enableIC) {
 
-            this.inspectorCamera = new InspectorCamera({ defaultCamera: this.defaultCamera });
+            this.inspectorCamera = new InspectorCamera({ defaultCamera: this.defaultCamera, ICFollowPlayer });
             this.inspectorCamera.setup({ player: this.player, control: this.controls.defControl, scene: this.scene, rooms: this.rooms });
 
         }        
@@ -2230,6 +2232,18 @@ class WorldScene {
                 box.visible = s;
 
             }
+
+        }
+
+    }
+
+    switchFixedInspectorCamera(yes) {
+
+        const e = yes === STRING_CONFIG.yes;
+
+        if (this.inspectorCamera) {
+
+            this.inspectorCamera.ICFollowPlayer = !e;
 
         }
 

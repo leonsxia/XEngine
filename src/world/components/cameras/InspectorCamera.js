@@ -7,6 +7,7 @@ class InspectorCamera {
 
     camera;
     target = new Vector3();
+    _icFollowPlayer = false;
 
     #player;
     #control;
@@ -16,13 +17,25 @@ class InspectorCamera {
 
     constructor(specs) {
 
-        const { defaultCamera } = specs;
+        const { defaultCamera, ICFollowPlayer } = specs;
+        this._icFollowPlayer = ICFollowPlayer;
         
         this.camera = defaultCamera.camera;
         this.target.copy(defaultCamera.target);
 
     }
 
+    get ICFollowPlayer() {
+
+        return this._icFollowPlayer;
+
+    }
+
+    set ICFollowPlayer(val) {
+
+        this._icFollowPlayer = val;
+
+    }
 
     setup(specs) {
 
@@ -142,10 +155,10 @@ class InspectorCamera {
 
         const room = box.mesh.parent;
         _v1.set(...cameraPosition);
-        _v2.set(...cameraTarget);
+
         room.updateWorldMatrix(true, false);
         const camPosWorld = _v1.applyMatrix4(room.matrixWorld);
-        const camTarWorld = _v2.applyMatrix4(room.matrixWorld);
+        const camTarWorld = this._icFollowPlayer ? this.#player.getWorldPosition(_v2) : _v2.set(...cameraTarget).applyMatrix4(room.matrixWorld);
 
         this.camera.position.copy(camPosWorld);
         this.camera.lookAt(camTarWorld);
