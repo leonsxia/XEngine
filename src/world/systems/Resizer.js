@@ -25,7 +25,8 @@ class Resizer {
 
         const devicePixelRatio = window.devicePixelRatio;
 
-        this.#ratio = devicePixelRatio * ratio;
+        // limit the maximum pixel ratio to 2 for performance reasons
+        this.#ratio = Math.min(devicePixelRatio * ratio, 2);
 
         this.setSize();
         
