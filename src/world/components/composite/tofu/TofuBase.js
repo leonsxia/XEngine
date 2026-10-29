@@ -136,6 +136,7 @@ class TofuBase extends Moveable2D {
     #armedHeight = 0;
     #aimDirection = aimDirection.forward;
     #focusHeight = 0;
+    #attackHeightRange = [0, 0];
 
     #pickRange = .8;
     #pickRadius = Math.PI / 3;
@@ -178,7 +179,7 @@ class TofuBase extends Moveable2D {
         const { collisionSize = { width, depth, height } } = specs;
         const { createDefaultBoundingObjects = true } = specs;
         const { enableDefaultCBox = false } = specs;
-        const { needAimRay = true, needFocusRay = false, focusHeight = 0 } = specs;
+        const { needAimRay = true, needFocusRay = false, focusHeight = 0, attackHeightRange = [- height * .5, height * .5] } = specs;
         const { ignoreInSightObstacles = false } = specs;
 
         this._size = { width, width2, depth, depth2, height, sovRadius };
@@ -207,6 +208,7 @@ class TofuBase extends Moveable2D {
         this._needAimRay = needAimRay;
         this._needFocusRay = needFocusRay;
         this.#focusHeight = focusHeight;
+        this.attackHeightRange = attackHeightRange;
 
         this.name = name;
         this.group = new Group();
@@ -702,6 +704,19 @@ class TofuBase extends Moveable2D {
     set aimDirection(val) {
 
         this.#aimDirection = val;
+
+    }
+
+    get attackHeightRange() {
+
+        return this.#attackHeightRange;
+
+    }
+
+    set attackHeightRange(value = []) {
+
+        this.#attackHeightRange.length = 0;
+        this.#attackHeightRange.push(...value);
 
     }
 

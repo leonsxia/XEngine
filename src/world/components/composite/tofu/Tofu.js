@@ -324,7 +324,7 @@ class Tofu extends TofuBase {
         _v3.copy(_v2);
         _v2.y = _v1.y;
         const distance = _v1.distanceTo(_v2) - target.depth * .5;
-        let result = angle < this.damageRadius * .5 && distance < this.damageRange;
+        let result = angle <= this.damageRadius * .5 && distance <= this.damageRange;
 
         if (result) {
 
@@ -345,13 +345,12 @@ class Tofu extends TofuBase {
 
         const targetBottomY = _v2.y - target.height * .5;
         const targetTopY = _v2.y + target.height * .5;
-        const thisBottomY = _v1.y - this.height * .5;
-        const thisTopY = _v1.y + this.height * .5;
-        const thisCenterY = _v1.y;
+        const thisAttackHeightMax = _v1.y + this.attackHeightRange[0];
+        const thisAttackHeightMin = _v1.y + this.attackHeightRange[1];
 
-        const result = (thisBottomY <= targetTopY && thisBottomY >= targetBottomY )||
-            (thisTopY <= targetTopY && thisTopY >= targetBottomY) ||
-            (thisCenterY <= targetTopY && thisCenterY >= targetBottomY);
+        const result = (thisAttackHeightMin <= targetTopY && thisAttackHeightMin >= targetBottomY )||
+            (thisAttackHeightMax <= targetTopY && thisAttackHeightMax >= targetBottomY) ||
+            (thisAttackHeightMax >= targetTopY && thisAttackHeightMin <= targetBottomY);
 
         return result;
 

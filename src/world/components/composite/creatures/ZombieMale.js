@@ -222,6 +222,7 @@ class ZombieMale extends CreatureBase {
             HPMax,
             characterControllerSettings, physics,
             focusHeight: .4,
+            attackHeightRange: [0.1, 0.6],
             variant,
             ignoreInSightObstacles
         };

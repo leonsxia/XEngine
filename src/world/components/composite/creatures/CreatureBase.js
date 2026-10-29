@@ -53,7 +53,7 @@ class CreatureBase extends CustomizedCreatureTofu {
         const { isActive = true, showBS = false, enableCollision = true, typeMapping = {} } = specs;
         const { createDefaultBoundingObjects = true } = specs;
         const { HPMax = 100 } = specs;
-        const { needAimRay = false, needFocusRay = true, focusHeight = 0 } = specs;
+        const { needAimRay = false, needFocusRay = true, focusHeight = 0, attackHeightRange = [- height * .5, height * .5] } = specs;
         const { ignoreInSightObstacles = false } = specs;
 
         super({ 
@@ -61,7 +61,9 @@ class CreatureBase extends CustomizedCreatureTofu {
             size: { width, width2, depth, depth2, height, sovRadius }, collisionSize, 
             rotateR, vel, turnbackVel, velEnlarge, rotateREnlarge, 
             createDefaultBoundingObjects, enableCollision, typeMapping,
-            HPMax, needAimRay, needFocusRay, focusHeight, ignoreInSightObstacles
+            HPMax, needAimRay, needFocusRay, focusHeight, 
+            attackHeightRange,
+            ignoreInSightObstacles,
         });
 
         this.specs = specs;
