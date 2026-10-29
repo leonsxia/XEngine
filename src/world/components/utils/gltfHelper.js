@@ -1,6 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { DRACOLoader, DRACO_GLTF_CONFIG } from 'three/addons/loaders/DRACOLoader.js';
 import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 import { 
     GLTFModel, BayonetItem, GlockItem, PistolItem, RevolverItem, SMGShortItem,
@@ -14,7 +14,8 @@ function getGLTFLoader() {
     const loader = new GLTFLoader().setPath('assets/models/gltf/');
     const dracoLoader = new DRACOLoader();
     
-    dracoLoader.setDecoderPath('node_modules/three/examples/jsm/libs/draco/');
+    // dracoLoader.setDecoderPath('node_modules/three/examples/jsm/libs/draco/');
+    dracoLoader.setDecoderPath(DRACO_GLTF_CONFIG);
     loader.setDRACOLoader(dracoLoader);
     loader.setMeshoptDecoder(MeshoptDecoder);    
 
