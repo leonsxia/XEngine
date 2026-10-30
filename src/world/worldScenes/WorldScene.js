@@ -1,3 +1,4 @@
+import { World } from '../World.js';
 import { Camera } from '../components/cameras/Camera.js';
 import { ThirdPersonCamera } from '../components/cameras/ThirdPersonCamera.js';
 import { InspectorCamera } from '../components/cameras/InspectorCamera.js';
@@ -36,6 +37,8 @@ const STRING_CONFIG = {
 }
 
 class WorldScene {
+
+    world;
     
     setup = {
         enableTPC: false,
@@ -131,21 +134,24 @@ class WorldScene {
 
     #paused = true;
 
-    constructor(renderer, specs) {
+    constructor(specs) {
+
+        this.world = new World();
 
         Object.assign(this.setup, specs);
+        Object.assign(this.setup, this.world.configuration);
 
         const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, enableGui = false, controlEventDispatcher } = this.setup;
 
         this.name = name;
 
-        this.renderer = renderer;
+        this.renderer = this.world.renderer;
 
         this.defaultCamera = new Camera();
         this.camera = this.defaultCamera.camera;
 
         this.scene = createScene(backgroundColor);
-        this.postProcessor = new PostProcessor(renderer, this.scene, this.camera);
+        this.postProcessor = new PostProcessor(this.renderer, this.scene, this.camera);
         this.controlEventDispatcher = controlEventDispatcher;
         this.picker = worldPicker;
         this.sceneBuilder = sceneBuilder;

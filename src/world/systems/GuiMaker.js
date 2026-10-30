@@ -51,7 +51,7 @@ class GuiMaker {
             value: { Scene: this.setup.name },
             params: this.setup.scenes,
             type: 'scene-dropdown',
-            changeFn: this.setup.changeCallback
+            changeFn: this.scene.world.changeScene.bind(this.scene.world)
         }));
 
     }

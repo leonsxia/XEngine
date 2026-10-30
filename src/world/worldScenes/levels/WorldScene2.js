@@ -1,21 +1,22 @@
-import { createAxesHelper, createGridHelper } from '../components/utils/helpers.js';
-import { createBasicLights, createPointLights } from '../components/lights.js';
-import { BirdsGroup } from '../components/Models.js';
-import { setupShadowLight } from '../components/shadowMaker.js';
-import { WorldScene } from './WorldScene.js';
-import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../components/utils/constants.js';
+import { createAxesHelper, createGridHelper } from '../../components/utils/helpers.js';
+import { createBasicLights, createPointLights } from '../../components/lights.js';
+import { Train } from '../../components/Models.js';
+import { setupShadowLight } from '../../components/shadowMaker.js';
+import { WorldScene } from '../WorldScene.js';
+import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../../components/utils/constants.js';
 
-const sceneName = 'Birds';
+const sceneName = 'RunningTrain';
 const worldSceneSpecs = {
     name: sceneName,
     camera: {
-        position: [-1.5, 4.5, 6.5]
+        position: [10, 10, 10]
     },
     scene: {
         backgroundColor: 'lightblue'
     },
     enableGui: true,
-    enableShadow: false,
+    moveType: 'tankmove',
+    enableShadow: true,
     enablePicker: false
 };
 // basic lights
@@ -30,8 +31,8 @@ const mainLightCtlSpecs = {
     },
     type: DIRECTIONAL_LIGHT,
     debug: true,
-    shadow: false,
-    shadow_debug: false,
+    shadow: true,
+    shadow_debug: true,
     visible: true
 };
 const ambientLightCtlSpecs = {
@@ -42,8 +43,8 @@ const ambientLightCtlSpecs = {
         intensity: 2
     },
     type: AMBIENT_LIGHT,
-    debug: true,
-    visible: true
+    debug: false,
+    visible: false
 };
 const hemisphereLightCtlSpecs = {
     name: 'hemisphereLight',
@@ -64,22 +65,21 @@ const spotLightSpecsArr = [];
 // axes, grid helper
 const axesSpecs = {
     size: 3,
-    position: [-10.5, 0, -10.5]
+    position: [-25.5, 0, -25.5]
 };
 const gridSpecs = {
-    size: 20,
-    divisions: 20
+    size: 50,
+    divisions: 50
 }
 
-class WorldScene3 extends WorldScene {
+class WorldScene2 extends WorldScene {
 
-    #objects = [];
     #basicLights = {};
     #pointLights = {};
 
-    constructor(renderer, globalConfig, eventDispatcher) {
-        Object.assign(worldSceneSpecs, globalConfig)
-        super(renderer, worldSceneSpecs, eventDispatcher);
+    constructor() {
+
+        super(worldSceneSpecs);
 
         this.#basicLights = createBasicLights(basicLightSpecsArr);
         this.#pointLights = createPointLights(pointLightSpecsArr);
@@ -87,8 +87,8 @@ class WorldScene3 extends WorldScene {
         Object.assign(this.lights, this.#pointLights);
 
         // this.camera.add(this.#pointLights['cameraSpotLight']);
-        
-        this.scene.add(  //this.camera, 
+
+        this.scene.add( //this.camera, 
             createAxesHelper(axesSpecs), createGridHelper(gridSpecs));
 
         // shadow light setup, including light helper
@@ -116,38 +116,19 @@ class WorldScene3 extends WorldScene {
         // setup cameras
         this.defaultCamera.position = position;
 
-        const birdsSpecs = {
-            models: [{
-                src: 'assets/models/Parrot.glb',
-                name: 'parrot',
-                position: [0, 3, 2.5]
-            }, {
-                src: 'assets/models/Flamingo.glb',
-                name: 'flamingo',
-                position: [7.5, 3, -10]
-            }, {
-                src: 'assets/models/Stork.glb',
-                name: 'stork',
-                position: [0, 1.5, -10]
-            }]
-        };
-
-        const birdsGroup = new BirdsGroup(birdsSpecs);
-        birdsGroup.name = 'birdsGroup';
-        this.#objects.push(birdsGroup);
-        await birdsGroup.loadBirds();
-        // move the target to the center of the front bird
-        this.controls.defControl.target.copy(birdsGroup.getBirds(0).position);
-
         this.forceStaticRender = false;
         this.controls.defControl.update();
         this.forceStaticRender = true;
 
         this.controls.defControl.saveState();
 
-        this.loop.updatables.push(birdsGroup);
-
-        this.scene.add(birdsGroup);
+        const train = new Train('red train');
+        train.setPosition([0, 1.25, 0]);
+        this.subscribeEvents(train, worldSceneSpecs.moveType);
+        train.castShadow(true);
+        train.receiveShadow(true);
+        this.loop.updatables.push(train);
+        this.scene.add(train.group);
 
         if (worldSceneSpecs.enableGui) {
 
@@ -158,35 +139,20 @@ class WorldScene3 extends WorldScene {
                     start: this.start.bind(this),
                     stop: this.stop.bind(this),
                     moveCamera: this.moveCamera.bind(this, false),
-                    resetCamera: this.resetCamera.bind(this, false),
-                    focusNext: this.focusNext.bind(this, false)
+                    resetCamera: this.resetCamera.bind(this, false)
                 }
             };
 
             this.guiMaker.setupGuiConfig();
             
         }
-
+        
         this.initContainer();
 
         this.loaded = true;
 
     }
 
-    focusNext(forceStaticRender = true) {
-        // console.log(this.#loadSequence);
-        const birdsGroup = this.#objects.find((obj) => obj.name === 'birdsGroup');
-        const allTargets = birdsGroup.positions.concat([{x: 0, y: 0, z: 0}]);
-        const allCameraPos = birdsGroup.getBirdsCamsPositions(5);
-        allCameraPos.push({x: 20, y: 15, z: 20}); // the last view camera position
-        const pos = {
-            allTargets,
-            allCameraPos
-        }
-
-        Object.assign(this.setup, pos);
-        this.focusNextProcess(forceStaticRender);
-    }
 }
 
-export { WorldScene3 };
+export { WorldScene2 };

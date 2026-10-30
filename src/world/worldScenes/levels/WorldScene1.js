@@ -1,8 +1,8 @@
-import { CubeMaker, SphereMaker, Sphere, Box, MeshGroup } from '../components/Models.js';
-import { createBasicLights, createPointLights } from '../components/lights.js';
-import { setupShadowLight } from '../components/shadowMaker.js';
-import { WorldScene } from './WorldScene.js';
-import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../components/utils/constants.js';
+import { CubeMaker, SphereMaker, Sphere, Box, MeshGroup } from '../../components/Models.js';
+import { createBasicLights, createPointLights } from '../../components/lights.js';
+import { setupShadowLight } from '../../components/shadowMaker.js';
+import { WorldScene } from '../WorldScene.js';
+import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../../components/utils/constants.js';
 
 const sceneName = 'BasicObjects';
 const worldSceneSpecs = {
@@ -67,9 +67,9 @@ class WorldScene1 extends WorldScene  {
     #pointLights = {};
 
     // 1. Create an instance of the World app   
-    constructor(renderer, globalConfig, eventDispatcher) {
-        Object.assign(worldSceneSpecs, globalConfig);
-        super(renderer, worldSceneSpecs, eventDispatcher);
+    constructor() {
+
+        super(worldSceneSpecs);
 
         this.#basicLights = createBasicLights(basicLightSpecsArr);
         this.#pointLights = createPointLights(pointLightSpecsArr);

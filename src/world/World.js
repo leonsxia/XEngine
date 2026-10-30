@@ -1,19 +1,5 @@
 import { container, infosDomElements } from "./systems/htmlElements";
-import { WorldScene1 } from "./worldScenes/WorldScene1";
-import { WorldScene2 } from "./worldScenes/WorldScene2";
-import { WorldScene3 } from "./worldScenes/WorldScene3";
-import { WorldScene4 } from "./worldScenes/WorldScene4";
-import { WaterRoom } from "./worldScenes/WaterRoom";
-import { Mansion } from "./worldScenes/Mansion";
-import { WorldScene5 } from "./worldScenes/WorldScene5";
-import { WorldScene6 } from "./worldScenes/WorldScene6";
-import { WorldMatrix } from "./worldScenes/Matrix";
-import { EnemyTestScene } from "./worldScenes/EnemyTestScene";
-import { WorldTerrain } from "./worldScenes/WorldTerrain";
-import { WorldRapier } from "./worldScenes/WorldRapier";
-import { RouteKanal } from "./worldScenes/levels/RouteKanal";
-import { WoodCabin } from "./worldScenes/levels/WoodCabin";
-import { NavRoom } from "./worldScenes/levels/NavRoom";
+import { scenes, buildLevels } from "./worldScenes/levels/levelBuilder";
 
 import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
@@ -40,25 +26,7 @@ import { loadSounds } from "./components/utils/audioHelper";
 import { SOUNDS } from "./components/utils/audioConstants";
 import { isObjectVisible } from "./components/utils/objectHelper";
 
-const config = { 
-    scenes: [
-        'BasicObjects', 
-        'RunningTrain', 
-        'Birds', 
-        'Simple Physics', 
-        'Water Room', 
-        'Mansion', 
-        'Animated Characters', 
-        'Entries Test',  
-        'Matrix', 
-        'Enemy Test Scene',
-        'Terrain',
-        'Rapier Physics',
-        'Route Kanal',
-        'Wood Cabin',
-        'Navigation Room'
-    ],  // scene list for scene selector
-};
+const config = { scenes };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
 const controlActions = InputBase.CONTROL_ACTIONS.map(actions => {
 
@@ -123,7 +91,11 @@ function countObjects(scene, specs = { visibleOnly: false }) {
 
 const systemLogger = new Logger(DEBUG, 'World');
 
+let instance = null;
+
 class World {
+
+    configuration;
 
     #renderer;
     #currentScene;
@@ -145,11 +117,20 @@ class World {
 
     constructor() {
 
+        // singleton
+        if (instance) {
+
+            return instance;
+
+        }
+
+        instance = this;
+
         this.#renderer = createRenderer();
         this.#renderer.name = 'world_renderer';
         this.#renderer.domElement.classList.add('scene-canvas');
 
-        config.changeCallback = this.changeScene.bind(this);
+        this.configuration = config;
 
         const worldPicker = new Picker();
         config.worldPicker = worldPicker;
@@ -178,24 +159,7 @@ class World {
         this._mouse = new Mouse(inputConifg);
         this._mouse.bindAllEvents();
 
-        this.worldScenes = [];
-        this.worldScenes.push(
-            new WorldScene1(this.#renderer, config),
-            new WorldScene2(this.#renderer, config),
-            new WorldScene3(this.#renderer, config),
-            new WorldScene4(this.#renderer, config),
-            new WorldScene5(this.#renderer, config), 
-            new WorldScene6(this.#renderer, config), 
-            new WaterRoom(this.#renderer, config), 
-            new Mansion(this.#renderer, config), 
-            new WorldMatrix(this.#renderer, config), 
-            new EnemyTestScene(this.#renderer, config),
-            new WorldTerrain(this.#renderer, config),
-            new WorldRapier(this.#renderer, config),
-            new RouteKanal(this.#renderer, config),
-            new WoodCabin(this.#renderer, config),
-            new NavRoom(this.#renderer, config)
-        );
+        this.worldScenes = buildLevels();
 
     }
 
@@ -307,7 +271,13 @@ class World {
             height: canvas.clientHeight
         };
 
-    }    
+    }
+
+    get renderer() {
+
+        return this.#renderer;
+
+    }
 
     setAnimationLoop(callback) {
 
