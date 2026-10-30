@@ -353,7 +353,7 @@ class Gui {
 
                         target.color.setStyle(colorStr(...val));
 
-                        if (find.changeFn) find.changeFn();
+                        find.changeFn?.();
 
                         break;
 
@@ -361,7 +361,7 @@ class Gui {
 
                         target.groundColor.setStyle(colorStr(...val));
 
-                        if (find.changeFn) find.changeFn();
+                        find.changeFn?.();
 
                         break;
 
@@ -371,7 +371,7 @@ class Gui {
 
                         this.#sceneChanged = true;
 
-                        find.changeFn(val);
+                        find.changeFn?.(val);
 
                         break;
 
@@ -380,7 +380,7 @@ class Gui {
                     // eslint-disable-next-line no-fallthrough
                     case 'dropdown':
 
-                        find.changeFn(val);
+                        find.changeFn?.(val);
 
                         break;
 
@@ -390,7 +390,7 @@ class Gui {
 
                             const gui = this.findGui(GUI_CONFIG.CONTROL_TITLES.MENU);
 
-                            find.changeFn(val, false);
+                            find.changeFn?.(val, false);
 
                             this.findController(gui, GUI_CONFIG.PLAYER_CONTROL, 'BBHelper').setValue('hide');
 
@@ -429,7 +429,7 @@ class Gui {
                             }
                         }
 
-                        find.changeFn(val);
+                        find.changeFn?.(val);
 
                         break;
 
@@ -437,14 +437,14 @@ class Gui {
                     case 'object-angle':
                     case 'water-color':
 
-                        if (find.changeFn) find.changeFn(val);
+                        find.changeFn?.(val);
 
                         break;
 
                     case 'light-num':
                     case 'angle':
 
-                        if (find.changeFn) find.changeFn();
+                        find.changeFn?.();
 
                         break;
 
@@ -534,6 +534,7 @@ class Gui {
                     }
 
                 }
+
             }
 
             if (this.#attachedTo.staticRendering && !this.#sceneChanged && find?.type !== 'scene-dropdown') 

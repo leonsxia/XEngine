@@ -4,7 +4,6 @@ import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, ma
 import { Gui } from "./Gui";
 import { DEFAULT_BLOOM } from "./PostProcessor";
 import { Resizer } from "./Resizer";
-import { toneMappingStr } from "./renderer";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control
@@ -164,12 +163,25 @@ class GuiMaker {
         // tone mapping
         this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
             folder: 'Tone Mapping',
-            parent: 'toneMapping',
-            name: 'Mapping',
-            value: { Mapping: toneMappingStr($scene.renderer.toneMapping) },
+            parent: 'rendererToneMapping',
+            name: 'toneMapping',
+            prop: 'Type',
+            value: $scene.renderer,
             params: TONE_MAPPING,
             type: 'dropdown',
             changeFn: $scene.changeToneMapping.bind($scene),
+            close: true
+        }));
+
+        this.guiLeftSpecs.details.push(makeDropdownGuiConfig({
+            folder: 'Tone Mapping',
+            parent: 'rendererToneMapping',
+            name: 'toneMappingExposure',
+            prop: 'Exposure',
+            value: $scene.renderer,
+            params: [0, 10, .001],
+            type: 'number',
+            changeFn: $scene.changeToneExposure.bind($scene),
             close: true
         }));
 

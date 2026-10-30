@@ -77,13 +77,14 @@ function makeFunctionGuiConfig(folder, parent, subFolder, close = false, closeSu
 }
 
 function makeDropdownGuiConfig(specs) {
-    const { folder, parent, name, value, params, type, changeFn, close = false } = specs;
+    const { folder, parent, name, prop, value, params, type, changeFn, close = false } = specs;
     return {
         folder,
         parent,
         close,
         specs: [{
             name,
+            prop,
             value,
             params,
             type,

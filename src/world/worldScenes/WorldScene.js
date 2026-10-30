@@ -124,6 +124,7 @@ class WorldScene {
     jsonFileName;
 
     selectedTone;
+    selectedToneExposure;
 
     loaded = false;
     isRunning = false;
@@ -212,6 +213,7 @@ class WorldScene {
             enableTPC = false, enableIC = false, ICFollowPlayer = false,
             physics, currentRoomSequence = 0,
             toneMapping = toneMappingStr(TONE_MAPPING.AgX),
+            toneMappingExposure = 1,
             postProcessing = { enable: false, bloomEnable: false },
             envHDR
         } = this.setup;
@@ -228,7 +230,9 @@ class WorldScene {
         this.loadSequence = currentRoomSequence;
 
         this.renderer.toneMapping = TONE_MAPPING[toneMapping];
+        this.renderer.toneMappingExposure = toneMappingExposure;
         this.selectedTone = TONE_MAPPING[toneMapping];
+        this.selectedToneExposure = toneMappingExposure;
 
         if (envHDR?.enabled) {
 
@@ -542,6 +546,7 @@ class WorldScene {
 
             // set tone mapping to current selected
             this.renderer.toneMapping = this.selectedTone;
+            this.renderer.toneMappingExposure = this.selectedToneExposure;
 
         }
 
@@ -927,8 +932,13 @@ class WorldScene {
 
     changeToneMapping(tone) {
 
-        this.renderer.toneMapping = tone;
         this.selectedTone = tone;
+
+    }
+
+    changeToneExposure(exposure) {
+
+        this.selectedToneExposure = exposure;
 
     }
 
