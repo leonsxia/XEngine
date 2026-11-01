@@ -21,72 +21,65 @@ const scenes = [
     'Navigation Room'
 ];  // scene list for scene selector
 
+const levels = [
+    {
+        name: "Simple Physics",
+        src: 'assets/scene_objects/worldScene4.json',
+        enableGui: true
+    }, {
+        name: "Animated Characters",
+        src: 'assets/scene_objects/worldScene5.json',
+        enableGui: true
+    }, {
+        name: "Entries Test",
+        src: 'assets/scene_objects/worldScene6.json',
+        enableGui: true
+    }, {
+        name: "Water Room",
+        src: 'assets/scene_objects/water_room.json',
+        enableGui: true
+    }, {
+        name: "Mansion",
+        src: 'assets/scene_objects/mansion.json',
+        enableGui: true
+    }, {
+        name: "Matrix",
+        src: 'assets/scene_objects/matrix.json',
+        enableGui: true
+    }, {
+        name: "Enemy Test Scene",
+        src: 'assets/scene_objects/enemy_test_scene.json',
+        enableGui: true
+    }, {
+        name: "Terrain",
+        src: 'assets/scene_objects/terrain.json',
+        enableGui: true
+    }, {
+        name: "Rapier Physics",
+        src: 'assets/scene_objects/rapierPhysics.json',
+        enableGui: true
+    }, {
+        name: "Route Kanal",
+        src: 'assets/scene_objects/levels/route_kanal.json',
+        enableGui: true
+    }, {
+        name: 'Wood Cabin',
+        src: 'assets/scene_objects/levels/woodCabin.json',
+        enableGui: true
+    }, {
+        name: 'Navigation Room',
+        src: 'assets/scene_objects/levels/navRoom.json',
+        enableGui: true
+    }
+];
+
 const buildLevels = function () {
 
     return [
         new WorldScene1(),
         new WorldScene2(),
         new WorldScene3(),
-        new WorldScene({
-            name: "Simple Physics",
-            src: 'assets/scene_objects/worldScene4.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Animated Characters",
-            src: 'assets/scene_objects/worldScene5.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Entries Test",
-            src: 'assets/scene_objects/worldScene6.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Water Room",
-            src: 'assets/scene_objects/water_room.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Mansion",
-            src: 'assets/scene_objects/mansion.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Matrix",
-            src: 'assets/scene_objects/matrix.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Enemy Test Scene",
-            src: 'assets/scene_objects/enemy_test_scene.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Terrain",
-            src: 'assets/scene_objects/terrain.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Rapier Physics",
-            src: 'assets/scene_objects/rapierPhysics.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: "Route Kanal",
-            src: 'assets/scene_objects/levels/route_kanal.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: 'Wood Cabin',
-            src: 'assets/scene_objects/levels/woodCabin.json',
-            enableGui: true
-        }),
-        new WorldScene({
-            name: 'Navigation Room',
-            src: 'assets/scene_objects/levels/navRoom.json',
-            enableGui: true
-        })
+        ...levels.map(level => new WorldScene(level))
     ];
 
 }
