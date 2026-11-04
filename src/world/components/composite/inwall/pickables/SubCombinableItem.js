@@ -1,7 +1,7 @@
 import { createOBBBox } from "../../../physics/collisionHelper";
-import { JSON_NAMES } from "../../../utils/documentary";
-import { getImageUrl } from "../../../utils/imageHelper";
-import { getJsonItem } from "../../../utils/jsonHelper";
+import { JSON_NAMES } from "../../../../systems/resources/configs/documentary";
+import { getImageUrl } from "../../../../systems/resources/helpers/ImageHelper";
+import { getJsonItem } from "../../../../systems/resources/helpers/JsonHelper";
 
 class SubCombinableItem {
 

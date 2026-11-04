@@ -6,10 +6,10 @@ import { makeInteractiveLabelCanvas } from "../../../utils/canvasMaker";
 import { createSpriteMaterial } from "../../../basic/basicMaterial";
 import { ELEMENT_CLASS, GAMEPAD_BUTTONS, KEYS, LABEL_BASE_SCALE } from "../../../../systems/ui/uiConstants";
 import { hexToRGBA, labelBackground, labelForbidden, white } from "../../../basic/colorBase";
-import { getImageUrl } from "../../../utils/imageHelper";
+import { getImageUrl } from "../../../../systems/resources/helpers/ImageHelper";
+import { getJsonItem } from "../../../../systems/resources/helpers/JsonHelper";
+import { JSON_NAMES } from "../../../../systems/resources/configs/documentary";
 import { addElementClass, removeElementClass } from "../../../utils/htmlHelper";
-import { getJsonItem } from "../../../utils/jsonHelper";
-import { JSON_NAMES } from "../../../utils/documentary";
 import { RIGID_BODY_TYPES } from "../../../utils/constants";
 
 class PickableItem extends ObstacleBase {

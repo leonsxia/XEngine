@@ -1,11 +1,10 @@
 import { Group } from 'three';
 import { GLTFModel } from '../../Models';
-import { loadedGLTFModels } from '../../utils/gltfHelper';
 import { Logger } from '../../../systems/Logger';
 import { AnimateWorkstation } from '../../animation/AnimateWorkstation';
 import { CAMERA_RAY_LAYER } from '../../utils/constants';
 import { Ammo } from './Ammo';
-import { SOUND_NAMES } from '../../utils/audioConstants';
+import { SOUND_NAMES } from '../../../systems/resources/configs/sounds';
 
 const DEBUG = false;
 
@@ -94,14 +93,8 @@ class WeaponBase {
         Object.assign(this._clips, clips);
         Object.assign(this._animationSettings, animationSetting);
 
-        if (loadedGLTFModels[gltfName]) {
-
-            src = loadedGLTFModels[gltfName];
-
-        }
-
         // basic gltf model
-        const gltfSpecs = { name: `${name}_gltf_model`, src, receiveShadow, castShadow };
+        const gltfSpecs = { name: `${name}_gltf_model`, gltfName, src, receiveShadow, castShadow };
 
         // gltf model
         this.gltf = new GLTFModel(gltfSpecs);
@@ -121,12 +114,6 @@ class WeaponBase {
         if (this.isDefault) return;
 
         await this.gltf.init();
-
-        if (!loadedGLTFModels[this._gltfName]) {
-
-            loadedGLTFModels[this._gltfName] = this.gltf.gltf;
-
-        }
 
         this.bindEvents();
 

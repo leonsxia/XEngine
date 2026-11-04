@@ -1,6 +1,7 @@
 import { WeaponBase } from '../../Models';
-import { SOUND_NAMES } from '../../utils/audioConstants';
-import { AMMOS, GLTF_NAMES, WEAPONS } from '../../utils/constants';
+import { SOUND_NAMES } from '../../../systems/resources/configs/sounds';
+import { GLTF_NAMES } from '../../../systems/resources/configs/gltfs';
+import { AMMOS, WEAPONS } from '../../utils/constants';
 import { Ammo } from './Ammo';
 
 const GLTF_SRC = 'weapons/pistol.glb';

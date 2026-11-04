@@ -3,7 +3,7 @@ import { ELEMENT_CLASS, XBOX_CONTROLLER_ICON_NAMES } from "../../systems/ui/uiCo
 import { CONTROL_TYPES } from "../utils/constants";
 import { hintIndex } from "../utils/enums";
 import { addElementClass, removeElementClass } from "../utils/htmlHelper";
-import { getImageUrl } from "../utils/imageHelper";
+import { getImageUrl } from "../../systems/resources/helpers/ImageHelper";
 
 class PdaHint {
 

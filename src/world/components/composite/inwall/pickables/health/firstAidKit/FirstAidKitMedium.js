@@ -1,6 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../../systems/ui/uiConstants";
 import { FIRST_AID_KIT } from "../../../../../utils/constants";
-import { PICKABLE_ITEM_NAMES } from "../../../../../utils/documentary";
+import { PICKABLE_ITEM_NAMES } from "../../../../../../systems/resources/configs/documentary";
 import { FirstAidKitBase } from "./FirstAidKitBase";
 
 const GLTF_SRC = 'pickable_items/health/first_aid_kit_medium.glb';

@@ -2,7 +2,7 @@ import { CreatureBase, GeometryDesc, MeshDesc, WeaponBase } from '../../Models.j
 import { BOX_GEOMETRY, BLACK_WIDOW_CLIPS as CLIPS, SPHERE_GEOMETRY, WEAPONS } from '../../utils/constants.js';
 import { CreatureTypeMapping } from './CreatureTypeMapping';
 import { Ammo } from '../weapons/Ammo.js';
-import { SOUND_NAMES } from '../../utils/audioConstants.js';
+import { SOUND_NAMES } from '../../../systems/resources/configs/sounds';
 
 const GLTF_SRC = 'creatures/black_widow.glb';
 
@@ -100,9 +100,8 @@ class BlackWidow extends CreatureBase {
         const { HPMax = 80 } = specs;
         const { characterControllerSettings } = specs;
         const { physics = {} } = specs;
-        let { width, width2, depth, depth2, height } = specs;
-        let { gltfScale = [1, 1, 1] } = specs;
-        let { offsetY } = specs;
+        let width, width2, depth, depth2, height;
+        let gltfScale, offsetY;
 
         const animationSetting = Object.assign({}, ANIMATION_SETTINGS);
         const soundSetting = Object.assign({}, SOUND_SETTINGS);

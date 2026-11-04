@@ -8,11 +8,13 @@ import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
 import { SSAARenderPass } from 'three/addons/postprocessing/SSAARenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OUTLINE, SSAO, FXAA, SSAA, BLOOM, REPEAT_WRAPPING, BLOOM_SCENE_LAYER, SHADER_NAMES, TEXTURE_NAMES } from '../components/utils/constants';
+import { OUTLINE, SSAO, FXAA, SSAA, BLOOM, REPEAT_WRAPPING, BLOOM_SCENE_LAYER } from '../components/utils/constants';
+import { SHADER_NAMES } from './resources/configs/shaders';
+import { TEXTURE_NAMES } from './resources/configs/textures';
+import { loadedShaders } from './resources/helpers/ShaderHelper';
+import { loadSingleTexture } from './resources/helpers/TextureHelper';
 import { black, white } from '../components/basic/colorBase';
-import { loadSingleTexture } from '../components/utils/textureHelper';
 import { basicMaterials } from '../components/basic/basicMaterial';
-import { shaders } from '../components/utils/shaderHelper';
 import { container } from './htmlElements';
 
 const DEFAULT_OUTLINE = {
@@ -159,8 +161,8 @@ class PostProcessor {
 
     initAlternativeBloomPass() {
 
-        this.#vertexShaderBloom = shaders[SHADER_NAMES.BLOOM_VERTEX];
-        this.#fragmentShaderBloom = shaders[SHADER_NAMES.BLOOM_FRAGMENT];
+        this.#vertexShaderBloom = loadedShaders[SHADER_NAMES.BLOOM_VERTEX];
+        this.#fragmentShaderBloom = loadedShaders[SHADER_NAMES.BLOOM_FRAGMENT];
 
         const bloomPass = new UnrealBloomPass(new Vector2(this.renderTargetWidth, this.renderTargetHeight), 1.5, 0.4, 0.85 );
         bloomPass.threshold = DEFAULT_BLOOM.threshold;
@@ -195,7 +197,7 @@ class PostProcessor {
 
         this.initPass();
 
-        const { texture } = await loadSingleTexture({ map: TEXTURE_NAMES.TRI_PATTERN });
+        const texture = await loadSingleTexture(TEXTURE_NAMES.TRI_PATTERN);
 
         texture.wrapS = REPEAT_WRAPPING;
         texture.wrapT = REPEAT_WRAPPING;

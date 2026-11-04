@@ -1,5 +1,5 @@
 import { Box3, EventDispatcher, Group, SkeletonHelper, Vector3 } from 'three';
-import { worldGLTFLoader } from '../utils/gltfHelper';
+import { loadGLTFModel } from '../../systems/resources/helpers/GltfHelper';
 import { clone } from '../utils/objectHelper';
 import { clone as skeletonClone } from 'three/addons/utils/SkeletonUtils.js';
 import { computeMikkTSpaceTangents } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -41,20 +41,13 @@ class GLTFModel extends EventDispatcher {
             receiveShadow = false, castShadow = false, shadowCastIgnoreList = [],
             hasBones = false,
             needCloneMaterial = false, needCloneTexture = false,
-            needAdjustPosition = true
+            needAdjustPosition = true,
+            gltfName
         } = this.specs;
 
         let model;
 
-        if (src.scene) {
-
-            model = src;
-
-        } else {
-
-            model = await Promise.all([src ? worldGLTFLoader.loadAsync(src) : Promise.resolve(null)]);
-
-        }
+        model = await loadGLTFModel(src, gltfName);
 
         if (model) {
 

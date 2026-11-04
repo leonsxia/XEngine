@@ -1,7 +1,7 @@
 import { Audio, AudioListener, PositionalAudio } from 'three';
-import { loadedSounds } from '../utils/audioHelper';
+import { loadedSounds } from '../../systems/resources/helpers/AudioHelper';
 import { Logger } from '../../systems/Logger';
-import { SOUNDS } from '../utils/audioConstants';
+import { SOUNDS } from '../../systems/resources/configs/sounds';
 import { ResourceTracker } from '../../systems/ResourceTracker';
 
 const DEBUG = false;

@@ -3,7 +3,7 @@ import { BOX_GEOMETRY, ZOMBIE_MALE_CLIPS as CLIPS, WEAPONS } from "../../utils/c
 import { Logger } from '../../../systems/Logger';
 import { CreatureTypeMapping } from "./CreatureTypeMapping";
 import { Ammo } from "../weapons/Ammo";
-import { SOUND_NAMES } from "../../utils/audioConstants.js";
+import { SOUND_NAMES } from "../../../systems/resources/configs/sounds";
 import { generateRapierCharacterInstance } from "../../physics/rapier/helpers/rapierHelper.js";
 
 const GLTF_SRC = 'creatures/zombie_male.glb';

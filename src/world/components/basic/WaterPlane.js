@@ -1,8 +1,9 @@
 import { Vector2, Vector3 } from 'three';
 import { Water } from 'three/addons/objects/Water2.js';
 import { BasicObject } from './BasicObject';
-import { loadedTextures } from '../utils/textureHelper';
-import { WATER_PLANE, TEXTURE_NAMES } from '../utils/constants';
+import { loadedTextures } from '../../systems/resources/helpers/TextureHelper';
+import {TEXTURE_NAMES} from '../../systems/resources/configs/textures';
+import { WATER_PLANE } from '../utils/constants';
 import { colorStr } from './colorBase';
 import { Logger } from '../../systems/Logger';
 

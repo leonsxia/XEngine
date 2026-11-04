@@ -65,7 +65,8 @@ h1 {
 }
 
 #msg {
-    height: 19px;
+    white-space: pre;
+    height: auto;
     width: auto;
     padding: 0 10px 0 10px;
     color: #fff;

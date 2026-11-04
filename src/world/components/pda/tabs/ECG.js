@@ -1,6 +1,6 @@
 import { createECG } from "../../../systems/htmlElements";
 import { ECG_STATE, IMAGE_NAMES } from "../../../systems/ui/uiConstants";
-import { getImageUrl } from "../../utils/imageHelper";
+import { getImageUrl } from "../../../systems/resources/helpers/ImageHelper";
 
 class ECG {
 

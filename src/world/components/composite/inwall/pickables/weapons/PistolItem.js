@@ -1,6 +1,6 @@
 import { IMAGE_NAMES } from "../../../../../systems/ui/uiConstants";
 import { AMMOS, WEAPONS } from "../../../../utils/constants";
-import { PICKABLE_ITEM_NAMES } from "../../../../utils/documentary";
+import { PICKABLE_ITEM_NAMES } from "../../../../../systems/resources/configs/documentary";
 import { Ammo } from "../../../weapons/Ammo";
 import { WeaponItem } from "./WeaponItem";
 

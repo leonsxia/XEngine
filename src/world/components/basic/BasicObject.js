@@ -1,7 +1,7 @@
 import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher, Quaternion, MeshStandardMaterial } from 'three';
 // import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, getTerrainGeometry } from '../utils/geometryHelper';
-import { worldTextureLoader } from '../utils/textureHelper';
+import { loadSingleTexture } from '../../systems/resources/helpers/TextureHelper';
 import { basicMaterials } from './basicMaterial';
 import { white } from './colorBase';
 import { REPEAT_WRAPPING } from '../utils/constants';
@@ -17,7 +17,6 @@ class BasicObject extends EventDispatcher {
     material = null;
     mesh = null;
     name = '';
-    loader = worldTextureLoader;
     type;
     specs;
 
@@ -106,74 +105,20 @@ class BasicObject extends EventDispatcher {
 
     async initBasic() {
 
-        const initPromises = [];
         const {
             map, normalMap,
             aoMap, roughMap, roughness = 1, metalMap, metalness = 0, armMap,
             useStandardMaterial = false
         } = this.specs;
 
-        if (map?.isTexture) {
-
-            const _map = map.clone();
-            this.resetTextureColor();
-            this.setTexture(_map, true);
-            this.material.map = _map;
-
-        }
-
-        if (normalMap?.isTexture) {
-
-            const _map = normalMap.clone();
-            this.setTexture(_map);
-            this.material.normalMap = _map;
-
-        }
-
-        if (armMap?.isTexture) {
-
-            const _map = armMap.clone();
-            this.setTexture(_map);
-            this.material.aoMap = _map;
-            this.material.roughnessMap = _map;
-            this.material.metalnessMap = _map;
-
-        } else {
-
-            if (aoMap?.isTexture) {
-
-                const _map = aoMap.clone();
-                this.setTexture(_map);
-                this.material.aoMap = _map;
-
-            }
-
-            if (roughMap?.isTexture) {
-
-                const _map = roughMap.clone();
-                this.setTexture(_map);
-                this.material.roughnessMap = _map;
-
-            }
-
-            if (metalMap?.isTexture) {
-
-                const _map = metalMap.clone();
-                this.setTexture(_map);
-                this.material.metalnessMap = _map;
-
-            }
-
-        }
-
-        initPromises.push(map && !map.isTexture ? this.loader.loadAsync(map) : Promise.resolve(null));
-        initPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
-        initPromises.push(armMap && !armMap.isTexture ? this.loader.loadAsync(armMap) : Promise.resolve(null));
-        initPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
-        initPromises.push(roughMap && !roughMap.isTexture ? this.loader.loadAsync(roughMap) : Promise.resolve(null));
-        initPromises.push(metalMap && !metalMap.isTexture ? this.loader.loadAsync(metalMap) : Promise.resolve(null));
-
-        const [tex, normal, arm, ao, rough, metal] = await Promise.all(initPromises);
+        const [tex, normal, arm, ao, rough, metal] = await Promise.all([
+            loadSingleTexture(map, null, true),
+            loadSingleTexture(normalMap, null, true),
+            loadSingleTexture(armMap, null, true),
+            loadSingleTexture(aoMap, null, true),
+            loadSingleTexture(roughMap, null, true),
+            loadSingleTexture(metalMap, null, true)
+        ]);
 
         if (tex) {
 

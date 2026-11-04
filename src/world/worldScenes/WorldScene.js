@@ -23,7 +23,7 @@ import { RapierWorld } from '../components/physics/rapier/RapierWorld.js';
 import { GLOBALS } from '../systems/globals.js';
 import { toneMappingStr } from '../systems/renderer.js';
 import { countObjects, systemLogger } from '../World.js';
-import { loadedHDRTextures } from '../components/utils/textureHelper.js';
+import { loadedHDRTextures } from '../systems/resources/helpers/TextureHelper.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;

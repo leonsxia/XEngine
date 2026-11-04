@@ -38,9 +38,10 @@ import {
     DUNGEON_GATE_1,
     VERTICAL_LADDER, ROTATABLE_LADDER, LADDER,
     MODERN_CEILING_LAMP_01, SECURITY_LIGHT,
-    TEXTURE_NAMES, GLTF_NAMES,
     WEAPONS, AMMUNITION, HEALTH_CATEGORY
 } from '../../components/utils/constants.js';
+import { TEXTURE_NAMES } from '../../systems/resources/configs/textures.js';
+import { GLTF_NAMES } from '../../systems/resources/configs/gltfs.js';
 import { createAxesHelper, createGridHelper } from '../../components/utils/helpers.js';
 
 class ModelBuilder {

@@ -5,26 +5,47 @@ import { createRenderer } from "./systems/renderer";
 import { Picker } from "./systems/Picker";
 import { ControlEventDispatcher } from "./systems/ControlEventDispatcher";
 
-import { loadedTextures, loadTextures, loadHDRTextures } from "./components/utils/textureHelper";
-import { initPickableModels, loadGLTFModels, setKTX2Loader } from "./components/utils/gltfHelper";
-import { loadShaders } from "./components/utils/shaderHelper";
-import { loadImages } from "./components/utils/imageHelper";
-import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
-import { TEXTURES, HDR_TEXTURES, GLTFS, SHADERS, CONTROL_TYPES, TEXTURE_NAMES, PHYSICS_TYPES } from "./components/utils/constants";
+/**
+ * resources
+ */
+// textures
+import { RESOURCE_TYPE } from "./systems/resources/configs/resources";
+import { TEXTURES, HDR_TEXTURES, TEXTURE_NAMES } from "./systems/resources/configs/textures";
+import TextureHelper, { loadedTextures } from "./systems/resources/helpers/TextureHelper";
+
+// images
 import { IMAGES, XBOX_CONTROLLER_ICONS } from "./systems/ui/uiConstants";
+import ImageHelper from "./systems/resources/helpers/ImageHelper";
+
+// jsons
+import { JSONS } from "./systems/resources/configs/documentary";
+import JsonHelper from "./systems/resources/helpers/JsonHelper";
+
+// shaders
+import { SHADERS } from "./systems/resources/configs/shaders";
+import ShaderHelper from "./systems/resources/helpers/ShaderHelper";
+
+// sounds
+import { SOUNDS } from "./systems/resources/configs/sounds";
+import AudioHelper from "./systems/resources/helpers/AudioHelper";
+
+// gltf models
+import { GLTFS } from "./systems/resources/configs/gltfs";
+import GltfHelper, { initPickableModels } from "./systems/resources/helpers/GltfHelper";
+
+import { SceneBuilder } from "./worldScenes/builder/SceneBuilder";
+import { CONTROL_TYPES, PHYSICS_TYPES } from "./components/utils/constants";
 import { Logger } from "./systems/Logger";
 import { InputBase } from "./systems/physicalInputs/InputBase";
 import { XBoxController } from "./systems/physicalInputs/gamepad/XBoxController";
 import { Keyboard } from "./systems/physicalInputs/Keyboard";
 import { Mouse } from "./systems/physicalInputs/Mouse";
-import { loadJsons } from "./components/utils/jsonHelper";
-import { JSONS } from "./components/utils/documentary";
 import { pdaItemViewer } from "./systems/ItemViewer";
 import { AnimationLoop } from "./systems/AnimationLoop";
 import { Loop } from "./systems/Loop";
-import { loadSounds } from "./components/utils/audioHelper";
-import { SOUNDS } from "./components/utils/audioConstants";
+
 import { isObjectVisible } from "./components/utils/objectHelper";
+
 
 const config = { scenes };
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
@@ -161,22 +182,51 @@ class World {
 
         this.worldScenes = buildLevels();
 
+        this.setupResources();
+
+    }
+
+    setupResources() {
+
+        this.resources = {
+            textures: new TextureHelper(TEXTURES),
+            hdrTextures: new TextureHelper(HDR_TEXTURES, RESOURCE_TYPE.HDR_TEXTURE),
+            gltfs: new GltfHelper(GLTFS, this.#renderer),
+            images: new ImageHelper(IMAGES),
+            xboxControllerIcons: new ImageHelper(XBOX_CONTROLLER_ICONS, RESOURCE_TYPE.XBOX_CONTROLLER_ICON),
+            jsons: new JsonHelper(JSONS),
+            shaders: new ShaderHelper(SHADERS),
+            sounds: new AudioHelper(SOUNDS)
+        };
+
+        const readyCall = (event) => {
+
+            infosDomElements.msg.textContent += `\r\n[${event.type}] ${event.count} ${event.count > 1 ? 'assets are' : 'asset is'} ready in ${event.time} ms.`;
+
+        };
+        
+        for (const key in this.resources) {
+
+            const helper = this.resources[key];
+            helper.on(helper.outEvent, readyCall);
+
+        }
+
     }
 
     async initScene(name) {
 
         const start = Date.now();
 
-        setKTX2Loader(this.#renderer);
-        const [textures, gltfs] = await Promise.all([
-            loadTextures(TEXTURES),            
-            loadGLTFModels(GLTFS),
-            loadShaders(SHADERS),
-            loadImages(IMAGES),
-            loadImages(XBOX_CONTROLLER_ICONS),
-            loadJsons(JSONS),
-            loadSounds(SOUNDS),
-            loadHDRTextures(HDR_TEXTURES)
+        const [textures, , gltfs] = await Promise.all([
+            this.resources.textures.startLoading(),
+            this.resources.hdrTextures.startLoading(),
+            this.resources.gltfs.startLoading(),
+            this.resources.shaders.startLoading(),
+            this.resources.images.startLoading(),
+            this.resources.xboxControllerIcons.startLoading(),
+            this.resources.jsons.startLoading(),
+            this.resources.sounds.startLoading()
         ]);
         const itemViewerEnvironment = loadedTextures[TEXTURE_NAMES.METAL_241].clone();
 

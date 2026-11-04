@@ -1,10 +1,10 @@
 import { createFileLeftNavList, createFiles } from "../../../systems/htmlElements";
 import { ELEMENT_CLASS, GAMEPAD_BUTTONS, KEYS } from "../../../systems/ui/uiConstants";
 import { CONTROL_TYPES } from "../../utils/constants";
-import { JSON_NAMES } from "../../utils/documentary";
+import { JSON_NAMES } from "../../../systems/resources/configs/documentary";
+import { loadedImages } from "../../../systems/resources/helpers/ImageHelper";
+import { getJson } from "../../../systems/resources/helpers/JsonHelper";
 import { addElementClass, clearChildren, removeElementClass } from "../../utils/htmlHelper";
-import { loadedImages } from "../../utils/imageHelper";
-import { getJson } from "../../utils/jsonHelper";
 import { format } from "../../utils/stringHelper";
 import { TabPanel } from "./TabPanel";
 

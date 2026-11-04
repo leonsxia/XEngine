@@ -3,7 +3,7 @@ import { BOX_GEOMETRY, SOLDIER_FEMALE_CLIPS as CLIPS, WEAPONS } from '../../util
 import { Logger } from '../../../systems/Logger';
 import { WeaponActionMapping } from './WeaponActionMapping';
 import { Ammo } from '../weapons/Ammo';
-import { SOUND_NAMES } from '../../utils/audioConstants';
+import { SOUND_NAMES } from '../../../systems/resources/configs/sounds';
 import { generateRapierCharacterInstance } from '../../physics/rapier/helpers/rapierHelper';
 
 const GLTF_SRC = 'characters/soldier_female.glb';
