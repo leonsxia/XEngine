@@ -2,6 +2,7 @@ import { Mesh } from 'three';
 import { BasicObject } from './BasicObject';
 import { CYLINDER } from '../utils/constants';
 import { white } from './colorBase';
+import { loadSingleTexture } from '../../systems/resources/helpers/TextureHelper';
 
 class Cylinder extends BasicObject {
 
@@ -44,90 +45,22 @@ class Cylinder extends BasicObject {
         else
             material = this.bottomMaterial;
 
-        if (map?.isTexture) {
+        const [diffuse, normal, arm, ao, rough, metal] = await Promise.all([
+            loadSingleTexture(map, null, true),
+            loadSingleTexture(normalMap, null, true),
+            loadSingleTexture(armMap, null, true),
+            loadSingleTexture(aoMap, null, true),
+            loadSingleTexture(roughMap, null, true),
+            loadSingleTexture(metalMap, null, true)
+        ]);
 
-            const _map = map.clone();
-
-            material.color.setHex(white);
-            _map.isCap = true;
-            this.setTexture(_map, true).setCapRotation(_map);
-
-            material.map = _map;
-
-        }
-
-        if (normalMap?.isTexture) {
-
-            const _normal = normalMap.clone();
-            _normal.isCap = true;
-            this.setTexture(_normal).setCapRotation(_normal);
-
-            material.normalMap = _normal;
-
-        }
-
-        if (armMap?.isTexture) {
-
-            const _arm = armMap.clone();
-            _arm.isCap = true;
-            this.setTexture(_arm).setCapRotation(_arm);
-
-            material.aoMap = _arm;
-            material.roughnessMap = _arm;
-            material.metalnessMap = _arm;
-
-        } else {
-
-            if (aoMap?.isTexture) {
-
-                const _ao = aoMap.clone();
-                _ao.isCap = true;
-                this.setTexture(_ao).setCapRotation(_ao);
-
-                material.aoMap = _ao;
-
-            }
-
-            if (roughMap?.isTexture) {
-
-                const _rough = roughMap.clone();
-                _rough.isCap = true;
-                this.setTexture(_rough).setCapRotation(_rough);
-
-                material.roughnessMap = _rough;
-
-            }
-
-            if (metalMap?.isTexture) {
-
-                const _metal = metalMap.clone();
-                _metal.isCap = true;
-                this.setTexture(_metal).setCapRotation(_metal);
-
-                material.metalnessMap = _metal;
-
-            }
-
-        }
-
-        const loadPromises = [];
-
-        loadPromises.push(map && !map.isTexture ? this.loader.loadAsync(map) : Promise.resolve(null));
-        loadPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
-        loadPromises.push(armMap && !armMap.isTexture ? this.loader.loadAsync(armMap) : Promise.resolve(null));
-        loadPromises.push(aoMap && !aoMap.isTexture ? this.loader.loadAsync(aoMap) : Promise.resolve(null));
-        loadPromises.push(roughMap && !roughMap.isTexture ? this.loader.loadAsync(roughMap) : Promise.resolve(null));
-        loadPromises.push(metalMap && !metalMap.isTexture ? this.loader.loadAsync(metalMap) : Promise.resolve(null));
-
-        const [texture, normal, arm, ao, rough, metal] = await Promise.all(loadPromises);
-
-        if (texture) {
+        if (diffuse) {
 
             material.color.setHex(white);
-            texture.isCap = true;
-            this.setTexture(texture, true).setCapRotation(texture);
+            diffuse.isCap = true;
+            this.setTexture(diffuse, true).setCapRotation(diffuse);
 
-            material.map = texture;
+            material.map = diffuse;
 
         }
 

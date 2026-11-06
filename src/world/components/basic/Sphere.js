@@ -2,6 +2,7 @@ import { Mesh, SRGBColorSpace } from 'three';
 import { BasicObject } from './BasicObject';
 import { specular } from './colorBase';
 import { SPHERE } from '../utils/constants';
+import { loadSingleTexture } from '../../systems/resources/helpers/TextureHelper';
 
 class Sphere extends BasicObject {
 
@@ -19,58 +20,12 @@ class Sphere extends BasicObject {
     async init() {
 
         const { surfaceMap, normalMap, specularMap } = this.specs;
-        let mapLoaded = false;
-        let normalLoaded = false;
-        let specularLoaded = false;
 
-        if (surfaceMap?.isTexture) {
-
-            const _map = surfaceMap.clone();
-
-            this.resetTextureColor();
-            _map.colorSpace = SRGBColorSpace;
-            this.material.map = _map;
-
-            mapLoaded = true;
-
-        }
-
-        if (normalMap?.isTexture) {
-
-            const _normalMap = normalMap.clone();
-            this.material.normalMap = _normalMap;
-
-            normalLoaded = true;
-
-        }
-
-        if (specularMap?.isTexture) {
-
-            const _specularMap = specularMap.clone();
-
-            this.resetTextureColor();
-            _specularMap.colorSpace = SRGBColorSpace;
-            this.material.specularMap = _specularMap;
-
-            specularLoaded = true;
-
-        }
-
-        this.material.specular.setHex(specular);
-
-        if (mapLoaded && normalLoaded && specularLoaded) {
-
-            return;
-
-        }
-        
-        const loadPromises = [];
-
-        loadPromises.push(surfaceMap && !surfaceMap.isTexture ? this.loader.loadAsync(surfaceMap) : Promise.resolve(null));
-        loadPromises.push(normalMap && !normalMap.isTexture ? this.loader.loadAsync(normalMap) : Promise.resolve(null));
-        loadPromises.push(specularMap && !specularMap.isTexture ? this.loader.loadAsync(specularMap) : Promise.resolve(null));
-
-        const [surfaceT, normalT, specularT] = await Promise.all(loadPromises);
+        const [surfaceT, normalT, specularT] = await Promise.all([
+            loadSingleTexture(surfaceMap, null, true),
+            loadSingleTexture(normalMap, null, true),
+            loadSingleTexture(specularMap, null, true)
+        ]);
 
         if (surfaceT) {
 
@@ -93,8 +48,11 @@ class Sphere extends BasicObject {
             this.material.specularMap = specularT;
 
         }
+
+        this.material.specular.setHex(specular);
         
     }
+
 }
 
 export { Sphere };

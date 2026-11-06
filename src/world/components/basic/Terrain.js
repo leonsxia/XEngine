@@ -3,6 +3,7 @@ import { BasicObject } from './BasicObject';
 import { TERRAIN } from '../utils/constants';
 import { Logger } from '../../systems/Logger';
 import { getTerrainGeometry, updateTerrainGeometry } from '../utils/geometryHelper';
+import { loadSingleTexture } from '../../systems/resources/helpers/TextureHelper';
 
 const DEBUG = false;
 const _v1 = new Vector3();
@@ -54,25 +55,7 @@ class Terrain extends BasicObject {
             repeatU = 1, repeatV = 1, offsetX = 0, offsetY = 0, height = 1
         } = this.specs;
 
-        if (dispMap?.isTexture) {
-
-            const _map = dispMap.clone();
-            // this.setTexture(_map);
-            // this.material.displacementMap = _map;
-
-            if (useHeightmap) {
-
-                updateTerrainGeometry(this.geometry, _map, this.material, [repeatU, repeatV], [offsetX, offsetY], height);
-
-            }
-
-            this._displacementMap = _map;
-
-        }
-
-        initPromises.push(dispMap && !dispMap.isTexture ? this.loader.loadAsync(dispMap) : Promise.resolve(null));
-
-        const [disp] = await Promise.all(initPromises);
+        const disp = await loadSingleTexture(dispMap, null, true);
 
         if (disp) {
 

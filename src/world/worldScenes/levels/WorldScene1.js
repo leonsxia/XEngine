@@ -2,7 +2,8 @@ import { CubeMaker, SphereMaker, Sphere, Box, MeshGroup } from '../../components
 import { createBasicLights, createPointLights } from '../../components/lights.js';
 import { setupShadowLight } from '../../components/shadowMaker.js';
 import { WorldScene } from '../WorldScene.js';
-import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../../components/utils/constants.js';
+import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, TONE_MAPPING } from '../../components/utils/constants.js';
+import { toneMappingStr } from '../../systems/renderer.js';
 
 const sceneName = 'BasicObjects';
 const worldSceneSpecs = {
@@ -96,11 +97,19 @@ class WorldScene1 extends WorldScene  {
 
         const { 
             camera: { position = [0, 0, 0] },
-            enableShadow = false
+            enableShadow = false,
+            toneMapping = toneMappingStr(TONE_MAPPING.AgX),
+            toneMappingExposure = 1
         } = this.setup;
 
         // renderer shadow enable
         this.renderer.shadowMap.enabled = enableShadow;
+
+        // tone mapping
+        this.renderer.toneMapping = TONE_MAPPING[toneMapping];
+        this.renderer.toneMappingExposure = toneMappingExposure;
+        this.selectedTone = TONE_MAPPING[toneMapping];
+        this.selectedToneExposure = toneMappingExposure;
 
         // setup cameras
         this.defaultCamera.position = position;
