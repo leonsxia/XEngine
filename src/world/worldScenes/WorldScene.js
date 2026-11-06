@@ -831,32 +831,25 @@ class WorldScene {
 
         if (this.staticRendering) {
 
-            this.controls.defControl.target.copy(allTargets[this.loadSequence]);
-            this.camera.position.copy(allCameraPos[this.loadSequence]);
-
             if (!forceStaticRender) this.forceStaticRender = false;
-            this.controls.defControl.update();
+            this.controls.focusNext(
+                allTargets[this.loadSequence],
+                allCameraPos[this.loadSequence],
+                true
+            );
             if (!forceStaticRender) this.forceStaticRender = true;
 
         } else if (this.loop.updatables.find(f => f === this.controls.defControl)) {
 
-            const tar = this.controls.defControl.target;
-            const pos = this.camera.position;
-            const preTar = { x: tar.x, y: tar.y, z: tar.z };
-            const preCam = { x: pos.x, y: pos.y, z: pos.z };
-
             if (this.loadSequence === 0) { // move to first position
 
-                this.controls.focusNext(
-                    preTar, allTargets[0],
-                    preCam, allCameraPos[0]
-                );
+                this.controls.focusNext(allTargets[0], allCameraPos[0]);
 
             } else { // move to next position
 
                 this.controls.focusNext(
-                    preTar, allTargets[this.loadSequence],
-                    preCam, allCameraPos[this.loadSequence]
+                    allTargets[this.loadSequence],
+                    allCameraPos[this.loadSequence]
                 );
 
             }
