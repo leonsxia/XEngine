@@ -7,8 +7,10 @@ import { WorldControls } from '../systems/Controls.js';
 import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcessor.js';
-import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, GUI_CONFIG, CAMERAS, PHYSICS_TYPES, TONE_MAPPING } from '../components/utils/constants.js';
+import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, CAMERAS, PHYSICS_TYPES, TONE_MAPPING } from '../components/utils/constants.js';
 import { GuiMaker } from '../systems/GuiMaker.js';
+import { GUI_CONFIG, GUI_STRINGS } from '../systems/editor/editorConfig.js';
+import Editor from '../systems/editor/Editor.js';
 import { UpdatableQueue } from '../components/updatables/UpdatableQueue.js';
 import { SimplePhysics } from '../components/physics/SimplePhysics.js';
 import { Combat } from '../components/updatables/Combat.js';
@@ -27,14 +29,6 @@ import { loadedHDRTextures } from '../systems/resources/helpers/TextureHelper.js
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
-const STRING_CONFIG = {
-    enable: 'enable',
-    disable: 'disable',
-    show: 'show',
-    hide: 'hide',
-    yes: 'yes',
-    no: 'no'
-}
 
 class WorldScene {
 
@@ -48,14 +42,14 @@ class WorldScene {
         },
         enableGui: false,
         actions: [
-            "start",
-            "stop",
-            "resetCamera",
-            "focusNext",
-            "resetPlayer",
-            "resetScene",
-            "saveScene",
-            "loadScene"
+            'start',
+            'stop',
+            'resetCamera',
+            'focusNext',
+            'resetPlayer',
+            'resetScene',
+            'saveScene',
+            'loadScene'
         ]
     };
     name = 'default scene';
@@ -192,7 +186,7 @@ class WorldScene {
             this.guiMaker = new GuiMaker(this);
             this.guiMaker.init();
 
-            this.controls.initPanels(this.guiMaker.gui);
+            // this.controls.initPanels(this.guiMaker.gui);
 
         }
 
@@ -492,12 +486,15 @@ class WorldScene {
 
             this.guiMaker.setupGuiConfig();
 
+            this.editor = new Editor(this);
+            this.controls.initPanels(this.editor.guiMaker);
+
         }
 
         // post processor
-        this.enablePostEffect(postProcessing.enable ? STRING_CONFIG.enable : STRING_CONFIG.disable);
+        this.enablePostEffect(postProcessing.enable ? GUI_STRINGS.enable : GUI_STRINGS.disable);
         // bloom must set after gui setup, bloomStrength and bloomRadius will be initialized in the gui setup
-        this.enableBloom(postProcessing.bloomEnable ? STRING_CONFIG.enable : STRING_CONFIG.disable);
+        this.enableBloom(postProcessing.bloomEnable ? GUI_STRINGS.enable : GUI_STRINGS.disable);
 
         this.showCPlaneLines(false);
         this.showCPlaneArrows(false);
@@ -549,6 +546,7 @@ class WorldScene {
             }
 
             this.initContainer();
+            this.editor.alive();
 
             // set tone mapping to current selected
             this.renderer.toneMapping = this.selectedTone;
@@ -734,8 +732,10 @@ class WorldScene {
         if (this.guiMaker?.enabled) {
 
             this.guiMaker.suspendGui();
-
+            
         }
+
+        this.editor?.suspend();
 
         // must disable current scene default control, otherwise it will jump backward to last scene
         this.controls.enableDefControl(false);
@@ -777,7 +777,7 @@ class WorldScene {
 
         }
 
-        this.showNavMesh(this.showNavigationMesh ? STRING_CONFIG.show : STRING_CONFIG.hide);
+        this.showNavMesh(this.showNavigationMesh ? GUI_STRINGS.show : GUI_STRINGS.hide);
 
         if (this.player) {
 
@@ -1216,7 +1216,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxHelper) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         if (s) {
 
@@ -1239,7 +1239,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxMesh) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.player.showBB(s);
 
@@ -1251,7 +1251,7 @@ class WorldScene {
 
         if (!this.player || !this.player.boundingBoxWireMesh) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.player.showBBW(s);
 
@@ -1263,7 +1263,7 @@ class WorldScene {
 
         if (!this.player) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.player.showBF(s);
 
@@ -1275,7 +1275,7 @@ class WorldScene {
 
         if (!this.player) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.player.showCollisionBox(s);
 
@@ -1315,7 +1315,7 @@ class WorldScene {
 
         if (!this.player || !this.player.isCustomizedCombatTofu) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
         
         if (s) {
 
@@ -1337,7 +1337,7 @@ class WorldScene {
 
         if (!this.player || !this.player.showPushingBox) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.player.showPushingBox(s);
 
@@ -1349,7 +1349,7 @@ class WorldScene {
 
         if (!this.player || !this.player.hasRays) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         if (s) {
 
@@ -1379,7 +1379,7 @@ class WorldScene {
 
         if (!this.player || !this.player.hasRays) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         if (s) {
 
@@ -1399,7 +1399,7 @@ class WorldScene {
 
         if (!this.player.gltf?.skeleton) return this;
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         if (s) {
 
@@ -1419,7 +1419,7 @@ class WorldScene {
 
     showEnemyBBHelper(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1447,7 +1447,7 @@ class WorldScene {
 
     showEnemyBB(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1465,7 +1465,7 @@ class WorldScene {
 
     showEnemyBBW(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1483,7 +1483,7 @@ class WorldScene {
 
     showEnemyBF(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1501,7 +1501,7 @@ class WorldScene {
 
     showEnemyCBox(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1549,7 +1549,7 @@ class WorldScene {
 
     showEnemyCBoxArrows(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1577,7 +1577,7 @@ class WorldScene {
 
     showEnemyPushingBox(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1595,7 +1595,7 @@ class WorldScene {
 
     showEnemyArrows(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1629,7 +1629,7 @@ class WorldScene {
 
     showEnemyNavigationArrow(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1657,7 +1657,7 @@ class WorldScene {
 
     showEnemyPathHelper(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1683,7 +1683,7 @@ class WorldScene {
 
     showEnemySkeleton(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.enemies.length; i < il; i++) {
 
@@ -1714,12 +1714,14 @@ class WorldScene {
         if (!this.player.isCombatPlayer || this.player.attacking) {
             
             this.guiMaker.gui._lockWeapons = true;
+            this.editor.lockWeapons = true;
             // console.log(`weapons locked: ${this.guiMaker.gui._lockWeapons}`);
             return;
         
         }
 
         this.guiMaker.gui._lockWeapons = false;
+        this.editor.lockWeapons = false;
         // console.log(`weapons locked: ${this.guiMaker.gui._lockWeapons}`);
 
         switch(name) {
@@ -1814,12 +1816,14 @@ class WorldScene {
         if (!this.player.isCombatPlayer || this.player.attacking) {
             
             this.guiMaker.gui._lockWeapons = true;
+            this.editor.lockWeapons = true;
 
             return;
 
         }
 
         this.guiMaker.gui._lockWeapons = false;
+        this.editor.lockWeapons = false;
 
         this.player.reloadAllWeapons();
         
@@ -1827,7 +1831,7 @@ class WorldScene {
 
     showWireframe(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.cPlanes.forEach(cp => {
 
@@ -1839,7 +1843,7 @@ class WorldScene {
 
     showCPlaneLines(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.cPlanes.forEach(cp => {
 
@@ -1851,7 +1855,7 @@ class WorldScene {
 
     showCPlaneArrows(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.cPlanes.forEach(cp => {
 
@@ -1877,7 +1881,7 @@ class WorldScene {
 
     enablePostEffect(enable) {
 
-        const e = enable === STRING_CONFIG.enable;
+        const e = enable === GUI_STRINGS.enable;
 
         this.enablePostProcessing(e);
 
@@ -1893,7 +1897,11 @@ class WorldScene {
 
         if (this.enablePick && !this.postProcessOn) {
 
-            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, STRING_CONFIG.disable, STRING_CONFIG.enable);
+            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, GUI_STRINGS.disable, GUI_STRINGS.enable);
+
+            // new editor controller
+            this.editor.guiMaker.switchControllerState(this.editor.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.MENU].ctl_picker);
+
             this.enablePick = false;
 
         }
@@ -1907,7 +1915,10 @@ class WorldScene {
 
             this.pickedObject = null;
             this.enablePicking();
-            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, STRING_CONFIG.disable, STRING_CONFIG.enable);
+            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, GUI_STRINGS.disable, GUI_STRINGS.enable);
+
+            // new editor controller
+            this.editor.guiMaker.switchControllerState(this.editor.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.MENU].ctl_picker);
 
         }
 
@@ -1926,6 +1937,9 @@ class WorldScene {
 
             this.guiMaker.gui.setControlValue(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.POST_PROCESS_CONTROL, 'PostEffect', val);
 
+            // new editor controller
+            this.editor.guiMaker.setControlValue(this.editor.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.MENU].ctl_post_enable, val);
+
             this.postProcessOn = postProcState;
 
         }
@@ -1934,11 +1948,9 @@ class WorldScene {
 
             if (!this.postProcessOn) {
 
-                this.enablePostProcessing(true);
+                triggerPostProcess(GUI_STRINGS.enable);
 
             }
-
-            triggerPostProcess(STRING_CONFIG.enable);
 
         } else {
             
@@ -1946,8 +1958,7 @@ class WorldScene {
 
             if (!this.postProcessOn) {
 
-                this.enablePostProcessing(false);  
-                triggerPostProcess(STRING_CONFIG.disable);              
+                triggerPostProcess(GUI_STRINGS.disable);              
 
             }            
 
@@ -1965,7 +1976,7 @@ class WorldScene {
 
     enableFXAA(enable) {
 
-        const e = enable === STRING_CONFIG.enable;
+        const e = enable === GUI_STRINGS.enable;
 
         this.setEffect(FXAA, { enabled: e });
 
@@ -1973,7 +1984,7 @@ class WorldScene {
 
     enableSSAA(enable) {
 
-        const e = enable === STRING_CONFIG.enable;
+        const e = enable === GUI_STRINGS.enable;
 
         this.setEffect(SSAA, { enabled: e });
 
@@ -2012,7 +2023,7 @@ class WorldScene {
 
     enableSSAO(enable) {
 
-        const e = enable === STRING_CONFIG.enable;
+        const e = enable === GUI_STRINGS.enable;
 
         this.setEffect(SSAO, { enabled: e });
 
@@ -2052,12 +2063,19 @@ class WorldScene {
 
     enableBloom(enable) {
 
-        const e = enable === STRING_CONFIG.enable;
+        const e = enable === GUI_STRINGS.enable;
 
         this.setEffect(BLOOM, {
             enabled: e, 
             strength: this.guiMaker.bloomSetting.BloomStrength, 
             radius: this.guiMaker.bloomSetting.BloomRadius
+        });
+
+        // new editor controller
+        this.setEffect(BLOOM, {
+            enabled: e, 
+            strength: this.editor.bloomSetting.BloomStrength, 
+            radius: this.editor.bloomSetting.BloomRadius
         });
 
     }
@@ -2195,7 +2213,7 @@ class WorldScene {
 
     showAirWalls(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.airWalls.forEach(w => {
 
@@ -2207,7 +2225,7 @@ class WorldScene {
 
     showCObjects(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         this.cObjects.forEach(obj => {
 
@@ -2227,7 +2245,7 @@ class WorldScene {
 
     showICAreas(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
 
         for (let i = 0, il = this.rooms.length; i < il; i++) {
 
@@ -2248,7 +2266,7 @@ class WorldScene {
 
     switchFixedInspectorCamera(yes) {
 
-        const e = yes === STRING_CONFIG.yes;
+        const e = yes === GUI_STRINGS.yes;
 
         if (this.inspectorCamera) {
 
@@ -2278,7 +2296,7 @@ class WorldScene {
 
     showRapierDebugger(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
         this.physics.showDebugger(s);
 
     }
@@ -2306,7 +2324,7 @@ class WorldScene {
 
     showNavMesh(show) {
 
-        const s = show === STRING_CONFIG.show;
+        const s = show === GUI_STRINGS.show;
         this.showNavigationMesh = s;
 
         for (let i = 0, il = this.rooms.length; i < il; i++) {

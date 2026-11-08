@@ -5,6 +5,7 @@ import { setupShadowLight } from '../../components/shadowMaker.js';
 import { WorldScene } from '../WorldScene.js';
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT, TONE_MAPPING } from '../../components/utils/constants.js';
 import { toneMappingStr } from '../../systems/renderer.js';
+import Editor from '../../systems/editor/Editor.js';
 
 const sceneName = 'Birds';
 const worldSceneSpecs = {
@@ -173,6 +174,16 @@ class WorldScene3 extends WorldScene {
             };
 
             this.guiMaker.setupGuiConfig();
+
+            this.setup.actions = [
+                'start',
+                'stop',
+                'moveCamera',
+                'resetCamera',
+                'focusNext'
+            ];
+            this.editor = new Editor(this);
+            this.controls.initPanels(this.editor.guiMaker);
             
         }
 
@@ -191,7 +202,7 @@ class WorldScene3 extends WorldScene {
         const pos = {
             allTargets,
             allCameraPos
-        }
+        };
 
         Object.assign(this.setup, pos);
         this.focusNextProcess(forceStaticRender);
