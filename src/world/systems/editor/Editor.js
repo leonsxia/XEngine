@@ -1,6 +1,6 @@
 import GuiMaker from './GuiMaker.js';
 import MenuPanel from './panels/MenuPanel.js';
-import LightsPanel from './panels/LightPanel.js';
+import LightsPanel from './panels/LightsPanel.js';
 import ObjectsPanel from './panels/ObjectsPanel.js';
 import { DEFAULT_BLOOM } from '../PostProcessor.js';
 import { GUI_CONFIG } from './editorConfig.js';
@@ -99,6 +99,8 @@ export default class Editor {
     clearObjectsPanel() {
 
         this.guiMaker.removeChildren(this.panel_objects);
+        // clear temple folder in ObjectsPanel
+        this.panels[GUI_CONFIG.PANEL_TITLES.OBJECTS_CONTROL].folder = null;
 
     }
 

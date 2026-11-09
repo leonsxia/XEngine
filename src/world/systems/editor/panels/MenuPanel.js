@@ -260,6 +260,7 @@ export default class MenuPanel extends Panel {
         controllers.ctl_toneMapping_type = folders.folder_toneMapping
             .add($scene.renderer, 'toneMapping', TONE_MAPPING)
             .name('Type',)
+            .listen()
             .onChange((value) => {
 
                 $scene.changeToneMapping.call($scene, value);
@@ -269,6 +270,7 @@ export default class MenuPanel extends Panel {
         controllers.ctl_toneMapping_exposure = folders.folder_toneMapping
             .add($scene.renderer, 'toneMappingExposure', 0, 10)
             .name('Exposure')
+            .listen()
             .onChange((value) => {
 
                 $scene.changeToneExposure.call($scene, value);
@@ -291,15 +293,19 @@ export default class MenuPanel extends Panel {
             folders.folder_scene_hdr = folders.folder_scene.addFolder(GUI_CONFIG.SCENE_HDR);
             folders.folder_scene_hdr
                 .add($scene.scene, 'backgroundRotationX', - 184, 180, .01)
+                .listen()
                 .name('HDR.rotX');
             folders.folder_scene_hdr
                 .add($scene.scene, 'backgroundRotationY', - 180, 180, .01)
+                .listen()
                 .name('HDR.rotY');
             folders.folder_scene_hdr
                 .add($scene.scene, 'backgroundRotationZ', - 180, 180, .01)
+                .listen()
                 .name('HDR.rotZ');
             folders.folder_scene_hdr
                 .add($scene.scene, 'backgroundIntensity', 0, 5, .01)
+                .listen()
                 .name('HDR.intensity');
 
         }

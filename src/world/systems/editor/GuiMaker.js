@@ -61,7 +61,8 @@ export default class GuiMaker {
 
             if (
                 event.controller.constructor.name === 'FunctionController' ||
-                event.controller.constructor.name === 'NumberController'
+                event.controller.constructor.name === 'NumberController' ||
+                event.controller.constructor.name === 'ColorController'
             ) {
 
                 /**
