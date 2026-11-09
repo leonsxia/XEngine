@@ -51,6 +51,7 @@ export default class Editor {
         // bind controls change events
         this.bindChangeEvents();
 
+        // show inital right panel which is Objects Control
         this.showInitialRightPanel();
         
     }
@@ -86,6 +87,18 @@ export default class Editor {
 
     }
 
+    /**
+     * clear Objects Control panel when needed
+     */
+    clearObjectsPanel() {
+
+        this.guiMaker.removeChildren(this.panel_objects);
+
+    }
+
+    /**
+     * used by select control
+     */
     selectPanel(title) {
 
         this.guiMaker.hideAt(this.currentRightPanel);
@@ -94,6 +107,9 @@ export default class Editor {
 
     }
 
+    /**
+     * recover guis when needed, e.g. mouse moved
+     */
     recover() {
 
         this.guiMaker.showAt(GUI_CONFIG.PANEL_TITLES.MENU);

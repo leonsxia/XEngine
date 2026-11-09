@@ -13,8 +13,8 @@ export default class LightsPanel extends Panel {
 
     init() {
 
-        // initialize menu panel
-        this.scope.panel_menu = this.guiMaker.addGui({
+        // initialize lights panel
+        this.scope.panel_lights = this.guiMaker.addGui({
             title: GUI_CONFIG.PANEL_TITLES.LIGHT_CONTROL,
             styles: {
                 right: '250px'

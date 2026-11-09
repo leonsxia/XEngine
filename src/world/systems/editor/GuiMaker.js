@@ -167,6 +167,13 @@ export default class GuiMaker {
 
     }
 
+    removeChildren(gui) {
+
+        // [...gui.children].forEach(c => c.destroy());
+        Array.from(gui.children).forEach(c => c.destroy());
+
+    }
+
     show() {
 
         for (const title in this.guis) {

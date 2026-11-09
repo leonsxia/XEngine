@@ -13,8 +13,8 @@ export default class ObjectsPanel extends Panel {
 
     init() {
 
-        // initialize menu panel
-        this.scope.panel_menu = this.guiMaker.addGui({
+        // initialize objects panel
+        this.scope.panel_objects = this.guiMaker.addGui({
             title: GUI_CONFIG.PANEL_TITLES.OBJECTS_CONTROL,
             styles: {
                 right: '250px'
