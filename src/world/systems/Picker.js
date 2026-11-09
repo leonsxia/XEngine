@@ -4,17 +4,18 @@ import { getInwallParent, getTopParent } from '../components/utils/objectHelper'
 import { container } from './htmlElements';
 
 class Picker {
-    #camera;
-    #scene;
-    #postProcessor;
-    #worldScene;
-    #raycaster;
-    #mouse = new Vector2();
+
+    camera;
+    scene;
+    postProcessor;
+    worldScene;
+    raycaster;
+    mouse = new Vector2();
 
     constructor() {
 
-        this.#raycaster = new Raycaster();
-        this.#raycaster.layers.set(CAMERA_RAY_LAYER);
+        this.raycaster = new Raycaster();
+        this.raycaster.layers.set(CAMERA_RAY_LAYER);
 
         this.bindClick();
 
@@ -22,25 +23,25 @@ class Picker {
 
     setup(worldScene) {
 
-        this.#camera = worldScene.camera;
-        this.#scene = worldScene.scene;
-        this.#postProcessor = worldScene.postProcessor;
-        this.#worldScene = worldScene;
+        this.camera = worldScene.camera;
+        this.scene = worldScene.scene;
+        this.postProcessor = worldScene.postProcessor;
+        this.worldScene = worldScene;
 
     }
 
     reset() {
 
-        this.#camera = null;
-        this.#scene = null;
-        this.#postProcessor = null;
-        this.#worldScene = null;
+        this.camera = null;
+        this.scene = null;
+        this.postProcessor = null;
+        this.worldScene = null;
 
     }
 
     get isUnavailable() {
 
-        return !this.#camera && !this.#scene && !this.#postProcessor && !this.#worldScene;
+        return !this.camera && !this.scene && !this.postProcessor && !this.worldScene;
 
     }
 
@@ -52,20 +53,20 @@ class Picker {
 
     clickEvent(event) {
 
-        if (!this.#scene || 
-            !this.#worldScene.postProcessingEnabled || 
-            !this.#worldScene.enablePick || 
-            this.#worldScene.objectLocked
+        if (!this.scene || 
+            !this.worldScene.postProcessingEnabled || 
+            !this.worldScene.enablePick || 
+            this.worldScene.objectLocked
         ) 
             return;
 
         const canvas = container.querySelector('canvas');
         const canvasRatioH = canvas.clientWidth / container.clientWidth;
         const canvasRatioV = canvas.clientHeight / container.clientHeight;
-        this.#mouse.x = ((event.clientX / container.clientWidth) * 2 - 1) / canvasRatioH;
-        this.#mouse.y = (- (event.clientY / container.clientHeight) * 2 + 1) / canvasRatioV;
+        this.mouse.x = ((event.clientX / container.clientWidth) * 2 - 1) / canvasRatioH;
+        this.mouse.y = (- (event.clientY / container.clientHeight) * 2 + 1) / canvasRatioV;
 
-        if (Math.abs(this.#mouse.x) > 1 || Math.abs(this.#mouse.y) > 1) {
+        if (Math.abs(this.mouse.x) > 1 || Math.abs(this.mouse.y) > 1) {
 
             this.clearPicked();
             return;
@@ -78,17 +79,19 @@ class Picker {
 
     clearPicked() {
 
-        this.#postProcessor.clearOutlineObjects();
-        this.#worldScene.pickedObject = null;
-        this.#worldScene.guiMaker.clearObjectsPanel();
+        this.postProcessor.clearOutlineObjects();
+        this.worldScene.pickedObject = null;
+        this.worldScene.guiMaker.clearObjectsPanel();
+        // new editor
+        this.worldScene.editor.clearObjectsPanel();
 
     }
 
     checkIntersection() {
 
-        this.#raycaster.setFromCamera(this.#mouse, this.#camera);
+        this.raycaster.setFromCamera(this.mouse, this.camera);
 
-        const intersects = this.#raycaster.intersectObjects(this.#scene.children.filter(c => c.visible));
+        const intersects = this.raycaster.intersectObjects(this.scene.children.filter(c => c.visible));
         if (intersects.length > 0) {
 
             const intersectObj = intersects[0].object;
@@ -124,18 +127,20 @@ class Picker {
             father?.resetFallingState?.();
             father?.resetInwaterAnimeState?.();
 
-            if (this.#worldScene.pickedObject !== selectedObject) {
+            if (this.worldScene.pickedObject !== selectedObject) {
 
                 this.clearPicked();
-                this.#postProcessor.addOutlineObjects([selectedObject]);
-                this.#worldScene.pickedObject = selectedObject;
-                this.#worldScene.guiMaker.setupObjectsGuiConfig([this.#worldScene.pickedObject]);
+                this.postProcessor.addOutlineObjects([selectedObject]);
+                this.worldScene.pickedObject = selectedObject;
+                this.worldScene.guiMaker.setupObjectsGuiConfig([this.worldScene.pickedObject]);
+                // new editor
+                this.worldScene.editor.addObjectsToPanel([this.worldScene.pickedObject]);
 
             }
 
         }
 
-        if (this.#worldScene.staticRendering && this.#worldScene.forceStaticRender) this.#worldScene.render();
+        if (this.worldScene.staticRendering && this.worldScene.forceStaticRender) this.worldScene.render();
 
     }
 

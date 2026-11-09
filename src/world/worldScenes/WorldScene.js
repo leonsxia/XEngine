@@ -328,11 +328,13 @@ class WorldScene {
                             this.loop.stop();
                             this.pauseAudio();
                             this.staticRendering = true;
-                            player.pda.stats = this.guiMaker.gui.stats;
+                            // player.pda.stats = this.guiMaker.gui.stats;
+                            player.pda.stats = this.editor.guiMaker.stats;
 
                         } else {
 
-                            this.loop.start(this.guiMaker.gui.stats);
+                            // this.loop.start(this.guiMaker.gui.stats);
+                            this.loop.start(this.editor.guiMaker.stats);
                             this.unpauseAudio();
                             this.staticRendering = false;
 
@@ -585,7 +587,8 @@ class WorldScene {
         this.staticRendering = false;
         this.controls.initPreCoordinates();
         this.controls.setDamping(true, 0.1); // default damping factor 0.05
-        this.loop.start(this.guiMaker.gui.stats);
+        // this.loop.start(this.guiMaker.gui.stats);
+        this.loop.start(this.editor.guiMaker.stats);
         this.#paused = false;
 
     }
@@ -1804,8 +1807,7 @@ class WorldScene {
 
         if (this.pickedObject?.isWeapon) {
             
-            this.guiMaker.clearObjectsPanel();
-            this.objectLocked = false;
+            this.clearPickedObject();
         
         };
 
@@ -1971,6 +1973,9 @@ class WorldScene {
         this.pickedObject = null;
         this.postProcessor.clearOutlineObjects();
         this.guiMaker.clearObjectsPanel();
+        // new editor
+        this.editor.clearObjectsPanel();
+        this.objectLocked = false;
 
     }
 

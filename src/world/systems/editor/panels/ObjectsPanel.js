@@ -26,4 +26,17 @@ export default class ObjectsPanel extends Panel {
 
     }
 
+    buildPanel(objects = []) {
+
+        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+
+        for (let i = 0, il = objects.length; i < il; i++) {
+
+            const object = objects[i];
+            const object_folder = $scope.panel_objects.addFolder(object.name);
+
+        }
+
+    }
+
 };

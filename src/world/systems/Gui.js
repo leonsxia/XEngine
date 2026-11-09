@@ -53,7 +53,7 @@ class Gui {
         this.showIntialRight(this.#initialRightPanel);
 
         this.#stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-        document.body.appendChild(this.#stats.dom);
+        // document.body.appendChild(this.#stats.dom);
 
         if (this.#guiLoaded) return;
 
@@ -679,7 +679,7 @@ class Gui {
 
         this.#sceneChanged = false;
 
-        document.body.removeChild(this.#stats.dom);
+        // document.body.removeChild(this.#stats.dom);
 
     }
 

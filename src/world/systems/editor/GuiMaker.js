@@ -11,6 +11,8 @@ export default class GuiMaker {
         this.controllers = {};
         this.stats = new Stats();
 
+        this.init();
+
     }
 
     get panels() {
@@ -21,9 +23,8 @@ export default class GuiMaker {
 
     init() {
 
-        this.show();
         this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-        // document.body.appendChild(this.stats.dom);
+        document.body.appendChild(this.stats.dom);
 
     }
 
@@ -207,6 +208,19 @@ export default class GuiMaker {
 
         const gui = this.guis[title];
         if (gui) gui.hide();
+
+    }
+
+    removeStats() {
+
+        document.body.removeChild(this.stats.dom);
+
+    }
+
+    suspend() {
+
+        this.hide();
+        this.removeStats();
 
     }
 

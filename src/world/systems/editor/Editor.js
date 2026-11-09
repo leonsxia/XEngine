@@ -24,7 +24,7 @@ export default class Editor {
         GUI_CONFIG.PANEL_TITLES.OBJECTS_CONTROL
     ];
 
-    panels = [];
+    panels = {};
 
     constructor(scene) {
 
@@ -40,13 +40,13 @@ export default class Editor {
     init() {
 
         // initialize left main menu panel
-        this.panels.push(new MenuPanel(this));
+        this.panels[GUI_CONFIG.PANEL_TITLES.MENU] = new MenuPanel(this);
 
         // initialize right lights control panel
-        this.panels.push(new LightsPanel(this));
+        this.panels[GUI_CONFIG.PANEL_TITLES.LIGHT_CONTROL] = new LightsPanel(this);
 
         // initialize right objects control panel
-        this.panels.push(new ObjectsPanel(this));
+        this.panels[GUI_CONFIG.PANEL_TITLES.OBJECTS_CONTROL] = new ObjectsPanel(this);
 
         // bind controls change events
         this.bindChangeEvents();
@@ -84,6 +84,12 @@ export default class Editor {
             else this.guiMaker.hideAt(title);
 
         }
+
+    }
+
+    addObjectsToPanel(objects) {
+
+        this.panels[GUI_CONFIG.PANEL_TITLES.OBJECTS_CONTROL].buildPanel(objects);
 
     }
 
@@ -126,7 +132,7 @@ export default class Editor {
         this.ctl_selectScene.reset();
         this.ctl_selectControl.reset();
         this.sceneChanged = false;
-        this.guiMaker.hide();
+        this.guiMaker.suspend();
 
     }
 
