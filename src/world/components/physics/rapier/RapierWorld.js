@@ -5,7 +5,7 @@ import { Logger } from '../../../systems/Logger';
 
 const CHARACTER_CONTROLLER = 'characterController';
 const STAIR_OFFSET_MAX = .2;
-const DOWN_RAY_LENGTH = .52;
+// const DOWN_RAY_LENGTH = .52;
 const PICKABLE_DOWN_RAY_LENGTH = 1;
 
 const _v1 = new Vector3();
@@ -41,6 +41,7 @@ class RapierWorld {
 
     _debug = false;
 
+    // eslint-disable-next-line no-unused-private-class-members
     #logger = new Logger(DEBUG, 'RapierWorld');
 
     constructor({ players = [], enemies = [], attachTo }) {
@@ -170,7 +171,11 @@ class RapierWorld {
         const userData = meshDesc.userData;
         const { characterControllerSettings: { 
             offset = 0.01, snapToGroundDistance = 0.3, slideEnabled = true,
-            maxSlopeClimbAngle = 60, // set too small will cause the character to get stuck on stairs
+            /**
+             * set too small will cause the character to get stuck on stairs
+             * 90 degrees will make sure no stuck on the border of terrain and walls
+             */             
+            maxSlopeClimbAngle = 90,
             minSlopeSlideAngle = 45,
             autoStepMaxHeight = STAIR_OFFSET_MAX, autoStepMinWidth = 0.1
         } = {} } = avatar.specs;
@@ -657,7 +662,7 @@ class RapierWorld {
             let isLanded = false;
 
             // collect on land points and return the highest one
-            const onLandPoints = [];
+            // const onLandPoints = [];
 
             if (!avatar.isClimbingUp) {
 
@@ -668,24 +673,24 @@ class RapierWorld {
 
                 }
                 
-                // check on land
-                const maxToi = avatar.height * DOWN_RAY_LENGTH;
-                _v1.set(position.x, position.y, position.z);    // origin
-                // take terrain into account, `undefined` will not see as `false` in rapier!!!
-                const { hit, ray } = this.engine.checkRayHitCollider(_v1, _down, maxToi, collider, (collider) => collider.isTerrain || false);
+                // // check on land
+                // const maxToi = avatar.height * DOWN_RAY_LENGTH;
+                // _v1.set(position.x, position.y, position.z);    // origin
+                // // take terrain into account, `undefined` will not see as `false` in rapier!!!
+                // const { hit, ray } = this.engine.checkRayHitCollider(_v1, _down, maxToi, collider, (collider) => collider.isTerrain || false);
 
-                if (hit && (
-                    !controller.computedGrounded() || 
-                    hit.timeOfImpact < avatar.height * .5   // avoid falling into ground
-                )) {
+                // if (hit && (
+                //     !controller.computedGrounded() || 
+                //     hit.timeOfImpact < avatar.height * .5   // avoid falling into ground
+                // )) {
 
-                    // The hit point is obtained from the ray's origin and direction: `origin + dir * timeOfImpact`.
-                    onLandPoints.push(ray.pointAt(hit.timeOfImpact)); // Same as: `ray.origin + ray.dir * toi`
-                    moveVector.add(avatar.tickOnLandPointsAdjustRaw(onLandPoints));
-                    isLanded = true;
-                    this.#logger.log(`charater: ${avatar.name}, is landed by castRay`);
+                //     // The hit point is obtained from the ray's origin and direction: `origin + dir * timeOfImpact`.
+                //     onLandPoints.push(ray.pointAt(hit.timeOfImpact)); // Same as: `ray.origin + ray.dir * toi`
+                //     moveVector.add(avatar.tickOnLandPointsAdjustRaw(onLandPoints));
+                //     isLanded = true;
+                //     this.#logger.log(`charater: ${avatar.name}, is landed by castRay`);
 
-                }
+                // }
                 
             }
 
@@ -701,9 +706,10 @@ class RapierWorld {
 
             }
 
+            // no filter
             controller.computeColliderMovement(collider, moveVector, null, null, 
                 // terrain will be excluded
-                collider => !collider.isTerrain
+                // collider => !collider.isTerrain
             );
             const translation = controller.computedMovement();
 
