@@ -1915,7 +1915,6 @@ class WorldScene {
         // clear picked object
         if (this.enablePick) {
 
-            this.pickedObject = null;
             this.enablePicking();
             this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, GUI_STRINGS.disable, GUI_STRINGS.enable);
 
@@ -1976,6 +1975,12 @@ class WorldScene {
         // new editor
         this.editor.clearObjectsPanel();
         this.objectLocked = false;
+
+        if (this.staticRendering && this.physics?.isRapierWorld) {
+
+            this.physics.updateDebugger(true);
+
+        }
 
     }
 

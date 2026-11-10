@@ -67,6 +67,10 @@ class LightingObjectBase extends ObstacleBase {
                     light.target.position.sub(currentTarget).add(_v2);
                     updateSingleLightCamera.call(null, lightObject, false);
 
+                } else if (light.isPointLight) {
+
+                    updateSingleLightCamera.call(null, lightObject, false);
+
                 }
 
             } else {

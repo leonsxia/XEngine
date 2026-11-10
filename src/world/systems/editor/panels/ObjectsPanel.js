@@ -33,7 +33,7 @@ export default class ObjectsPanel extends Panel {
 
     buildPanel(objects = []) {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope } = this.getLocalDomain();
 
         for (let i = 0, il = objects.length; i < il; i++) {
 
@@ -76,13 +76,13 @@ export default class ObjectsPanel extends Panel {
             this.buildRapierPhysicsRotationControls(object, postChangeFn);
 
             // 4. LWall controls
-            this.buildLWallControls(object, postChangeFn);
+            this.buildLWallControls(object);
 
             // 5. scale controls
-            this.buildScaleControls(object, postChangeFn);
+            this.buildScaleControls(object);
 
             // 6. plane controls
-            this.buildPlaneControls(object, postChangeFn);
+            this.buildPlaneControls(object);
 
             // 7. rotation controls for floor and ceiling in simple physics
             this.buildFloorCeilingRotationControls(object);
@@ -98,6 +98,21 @@ export default class ObjectsPanel extends Panel {
 
             // 11. standard material properties controls
             this.buildStandardMaterialControls(object);
+
+            // 12. terrain controls
+            this.buildTerrainControls(object);
+
+            // 13. rotatable ladder controls
+            this.buildRotatableLadderControls(object, postChangeFn);
+
+            // 14. rotation controls for weapon and scene model
+            this.buildWeaponOrSceneModelRotationControls(object, postChangeFn);
+
+            // 'lock' and 'apply' at the bottom
+            this.buildBottomControls(object);
+
+            // global controls
+            this.buildGlobalControls();
 
         }
 
@@ -115,17 +130,17 @@ export default class ObjectsPanel extends Panel {
         this.folder.add(object.position, 'x', min, max, steps)
             .name('position.x')
             .listen()
-            .onChange(() => changeFn());
+            .changeFn = changeFn;
 
         this.folder.add(object.position, 'y', min, max, steps)
             .name('position.y')
             .listen()
-            .onChange(() => changeFn());
+            .changeFn = changeFn;
 
         this.folder.add(object.position, 'z', min, max, steps)
             .name('position.z')
             .listen()
-            .onChange(() => changeFn());
+            .changeFn = changeFn;
 
     }
 
@@ -149,7 +164,7 @@ export default class ObjectsPanel extends Panel {
             this.folder.add(object.father, 'rotationYDegree', min, max, steps)
                 .name('rotation.y')
                 .listen()
-                .onChange(() => changeFn());
+                .changeFn = changeFn;
 
         }
 
@@ -171,17 +186,17 @@ export default class ObjectsPanel extends Panel {
             this.folder.add(object.father, 'rotationXDegree', min, max, steps)
                 .name('rotation.x')
                 .listen()
-                .onChange(() => changeFn());
+                .changeFn = changeFn;
 
             this.folder.add(object.father, 'rotationYDegree', min, max, steps)
                 .name('rotation.y')
                 .listen()
-                .onChange(() => changeFn());
+                .changeFn = changeFn;
 
             this.folder.add(object.father, 'rotationZDegree', min, max, steps)
                 .name('rotation.z')
                 .listen()
-                .onChange(() => changeFn());
+                .changeFn = changeFn;
 
         }
 
@@ -190,19 +205,17 @@ export default class ObjectsPanel extends Panel {
     /**
      * 4. LWall controls
      */
-    buildLWallControls(object, changeFn) {
+    buildLWallControls(object) {
 
         if (objectFilter3(object.father)) {
 
             this.folder.add(object.father, 'thickSPercentage', 0, 100, .1)
                 .name('thickness_S %')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
             this.folder.add(object.father, 'thickTPercentage', 0, 100, .1)
                 .name('thickness_T %')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
         }
 
@@ -211,7 +224,7 @@ export default class ObjectsPanel extends Panel {
     /**
      * 5. scales controls
      */
-    buildScaleControls(object, changeFn) {
+    buildScaleControls(object) {
 
         const min = GUI_MEASURES.SCALE_MIN;
         const max = GUI_MEASURES.SCALE_MAX;
@@ -222,30 +235,25 @@ export default class ObjectsPanel extends Panel {
 
             this.folder.add(target, 'scaleX', min, max, steps)
                 .name('scale.x')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
             this.folder.add(target, 'scaleY', min, max, steps)
                 .name('scale.y')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
             this.folder.add(target, 'scaleZ', min, max, steps)
                 .name('scale.z')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
         } else if (objectFilter2(target)) {  // cylinder shape like
 
             this.folder.add(target, 'scaleR', min, max, steps)
                 .name('scale.r')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
             this.folder.add(target, 'scaleY', min, max, steps)
                 .name('scale.y')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
         }
 
@@ -254,7 +262,7 @@ export default class ObjectsPanel extends Panel {
     /**
      * 6. plane controls
      */
-    buildPlaneControls(object, changeFn) {
+    buildPlaneControls(object) {
 
         const target = object.father;
         let min, max, steps;
@@ -269,8 +277,7 @@ export default class ObjectsPanel extends Panel {
 
                 this.folder.add(target, 'rotationTDegree', min, max, steps)
                     .name('rotationT')
-                    .listen()
-                    .onChange(() => changeFn());
+                    .listen();
 
                 min = GUI_MEASURES.SCALE_MIN;
                 max = GUI_MEASURES.SCALE_MAX;
@@ -278,25 +285,21 @@ export default class ObjectsPanel extends Panel {
 
                 this.folder.add(target, 'repeatU', min, max, steps)
                     .name('repeatU')
-                    .listen()
-                    .onChange(() => changeFn());
+                    .listen();
 
                 this.folder.add(target, 'repeatV', min, max, steps)
                     .name('repeatV')
-                    .listen()
-                    .onChange(() => changeFn());
+                    .listen();
 
             }
 
             this.folder.add(target, 'scaleX', min, max, steps)
                 .name('scale.x')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
             this.folder.add(target, 'scaleY', min, max, steps)
                 .name('scale.y')
-                .listen()
-                .onChange(() => changeFn());
+                .listen();
 
         }
 
@@ -502,7 +505,7 @@ export default class ObjectsPanel extends Panel {
     }
 
     /**
-     * standard material properties controls
+     * 11. standard material properties controls
      */
     buildStandardMaterialControls(object) {
 
@@ -520,6 +523,159 @@ export default class ObjectsPanel extends Panel {
                 .listen();
 
         }
+
+    }
+
+    /**
+     * 12. terrian controls
+     */
+    buildTerrainControls(object) {
+        
+        const target = object.father;
+        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.RAPIER && target?.isTerrain) {
+
+            const steps = GUI_MEASURES.PICKED_NUMBER_STEPS;
+            const terrain_folder = this.folder.addFolder('Terrain');
+
+            terrain_folder.add(target.specs, 'width', 1, 500, .1)
+                .name('width')
+                .listen();
+
+            terrain_folder.add(target.specs, 'depth', 1, 500, .1)
+                .name('depth')
+                .listen();
+
+            terrain_folder.add(target.specs, 'height', 0.1, 2, steps)
+                .name('height')
+                .listen();
+
+            terrain_folder.add(target.specs, 'segmentW', 1, 350, 1)
+                .name('segmentW')
+                .listen();
+
+            terrain_folder.add(target.specs, 'segmentD', 1, 350, 1)
+                .name('segmentD')
+                .listen();
+
+            const min = GUI_MEASURES.SCALE_MIN;
+            const max = GUI_MEASURES.SCALE_MAX;
+            terrain_folder.add(target, 'repeatU', min, max, steps)
+                .name('repeatU')
+                .listen();
+
+            terrain_folder.add(target, 'repeatV', min, max, steps)
+                .name('repeatV')
+                .listen();
+
+            terrain_folder.add(target, 'offsetX', 0, 1, steps)
+                .name('offsetX')
+                .listen();
+
+            terrain_folder.add(target, 'offsetY', 0, 1, steps)
+                .name('offsetY')
+                .listen();
+
+        }
+
+    }
+
+    /**
+     * 13. rotatable ladder controls
+     */
+    buildRotatableLadderControls(object, changeFn) {
+
+        const target = object.father;
+        if (target?.isRotatableLadder) {
+
+            const min = - GUI_MEASURES.MAX_ANGLE;
+            const max = GUI_MEASURES.MAX_ANGLE;
+            const steps = GUI_MEASURES.PICKED_ANGLE_STEPS;
+
+            this.folder.add(target, 'rotationXDegree', min, max, steps)
+                .name('rotation.x')
+                .listen()
+                .changeFn = changeFn;
+
+            this.folder.add(target, 'rotationYDegree', min, max, steps)
+                .name('rotation.y')
+                .listen()
+                .changeFn = changeFn;
+
+        }
+
+    }
+
+    /**
+     * 14. rotation controls for weapon and scene model
+     */
+    buildWeaponOrSceneModelRotationControls(object, changeFn) {
+
+        if (object.isWeapon || object.isSceneModel) {
+
+            const min = - GUI_MEASURES.MAX_RADIUS;
+            const max = GUI_MEASURES.MAX_RADIUS;
+            const steps = GUI_MEASURES.RADIUS_STEPS;
+
+            this.folder.add(object.rotation, 'x', min, max, steps)
+                .name('rotation.x')
+                .listen()
+                .onChange(() => changeFn());
+
+            this.folder.add(object.rotation, 'y', min, max, steps)
+                .name('rotation.y')
+                .listen()
+                .onChange(() => changeFn());
+
+            this.folder.add(object.rotation, 'z', min, max, steps)
+                .name('rotation.z')
+                .listen()
+                .onChange(() => changeFn());
+
+        }
+
+    }
+
+    /**
+     * bottom function controls
+     */
+    buildBottomControls(object) {
+
+        const { $scene, $guiMaker } = this.getLocalDomain();
+
+        const ctl_lock = this.folder.add({ 'lock': $scene.lockObjects.bind($scene) }, 'lock')
+            .onChange(() => {
+
+                $guiMaker.switchControllerState(ctl_lock);
+
+            });
+
+        if ($scene.physics?.isRapierWorld) {
+
+            this.folder.add({
+                'apply': () => {
+                    object.father ?
+                    object.father.syncRapierWorld?.() :
+                    object.sceneObject?.syncRapierWorld?.();
+                }
+            }, 'apply');
+
+        }
+
+    }
+
+    /**
+     * global controls
+     */
+    buildGlobalControls() {
+
+        const { $scope } = this.getLocalDomain();
+        $scope.panel_objects.add({
+            'reset': () => {
+
+                $scope.panel_objects.reset();
+
+            }
+        }, 'reset');
 
     }
 

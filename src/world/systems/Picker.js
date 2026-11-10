@@ -68,22 +68,17 @@ class Picker {
 
         if (Math.abs(this.mouse.x) > 1 || Math.abs(this.mouse.y) > 1) {
 
-            this.clearPicked();
+            this.worldScene.clearPicking();
+            if (this.worldScene.staticRendering) {
+
+                this.worldScene.render();
+
+            }
             return;
 
         }
 
         this.checkIntersection();
-
-    }
-
-    clearPicked() {
-
-        this.postProcessor.clearOutlineObjects();
-        this.worldScene.pickedObject = null;
-        this.worldScene.guiMaker.clearObjectsPanel();
-        // new editor
-        this.worldScene.editor.clearObjectsPanel();
 
     }
 
@@ -129,7 +124,7 @@ class Picker {
 
             if (this.worldScene.pickedObject !== selectedObject) {
 
-                this.clearPicked();
+                this.worldScene.clearPickedObject();
                 this.postProcessor.addOutlineObjects([selectedObject]);
                 this.worldScene.pickedObject = selectedObject;
                 this.worldScene.guiMaker.setupObjectsGuiConfig([this.worldScene.pickedObject]);

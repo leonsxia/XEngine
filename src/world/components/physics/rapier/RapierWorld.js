@@ -122,17 +122,23 @@ class RapierWorld {
         this.cleanupAvatars();
         this.setupWorld();
 
-        if (this._debug) this.updateDebugger();
+        if (this._debug) this.resetDebugger();
 
     }
 
-    updateDebugger() {
+    resetDebugger() {
 
         if (this._rapierHelper) this.scene.remove(this._rapierHelper);
 
         this._rapierHelper = new RapierHelper(this.engine.world);
         this._rapierHelper.update();
         this.attachTo.scene.add(this._rapierHelper);
+
+    }
+
+    updateDebugger(force = false) {
+
+        if (force || (this._rapierHelper && this._debug)) this._rapierHelper?.update();
 
     }
 
@@ -552,7 +558,7 @@ class RapierWorld {
 
         if (delta > 0.077) return;  // lost frame when fps lower than 13fps
 
-        if (this._rapierHelper && this._debug) this._rapierHelper.update();
+        this.updateDebugger();
 
         this.playerTick(delta);
         this.enemyTick(delta);
