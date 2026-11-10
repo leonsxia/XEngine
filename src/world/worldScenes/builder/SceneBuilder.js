@@ -100,10 +100,10 @@ class SceneBuilder {
             if (worldScene.setup.enableGui) {
 
                 worldScene.guiLightSpecs = {
-                    basicLightSpecsArr: basicLightGuiSpecsArr, 
-                    pointLightSpecsArr: pointLightGuiSpecsArr, 
-                    spotLightSpecsArr: spotLightGuiSpecsArr,
-                    rectAreaLightSpecsArr: rectAreaLightGuiSpecsArr
+                    basicLightSpecsArr: [], 
+                    pointLightSpecsArr: [], 
+                    spotLightSpecsArr: [],
+                    rectAreaLightSpecsArr: []
                 };
 
             }
