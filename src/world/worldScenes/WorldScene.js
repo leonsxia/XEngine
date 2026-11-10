@@ -68,6 +68,7 @@ class WorldScene {
 
     lights = {};
     shadowLightObjects = [];
+    guiLightSpecs = null;
 
     guiMaker;
 

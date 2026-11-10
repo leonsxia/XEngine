@@ -23,8 +23,7 @@ export default class GuiMaker {
 
     init() {
 
-        this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-        document.body.appendChild(this.stats.dom);
+        this.addStats();
 
     }
 
@@ -209,6 +208,13 @@ export default class GuiMaker {
 
         const gui = this.guis[title];
         if (gui) gui.hide();
+
+    }
+
+    addStats() {
+
+        this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild(this.stats.dom);
 
     }
 

@@ -140,11 +140,12 @@ export default class Editor {
 
     /**
      * called when scene is awakened in initBasic
-     * all guis are shown
+     * all guis are recovered
      */
     alive() {
 
-        this.guiMaker.show();
+        this.recover();
+        this.guiMaker.addStats();
 
     }
 

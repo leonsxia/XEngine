@@ -97,6 +97,17 @@ class SceneBuilder {
 
             }
 
+            if (worldScene.setup.enableGui) {
+
+                worldScene.guiLightSpecs = {
+                    basicLightSpecsArr: basicLightGuiSpecsArr, 
+                    pointLightSpecsArr: pointLightGuiSpecsArr, 
+                    spotLightSpecsArr: spotLightGuiSpecsArr,
+                    rectAreaLightSpecsArr: rectAreaLightGuiSpecsArr
+                };
+
+            }
+
             // build scene lights
             {
                 this.buildLights(lights, { name: 'scene', insideGroups: sceneObjects });
@@ -169,6 +180,17 @@ class SceneBuilder {
             guiLights.spotLightSpecsArr = guiLights.spotLightSpecsArr.concat(spotLightsSpecsArr);
             guiLights.rectAreaLightSpecsArr = guiLights.rectAreaLightSpecsArr.concat(rectAreaLightsSpecsArr);
     
+        }
+
+        if (worldScene.setup.enableGui) {
+
+            const { guiLightSpecs } = worldScene;
+
+            guiLightSpecs.basicLightSpecsArr = guiLightSpecs.basicLightSpecsArr.concat(basicLightsSpecsArr);
+            guiLightSpecs.pointLightSpecsArr = guiLightSpecs.pointLightSpecsArr.concat(pointLightsSpecsArr);
+            guiLightSpecs.spotLightSpecsArr = guiLightSpecs.spotLightSpecsArr.concat(spotLightsSpecsArr);
+            guiLightSpecs.rectAreaLightSpecsArr = guiLightSpecs.rectAreaLightSpecsArr.concat(rectAreaLightsSpecsArr);
+            
         }
         
         // worldScene.lights are used for Gui as parents, the light objects controlled by Gui controllers

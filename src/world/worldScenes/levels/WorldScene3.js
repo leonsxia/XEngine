@@ -162,6 +162,7 @@ class WorldScene3 extends WorldScene {
         if (worldSceneSpecs.enableGui) {
 
             this.guiMaker.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr };
+            this.guiLightSpecs = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr};
 
             this.guiMaker.leftActions = {
                 'actions': {

@@ -5,6 +5,8 @@ import Panel from './Panel.js';
 // $scope must be set to Editor instance when called
 export default class LightsPanel extends Panel {
 
+    folders = {};
+
     constructor(scope) {
 
         super(scope);
@@ -24,6 +26,31 @@ export default class LightsPanel extends Panel {
         this.folders = this.guiMaker.folders[GUI_CONFIG.PANEL_TITLES.LIGHT_CONTROL];
         this.controllers = this.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.LIGHT_CONTROL];
 
-    }    
+        this.buildPanel();
+
+    }
+
+    getLocalDomain() {
+
+        const domain = super.getLocalDomain();
+        domain.$lightSpecs = this.scene.guiLightSpecs;
+        domain.$shadowLightObjects = this.scene.shadowLightObjects;
+
+        return domain;
+
+    }
+
+    buildPanel() {
+
+        const { $scope, $lightSpecs, $shadowLightObjects } = this.getLocalDomain();
+        const rooms = [...new Set($shadowLightObjects.map(sl => sl.room))];
+
+        for (const room of rooms) {
+
+            $scope.panel_lights.addFolder(room);
+
+        }
+
+    }
 
 };
