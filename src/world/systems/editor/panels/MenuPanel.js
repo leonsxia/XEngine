@@ -30,6 +30,8 @@ export default class MenuPanel extends Panel {
         this.folders = this.guiMaker.folders[GUI_CONFIG.PANEL_TITLES.MENU];
         this.controllers = this.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.MENU];
 
+        this.getLocalDomain();
+
         // 1. add select scene control
         this.addSelectScene();
 
@@ -97,7 +99,7 @@ export default class MenuPanel extends Panel {
      */
     addSelectScene() {
 
-        const { $scope, $scene, controllers } = this.getLocalDomain();
+        const { $scope, $scene, controllers } = this.domain;
         $scope.ctl_selectScene = controllers.ctl_selectWorld_Scene = $scope.panel_menu
             .addFolder(GUI_CONFIG.SELECT_WORLD_CONTROL)
             .add({ Scene: $scope.setup.name }, 'Scene', $scope.setup.scenes)
@@ -118,7 +120,7 @@ export default class MenuPanel extends Panel {
      */
     addActions() {
 
-        const { $scope, $scene, folders } = this.getLocalDomain();
+        const { $scope, $scene, folders } = this.domain;
         const { actions } = $scope.setup;
         const actionObjects = {};
         for (const action of actions) {
@@ -161,7 +163,7 @@ export default class MenuPanel extends Panel {
      */
     addScreenSettings() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         let { resolution = 1, screenSize = Resizer.SIZE.WIDE } = $scope.setup;
         if (devicePixelRatio === 1) resolution = 1;
 
@@ -191,7 +193,7 @@ export default class MenuPanel extends Panel {
      */
     addSelectControls() {
 
-        const { $scope, folders, controllers } = this.getLocalDomain();
+        const { $scope, folders, controllers } = this.domain;
         folders.folder_selectControl = $scope.panel_menu.addFolder(GUI_CONFIG.SELECT_CONTROL).close();
         $scope.ctl_selectControl = controllers.ctl_select_control = folders.folder_selectControl
             .add({ Control: $scope.initialRightPanel }, 'Control')
@@ -210,7 +212,7 @@ export default class MenuPanel extends Panel {
      */
     addSelectRole() {
 
-        const { $scope, $scene, $guiMaker, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, $guiMaker, folders, controllers } = this.domain;
         if ($scene.showRoleSelector) {
 
             const roles = $scene.players.map(p => p.name);
@@ -255,7 +257,7 @@ export default class MenuPanel extends Panel {
      */
     addToneMappingControls() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         folders.folder_toneMapping = $scope.panel_menu.addFolder(GUI_CONFIG.TONE_MAPPING).close();
         controllers.ctl_toneMapping_type = folders.folder_toneMapping
             .add($scene.renderer, 'toneMapping', TONE_MAPPING)
@@ -284,7 +286,7 @@ export default class MenuPanel extends Panel {
      */
     addSceneSettings() {
 
-        const { $scope, $scene, folders } = this.getLocalDomain();
+        const { $scope, $scene, folders } = this.domain;
 
         // HDR
         if ($scope.setup.envHDR?.enabled) {
@@ -317,7 +319,7 @@ export default class MenuPanel extends Panel {
      */
     addAudioSettings() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         const volume = { level: 1 };
         folders.folder_audio = $scope.panel_menu.addFolder(GUI_CONFIG.AUDIO).close();
         controllers.ctl_audio_master_volume = folders.folder_audio
@@ -336,7 +338,7 @@ export default class MenuPanel extends Panel {
      */
     addRapierControls() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         if ($scene.physics?.isRapierWorld) {
 
             folders.folder_rapier = $scope.panel_menu.addFolder(GUI_CONFIG.RAPIER).close();
@@ -358,7 +360,7 @@ export default class MenuPanel extends Panel {
      */
     addPathfindingControls() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         if ($scene.pathfindingEnabled) {
 
             const { pathfinding = {} } = $scope.setup;
@@ -385,7 +387,7 @@ export default class MenuPanel extends Panel {
      */
     addPickerControls() {
 
-        const { $scope, $scene, $guiMaker, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, $guiMaker, folders, controllers } = this.domain;
         if (!$scene.picker.isUnavailable) {
 
             const pickerActions = {
@@ -411,7 +413,7 @@ export default class MenuPanel extends Panel {
      */
     addPostProcessorControls() {
 
-        const { $scope, $scene, $guiMaker, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, $guiMaker, folders, controllers } = this.domain;
         if ($scene.postProcessor.ready) {
 
             const enable = $scene.setup.postProcessing?.enable;
@@ -548,7 +550,7 @@ export default class MenuPanel extends Panel {
      */
     addCamerasControls() {
 
-        const { $scope, $scene, $guiMaker, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, $guiMaker, folders, controllers } = this.domain;
         const changeFn = (ctl) => {
 
             const isActive = $guiMaker.controllerIsActive(ctl);
@@ -629,7 +631,7 @@ export default class MenuPanel extends Panel {
      */
     addHealthControls() {
 
-        const { $scope, $scene, $guiMaker, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, $guiMaker, folders, controllers } = this.domain;
         if ($scene.player || $scene.enemies.length) {
 
             folders.folder_health = $scope.panel_menu.addFolder(GUI_CONFIG.HEALTH_CONTROL).close();
@@ -677,7 +679,7 @@ export default class MenuPanel extends Panel {
      */
     addPlayerControls() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         if ($scene.player) {
 
             // player controls folder
@@ -798,7 +800,7 @@ export default class MenuPanel extends Panel {
      */
     addWeaponControls() {
 
-        const { $scope, $scene, $guiMaker, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, $guiMaker, folders, controllers } = this.domain;
         if ($scene.player) {
 
             const combatPlayer = $scene.players.find(p => p.isCombatPlayer);
@@ -880,7 +882,7 @@ export default class MenuPanel extends Panel {
      */
     addEnemyControls() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         if ($scene.enemies.length > 0) {
 
             // enemy controls folder
@@ -1010,7 +1012,7 @@ export default class MenuPanel extends Panel {
      */
     addCPlaneControls() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         if ($scene.cPlanes.length) {
 
             folders.folder_cPlanes = $scope.panel_menu.addFolder(GUI_CONFIG.C_PLANES).close();
@@ -1054,7 +1056,7 @@ export default class MenuPanel extends Panel {
      */
     addCObjectControls() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         if ($scene.cObjects.length) {
 
             folders.folder_cObjects = $scope.panel_menu.addFolder(GUI_CONFIG.C_OBJECTS).close();
@@ -1078,7 +1080,7 @@ export default class MenuPanel extends Panel {
      */
     addAirWallControls() {
 
-        const { $scope, $scene, folders, controllers } = this.getLocalDomain();
+        const { $scope, $scene, folders, controllers } = this.domain;
         if ($scene.airWalls.length) {
 
             folders.folder_airwall = $scope.panel_menu.addFolder(GUI_CONFIG.AIR_WALLS).close();

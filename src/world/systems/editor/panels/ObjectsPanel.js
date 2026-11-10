@@ -29,11 +29,13 @@ export default class ObjectsPanel extends Panel {
         this.folders = this.guiMaker.folders[GUI_CONFIG.PANEL_TITLES.OBJECTS_CONTROL];
         this.controllers = this.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.OBJECTS_CONTROL];
 
+        this.getLocalDomain();
+
     }
 
     buildPanel(objects = []) {
 
-        const { $scope } = this.getLocalDomain();
+        const { $scope } = this.domain;
 
         for (let i = 0, il = objects.length; i < il; i++) {
 
@@ -640,7 +642,7 @@ export default class ObjectsPanel extends Panel {
      */
     buildBottomControls(object) {
 
-        const { $scene, $guiMaker } = this.getLocalDomain();
+        const { $scene, $guiMaker } = this.domain;
 
         const ctl_lock = this.folder.add({ 'lock': $scene.lockObjects.bind($scene) }, 'lock')
             .onChange(() => {
@@ -668,7 +670,7 @@ export default class ObjectsPanel extends Panel {
      */
     buildGlobalControls() {
 
-        const { $scope } = this.getLocalDomain();
+        const { $scope } = this.domain;
         $scope.panel_objects.add({
             'reset': () => {
 

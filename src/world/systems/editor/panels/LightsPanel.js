@@ -26,6 +26,8 @@ export default class LightsPanel extends Panel {
         this.folders = this.guiMaker.folders[GUI_CONFIG.PANEL_TITLES.LIGHT_CONTROL];
         this.controllers = this.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.LIGHT_CONTROL];
 
+        this.getLocalDomain();
+
         this.buildPanel();
 
     }
@@ -42,7 +44,7 @@ export default class LightsPanel extends Panel {
 
     buildPanel() {
 
-        const { $scope, $lightSpecs, $shadowLightObjects } = this.getLocalDomain();
+        const { $scope, $lightSpecs, $shadowLightObjects } = this.domain;
         const rooms = [...new Set($shadowLightObjects.map(sl => sl.room))];
 
         for (const room of rooms) {

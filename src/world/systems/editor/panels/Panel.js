@@ -14,13 +14,15 @@ export default class Panel {
 
     getLocalDomain() {
 
-        return {
+        this.domain = {
             $scope: this.scope,
             $scene: this.scene,
             $guiMaker: this.guiMaker,
             folders: this.folders,
             controllers: this.controllers
         };
+
+        return this.domain;
 
     }
 
