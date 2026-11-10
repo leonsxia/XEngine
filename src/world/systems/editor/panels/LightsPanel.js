@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { GUI_CONFIG, GUI_MEASURES, GUI_OPTIONS } from '../editorConfig.js';
+import { GUI_CONFIG, GUI_MEASURES } from '../editorConfig.js';
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../../../components/utils/constants.js';
 import { updateSingleLightCamera } from '../../../components/shadowMaker.js';
 import { colorStr } from '../../../components/basic/colorBase.js';
@@ -60,6 +60,7 @@ export default class LightsPanel extends Panel {
         const { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr, rectAreaLightSpecsArr } = $lightSpecs;
         for (const basicLightSpecs of basicLightSpecsArr) {
 
+            if (!basicLightSpecs.visible) continue;
             this.buildBasicLightControls(basicLightSpecs);
 
         }
@@ -71,7 +72,7 @@ export default class LightsPanel extends Panel {
      */
     buildBasicLightControls(lightSpecs) {
 
-        switch(lightSpecs.light.type) {
+        switch (lightSpecs.light.type) {
 
             case DIRECTIONAL_LIGHT:
 
@@ -97,9 +98,9 @@ export default class LightsPanel extends Panel {
     buildDirectionalLightControls(lightSpecs) {
 
         const { folders } = this.domain;
-        const { name, room, light, detail, debug, shadow, shadow_debug } = lightSpecs;
+        const { name, display, room = 'scene', light, detail, debug, shadow, shadow_debug } = lightSpecs;
         const room_folder = folders[room];
-        const light_folder = room_folder.addFolder(detail.display ?? name);
+        const light_folder = room_folder.addFolder(display ?? name);
         const postChangeFn = this.lightShadowHelperCallback(light);
 
         light_folder.add(light, 'intensity', 0, 20, GUI_MEASURES.NUMBER_STEPS)
@@ -108,7 +109,7 @@ export default class LightsPanel extends Panel {
         light_folder.addColor(detail, 'color', 255)
             .listen()
             .changeFn = event => {
-                
+
                 light.color.setStyle(colorStr(...event.value));
                 postChangeFn();
 
@@ -116,7 +117,7 @@ export default class LightsPanel extends Panel {
 
         if (debug) {
 
-            const debug_folder = light_folder.addFolder('debug');
+            const debug_folder = light_folder.addFolder('debug').close();
             debug_folder.add(light.position, 'x')
                 .min(- GUI_MEASURES.DEFALUT_GRID_WIDTH)
                 .max(GUI_MEASURES.DEFALUT_GRID_WIDTH)
@@ -171,7 +172,7 @@ export default class LightsPanel extends Panel {
 
             if (shadow && shadow_debug) {
 
-                const shadow_camera_folder = light_folder.addFolder('shadow camera');
+                const shadow_camera_folder = light_folder.addFolder('shadow camera').close();
                 shadow_camera_folder.add(light.shadow, 'blurSamples', 0, 20, GUI_MEASURES.NUMBER_STEPS)
                     .name('shadow blurSamples')
                     .listen();
@@ -230,27 +231,107 @@ export default class LightsPanel extends Panel {
     /**
      * ambient light controls
      */
-    buildAmbientLightControls(lightSpecs) {}
-    
+    buildAmbientLightControls(lightSpecs) {
+
+        const { folders } = this.domain;
+        const { name, display, room = 'scene', light, detail } = lightSpecs;
+        const room_folder = folders[room];
+        const light_folder = room_folder.addFolder(display ?? name);
+
+        light_folder.add(light, 'intensity', 0, 20, GUI_MEASURES.NUMBER_STEPS)
+            .listen();
+
+        light_folder.addColor(detail, 'color', 255)
+            .listen()
+            .changeFn = event => {
+
+                light.color.setStyle(colorStr(...event.value));
+
+            };
+
+    }
+
     /**
      * hemisphere light controls
      */
-    buildHemisphereLightControls(lightSpecs) {}
+    buildHemisphereLightControls(lightSpecs) {
+
+        const { folders } = this.domain;
+        const { name, display, room = 'scene', light, detail, debug } = lightSpecs;
+        const room_folder = folders[room];
+        const light_folder = room_folder.addFolder(display ?? name);
+        const postChangeFn = this.lightShadowHelperCallback(light);
+
+        light_folder.add(light, 'intensity', 0, 50, GUI_MEASURES.NUMBER_STEPS)
+            .listen();
+
+        light_folder.addColor(detail, 'skyColor', 255)
+            .listen()
+            .changeFn = event => {
+
+                light.color.setStyle(colorStr(...event.value));
+                postChangeFn();
+
+            };
+
+        light_folder.addColor(detail, 'groundColor', 255)
+            .listen()
+            .changeFn = event => {
+
+                light.color.setStyle(colorStr(...event.value));
+                postChangeFn();
+
+            };
+
+        if (debug) {
+
+            const debug_folder = light_folder.addFolder('debug').close();
+            debug_folder.add(light.position, 'x')
+                .min(- GUI_MEASURES.DEFALUT_GRID_WIDTH)
+                .max(GUI_MEASURES.DEFALUT_GRID_WIDTH)
+                .step(GUI_MEASURES.NUMBER_STEPS)
+                .name('position.x')
+                .listen()
+                .changeFn = postChangeFn;
+
+            debug_folder.add(light.position, 'y')
+                .min(- GUI_MEASURES.DEFAULT_GRID_HEIGHT)
+                .max(GUI_MEASURES.DEFAULT_GRID_HEIGHT)
+                .step(GUI_MEASURES.NUMBER_STEPS)
+                .name('position.y')
+                .listen()
+                .changeFn = postChangeFn;
+
+            debug_folder.add(light.position, 'z')
+                .min(- GUI_MEASURES.DEFALUT_GRID_DEPTH)
+                .max(GUI_MEASURES.DEFALUT_GRID_DEPTH)
+                .step(GUI_MEASURES.NUMBER_STEPS)
+                .name('position.z')
+                .listen()
+                .changeFn = postChangeFn;
+
+            debug_folder.add(light.lightHelper, 'visible')
+                .name('light helper')
+                .listen();
+
+        }
+
+    }
 
     /**
      * point light controls
      */
-    buildPointLightControls(lightSpecs) {}
+    buildPointLightControls(lightSpecs) { }
 
     /**
      * spot light controls
      */
-    buildSpotLightControls(lightSpecs) {}
+    buildSpotLightControls(lightSpecs) { }
 
     /**
      * rect area light controls
      */
-    buildRectAreaLightControls(lightSpecs) {}
+    buildRectAreaLightControls(lightSpecs) { }
 
     /**
      * bind callback to light helper and shadow cam helper
