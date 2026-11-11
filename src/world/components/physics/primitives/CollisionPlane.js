@@ -1,7 +1,8 @@
 import { EdgesGeometry, LineSegments, LineBasicMaterial, Raycaster, Vector3, ArrowHelper, MathUtils } from "three";
 import { Plane } from "../../Models";
 import { white, red, green } from "../../basic/colorBase";
-import { CORNOR_RAY_LAYER } from "../../utils/constants";
+import { CORNOR_RAY_LAYER, PHYSICS_TYPES } from "../../utils/constants";
+import { GLOBALS } from "../../../systems/globals";
 
 const DEFAULT_RAY_LENGTH = 20;
 const HEAD_LENGTH = 1;
@@ -59,7 +60,15 @@ class CollisionPlane extends Plane {
 
     set rotationYDegree(value) {
 
-        this.setRotationY(MathUtils.degToRad(value));
+        if (GLOBALS.CURRENT_PHYSICS === PHYSICS_TYPES.SIMPLE) {
+
+            this.setRotationY(MathUtils.degToRad(value));
+
+        } else {
+
+            super.rotationYDegree = value;
+
+        }
 
     }
 

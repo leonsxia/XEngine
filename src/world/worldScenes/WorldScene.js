@@ -526,6 +526,7 @@ class WorldScene {
         const tpcIdx = updatables.findIndex(f => f === this.thirdPersonCamera);
         const icIdx = updatables.findIndex(f => f === this.inspectorCamera);
 
+        // set current global physics to loaded scene physics type
         const { physics } = this.setup;
         GLOBALS.CURRENT_PHYSICS = physics;
 
