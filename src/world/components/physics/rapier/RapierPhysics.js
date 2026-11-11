@@ -205,6 +205,7 @@ class RapierPhysics {
         group.matrixWorld.decompose(_v1, _q1, _vector);
         const body = this.createRigidBody(_v1, _q1, rigidBodyType ?? (totalMass ? 'dynamic' : 'fixed'));
 
+        const { characterIgnored = false } = group.userData.physics;
         for (let i = 0, il = children.length; i < il; i++) {
 
             const mesh = children[i];
@@ -224,6 +225,8 @@ class RapierPhysics {
             shape.setFriction(friction);
 
             const collider = this.world.createCollider(shape, body);
+
+            if (characterIgnored) collider.characterIgnored = true;
 
             physics.body = body;
             physics.collider = collider;

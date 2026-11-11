@@ -315,7 +315,8 @@ class PickableItem extends ObstacleBase {
         this.group.userData.physics = {
             enableRotations: { enableRotX: false, enableRotY: true, enableRotZ: false },
             enableTranslations: { enableTransX: false, enableTransY: true, enableTransZ: false },
-            rigidBodyType: RIGID_BODY_TYPES.KENEMATIC_POSITION_BASED
+            rigidBodyType: RIGID_BODY_TYPES.KENEMATIC_POSITION_BASED,
+            characterIgnored: true
         }
 
     }

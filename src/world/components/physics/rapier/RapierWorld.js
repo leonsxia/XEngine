@@ -371,6 +371,8 @@ class RapierWorld {
                 colliderDesc.setTranslation(..._v1);
                 userData.physics.collider = this.engine.world.createCollider(colliderDesc);
                 userData.physics.collider.name = `${avatar.name}_character_controller_collider`;
+                // flags to be used when pickable item raycasting will ignore character colliders
+                userData.physics.collider.isCharacterCollider = true;
 
             }
 
@@ -593,8 +595,9 @@ class RapierWorld {
                 const onLandPoints = [];
 
                 const ray = new this.engine.RAPIER.Ray(_v1, _down);
-                const hit = this.engine.world.castRay(ray, maxToi, false, null, null, null, null,                     
-                    (col) => collider.indexOf(col) === -1
+                const hit = this.engine.world.castRay(ray, maxToi, false, null, null, null, null,
+                    // ignore self and character colliders
+                    (col) => collider.indexOf(col) === -1 && !col.isCharacterCollider
                 );
 
                 if (hit) {
@@ -710,6 +713,8 @@ class RapierWorld {
             controller.computeColliderMovement(collider, moveVector, null, null, 
                 // terrain will be excluded
                 // collider => !collider.isTerrain
+                // ignore pickable items
+                collider => !collider.characterIgnored
             );
             const translation = controller.computedMovement();
 

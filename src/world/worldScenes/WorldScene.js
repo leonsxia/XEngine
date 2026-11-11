@@ -1978,6 +1978,12 @@ class WorldScene {
         this.editor.clearObjectsPanel();
         this.objectLocked = false;
 
+        this.updateRapierDebugger();
+
+    }
+
+    updateRapierDebugger() {
+
         if (this.staticRendering && this.physics?.isRapierWorld) {
 
             this.physics.updateDebugger(true);

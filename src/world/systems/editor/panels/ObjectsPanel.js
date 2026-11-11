@@ -658,6 +658,7 @@ export default class ObjectsPanel extends Panel {
                     object.father ?
                     object.father.syncRapierWorld?.() :
                     object.sceneObject?.syncRapierWorld?.();
+                    $scene.updateRapierDebugger();
                 }
             }, 'apply');
 
