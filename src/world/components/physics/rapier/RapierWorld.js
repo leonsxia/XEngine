@@ -714,7 +714,7 @@ class RapierWorld {
                 // terrain will be excluded
                 // collider => !collider.isTerrain
                 // ignore pickable items
-                collider => !collider.characterIgnored
+                collider => !collider.customProperties?.characterIgnored
             );
             const translation = controller.computedMovement();
 
