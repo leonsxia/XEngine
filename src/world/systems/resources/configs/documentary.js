@@ -27,7 +27,7 @@ const JSON_NAMES = {
 
 // json files
 const JSONS = [{
-    name: JSON_NAMES.PACKAGE, src: './package.json'
+    name: JSON_NAMES.PACKAGE, src: new URL('../../../../../package.json', import.meta.url).href
 }, {
     name: JSON_NAMES.PICKABLE_DESCRIPTIONS,  src: 'assets/docs/pickable_descriptions.json'    
  }, {
