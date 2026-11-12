@@ -47,7 +47,10 @@ import { Loop } from "./systems/Loop";
 import { isObjectVisible } from "./components/utils/objectHelper";
 
 
-const config = { scenes };
+const config = {
+    scenes,
+    physics: PHYSICS_TYPES.SIMPLE
+};
 const controlTypes = Object.values(InputBase.CONTROL_TYPES);
 const controlActions = InputBase.CONTROL_ACTIONS.map(actions => {
 
@@ -57,11 +60,6 @@ const controlActions = InputBase.CONTROL_ACTIONS.map(actions => {
     return { category, types };
 
 });
-const controlEventDispatcher = new ControlEventDispatcher(controlTypes, controlActions);
-config.controlEventDispatcher = controlEventDispatcher;
-
-config.physics = PHYSICS_TYPES.SIMPLE;
-
 const DEBUG = true;
 
 function countObjects(scene, specs = { visibleOnly: false }) {
@@ -118,14 +116,6 @@ class World {
 
     configuration;
 
-    #renderer;
-    #currentScene;
-
-    #textures;
-    #gltfs;
-
-    #sceneBuilder;
-
     _amimationLoop;
     _worldLooper;
     _onAnimationFrameCallback;
@@ -147,16 +137,15 @@ class World {
 
         instance = this;
 
-        this.#renderer = createRenderer();
-        this.#renderer.name = 'world_renderer';
-        this.#renderer.domElement.classList.add('scene-canvas');
+        this.renderer = createRenderer();
+        this.renderer.name = 'world_renderer';
+        this.renderer.domElement.classList.add('scene-canvas');
 
         this.configuration = config;
 
-        const worldPicker = new Picker();
-        config.worldPicker = worldPicker;
-        this.#sceneBuilder = new SceneBuilder();
-        config.sceneBuilder = this.#sceneBuilder;
+        this.worldPicker = new Picker();
+        this.sceneBuilder = new SceneBuilder();
+        this.controlEventDispatcher = new ControlEventDispatcher(controlTypes, controlActions);
 
         this._amimationLoop = new AnimationLoop();    
         this._amimationLoop.setAnimationLoop((time) => {
@@ -167,7 +156,7 @@ class World {
         this._worldLooper = new Loop(this);
 
         const inputConifg = {
-            dispatcher: controlEventDispatcher,
+            dispatcher: this.controlEventDispatcher,
             controlTypes: controlTypes,
             attachTo: this
         }
@@ -191,7 +180,7 @@ class World {
         this.resources = {
             textures: new TextureHelper(TEXTURES),
             hdrTextures: new TextureHelper(HDR_TEXTURES, RESOURCE_TYPE.HDR_TEXTURE),
-            gltfs: new GltfHelper(GLTFS, this.#renderer),
+            gltfs: new GltfHelper(GLTFS, this.renderer),
             images: new ImageHelper(IMAGES),
             xboxControllerIcons: new ImageHelper(XBOX_CONTROLLER_ICONS, RESOURCE_TYPE.XBOX_CONTROLLER_ICON),
             jsons: new JsonHelper(JSONS),
@@ -233,14 +222,11 @@ class World {
         const end = Date.now();
         systemLogger.log(`loading assests in ${(end - start) * .001} s`);
 
-        this.#textures = textures;
-        this.#gltfs = gltfs;
-
         pdaItemViewer.scene.background = itemViewerEnvironment;
 
         await initPickableModels();
 
-        this.#sceneBuilder.loadAssets(this.#textures, this.#gltfs);
+        this.sceneBuilder.loadAssets(textures, gltfs);
 
         await this.changeScene(name);
 
@@ -251,8 +237,8 @@ class World {
 
     async changeScene(name) {
 
-        // this.#currentScene?.reset(); // reset camera, gui, controls, stop animation
-        this.#currentScene?.suspend(); // stop looping, hide gui but not reset, disable controls
+        // this.currentScene?.reset(); // reset camera, gui, controls, stop animation
+        this.currentScene?.suspend(); // stop looping, hide gui but not reset, disable controls
         
         container.innerHTML = '';
 
@@ -270,9 +256,9 @@ class World {
         // need to resize current loaded scene in case that size has changed on last scene
         loadScene.resizer.setSize();
 
-        this.#currentScene = loadScene;
+        this.currentScene = loadScene;
 
-        systemLogger.log(`Scene: ${this.#currentScene.name} Renderer: ${this.#currentScene.renderer.name}`);
+        systemLogger.log(`Scene: ${this.currentScene.name} - Renderer: ${this.currentScene.renderer.name}`);
 
         if (infosDomElements) infosDomElements.msg.textContent = 'assets all loaded. => renderding scene...';
 
@@ -282,7 +268,7 @@ class World {
 
             loadScene.render();
 
-            container.prepend(this.#renderer.domElement);
+            container.prepend(this.renderer.domElement);
 
             const end = Date.now();
             systemLogger.log(`render in ${(end - start) * .001} s`);
@@ -303,29 +289,17 @@ class World {
 
     get current() {
 
-        return this.#currentScene.name;
-
-    }
-
-    get currentScene() {
-
-        return this.#currentScene;
+        return this.currentScene.name;
 
     }
 
     get sceneClientSize() {
 
-        const canvas = this.#renderer.domElement;
+        const canvas = this.renderer.domElement;
         return {
             width: canvas.clientWidth,
             height: canvas.clientHeight
         };
-
-    }
-
-    get renderer() {
-
-        return this.#renderer;
 
     }
 
@@ -346,7 +320,7 @@ class World {
                 const scene = this.worldScenes[i];
                 const { resizer } = scene;
 
-                if (this.#currentScene === scene) {
+                if (this.currentScene === scene) {
 
                     resizer.setSize();
                     resizer.onResize();
@@ -395,7 +369,7 @@ class World {
 
                 container.classList.remove('nocursor');
                 // new editor
-                this.#currentScene?.editor.recover();
+                this.currentScene?.editor.recover();
                 this.setInfo(true);
                 this._showGuiAndInfo = true;
 
@@ -407,7 +381,7 @@ class World {
 
                 container.classList.add('nocursor');
                 // new editor
-                this.#currentScene?.editor.guiMaker.hide();
+                this.currentScene?.editor.guiMaker.hide();
                 this.setInfo(false);
                 this._showGuiAndInfo = false;
 
@@ -419,7 +393,7 @@ class World {
 
     switchInput(type) {
 
-        if (!this.#currentScene) return;
+        if (!this.currentScene) return;
 
         switch(type) {
 

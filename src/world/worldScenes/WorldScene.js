@@ -135,7 +135,7 @@ class WorldScene {
         Object.assign(this.setup, specs);
         Object.assign(this.setup, this.world.configuration);
 
-        const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, controlEventDispatcher } = this.setup;
+        const { name, scene: { backgroundColor } } = this.setup;
 
         this.name = name;
 
@@ -146,9 +146,9 @@ class WorldScene {
 
         this.scene = createScene(backgroundColor);
         this.postProcessor = new PostProcessor(this.renderer, this.scene, this.camera);
-        this.controlEventDispatcher = controlEventDispatcher;
-        this.picker = worldPicker;
-        this.sceneBuilder = sceneBuilder;
+        this.controlEventDispatcher = this.world.controlEventDispatcher;
+        this.picker = this.world.worldPicker;
+        this.sceneBuilder = this.world.sceneBuilder;
         this.controls = new WorldControls(this.camera, this.renderer.domElement);
 
         this.loop = new Loop(this.renderer);
