@@ -1,6 +1,21 @@
-import GUI from 'lil-gui';
+import {
+    GUI,
+    BooleanController,
+    ColorController,
+    FunctionController,
+    NumberController,
+    OptionController,
+    StringController
+} from 'lil-gui';
 import Stats from 'stats.js';
 import { GUI_CONFIG, GUI_OPTIONS } from './editorConfig.js';
+
+BooleanController.prototype.isBooleanController = true;
+ColorController.prototype.isColorController = true;
+FunctionController.prototype.isFunctionController = true;
+NumberController.prototype.isNumberController = true;
+OptionController.prototype.isOptionController = true;
+StringController.prototype.isStringController = true;
 
 export default class GuiMaker {
 
@@ -47,7 +62,7 @@ export default class GuiMaker {
         gui.onFinishChange(event => {
 
             if (
-                event.controller.domElement.classList.contains('lil-option')
+                event.controller.isOptionController
             ) {
 
                 callback(event);
@@ -59,10 +74,10 @@ export default class GuiMaker {
         gui.onChange(event => {
 
             if (
-                event.controller.domElement.classList.contains('lil-function') ||
-                event.controller.domElement.classList.contains('lil-number') ||
-                event.controller.domElement.classList.contains('lil-color') ||
-                event.controller.domElement.classList.contains('lil-boolean')
+                event.controller.isFunctionController ||
+                event.controller.isNumberController ||
+                event.controller.isColorController ||
+                event.controller.isBooleanController
             ) {
 
                 /**
