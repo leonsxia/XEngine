@@ -47,7 +47,7 @@ export default class GuiMaker {
         gui.onFinishChange(event => {
 
             if (
-                event.controller.constructor.name === 'OptionController'
+                event.controller.domElement.classList.contains('lil-option')
             ) {
 
                 callback(event);
@@ -59,10 +59,10 @@ export default class GuiMaker {
         gui.onChange(event => {
 
             if (
-                event.controller.constructor.name === 'FunctionController' ||
-                event.controller.constructor.name === 'NumberController' ||
-                event.controller.constructor.name === 'ColorController' ||
-                event.controller.constructor.name === 'BooleanController'
+                event.controller.domElement.classList.contains('lil-function') ||
+                event.controller.domElement.classList.contains('lil-number') ||
+                event.controller.domElement.classList.contains('lil-color') ||
+                event.controller.domElement.classList.contains('lil-boolean')
             ) {
 
                 /**

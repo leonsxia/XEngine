@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { GLOBALS } from '../../globals.js';
 import { GUI_CONFIG, GUI_OPTIONS, GUI_MEASURES } from '../editorConfig.js';
 import { PHYSICS_TYPES } from '../../../components/utils/constants.js';
