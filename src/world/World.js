@@ -207,7 +207,7 @@ class World {
 
         const start = Date.now();
 
-        const [textures, , gltfs] = await Promise.all([
+        const [textures, , gltfs, , , , jsons] = await Promise.all([
             this.resources.textures.startLoading(),
             this.resources.hdrTextures.startLoading(),
             this.resources.gltfs.startLoading(),
@@ -229,6 +229,8 @@ class World {
         this.sceneBuilder.loadAssets(textures, gltfs);
 
         await this.changeScene(name);
+
+        if (infosDomElements) infosDomElements.version.textContent = `Version: ${jsons.PACKAGE.version}`;
 
         this.bindResizer();
         this._worldLooper.start();

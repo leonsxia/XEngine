@@ -3,9 +3,11 @@ import { KEYS, PDA_HINT_GROUP, PDA_MENU_NAMES, PDA_OPERATE_MENU_LIST } from "./u
 const container = document.querySelector('#scene-container');
 const header = document.querySelector('#sceneTitle');
 const msg = document.querySelector('#msg');
+const version = document.querySelector('#version');
 const infosDomElements = {
     header,
-    msg
+    msg,
+    version
 };
 
 function createPdaContainer(theme) {

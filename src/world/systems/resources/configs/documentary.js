@@ -20,12 +20,15 @@ const FIELS_NAMES = {
 }
 
 const JSON_NAMES = {
+    PACKAGE: 'PACKAGE',
     PICKABLE_DESCRIPTIONS: 'PICKABLE_DESCRIPTIONS',
     FILES: 'FILES'
 }
 
 // json files
 const JSONS = [{
+    name: JSON_NAMES.PACKAGE, src: './package.json'
+}, {
     name: JSON_NAMES.PICKABLE_DESCRIPTIONS,  src: 'assets/docs/pickable_descriptions.json'    
  }, {
     name: JSON_NAMES.FILES, src: 'assets/docs/files.json'
