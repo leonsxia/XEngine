@@ -3,6 +3,7 @@ const GUI_OPTIONS = {
     ENABLE_DISABLE: ['enable', 'disable'],
     ENABLE_CAMERA: ['enable TPC', 'enable IC'],
     YES_NO: ['yes', 'no'],
+    LOCK_UNLOCK: ['lock', 'unlock'],
     HEALTH: ['Player HP', 'Enemy HP'],
     WEAPONS: ['Pistol1', 'Glock 19', 'Magnum357', 'SMG Short'],
     WEAPON_ACTIONS: ['Reload All Weapons'],

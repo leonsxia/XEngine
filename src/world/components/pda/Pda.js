@@ -106,7 +106,6 @@ class Pda {
 
             }
 
-            this.resetInventory();
             this.resetFiles();
             this.showElement(this._pdaContainer, true);
 
@@ -115,6 +114,8 @@ class Pda {
             this.showElement(this._pdaContainer, false);
 
         }
+
+        this.resetInventory();
 
         for (let i = 0, il = this.onVisibleChanged.length; i < il; i++) {
 

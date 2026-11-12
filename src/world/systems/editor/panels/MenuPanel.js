@@ -20,9 +20,9 @@ export default class MenuPanel extends Panel {
         // initialize menu panel
         this.scope.panel_menu = this.guiMaker.addGui({
             title: GUI_CONFIG.PANEL_TITLES.MENU,
-            width: 200,
+            width: 220,
             styles: {
-                left: '210px',
+                left: '0',
                 top: '70px'
             }
         });

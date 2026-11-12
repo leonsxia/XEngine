@@ -232,4 +232,16 @@ export default class GuiMaker {
 
     }
 
+    reset() {
+
+        for (const title in this.guis) {
+
+            this.guis[title].reset();
+
+        }
+
+        this.removeStats();
+        
+    }
+
 }

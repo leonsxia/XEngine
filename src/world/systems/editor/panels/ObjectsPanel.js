@@ -22,7 +22,7 @@ export default class ObjectsPanel extends Panel {
         this.scope.panel_objects = this.guiMaker.addGui({
             title: GUI_CONFIG.PANEL_TITLES.OBJECTS_CONTROL,
             styles: {
-                right: '250px'
+                right: '0'
             }
         });
 
@@ -647,7 +647,7 @@ export default class ObjectsPanel extends Panel {
         const ctl_lock = this.folder.add({ 'lock': $scene.lockObjects.bind($scene) }, 'lock')
             .onChange(() => {
 
-                $guiMaker.switchControllerState(ctl_lock);
+                $guiMaker.switchControllerState(ctl_lock, true, GUI_OPTIONS.LOCK_UNLOCK);
 
             });
 

@@ -291,7 +291,7 @@ class ItemViewer {
                 const itemAngleTo = Math.abs(this._item.group.quaternion.angleTo(_originQuaternion));
                 const camPositionInterval = parseFloat(_v1.copy(_originCameraPosition).sub(this._camera.position).length().toFixed(3));
                 const camTargetInterval = _v2.copy(_originCameraTarget).sub(this._controls.target).length();
-                let alpha = 0;
+                let alpha;
 
                 const needLerp = Math.max(0, itemPositionInterval, itemAngleTo, camPositionInterval, camTargetInterval) > 0;
 

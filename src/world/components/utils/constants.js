@@ -250,41 +250,6 @@ const GLOCK_CLIPS = {
     SHOOT: { nick: 'shoot', name: 'glock_19|Shoot', idx: 0, enable: true, isDefault: true, startImmediately: false, weight: 0, loopOnce: true }
 };
 
-// Gui
-const GUI_CONFIG = {
-    CONTROL_TITLES : {
-        MENU: 'Menu', 
-        LIGHT_CONTROL: 'Lights Control', 
-        OBJECTS_CONTROL: 'Objects Control'
-    },
-    SELECT_WORLD_CONTROL: 'Select World',
-    RIGHT_PANEL_SELECTOR_CONTROL: "Select Control",
-    PLAYER_CONTROL: 'Player Control',
-    ENEMY_CONTROL: 'Enemy Control',
-    POST_PROCESS_CONTROL: 'Post Processing',
-    TPC_CONTROL: 'Third Person Camera',
-    IC_CONTROL: 'Inspector Camera',
-    CAMERA_CONTROL: 'Cameras',
-    RAPIER_PHYSICS_CONTROL: 'Rapier Physics',
-    SCENE_CONTROL: 'Scene',
-    PATHFINDING_CONTROL: 'Pathfinding',
-    PICKER_CONTROL: 'Picker',
-    HEALTH_CONTROL: 'Health',
-    WEAPON_CONTROL: 'Weapons',
-    SELECT_WEAPONS: 'Select Weapons',
-    WEAPON_ACTIONS: 'Weapon Actions',
-    WEAPONS_OPTIONS_PARENT: 'weapon_options_actions',
-    WEAPONS_ACTIONS_PARENT: 'weapon_actions',
-    PICKER_ACTIONS_PARENT: 'picker_actions',
-    TPC_ACTIONS_PARENT: 'tpc_actions',
-    IC_ACTIONS_PARENT: 'ic_actions',
-    IC_AREAS_PARENT: 'ic_areas',
-    PLAYER_HP_ACTIONS_PARENT: 'player_hp_actions',
-    ENEMY_HP_ACTIONS_PARENT: 'enemy_hp_actions',
-    INACTIVES: '_inactive',
-    CLASS_INACTIVE: 'control-inactive'
-};
-
 // controls
 const CONTROL_TYPES = {
     KEYBOARD: 'keyboard',
@@ -447,8 +412,6 @@ export {
     ZOMBIE_MALE_CLIPS,
     BLACK_WIDOW_CLIPS,
     GLOCK_CLIPS,
-
-    GUI_CONFIG,
 
     CONTROL_TYPES,
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { GUI_CONFIG, GUI_MEASURES } from '../editorConfig.js';
 import { DIRECTIONAL_LIGHT, AMBIENT_LIGHT, HEMISPHERE_LIGHT } from '../../../components/utils/constants.js';
 import { updateSingleLightCamera } from '../../../components/shadowMaker.js';
@@ -28,7 +27,7 @@ export default class LightsPanel extends Panel {
             title: GUI_CONFIG.PANEL_TITLES.LIGHT_CONTROL,
             width: 280,
             styles: {
-                right: '250px'
+                right: '0'
             }
         });
 

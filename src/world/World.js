@@ -394,7 +394,6 @@ class World {
             if (!this._showGuiAndInfo) {
 
                 container.classList.remove('nocursor');
-                this.#currentScene?.guiMaker.gui.recover();
                 // new editor
                 this.#currentScene?.editor.recover();
                 this.setInfo(true);
@@ -407,7 +406,6 @@ class World {
             if (this._showGuiAndInfo) {
 
                 container.classList.add('nocursor');
-                this.#currentScene?.guiMaker.gui.hide();
                 // new editor
                 this.#currentScene?.editor.guiMaker.hide();
                 this.setInfo(false);

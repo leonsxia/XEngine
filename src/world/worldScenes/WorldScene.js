@@ -8,7 +8,6 @@ import { Resizer } from '../systems/Resizer.js';
 import { Loop } from '../systems/Loop.js';
 import { PostProcessor, SSAO_OUTPUT } from '../systems/PostProcessor.js';
 import { FXAA, OUTLINE, SSAO, SSAA, BLOOM, WEAPONS, CAMERAS, PHYSICS_TYPES, TONE_MAPPING } from '../components/utils/constants.js';
-import { GuiMaker } from '../systems/GuiMaker.js';
 import { GUI_CONFIG, GUI_STRINGS } from '../systems/editor/editorConfig.js';
 import Editor from '../systems/editor/Editor.js';
 import { UpdatableQueue } from '../components/updatables/UpdatableQueue.js';
@@ -70,7 +69,7 @@ class WorldScene {
     shadowLightObjects = [];
     guiLightSpecs = null;
 
-    guiMaker;
+    editor = null;
 
     controlEventDispatcher;
     
@@ -136,7 +135,7 @@ class WorldScene {
         Object.assign(this.setup, specs);
         Object.assign(this.setup, this.world.configuration);
 
-        const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, enableGui = false, controlEventDispatcher } = this.setup;
+        const { name, scene: { backgroundColor }, worldPicker, sceneBuilder, controlEventDispatcher } = this.setup;
 
         this.name = name;
 
@@ -181,15 +180,6 @@ class WorldScene {
             // console.log(`camera target: x: ${tar.x}, y: ${tar.y}, z: ${tar.z}`);
 
         });
-
-        if (enableGui) {
-
-            this.guiMaker = new GuiMaker(this);
-            this.guiMaker.init();
-
-            // this.controls.initPanels(this.guiMaker.gui);
-
-        }
 
         this.updatableQueue = new UpdatableQueue();
 
@@ -329,12 +319,11 @@ class WorldScene {
                             this.loop.stop();
                             this.pauseAudio();
                             this.staticRendering = true;
-                            // player.pda.stats = this.guiMaker.gui.stats;
+                            // pass stats from editor to item viewer
                             player.pda.stats = this.editor.guiMaker.stats;
 
                         } else {
-
-                            // this.loop.start(this.guiMaker.gui.stats);
+                            // restor stats from item viewer to current scene
                             this.loop.start(this.editor.guiMaker.stats);
                             this.unpauseAudio();
                             this.staticRendering = false;
@@ -485,10 +474,7 @@ class WorldScene {
 
             });
 
-            this.guiMaker.leftActions = leftActions;
-
-            this.guiMaker.setupGuiConfig();
-
+            // setup editor
             this.editor = new Editor(this);
             this.controls.initPanels(this.editor.guiMaker);
 
@@ -502,19 +488,7 @@ class WorldScene {
         this.showCPlaneLines(false);
         this.showCPlaneArrows(false);
 
-        this.initContainer();
-
         this.loaded = true;
-
-    }
-
-    initContainer() {
-
-        if (this.guiMaker?.enabled) {
-
-            this.guiMaker.initGuiControl();
-
-        }
 
     }
 
@@ -549,7 +523,7 @@ class WorldScene {
 
             }
 
-            this.initContainer();
+            // bring editor back alive
             this.editor.alive();
 
             // set tone mapping to current selected
@@ -589,7 +563,6 @@ class WorldScene {
         this.staticRendering = false;
         this.controls.initPreCoordinates();
         this.controls.setDamping(true, 0.1); // default damping factor 0.05
-        // this.loop.start(this.guiMaker.gui.stats);
         this.loop.start(this.editor.guiMaker.stats);
         this.#paused = false;
 
@@ -690,6 +663,7 @@ class WorldScene {
 
     }
 
+    // deprecated
     reset() {
 
         // renderTimes = 0;
@@ -711,11 +685,7 @@ class WorldScene {
         this.picker.reset();
         this.postProcessor.clearOutlineObjects();
 
-        if (this.guiMaker?.enabled) {
-
-            this.guiMaker.resetGui();
-
-        }
+        this.editor?.reset();
 
         // must disable default orbit control after gui reest, 
         // the gui will disable all cameras which will enable default camera again
@@ -733,12 +703,6 @@ class WorldScene {
         this.clearPicking();
 
         this.picker.reset();
-
-        if (this.guiMaker?.enabled) {
-
-            this.guiMaker.suspendGui();
-            
-        }
 
         this.editor?.suspend();
 
@@ -1717,17 +1681,13 @@ class WorldScene {
     armWeapon(name) {
 
         if (!this.player.isCombatPlayer || this.player.attacking) {
-            
-            this.guiMaker.gui._lockWeapons = true;
+
             this.editor.lockWeapons = true;
-            // console.log(`weapons locked: ${this.guiMaker.gui._lockWeapons}`);
             return;
         
         }
 
-        this.guiMaker.gui._lockWeapons = false;
         this.editor.lockWeapons = false;
-        // console.log(`weapons locked: ${this.guiMaker.gui._lockWeapons}`);
 
         switch(name) {
 
@@ -1818,17 +1778,13 @@ class WorldScene {
     reloadAllWeapons() {
 
         if (!this.player.isCombatPlayer || this.player.attacking) {
-            
-            this.guiMaker.gui._lockWeapons = true;
-            this.editor.lockWeapons = true;
 
+            this.editor.lockWeapons = true;
             return;
 
         }
 
-        this.guiMaker.gui._lockWeapons = false;
         this.editor.lockWeapons = false;
-
         this.player.reloadAllWeapons();
         
     }
@@ -1900,9 +1856,7 @@ class WorldScene {
         this.objectLocked = false;
 
         if (this.enablePick && !this.postProcessOn) {
-
-            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, GUI_STRINGS.disable, GUI_STRINGS.enable);
-
+        
             // new editor controller
             this.editor.guiMaker.switchControllerState(this.editor.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.MENU].ctl_picker);
 
@@ -1917,8 +1871,8 @@ class WorldScene {
         // clear picked object
         if (this.enablePick) {
 
+            // disable picking first
             this.enablePicking();
-            this.guiMaker.gui.switchFunctionControl(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.PICKER_CONTROL, GUI_STRINGS.disable, GUI_STRINGS.enable);
 
             // new editor controller
             this.editor.guiMaker.switchControllerState(this.editor.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.MENU].ctl_picker);
@@ -1937,8 +1891,6 @@ class WorldScene {
         const triggerPostProcess = (val) => {
 
             const postProcState = this.postProcessOn;
-
-            this.guiMaker.gui.setControlValue(GUI_CONFIG.CONTROL_TITLES.MENU, GUI_CONFIG.POST_PROCESS_CONTROL, 'PostEffect', val);
 
             // new editor controller
             this.editor.guiMaker.setControlValue(this.editor.guiMaker.controllers[GUI_CONFIG.PANEL_TITLES.MENU].ctl_post_enable, val);
@@ -1973,7 +1925,6 @@ class WorldScene {
 
         this.pickedObject = null;
         this.postProcessor.clearOutlineObjects();
-        this.guiMaker.clearObjectsPanel();
         // new editor
         this.editor.clearObjectsPanel();
         this.objectLocked = false;
@@ -2082,12 +2033,6 @@ class WorldScene {
     enableBloom(enable) {
 
         const e = enable === GUI_STRINGS.enable;
-
-        this.setEffect(BLOOM, {
-            enabled: e, 
-            strength: this.guiMaker.bloomSetting.BloomStrength, 
-            radius: this.guiMaker.bloomSetting.BloomRadius
-        });
 
         // new editor controller
         this.setEffect(BLOOM, {

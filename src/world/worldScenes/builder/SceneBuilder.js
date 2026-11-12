@@ -81,22 +81,6 @@ class SceneBuilder {
 
             }
 
-            let basicLightGuiSpecsArr = [];
-            let pointLightGuiSpecsArr = [];
-            let spotLightGuiSpecsArr = [];
-            let rectAreaLightGuiSpecsArr = [];
-
-            if (worldScene.guiMaker) {
-
-                worldScene.guiMaker.guiLights = { 
-                    basicLightSpecsArr: basicLightGuiSpecsArr, 
-                    pointLightSpecsArr: pointLightGuiSpecsArr, 
-                    spotLightSpecsArr: spotLightGuiSpecsArr,
-                    rectAreaLightSpecsArr: rectAreaLightGuiSpecsArr
-                };
-
-            }
-
             if (worldScene.setup.enableGui) {
 
                 worldScene.guiLightSpecs = {
@@ -170,17 +154,6 @@ class SceneBuilder {
         const _pointLights = createPointLights(pointLightsSpecsArr);
         const _spotLights = createSpotLights(spotLightsSpecsArr);
         const _rectAreaLights = createRectAreaLights(rectAreaLightsSpecsArr);
-
-        if (worldScene.guiMaker) {
-
-            const { guiLights } = worldScene.guiMaker;
-            
-            guiLights.basicLightSpecsArr = guiLights.basicLightSpecsArr.concat(basicLightsSpecsArr);
-            guiLights.pointLightSpecsArr = guiLights.pointLightSpecsArr.concat(pointLightsSpecsArr);
-            guiLights.spotLightSpecsArr = guiLights.spotLightSpecsArr.concat(spotLightsSpecsArr);
-            guiLights.rectAreaLightSpecsArr = guiLights.rectAreaLightSpecsArr.concat(rectAreaLightsSpecsArr);
-    
-        }
 
         if (worldScene.setup.enableGui) {
 

@@ -127,7 +127,6 @@ class Picker {
                 this.worldScene.clearPickedObject();
                 this.postProcessor.addOutlineObjects([selectedObject]);
                 this.worldScene.pickedObject = selectedObject;
-                this.worldScene.guiMaker.setupObjectsGuiConfig([this.worldScene.pickedObject]);
                 // new editor
                 this.worldScene.editor.addObjectsToPanel([this.worldScene.pickedObject]);
 

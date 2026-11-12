@@ -202,19 +202,7 @@ class WorldScene1 extends WorldScene  {
         // Gui setup
         if (worldSceneSpecs.enableGui) {
 
-            this.guiMaker.guiLights = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr};
             this.guiLightSpecs = { basicLightSpecsArr, pointLightSpecsArr, spotLightSpecsArr};
-
-            this.guiMaker.leftActions = {
-                'actions': {
-                    start: this.start.bind(this),
-                    stop: this.stop.bind(this),
-                    moveCamera: this.moveCamera.bind(this, false),
-                    resetCamera: this.resetCamera.bind(this, false)
-                }
-            };
-
-            this.guiMaker.setupGuiConfig();
 
             this.setup.actions = [
                 'start',
@@ -226,8 +214,6 @@ class WorldScene1 extends WorldScene  {
             this.controls.initPanels(this.editor.guiMaker);
             
         }
-        
-        this.initContainer();
 
         this.loaded = true;
 

@@ -1,9 +1,9 @@
-import { updateSingleLightCamera } from "../components/shadowMaker";
-import { WEAPONS, GUI_CONFIG, CAMERAS, TONE_MAPPING } from "../components/utils/constants";
-import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, makeSubGuiControlFolder, setupFunctionPanel } from "../components/utils/guiConfigHelper";
+import { updateSingleLightCamera } from "../src/world/components/shadowMaker";
+import { WEAPONS, GUI_CONFIG, CAMERAS, TONE_MAPPING } from "../src/world/components/utils/constants";
+import { makeDropdownGuiConfig, makeFolderGuiConfig, makeFolderSpecGuiConfig, makeFunctionGuiConfig, makeGuiPanel, makeObjectsGuiConfig, makeSceneRightGuiConfig, makeSubGuiControlFolder, setupFunctionPanel } from "./guiConfigHelper";
 import { Gui } from "./Gui";
-import { DEFAULT_BLOOM } from "./PostProcessor";
-import { Resizer } from "./Resizer";
+import { DEFAULT_BLOOM } from "../src/world/systems/PostProcessor";
+import { Resizer } from "../src/world/systems/Resizer";
 
 const CONTROL_TITLES = ['Lights Control', 'Objects Control'];
 const INITIAL_RIGHT_PANEL = 'Objects Control'; // Lights Control

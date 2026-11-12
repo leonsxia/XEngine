@@ -134,7 +134,17 @@ export default class Editor {
         this.ctl_selectScene.reset();
         this.ctl_selectControl.reset();
         this.sceneChanged = false;
+        // remove stats and hide all guis
         this.guiMaker.suspend();
+
+    }
+
+    /**
+     * called when reset scene, deprecated
+     */
+    reset() {
+
+        this.guiMaker.reset();
 
     }
 

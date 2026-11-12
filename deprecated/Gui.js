@@ -1,7 +1,7 @@
 import { GUI } from 'lil-gui';
 import Stats from 'stats.js';
-import { colorStr } from '../components/basic/colorBase';
-import { GUI_CONFIG } from '../components/utils/constants';
+import { colorStr } from '../src/world/components/basic/colorBase';
+import { GUI_CONFIG } from '../src/world/components/utils/constants';
 
 class Gui {
 
