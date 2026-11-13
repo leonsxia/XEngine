@@ -10,13 +10,6 @@ import {
 import Stats from 'stats.js';
 import { GUI_CONFIG, GUI_OPTIONS } from './editorConfig.js';
 
-BooleanController.prototype.isBooleanController = true;
-ColorController.prototype.isColorController = true;
-FunctionController.prototype.isFunctionController = true;
-NumberController.prototype.isNumberController = true;
-OptionController.prototype.isOptionController = true;
-StringController.prototype.isStringController = true;
-
 export default class GuiMaker {
 
     constructor() {
@@ -62,7 +55,7 @@ export default class GuiMaker {
         gui.onFinishChange(event => {
 
             if (
-                event.controller.isOptionController
+                event.controller instanceof OptionController
             ) {
 
                 callback(event);
@@ -74,10 +67,11 @@ export default class GuiMaker {
         gui.onChange(event => {
 
             if (
-                event.controller.isFunctionController ||
-                event.controller.isNumberController ||
-                event.controller.isColorController ||
-                event.controller.isBooleanController
+                event.controller instanceof FunctionController ||
+                event.controller instanceof NumberController ||
+                event.controller instanceof ColorController ||
+                event.controller instanceof BooleanController ||
+                event.controller instanceof StringController
             ) {
 
                 /**
