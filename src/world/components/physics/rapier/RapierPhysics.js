@@ -559,11 +559,11 @@ class RapierPhysics {
 
                 if (_mesh2 && !_mesh2.isScene) {
 
-                    _mesh2.getWorldQuaternion(_q1).invert();
-                    _m1.copy(_mesh2.matrixWorld).invert();
-                    _v1.copy(body.translation()).applyMatrix4(_m1);
+                    _mesh2.updateWorldMatrix(true, false);
+                    _m1.copy(_mesh2.matrixWorld).invert().decompose(_v1, _q1, _v2);
+                    _v2.copy(body.translation()).applyMatrix4(_m1);
                     _q2.copy(body.rotation()).premultiply(_q1);
-                    _mesh1.position.copy(_v1);
+                    _mesh1.position.copy(_v2);
                     _mesh1.quaternion.copy(_q2);
 
                 } else {
