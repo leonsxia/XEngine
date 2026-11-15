@@ -717,11 +717,11 @@ class Inventory extends TabPanel {
 
             if (interval > 0) {
 
-                tarIdx = ++tarIdx % this._size;
+                tarIdx = (tarIdx + 1) % this._size;
 
             } else {
 
-                tarIdx = --tarIdx;
+                tarIdx--;
 
             }
 
@@ -739,12 +739,16 @@ class Inventory extends TabPanel {
         const element = this._html.selectDiv;
         const lastSelectedItem = this.getMatchedItem(this._selectIdx);
         let tarIdx = getLoopIndex(val, this._size, 4);
-        tarIdx = lastSelectedItem && lastSelectedItem.itemSize === 2 && lastSelectedItem.occupiedSlotIdx + 1 === tarIdx ? ++tarIdx : tarIdx;
+        if (lastSelectedItem && lastSelectedItem.itemSize === 2 && lastSelectedItem.occupiedSlotIdx + 1 === tarIdx) {
+            tarIdx++;
+        }
         const selectedItem = this.getMatchedItem(tarIdx);
 
         if (selectedItem && selectedItem.itemSize === 2) {
 
-            tarIdx = selectedItem.occupiedSlotIdx + 1 === tarIdx ? --tarIdx : tarIdx;
+            if (selectedItem.occupiedSlotIdx + 1 === tarIdx) {
+                tarIdx--;
+            }
             removeElementClass(element, ELEMENT_CLASS.ITEM_SIZE_PREFIX);
             addElementClass(element, ELEMENT_CLASS.ITEM_SIZE_2);
 
@@ -1654,7 +1658,7 @@ class Inventory extends TabPanel {
 
     add(item) {
         
-        let idx = -1;
+        let idx;
         if (item.occupiedSlotIdx > -1) {
 
             idx = item.occupiedSlotIdx;
