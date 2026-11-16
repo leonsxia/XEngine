@@ -409,7 +409,7 @@
                     "display": "Ambient Light",
                     "detail": {
                         "color": [255, 221, 173],
-                        "intensity": 0.05
+                        "intensity": 0.217
                     },
                     "type": "AmbientLight",
                     "debug": true,
@@ -460,8 +460,8 @@
                             132
                         ],
                         "position": [
-                            0,
-                            0,
+                            0.016,
+                            -0.016,
                             0
                         ],
                         "scale": [
@@ -469,13 +469,13 @@
                             0.05,
                             0.05
                         ],
-                        "intensity": 4.45,
+                        "intensity": 6,
                         "distance": 1.88,
                         "decay": 0.77,
                         "shadowCameraAspect": 1,
                         "bias": 0,
                         "normalBias": 0.00392,
-                        "shadowCameraNear": 0.23
+                        "shadowCameraNear": 0.042
                     },
                     "debug": true,
                     "shadow": true,
@@ -502,15 +502,15 @@
                         ],
                         "position": [
                             0,
-                            0,
+                            -0.031,
                             0
                         ],
                         "rotation": [
-                            -2,
+                            -1.57,
                             0,
                             0
                         ],
-                        "intensity": 25,
+                        "intensity": 85,
                         "width": 0.93,
                         "height": 0.02
                     },

@@ -688,7 +688,7 @@ export default class LightsPanel extends Panel {
         const light_folder = room_folder.addFolder(display ?? name);
         const postChangeFn = this.lightShadowHelperCallback(light);
 
-        light_folder.add(light, 'intensity', 0, 20, GUI_MEASURES.NUMBER_STEPS)
+        light_folder.add(light, 'intensity', 0, 500, GUI_MEASURES.NUMBER_STEPS)
             .listen();
 
         light_folder.add(light, 'power', 0, 2000, GUI_MEASURES.NUMBER_STEPS)
