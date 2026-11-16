@@ -167,14 +167,14 @@ class AI extends UpdatableBase {
                         path = pathfinder.findPath(_v2, _v1, this.zone, groupID);
 
                         enemy.pathHelper
-                            .reset()
+                            ?.reset()
                             .setPlayerPosition(_v2)
                             .setTargetPosition(_v1);
 
                         if (path && path.length > 0) {
 
                             target = { dirAngle: enemy.getTargetDirectionAngle(path[0]) };
-                            enemy.pathHelper.setPath(path);
+                            enemy.pathHelper?.setPath(path);
 
                         }
 
@@ -187,7 +187,7 @@ class AI extends UpdatableBase {
             } else {
 
                 enemy.movingTick({ delta });
-                enemy.pathHelper.reset();
+                enemy.pathHelper?.reset();
 
             }
 

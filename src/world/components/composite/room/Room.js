@@ -182,7 +182,7 @@ class Room {
 
         if (navigationMeshSrc) {
 
-            const navModel = new GLTFModel({ name: `${this.name}_navigation_mesh`, src: navigationMeshSrc, receiveShadow: true, castShadow: true, needAdjustPosition: false });
+            const navModel = new GLTFModel({ name: `${this.name}_navigation_mesh`, src: navigationMeshSrc, needClone: false, receiveShadow: true, castShadow: true, needAdjustPosition: false });
             await navModel.init();
             this.navigationMesh = navModel.getChildByName('Nav_Mesh', true);
 

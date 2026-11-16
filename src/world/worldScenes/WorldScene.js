@@ -1632,7 +1632,7 @@ class WorldScene {
 
             const enemy = this.enemies[i];
 
-            if (enemy.disposed) continue;
+            if (enemy.disposed || !enemy.pathHelper) continue;
 
             if (s) {
 

@@ -37,7 +37,7 @@ class GLTFModel extends EventDispatcher {
 
     async init() {
 
-        const { src,
+        const { src, needClone = true,
             receiveShadow = false, castShadow = false, shadowCastIgnoreList = [],
             hasBones = false,
             needCloneMaterial = false, needCloneTexture = false,
@@ -58,12 +58,12 @@ class GLTFModel extends EventDispatcher {
             // when disposed one cloned object, the others using the same references will re-create to upload to GPU next frame
             if (!hasBones) {
 
-                modelGroup = gltfModel.scene.clone();
+                modelGroup = needClone ? gltfModel.scene.clone() : gltfModel.scene;
 
             } else {
 
                 // use skeleton clone to bind mesh with skeleton
-                modelGroup = skeletonClone(gltfModel.scene);
+                modelGroup = needClone ? skeletonClone(gltfModel.scene) : gltfModel.scene;
                 this.skeleton = new SkeletonHelper(modelGroup);
 
             }

@@ -14,13 +14,16 @@ class Tofu extends TofuBase {
 
     _currentHP;
 
-    _pathHelper = createPathHelper(_v1.set(0, 0.2, 0));
+    _pathHelper;
 
     #logger = new Logger(DEBUG, 'Tofu');
 
     constructor(specs) {
 
         super(specs);
+
+        const { enablePathHelper = false } = specs;
+        if (enablePathHelper) this._pathHelper = createPathHelper(_v1.set(0, 0.2, 0));
 
     }
 

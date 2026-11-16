@@ -55,6 +55,7 @@ class CreatureBase extends CustomizedCreatureTofu {
         const { HPMax = 100 } = specs;
         const { needAimRay = false, needFocusRay = true, focusHeight = 0, attackHeightRange = [- height * .5, height * .5] } = specs;
         const { ignoreInSightObstacles = false } = specs;
+        const { enablePathHelper = true } = specs;
 
         super({ 
             name, 
@@ -64,6 +65,7 @@ class CreatureBase extends CustomizedCreatureTofu {
             HPMax, needAimRay, needFocusRay, focusHeight, 
             attackHeightRange,
             ignoreInSightObstacles,
+            enablePathHelper
         });
 
         this.specs = specs;
