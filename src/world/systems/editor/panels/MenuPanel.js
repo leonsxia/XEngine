@@ -610,7 +610,8 @@ export default class MenuPanel extends Panel {
 
                 });
 
-            controllers.ctl_ic_areas = folders.folder_camera
+            folders.folder_ic_camera = folders.folder_camera.addFolder(GUI_CONFIG.IC_CONTROL);
+            controllers.ctl_ic_areas = folders.folder_ic_camera
                 .add({ 'IC Areas': GUI_OPTIONS.SHOW_HIDE[1] }, 'IC Areas')
                 .options(GUI_OPTIONS.SHOW_HIDE)
                 .name('IC Areas')
@@ -620,7 +621,7 @@ export default class MenuPanel extends Panel {
 
                 });
 
-            controllers.ctl_ic_fixed = folders.folder_camera
+            controllers.ctl_ic_fixed = folders.folder_ic_camera
                 .add({ 'Fixed IC': $scene.setup.ICFollowPlayer ? GUI_OPTIONS.YES_NO[1] : GUI_OPTIONS.YES_NO[0] }, 'Fixed IC')
                 .options(GUI_OPTIONS.YES_NO)
                 .name('Fixed IC')
@@ -629,6 +630,14 @@ export default class MenuPanel extends Panel {
                     $scene.switchFixedInspectorCamera.call($scene, value);
 
                 });
+
+            controllers.ctl_ic_damping = folders.folder_ic_camera
+                .add($scene.inspectorCamera, 'damping')
+                .name('Damping');
+
+            controllers.ctl_ic_damping_speed = folders.folder_ic_camera
+                .add($scene.inspectorCamera, 'dampingSpeed', 0, 10, .01)
+                .name('Damping Speed');
 
         }
 

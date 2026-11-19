@@ -82,12 +82,6 @@ class Plane extends BasicObject {
 
     }
 
-    setDoubleSide() {
-
-        this.material.side = DoubleSide;
-
-    }
-
     setDoubleShadowSide() {
 
         this.material.shadowSide = DoubleSide;

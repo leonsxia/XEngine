@@ -670,11 +670,11 @@ class RapierWorld {
             if (!avatar.isClimbingUp) {
 
                 // terrain check
-                if (this.terrains.length > 0) {
+                // if (this.terrains.length > 0) {
 
-                    avatar.updateRayLength('terrain');
+                //     avatar.updateRayLength('terrain');
 
-                }
+                // }
                 
                 // // check on land
                 // const maxToi = avatar.height * DOWN_RAY_LENGTH;

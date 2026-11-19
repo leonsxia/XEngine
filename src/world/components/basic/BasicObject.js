@@ -1,4 +1,4 @@
-import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher, Quaternion, MeshStandardMaterial } from 'three';
+import { PlaneGeometry, BoxGeometry, SphereGeometry, CircleGeometry, CylinderGeometry, CapsuleGeometry, MeshPhongMaterial, SRGBColorSpace, Vector3, MeshBasicMaterial, MathUtils, EventDispatcher, Quaternion, MeshStandardMaterial, DoubleSide } from 'three';
 // import { NearestFilter, LinearFilter, NearestMipMapNearestFilter, NearestMipMapLinearFilter, LinearMipMapNearestFilter, LinearMipMapLinearFilter } from 'three';
 import { createTriangleGeometry, createStairsSideGeometry, createStairsFrontGeometry, createStairsTopGeometry, getTerrainGeometry } from '../utils/geometryHelper';
 import { loadSingleTexture } from '../../systems/resources/helpers/TextureHelper';
@@ -725,6 +725,25 @@ class BasicObject extends EventDispatcher {
         this.material.wireframe = show;
 
         return this;
+
+    }
+
+    setDoubleSide() {
+
+        const material = this.mesh.material;
+        if (Array.isArray(material)) {
+
+            for (let i = 0, il = material.length; i < il; i++) {
+
+                material[i].side = DoubleSide;
+
+            }
+            
+        } else {
+
+            material.side = DoubleSide;
+
+        }
 
     }
 

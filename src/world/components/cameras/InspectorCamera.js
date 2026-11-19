@@ -1,5 +1,6 @@
 import { Vector3 } from "three";
 
+const _v0 = new Vector3();
 const _v1 = new Vector3();
 const _v2 = new Vector3();
 
@@ -7,33 +8,26 @@ class InspectorCamera {
 
     camera;
     target = new Vector3();
-    _icFollowPlayer = false;
+    damping = true;
+    dampingSpeed = 1.5;
+    icFollowPlayer = false;
+    _currentArea = null;
 
     #player;
     #control;
-    #roomAreas = [];
+    roomAreas = {};
+    attachTo;
 
     isInspectorCamera = true;
 
     constructor(specs) {
 
-        const { defaultCamera, ICFollowPlayer } = specs;
-        this._icFollowPlayer = ICFollowPlayer;
+        const { defaultCamera, ICFollowPlayer, attachTo } = specs;
+        this.icFollowPlayer = ICFollowPlayer;
         
         this.camera = defaultCamera.camera;
         this.target.copy(defaultCamera.target);
-
-    }
-
-    get ICFollowPlayer() {
-
-        return this._icFollowPlayer;
-
-    }
-
-    set ICFollowPlayer(val) {
-
-        this._icFollowPlayer = val;
+        this.attachTo = attachTo;
 
     }
 
@@ -50,7 +44,10 @@ class InspectorCamera {
 
             const room = inspectorRooms[i];
 
-            this.#roomAreas.push(...room.areas);
+            this.roomAreas[room.roomId] = { 
+                areas: new Array(...room.areas),
+                areaBlockMeshes: room.areas.map(a => a.box.mesh)
+            };
 
             for (let j = 0, jl = room.areas.length; j < jl; j++) {
 
@@ -127,50 +124,87 @@ class InspectorCamera {
 
     }
 
-    checkIntersection() {
+    checkIntersection(delta) {
 
         const intersects = [];
+        const roomAreas = this.roomAreas[this.attachTo.currentRoom.roomId];
+        intersects.push(...this.#player.centerRay.intersectObjects(roomAreas.areaBlockMeshes));
 
-        for (let i = 0; i < this.#roomAreas.length; i++) {
+        if (!intersects.length) {
 
-            if (this.#player.obb.intersectsOBB(this.#roomAreas[i].box.obb)) {
+            for (let i = 0; i < roomAreas.areas.length; i++) {
 
-                intersects.push(this.#roomAreas[i]);
+                const area = roomAreas.areas[i];
+                if (this.#player.obb.intersectsOBB(area.box.obb)) {
+
+                    intersects.push(area);
+
+                }
 
             }
 
         }
 
-        if (intersects.length === 1) {
+        if (intersects.length) {
 
-            this.updateCamera(intersects[0]);            
+            if (intersects[0].object?.isMesh) {
+
+                this.updateCamera(intersects[0].object.father.attachTo, delta);
+
+            } else if (intersects[0].isAreaBlock) {
+
+                intersects.sort((a, b) => a.index - b.index);
+                this.updateCamera(intersects[0], delta);
+
+            }                      
 
         }
 
     }
 
-    updateCamera(area) {
+    updateCamera(area, delta) {
 
         const { box, cameraPosition, cameraTarget } = area;
+        let { dampingSpeed } = area;
+        if (dampingSpeed === undefined) dampingSpeed = this.dampingSpeed;
 
         const room = box.mesh.parent;
         _v1.set(...cameraPosition);
 
         room.updateWorldMatrix(true, false);
         const camPosWorld = _v1.applyMatrix4(room.matrixWorld);
-        const camTarWorld = this._icFollowPlayer ? this.#player.getWorldPosition(_v2) : _v2.set(...cameraTarget).applyMatrix4(room.matrixWorld);
+        const camTarWorld = this.icFollowPlayer ? this.#player.getWorldPosition(_v2) : _v2.set(...cameraTarget).applyMatrix4(room.matrixWorld);        
 
         this.camera.position.copy(camPosWorld);
-        this.camera.lookAt(camTarWorld);
-        this.target.copy(camTarWorld);
+
+        let direction = camTarWorld;
+        if (this._currentArea !== area) {
+
+            this._currentArea = area;
+            this.camera.lookAt(direction);
+
+        }
+
+        if (this.damping) {
+
+            this.camera.getWorldDirection(_v0);
+            direction = _v0.add(_v1);
+            // direction.add(_v2.sub(direction).normalize().multiplyScalar(dampingSpeed * delta));
+            const alpha = dampingSpeed * delta / direction.distanceTo(_v2);
+            direction.lerp(_v2, alpha);
+
+        }
+
+        this.camera.lookAt(direction);
+        this.target.copy(direction);
 
         this.#control.target.copy(this.target);
 
     }
 
-    tick() {
+    tick(delta) {
 
-        this.checkIntersection();
+        this.checkIntersection(delta);
 
     }
 

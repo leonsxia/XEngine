@@ -1,7 +1,7 @@
 import { Room } from "./Room";
 import { createOBBBox } from "../../physics/collisionHelper";
 import { basic } from "../../basic/colorBase";
-import { CAMERA_RAY_LAYER } from "../../utils/constants";
+import { CAMERA_RAY_LAYER, TOFU_RAY_LAYER } from "../../utils/constants";
 
 class InspectorRoom extends Room {
 
@@ -27,6 +27,7 @@ class InspectorRoom extends Room {
             const { name, width, height, depth, scale, color = basic } = area;
             const { position = [0, 0, 0], rotation = [0, 0, 0] } = area;
             const { cameraPosition = [0, 0, 0], cameraTarget = [0, 0, 0] } = area;
+            const { dampingSpeed } = area;
             const boxSpecs = { size: { width: 1, depth: 1, height: 1 }, color };
 
             const areaBlock = {
@@ -34,11 +35,17 @@ class InspectorRoom extends Room {
                 name,
                 box: createOBBBox(boxSpecs, name, position, rotation, false, false),
                 cameraPosition,
-                cameraTarget
+                cameraTarget,
+                index: i,
+                isAreaBlock: true,
+                dampingSpeed
 
             };
+            areaBlock.box.mesh.layers.enable(TOFU_RAY_LAYER);
             areaBlock.box.setScale(scale ?? [width, height, depth]);
             areaBlock.box.isArea = true;
+            areaBlock.box.setDoubleSide();
+            areaBlock.box.attachTo = areaBlock;
 
             // set collision areas invisible
             const listener = () => {

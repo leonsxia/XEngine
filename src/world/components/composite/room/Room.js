@@ -142,6 +142,12 @@ class Room {
 
     }
 
+    get roomId() {
+
+        return `${this.name}_id${this.sequence}`;
+
+    }
+
     async init() {
         
         const insideWallsInit = this.initObjects(this.insideWalls);

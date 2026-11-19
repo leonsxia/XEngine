@@ -438,8 +438,8 @@ class WorldScene {
 
         if (enableIC) {
 
-            this.inspectorCamera = new InspectorCamera({ defaultCamera: this.defaultCamera, ICFollowPlayer });
-            this.inspectorCamera.setup({ player: this.player, control: this.controls.defControl, scene: this.scene, rooms: this.rooms });
+            this.inspectorCamera = new InspectorCamera({ defaultCamera: this.defaultCamera, ICFollowPlayer, attachTo: this, });
+            this.inspectorCamera.setup({ player: this.player, control: this.controls.defControl, rooms: this.rooms });
 
         }        
 
@@ -2244,7 +2244,7 @@ class WorldScene {
 
         if (this.inspectorCamera) {
 
-            this.inspectorCamera.ICFollowPlayer = !e;
+            this.inspectorCamera.icFollowPlayer = !e;
 
         }
 
