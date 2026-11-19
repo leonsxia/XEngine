@@ -46,7 +46,6 @@ import { Loop } from "./systems/Loop";
 
 import { isObjectVisible } from "./components/utils/objectHelper";
 
-
 const config = {
     scenes,
     physics: PHYSICS_TYPES.SIMPLE
@@ -115,6 +114,9 @@ let instance = null;
 class World {
 
     configuration;
+    customized = {
+        currentTextureAnisotropy: 8
+    };
 
     _amimationLoop;
     _worldLooper;

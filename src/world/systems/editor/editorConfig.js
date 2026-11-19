@@ -56,6 +56,7 @@ const GUI_CONFIG = {
     TONE_MAPPING: 'Tone Mapping',
     SCENE: 'Scene',
     SCENE_HDR: 'HDR',
+    SCENE_TEXTURE: 'Textures',
     AUDIO: 'Audio',
     RAPIER: 'Rapier Physics',
     PLAYER_CONTROL: 'Player Control',

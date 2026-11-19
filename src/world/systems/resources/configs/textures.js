@@ -316,7 +316,7 @@ const TEXTURES = [{
 }, {
     name: TEXTURE_NAMES.WATER_2_M, normalMap: `${TEXTURE_ROOT}/water/Water_2_M_Normal.jpg`
 }, {
-    name: TEXTURE_NAMES.TRI_PATTERN, map: `${TEXTURE_ROOT}/tri_pattern.jpg`
+    name: TEXTURE_NAMES.TRI_PATTERN, map: `${TEXTURE_ROOT}/tri_pattern.jpg`, enableAnisotropy: false
 }];
 
 const HDR_TEXTURES = [{

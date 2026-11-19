@@ -5,6 +5,7 @@ import Panel from './Panel.js';
 
 const RESOLUTION_RATIO = { '0.5x': 0.5, '0.8x': 0.8, '1x': 1, '2x': 2 };
 const SCREEN_ASPECT = { '16:9': Resizer.SIZE.WIDE, '4:3': Resizer.SIZE.NORMAL, 'Full': Resizer.SIZE.FULL };
+const TEXTURE_ANISOTROPY = { '1x': 1, '2x': 2, '4x': 4, '8x': 8, '16x': 16 };
 const devicePixelRatio = window.devicePixelRatio;
 
 export default class MenuPanel extends Panel {
@@ -287,11 +288,11 @@ export default class MenuPanel extends Panel {
     addSceneSettings() {
 
         const { $scope, $scene, folders } = this.domain;
+        folders.folder_scene = $scope.panel_menu.addFolder(GUI_CONFIG.SCENE).close();
 
         // HDR
         if ($scope.setup.envHDR?.enabled) {
-
-            folders.folder_scene = $scope.panel_menu.addFolder(GUI_CONFIG.SCENE).close();
+            
             folders.folder_scene_hdr = folders.folder_scene.addFolder(GUI_CONFIG.SCENE_HDR);
             folders.folder_scene_hdr
                 .add($scene.scene, 'backgroundRotationX', - 184, 180, .01)
@@ -311,6 +312,14 @@ export default class MenuPanel extends Panel {
                 .name('HDR.intensity');
 
         }
+
+        folders.folder_scene_textures = folders.folder_scene.addFolder(GUI_CONFIG.SCENE_TEXTURE);
+        folders.folder_scene_textures
+            .add({ level: `${$scene.textureAnisotropy ?? 1 }x` }, 'level')
+            .options(TEXTURE_ANISOTROPY)
+            .name('Anisotropy')
+            .listen()
+            .onChange(value => $scene.changeTextureAnisotropy.call($scene, value));
 
     }
 

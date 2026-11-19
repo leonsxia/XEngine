@@ -1,5 +1,6 @@
 import { TextureLoader, SRGBColorSpace, EquirectangularReflectionMapping } from 'three';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+import { TEXTURES } from '../configs/textures';
 import Resource from '../Resource';
 import { RESOURCE_TYPE } from '../configs/resources';
 import { Logger } from '../../Logger';
@@ -9,6 +10,7 @@ const worldHDRLoader = new HDRLoader();
 
 const loadedTextures = {};
 const loadedHDRTextures = {};
+const trackedTextures = [];
 
 async function loadBasicTextures(specs) {
 
@@ -62,28 +64,108 @@ async function loadSingleTexture(src, name, clone = false) {
 
     if (!src) return null;
 
+    let result;
     if (src.isTexture) {
 
-        return clone ? src.clone() : src;
+        result = clone ? src.clone() : src;
 
     } else if (loadedTextures[src]) {
 
-        return clone ? loadedTextures[src].clone() : loadedTextures[src];
+        result = clone ? loadedTextures[src].clone() : loadedTextures[src];
 
     } else if (name && loadedTextures[name]) {
 
-        return clone ? loadedTextures[name].clone() : loadedTextures[name];
+        result = clone ? loadedTextures[name].clone() : loadedTextures[name];
 
     }
 
-    const texture = await worldTextureLoader.loadAsync(src);
-    if (name) loadedTextures[name] = texture;
+    if (result) {
 
-    return texture;
+        if (clone) trackedTextures.push(result);
+        return result;
+
+    }
+
+    result = await worldTextureLoader.loadAsync(src);
+    trackedTextures.push(result);
+    if (name) loadedTextures[name] = result;
+
+    return result;
 
 }
 
-export { loadedTextures, loadedHDRTextures, loadSingleTexture, loadBasicTextures };
+function setTextureAnisotropy(level) {
+
+    const set = (level, texture) => {
+
+        if (texture.anisotropy !== level) {
+
+            texture.anisotropy = level;
+            texture.needsUpdate = true;
+
+        }
+
+    };
+
+    const setAnisotropy = (level, texture) => {
+
+        switch (level.toString()) {
+
+            case '1':
+            case '1x':
+                set(1, texture);
+                break;
+
+            case '2':
+            case '2x':
+                set(2, texture);
+                break;
+
+            case '4':
+            case '4x':
+                set(4, texture);
+                break;
+
+            case '8':
+            case '8x':
+                set(8, texture);
+                break;
+
+            case '16':
+            case '16x':
+                set(16, texture);
+                break;
+
+            default:
+                set(1, texture);
+                break;
+
+        }        
+
+    };
+
+    for (const config of TEXTURES) {
+
+        const { name, enableAnisotropy = true } = config;
+        const texture = loadedTextures[name];
+
+        if (texture?.isTexture && enableAnisotropy) {
+
+            setAnisotropy(level, texture);
+
+        }
+
+    }
+
+    for (const texture of trackedTextures) {
+
+        setAnisotropy(level, texture);
+
+    }
+
+}
+
+export { loadedTextures, loadedHDRTextures, loadSingleTexture, loadBasicTextures, setTextureAnisotropy };
 
 const DEBUG = true;
 export default class TextureHelper extends Resource {

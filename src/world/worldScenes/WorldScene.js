@@ -24,7 +24,7 @@ import { RapierWorld } from '../components/physics/rapier/RapierWorld.js';
 import { GLOBALS } from '../systems/globals.js';
 import { toneMappingStr } from '../systems/renderer.js';
 import { countObjects, systemLogger } from '../World.js';
-import { loadedHDRTextures } from '../systems/resources/helpers/TextureHelper.js';
+import { loadedHDRTextures, setTextureAnisotropy } from '../systems/resources/helpers/TextureHelper.js';
 
 // let renderTimes = 0;
 const devicePixelRatio = window.devicePixelRatio;
@@ -123,6 +123,8 @@ class WorldScene {
     selectedTone;
     selectedToneExposure;
 
+    textureAnisotropy;
+
     loaded = false;
     isRunning = false;
 
@@ -206,7 +208,7 @@ class WorldScene {
             toneMapping = toneMappingStr(TONE_MAPPING.AgX),
             toneMappingExposure = 1,
             postProcessing = { enable: false, bloomEnable: false },
-            envHDR
+            envHDR, anisotropy = 8
         } = this.setup;
 
         // set camera initial position and save the state
@@ -235,6 +237,9 @@ class WorldScene {
             this.scene.backgroundIntensity = intensity;
 
         }
+        
+        // set textures anisotropy
+        this.changeTextureAnisotropy(anisotropy);
 
         // only set pixel ratio at first time
         if (devicePixelRatio > 1) {
@@ -529,6 +534,13 @@ class WorldScene {
             // set tone mapping to current selected
             this.renderer.toneMapping = this.selectedTone;
             this.renderer.toneMappingExposure = this.selectedToneExposure;
+
+            if (this.textureAnisotropy !== this.world.customized.currentTextureAnisotropy) {
+
+                this.world.customized.currentTextureAnisotropy = this.textureAnisotropy;
+                this.changeTextureAnisotropy(this.textureAnisotropy);
+
+            }
 
         }
 
@@ -2309,6 +2321,14 @@ class WorldScene {
             }
 
         }
+
+    }
+
+    changeTextureAnisotropy(level) {
+
+        setTextureAnisotropy(level);
+        this.textureAnisotropy = parseInt(level);
+        this.world.customized.currentTextureAnisotropy = parseInt(level);
 
     }
 
