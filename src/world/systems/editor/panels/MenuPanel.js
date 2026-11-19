@@ -6,7 +6,6 @@ import Panel from './Panel.js';
 const RESOLUTION_RATIO = { '0.5x': 0.5, '0.8x': 0.8, '1x': 1, '2x': 2 };
 const SCREEN_ASPECT = { '16:9': Resizer.SIZE.WIDE, '4:3': Resizer.SIZE.NORMAL, 'Full': Resizer.SIZE.FULL };
 const TEXTURE_ANISOTROPY = { '1x': 1, '2x': 2, '4x': 4, '8x': 8, '16x': 16 };
-const devicePixelRatio = window.devicePixelRatio;
 
 export default class MenuPanel extends Panel {
 
@@ -166,7 +165,7 @@ export default class MenuPanel extends Panel {
 
         const { $scope, $scene, folders, controllers } = this.domain;
         let { resolution = 1, screenSize = Resizer.SIZE.WIDE } = $scope.setup;
-        if (devicePixelRatio === 1) resolution = 1;
+        if ($scene.resizer.devicePixelRatio === 1) resolution = 1;
 
         folders.folder_screenSettings = $scope.panel_menu.addFolder(GUI_CONFIG.SCREEN_SETTINGS).close();
         controllers.ctl_screen_resolution = folders.folder_screenSettings
@@ -262,7 +261,7 @@ export default class MenuPanel extends Panel {
         folders.folder_toneMapping = $scope.panel_menu.addFolder(GUI_CONFIG.TONE_MAPPING).close();
         controllers.ctl_toneMapping_type = folders.folder_toneMapping
             .add($scene.renderer, 'toneMapping', TONE_MAPPING)
-            .name('Type',)
+            .name('Type')
             .listen()
             .onChange((value) => {
 
@@ -315,7 +314,7 @@ export default class MenuPanel extends Panel {
 
         folders.folder_scene_textures = folders.folder_scene.addFolder(GUI_CONFIG.SCENE_TEXTURE);
         folders.folder_scene_textures
-            .add({ level: `${$scene.textureAnisotropy ?? 1 }x` }, 'level')
+            .add({ level: $scene.textureAnisotropy ?? 1 }, 'level')
             .options(TEXTURE_ANISOTROPY)
             .name('Anisotropy')
             .listen()

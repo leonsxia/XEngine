@@ -27,7 +27,6 @@ import { countObjects, systemLogger } from '../World.js';
 import { loadedHDRTextures, setTextureAnisotropy } from '../systems/resources/helpers/TextureHelper.js';
 
 // let renderTimes = 0;
-const devicePixelRatio = window.devicePixelRatio;
 
 class WorldScene {
 
@@ -242,7 +241,7 @@ class WorldScene {
         this.changeTextureAnisotropy(anisotropy);
 
         // only set pixel ratio at first time
-        if (devicePixelRatio > 1) {
+        if (this.resizer.devicePixelRatio > 1) {
 
             // set default scene resolution
             this.resizer.changeResolution(resolution);
